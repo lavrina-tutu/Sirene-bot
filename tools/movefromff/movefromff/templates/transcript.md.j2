@@ -1,0 +1,16 @@
+# {{ title }}
+
+**Дата (UTC):** {{ meeting_date_iso }}
+**Длительность:** {{ duration }} мин
+**Участники:** {{ participants | join(", ") if participants else "—" }}
+**Meeting ID:** {{ meeting_id }}
+
+---
+
+## Транскрипт
+
+{% for line in lines -%}
+{{ line.ts }} **{{ line.speaker }}:** {{ line.text }}
+{% endfor %}
+{%- if not lines %}_Транскрипт пуст._
+{% endif %}

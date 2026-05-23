@@ -1,0 +1,7 @@
+commit:  127b56a61aa84c26f52feb8b672c89112f607a1a
+tag:     v2026.5.16
+date:    2026-05-23
+prev:    
+notes:   Начальный pin — текущий HEAD клона hermes-agent на момент консолидации репозиториев.
+         Клон отстаёт от upstream/main на ~3 дня (см. self-check Сирени 2026-05-23).
+         Перед следующим upstream_update.sh нужно проверить security-фиксы (API key leakage).

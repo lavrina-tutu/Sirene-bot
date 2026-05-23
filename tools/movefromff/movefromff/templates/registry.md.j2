@@ -1,0 +1,13 @@
+# Реестр встреч MoveFromFF
+
+> Auto-generated. Не редактировать руками.
+
+- **Schema:** `{{ schema_version }}`
+- **Updated:** `{{ updated_at }}`
+- **Total:** {{ total }}
+
+| Дата | Status | Title | Meeting ID |
+|---|---|---|---|
+{% for mid, m in meetings -%}
+| {{ m.meeting_date or "—" }} | `{{ m.status }}` | {{ m.title }} | `{{ mid }}` |
+{% endfor %}

@@ -1,0 +1,3 @@
+# История откатов upstream
+# Формат: одна строка на запись. Заполняется автоматически scripts/upstream_update.sh перед git pull.
+# previous: <sha> on <date> # notes

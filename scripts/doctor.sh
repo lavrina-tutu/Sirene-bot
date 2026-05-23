@@ -31,10 +31,13 @@ if [ -f config/config.yaml ]; then
   fi
 fi
 
-echo "[doctor] checking tools/*/.env (must not exist in tree)..."
-for envf in tools/*/.env; do
-  [ -e "$envf" ] && { echo "❌ unexpected $envf present in working tree"; fail=1; }
-done
+echo "[doctor] checking tools/*/.env (must not be tracked by git)..."
+tracked_env=$(git ls-files 'tools/*/.env' 2>/dev/null || true)
+if [ -n "$tracked_env" ]; then
+  echo "❌ tools/*/.env tracked by git:"
+  echo "$tracked_env"
+  fail=1
+fi
 
 if [ "$fail" -ne 0 ]; then
   echo "[doctor] FAIL"

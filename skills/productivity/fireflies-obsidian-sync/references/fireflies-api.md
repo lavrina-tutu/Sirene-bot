@@ -141,10 +141,55 @@ participants { name email }
 participants
 ```
 
-## Статусы встреч
+## Статусы встреч и задержка обработки
 
 - `processing` — ещё обрабатывается (пропустить, добавить в `_pending_ff.json`)
 - `completed` — готово, `transcript_ready = true`
+
+**Задержка обработки (важно для синка):**
+Fireflies-бот пишет встречу в реальном времени (online), но transcript и summary через API доступны только **после окончания встречи** — обычно через 5–30 минут. За это время:
+- `transcript(id)` вернёт пустой `sentences: []` или `summary: null`
+- Никакой ошибки не будет — просто пустые данные
+
+**Надёжный способ проверить готовность:**
+```python
+meeting = ff.fetch_meeting(meeting_id)
+if meeting.summary and meeting.summary.overview:
+    # готово, можно записывать
+else:
+    # ещё не обработано
+```
+
+**Pre-filter по времени (оптимизация API):**
+Чтобы не тратить `fetch_meeting(id)` на явно незрелые встречи:
+```python
+meeting_end_ms = meeting.date + (meeting.duration or 0) * 60 * 1000
+age_hours = (now_ms - meeting_end_ms) / 3_600_000
+if age_hours < 1:
+    # пропустить без вызова fetch_meeting — не готово с высокой вероятностью
+```
+Это экономия, не гарантия — итоговая проверка summary.overview обязательна.
+
+## Двухэтапная загрузка (обязательный паттерн)
+
+FF API имеет **cost-limit** на GraphQL-запросы. При запросе тяжёлых полей (`sentences`, `summary`) в list-запросе FF **молча возвращает пустой массив** без ошибки.
+
+**Правильный паттерн:**
+```
+Шаг A: fetch_range() — только лёгкие поля
+         → id, title, date, duration, participants
+
+Шаг B: для каждой новой встречи → fetch_meeting(id) — полные поля
+         → sentences, summary (+ проверка готовности)
+```
+
+**Неправильно (приводит к пустым файлам):**
+```graphql
+# ❌ — FF вернёт transcripts: [] или sentences: [] без ошибки
+transcripts(fromDate: ...) {
+  id title date sentences { text } summary { overview }
+}
+```
 
 ## Rate Limits (Pro тариф)
 

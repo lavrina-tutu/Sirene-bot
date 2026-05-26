@@ -13,7 +13,7 @@ platforms: [windows]
 
 ## Принципы (обязательны для всех инструментов)
 
-1. **Только 3 файла на единицу данных** — не обрабатывать смысл, только перенести как есть
+1. **Минимум файлов на единицу данных** — не обрабатывать смысл, только перенести как есть. Количество файлов определяется ценностью: `actions.md` для FF — дубль `summary.md`, поэтому не нужен. Не добавлять файлы ради полноты — только если несут уникальную ценность.
 2. **Идемпотентность через `_registry.json`** — не качать повторно уже загруженное
 3. **Никакой постобработки** — это зона следующих инструментов конвейера (MarkObjectsFromSummary и др.)
 4. **Минимальная статусная машина загрузки:** `pending` / `completed` / `error`
@@ -31,19 +31,21 @@ MoveFrom<Service>/
 │   ├── config.py        ← Settings из .env
 │   ├── client.py        ← API клиент (requests + tenacity retry)
 │   ├── schema.py        ← Pydantic модели данных
-│   ├── writer.py        ← запись 3 файлов, атомарная, rollback при ошибке
+│   ├── writer.py        ← запись файлов, атомарная, rollback при ошибке
 │   ├── renderer.py      ← _registry.md из JSON через Jinja2
 │   ├── registry.py      ← _registry.json: load/save/migrate, portalocker
-│   ├── lock.py          ← _sync.lock: {pid, started_at, source}
-│   ├── logger.py        ← _log.md append + jsonl events
-│   ├── tg_notifier.py   ← TG-алерты (только manual mode)
+│   ├── lock.py          ← portalocker single-instance guard
+│   ├── logger.py        ← _log.md (одна строка/запуск) + jsonl events
+│   ├── tg.py            ← TG-алерты (только manual mode; cron молчит)
 │   └── templates/
 │       ├── registry.md.j2
-│       └── *.md.j2      ← шаблоны 3 файлов
+│       └── *.md.j2      ← шаблоны файлов
 ├── tests/
 ├── .env
 └── .venv/
 ```
+
+**Количество файлов на единицу данных определяется ценностью, не полнотой.** Не добавлять файлы ради полноты. Пример: MoveFromFF — 2 файла (transcript + summary), actions убран как дубль.
 
 ## Коды выхода CLI (стандарт)
 
@@ -161,6 +163,49 @@ Critical ≠ Открытые вопросы: Critical = не знаем как 
 
 **Почему не SQLite рядом:** два источника правды сложнее поддерживать. .md+Dataview — нативно для Obsidian, уже установлен, ручное редактирование — открыл файл, исправил, закрыл.
 
+## Wiki-ссылки и карточки сущностей (зафиксировано 24 мая 2026)
+
+**Все сущности в frontmatter summary.md — wiki-ссылки Obsidian:**
+```yaml
+---
+contacts:
+  - "[[Иван Иванов]]"
+  - "[[Мария Петрова]]"
+projects:
+  - "[[Тризигма]]"
+  - "[[Аналитика данных 2026]]"
+---
+```
+
+**Формат имени контакта:** `[[Имя Фамилия]]` — сокращённое (без отчества).
+
+**Карточки контактов:** для каждого смаченного контакта создаётся/обновляется файл `Contacts/Иван Иванов.md`. Wiki-ссылка должна вести на реальный файл — иначе в Obsidian «сломанная» ссылка. MarkObjectsFromSummary создаёт эти файлы автоматически из contacts.enc.
+
+**Структура карточки контакта:**
+```yaml
+---
+email: ivan.ivanov@tutu.ru
+fio_full: Иванов Иван Иванович
+department: Аналитика и данные
+team: BI
+position: Руководитель группы
+is_internal: true
+aliases:
+  - Ваня
+  - Иванов
+messengers:
+  telegram: "@iivanov"
+  zulip: "ivan.ivanov"
+---
+# Иван Иванов
+```
+
+**Источник правды — `contacts.enc`.** Карточка `.md` — только отображение для Obsidian, генерируется/обновляется автоматически. Карточка НЕ удаляется инструментом — только создаётся и обновляется.
+
+**Папка карточек:** `Contacts/` в WorkVault. Старые файлы (до перехода на contacts.enc) — удаляет пользователь вручную разово.
+
+**Проекты тоже wiki-ссылки:** `[[Тризигма]]` ведёт на файл проекта. Файл проекта создаётся отдельным инструментом (не MarkObjectsFromSummary v0.1). В v0.1 — только контакты.
+
 ## Entity Resolver — правила (зафиксировано 22 мая 2026)
 
 **Три состояния:**
@@ -230,7 +275,7 @@ Email как универсальный ключ связывает:
 **Что качать из Fireflies:**
 - ✅ **summary** — основной рабочий материал. Структурирован, компактный, ФИО полные. Черновые таски Fireflies здесь — тоже ценны как отправная точка.
 - ✅ **transcript** — архив. Хранить, не обрабатывать постоянно. Использовать точечно: "что именно было сказано про X?"
-- ❌ **actions** — дубль Action Items из summary. Нулевая добавленная ценность. **Не качать.**
+- ❌ **actions** — дубль Action Items из summary. **ФИНАЛЬНОЕ РЕШЕНИЕ: не скачивать** (май 2026). В ТЗ v2.0 нужно убрать из алгоритма, схемы реестра и шаблонов.
 
 **Роль Fireflies в конвейере:**
 Только STT (speech-to-text) + первичная разметка спикеров. Саммари и таски от FF — черновик, не финал. Качественную обработку (извлечение сущностей, правильная атрибуция задач) делаем своими моделями (Opus) с контекстом Exchange GAL.
@@ -241,10 +286,11 @@ Email как универсальный ключ связывает:
 
 | Инструмент | Сервис | Статус | ТЗ |
 |---|---|---|---|
-| MoveFromFF | Fireflies.ai | ✅ v2.0, код написан, тест ночью | MoveFromFF_TZ_v2.0_minimal.md |
-| MoveFromConfluence | Confluence (`dom.tutu.ru`) | 📋 бэклог | — |
-| MoveFromJira | Jira (ТУТУ) | 📋 бэклог | — |
-| MoveFromExchange | Exchange (ТУТУ) | 🥇 **Приоритет #1** — начать с режима contacts/GAL | — |
+| MoveFromFF | Fireflies.ai | ✅ **v2.0 готов** — 2 файла (transcript+summary), 48 тестов ✅. Крон: пн–пт 10:00/12:00/14:00/16:00/18:00/20:00 МСК (job_id: 1e62e18ae399). Флаг `--meeting-id` для скачивания одной встречи. Загружено 439 встреч (авг 2025 – май 2026). | `hermes-workspace/docs/tz/MoveFromFF_TZ_v2.0_minimal.md` |
+| MoveFromExchange | Exchange (ТУТУ) | ✅ **v1.0 готов** — contacts/GAL, AES-256-GCM шифрование, 34 теста ✅. Крон: каждое воскресенье 03:00 МСК (job_id: 58ab10e1ee15). **Работает в офисе (домен ТУТУ) через Kerberos** — пароль не нужен. Проверено 25.05.2026: Inbox ✅ (14 писем), Calendar ✅ (43 события), GAL resolve_names ✅. fetch_gal() возвращает 0 — нужна диагностика _fetch_people() в домене. Дома без VPN — не работает. | `hermes-workspace/docs/tz/MoveFromExchange_TZ_contacts_v1.0.md` |
+| MarkObjectsFromSummary | WorkVault | 🟡 **Бриф завершён (блоки A-F+G), ТЗ не написано.** БЛОКЕР: нужен письменный список проектов/тем/инициатив от Саши с точными названиями и алиасами → файл `projects.md`. Без него ТЗ v0.1 можно написать (только контакты), но в реализацию v0.2+ не идти. | `hermes-workspace/docs/tz/MarkObjectsFromSummary_TZ_v0.1.md` (не создан) |
+| MoveFromJira | Jira (ТУТУ) | 🥈 **Приоритет #2** — только OKRAID + OKRS (цели и проекты). Нужен для быстрой постановки задач через TG. Jira доступна без VPN (`dom.tutu.ru`, PAT в `.env`). | — |
+| MoveFromConfluence | Confluence (`dom.tutu.ru`) | ⚠️ **v1.0 написан, но API заблокирован Keycloak SSO.** В офисе браузер работает без 2FA (Kerberos). Дома — 2FA (Google Authenticator). API через curl/requests — редиректит на Keycloak, PAT не принимается. Исследование Kerberos-подключения через requests_kerberos запущено (май 2026). Работать только в домене ТУТУ. | `hermes-workspace/docs/tz/MoveFromConfluence_TZ_v1.0.md` |
 | MoveFromZulip | Zulip (ТУТУ) | 📋 бэклог | — |
 
 ## Credentials (корпоративные сервисы ТУТУ)
@@ -284,9 +330,242 @@ TG_ALERT_CHAT_ID=400307920
 - Sonnet — основное общение с Сашей
 - Haiku — простые терминальные задачи (git push, cp, ls), шутки, лёгкий разговор
 
-## Питфоллы (Pitfalls)
+**⚠️ Способ делегирования на Opus — через cronjob, не delegate_task:**
+`delegate_task` с Opus (reasoning_effort=high, child_timeout=1200) держит родительский стрим и вызывает gateway-зависания (подтверждено логами: "Stream stale for 180s", "Subagent stale"). Длинные задачи (>5 мин) — всегда через `cronjob(repeat=1, model={"model":"claude-opus-4-7",...})`. `delegate_task` — только для коротких задач на Sonnet/Haiku.
+
+## Правила разработки и ТЗ (ОБЯЗАТЕЛЬНО)
+
+- **ТЗ пишет и правит — всегда Opus** (`delegate_task model=claude-opus-4-7`). Даже мелкие правки — Opus. Haiku для ТЗ недопустим.
+- **После любой правки ТЗ — Opus проверяет все смежные ТЗ** инструментов на непротиворечивость. Смежные = инструменты которые читают/пишут общие файлы или вызывают друг друга.
+- **Код пишет Opus** (delegate_task model=claude-opus-4-7)
+- **Финальная проверка кода — Haiku** читает код и ТЗ, находит расхождения, докладывает
+- **Справочные вопросы** («как работает X», «что написано в ТЗ») → Haiku с fallback на Sonnet
+- **⛔ СТРОГОЕ ПРАВИЛО: разработку любого инструмента/фичи запускать ТОЛЬКО по ТЗ и ТОЛЬКО после явного "ок, берём в работу" от Саши в TG.** Никакой реализации "по ходу" или "на основе обсуждения". Обсуждение → ТЗ на согласование → явное подтверждение → только тогда cronjob/delegate_task на реализацию.
+
+## MarkObjectsFromSummary — архитектурные решения брифа (24 мая 2026)
+
+**Область v0.1:** только матчинг контактов (email из participants → contacts.enc → wiki-ссылки в frontmatter + карточки Contacts/).
+
+**Отдельный реестр `_mark_objects_registry.json`** — инструмент не трогает `_registry.json` MoveFromFF. Структура:
+```json
+{
+  "schema_version": "1.0",
+  "meetings": {
+    "<meeting_id>": {
+      "processed_at": "2026-05-24T14:00:00+03:00",
+      "status": "ok",
+      "contacts_matched": 3,
+      "contacts_unmatched": 1,
+      "unmatched_speakers": ["Speaker 1"],
+      "files": { "summary": "path/to/summary.md" }
+    }
+  }
+}
+```
+
+**Статусы встречи:** `ok` / `empty` (встреча без слов) / `no_participants` (участников нет) / `error`. Пустые и без участников не пропускать — фиксировать в реестре.
+
+**Классификация контактов:**
+- Внутренние домены: `@tutu.ru`, `@tutu.tech` (пополнять по результатам Exchange)
+- Внешние → contacts.enc с `is_internal: false` (единый файл для всех)
+- Служебные ящики (`noreply@`, `vendor@`) → игнорировать, не заводить
+- Внутренний не найден в GAL → статус `undefined`
+- Speaker без email → `unmatched_speakers` в реестре, не в contacts.enc
+- `ignore: true` в contacts.enc → инструмент навсегда пропускает этот email
+
+**Крон:** сразу после MoveFromFF (каждые 2 часа пн–пт 10–20 МСК).
+
+**Режим `--rematch`:** перематчить уже обработанные встречи — по одной (`--meeting-id`), за период (`--from`/`--to`), все (`--all`). Нужен когда контакт добавлен в contacts.enc задним числом.
+
+**Папки по МСК** (Europe/Moscow).
+
+**Жизненный цикл заготовки:** заготовка «готова» после прохода MoveFromExchange (GAL заполнил ФИО/должность). Но функционально — рабочая как только матчим на неё задачи из summary, даже если поля неполные.
+
+**Уведомления:** нет. Только лог. Сводки — по запросу пользователя.
+
+**Проекты в v0.1:** не размечаются. БЛОКЕР для v0.2+: Саша должен передать письменный список проектов/тем/инициатив с точными названиями и алиасами → файл `projects.md`.
+
+## Паттерн массовой загрузки исторических данных
+
+При первичной загрузке большого периода (например, полгода встреч из FF):
+1. Загружать помесячно через `--mode manual --from-date ... --to-date ...`
+2. Делать паузу 10 секунд между месяцами (`sleep 10`)
+3. Можно запустить одной shell-командой с цепочкой `&&`
+4. Rate limit FF сбрасывается в **00:00 UTC** каждые сутки — если исчерпан, ждать до 03:00 МСК
+5. Первый месяц с данными = месяц начала использования сервиса (до него — `downloaded=0, skipped=0`)
+
+**Пример (декабрь 2025 → январь 2025):**
+```bash
+cd .../MoveFromFF && .venv/Scripts/python.exe -m movefromff --mode manual \
+  --from-date 2025-12-01 --to-date 2025-12-31 --verbose 2>&1 && sleep 10 && \
+  .venv/Scripts/python.exe -m movefromff --mode manual \
+  --from-date 2025-11-01 --to-date 2025-11-30 --verbose 2>&1 && sleep 10 && ...
+```
+Timeout для всей цепочки: 600 секунд (10 минут на 12 месяцев).
+
+## Zulip как первичный источник контактов (25 мая 2026)
+
+contacts.enc первично заполнен из Zulip (не Exchange). 1167 активных людей загружены 25.05.2026.
+
+**Поля из Zulip:** email, login, fio (full_name), display_name, zulip user_id в messenger_ids.zulip.
+**Чего нет в Zulip:** department, position, team — эти поля будут обогащены из Exchange GAL позже.
+
+Exchange GAL нужен для: обогащения contacts.enc полями department/position, будущих инструментов создания встреч и анализа почты.
+
+**Скрипт повторной заливки Zulip → contacts.enc:** `MoveFromExchange/reimport_zulip.py`
+
+## merger.py — исправленный баг (25 мая 2026)
+
+При создании НОВОГО контакта (не существующего в базе) поля `aliases`, `messenger_ids`, `notes`, `custom_updated_at` теперь берутся из входного контакта, а не жёстко пустые `{}` / `[]`. Это критично для Zulip-импорта где messenger_ids.zulip содержит реальный ID.
+
+```python
+# ДО (баг):
+"messenger_ids": {},
+# ПОСЛЕ (исправлено):
+"messenger_ids": contact.get("messenger_ids", {}),
+```
+
+
+
+Для данных требующих шифрования (контакты, персональные данные):
+- Один файл `<name>.enc` (AES-256-GCM)
+- Ключ 32 байта, base64-encoded, в `.env` как `<NAME>_ENCRYPTION_KEY`
+- Nonce генерируется каждый раз при записи, хранится в начале файла
+- При отсутствии ключа → сгенерировать и вывести инструкцию
+- Экспорт для просмотра: `--export` → `.xlsx` через openpyxl, отправить в TG, удалить
+
+## Реорганизация файловой структуры (согласовано май 2026)
+
+**Принцип:** WorkVault = данные, CursorProjects = исходники, hermes-agent/USERTOOLS = все пользовательские инструменты.
+
+### Целевая структура
+
+```
+WorkVault/
+├── Contacts/
+│   ├── contacts.enc              ← единый для всех инструментов (Zulip + Exchange merge)
+│   ├── _registry_cont.json
+│   └── _registry_cont.md
+├── Meetings/
+│   └── NewMeetings/
+│       ├── _registry_meet.json   ← было: _registry.json
+│       ├── _registry_meet.md     ← было: _registry.md
+│       └── _log_meet.md          ← было: _log.md
+├── Projects/
+│   ├── _registry_proj.json
+│   └── _registry_proj.md
+├── Tasks/
+│   ├── _registry_task.json
+│   └── _registry_task.md
+└── _meta/
+    ├── MoveFromFF/               ← логи и jsonl
+    ├── MoveFromExchange/
+    └── MoveFromConfluence/
+
+hermes-agent/USERTOOLS/
+├── MoveFromFF/                   ← исходники (из CursorProjects/MoveFromFF)
+├── MoveFromExchange/
+├── MoveFromConfluence/
+└── MarkObjectsFromSummary/
+```
+
+### Соглашение по именованию реестров
+
+Реестры **всегда** имеют суффикс сущности — не просто `_registry.json`:
+
+| Сущность | Суффикс | Файлы |
+|---|---|---|
+| Meetings | `_meet` | `_registry_meet.json`, `_registry_meet.md`, `_log_meet.md` |
+| Contacts | `_cont` | `_registry_cont.json`, `_registry_cont.md` |
+| Projects | `_proj` | `_registry_proj.json`, `_registry_proj.md` |
+| Tasks | `_task` | `_registry_task.json`, `_registry_task.md` |
+| (новые) | `_[3-4 буквы]` | аналогично |
+
+### contacts.enc — единый файл
+
+- Один `WorkVault/Contacts/contacts.enc` для всех инструментов
+- Источник истины: 1167 записей из Zulip (май 2026)
+- contacts.enc в MoveFromExchange — только 2 тестовые записи → **удалить**
+- При обогащении из Exchange GAL — merge в единый файл
+
+### Чеклист миграции (стадии)
+
+**Стадии запускаются последовательно через Opus-cronjob. К следующей стадии переходить только если все тесты стадии GREEN.**
+
+- **Стадия 0** — Подготовка: создать папки, git commit, резервные копии contacts.enc
+- **Стадия 1** — MoveFromFF (пилот): данные → WorkVault/Contacts/ и _meta/MoveFromFF/, исходники → USERTOOLS/MoveFromFF/, обновить .env + config.py, переименовать _registry.json → _registry_meet.json, обновить крон 1e62e18ae399
+- **Стадия 2** — MoveFromExchange: удалить тестовый contacts.enc, логи → _meta/MoveFromExchange/, исходники → USERTOOLS/MoveFromExchange/, обновить крон 58ab10e1ee15
+- **Стадия 3** — MoveFromConfluence: исходники → USERTOOLS/MoveFromConfluence/, логи → _meta/MoveFromConfluence/
+- **Стадия 4** — MarkObjectsFromSummary: исходники → USERTOOLS/ (ТЗ ещё нет, только папка)
+- **Стадия 5** — Финальная проверка: CursorProjects/ без данных, все кроны работают, Hermes memory обновлена
+
+## Тестирование с нуля (clean-install verification)
+
+Для подтверждения успешной миграции или после крупных изменений структуры — запускать тесты в свежем venv.
+
+**Паттерн:**
+```bash
+python -m venv /tmp/test_venv_fresh
+source /tmp/test_venv_fresh/Scripts/activate  # Windows (Git Bash)
+
+# Установить все инструменты + pytest-плагины
+pip install -q -e USERTOOLS/MoveFromFF -e USERTOOLS/MoveFromExchange -e USERTOOLS/MoveFromConfluence
+pip install -q pytest pytest-mock pytest-xdist pytest-timeout
+
+# Запускать КАЖДЫЙ инструмент из его собственной директории
+cd USERTOOLS/MoveFromFF && python -m pytest tests/ -v --tb=short \
+  --override-ini="addopts=" --timeout-method=thread
+
+cd ../MoveFromExchange && python -m pytest tests/ -v --tb=short \
+  --override-ini="addopts=" --timeout-method=thread
+
+cd ../MoveFromConfluence && python -m pytest tests/ -v --tb=short \
+  --override-ini="addopts=" --timeout-method=thread
+
+rm -rf /tmp/test_venv_fresh
+```
+
+**⚠️ Критические питфоллы:**
+- **Нельзя запускать все тесты из корня hermes-agent** — корневой `pyproject.toml` содержит `addopts = -n --timeout-method=signal`, что ломает pytest на Windows (нет `signal.SIGALRM`) и конфликтует с дочерними пакетами
+- **`--override-ini="addopts="`** — обязателен для сброса корневых `addopts` при запуске из директории инструмента (иначе pytest тянет корневой конфиг по иерархии)
+- **`--timeout-method=thread`** — заменяет `signal` для Windows-совместимости
+- **`.venv/` в каждом инструменте — НЕ удалять** — это рабочие окружения для кронов
+- **`*.egg-info/` — НЕ удалять** — нужны для `pip install -e` (editable install)
+
+**Что проверяет clean-install тест:**
+- ✅ Зависимости правильно задекларированы в `pyproject.toml`
+- ✅ Пути и конфиги работают на реальной файловой структуре
+- ✅ Нет "призраков" старого окружения
+- ❌ Не проверяет: реальные API-запросы (мокируются), работу кронов в production
+
+**Мусор после прогона тестов (можно чистить):**
+```bash
+# __pycache__ и .pytest_cache — только из исходников, не из .venv
+find USERTOOLS -maxdepth 3 -type d -name "__pycache__" ! -path "*/.venv/*" -exec rm -rf {} + 2>/dev/null
+find USERTOOLS -maxdepth 2 -type d -name ".pytest_cache" ! -path "*/.venv/*" -exec rm -rf {} + 2>/dev/null
+```
+
+## QA-верификация проектов против ТЗ
+
+**Когда ТЗ обновляется (особенно mid-version addenda типа 2026-05-25):**
+Используйте `references/qa-verification-checklist.md` для систематической проверки всех MoveFrom* проектов на соответствие новым требованиям. Чек-лист включает:
+- Фазы поиска ТЗ и чтения актуального текста
+- Проверку spec-vs-code дрифта (версии, флаги API, переменные)
+- Common pitfalls (exchangelib версия, custom fields merge, is_internal, TG alerts в cron)
+- Шаблон audit-отчёта
+
+**exchangelib-специфичный питфолл (2026-05-25):** Explicit version Build (e.g. `Version(build=Build(15,2,1544,14))`) может противоречить ТЗ, которое требует auto-discovery. Старый workaround для 401-ошибок, но обновлённое ТЗ предпочитает дать exchangelib определить версию автоматически. При ТЗ-конфликте: remove build spec, add comment с датой решения.
+
+**Кастомные поля (не из API-источника) не перезаписываются при синке** — это iron rule.
+Пример в MoveFromExchange: `aliases`, `messenger_ids`, `notes`, `custom_updated_at` — только ручное редактирование через TG-команды `/contact edit`.
 
 - **Не писать ad-hoc скрипты к API** — только через инструмент MoveFrom*. Если сценарий не поддерживается — сначала доработать инструмент.
+- **Exchange/VPN — решено (25.05.2026):** В офисе (домен ТУТУ) EWS работает через Windows Kerberos без пароля. Пароль в .env НЕ нужен (`TUTU_PASSWORD=***` — плейсхолдер). `access_type=DELEGATE` обязателен. Версию exchangelib НЕ указывать явно — мешает Kerberos negotiate. Дома без VPN — не работает. `Configuration(timeout=...)` → TypeError в новых версиях exchangelib — убрать.
+- **fetch_gal() тихо возвращает 0** — причина: голый `except Exception: pass` глотает UnauthorizedError на каждом паттерне wildcards. Всегда логировать исключения в клиентах API, иначе silent failure невозможно отладить.
+- **Субагент на Haiku портит .env и contacts.enc** — при делегировании задач диагностики Exchange субагент подставлял тестовые credentials и удалял contacts.enc. Явно запрещать эти действия в промпте: "не удалять contacts.enc и .env".
+- **Confluence Keycloak SSO:** PAT не работает через API (редирект на Keycloak). В домене ТУТУ браузер проходит без 2FA (Kerberos). Дома — 2FA (Google Authenticator). Разрабатывать MoveFromConfluence только в домене. Дома — поднимать VPN.
+- **EXCHANGE_PASSWORD в MoveFromExchange/.env был `***`** — плейсхолдер, не реальный пароль. Реальная аутентификация через Kerberos (доменная сессия Windows). Не пытаться «восстановить» пароль — это не нужно.
+- **Проверяй что субагент не написал заглушку** — после делегирования разработки API-клиента явно проверяй что метод `fetch_*` не возвращает `[]` из mock-ветки. Паттерн: `grep -n "return \[\]" client.py` или читать тело метода перед первым боевым тестом.
 - **Rate limit** — у большинства сервисов есть дневные лимиты. Загружать большие периоды блоками, не делать несколько прогонов подряд в один день.
 - **List-запрос не должен тянуть тяжёлые поля** — иначе cost-limit API молча возвращает пустой массив без ошибки. Паттерн: лёгкий list → fetch полных данных только для новых записей (N+1 по числу реально новых).
 - **Корпоративные токены** — хранить только как Personal Access Token, не доменный пароль. PAT можно отозвать не меняя пароль.

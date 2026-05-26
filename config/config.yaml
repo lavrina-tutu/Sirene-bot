@@ -15,7 +15,7 @@ agent:
   tool_use_enforcement: auto
   gateway_timeout_warning: 900
   clarify_timeout: 600
-  gateway_notify_interval: 180
+  gateway_notify_interval: 0
   gateway_auto_continue_freshness: 3600
   image_input_mode: auto
   disabled_toolsets: []
@@ -61,12 +61,13 @@ agent:
       \ you today! Every question is AMAZING and we're gonna CRUSH IT together! This\
       \ is gonna be LEGENDARY! ARE YOU READY?! LET'S DO THIS! \U0001F4AA\U0001F624\
       \U0001F680"
-  system_prompt: "\u0412 \u043D\u0430\u0447\u0430\u043B\u0435 \u043A\u0430\u0436\u0434\
-    \u043E\u0433\u043E \u043E\u0442\u0432\u0435\u0442\u0430 \u0443\u043A\u0430\u0437\
-    \u044B\u0432\u0430\u0439 \u043C\u043E\u0434\u0435\u043B\u044C \u0432 \u0444\u043E\
-    \u0440\u043C\u0430\u0442\u0435: \U0001F916 **\u041C\u043E\u0434\u0435\u043B\u044C\
-    : [\u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043C\u043E\u0434\u0435\u043B\
-    \u0438]**"
+  system_prompt: |
+    Правила делегирования и выбора модели:
+    - Opus (claude-opus-4-7) — исследования инфраструктуры (auth, API, диагностика), разработка/доработка/починка кода и инструментов, настройка Hermes, написание ТЗ. Длинные задачи (>5 минут) запускать через cronjob, НЕ через delegate_task (иначе gateway падает по таймауту).
+    - Haiku (claude-haiku-4-5) — лёгкие терминальные задачи, справочные вопросы, шутки и лёгкий разговор. Fallback — Sonnet.
+    - Sonnet (claude-sonnet-4-6) — координация, основные задачи и анализ, короткие ответы пользователю.
+    - Короткие правки и подзадачи → delegate_task (Sonnet/Haiku). Сложное и долгое → cronjob (Opus).
+    - Принцип: Sonnet координирует и отвечает; Opus делает всё сложное.
 terminal:
   backend: local
   modal_mode: auto
@@ -267,18 +268,25 @@ display:
   user_message_preview:
     first_lines: 2
     last_lines: 2
-  interim_assistant_messages: true
+  interim_assistant_messages: false
   tool_progress_command: false
   tool_progress_overrides: {}
   tool_preview_length: 0
   ephemeral_system_ttl: 0
-  platforms: {}
+  platforms:
+    telegram:
+      notifications: important
+      tool_progress: 'off'
+      interim_assistant_messages: false
   runtime_footer:
     enabled: false
     fields:
     - model
     - context_pct
     - cwd
+  runtime_header:
+    enabled: true
+    template: "🤖 **Модель: {model}**"
   copy_shortcut: auto
   tool_progress: all
   cleanup_progress: false
@@ -345,7 +353,7 @@ memory:
   nudge_interval: 10
   flush_min_turns: 6
 delegation:
-  model: claude-haiku-4-5
+  model: claude-opus-4-7
   provider: anthropic
   base_url: ''
   api_key: ''

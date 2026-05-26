@@ -11,39 +11,64 @@ platforms: [windows]
 
 Все credentials хранятся в `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/.env`
 
+## ⚠️ Правило: минимизация авторизаций
+
+**Одна успешная проверка = достаточно.** Не перебирать форматы логина, методы auth, endpoint-ы в цикле — это блокирует учётку. При первом 401 → остановиться и сообщить пользователю. Не делать больше 2-3 запросов на один сервис за сессию.
+
+Особенно критично для Exchange — Basic auth с неверными credentials быстро триггерит lock-out.
+
 ## Confluence + Jira (Atlassian)
 
 - **URL:** `https://dom.tutu.ru`
-- **Auth:** Personal Access Token (Bearer)
-- **Env:** `TUTU_ATLASSIAN_TOKEN`, `TUTU_CONFLUENCE_URL=https://dom.tutu.ru`, `TUTU_USERNAME=tkachenkoav@tutu.ru`
+- **Auth (браузер):** Keycloak SSO — в офисной сети работает без 2FA (Windows domain session), дома требует 2FA
+- **Auth (API) — ⚠️ НЕ РАБОТАЕТ через Bearer PAT (май 2026):** ТУТУ перевёл `dom.tutu.ru` на **Keycloak + oauth2-proxy**. Все HTTP-запросы, включая `Authorization: Bearer <PAT>`, редиректятся на `keycloak.tutu.ru/realms/tutu/...`. Токен игнорируется.
+- **Env:** `TUTU_ATLASSIAN_TOKEN` (устарел для API), `TUTU_CONFLUENCE_URL=https://dom.tutu.ru`, `TUTU_USERNAME=tkachenkoav@tutu.ru`
 - **Версия:** Atlassian Confluence 8.9.4 (on-premise)
-- **Получить токен:** `dom.tutu.ru` → профиль → Настройки → Личные маркеры доступа → Создать маркер
-- **Один токен работает для Confluence и Jira** (один инстанс Atlassian)
-- **Домашняя страница Confluence:** `pageId=422705401` — тестовые страницы создавать там же
-- **Срок действия токена:** до 21 февраля 2027
+- **Срок действия токена:** до 21 февраля 2027 (но бесполезен пока не решён вопрос SSO)
 
-```python
-import requests
-headers = {'Authorization': f'Bearer {token}'}
-r = requests.get('https://dom.tutu.ru/rest/api/content', headers=headers)
-```
+**Вопрос к IT-администраторам ТУТУ:**
+> Раньше мог обращаться к Confluence/Jira REST API через Personal Access Token (Bearer-заголовок). Сейчас все запросы к `dom.tutu.ru` через API редиректятся на Keycloak SSO, и токен не принимается. Есть ли способ делать API-запросы к Confluence/Jira программно (не через браузер)? Какой метод аутентификации сейчас поддерживается для REST API?
+
+- **Домашняя страница Confluence:** `pageId=422705401`
 
 ## Exchange EWS
 
 - **URL:** `https://cas.tutu.ru/EWS/Exchange.asmx`
-- **Auth:** NTLM (`requests_ntlm.HttpNtlmAuth`)
-- **Env:** `TUTU_EXCHANGE_URL`, `TUTU_USERNAME`, `TUTU_PASSWORD`
-- **SSL:** самоподписанный сертификат → `verify=False`
-- **OWA:** `https://cas.tutu.ru/owa/`
-- **Проверка доступности:** `curl -o /dev/null -w "%{http_code}" https://cas.tutu.ru/EWS/Exchange.asmx` → 401 = сервер есть
-- **Библиотеки:** `requests`, `requests-ntlm`
+- **Версия сервера:** Exchange 2019, build `15.2.1544.14`
+- **Auth:** Basic или NTLM/Negotiate. Basic поддерживается (`www-authenticate: Basic` в заголовках). Negotiate — зависает из терминала (Kerberos требует Windows credential store).
+- **Env (MoveFromExchange/.env):** `EXCHANGE_URL`, `EXCHANGE_USER=tkachenkoav@tutu.ru`, `EXCHANGE_PASSWORD`
+- **Env (MoveFromFF/.env):** `TUTU_EXCHANGE_URL`, `TUTU_USERNAME`, `TUTU_PASSWORD` — те же данные, другие имена ключей
+- **SSL:** самоподписанный сертификат — exchangelib обрабатывает сам
 
+**Рабочий шаблон подключения (exchangelib, Kerberos):**
 ```python
-from requests_ntlm import HttpNtlmAuth
-r = requests.get(url, auth=HttpNtlmAuth(user, password), verify=False)
+from exchangelib import Credentials, Account, Configuration, BASIC, DELEGATE
+
+creds = Credentials(username=user, password=password)
+server = url.split('://')[1].split('/')[0]  # только хост
+# НЕ указывать version= (мешает Kerberos negotiate в домене ТУТУ)
+# НЕ передавать timeout= в Configuration (TypeError в новых версиях)
+config = Configuration(server=server, credentials=creds, auth_type=BASIC)
+# ОБЯЗАТЕЛЕН access_type=DELEGATE (иначе ErrorImpersonateUserDenied)
+account = Account(primary_smtp_address=user, config=config,
+                  autodiscover=False, access_type=DELEGATE)
+
+# Реальная проверка подключения:
+count = account.inbox.all().count()
 ```
 
-**⚠️ Ubuntu:** при переносе заменить хранение пароля — в `.env` с правами `chmod 600`.
+**Детальная справка:** см. `movefrom-exchange-contacts` skill → `references/exchange-version-configuration.md`
+
+**✅ Статус (май 2026, в домене):** Inbox ✅, Calendar ✅, GAL resolve_names ✅ — всё работает.
+**Auth через Windows Kerberos** — пароль в .env НЕ используется и НЕ нужен (`TUTU_PASSWORD=***` — плейсхолдер). Авторизация через доменную сессию Windows автоматически. Работает ТОЛЬКО в домене (офис). Дома — не работает.
+**Ключ**: НЕ указывать version= в Configuration (мешает Kerberos). НЕ передавать timeout=. `access_type=DELEGATE` — обязателен.
+
+**Планируемые кейсы использования Exchange:**
+1. Чтение/создание встреч в календаре
+2. Анализ входящей почты (inbox)
+3. Обогащение contacts.enc полями department/position из GAL
+
+**⚠️ Диагностика:** если подключение "успешно" но данных нет — Account-объект создаётся без сетевого запроса. Реальный запрос только при `inbox.all().count()`, `resolve_names()` и т.д.
 
 ## Zulip
 
@@ -51,13 +76,30 @@ r = requests.get(url, auth=HttpNtlmAuth(user, password), verify=False)
 - **Auth:** HTTP Basic (`username:api_key`)
 - **Env:** `TUTU_ZULIP_URL`, `TUTU_ZULIP_API_KEY`, `TUTU_USERNAME`
 - **SSL:** самоподписанный сертификат → `verify=False`
-- **API недоступен напрямую из терминала** — только через браузер или корпоративную сеть/VPN
-- **Получить API key:** `zulip.tutu.ru/#settings/account-and-privacy` → «Управление API-ключом» (требует ввод пароля в браузере)
+- **✅ Работает из терминала/кода без VPN** — проверено в офисной сети (май 2026)
+- **Объём:** 2209 пользователей, 1167 активных людей (май 2026)
+- **Получить API key:** `zulip.tutu.ru/#settings/account-and-privacy` → «Управление API-ключом»
 
 ```python
-r = requests.get(f'{url}/api/v1/users/me',
-    auth=('tkachenkoav@tutu.ru', api_key), verify=False)
+import requests, warnings
+warnings.filterwarnings('ignore')  # suppress SSL warning
+
+url = os.getenv('TUTU_ZULIP_URL')
+api_key = os.getenv('TUTU_ZULIP_API_KEY')
+user = os.getenv('TUTU_USERNAME')
+
+# Проверка подключения (один запрос)
+r = requests.get(f'{url}/api/v1/users/me', auth=(user, api_key), verify=False, timeout=10)
+# r.json() → {'full_name': 'Ткаченко Александр Владимирович', 'email': '...', ...}
+
+# Все пользователи
+r = requests.get(f'{url}/api/v1/users', auth=(user, api_key), verify=False, timeout=15)
+members = r.json().get('members', [])
+active_humans = [m for m in members if m.get('is_active') and not m.get('is_bot')]
+# Поля: email, user_id, full_name, is_active, is_bot, is_admin, role
 ```
+
+**Zulip → contacts.enc bootstrap:** Zulip — основной источник для первичного заполнения справочника контактов (см. `movefrom-exchange-contacts`). Выгружает email + ФИО + zulip_id. Department/position недоступны (не хранятся в Zulip) — обогащать через Exchange когда заработает.
 
 ## GitHub
 
@@ -73,6 +115,10 @@ r = requests.get(f'{url}/api/v1/users/me',
 
 - **requests_ntlm** нужно устанавливать отдельно: `pip install requests-ntlm`
 - **keyring** (Windows Credential Manager) и `cmdkey` — разные хранилища, `keyring` не видит `cmdkey` записи. Проще хранить в `.env` локально.
-- **Zulip API timeout** из терминала — не ошибка кода, сеть не пропускает прямые запросы. Для теста — только через браузер.
+- **Zulip API timeout** из терминала — УСТАРЕВШИЙ ПИТФОЛЛ, фактически API работает из офисной сети без проблем (проверено май 2026).
+- **Confluence/Jira PAT** — устарел: oauth2-proxy перехватывает все запросы и редиректит на Keycloak. Workaround пока не найден.
+- **Exchange Basic auth** — не используется. Аутентификация через Windows Kerberos (доменная сессия). EXCHANGE_PASSWORD в .env = `***` плейсхолдер, реальный пароль не нужен. Не пытаться подобрать или «восстановить».
 - **GitHub fine-grained PAT** без `Administration: Read & Write` не может создавать репозитории — добавить через Edit токена на github.com/settings/personal-access-tokens
 - **sed** не работает на активных файлах Windows (Device or resource busy) — использовать Python `str.replace()`
+- **exchangelib Account() не делает реальный запрос** — объект создаётся без сетевого вызова. `connect()` может вернуть `True` даже без VPN. Реальный запрос происходит только при `resolve_names()`, `account.inbox.all()` и т.д.
+- **EXCHANGE_PASSWORD = TUTU_PASSWORD** — один и тот же пароль доменной учётки

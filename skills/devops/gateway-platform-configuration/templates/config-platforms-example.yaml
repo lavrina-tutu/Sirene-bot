@@ -1,0 +1,58 @@
+# Hermes Gateway Platform Display Configuration Template
+# Add this to ~/.hermes/config.yaml under the 'display' section
+
+display:
+  # Global display settings
+  compact: false
+  streaming: true
+  tool_progress: all
+  interim_assistant_messages: true
+  show_reasoning: false
+  
+  # Per-platform overrides (optional)
+  platforms:
+    # Telegram: Interim messages silently delivered (no push notifications)
+    # Useful when agent work generates many intermediate status updates
+    telegram:
+      notifications: important  # 'important' (silent) or 'all' (with notifications)
+      # Uncomment below to override other settings per-platform:
+      # interim_messages: false
+      # streaming: false
+
+    # Discord: Example of per-platform streaming override
+    # (uncomment if you want to customize Discord separately)
+    # discord:
+    #   streaming: false
+    #   interim_messages: false
+
+    # Slack: Example of per-platform notifications
+    # (note: Slack doesn't yet support notification modes like Telegram)
+    # slack:
+    #   interim_messages: false
+
+# Example 1: Minimal — just silence Telegram interim messages
+# display:
+#   platforms:
+#     telegram:
+#       notifications: important
+
+# Example 2: Aggressive — hide all thinking/planning, silence Telegram
+# display:
+#   interim_assistant_messages: false
+#   tool_progress: off
+#   platforms:
+#     telegram:
+#       notifications: important
+
+# Example 3: Platform-specific streaming
+# display:
+#   streaming: true  # stream everywhere by default
+#   platforms:
+#     telegram:
+#       notifications: important
+#       streaming: false  # except Telegram — send whole messages at once
+#     discord:
+#       streaming: false  # also disable streaming on Discord
+
+# After editing, restart gateway:
+# hermes gateway restart

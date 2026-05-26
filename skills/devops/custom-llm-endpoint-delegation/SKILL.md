@@ -75,6 +75,27 @@ model=creds["model"]  # всегда из delegation.model в config
 - Простые задачи → основная модель выполняет **сама**, без делегирования
 - Сложные → `delegate_task` на Opus (`delegation.model = claude-opus-4-7`)
 
+### Если всё-таки нужен per-call patch
+
+См. `references/delegate-per-call-model-patch.md` — точный план патча на 4 точки в `tools/delegate_tool.py` (схема + handler + пересборка `creds`). Это редко нужно, но если кто-то снова придёт с этим вопросом — не повторяй исследование, открой файл.
+
+## Полная цепочка resolve модели для субагента (где что читать в коде)
+
+Чтобы не перерывать `delegate_tool.py` снова при следующем вопросе «откуда берётся модель»:
+
+1. **`tools/delegate_tool.py:2459 _load_config()`** — читает секцию `delegation:` из `CLI_CONFIG` (cli.py) или `load_config()` (hermes_cli/config.py). Работает одинаково из CLI, gateway, cron.
+2. **`tools/delegate_tool.py:2345 _resolve_delegation_credentials(cfg, parent_agent)`** — возвращает dict с `model/provider/base_url/api_key/api_mode`:
+   - если задан `delegation.base_url` → direct endpoint (custom/openai-codex/anthropic — детектится по hostname);
+   - иначе если задан `delegation.provider` → `resolve_runtime_provider(requested=provider, target_model=model)` собирает полный набор;
+   - иначе все поля `None` → дитя наследует от родителя.
+3. **`tools/delegate_tool.py:875 _build_child_agent(..., model=creds["model"], override_provider=creds["provider"], ...)`** — подставляет в `AIAgent(...)`.
+4. **`tools/delegate_tool.py:1021–1036`** — финальный merge: `effective_model = model or parent_agent.model`. **api_mode НЕ наследуется когда provider отличается** (баг #20558 / PR #20563): иначе MiniMax/DeepSeek роутятся не на ту API.
+5. **`tools/delegate_tool.py:1050`** — если задан `override_provider` без `override_acp_command`, ACP-транспорт принудительно сбрасывается. Иначе `CopilotACPClient` обходит override credentials.
+
+### Cron — другая дверь
+
+В отличие от delegate_task, **`cronjob` принимает `model={"model":..., "provider":...}` как параметр инструмента** (см. `cron/scheduler.py:1416–1556`, где `model` идёт напрямую в `AIAgent(model=..., provider=...)`). Если нужен «одноразовый запуск тяжёлой модели не блокируя текущий ход» — это рабочий обходной путь вместо delegate_task. Минус: результат не возвращается в текущий контекст, доставляется отдельным сообщением.
+
 ## Профили Hermes — правильный способ маршрутизации по моделям
 
 `delegate_task` не поддерживает per-task модель. Правильное решение — **профили Hermes**, каждый со своим `model.*` и `delegation.*`.
@@ -189,6 +210,14 @@ hermes config set delegation.api_key ''
 
 Это помогает пользователю контролировать какая модель фактически обрабатывает запрос.
 
+### Два способа реализации
+
+**Способ A (ненадёжный) — через `agent.system_prompt`.** Инструкция «в начале каждого ответа выводи строку...». Модели Sonnet/Haiku регулярно её пропускают. Используется по умолчанию, но не гарантирует 100%.
+
+**Способ B (гарантированный) — через runtime_header в gateway.** Зеркальный механизм к существующему `runtime_footer` (см. `gateway/runtime_footer.py` + `gateway/run.py:8542–8557`). Текст добавляется к `response` **после возврата от агента, до отправки адаптеру** — это вне контроля модели, не пропускается.
+
+Точный план патча и почему хуки/prefill не подходят — см. `references/gateway-response-injection.md`.
+
 ## Проверка что субагент использует нужную модель
 
 После настройки убедиться через `delegate_task`:
@@ -225,3 +254,5 @@ echo "TAVILY_API_KEY=tvly-..." >> ~/.hermes/.env
 ## References
 
 - `references/auto-switch-delegation.md` — полный скрипт автопереключения
+- `references/delegate-per-call-model-patch.md` — план патча для per-call model в `delegate_task` (4 точки в `tools/delegate_tool.py`); используй когда профили и `cronjob(model=...)` не покрывают кейс
+- `references/gateway-response-injection.md` — паттерн `runtime_footer`/`runtime_header` для гарантированной дописки текста к каждому gateway ответу (вне контроля модели); почему хуки и prefill не работают для этого

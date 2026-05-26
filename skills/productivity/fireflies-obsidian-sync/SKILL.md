@@ -20,11 +20,15 @@ platforms: [windows]
 
 ## Архитектурный принцип (v2.0)
 
-MoveFromFF — **минимальный транспорт**: скачать 3 файла на встречу, не тянуть повторно уже загруженные. Никакой постобработки — это зона следующих инструментов.
+MoveFromFF — **минимальный транспорт**: скачать 2 файла на встречу, не тянуть повторно уже загруженные. Никакой постобработки — это зона следующих инструментов.
 
-**Что входит:** 3 файла (transcript/summary/actions), `_registry.json` (идемпотентность), `_registry.md` (рендер из JSON через Jinja2 без запросов к FF), статусная машина: `pending/completed/error`. TG-алерт **только при `--mode manual`**; cron молчит.
+**Что входит:** **2 файла** (transcript/summary), `_registry.json` (идемпотентность), `_registry.md` (рендер из JSON через Jinja2 без запросов к FF), статусная машина: `pending/completed/error`. TG-алерт **только при `--mode manual`**; cron молчит.
 
-**Что НЕ входит:** SHA-256, reconciler, поля постобработки (`moved_by`, `processing_status`), `--mode deleted-check`.
+**actions.md — НЕ скачиваем** (финальное решение, май 2026): дублирует `action_items` из `summary.md`, нулевая добавленная ценность. Убрано из ТЗ v2.0, кода, шаблонов и структуры проекта.
+
+**Код v2.0 написан и работает** (май 2026). Проект: `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/`. 48/48 тестов ✅. Крон: пн–пт 10:00/12:00/14:00/16:00/18:00/20:00 МСК (job_id: 1e62e18ae399). Загружено 439 встреч (авг 2025 – май 2026). Два бага исправлены после QA: Speaker N хардкод заменён на `speaker_label(sentence, speaker_map)` через `build_speaker_map()`; убран `.lower()` на participants (ТЗ: "как есть из FF"). Добавлен флаг `--meeting-id` для скачивания одной конкретной встречи по ID.
+
+**Что НЕ входит:** SHA-256, reconciler, actions.md, поля постобработки (`moved_by`, `processing_status`), `--mode deleted-check`.
 
 ## ⚠️ Критически важно: API — GraphQL, не REST
 
@@ -82,7 +86,47 @@ WorkVault/
 - Сгенерировать `_registry.md`, обновить `_last_sync.txt`, дописать в `_log.md`
 - Снять `_sync.lock`
 
-## Реестр `_registry.json` (схема v1)
+## Реестр `_registry.json` (схема v2.1 — актуальная)
+
+```json
+{
+  "schema_version": "2.1",
+  "updated_at": "2026-05-25T14:30:00Z",
+  "last_synced_at": "2026-05-25T14:30:00Z",
+  "meetings": {
+    "<meeting_id>": {
+      "title": "Встреча с клиентом",
+      "meeting_date": "2026-05-20T11:30:00Z",
+      "duration_minutes": 47,
+      "participants": ["a@tutu.ru", "b@example.com"],
+      "files": {
+        "transcript": "2026-05-20 11-30-00 Встреча - transcript.md",
+        "summary":    "2026-05-20 11-30-00 Встреча - summary.md"
+      },
+      "status": "completed",
+      "fetched_at": "2026-05-23T14:30:05Z",
+      "first_seen_at": "2026-05-23T14:30:00Z",
+      "attempts": 0,
+      "next_retry_at": null
+    }
+  }
+}
+```
+
+**Новые поля v2.1:**
+- `Registry.last_synced_at` — UTC метка конца последнего успешного окна; используется для умного окна cron вместо фиксированных -4.5ч
+- `MeetingRecord.attempts` — счётчик попыток `fetch_meeting(id)` для pending-встречи
+- `MeetingRecord.first_seen_at` — когда встреча впервые появилась в `fetch_range()`
+
+**Правила:**
+- Все даты — UTC ISO-8601 с `Z`
+- `files` содержит только `transcript` и `summary` (actions убран в v2.0)
+- `status` ∈ {`pending`, `completed`, `error`, `stale`} — `stale` терминальный, синк прекращается
+- `participants` — список email как есть из FF (без `.lower()`)
+- `meeting_id` — ключ объекта, внутрь не дублировать
+- Миграция v2.0 → v2.1 автоматическая (новые поля с дефолтами, `extra="ignore"` в Pydantic)
+
+**Поля v1.0 убраны:** `transfer_status`, `integrity`, `source`, `processing_status`, `moved_by`, `moved_at`, `moved_to`, `errors`, `sha256`, `audio_url`, `last_checked_at`, `keywords`
 
 ```json
 {
@@ -203,9 +247,9 @@ TG_ALERT_CHAT_ID=400307920
 |---|---|---|
 | `summary.md` | Структурирован FF AI, компактный (~3KB/22мин), ФИО полные, таски атрибутированы | ✅ **Основной рабочий материал конвейера** |
 | `transcript.md` | Полный текст с таймкодами и спикерами, ~31KB/22мин | ✅ **Архив** — хранить, использовать точечно ("что именно было сказано про X") |
-| `actions.md` | Дословная копия раздела Action Items из summary | ❌ **Дубликат** — **РЕШЕНО: не скачивать** (задача в бэклоге, код заморожен до финализации ТЗ) |
+| `actions.md` | Дословная копия раздела Action Items из summary | ❌ **Дубликат** — **ФИНАЛЬНОЕ РЕШЕНИЕ: не скачивать, не генерировать** (зафиксировано май 2026). Нужно убрать из ТЗ v2.0: алгоритм, схема `files` реестра, шаблон `actions.md.j2`. |
 
-**⚠️ Код MoveFromFF заморожен до финализации ТЗ.** Архитектурные решения записаны в `WorkVault/Hermes-Backlog/backlog.md`. Не вносить изменения в код до завершения ТЗ-диалога.
+**Код MoveFromFF v2.0 написан и работает** (май 2026). Проект: `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/`. 42/42 тестов проходят. `--mode test --dry-run` — exit 0.
 
 **Почему actions.md избыточен:** FF дублирует action items в summary. Отдельный файл не несёт добавленной ценности. Таски из FF в любом случае сырые и привязаны к неправильным сущностям — это не проблема файла, а проблема отсутствия контекста (Exchange GAL).
 
@@ -226,7 +270,26 @@ summary.md + transcript.md (actions.md — под вопросом, см. бэк
 Качественный анализ конкретной встречи
 ```
 
-## Контракт с агентом-обработчиком (следующий в конвейере)
+## Исправленные баги в v2.0 (код)
+
+**Баг 1 — Speaker N хардкод** (`transcript.md.j2` + `renderer.py`):
+- Было: `Speaker 1` жёстко прописан в шаблоне
+- Стало: `renderer.py` вычисляет `speaker_map = build_speaker_map(meeting.sentences)`, передаёт в Jinja2 контекст; шаблон использует `{{ speaker_label(sentence, speaker_map) }}`
+- Функции `build_speaker_map()` и `speaker_label()` уже были в `ff_schema.py` — просто не подключались
+
+**Баг 2 — lowercase нормализация participants** (`ff_schema.py`):
+- Было: метод `_participants_clean` делал `.lower()` на все email
+- Стало: `.strip()` без `.lower()` — email хранится как отдаёт FF
+- Причина: ТЗ §2 требует "participants (как есть)", данные из FF не редактируются
+- Важно для резолва через MoveFromExchange: ключ contacts.enc — email как есть
+
+## Интеграция с MoveFromExchange (contacts)
+
+MoveFromFF хранит в `_registry.json` поле `participants` — список email участников встречи (как отдаёт FF, без нормализации).
+
+**MoveFromFF НЕ делает резолв** email → ФИО — это задача MarkObjectsFromSummary.
+
+Контракт: если `contacts.enc` (MoveFromExchange) доступен, downstream-инструменты читают его через `crypto.py` для обогащения данных встреч.
 
 - Читает файлы из `NewMeetings/`
 - Берёт file-lock на `_registry.json` перед изменением
@@ -256,13 +319,26 @@ summary.md + transcript.md (actions.md — под вопросом, см. бэк
 - **Q6. deleted_in_ff:** проверять за последние 90 дней раз в месяц отдельным Hermes cron; локальные файлы не трогать
 - **Q7. Реальная схема FF API:** `participants` = `[String]` (НЕ объект), `date` = Unix ms, `audio_url` = null на Pro, `summary.action_items` = строка; см. `references/fireflies-api.md`
 
-## Коды выхода CLI
+## CLI (v2.0)
 
-- `0` — успех
-- `1` — частичный успех (часть встреч упала)
-- `2` — лок занят / preflight провален
-- `3` — FF недоступен / auth-ошибка
-- `4` — фатальная ошибка
+```bash
+# Стандартные режимы
+python -m movefromff --mode test                              # последние 5 дней, без TG
+python -m movefromff --mode cron                             # последние 4ч 30мин, без TG
+python -m movefromff --mode manual --from-date 2026-01-01 --to-date 2026-01-31
+python -m movefromff --mode manual --from-date 2026-01-01 --to-date 2026-01-31 --dry-run
+
+# Скачать одну конкретную встречу по ID (только с --mode manual)
+python -m movefromff --mode manual --meeting-id <meeting_id>
+# Пример: когда MoveFromConfluence хочет опубликовать summary встречи которой нет в NewMeetings/
+
+# Флаги
+--dry-run    # план без записи
+--no-tg      # отключить TG-алерт (ручной режим без TG, для отладки)
+--verbose    # DEBUG лог
+```
+
+**`--meeting-id`:** работает только с `--mode manual`. При использовании с `--mode cron` или `--mode test` → exit 2. `from-date`/`to-date` при наличии `--meeting-id` игнорируются.
 
 ## Сканирование папки при старте
 
@@ -354,11 +430,13 @@ Windows: Cryptomator десктоп → виртуальный диск → Obsi
 
 ## Бэклог и ТЗ
 
-Все ТЗ и бэклог хранятся в: `C:/Users/tkachenkoav/WorkVault/Hermes-Backlog/`
-- `MoveFromFF_TZ_v2.0_minimal.md` — актуальное ТЗ (v2.0)
+ТЗ хранятся в: `C:/Users/tkachenkoav/Documents/Cursor_projects/hermes-workspace/docs/tz/`
+- `MoveFromFF_TZ_v2.0_minimal.md` — актуальное ТЗ (v2.0, на согласовании)
 - `MoveFromFF_TZ_v1.md`, `MoveFromFF_TZ_v1.1_addendum.md` — история
-- `MarkObjectsFromSummary_TZ_v0.1.md` — следующий инструмент конвейера
-- `backlog.md` — бэклог задач по всем инструментам
+
+Бэклог задач: `C:/Users/tkachenkoav/WorkVault/Hermes-Backlog/backlog.md`
+
+**⚠️ Код заархивирован:** старая версия — `MoveFromFF.archived`. **Актуальный код:** `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/` (v2.0, 2 файла на встречу, 42 теста ✅).
 
 ## Корпоративные источники данных (бэклог инструментов)
 
@@ -391,6 +469,120 @@ Windows: Cryptomator десктоп → виртуальный диск → Obsi
 **Exchange:** самоподписанный сертификат → использовать `verify=False` + `requests_ntlm.HttpNtlmAuth`. При переносе на Ubuntu — заменить `TUTU_PASSWORD` в `.env` с правами 600.
 
 **Zulip:** API недоступен напрямую из терминала (только через браузер/VPN). Для получения API key — зайти через браузер на `zulip.tutu.ru/#settings/account-and-privacy` → «Управление API-ключом».
+
+## ⚠️ ПРАВИЛО РАЗРАБОТКИ (строгое)
+
+Разработку любого изменения MoveFromFF запускать **ТОЛЬКО по согласованному ТЗ** и **ТОЛЬКО после явного "ок, берём в работу"** от Саши в TG. Никакой реализации "по ходу обсуждения". Opus-задачи на реализацию запускать только после этого сигнала.
+
+## Реестр: соглашение по именованию файлов
+
+Реестры сущностей называются с суффиксом сущности — не просто `_registry.json`:
+
+| Сущность | Файлы |
+|---|---|
+| Meetings | `_registry_meet.json`, `_registry_meet.md`, `_log_meet.md` |
+| Contacts | `_registry_cont.json`, `_registry_cont.md` |
+| Projects | `_registry_proj.json`, `_registry_proj.md` |
+| Tasks | `_registry_task.json`, `_registry_task.md` |
+
+Текущий файл `_registry.json` в `NewMeetings/` → переименовать в `_registry_meet.json` при миграции (Стадия 1).
+
+## Целевая файловая структура WorkVault + USERTOOLS
+
+После миграции (чеклист согласован, май 2026):
+
+```
+WorkVault/
+├── Contacts/
+│   ├── contacts.enc          ← единый для всех инструментов
+│   ├── _registry_cont.json
+│   └── _registry_cont.md
+├── Meetings/
+│   └── NewMeetings/
+│       ├── _registry_meet.json   ← сейчас: _registry.json
+│       ├── _registry_meet.md     ← сейчас: _registry.md
+│       └── _log_meet.md          ← сейчас: _log.md
+├── Projects/
+├── Tasks/
+└── _meta/
+    ├── MoveFromFF/           ← логи и jsonl
+    ├── MoveFromExchange/
+    └── MoveFromConfluence/
+
+hermes-agent/USERTOOLS/
+├── MoveFromFF/               ← исходники (из CursorProjects/MoveFromFF)
+├── MoveFromExchange/
+├── MoveFromConfluence/
+└── MarkObjectsFromSummary/
+```
+
+**Принцип:** WorkVault = данные, CursorProjects = исходники, USERTOOLS = все пользовательские инструменты под одной крышей.
+
+**contacts.enc:** единый файл для всех инструментов (Zulip + Exchange merge). Источник истины — MoveFromFF/contacts.enc (1167 записей, май 2026). contacts.enc MoveFromExchange — только 2 тестовые записи, удалить.
+
+**Логи:** все в `WorkVault/_meta/<ИнструментName>/` — не внутри исходников.
+
+## Оптимизация API-вызовов: паттерн pending+stale (v2.1, согласовано май 2026)
+
+**Проблема без оптимизации:** встреча без summary → пропускается, но НЕ записывается в реестр. Следующий крон (через 2ч) снова делает `fetch_meeting(id)` → снова видит пустой summary → снова пропускает. Лишний API-вызов каждые 2ч на каждую незавершённую встречу.
+
+**Решение (v2.1):** pending-запись в реестре + `last_synced_at`. Backoff **не используется** — встреча просто ждёт следующего синка (каждые 2ч).
+
+**Статусы (4 шт.):** `pending` / `completed` / `error` / `stale`
+
+- `pending` — встреча найдена, но summary/транскрипт ещё не готовы. Ждём следующего синка.
+- `completed` — файлы записаны успешно.
+- `error` — ошибка fetch или записи.
+- `stale` — **терминальный статус**: встреча не обработана FF за 48ч (2 рабочих дня). Больше не пытаемся синкать, алерт в TG.
+
+**Критерии качества встречи (принимается к записи):**
+- `summary.overview` не пустой **И**
+- суммарная длина всех sentences.text ≥ **500 символов** (порог настраивается через `.env`: `MIN_TRANSCRIPT_CHARS=500`)
+
+Если транскрипт < 500 символов при следующем синке снова < 500 → сразу `stale` (не ждём 48ч).
+
+**Алгоритм Шаг 3 (v2.1):**
+```
+# Порядок: сначала pending из реестра, потом новые из fetch_range
+
+# 1. Обработать все pending из реестра:
+для каждой pending-встречи в реестре:
+    если first_seen_at > 48ч → stale, алерт TG, стоп
+    fetch_meeting(id) → проверить качество
+
+# 2. Новые встречи:
+fetch_range(from_dt, to_dt) → список ID (лёгкие поля)
+для каждого ID:
+    completed / stale / error → skip (0 API вызовов)
+    pending → уже обработан выше → skip
+    новый → fetch_meeting(id) → проверить качество:
+        summary есть И транскрипт ≥ 500 симв → write_meeting_files() → completed
+        нет summary ИЛИ транскрипт < 500 → pending (attempts++, ждём следующего синка)
+        pending при прошлом синке И снова < 500 → stale (не ждём 48ч)
+```
+
+**Умное окно (v2.1):**
+```python
+# cron-режим: вместо фиксированных -4.5ч
+if registry.last_synced_at:
+    from_dt = max(last_synced_at, now - timedelta(hours=24))
+else:
+    from_dt = now - timedelta(hours=4, minutes=30)  # первый запуск
+# После успешного запуска (errors==0): registry.last_synced_at = to_dt
+```
+
+**Почему отказались от backoff и 1ч фильтра:** крон каждые 2ч — промежуточные интервалы (5/10/30 мин) бессмысленны. Pending-запись в реестре обеспечивает идемпотентность без лишней сложности. Проверка `summary.overview + len(transcript) >= 500` — достаточный safety net.
+
+**Коды событий лога (v2.1):**
+- `meeting_skipped` — уже в реестре со статусом completed/stale/error
+- `meeting_pending` — fetch выполнен, качество не прошло, записан pending
+- `meeting_stale` — помечен stale (48ч или повторный низкокачественный), TG алерт
+- `download_ok` — успешно записан
+- `download_error` — ошибка fetch или записи файлов
+
+## Исследование полей FF summary (в процессе, май 2026)
+
+Встреча Trisigma (ID: `01KSFNBC3X0C120ZD501YG0TNX`) показала: в FF веб-интерфейсе видны блоки **тезисов** и **Notes** которые не переносятся в summary.md. Текущий GraphQL-запрос берёт только `overview / action_items / keywords / outline`. Потерянные блоки могут жить в полях `shorthand_bullet`, `bullet_gist`, `gist`, `meeting_info` или в `ai_filters`. Исследование запущено через Opus-cronjob (май 2026) — результат ожидается. После исследования обновить `_MEETING_FIELDS_FULL` в `ff_client.py` и схему `FFSummary` в `ff_schema.py`.
 
 ## GraphQL баг: silent empty response (FF cost-limit)
 
@@ -445,7 +637,7 @@ FF GraphQL error: Too many requests. Please retry after Sat, 23 May 2026 00:00:0
 
 **Убрано:** SHA-256 / hashing.py, reconciler.py (сверка диск↔реестр), processing_status / moved_by / moved_at / moved_to, --mode deleted-check, --reconcile-only, _pending_ff.json, YAML-frontmatter в файлах.
 
-**Осталось:** 3 файла на встречу (transcript/summary/actions), _registry.json (идемпотентность), _registry.md (рендер из JSON через Jinja2 без доп. запросов к FF), минимальная статусная машина (pending/completed/error), 3 режима CLI (test/cron/manual), retry/атомарная запись/_log.md.
+**Осталось:** 2 файла на встречу (transcript/summary), `_registry.json` (идемпотентность), `_registry.md` (рендер из JSON через Jinja2 без доп. запросов к FF), минимальная статусная машина (pending/completed/error), 3 режима CLI (test/cron/manual), retry/атомарная запись/_log.md.
 
 **TG-алерты:** только при `--mode manual` с ошибкой. Cron/test — тишина, всё в `_log.md`.
 

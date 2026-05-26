@@ -1,13 +1,13 @@
 # ТЗ: Инструмент MoveFromFF v2.0 — минимальная версия
 # Перенос встреч из Fireflies.ai → Obsidian WorkVault
-# Версия: 2.0 (minimal) | Дата: 2026-05-22 | Статус: На согласовании
+# Версия: 2.0 (minimal) | Дата: 2026-05-23 | Статус: На согласовании + обновлено 2026-05-25 (Zulip контакты)
 # Замещает: v1.0 + v1.1_addendum
 
 ---
 
 ## 0. Философия (главное)
 
-**MoveFromFF делает ОДНО:** забирает из Fireflies три файла на встречу (transcript / summary / actions) и кладёт их в `NewMeetings/`. Один раз. Идемпотентно.
+**MoveFromFF делает ОДНО:** забирает из Fireflies два файла на встречу (transcript / summary) и кладёт их в `NewMeetings/`. Один раз. Идемпотентно.
 
 Всё остальное — задача следующих инструментов конвейера. В первую очередь — **MarkObjectsFromSummary** (разметка, frontmatter, перемещение в Processed/).
 
@@ -28,7 +28,7 @@
 
 | Блок v1.0/v1.1 | Судьба в v2.0 | Комментарий |
 |---|---|---|
-| 3 файла на встречу (transcript / summary / actions) | ✅ Остаётся | Ядро инструмента |
+|| 2 файла на встречу (transcript / summary) | ✅ Остаётся | Ядро инструмента |
 | GraphQL-клиент к FF + retry (tenacity) | ✅ Остаётся | Без изменений |
 | Pydantic-модели FF-ответа (`ff_schema.py`) | ✅ Остаётся | Упрощённая схема (§5) |
 | Идемпотентность по `meeting_id` | ✅ Остаётся | Главный механизм «не качать повторно» |
@@ -38,7 +38,7 @@
 | Portalocker-лок процесса | ✅ Остаётся | Защита от двойного запуска |
 | Атомарная запись JSON (`tmp + os.replace`) | ✅ Остаётся | Базовая надёжность |
 | `.env` для секретов и путей | ✅ Остаётся | Без хардкода путей |
-| Templates jinja2 для 3 markdown-файлов | ✅ Остаётся | Рендер через `writer.py` |
+|| Templates jinja2 для 2 markdown-файлов | ✅ Остаётся | Рендер через `writer.py` |
 | **`_registry.md`** (markdown-вид реестра) | ✅ Остаётся | Генерируется из `_registry.json` через `renderer.py` + Jinja2. Без доп. запросов к FF — чистая конвертация JSON → Markdown для удобства чтения человеком. |
 | **Минимальная статусная машина загрузки** (`status` ∈ {`pending`, `completed`, `error`}) | ✅ Остаётся | Только результат загрузки. Никакой постобработки. |
 | TG-уведомления **только при ручном запуске** (`--mode manual` или TG-команда `обнови ff`) | ✅ Остаётся | Cron/test — без TG, всё в `_log.md`. См. §7 |
@@ -59,9 +59,10 @@
 | **Сложная схема статусов** (`transfer_status` ∈ {pending, completed, failed, deleted_in_ff, missing_locally}, `integrity` ∈ {ok, modified_locally, unknown}) | Заменена на минимальную: только `status` ∈ {`pending`, `completed`, `error`} — результат загрузки и ничего больше. |
 | **Поля постобработки** (`processing_status`, `moved_by`, `moved_at`, `moved_to`, статусы `in_progress` / `done`) | Это область ответственности downstream (MarkObjectsFromSummary). MoveFromFF не должен знать, что произошло после загрузки. |
 | **`errors[]` в записи реестра** | При ошибке загрузки — запись в реестр **не создаётся** (попробует в следующий cron). Ошибка — в jsonl-лог и TG. |
-| **`_pending_ff.json`** (встречи в статусе Processing) | Просто пропускаем, попадут в следующее окно (overlap 30 мин или 24 ч). |
-| **Поле `audio_url`** в реестре и в transcript | На тарифе Pro всегда `null`. Не выводить. |
-| **Шифрование (Cryptomator)** | Отдельная инфраструктурная задача, к коду MoveFromFF не относится. |
+|| **`_pending_ff.json`** (встречи в статусе Processing) | Просто пропускаем, попадут в следующее окно (overlap 30 мин или 24 ч). |
+|| **Поле `audio_url`** в реестре и в transcript | На тарифе Pro всегда `null`. Не выводить. |
+|| **`actions.md` / `actions.md.j2`** | Дублирует `action_items` из `summary.md`, нулевая доп. ценность |
+|| **Шифрование (Cryptomator)** | Отдельная инфраструктурная задача, к коду MoveFromFF не относится. |
 | **Подробная нормализация полей FF** (вся таблица §13 v1.1) | Минимум: `date` (UTC), `duration` (как есть), `participants` (как есть), `speaker_name` (если пусто — `Speaker N`). Остальное — слово в слово как отдаёт FF. |
 | **Длинная матрица TG-алертов** (7 строк) | 2 правила, см. §7. Cron/test вообще не шлёт в TG. |
 | **DoD с 16 пунктами** | Сжимается до 7 пунктов, см. §10. |
@@ -83,12 +84,13 @@
 - `--mode test` → `from = now_utc - 5 дней`
 - `--mode cron` → `from = now_utc - 4ч 30мин` (overlap)
 - `--mode manual --from-date --to-date` → произвольный интервал (UTC)
-- GraphQL: `transcripts(fromDate, toDate, limit=50)` с пагинацией.
+- `--mode manual --meeting-id <id>` → запрос только одной встречи по ID (GraphQL: `transcript(id: $id)`)
+- GraphQL: `transcripts(fromDate, toDate, limit=50)` с пагинацией (для окна) или `transcript(id: $id)` (для одной встречи).
 
 ### Шаг 3. Фильтр и скачивание
 Для каждой встречи из ответа FF:
 1. **Если `meeting_id` уже есть в `_registry.json`** → пропустить (лог `skipped`).
-2. **Иначе** скачать полный объект (`transcript`, `summary`, `sentences`), отрендерить 3 markdown-файла, записать на диск (атомарно: tmp + replace).
+2. **Иначе** скачать полный объект (`transcript`, `summary`, `sentences`), отрендерить 2 markdown-файла, записать на диск (атомарно: tmp + replace).
 3. **При успехе** — добавить запись в реестр (атомарно: tmp + replace всего файла).
 4. **При ошибке** на конкретной встрече:
    - Файлы (если частично записаны) — удалить.
@@ -122,8 +124,7 @@
       "participants": ["a@tutu.ru", "b@example.com"],
       "files": {
         "transcript": "2026-05-20 11-30-00 Встреча с клиентом - transcript.md",
-        "summary":    "2026-05-20 11-30-00 Встреча с клиентом - summary.md",
-        "actions":    "2026-05-20 11-30-00 Встреча с клиентом - actions.md"
+        "summary":    "2026-05-20 11-30-00 Встреча с клиентом - summary.md"
       },
       "status": "completed",
       "fetched_at": "2026-05-22T14:30:05Z"
@@ -137,7 +138,7 @@
 - `files.*` — только имена файлов (без путей), относительно `NewMeetings/`.
 - `status` ∈ {`pending`, `completed`, `error`} — **минимальная статусная машина результата загрузки**:
   - `pending` — встреча обнаружена в FF, загрузка ещё не завершена (промежуточное состояние внутри одного запуска).
-  - `completed` — все 3 файла успешно записаны на диск.
+  - `completed` — оба файла успешно записаны на диск.
   - `error` — последняя попытка загрузки упала; запись остаётся, чтобы downstream/человек видели проблему. В следующий cron MoveFromFF может попробовать снова.
 - Других состояний нет. Никакой постобработки в этом поле не отражается.
 - Поле `meeting_id` хранится как ключ объекта `meetings` — дублировать его внутрь не нужно.
@@ -146,7 +147,7 @@
 
 ---
 
-## 5. Содержимое 3 файлов
+## 5. Содержимое 2 файлов
 
 ### `transcript.md`
 ```
@@ -184,15 +185,6 @@
 - `keywords` (string или array) — выводим как есть (если array — через запятую).
 - Никакой LLM-обработки.
 
-### `actions.md`
-```
-# Action items: {{ title }}
-
-{{ summary.action_items }}
-```
-- Если `action_items` пусто → `_Нет action items._`
-- Содержимое — как отдал FF (markdown-строка), не парсим в чек-лист.
-
 **Никакого YAML-frontmatter.** Его добавляет MarkObjectsFromSummary.
 
 ---
@@ -203,7 +195,7 @@
 ```
 YYYY-MM-DD HH-MM-SS <Title> - <kind>.md
 ```
-где `<kind> ∈ {transcript, summary, actions}`.
+где `<kind> ∈ {transcript, summary}`.
 
 - Дата/время — UTC.
 - Sanitize Windows: `\ / : * ? " < > |` → `_`.
@@ -250,6 +242,7 @@ YYYY-MM-DD HH-MM-SS <Title> - <kind>.md
 python -m movefromff --mode test                                    # последние 5 дней, без TG
 python -m movefromff --mode cron                                    # последние 4ч 30мин, без TG
 python -m movefromff --mode manual --from-date 2026-01-01 --to-date 2026-01-31
+python -m movefromff --mode manual --meeting-id <meeting_id>        # скачать одну встречу по ID
 python -m movefromff --mode test --dry-run                          # план без записи
 python -m movefromff --mode manual --no-tg                          # ручной запуск без TG (отладка)
 python -m movefromff --mode cron --verbose                          # DEBUG лог
@@ -276,7 +269,7 @@ MoveFromFF/
 │   ├── ff_client.py           # GraphQL + tenacity retry
 │   ├── ff_schema.py           # pydantic-модели ответа FF (минимум полей)
 │   ├── registry.py            # read/write _registry.json (атомарно)
-│   ├── writer.py              # рендер jinja2 + запись 3 файлов
+│   ├── writer.py              # рендер jinja2 + запись 2 файлов
 │   ├── renderer.py            # генерация _registry.md из _registry.json (Jinja2, без запросов к FF)
 │   ├── filename.py            # генерация имени файла
 │   ├── lock.py                # portalocker
@@ -285,7 +278,6 @@ MoveFromFF/
 │   └── templates/
 │       ├── transcript.md.j2
 │       ├── summary.md.j2
-│       ├── actions.md.j2
 │       └── registry.md.j2     # шаблон для _registry.md (конвертация JSON → MD)
 ├── tests/
 │   ├── test_filename.py
@@ -304,7 +296,7 @@ MoveFromFF/
 
 ## 11. Критерии приёмки (DoD, минимум)
 
-1. ✅ `--mode test` скачивает встречи за 5 дней в правильном формате.
+1. ✅ `--mode test` скачивает встречи за 5 дней в правильном формате (2 файла).
 2. ✅ Повторный запуск без новых встреч → `downloaded=0 skipped=N`, длительность <5 сек.
 3. ✅ Уже скачанная встреча (запись в реестре) — **никогда** не качается повторно.
 4. ✅ Ошибка одной встречи → остальные продолжают качаться, упавшая попадёт в следующий cron.
@@ -317,7 +309,7 @@ MoveFromFF/
 ## 12. Контракт с MarkObjectsFromSummary (минимальный)
 
 **MoveFromFF гарантирует:**
-- Три файла на каждую встречу в `NewMeetings/` без YAML-frontmatter.
+- Два файла на каждую встречу в `NewMeetings/` без YAML-frontmatter.
 - Запись о встрече в `_registry.json` (ключ = `meeting_id`, поля по §4).
 - Имена файлов — стабильные (генерируются детерминированно по дате+title).
 
@@ -330,11 +322,54 @@ MoveFromFF/
 
 ---
 
-## 13. Миграция с v1.0/v1.1 → v2.0
+## 13. Интеграция с MoveFromExchange (контакты)
+
+**MoveFromFF хранит в `_registry.json` поле `participants`** — список email участников встречи.
+
+Для резолва email → ФИО используется `contacts.enc` из MoveFromExchange.
+
+**MoveFromFF НЕ делает резолв сам** — это задача MarkObjectsFromSummary. MoveFromFF просто сохраняет email как есть.
+
+**Контракт:**
+- Если `contacts.enc` доступен, downstream-инструменты (MarkObjectsFromSummary, другие агенты) могут обогащать данные встреч (добавлять ФИО, department, team участников).
+- Если `contacts.enc` недоступен — MoveFromFF продолжает работать без него, встречи остаются с email как есть (graceful degradation).
+- Резолв email → ФИО выполняет **MoveFromExchange** (синхронизация контактов из Exchange GAL) + **MarkObjectsFromSummary** (обогащение встреч).
+- **Обновление 2026-05-25:** Zulip содержит 1167 активных контактов (API работает без VPN). MarkObjectsFromSummary может использовать данные как из Exchange GAL, так и из Zulip API для резолва участников встреч.
+
+---
+
+## 13a. Интеграция с MoveFromConfluence (публикация summary встреч)
+
+**MoveFromConfluence** (через агента Hermes в Telegram) может вызвать **MoveFromFF** для скачивания конкретной встречи перед публикацией её summary.
+
+### Сценарий
+
+Пользователь просит в TG: «Опубликуй summary встречи от 20 мая».
+
+**Алгоритм:**
+1. MoveFromConfluence-агент ищет summary-файл встречи от 20 мая в `{WORKVAULT_PATH}/Meetings/NewMeetings/`.
+2. Если файл **не найден** в локальных файлах → проверяет реестр `_registry.json`.
+3. Если запись о встрече есть в реестре, но файл `.md` отсутствует → вызывает:
+   ```bash
+   python -m movefromff --mode manual --meeting-id <meeting_id>
+   ```
+4. MoveFromFF скачивает встречу по ID и создаёт 2 файла в `NewMeetings/` (transcript + summary).
+5. После успешной загрузки → агент MoveFromConfluence продолжает публикацию summary на нужную страницу Confluence.
+
+### Контракт
+
+- **Путь для встреч:** обе системы используют одинаковый путь `{WORKVAULT_PATH}/Meetings/NewMeetings/` для размещения файлов summary.
+- **Формат имён:** `YYYY-MM-DD HH-MM-SS <Title> - summary.md` (детерминированное именование, совместимое обеими системами).
+- **Реестр `_registry.json`:** MoveFromFF ведёт, MoveFromConfluence-агент может читать для поиска встреч.
+- **Независимость:** MoveFromFF скачивает встречи, MoveFromConfluence публикует summary. Никакой синхронизации статусов между ними.
+
+---
+
+## 13b. Миграция с v1.0/v1.1 → v2.0
 
 Если в `_registry.json` встретился `schema_version=1.0` или `1.1`:
 1. Прочитать список `meeting_id` → переписать в новой схеме (оставить только нужные поля: `title`, `meeting_date`, `duration_minutes`, `participants`, `files`, `fetched_at`).
-2. Проставить `status="completed"` всем записям, у которых на диске реально лежат 3 файла. Если каких-то файлов нет — `status="error"` (downstream увидит проблему).
+2. Проставить `status="completed"` всем записям, у которых на диске реально лежат 2 файла. Если каких-то файлов нет — `status="error"` (downstream увидит проблему).
 3. Записать обратно с `schema_version="2.0"`.
 4. Старые поля (`sha256`, `transfer_status`, `integrity`, `processing_status`, `moved_by`, `moved_at`, `moved_to`, `errors`, `audio_url`, `last_checked_at`, `keywords`, `source`) — **отбросить**.
 5. Сгенерировать свежий `_registry.md` из обновлённого `_registry.json`.
@@ -361,4 +396,4 @@ MoveFromFF/
 | Статусов | 5 transfer + 3 integrity + 2 source + статусы постобработки | 3 (`pending` / `completed` / `error`) — только результат загрузки |
 | TG-правил | 7 | 2 (только ручной запуск; cron/test — без TG) |
 | DoD-пунктов | 16 | 7 |
-| Шаблонов jinja2 | 4 | 4 (`transcript`, `summary`, `actions`, `registry`) |
+|| Шаблонов jinja2 | 4 | 3 (`transcript`, `summary`, `registry`) |

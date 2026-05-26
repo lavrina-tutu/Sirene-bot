@@ -19,8 +19,11 @@ Strategies to reduce API token costs while keeping main conversation quality hig
 | Тип задачи | Модель |
 |---|---|
 | Терминальные / механические (ls, config set, статус) | claude-haiku-4-5 |
+| Справочные вопросы по готовым инструментам/ТЗ/скиллам | claude-haiku-4-5 |
 | Основной чат, координация, интерпретация запросов | claude-sonnet-4-6 |
-| Разработка, ТЗ, архитектура, дебаг, тесты | claude-opus-4-7 |
+| Разработка, **написание и правка ТЗ**, архитектура, дебаг | claude-opus-4-7 |
+
+**Правило ТЗ:** ТЗ всегда пишет и правит Opus. После любой правки ТЗ — Opus проверяет все смежные ТЗ инструментов на непротиворечивость. Нарушение этого правила приводит к расхождениям между документами (как произошло в мае 2026: Haiku отредактировал ТЗ MoveFromExchange вместо Opus).
 
 **Важно:** основной чат держать на Sonnet, не Haiku — Haiku теряет контекст длинных сессий и неточно формулирует задачи для субагентов. Sonnet дешевле Opus в ~5 раз при приемлемом качестве.
 
@@ -163,7 +166,23 @@ hermes config set agent.system_prompt 'В начале каждого ответ
 
 ---
 
-## 8. Роутинг по типу задачи (рекомендуемая схема для tkachenkoav)
+## 8. Справочные вопросы по готовым инструментам → Haiku
+
+Когда пользователь задаёт вопрос вида «как работает X», «что делает функция Y», «объясни алгоритм Z» про уже написанный инструмент/ТЗ/скилл — этот вопрос можно делегировать Haiku. Haiku читает код/документ и объясняет — качество достаточное, стоимость в 20x меньше.
+
+**Кандидаты для Haiku:**
+- «Как MoveFromFF синхронизирует новые встречи?»
+- «Что делает функция fetch_range?»
+- «Какие поля в реестре v2.0?»
+- «Как работает блокировка через portalocker?»
+- «Что настроено в config.yaml?»
+
+**Оставлять на Sonnet/Opus:**
+- Вопросы с архитектурными решениями («как лучше сделать X»)
+- Вопросы по нескольким файлам сразу с выводами
+- Отладка — найти где баг в коде
+
+## 9. Роутинг по типу задачи (рекомендуемая схема для tkachenkoav)
 
 | Тип задачи | Модель | Способ |
 |---|---|---|
@@ -265,7 +284,36 @@ conn.close()
 
 
 
-- `fallback_model` in config.yaml applies to the **main model only**, NOT to delegation. There is no native per-delegation fallback — use manual switch scripts or a cron job.
+## 10. Gateway-безопасное делегирование тяжёлых задач (tkachenkoav, май 2026)
+
+**Проблема:** `delegate_task` с Opus (`reasoning_effort=high`, `child_timeout=1200`) держит родительский stream. При длинных задачах gateway падает с "Stream stale for 180s — Killing connection" и перезапускается. Сессия рвётся.
+
+**Решение — cronjob вместо delegate_task для тяжёлых Opus-задач:**
+
+```python
+# Вместо delegate_task (блокирует gateway):
+cronjob(action='create',
+    name='my-task',
+    prompt='...',
+    model={'model': 'claude-opus-4-7', 'provider': 'anthropic'},
+    schedule='1m',      # запуск через 1 минуту
+    repeat=1,           # один раз
+    deliver='origin',   # результат в текущий чат
+    enabled_toolsets=['file', 'terminal']
+)
+```
+
+**Правила:**
+- Задачи >5 мин (разработка, исследования, ТЗ, настройка Hermes) → **cronjob**
+- Короткие задачи (<2 мин) → **delegate_task** на Sonnet/Haiku
+
+**Минусы cronjob:**
+- Нет контекста разговора — всё нужно писать в prompt явно
+- Нет обратной связи в процессе — итерации дороже
+- Задержка 1+ мин до старта
+- Нельзя видеть прогресс (только через `cronjob action='log'` пока running)
+
+**Паттерн промпта для cronjob-задачи:** передавай максимум контекста явно: пути к файлам, что уже сделано, что именно нужно сделать, что нельзя трогать. Иначе Opus начнёт с нуля. There is no native per-delegation fallback — use manual switch scripts or a cron job.
 - Changes to `delegation.*` take effect immediately for new `delegate_task` calls — no `/reset` needed.
 - Changes to `auxiliary.*` also take effect immediately.
 - exo signing key = the model name string shown on the integrations page, NOT a token/secret.

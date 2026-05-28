@@ -268,6 +268,64 @@ Email как универсальный ключ связывает:
 
 **Если предлагается разработка другого инструмента раньше Exchange contacts — напомнить про эту договорённость.**
 
+## MoveFromFF — полная карта полей Fireflies API (исследовано 27.05.2026)
+
+GraphQL-запрос для полного summary (все полезные поля):
+```graphql
+query {
+  transcripts(limit: N) {
+    id title date
+    summary {
+      overview short_summary gist bullet_gist shorthand_bullet
+      outline action_items keywords
+      extended_sections { title content }
+    }
+    apps_preview {
+      outputs { app_id title response created_at }
+    }
+  }
+}
+```
+
+**Стабильно заполнены (все встречи):**
+- `overview` — 5 буллетов, executive summary (~570–750 символов)
+- `short_summary` — один связный абзац (~650 символов), удобен для уведомлений
+- `gist` — одна фраза, цель встречи (~100 символов). Уникальный источник
+- `bullet_gist` — те же 5 пунктов что overview, но с эмодзи. Уникальный источник
+- `shorthand_bullet` — таймлайн встречи по фазам с таймкодами (MM:SS-MM:SS) + эмодзи-заголовки (~1500–1800 символов). Уникальный взгляд «как шла встреча по времени»
+- `action_items` — plain-text строка, задачи сгруппированы по ФИО исполнителя с таймкодами. Единственный нативный источник «задача → человек»
+- `keywords` — list[str], ~6 тегов. Для тегирования/поиска
+- `extended_sections` — стабильно 4 секции: `Blockers`, `Questions`, `Meeting Outline`, `Topics`. Единственный источник блокеров и открытых вопросов с таймкодами
+- `apps_preview.outputs` — 2 элемента: `1:1` и `Meeting Summary Generator`. Meeting Summary Generator — самый полный протокол (4.5–7 КБ): список участников с ФИО, расширенное обсуждение, блокеры с ответственными, задачи по людям со сроками
+
+**Маппинг FF UI → API поля (проверено на встрече 01KSJ49AGHYFJTRARWAD088Q7N, 27.05.2026):**
+
+| Блок в FF UI | API поле | Примечание |
+|---|---|---|
+| Bullet points вверху страницы | `summary.overview` | 5 буллетов с жирным заголовком |
+| **Notes** | `summary.extended_sections` | FF называет их "Notes", рендерит 4 секции: Blockers / Questions / Meeting Outline / Topics |
+| **1:1** (голубая карточка Custom Skill) | `apps_preview.outputs` где `title="1:1"` | Gist + Key Topics Discussed + Key Takeaways + Action Items + Decisions Made |
+| **Meeting Summary Generator** (жёлтая карточка Custom Skill) | `apps_preview.outputs` где `title="Meeting Summary Generator"` | Самый полный протокол на русском: участники, обсудили, блокеры, задачи по людям |
+
+Все три блока (Notes, 1:1, Meeting Summary Generator) — **отдельные визуальные блоки** в FF UI, не один блок.
+
+**`outline` — ВСЕГДА null.** Не использовать. Структуру встречи даёт `extended_sections[title="Meeting Outline"]`.
+
+**`notes` — НОВОЕ ПОЛЕ (обнаружено 27.05.2026).** Содержит тематический нарратив ~6KB с подзаголовками. В FF UI отображается как блок "Notes" сразу после Bullet points. Это НЕ `extended_sections` — отдельное поле типа String. Добавить в GraphQL-запрос и в шаблон summary.md.j2. ТЗ: `WorkVault/Hermes-Backlog/_Done/ТЗ-MoveFromFF-summary-fields-20260527.md`.
+
+**Реальная форма `extended_sections`:** поле называется `content` (не `items`). Структура: `{ title: String, content: String }`. `items` не существует на нашем тарифе.
+
+**Возможен полностью пустой summary** (короткая/прерванная запись) — все поля null, `apps_preview.outputs = []`. Код должен обрабатывать корректно.
+
+**Рекомендации по использованию:**
+- Компактный превью → `short_summary` или `overview`
+- Визуальная шпаргалка → `bullet_gist` или `shorthand_bullet`
+- Задачи по людям → `action_items` (нативно) или `apps_preview[Meeting Summary Generator]` (детальнее)
+- Блокеры/вопросы с таймкодами → `extended_sections`
+- Полный архивный протокол → `apps_preview.outputs[Meeting Summary Generator].response`
+
+Тестовый скрипт: `USERTOOLS/MoveFromFF/test_ff_full_summary.py`
+
 ## MoveFromFF — архитектурные решения (22 мая 2026, КОД ЗАМОРОЖЕН)
 
 Код заморожен до финализации ТЗ. Только обсуждение и документирование решений.
@@ -282,12 +340,86 @@ Email как универсальный ключ связывает:
 
 **Почему так:** Fireflies не знает оргструктуру, не знает кто есть кто → кривые таски, размытые саммари. После подключения Exchange GAL точность резолвера вырастет автоматически.
 
+## AnywhereContacts — архитектура (согласовано 28.05.2026)
+
+Общая библиотека для всех коннекторов MoveFrom*. MoveFrom* становятся тонкими коннекторами.
+
+### Что переезжает в AnywhereContacts
+- `crypto.py` — шифрование AES-256-GCM (полностью generic)
+- `store.py` — ContactStore, create_store (публичный API)
+- `logger.py` — SyncLogger + PII-маскеры (расширяемые через register_pii_masker)
+- `lock.py` — FileLock (общий lock на contacts.enc)
+- `merger.py` — рефакторинг: ContactMerger.merge(local, incoming, strategy) + MergeStrategy
+- `settings.py` — ContactsBaseSettings (pydantic, базовый класс для всех коннекторов)
+- `schema.py` — dataclass Contact + константы полей
+
+### Что остаётся в коннекторах
+- `filters.py` — правила что отбрасывать (Exchange: 4 правила; Zulip: is_bot/is_active)
+- `<source>_client.py` — API-клиент к источнику
+- `mapper.py` — нормализация raw API record → стандартный contact dict
+- `config.py` — только специфичные credentials/URL (наследует ContactsBaseSettings)
+- `sync.py` — оркестрация синка через MergeStrategy
+
+### Ключевые архитектурные решения (28.05.2026)
+
+**Первичный ключ — `login` (не email).** Причина: у одного человека может быть @tutu.ru в Exchange и @tutu.tech в Zulip. Логин одинаков, email разный. По логину мержим в один контакт.
+
+**Schema v2 — multi-source.** Структура sources внутри контакта:
+```json
+{
+  "login": "sereda",
+  "email": "sereda@tutu.ru",
+  "sources": {
+    "exchange": {"email": "sereda@tutu.ru", "synced_at": "...", "active": true},
+    "zulip":    {"email": "sereda@tutu.tech", "synced_at": "...", "active": true}
+  },
+  "active": true
+}
+```
+`active` верхнего уровня = `any(source.active)`. Требует migration contacts.enc v1 → v2.
+
+**Общий lock — `WorkVault/Contacts/.contacts.enc.lock`.** Один файл на всех коннекторов. Параллельный запуск двух коннекторов безопасен.
+
+**messenger_ids с source.** Каждое значение фиксирует источник:
+```json
+"messenger_ids": {
+  "telegram": {"value": "@sereda", "source": "zulip", "synced_at": "..."},
+  "zulip_id":  {"value": 12345,    "source": "zulip", "synced_at": "..."}
+}
+```
+`source: "manual"` — коннектор не перезаписывает. `source: "zulip"` — перезаписывает при синке.
+
+**is_active=false из Zulip — НЕ пишем в contacts.** Просто пропускаем.
+
+### Минимум кода для нового коннектора (~150 строк)
+mapper.py + filters.py + client.py + config.py + sync.py + __main__.py.
+MergeStrategy описывает поведение: source, authoritative_fields, filter_fn.
+
+### Структура пакетов
+```
+USERTOOLS/
+├── AnywhereContacts/          ← библиотека (не CLI)
+│   └── anywhere_contacts/
+│       ├── crypto.py, store.py, logger.py, lock.py, merger.py
+│       ├── schema.py, settings.py, connector.py
+│       └── __init__.py        ← публичный API (re-exports)
+├── MoveFromZulip/             ← тонкий коннектор
+│   └── movefromzulip/
+│       ├── zulip_client.py, mapper.py, filters.py, config.py, sync.py
+│       └── __main__.py
+└── MoveFromExchange/          ← рефакторинг: остаются только exchange-специфичные части
+```
+
 ## Статус инструментов
+
+**MoveFromZulip** — бриф согласован 2026-05-28, ТЗ не написано (следующий шаг).
+Детали брифа: `references/movefromzulip-brief-v1.md`.
+Zulip — основной источник контактов (1 запрос `GET /api/v1/users`). Exchange — верификация.
 
 | Инструмент | Сервис | Статус | ТЗ |
 |---|---|---|---|
-| MoveFromFF | Fireflies.ai | ✅ **v2.0 готов** — 2 файла (transcript+summary), 48 тестов ✅. Крон: пн–пт 10:00/12:00/14:00/16:00/18:00/20:00 МСК (job_id: 1e62e18ae399). Флаг `--meeting-id` для скачивания одной встречи. Загружено 439 встреч (авг 2025 – май 2026). | `hermes-workspace/docs/tz/MoveFromFF_TZ_v2.0_minimal.md` |
-| MoveFromExchange | Exchange (ТУТУ) | ✅ **v1.0 готов** — contacts/GAL, AES-256-GCM шифрование, 34 теста ✅. Крон: каждое воскресенье 03:00 МСК (job_id: 58ab10e1ee15). **Работает в офисе (домен ТУТУ) через Kerberos** — пароль не нужен. Проверено 25.05.2026: Inbox ✅ (14 писем), Calendar ✅ (43 события), GAL resolve_names ✅. fetch_gal() возвращает 0 — нужна диагностика _fetch_people() в домене. Дома без VPN — не работает. | `hermes-workspace/docs/tz/MoveFromExchange_TZ_contacts_v1.0.md` |
+| MoveFromFF | Fireflies.ai | ✅ **v2.2 готов** — 8 секций summary (Bullet points/Notes/Action items/Blockers/Questions/Meeting Outline/Topics/Keywords), reconciliation (сброс в pending при удалении файлов), backfill (fetch по ID, лимит 50/прогон, newest-first), 83 теста ✅. Крон: пн–пт 10:00–20:00 МСК каждые 2ч (job_id: 1e62e18ae399). | `USERTOOLS/MoveFromFF/MoveFromFF_TZ_v2.2.md` (обновить) |
+| MoveFromExchange | Exchange (ТУТУ) | 🟡 **v1.0 работает, v1.1 в разработке** — 1787 контактов (после фильтрации ~944). ТЗ v1.1 согласовано 27.05.2026: filters.py (4 правила), XLSX убран, contacts.jsonl с маскировкой, TG-поиск контактов с маскировкой (Ив**в, iv**v@tutu.ru). Крон-путь сломан (старый), починить после реализации v1.1. | `USERTOOLS/MoveFromExchange/MoveFromExchange_TZ_v1.1.md` |
 | MarkObjectsFromSummary | WorkVault | 🟡 **Бриф завершён (блоки A-F+G), ТЗ не написано.** БЛОКЕР: нужен письменный список проектов/тем/инициатив от Саши с точными названиями и алиасами → файл `projects.md`. Без него ТЗ v0.1 можно написать (только контакты), но в реализацию v0.2+ не идти. | `hermes-workspace/docs/tz/MarkObjectsFromSummary_TZ_v0.1.md` (не создан) |
 | MoveFromJira | Jira (ТУТУ) | 🥈 **Приоритет #2** — только OKRAID + OKRS (цели и проекты). Нужен для быстрой постановки задач через TG. Jira доступна без VPN (`dom.tutu.ru`, PAT в `.env`). | — |
 | MoveFromConfluence | Confluence (`dom.tutu.ru`) | ⚠️ **v1.0 написан, но API заблокирован Keycloak SSO.** В офисе браузер работает без 2FA (Kerberos). Дома — 2FA (Google Authenticator). API через curl/requests — редиректит на Keycloak, PAT не принимается. Исследование Kerberos-подключения через requests_kerberos запущено (май 2026). Работать только в домене ТУТУ. | `hermes-workspace/docs/tz/MoveFromConfluence_TZ_v1.0.md` |
@@ -311,6 +443,47 @@ TG_ALERT_CHAT_ID=400307920
 ```
 
 `redact_secrets: true` в Hermes config уже включён — токены в логах маскируются.
+
+## Правило хранения ТЗ (зафиксировано 27.05.2026)
+
+**Master-ТЗ** хранится в папке инструмента: `USERTOOLS/<tool>/<Tool>_TZ_vX.Y.md`
+- Обновляется при каждой доработке
+- Это единая точка правды по инструменту
+
+**История точечных изменений** → `WorkVault/Hermes-Backlog/_Done/ТЗ-<Tool>-<feature>-YYYYMMDD.md`
+
+При любой доработке инструмента — обновлять master-ТЗ в папке инструмента.
+
+## MoveFromExchange — маскировка персданных (27.05.2026)
+
+Правило для contacts.jsonl и TG-отображения:
+- **ФИО:** первые 2 + последняя буква открыты, середина `**` → `Ив**в Ал**р`
+- **Email:** первые 2 + последняя до `@` открыты, домен открыт → `iv**v@tutu.ru`
+- **Логин:** аналогично email → `iv**v`
+- **Telegram handle:** `@iv**v`
+
+TG-поиск контактов: по имени/фамилии, до 5 результатов, поля: ФИО, email, логин, отдел, команда, должность, алиасы, мессенджеры — все с маскировкой.
+
+## MoveFromFF — reconciliation + backfill (27.05.2026)
+
+**reconcile_registry()** в `registry.py`: при каждом синке проверяет completed-записи на наличие файлов на диске. Если файл удалён → статус сбрасывается в `pending`.
+
+**Backfill второй проход** в `__main__.py`: после основного fetch_range — делает fetch_meeting(id) для всех pending-записей с известным ID. Лимит 50/прогон, сортировка **newest-first** (`reverse=True`). Rate limit → прерывает backfill, оставшиеся в pending подхватятся на следующем cron.
+
+Результат: удалил файл руками → следующий cron перекачал автоматически в правильном формате.
+
+## Правило хранения ТЗ (зафиксировано 27.05.2026)
+
+**Живое полное ТЗ** каждого инструмента хранится в папке инструмента:
+`USERTOOLS/<Инструмент>/<Инструмент>_TZ_vX.Y.md`
+
+Примеры:
+- `USERTOOLS/MoveFromFF/MoveFromFF_TZ_v2.1.md` — обновляется при каждой доработке
+- `USERTOOLS/MoveFromExchange/MoveFromExchange_TZ_v1.1.md` — создан 27.05.2026
+
+`WorkVault/Hermes-Backlog/_Done/` = **история точечных изменений** (ТЗ на конкретную фичу).
+
+**При каждой доработке инструмента:** обновлять master-ТЗ в папке инструмента, не только создавать точечное ТЗ.
 
 ## Все ТЗ и бэклог
 
@@ -566,7 +739,16 @@ find USERTOOLS -maxdepth 2 -type d -name ".pytest_cache" ! -path "*/.venv/*" -ex
 - **Confluence Keycloak SSO:** PAT не работает через API (редирект на Keycloak). В домене ТУТУ браузер проходит без 2FA (Kerberos). Дома — 2FA (Google Authenticator). Разрабатывать MoveFromConfluence только в домене. Дома — поднимать VPN.
 - **EXCHANGE_PASSWORD в MoveFromExchange/.env был `***`** — плейсхолдер, не реальный пароль. Реальная аутентификация через Kerberos (доменная сессия Windows). Не пытаться «восстановить» пароль — это не нужно.
 - **Проверяй что субагент не написал заглушку** — после делегирования разработки API-клиента явно проверяй что метод `fetch_*` не возвращает `[]` из mock-ветки. Паттерн: `grep -n "return \[\]" client.py` или читать тело метода перед первым боевым тестом.
-- **Rate limit** — у большинства сервисов есть дневные лимиты. Загружать большие периоды блоками, не делать несколько прогонов подряд в один день.
+- **XLSX-экспорт убран из MoveFromExchange (v1.1):** никаких выгрузок персданных в открытый файл. contacts.enc остаётся (AES-256-GCM). Восстановление при потере — пересинхронизация из Exchange (кастомные поля теряются, это приемлемо).
+- **Переговорки не синхронизируем:** fetch_rooms() убрать из scope MoveFromExchange.
 - **List-запрос не должен тянуть тяжёлые поля** — иначе cost-limit API молча возвращает пустой массив без ошибки. Паттерн: лёгкий list → fetch полных данных только для новых записей (N+1 по числу реально новых).
 - **Корпоративные токены** — хранить только как Personal Access Token, не доменный пароль. PAT можно отозвать не меняя пароль.
 - **Postobработка — не зона MoveFrom*** — только перенос файлов как есть. Всё остальное делают следующие инструменты конвейера.
+
+## References
+
+- `references/movefrom-confluence.md` — MoveFromConfluence полное ТЗ: двусторонняя синхронизация задач Confluence ↔ WorkVault, публикация summary встреч, CLI, TG-команды, парсинг action items / @mention / таблиц.
+- `references/movefrom-exchange-contacts.md` — MoveFromExchange полное ТЗ + contact-resolution: синхронизация Exchange GAL → contacts.enc (AES-256-GCM), Zulip bootstrap, filters.py (4 правила фильтрации), маскировка персданных, exchangelib Kerberos-конфиг; резолвинг свободных упоминаний людей (alias/nickname/login) по contacts.enc через AnywhereContacts API, PII-маскировка при выводе, три состояния резолвера (resolved/ambiguous/unknown).
+- `references/exchange-version-configuration.md` — детали exchangelib Configuration: version, auth_type, access_type, почему нельзя указывать Build явно в домене ТУТУ.
+- `references/qa-verification-checklist.md` — чек-лист QA-верификации проектов против ТЗ (spec-vs-code drift).
+- `references/tutu-corporate-integrations.md` — credentials и auth-паттерны для всех корпоративных сервисов ТУТУ: Confluence (Keycloak SSO, PAT устарел), Jira, Exchange EWS (Kerberos/Basic, exchangelib шаблон), Zulip (HTTP Basic + verify=False), GitHub PAT. Правило минимизации авторизаций.

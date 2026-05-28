@@ -48,13 +48,81 @@ Savings: Haiku is ~20x cheaper than Sonnet. Subagents handle ~30-50% of tokens i
 
 ## 2. Auxiliary Tasks → Cheap Model
 
-Context compression, session search, and vision analysis each have their own model slot:
+Context compression, session search, and vision analysis each have their own model slot.
+
+**⚠️ Compression model ≠ session_search model** — у каждой задачи свой слот, выбирай осознанно.
+
+**Важно для compression:** модель сжатия должна иметь контекст **не меньше** порога сжатия основной модели. Иначе при каждом старте сессии будет предупреждение «Auto-lowered this session's threshold». Два варианта:
+- Использовать **Sonnet** как compression model (контекст 1M, порог 500K работает)
+- Использовать **Haiku** (200K) + снизить `compression.threshold: 0.17` (170K < 200K)
+
+**Текущая конфигурация для tkachenkoav (май 2026):** compression → Sonnet (claude-sonnet-4-6), session_search → Haiku
+
+## References
+
+- `references/compression-internals.md` — исследование Opus (май 2026): где живёт логика в коде, как работает `update_model()`, почему per-model thresholds невозможны через конфиг.
+- `references/delegate-per-call-model-patch.md` — план патча для per-call model в `delegate_task` (4 точки в `tools/delegate_tool.py`). Используй когда профили и `cronjob(model=...)` не покрывают кейс.
+- `references/gateway-response-injection.md` — паттерн `runtime_footer`/`runtime_header` для гарантированной дописки текста к каждому gateway ответу (вне контроля модели); почему хуки и prefill не работают для этого.
+
+### delegate_task model resolution (codebase reference)
+
+`delegate_task` **не принимает per-task model/provider** (проверено: `tools/delegate_tool.py:2066` — `model=creds["model"]` всегда из delegation.model). Вся цепочка:
+1. `delegate_tool.py:2459 _load_config()` — читает `delegation:` из `CLI_CONFIG`
+2. `delegate_tool.py:2345 _resolve_delegation_credentials()` — if `delegation.base_url` → direct endpoint; else if `delegation.provider` → `resolve_runtime_provider`; else наследование от родителя.
+3. `delegate_tool.py:875 _build_child_agent()` — подставляет `model=creds["model"]`
+4. `delegate_tool.py:1021–1036` — `effective_model = model or parent_agent.model`. **api_mode НЕ наследуется когда provider отличается** (баг #20558): иначе MiniMax/DeepSeek роутятся не на ту API.
+5. `delegate_tool.py:1050` — если задан `override_provider` без `override_acp_command`, ACP-транспорт принудительно сбрасывается.
+
+**Cron — другая дверь:** `cronjob` принимает `model={"model":..., "provider":...}` напрямую (см. `cron/scheduler.py:1416–1556`). Результат доставляется отдельным сообщением, не в текущий контекст.
+
+### Hermes Profiles для маршрутизации по моделям
+
+Правильный способ «разные модели для разных задач» — профили, не per-task параметры:
 
 ```bash
-hermes config set auxiliary.compression.model claude-haiku-4-5
+# Профиль для быстрых задач на Qwen (корп. сервер)
+hermes profile create qwen-fast --clone --description "Простые задачи на Qwen"
+hermes -p qwen-fast config set model.default "mlx-community/Qwen3.6-35B-A3B-8bit"
+hermes -p qwen-fast config set model.provider custom
+hermes -p qwen-fast config set model.base_url "http://10.8.4.100:52415/v1"
+hermes -p qwen-fast config set model.api_key "dummy"    # обязателен даже для local
+hermes -p qwen-fast config set delegation.reasoning_effort ""   # exo не поддерживает
+hermes -p qwen-fast config set agent.reasoning_effort ""
+
+# Fallback профиль на Haiku
+hermes profile create haiku-fallback --clone
+hermes -p haiku-fallback config set model.default "claude-haiku-4-5"
+hermes -p haiku-fallback config set model.provider anthropic
+hermes -p haiku-fallback config set delegation.base_url ""
+```
+
+Использование из основной сессии:
+```python
+terminal(command='hermes -p qwen-fast chat -q "простая задача"', timeout=120)
+```
+
+### Indicator активной модели (Telegram)
+
+```
+🤖 Модель: claude-opus-4-7 (исследование/разработка)
+🤖 Модель: claude-sonnet-4-6 (основная)
+🤖 Модель: Qwen3.6-35B (простая задача)
+🤖 Модель: claude-haiku-4-5 (fallback)
+```
+
+**Способ A (ненадёжный):** `agent.system_prompt` — модели Sonnet/Haiku регулярно пропускают инструкцию.
+**Способ B (гарантированный):** `runtime_footer` (существует) или custom `runtime_header` — добавляется после возврата от агента. Детали в `references/gateway-response-injection.md`.
+
+```bash
+# Compression → Sonnet (дороже, но порог 500K корректен, Opus не теряет контекст)
+hermes config set auxiliary.compression.model claude-sonnet-4-6
 hermes config set auxiliary.compression.provider anthropic
+
+# Session search → Haiku (дёшево, достаточно для поиска)
 hermes config set auxiliary.session_search.model claude-haiku-4-5
 hermes config set auxiliary.session_search.provider anthropic
+
+# Vision → Haiku
 hermes config set auxiliary.vision.model claude-haiku-4-5
 hermes config set auxiliary.vision.provider anthropic
 ```
@@ -68,6 +136,18 @@ hermes config set compression.enabled true
 hermes config set compression.threshold 0.50   # compress at 50% context fill
 hermes config set compression.target_ratio 0.20 # compress down to 20%
 ```
+
+**Как threshold взаимодействует с compression model:**
+
+| Compression model | Контекст модели | Рекомендуемый threshold | Результат |
+|---|---|---|---|
+| claude-haiku-4-5 | 200K | `0.17` (170K < 200K) | Haiku справится, порог корректен |
+| claude-sonnet-4-6 | 1M | `0.50` (500K ≪ 1M) | Оптимально, без предупреждений |
+| claude-opus-4-7 | 1M | `0.50` | Оптимально, очень дорого |
+
+**Почему нельзя задать разные пороги для разных моделей:** `compression.threshold` — глобальный параметр, per-model override отсутствует в config.yaml. Единственный встроенный override — функция `_compression_threshold_for_model()` в `agent/auxiliary_client.py` (захардкожена в исходнике). При смене модели (`update_model()`) Hermes переносит `threshold_percent` как есть на новую модель.
+
+**Почему Sonnet лучше Haiku для compression при использовании Opus:** Opus пишет длинные ТЗ/исследования. При пороге 170K компрессия может сработать в середине задачи и Opus потеряет ранний контекст. Sonnet как compressor + threshold 500K даёт Opus запас на полную сессию разработки.
 
 ---
 
@@ -203,9 +283,11 @@ hermes config set agent.system_prompt 'В начале каждого ответ
 hermes config set delegation.model claude-haiku-4-5
 hermes config set delegation.provider anthropic
 
-# Auxiliary → Haiku
-hermes config set auxiliary.compression.model claude-haiku-4-5
+# Compression → Sonnet (важно: Haiku 200K не покрывает threshold 500K)
+hermes config set auxiliary.compression.model claude-sonnet-4-6
 hermes config set auxiliary.compression.provider anthropic
+
+# Session search + Vision → Haiku
 hermes config set auxiliary.session_search.model claude-haiku-4-5
 hermes config set auxiliary.session_search.provider anthropic
 hermes config set auxiliary.vision.model claude-haiku-4-5

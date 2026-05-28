@@ -7,7 +7,18 @@ set -euo pipefail
 SRC="${1:?usage: sanitize_config.sh <src> <dst>}"
 DST="${2:?usage: sanitize_config.sh <src> <dst>}"
 
-python - "$SRC" "$DST" <<'PY'
+# Choose a working Python interpreter. Some venvs in this env have a broken
+# uv trampoline (missing python.exe), so prefer the Windows `py` launcher.
+PYBIN=""
+if command -v py >/dev/null 2>&1; then
+  PYBIN="py -3"
+elif command -v python3 >/dev/null 2>&1; then
+  PYBIN="python3"
+else
+  PYBIN="python"
+fi
+
+$PYBIN - "$SRC" "$DST" <<'PY'
 import re, sys, pathlib
 
 src = pathlib.Path(sys.argv[1])

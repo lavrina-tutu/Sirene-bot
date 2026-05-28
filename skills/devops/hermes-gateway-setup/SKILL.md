@@ -1,7 +1,7 @@
 ---
 name: hermes-gateway-setup
-description: "Set up, configure, and troubleshoot Hermes Gateway messaging platform integrations (Telegram, Discord, Slack, etc.)."
-version: 1.0.0
+description: "Set up, configure, and operate Hermes Gateway: platform integrations (Telegram, Discord, Slack), display/notification config, Windows service install, crash diagnosis, and delegate_task vs cronjob routing patterns."
+version: 1.1.0
 author: agent
 tags: [hermes, gateway, telegram, discord, slack, messaging, setup, windows]
 platforms: [linux, macos, windows]
@@ -81,6 +81,48 @@ Success looks like:
 Gateway running with 1 platform(s)
 ```
 
+## Windows: schtasks через bash не работает — используй реестр или Python
+
+`hermes gateway install` и прямые вызовы `schtasks` из git-bash/MSYS **падают** с одной из двух ошибок:
+- `UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8f` — кодировка консоли Windows (cp866 vs utf-8)
+- `ERROR: Access is denied.` — даже для ONLOGON-задач без /RL HIGHEST
+
+**Рабочий автозапуск: реестр HKCU\Run (прав администратора не требует)**
+
+```python
+import winreg
+
+key_path = r"SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+vbs_path = r"C:\Users\<USER>\AppData\Local\hermes\gateway_hidden.vbs"
+value = f'wscript.exe "{vbs_path}"'
+
+key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_SET_VALUE)
+winreg.SetValueEx(key, "HermesGateway", 0, winreg.REG_SZ, value)
+winreg.CloseKey(key)
+```
+
+Запускать через hermes venv Python:
+```bash
+/c/Users/<USER>/AppData/Local/hermes/hermes-agent/.venv/Scripts/python.exe script.py
+```
+
+Если нужно создать задачу через schtasks без bash, вызывай subprocess из Python (он обходит encoding-проблему bash):
+```python
+import subprocess
+r = subprocess.run(["schtasks", "/Create", ...], capture_output=True)
+print(r.stdout.decode("cp866", errors="replace"))
+```
+
+**Немедленный запуск gateway (без перезагрузки):**
+```bash
+wscript.exe "C:\Users\<USER>\AppData\Local\hermes\gateway_hidden.vbs"
+```
+Проверить через 5-8 секунд:
+```bash
+tail -5 ~/AppData/Local/hermes/logs/gateway.log
+# Должно быть: [Telegram] Connected to Telegram (polling mode)
+```
+
 ## Windows: Скрытый запуск (без видимого окна CMD)
 
 По умолчанию Task Scheduler запускает gateway с видимым окном CMD. Чтобы скрыть окно:
@@ -121,7 +163,8 @@ schtasks /Create /TN "Hermes_Gateway" /XML "C:\Users\USERNAME\AppData\Local\Temp
 ```
 
 ⚠️ `Set-ScheduledTask` в PowerShell требует прав администратора — используй `schtasks` CLI.
-⚠️ После `hermes gateway restart` задача пересоздаётся Hermes'ом и окно снова появится — нужно повторить шаги выше.
+⚠️ After `hermes gateway restart` задача пересоздаётся Hermes'ом и окно снова появится — нужно повторить шаги выше.
+⚠️ **Проверяй путь к venv в cmd-файле** после обновления Hermes. Файл `gateway-service/Hermes_Gateway.cmd` может содержать старый путь (например `hermes-agent\venv\` вместо `hermes-agent\.venv\`). Правильный путь: `C:\Users\<USER>\AppData\Local\hermes\hermes-agent\.venv\Scripts\python.exe`.
 
 ## Windows: Delegation config обновляется только после перезапуска gateway
 
@@ -157,6 +200,34 @@ powercfg.exe -change standby-timeout-dc 180   # 3 часа от батареи
 ```
 
 > ⚠️ **Pitfall**: `powercfg /query SCHEME_CURRENT SUB_SLEEP` через bash даёт пустой вывод из-за кодировки. Используй `powercfg.exe -query 2>&1 | cat` — выводит полный список включая SUB_SLEEP.
+
+## Диагностика упавшего gateway
+
+Если бот в ТГ не отвечает — проверяй в таком порядке:
+
+**1. Есть ли процесс?**
+```bash
+wmic process get ProcessId,CommandLine 2>/dev/null | grep "gateway run"
+# Если пусто — gateway упал, нужно перезапустить
+```
+
+**2. Последняя активность и ошибки:**
+```bash
+tail -30 ~/AppData/Local/hermes/logs/gateway.log
+tail -20 ~/AppData/Local/hermes/logs/errors.log
+```
+
+**Типичные причины падения:**
+- `HTTP 403: Request not allowed` — Anthropic API отклонил запрос (лимит, неверный ключ, временная блокировка). Gateway продолжает работать, но конкретная сессия прерывается.
+- `APITimeoutError` x3 подряд → `API call failed after 3 retries` — сеть нестабильна или API перегружен. После нескольких таких ошибок процесс может упасть.
+- `[MEMORY] rss=...` записи пропали — процесс умер (был жив, потом перестал писать)
+
+**3. Перезапуск:**
+```bash
+wscript.exe "C:\Users\<USER>\AppData\Local\hermes\gateway_hidden.vbs"
+sleep 8
+tail -5 ~/AppData/Local/hermes/logs/gateway.log
+```
 
 ## Common Problems
 
@@ -217,6 +288,105 @@ Full platform docs: https://hermes-agent.nousresearch.com/docs/user-guide/messag
 ```
 ```
 
+## Platform Display & Notification Configuration
+
+Configure per-platform display behavior via `~/.hermes/config.yaml`. Covers interim messages, push notifications, streaming.
+
+### Telegram: Silent Interim Messages
+
+```yaml
+display:
+  platforms:
+    telegram:
+      notifications: important   # no push for tool progress / status messages
+```
+
+Or via env var: `HERMES_TELEGRAM_NOTIFICATIONS=important` (test without editing config).
+
+**Modes:** `important` — interim messages delivered silently (no sound/vibration, visible in chat). Only final responses trigger push. `all` — legacy, all messages trigger push.
+
+### Full display.platforms Structure
+
+```yaml
+display:
+  interim_assistant_messages: true   # show thinking/planning
+  tool_progress: "all"               # "off" | "compact" | "all"
+  streaming: true
+  show_reasoning: false
+  platforms:
+    telegram:
+      notifications: important
+      interim_messages: false        # hide interim status entirely
+      streaming: false               # disable streaming for this platform
+    discord:
+      streaming: false
+```
+
+### Runtime Footer (shows model/context at end of response)
+
+```yaml
+display:
+  runtime_footer:
+    enabled: true
+    fields:
+      - model        # e.g. "claude-sonnet-4-6"
+      - context_pct  # e.g. "35%"
+      - cwd
+```
+
+**⚠️ `display.runtime_header` НЕ СУЩЕСТВУЕТ** — поиск по кодовой базе даёт 0 результатов. Молча игнорируется. Используй только `runtime_footer`.
+
+### How Interim Messages Work (codebase reference)
+1. Agent emits status events → `status_callback()` → `_status_callback_sync()` in `gateway/run.py:16049`
+2. `_prepare_gateway_status_message()` (line 225) filters noisy messages
+3. Telegram adapter's `_notification_kwargs()` (line 472 in `gateway/platforms/telegram.py`) returns `disable_notification=True` if mode is `important`
+
+### Zero Intermediate Messages Config
+```yaml
+display:
+  interim_assistant_messages: false
+  tool_progress: off
+  platforms:
+    telegram:
+      notifications: important
+```
+
+### delegate_task → Gateway Crash Pattern
+
+`delegate_task` с Opus (`reasoning_effort=high`, `child_timeout=1200`) держит родительский стрим → `Subagent stale (no progress 15 cycles)` → `Stream stale 180s` → gateway падает.
+
+**Решение: `cronjob` вместо `delegate_task` для задач >5 минут.**
+
+| Тип задачи | Инструмент |
+|---|---|
+| Разработка, исследования, ТЗ (>5 мин) | `cronjob(repeat=1, schedule='1m', model=opus)` |
+| Быстрые задачи (<2 мин) | `delegate_task` (Sonnet/Haiku) |
+
+**Delegation config (config.yaml):**
+```yaml
+delegation:
+  model: claude-opus-4-7
+  provider: anthropic
+  reasoning_effort: high
+  max_iterations: 50
+  child_timeout_seconds: 1200
+  max_concurrent_children: 3
+```
+
+### Display/Platform Pitfalls
+- Only Telegram reads `display.platforms.telegram.notifications`. Discord/Slack ignore it — use platform-native settings.
+- `disable_notification=True` is a server-side hint; phone settings (DND, sound muting) can override it.
+- Per-platform `notifications` overrides global `display.streaming` independently.
+- `cronjob` не видит контекст разговора — писать полный prompt с путями, ограничениями.
+- Субагент (Haiku) без явного запрета может испортить .env или удалить contacts.enc.
+
+See `references/gateway-telegram-notifications.md` for the complete codebase walkthrough (lines cited), noisy message regex patterns, error handling and rewriting logic.
+See `references/cronjob-vs-delegate-task.md` for the full decision guide on when to use cronjob vs delegate_task.
+
+---
+
 ## References
 
-- `references/windows-env-editing.md` — Python recipe for editing `.env` on Windows when Hermes tools block direct write
+- `references/windows-env-editing.md` — Python recipe for editing `.env` on Windows
+- `references/gateway-telegram-notifications.md` — complete Telegram notification codebase walkthrough
+- `references/cronjob-vs-delegate-task.md` — decision guide: when to use cronjob vs delegate_task for Opus tasks

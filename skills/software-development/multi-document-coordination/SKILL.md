@@ -1,6 +1,9 @@
 ---
 name: multi-document-coordination
-description: Coordinated review, update, and cross-reference validation for interdependent documents (specs, APIs, configs). Prevent inconsistencies when changes in one file affect contracts in others.
+description: "Coordinated review, update, and cross-reference validation for interdependent documents (specs, APIs, configs, Russian ТЗ files). Prevent inconsistencies when changes in one file affect contracts in others."
+version: 1.1.0
+tags: [documents, specs, consistency, tz, workvault, coordination]
+platforms: [windows, linux, macos]
 triggers:
   - Task requires reviewing and updating multiple related documents
   - Need to ensure consistency across files that reference each other
@@ -168,6 +171,44 @@ MarkObjectsFromSummary (downstream consumer — not edited, but mentioned)
 - Created UPDATE_REPORT_2026-05-25.md listing all changes.
 - Verified: No contradictions between files.
 - Noted: Keycloak migration requires separate v1.1 ТЗ.
+
+---
+
+## WorkVault ТЗ Iteration (workvault-tz-iteration)
+
+Specialized variant for applying batched edits to Russian ТЗ markdown specs in `C:\Users\tkachenkoav\WorkVault\Meetings\` after a Q&A review round.
+
+**Triggers:** «внеси правки в ТЗ», «обнови файлы в WorkVault», user cites a sibling Q&A / Brief file and wants answers propagated into the main spec.
+
+### Принципы
+1. **Точечные правки** (`patch` mode='replace' с маленькими уникальными блоками), не переписывать целиком.
+2. **Синхронность** — правка про таймзону/схему/именование затрагивает ВСЕ файлы пакета.
+3. **Закрывать открытые вопросы** — обновить секцию `## Открытые вопросы`: `✅ QN: закрыт: <решение>`.
+4. **Sanity-check** после всех правок: `search_files` по «удалённым» терминам → 0 совпадений.
+5. **Отчёт** по файлам с § ссылками на русском.
+
+### Алгоритм
+1. Прочитать все файлы пакета целиком (`read_file`).
+2. Сгруппировать правки по файлам (одна правка часто затрагивает 2-3 файла).
+3. Параллельные `patch` для независимых правок в РАЗНЫХ файлах; последовательные — в ОДНОМ файле (race condition).
+4. Обновить секцию «Открытые вопросы».
+5. Sanity-check: поиск старых терминов (`Europe/Moscow`, `+03:00`, `bullet_gist`, `restored`).
+6. Отчёт.
+
+### ТЗ-специфичные pitfalls
+- **`patch` race:** повторный patch к тому же файлу в одном tool block → `Failed to read file`. Разносить по разным tool block'ам.
+- **Markdown table pipe escape:** `|` внутри ячеек → `\|`.
+- **UTC ISO в примерах:** при переходе на UTC обновлять JSON-примеры в схемах (`"+03:00"` → `"Z"`, `14:30:00+03:00` → `11:30:00Z`).
+- **«Не использовать X» — это правило, не предложение:** писать дословно с **жирным** «не».
+- **Поля в нескольких местах:** таблица §13 + JSON-схема §9 + enum — обновлять все три.
+- **Зеркальные ссылки между ТЗ:** если правка пробрасывает обязанность из A в B — добавить в оба.
+
+### DoD
+- Все нумерованные пункты из запроса применены.
+- Кросс-файловая консистентность (одно поле/решение одинаково во всех файлах).
+- Sanity-check = 0 совпадений.
+- «Открытые вопросы» обновлены.
+- Отчёт с § ссылками отправлен.
 
 ---
 

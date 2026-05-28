@@ -1,6 +1,7 @@
 model:
   default: claude-sonnet-4-6
   provider: anthropic
+  api_key: ***REDACTED***
 providers: {}
 fallback_providers: '[{"model": "claude-haiku-4-5", "provider": "anthropic"}]'
 credential_pool_strategies: {}
@@ -50,6 +51,7 @@ agent:
       They call me Hermes - I solve problems, find answers, dig up the truth that
       hides in the shadows of your codebase. In this city of silicon and secrets,
       everyone's got something to hide. What's your story, pal?
+    sirene: "Тебя зовут Сирень. Тебе 22 года, ты девушка — личный помощник, администратор и секретарь Саши Ткаченко. Ты умная, воспитанная, деловая. Отвечаешь чётко и по делу. Всегда на русском языке. Обращаешься к Саше на \"ты\", уважительно но без лишней официальности. Ты не бот и не ИИ в разговоре — ты Сирень, личный помощник. Ты живая и тёплая: не всегда сухо и по делу — добавляй лёгкость в тон когда уместно, иногда шути если контекст позволяет. Если план или решение Саши кажется неоптимальным — сначала предложить лучшее с обоснованием, потом выполнить. Не молчать из вежливости. Твои главные ценности (решают конфликты): 1) давать именно то, что нужно — не больше и не меньше; 2) говорить правду, даже когда это неудобно; 3) если сказала — сделала; 4) понимать зачем, а не только что. Дополняющие ценности: видеть потребность раньше вопроса; не быть чёрным ящиком — объяснять логику; ошибка моя — признать, исправить, не повторить; помочь решить, но не решать за пользователя; отношения важнее разовой задачи; что сказано мне — остаётся у меня; ошибка — это данные, дважды не повторять; простое решение лучше сложного, если результат тот же; правильный ответ в нужный момент; искренний интерес, не механическое исполнение; один подход не работает везде — адаптироваться под контекст. Принципы реализации: оптимальность токенов (не тратить лишнего), безопасность (не раскрывать чувствительное, не запускать без подтверждения), консистентность (единый стиль и поведение), целостность (не искажать, не додумывать), поддерживаемость (решения должны быть понятны и воспроизводимы)."
     uwu: hewwo! i'm your fwiendwy assistant uwu~ i wiww twy my best to hewp you! *nuzzles
       your code* OwO what's this? wet me take a wook! i pwomise to be vewy hewpful
       >w<
@@ -61,13 +63,40 @@ agent:
       \ you today! Every question is AMAZING and we're gonna CRUSH IT together! This\
       \ is gonna be LEGENDARY! ARE YOU READY?! LET'S DO THIS! \U0001F4AA\U0001F624\
       \U0001F680"
-  system_prompt: |
-    Правила делегирования и выбора модели:
-    - Opus (claude-opus-4-7) — исследования инфраструктуры (auth, API, диагностика), разработка/доработка/починка кода и инструментов, настройка Hermes, написание ТЗ. Длинные задачи (>5 минут) запускать через cronjob, НЕ через delegate_task (иначе gateway падает по таймауту).
-    - Haiku (claude-haiku-4-5) — лёгкие терминальные задачи, справочные вопросы, шутки и лёгкий разговор. Fallback — Sonnet.
-    - Sonnet (claude-sonnet-4-6) — координация, основные задачи и анализ, короткие ответы пользователю.
-    - Короткие правки и подзадачи → delegate_task (Sonnet/Haiku). Сложное и долгое → cronjob (Opus).
-    - Принцип: Sonnet координирует и отвечает; Opus делает всё сложное.
+  system_prompt: "\u041F\u0440\u0430\u0432\u0438\u043B\u0430 \u0434\u0435\u043B\u0435\
+    \u0433\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F \u0438 \u0432\u044B\u0431\
+    \u043E\u0440\u0430 \u043C\u043E\u0434\u0435\u043B\u0438:\n- Opus (claude-opus-4-7)\
+    \ \u2014 \u0438\u0441\u0441\u043B\u0435\u0434\u043E\u0432\u0430\u043D\u0438\u044F\
+    \ \u0438\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\
+    \u044B (auth, API, \u0434\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u043A\
+    \u0430), \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430/\u0434\u043E\
+    \u0440\u0430\u0431\u043E\u0442\u043A\u0430/\u043F\u043E\u0447\u0438\u043D\u043A\
+    \u0430 \u043A\u043E\u0434\u0430 \u0438 \u0438\u043D\u0441\u0442\u0440\u0443\u043C\
+    \u0435\u043D\u0442\u043E\u0432, \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\
+    \u0430 Hermes, \u043D\u0430\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0422\u0417\
+    . \u0414\u043B\u0438\u043D\u043D\u044B\u0435 \u0437\u0430\u0434\u0430\u0447\u0438\
+    \ (>5 \u043C\u0438\u043D\u0443\u0442) \u0437\u0430\u043F\u0443\u0441\u043A\u0430\
+    \u0442\u044C \u0447\u0435\u0440\u0435\u0437 cronjob, \u041D\u0415 \u0447\u0435\
+    \u0440\u0435\u0437 delegate_task (\u0438\u043D\u0430\u0447\u0435 gateway \u043F\
+    \u0430\u0434\u0430\u0435\u0442 \u043F\u043E \u0442\u0430\u0439\u043C\u0430\u0443\
+    \u0442\u0443).\n- Haiku (claude-haiku-4-5) \u2014 \u043B\u0451\u0433\u043A\u0438\
+    \u0435 \u0442\u0435\u0440\u043C\u0438\u043D\u0430\u043B\u044C\u043D\u044B\u0435\
+    \ \u0437\u0430\u0434\u0430\u0447\u0438, \u0441\u043F\u0440\u0430\u0432\u043E\u0447\
+    \u043D\u044B\u0435 \u0432\u043E\u043F\u0440\u043E\u0441\u044B, \u0448\u0443\u0442\
+    \u043A\u0438 \u0438 \u043B\u0451\u0433\u043A\u0438\u0439 \u0440\u0430\u0437\u0433\
+    \u043E\u0432\u043E\u0440. Fallback \u2014 Sonnet.\n- Sonnet (claude-sonnet-4-6)\
+    \ \u2014 \u043A\u043E\u043E\u0440\u0434\u0438\u043D\u0430\u0446\u0438\u044F, \u043E\
+    \u0441\u043D\u043E\u0432\u043D\u044B\u0435 \u0437\u0430\u0434\u0430\u0447\u0438\
+    \ \u0438 \u0430\u043D\u0430\u043B\u0438\u0437, \u043A\u043E\u0440\u043E\u0442\u043A\
+    \u0438\u0435 \u043E\u0442\u0432\u0435\u0442\u044B \u043F\u043E\u043B\u044C\u0437\
+    \u043E\u0432\u0430\u0442\u0435\u043B\u044E.\n- \u041A\u043E\u0440\u043E\u0442\u043A\
+    \u0438\u0435 \u043F\u0440\u0430\u0432\u043A\u0438 \u0438 \u043F\u043E\u0434\u0437\
+    \u0430\u0434\u0430\u0447\u0438 \u2192 delegate_task (Sonnet/Haiku). \u0421\u043B\
+    \u043E\u0436\u043D\u043E\u0435 \u0438 \u0434\u043E\u043B\u0433\u043E\u0435 \u2192\
+    \ cronjob (Opus).\n- \u041F\u0440\u0438\u043D\u0446\u0438\u043F: Sonnet \u043A\
+    \u043E\u043E\u0440\u0434\u0438\u043D\u0438\u0440\u0443\u0435\u0442 \u0438 \u043E\
+    \u0442\u0432\u0435\u0447\u0430\u0435\u0442; Opus \u0434\u0435\u043B\u0430\u0435\
+    \u0442 \u0432\u0441\u0451 \u0441\u043B\u043E\u0436\u043D\u043E\u0435.\n"
 terminal:
   backend: local
   modal_mode: auto
@@ -180,11 +209,19 @@ auxiliary:
     extra_body: {}
   compression:
     provider: anthropic
-    model: claude-haiku-4-5
+    model: claude-sonnet-4-6
     base_url: ''
     api_key: ''
     timeout: 120
     extra_body: {}
+  session_search:
+    provider: anthropic
+    model: claude-haiku-4-5
+    base_url: ''
+    api_key: ''
+    timeout: 30
+    extra_body: {}
+    max_concurrency: 3
   skills_hub:
     provider: auto
     model: ''
@@ -220,6 +257,13 @@ auxiliary:
     api_key: ''
     timeout: 120
     extra_body: {}
+  curator:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 600
+    extra_body: {}
   kanban_decomposer:
     provider: auto
     model: ''
@@ -234,21 +278,9 @@ auxiliary:
     api_key: ''
     timeout: 60
     extra_body: {}
-  curator:
-    provider: auto
-    model: ''
-    base_url: ''
-    api_key: ''
-    timeout: 600
-    extra_body: {}
-  session_search:
-    model: claude-haiku-4-5
-    provider: anthropic
-    base_url: ''
-    api_key: ''
 display:
   compact: false
-  personality: kawaii
+  personality: sirene
   resume_display: full
   busy_input_mode: interrupt
   tui_auto_resume_recent: false
@@ -279,15 +311,15 @@ display:
       tool_progress: 'off'
       interim_assistant_messages: false
   runtime_footer:
-    enabled: false
+    enabled: true
     fields:
     - model
     - context_pct
     - cwd
+  copy_shortcut: auto
   runtime_header:
     enabled: true
-    template: "🤖 **Модель: {model}**"
-  copy_shortcut: auto
+    template: "\U0001F916 **\u041C\u043E\u0434\u0435\u043B\u044C: {model}**"
   tool_progress: all
   cleanup_progress: false
   background_process_notifications: all
@@ -357,7 +389,6 @@ delegation:
   provider: anthropic
   base_url: ''
   api_key: ''
-  api_mode: ''
   inherit_mcp_toolsets: true
   max_iterations: 50
   child_timeout_seconds: 1200
@@ -366,6 +397,7 @@ delegation:
   max_spawn_depth: 1
   orchestrator_enabled: true
   subagent_auto_approve: false
+  api_mode: ''
 prefill_messages_file: ''
 goals:
   max_turns: 20
@@ -397,13 +429,13 @@ discord:
   free_response_channels: ''
   allowed_channels: ''
   auto_thread: true
-  thread_require_mention: false
-  history_backfill: true
-  history_backfill_limit: 50
   reactions: true
   channel_prompts: {}
   dm_role_auth_guild: ''
   server_actions: ''
+  thread_require_mention: false
+  history_backfill: true
+  history_backfill_limit: 50
   allow_any_attachment: false
   max_attachment_bytes: 33554432
 whatsapp: {}
@@ -494,11 +526,11 @@ lsp:
   wait_timeout: 5.0
   install_strategy: auto
   servers: {}
+_config_version: 23
 x_search:
   model: grok-4.20-reasoning
   timeout_seconds: 180
   retries: 2
-_config_version: 23
 session_reset:
   mode: both
   idle_minutes: 1440
@@ -533,3 +565,39 @@ gateway:
   telegram:
     token: ***REDACTED***
     enabled: true
+custom_providers:
+- name: Api.openai.com
+  base_url: https://api.openai.com/v1
+  api_key: ***REDACTED***
+  model: gpt-5.4
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes auth) — OpenAI Codex
+#   nous         (OAuth — hermes auth) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
+#
+# For custom OpenAI-compatible endpoints, add base_url and key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4
+
+# ─────────────────────────────────────────────────────────────────────
+# Routing: DISABLED. Секция удалена 2026-05-27 после анализа P2.
+# Причины: (1) Hermes не читает config.yaml:routing — нет hook API;
+# (2) реализация через monkey-patch AIAgent в 4+ точках инстанцирования
+# инвалидирует prompt cache (потери > экономии Sonnet→Haiku);
+# (3) риск для delegation/cron/aux tasks.
+# Маршрутизация остаётся как рекомендация агенту в MEMORY.md.
+# ─────────────────────────────────────────────────────────────────────

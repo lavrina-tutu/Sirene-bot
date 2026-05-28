@@ -336,8 +336,7 @@ The registry of record is `hermes_cli/commands.py` — every consumer
 ~/.hermes/config.yaml       Main configuration
 ~/.hermes/.env              API keys and secrets
 $HERMES_HOME/skills/        Installed skills
-~/.hermes/sessions/         Gateway routing index, request dumps, *.jsonl transcripts (and optional per-session JSON snapshots when sessions.write_json_snapshots: true)
-~/.hermes/state.db          Canonical session store (SQLite + FTS5)
+~/.hermes/sessions/         Session transcripts
 ~/.hermes/logs/             Gateway and error logs
 ~/.hermes/auth.json         OAuth tokens and credential pools
 ~/.hermes/hermes-agent/     Source code (if git-installed)
@@ -635,9 +634,34 @@ before continuing its own loop. Isolated context + terminal session.
 
 Config: `delegation.*` in `config.yaml`.
 
-### Cron (scheduled jobs)
+### Cron job `no_agent` flag cannot be reset via cronjob tool
 
-Durable scheduler — `cron/jobs.py` + `cron/scheduler.py`. Drive it via
+**Symptom:** `cronjob(action='update', job_id=..., script='')` clears the script field but leaves `no_agent: true` — the tool has no parameter to flip this flag.
+
+**Fix: edit jobs.json directly.**
+
+```bash
+# Path on Windows:
+C:/Users/<user>/AppData/Local/hermes/cron/jobs.json
+```
+
+Steps:
+1. Read the file to find the job block
+2. Set `"no_agent": false` and `"script": null`
+3. Save — the scheduler picks up changes on next tick (no restart needed)
+
+**Pitfall:** Use a temporary ID rename trick to locate the exact JSON block before patching, since the file contains many jobs and unicode-escaped strings make visual scanning unreliable:
+```
+# patch: change "id": "TARGET_ID" → "id": "TARGET_ID_find_block"
+# read to confirm you have the right block
+# patch: set no_agent + script
+# patch: restore original id
+```
+
+**When to use agent mode vs no_agent:**
+- `no_agent: true` + `script: path.sh` — runs a shell script, zero LLM cost, but script must exist on disk
+- `no_agent: false` + prompt with commands — agent executes commands from prompt, handles edge cases, costs ~1 LLM call per run
+- For git push / terminal-only tasks: `no_agent: false`, model unset (uses default), toolsets: `["terminal"]` — `cron/jobs.py` + `cron/scheduler.py`. Drive it via
 the `cronjob` tool, the `hermes cron` CLI (`list`, `add`, `edit`,
 `pause`, `resume`, `run`, `remove`), or the `/cron` slash command.
 
@@ -681,30 +705,54 @@ User docs: https://hermes-agent.nousresearch.com/docs/user-guide/features/curato
 
 Durable SQLite board for multi-profile / multi-worker collaboration.
 Users drive it via `hermes kanban <verb>`; dispatcher-spawned workers
-see a focused `kanban_*` toolset gated by `HERMES_KANBAN_TASK`, and
-orchestrator profiles can opt into the broader `kanban` toolset. Normal
-sessions still have zero `kanban_*` schema footprint unless configured.
+see a focused `kanban_*` toolset gated by `HERMES_KANBAN_TASK` so the
+schema footprint is zero outside worker processes.
 
 - **CLI verbs (common):** `init`, `create`, `list` (alias `ls`),
   `show`, `assign`, `link`, `unlink`, `comment`, `complete`, `block`,
   `unblock`, `archive`, `tail`. Less common: `watch`, `stats`, `runs`,
   `log`, `dispatch`, `daemon`, `gc`.
-- **Worker/orchestrator toolset:** `kanban_show`, `kanban_complete`,
-  `kanban_block`, `kanban_heartbeat`, `kanban_comment`, `kanban_create`,
-  `kanban_link`; profiles that explicitly enable the `kanban` toolset
-  outside a dispatcher-spawned task also get `kanban_list` and
-  `kanban_unblock` for board routing.
+- **Worker toolset:** `kanban_show`, `kanban_complete`, `kanban_block`,
+  `kanban_heartbeat`, `kanban_comment`, `kanban_create`, `kanban_link`.
 - **Dispatcher** runs inside the gateway by default
   (`kanban.dispatch_in_gateway: true`) — reclaims stale claims,
   promotes ready tasks, atomically claims, spawns assigned profiles.
-  Auto-blocks a task after `failure_limit` consecutive spawn failures
-  (default 2; configurable via `kanban.failure_limit` or per-task
-  `max_retries`).
+  Auto-blocks a task after ~5 consecutive spawn failures.
 - **Isolation:** board is the hard boundary (workers get
   `HERMES_KANBAN_BOARD` pinned in env); tenant is a soft namespace
   within a board for workspace-path + memory-key isolation.
 
 User docs: https://hermes-agent.nousresearch.com/docs/user-guide/features/kanban
+
+---
+
+**`auxiliary.compression.model` (изменено 27.05.2026):** установлен `claude-sonnet-4-6` вместо `claude-haiku-4-5`. Haiku имеет контекст 200K, что меньше порога сжатия 500K для Sonnet/Opus (1M контекст). При несоответствии Hermes авто-понижает порог и выводит предупреждение каждую сессию. Решение: либо снизить `compression.threshold` до 0.17 (порог 170K), либо поставить Sonnet как compression model (текущее решение — Sonnet, threshold 0.5 корректен).
+
+**Routing rules (добавлено 27.05.2026):** в `config.yaml` добавлена секция `routing` для маршрутизации коротких/социальных сообщений на Haiku. Haiku по-прежнему доступен для явного делегирования через `delegate_task`/`cronjob`.
+
+## Config Options: What Does and Doesn't Exist
+
+**Verified as of May 2026 — always grep before assuming a config key works:**
+
+```bash
+grep -rn "runtime_header" hermes-agent/ --include="*.py"  # → 0 results
+```
+
+**`routing:` секция в config.yaml — НЕ РАБОТАЕТ (проверено 27.05.2026).** Код Hermes её не читает — молча игнорируется при загрузке. Упоминается в AGENTS.md как `smart_model_routing` но нигде не реализована. Для реальной маршрутизации нужен плагин/хук или правила в MEMORY.md как рекомендации агенту. Не добавлять эту секцию ожидая что она сработает.
+
+**`hermes skills list` не видит новый локальный скилл** — обязательные поля frontmatter: `name`, `description`, `version`, `author`, `tags`, `platforms`. Без `version` и `author` скилл есть на диске но не попадает в `.usage.json` индекс и не виден в списке. Setting it in config.yaml is silently ignored. The option was documented in memory/skills incorrectly.
+
+**`display.runtime_footer` — EXISTS and works:**
+```yaml
+display:
+  runtime_footer:
+    enabled: true
+    fields: [model, context_pct, cwd]  # renders: "claude-sonnet-4-6 · 35% · ~/proj"
+```
+
+**Rule:** Before writing config documentation or saving a "config option X works" memory entry, always verify with `grep -rn "option_name" hermes-agent/ --include="*.py"`. The config system does NOT warn on unknown keys — typos and non-existent options are silently ignored.
+
+**Live toggle:** `/footer on|off` in-session toggles `runtime_footer` without restarting. Equivalent to flipping `display.runtime_footer.enabled` in config.yaml for the current session only.
 
 ---
 
@@ -842,12 +890,120 @@ Common gateway problems:
 - **Slack bot only works in DMs**: Must subscribe to `message.channels` event. Without it, the bot ignores public channels.
 - **Windows-specific issues** (`Alt+Enter` newline, WinError 10106, UTF-8 BOM config, test suite, line endings): see the dedicated **Windows-Specific Quirks** section above.
 
+### session_search returns empty results for recent sessions
+
+**Symptom:** `session_search` with keyword queries returns 0 results even for sessions that clearly exist (visible in `session_search` recent mode).
+
+**Root cause (verified May 2026):** FTS5 combines all tokens with AND — a query like `"runtime_header не существует вариант 1 вариант 2 модель ответ"` requires a single message containing ALL those words simultaneously. No such message exists → empty result.
+
+The index is almost certainly fine. `messages = messages_fts` row counts match; insert/update/delete triggers are present.
+
+**Fix: use short, 1-3 word queries.** Examples:
+- ❌ `"runtime_header не существует вариант 1 вариант 2 модель ответ"` → 0 results
+- ✅ `"runtime_header вариант"` → finds the session immediately
+- ✅ `"вариант runtime_footer"` → same
+
+When unsure what keywords to use, first call `session_search` with no query (recent mode) to confirm the session ID exists, then search with the 2-3 most distinctive words from the topic.
+
+**Verify the index is healthy (if in doubt):**
+```bash
+sqlite3 "$LOCALAPPDATA/hermes/state.db" \
+  "SELECT (SELECT COUNT(*) FROM messages) AS msg, (SELECT COUNT(*) FROM messages_fts) AS fts;"
+# Both counts should match
+```
+
+### Настройка персонажа (personality) в config.yaml
+
+**Добавить кастомную личность** в `personalities` и активировать через `display.personality`:
+
+```yaml
+agent:
+  personalities:
+    my_persona: "Описание персонажа здесь."
+
+display:
+  personality: my_persona
+```
+
+**Важно:** вступает в силу только с новой сессией (`/new` или новый запуск). `display.personality` работает — выбирает один из ключей из `personalities`. Стандартные личности: `helpful`, `concise`, `kawaii`, `catgirl`, `pirate`, `shakespeare` и др.
+
+**Для Саши настроена личность `sirene`** — см. скилл `sirene-chat-friends` для деталей персонажа.
+
+### Compression model vs main model context mismatch
+
+**Symptom:** на старте сессии появляется предупреждение:
+`⚠ Compression model claude-haiku-4-5 context is 200,000 tokens, but the main model claude-sonnet-4-6's compression threshold was 500,000 tokens. Auto-lowered this session's threshold to 200,000 tokens`
+
+**Причина:** `compression.threshold` (0.5) × context_length основной модели (1M) = 500K > лимита compression model (200K).
+
+**Решение (рекомендуемое):** поставить Sonnet как compression model — тогда порог 500K корректен и предупреждение исчезает:
+```yaml
+auxiliary:
+  compression:
+    provider: anthropic
+    model: claude-sonnet-4-6   # вместо claude-haiku-4-5
+```
+
+**Альтернатива:** снизить threshold до 0.17 (1M × 0.17 = 170K < 200K лимита Haiku) — дешевле, но сжатие начинается раньше.
+
+**Важно:** Haiku остаётся доступен для delegate_task и других явных вызовов — это не конфликтует с выбором compression model.
+
+**Механизм (из кода):** `run_agent.py::_check_compression_model_feasibility()` — при старте сессии сравнивает `aux_context` и `threshold_tokens`, при несоответствии жёстко затирает threshold до aux_context. Изменить per-model пороги через config.yaml невозможно — только один глобальный `compression.threshold`.
+
+### Изменение no_agent в cron/jobs.json напрямую
+
+`cronjob(action='update')` не умеет сбрасывать `no_agent` в `false` — поле игнорируется. Единственный способ — патчить `cron/jobs.json` напрямую:
+
+```python
+# найти блок job-а, изменить поле
+"no_agent": false,
+"script": null,
+```
+
+После правки gateway подхватывает изменение без перезапуска (файл читается при каждом тике).
+
 ### Auxiliary models not working
 If `auxiliary` tasks (vision, compression, session_search) fail silently, the `auto` provider can't find a backend. Either set `OPENROUTER_API_KEY` or `GOOGLE_API_KEY`, or explicitly configure each auxiliary task's provider:
 ```bash
 hermes config set auxiliary.vision.provider <your_provider>
 hermes config set auxiliary.vision.model <model_name>
 ```
+
+### ⚠ Compression model context mismatch warning
+
+**Symptom:** At session start: `"compression model claude-haiku-4-5 context is 200,000 tokens, but the main model claude-sonnet-4-6's compression threshold was 500,000 tokens. Auto-lowered this session's threshold to 200,000 tokens"`
+
+**Root cause (verified May 2026, `run_agent.py::_check_compression_model_feasibility`):**
+- `compression.threshold` (e.g. 0.5) × main model context (e.g. 1,000,000) = threshold_tokens (500,000)
+- If `threshold_tokens > aux compression model context` → Hermes auto-lowers threshold to match compression model
+- This fires every session startup — it's not a one-time warning
+
+**The fix depends on your priorities:**
+
+**Option A — Use Sonnet as compression model (recommended if you do long Opus sessions):**
+```yaml
+auxiliary:
+  compression:
+    provider: anthropic
+    model: claude-sonnet-4-6   # 1M context — matches threshold 0.5 exactly
+```
+- Compression starts at ~500K tokens — Opus sessions don't lose detail
+- Haiku remains available for explicit delegate_task calls (separate thing)
+- Compression is more expensive but fires rarely
+
+**Option B — Lower threshold to match Haiku:**
+```yaml
+compression:
+  threshold: 0.17   # 1,000,000 × 0.17 = 170,000 < 200,000 Haiku limit
+```
+- Warning disappears, Haiku stays cheap
+- Compression fires earlier (~170K tokens) — fine for most conversations
+
+**Key internals:**
+- `auxiliary.compression.model` and model used for `delegate_task` are **completely independent** — changing compression model does NOT affect Haiku availability for delegated tasks
+- Per-model thresholds are NOT configurable via config.yaml — only one global `compression.threshold`
+- `update_model()` in context_compressor carries `threshold_percent` across model switches — so after auto-lower, switching to Opus also gets the lowered threshold
+- The only per-model override is hardcoded in `agent/auxiliary_client.py::_compression_threshold_for_model()` — requires source edit
 
 ---
 
@@ -868,7 +1024,7 @@ hermes config set auxiliary.vision.model <model_name>
 | Env variables | `hermes config env-path` or [Env vars reference](https://hermes-agent.nousresearch.com/docs/reference/environment-variables) |
 | CLI commands | `hermes --help` or [CLI reference](https://hermes-agent.nousresearch.com/docs/reference/cli-commands) |
 | Gateway logs | `~/.hermes/logs/gateway.log` |
-| Session files | `hermes sessions browse` (reads state.db) |
+| Session files | `~/.hermes/sessions/` or `hermes sessions browse` |
 | Source code | `~/.hermes/hermes-agent/` |
 
 ---

@@ -26,7 +26,7 @@ MoveFromFF — **минимальный транспорт**: скачать 2 �
 
 **actions.md — НЕ скачиваем** (финальное решение, май 2026): дублирует `action_items` из `summary.md`, нулевая добавленная ценность. Убрано из ТЗ v2.0, кода, шаблонов и структуры проекта.
 
-**Код v2.0 написан и работает** (май 2026). Проект: `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/`. 48/48 тестов ✅. Крон: пн–пт 10:00/12:00/14:00/16:00/18:00/20:00 МСК (job_id: 1e62e18ae399). Загружено 439 встреч (авг 2025 – май 2026). Два бага исправлены после QA: Speaker N хардкод заменён на `speaker_label(sentence, speaker_map)` через `build_speaker_map()`; убран `.lower()` на participants (ТЗ: "как есть из FF"). Добавлен флаг `--meeting-id` для скачивания одной конкретной встречи по ID.
+**Код v2.1 написан и работает** (май 2026). Проект: `C:/Users/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/MoveFromFF/`. 83/83 тестов ✅ (было 57 до расширения summary, +26 новых). Крон: пн–пт 10:00/12:00/14:00/16:00/18:00/20:00 МСК (job_id: 1e62e18ae399). Загружено 452 встречи (авг 2025 – май 2026), из них 448 в старом формате (без Notes/Blockers/Questions) и 4 в новом (с 27.05.2026). Два бага исправлены после QA: Speaker N хардкод заменён на `speaker_label(sentence, speaker_map)` через `build_speaker_map()`; убран `.lower()` на participants (ТЗ: "как есть из FF"). Добавлен флаг `--meeting-id` для скачивания одной конкретной встречи по ID.
 
 **Что НЕ входит:** SHA-256, reconciler, actions.md, поля постобработки (`moved_by`, `processing_status`), `--mode deleted-check`.
 
@@ -580,9 +580,146 @@ else:
 - `download_ok` — успешно записан
 - `download_error` — ошибка fetch или записи файлов
 
-## Исследование полей FF summary (в процессе, май 2026)
+## Дедупликация встреч (реализовано 27.05.2026)
 
-Встреча Trisigma (ID: `01KSFNBC3X0C120ZD501YG0TNX`) показала: в FF веб-интерфейсе видны блоки **тезисов** и **Notes** которые не переносятся в summary.md. Текущий GraphQL-запрос берёт только `overview / action_items / keywords / outline`. Потерянные блоки могут жить в полях `shorthand_bullet`, `bullet_gist`, `gist`, `meeting_info` или в `ai_filters`. Исследование запущено через Opus-cronjob (май 2026) — результат ожидается. После исследования обновить `_MEETING_FIELDS_FULL` в `ff_client.py` и схему `FFSummary` в `ff_schema.py`.
+**Проблема:** FF иногда создаёт две записи для одной встречи — бот отвалился и переподключился. Обе имеют разные ID и одинаковое название с разницей во времени ≤10 минут.
+
+**Правило:** если в реестре есть две встречи с одинаковым `title` и разницей `meeting_date` ≤10 минут → дубль. Оставляем запись с более длинным транскриптом. Более короткую — файлы удаляем, статус `duplicate`.
+
+**Новый статус `duplicate`:** терминальный, как `stale` — никогда не перекачиваем.
+
+**Приоритет при сравнении дублей:**
+1. Длина транскриптного файла (строки/символы) — главный критерий
+2. Если файл ещё не скачан — `duration_minutes` (дольше = полнее)
+3. Если duration одинаковый — более поздняя `meeting_date`
+
+**Реализация:** функция `detect_and_mark_duplicates(registry, new_meetings_dir)` в `__main__.py`, вызывается после `reconcile_registry()`.
+
+**ТЗ:** `WorkVault/Hermes-Backlog/_Done/ТЗ-MoveFromFF-dedup-*.md`
+
+## Reconciliation: автоматическая проверка файлов на диске (реализовано 27.05.2026)
+
+**Задача:** если пользователь вручную удалил файлы встреч → на следующем прогоне cron они должны появиться автоматически.
+
+**Как работает:** функция `reconcile_registry(reg, new_meetings_dir)` + приватный `_reset_to_pending(rec)` в `registry.py`. Вызов встроен в `__main__.py` сразу после `load_registry()` в Шаге 3.
+
+Алгоритм:
+1. Пройтись по всем записям со статусом `completed` в реестре
+2. Проверить наличие каждого файла на диске (`Path.exists()`) — summary и/или transcript
+3. Если хотя бы один файл отсутствует → сбросить запись в `pending` (`files={}, attempts=0`)
+4. Обычная логика синка + второй проход по pending подхватят и перекачают
+
+**Что НЕ входит:** не проверяется содержимое файлов, только наличие. Встречи в `pending`/`error` не затрагиваются.
+
+**Edge case:** если `new_meetings_dir` не передан или не существует — reconciliation пропускается без ошибки.
+
+**ТЗ:** `WorkVault/Hermes-Backlog/_Done/ТЗ-MoveFromFF-reconciliation-20260527.md`
+
+## Bulk re-fetch: быстрый однократный прогон
+
+**Проблема:** стандартный лимит `BACKFILL_MAX_PER_RUN = 50` не позволяет быстро перекачать сотни встреч.
+
+**Решение (без ТЗ, однократно):**
+1. Проверить остаток API: сделать любой GraphQL запрос, читать `x-ratelimit-remaining-api`
+2. Временно в коде: `BACKFILL_MAX_PER_RUN = <remaining - 10>`
+3. Запустить: `python -m movefromff --mode test` (не `--mode manual` — он требует дат)
+4. Вернуть: `BACKFILL_MAX_PER_RUN = 50`
+
+**Результат (май 2026):** 363 встречи за один прогон, ~12 минут (736 сек).
+
+**⚠️ `--mode manual` требует `--from-date` и `--to-date`** — без них падает с ошибкой. Для backfill по pending-записям используй `--mode test`.
+
+## Bulk re-fetch встреч (перегенерация summary)
+
+**Когда нужен:** после обновления шаблона summary.md.j2 — старые файлы содержат неполный формат.
+
+**Масштаб (май 2026):** 448 встреч в старом формате (авг 2025 – 26.05.2026), 4 в новом (с 27.05.2026).
+
+**Как делать (правильно):**
+1. Удалить нужные summary-файлы руками из `NewMeetings/`
+2. Reconciliation на следующем cron-запуске сбросит их в `pending` ✅
+3. **Но cron не перекачает встречи вне текущего временного окна!** Встреча 2025-08-12 — не попадёт в window `last_synced_at → сейчас`.
+4. Поэтому реализован **второй проход по pending** (см. ниже).
+
+**⚠️ Удаление файлов руками НЕ запускает перекачку без reconciliation:** cron проверяет только `status` в JSON реестре. Если status=completed — пропускает, не проверяя диск.
+
+**`_registry_meet.md` — не источник правды:** это только человекочитаемый рендер из JSON для Obsidian. Удаление строк из MD не влияет на cron вообще.
+
+**Лимит API:** 500 запросов / ~11ч → 448 встреч влезают за один прогон (462 свободно проверено 27.05.2026).
+
+## Второй проход по pending (backfill по ID, реализован 27.05.2026)
+
+**Задача:** встречи в `pending` за пределами текущего временного окна — не попадают в `fetch_range()`, но их нужно перекачать.
+
+**Решение:** после обычного `fetch_range`-цикла — дополнительный шаг:
+1. Найти все записи со статусом `pending` у которых meeting_id известен (ключ словаря)
+2. Для каждой — сделать `ff.fetch_meeting(meeting_id)` напрямую, без date-фильтра
+3. Скачать файлы, обновить статус → `completed`
+4. Логировать отдельно: сколько "backfill" встреч скачано
+
+**Edge cases:**
+- Встреча есть в реестре но удалена в FF → статус `error`, пропустить
+- Rate limit при backfill → прервать, оставить в `pending` (подхватится на следующем cron)
+**Лимит backfill за один прогон:** не более 50 встреч за раз (защита от сжигания всего rate-limit). Берём первые 50 по дате — **от самых свежих к старым** (`reverse=True` в сортировке). Это важно: пользователь хочет видеть актуальные встречи в новом формате как можно скорее.
+
+**Итоговый паттерн «удалил — перекачалось»:**
+```
+Пользователь удаляет summary файлы
+    ↓ (следующий cron)
+reconcile_registry() сбрасывает в pending
+    ↓ (тот же cron, второй проход)
+fetch_meeting(id) для каждой pending — без привязки к дате
+    ↓
+Файлы восстановлены в новом формате ✅
+```
+
+## Расширение полей summary (реализовано 27.05.2026)
+
+**Реальная схема FF extended_sections** (из GraphQL introspection):
+```graphql
+type SummarySection {
+  title: String!
+  content: String!   # plain text / markdown-bullets
+}
+```
+Поля `items` и `text` — **не существуют**. Запрос с ними даёт `Cannot query field "items" on type "SummarySection"`.
+
+**Что реализовано в коде (v2.1, 27.05.2026):**
+- `FFExtendedSection(title, content, items?, text?)` — `items`/`text` опциональны для backward-compat с моками
+- `section_as_text()` — приоритет: `content → text → items`
+- Новые 8 секций summary.md: Bullet points → Notes → Action items → Blockers → Questions → Meeting Outline → Topics → Keywords
+- `## Overview` переименован в `## Bullet points`
+- Тесты: 57 → **83** (все зелёные, 0.92s)
+- Smoke-тест встреча `01KSJ49AGHYFJTRARWAD088Q7N` — все 8 секций присутствуют
+
+**Код:** `movefromff/ff_schema.py` (+63 стр), `ff_client.py` (+5), `renderer.py` (+14), `templates/summary.md.j2` (переписан, 24→53 стр).
+**ТЗ:** перемещено в `WorkVault/Hermes-Backlog/_Done/ТЗ-MoveFromFF-summary-fields-20260527.md`
+
+## Исследование полей FF summary (результаты, май 2026)
+
+Встреча Trisigma (ID: `01KSFNBC3X0C120ZD501YG0TNX`). Opus провёл GraphQL introspection и прямые запросы.
+
+**Полная схема Summary — 14 полей**, текущий код запрашивает только 4:
+- Запрашиваются: `overview`, `action_items`, `keywords`, `outline`
+- **Не запрашиваются (потерянные):**
+  - `short_summary`, `gist`, `bullet_gist`, `shorthand_bullet`, `notes`
+  - `extended_sections { title content }` — **главное упущение**: секции Notes (Progress Review, Challenges, Upcoming milestones)
+  - `meeting_type`, `topics_discussed`, `transcript_chapters`
+
+**Ключевая находка: `apps_preview.outputs[]`**
+- Поле `apps_preview { outputs { app_id title response created_at } }` содержит кастомные AI-приложения
+- Там живёт русский **Meeting Summary Generator** с секциями Обсудили/Блокеры/Задачи
+- Это и есть то, что Саша видит в FF веб-интерфейсе но не получает в WorkVault
+
+**Согласованный подход (май 2026):** вместо стандартных полей summary использовать `apps_preview.outputs[].response` где `title == "Meeting Summary Generator"`. Перед внедрением в код — тест на 3 последних встречах (Opus cronjob `8d0ce98bb524` запущен 27.05).
+
+**ТЗ теста:**
+1. Тестовый скрипт `test_custom_summary.py` — запросить 3 встречи с `apps_preview` + `extended_sections`
+2. Удалить 3 встречи из WorkVault (только файлы, пометить pending в реестре)
+3. Скачать заново, убедиться что `apps_preview.outputs[].response` содержит правильный русский summary
+4. Саша смотрит глазами → только после подтверждения менять основной код
+
+После подтверждения: обновить GraphQL-запрос в `ff_client.py`, расширить `FFSummary` в `ff_schema.py`, обновить шаблон в `renderer.py`.
 
 ## GraphQL баг: silent empty response (FF cost-limit)
 
@@ -622,7 +759,14 @@ else:
 **Вероятная причина:** logger пишет в stdout, но не вызывает `append` в `_log.md`.
 **Приоритет:** высокий — без лога нельзя диагностировать проблемы в cron-режиме.
 
-## Rate Limit Fireflies API
+## Rate Limit Fireflies API (актуальные данные, май 2026)
+
+**Лимит аккаунта tkachenkoav:** 500 запросов за ~11 часов (заголовок `x-ratelimit-limit-api: 500`, сброс через `x-ratelimit-reset-api` секунд).
+- Остаток виден в заголовке ответа: `x-ratelimit-remaining-api`
+- Проверка баланса: сделать любой GraphQL запрос и читать заголовки ответа
+- При 448 встречах на bulk re-fetch потребуется 448 запросов — вписывается в лимит с запасом (462 свободно)
+
+**Данные аккаунта (май 2026):** 407 транскриптов, 15209 минут consumed.
 
 Fireflies Pro тариф имеет дневной лимит на GraphQL запросы. При превышении:
 ```
@@ -653,6 +797,30 @@ GraphQL list-запрос с тяжёлыми полями (`sentences`, пол�
 
 **Фикс (v2.0):** разделить запросы — list тянет только лёгкие поля (`id, title, date, duration, participants`), затем для каждой новой встречи отдельный `fetch_meeting(id)` с полными полями. Уже загруженные (status=completed) — не перезапрашиваются.
 
+## Быстрый bulk re-fetch: паттерн (без ТЗ, безопасно)
+
+Когда нужно быстро перекачать сотни встреч за один раз (например, после смены шаблона summary):
+
+1. Проверить лимит: сделать любой GraphQL запрос, читать `x-ratelimit-remaining-api`
+2. Временно в коде: `BACKFILL_MAX_PER_RUN = <remaining - 10>` (строка 48 в `__main__.py`)
+3. Запустить: `python -m movefromff --mode test` (**не `--mode manual`** — он требует дат)
+4. Вернуть: `BACKFILL_MAX_PER_RUN = 50`
+
+**Результат (май 2026):** 363 встречи за 12 минут при лимите 397 запросов.
+
+**Проверить лимит Python-скриптом:**
+```python
+import os, requests
+from dotenv import load_dotenv
+load_dotenv()
+api_key = os.getenv('FIREFLIES_API_KEY')
+resp = requests.post('https://api.fireflies.ai/graphql',
+    json={'query': '{ user { user_id } }'},
+    headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'})
+print('Остаток:', resp.headers.get('x-ratelimit-remaining-api'))
+print('Сброс через:', resp.headers.get('x-ratelimit-reset-api'), 'сек')
+```
+
 ## Pitfalls
 
 - **API — GraphQL, не REST**: эндпоинт `/graphql`, не `/v1/meetings`
@@ -667,8 +835,15 @@ GraphQL list-запрос с тяжёлыми полями (`sentences`, пол�
 
 - **Windows sleep убивает cron**: блокировка экрана (Win+L) безопасна, но если компьютер уходит в сон — VPN и все задачи падают. Перед ночными cron-задачами проверить и отключить sleep: `powercfg -change standby-timeout-ac 0`. Утром вернуть: `powercfg -change standby-timeout-ac 120`. Текущее значение: `powercfg -query SCHEME_CURRENT SUB_SLEEP`.
 - **GraphQL list-запрос молча возвращает `[]` при превышении cost-лимита** — не ошибка, просто пустой массив. Симптом: `fetched 0 meeting(s)` при непустом диапазоне дат. Фикс: убрать тяжёлые поля (`sentences`, полный `summary`) из list-запроса; тянуть их отдельным `fetch_meeting(id)` только для новых встреч.
-- **`_registry.md` генерируется из JSON** — не требует запросов к FF. `renderer.py` + Jinja2.
+- **`_registry.md` генерируется из JSON** — не требует запросов к FF. `renderer.py` + Jinja2. Удаление строк из `_registry_meet.md` **не влияет** на cron — он читает только JSON.
+- **Удаление файлов руками не запускает перекачку без reconciliation**: cron пропускает записи с `status=completed` вне зависимости от наличия файлов на диске. Reconciliation сбрасывает в `pending`, второй проход по pending перекачивает по ID — так замкнут паттерн «удалил → перекачалось автоматически».
+- **`_registry_meet.md` — не источник правды**: только человекочитаемый рендер из JSON. Удаление строк из MD не влияет на cron вообще.
+- **Дубли встреч в FF**: FF иногда дважды записывает встречу (бот отвалился). Признак дубля: одинаковое название + разница во времени ≤10 минут. Обрабатывается `detect_and_mark_duplicates()` — статус короткой копии становится `duplicate`.
+- **Backfill сортировка — newest first**: `reverse=True` в `_pending_sort_key`. Обеспечивает что самые свежие встречи перекачиваются первыми (по 50 за прогон).
 - **TG-алерты только при ручном запуске** — cron (`--mode cron`, `--mode test`) пишет только в `_log.md`, никакого TG.
+- **`--mode manual` требует `--from-date` и `--to-date`** — без них падает с `Manual mode requires --from-date and --to-date (or --meeting-id)`. Для быстрого запуска backfill использовать `--mode test`.
+- **Сортировка backfill — newest first (`reverse=True`)**: обеспечивает что самые свежие встречи появляются в новом формате первыми, до исчерпания лимита API.
+- **`_registry_meet.md` — не источник правды, только рендер**: удаление строк из MD не влияет на cron — он читает только JSON-реестр.
 
 ### Дополнительные pitfalls (из Opus QA финальной проверки ТЗ)
 

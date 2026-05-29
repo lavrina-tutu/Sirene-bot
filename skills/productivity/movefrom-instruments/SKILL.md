@@ -340,7 +340,25 @@ query {
 
 **Почему так:** Fireflies не знает оргструктуру, не знает кто есть кто → кривые таски, размытые саммари. После подключения Exchange GAL точность резолвера вырастет автоматически.
 
-## AnywhereContacts — архитектура (согласовано 28.05.2026)
+## AnywhereContacts — статус реализации (28.05.2026)
+
+**✅ Реализован и работает.** Opus выполнил все 4 этапа:
+- `USERTOOLS/AnywhereContacts/` — пакет создан, 22/22 теста зелёные
+- MoveFromExchange рефакторнут в тонкий коннектор, 32/32 теста зелёные
+- MoveFromZulip создан, боевой синк выполнен: **2148 контактов** (1747 Exchange + 401 только Zulip)
+- Schema v2 с `sources` в production
+- migration v1→v2 происходит автоматически при первом чтении
+
+**Zulip синк:** воскресенье 03:00 (job_id: `50a30903f503`)
+
+**PII Masking при выводе контактов (КРИТИЧНО):**
+Функция `mask_contact(contact)` экспортируется из `anywhere_contacts`.
+Вызывать ВСЕГДА перед выводом в Telegram или CLI.
+```python
+from anywhere_contacts import mask_contact
+hits_for_display = {k: mask_contact(v) for k, v in hits.items()}
+```
+Правильно: `Кр**в Ки**л`, `kr**v@tutu.ru`. Без маскировки — ошибка.
 
 Общая библиотека для всех коннекторов MoveFrom*. MoveFrom* становятся тонкими коннекторами.
 
@@ -422,8 +440,8 @@ Zulip — основной источник контактов (1 запрос `
 | MoveFromExchange | Exchange (ТУТУ) | 🟡 **v1.0 работает, v1.1 в разработке** — 1787 контактов (после фильтрации ~944). ТЗ v1.1 согласовано 27.05.2026: filters.py (4 правила), XLSX убран, contacts.jsonl с маскировкой, TG-поиск контактов с маскировкой (Ив**в, iv**v@tutu.ru). Крон-путь сломан (старый), починить после реализации v1.1. | `USERTOOLS/MoveFromExchange/MoveFromExchange_TZ_v1.1.md` |
 | MarkObjectsFromSummary | WorkVault | 🟡 **Бриф завершён (блоки A-F+G), ТЗ не написано.** БЛОКЕР: нужен письменный список проектов/тем/инициатив от Саши с точными названиями и алиасами → файл `projects.md`. Без него ТЗ v0.1 можно написать (только контакты), но в реализацию v0.2+ не идти. | `hermes-workspace/docs/tz/MarkObjectsFromSummary_TZ_v0.1.md` (не создан) |
 | MoveFromJira | Jira (ТУТУ) | 🥈 **Приоритет #2** — только OKRAID + OKRS (цели и проекты). Нужен для быстрой постановки задач через TG. Jira доступна без VPN (`dom.tutu.ru`, PAT в `.env`). | — |
-| MoveFromConfluence | Confluence (`dom.tutu.ru`) | ⚠️ **v1.0 написан, но API заблокирован Keycloak SSO.** В офисе браузер работает без 2FA (Kerberos). Дома — 2FA (Google Authenticator). API через curl/requests — редиректит на Keycloak, PAT не принимается. Исследование Kerberos-подключения через requests_kerberos запущено (май 2026). Работать только в домене ТУТУ. | `hermes-workspace/docs/tz/MoveFromConfluence_TZ_v1.0.md` |
-| MoveFromZulip | Zulip (ТУТУ) | 📋 бэклог | — |
+| ConfluenceSync | Confluence (`dom.tutu.ru`) | ✅ **v1.0 реализован (28.05.2026).** 47/47 тестов зелёные. `pip install -e .` выполнен. CLI: `confluencesync pull/push/resync/log`. Двусторонний (read + write). PAT работает из дома без VPN. Путь проекта: `USERTOOLS/ConfluenceSync/`. Хранение: `WorkVault/Confluence/<Space>/<Страница>/index.md`. Скилл: `movefrom-confluence`. Логи: `WorkVault/_meta/ConfluenceSync/_sync_log.jsonl`. Режимы: `--to-file`, `--to-context`, `--to-both`. Флаг `confirm=True` по умолчанию, `confirm=False` для программных вызовов. Credentials: `USERTOOLS/MoveFromConfluence/.env`. **Питфолл:** передавать конкретный URL страницы (pageId или /display/SPACE/Title), не корень домена. | `USERTOOLS/ConfluenceSync/TZ.md` |
+| MoveFromZulip | Zulip (ТУТУ) | ✅ **v1.0 готов (28.05.2026)** — 2148 контактов в contacts.enc, schema v2. Zulip = основной источник контактов (1 запрос GET /api/v1/users). Exchange = верификация. Крон: воскресенье 03:00 (job_id: 50a30903f503). Credentials: ZULIP_URL, ZULIP_EMAIL, ZULIP_API_KEY в MoveFromExchange/.env | `USERTOOLS/MoveFromZulip/TZ.md` |
 
 ## Credentials (корпоративные сервисы ТУТУ)
 
@@ -736,19 +754,24 @@ find USERTOOLS -maxdepth 2 -type d -name ".pytest_cache" ! -path "*/.venv/*" -ex
 - **Exchange/VPN — решено (25.05.2026):** В офисе (домен ТУТУ) EWS работает через Windows Kerberos без пароля. Пароль в .env НЕ нужен (`TUTU_PASSWORD=***` — плейсхолдер). `access_type=DELEGATE` обязателен. Версию exchangelib НЕ указывать явно — мешает Kerberos negotiate. Дома без VPN — не работает. `Configuration(timeout=...)` → TypeError в новых версиях exchangelib — убрать.
 - **fetch_gal() тихо возвращает 0** — причина: голый `except Exception: pass` глотает UnauthorizedError на каждом паттерне wildcards. Всегда логировать исключения в клиентах API, иначе silent failure невозможно отладить.
 - **Субагент на Haiku портит .env и contacts.enc** — при делегировании задач диагностики Exchange субагент подставлял тестовые credentials и удалял contacts.enc. Явно запрещать эти действия в промпте: "не удалять contacts.enc и .env".
-- **Confluence Keycloak SSO:** PAT не работает через API (редирект на Keycloak). В домене ТУТУ браузер проходит без 2FA (Kerberos). Дома — 2FA (Google Authenticator). Разрабатывать MoveFromConfluence только в домене. Дома — поднимать VPN.
+- **Confluence Keycloak SSO:** В браузере — SSO/Kerberos в домене, 2FA дома. Однако **PAT-токен через REST API (`/rest/api/space`) работает из дома без VPN** (проверено 28.05.2026: HTTP 200). API-разработку ConfluenceSync можно вести и дома. Разрабатывать только в домене — устаревшее правило.
 - **EXCHANGE_PASSWORD в MoveFromExchange/.env был `***`** — плейсхолдер, не реальный пароль. Реальная аутентификация через Kerberos (доменная сессия Windows). Не пытаться «восстановить» пароль — это не нужно.
 - **Проверяй что субагент не написал заглушку** — после делегирования разработки API-клиента явно проверяй что метод `fetch_*` не возвращает `[]` из mock-ветки. Паттерн: `grep -n "return \[\]" client.py` или читать тело метода перед первым боевым тестом.
 - **XLSX-экспорт убран из MoveFromExchange (v1.1):** никаких выгрузок персданных в открытый файл. contacts.enc остаётся (AES-256-GCM). Восстановление при потере — пересинхронизация из Exchange (кастомные поля теряются, это приемлемо).
 - **Переговорки не синхронизируем:** fetch_rooms() убрать из scope MoveFromExchange.
 - **List-запрос не должен тянуть тяжёлые поля** — иначе cost-limit API молча возвращает пустой массив без ошибки. Паттерн: лёгкий list → fetch полных данных только для новых записей (N+1 по числу реально новых).
 - **Корпоративные токены** — хранить только как Personal Access Token, не доменный пароль. PAT можно отозвать не меняя пароль.
+- **Реальный путь USERTOOLS (КРИТИЧНО для cronjob-ов):** `C:\\Users\\tkachenkoav\\Documents\\Cursor_projects\\hermes-agent\\USERTOOLS\\` — НЕ `WorkVault\\USERTOOLS\\`. При создании cronjob-ов всегда использовать полный путь. WorkVault — только для данных (`contacts.enc`, `Meetings/`, `_meta/` и т.д.).
+- **ConfluenceSync — чтение страниц в контекст агента (`--to-context`):** при получении ссылки на Confluence от пользователя — вызвать `confluencesync pull <url> --to-context --no-recursive`, вывод передаётся прямо в контекст. Пользователь может спросить «о чём здесь речь?» — читать через инструмент, не через браузер. Если ConfluenceSync даёт ошибку конвертера — использовать прямой REST API через `execute_code` (urllib + json + regex для strip HTML тегов).
+- **execute_code vs terminal для Python на Windows:** `python3` и `python3.11` в терминале могут не работать (uv trampoline, MS Store alias). Для быстрых Python-скриптов предпочитать `execute_code` — он использует правильный интерпретатор напрямую.
 - **Postobработка — не зона MoveFrom*** — только перенос файлов как есть. Всё остальное делают следующие инструменты конвейера.
 
 ## References
 
+- `references/confluence-obsidian-storage-design.md` — архитектура хранения Confluence страниц в Obsidian: структура папок (гибрид), frontmatter, кросс-ссылки, что переиспользовать из текущего кода, питфоллы именования файлов.
 - `references/movefrom-confluence.md` — MoveFromConfluence полное ТЗ: двусторонняя синхронизация задач Confluence ↔ WorkVault, публикация summary встреч, CLI, TG-команды, парсинг action items / @mention / таблиц.
 - `references/movefrom-exchange-contacts.md` — MoveFromExchange полное ТЗ + contact-resolution: синхронизация Exchange GAL → contacts.enc (AES-256-GCM), Zulip bootstrap, filters.py (4 правила фильтрации), маскировка персданных, exchangelib Kerberos-конфиг; резолвинг свободных упоминаний людей (alias/nickname/login) по contacts.enc через AnywhereContacts API, PII-маскировка при выводе, три состояния резолвера (resolved/ambiguous/unknown).
 - `references/exchange-version-configuration.md` — детали exchangelib Configuration: version, auth_type, access_type, почему нельзя указывать Build явно в домене ТУТУ.
 - `references/qa-verification-checklist.md` — чек-лист QA-верификации проектов против ТЗ (spec-vs-code drift).
+- `references/confluencesync-brief-v1.md` — ConfluenceSync бриф v1 (28.05.2026): архитектура, use cases, режимы вывода, логирование, тесты.
 - `references/tutu-corporate-integrations.md` — credentials и auth-паттерны для всех корпоративных сервисов ТУТУ: Confluence (Keycloak SSO, PAT устарел), Jira, Exchange EWS (Kerberos/Basic, exchangelib шаблон), Zulip (HTTP Basic + verify=False), GitHub PAT. Правило минимизации авторизаций.

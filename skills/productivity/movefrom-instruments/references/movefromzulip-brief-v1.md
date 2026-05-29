@@ -1,103 +1,57 @@
-# MoveFromZulip — бриф v1 (2026-05-28)
+# MoveFromZulip — бриф v1 (согласован 28.05.2026)
 
-## Контекст
-Решение заменить MoveFromExchange как источник контактов на Zulip.
-Exchange остаётся для будущей верификации, но не как основной источник.
-Крон MoveFromExchange удалён до явного подтверждения Саши.
+## Статус: ✅ РЕАЛИЗОВАНО
 
-## Источник данных
-- API: `GET /api/v1/users` — один запрос, все пользователи сразу
-- Auth: Basic (`ZULIP_EMAIL` + `ZULIP_API_KEY`) из `.env`
-- Env vars: `ZULIP_URL`, `ZULIP_EMAIL`, `ZULIP_API_KEY`
-- Поля ответа: `email`, `full_name`, `user_id`, `is_active`, `is_bot`, `role`, `avatar_url`
-- Telegram берётся из профиля Zulip автоматически (все сотрудники его указывают)
+Пакет: `USERTOOLS/MoveFromZulip/`
+Contacts: 2148 (1747 Exchange + 401 только Zulip)
+Крон: воскресенье 03:00 (job_id: `50a30903f503`)
 
-## Фильтрация
-- `is_bot == true` → пропустить
-- `is_active == false` → пропустить (не писать в contacts.enc вообще)
+## Ключевые решения брифа
 
-## Архитектурные решения (согласованы 28.05.2026)
+### Источник данных
+- `GET /api/v1/users` — один запрос, весь список сразу (в отличие от Exchange ResolveNames с перебором букв)
+- Авторизация: ZULIP_URL + ZULIP_EMAIL + ZULIP_API_KEY из `.env`
 
-### Первичный ключ — login (не email)
-Причина: у одного человека может быть @tutu.ru в Exchange и @tutu.tech в Zulip.
-Логин одинаков (`sereda`), email разный. По логину мержим в один контакт.
+### Фильтрация
+- `is_bot=True` → пропускаем
+- `is_active=False` → пропускаем, **НЕ пишем в contacts.enc**
 
-### Schema v2 — multi-source
-```json
-{
-  "login": "sereda",
-  "email": "sereda@tutu.ru",
-  "sources": {
-    "exchange": {"email": "sereda@tutu.ru", "synced_at": "...", "active": true},
-    "zulip":    {"email": "sereda@tutu.tech", "synced_at": "...", "active": true}
-  },
-  "active": true
-}
-```
-`active` верхнего уровня = `any(source.active)`. Требует migration contacts.enc v1 → v2.
+### Схема (schema v2)
+- Первичный ключ: `login` (часть email до @)
+- `sources: {zulip: {email, synced_at, active}}`
+- `active = any(source.active)`
+- `messenger_ids.telegram` из профиля Zulip → `{value, source: "zulip", synced_at}`
+- Поля Exchange (department, position) — пустые строки, заполнятся при верификации
 
-### Общий lock
-`WorkVault/Contacts/.contacts.enc.lock` — один на всех коннекторов.
+### Мерж
+- Единый `contacts.enc` в `WorkVault/Contacts/`
+- Общий lock: `WorkVault/Contacts/.contacts.enc.lock`
+- Если контакт уже есть (по login) — обновляем `sources.zulip` и `synced_at`
+- Новый контакт создаётся с `sources: {zulip: ...}`
 
-### messenger_ids с source
-```json
-"messenger_ids": {
-  "telegram": {"value": "@sereda", "source": "zulip", "synced_at": "..."},
-  "zulip_id":  {"value": 12345,    "source": "zulip", "synced_at": "..."}
-}
-```
-`source: "manual"` — коннектор не перезаписывает. `source: "zulip"` — перезаписывает.
+### Логирование
+- `WorkVault/_meta/MoveFromZulip/_sync_log.md`
+- `WorkVault/_meta/MoveFromZulip/contacts.jsonl` (с PII-маскировкой)
+- Маскировка: те же правила что MoveFromExchange (Кр**в, kr**v@tutu.ru)
 
-## Архитектура пакетов
-MoveFromZulip — тонкий коннектор поверх AnywhereContacts.
-Зависимость: `pip install -e ../AnywhereContacts`.
+### Расписание
+- Воскресенье 03:00, тихий cron (уведомление только при ошибке)
 
+### Архитектура (тонкий коннектор)
 ```
 MoveFromZulip/
 └── movefromzulip/
-    ├── zulip_client.py   # GET /api/v1/users
-    ├── mapper.py         # zulip_user → contact dict
-    ├── filters.py        # is_bot / is_active
-    ├── config.py         # Settings(ContactsBaseSettings): zulip_site, email, api_key
-    ├── sync.py           # run_sync() через MergeStrategy
-    └── __main__.py       # CLI entrypoint
+    ├── zulip_client.py  ← GET /api/v1/users
+    ├── mapper.py        ← zulip_user → contact dict (schema v2)
+    ├── filters.py       ← is_bot / is_active
+    ├── config.py        ← Settings(ContactsBaseSettings)
+    ├── sync.py          ← run_sync()
+    └── __main__.py
 ```
+Зависит от `anywhere_contacts` (AnywhereContacts пакет).
 
-## Схема контакта (v2)
-Все поля схемы Exchange сохраняются для совместимости.
-Zulip не отдаёт: `department`, `team`, `position` — пустые строки.
-
-## Хранилище
-Единый `WorkVault/Contacts/contacts.enc`.
-Первичный ключ — `login` (с v2).
-
-## Мерж
-- Контакт есть (по login) → обновить источник `sources.zulip`, не трогать другие источники
-- Контакта нет → создать новую запись с `sources.zulip`
-- Контакт был, но в новой выгрузке отсутствует → `sources.zulip.active: false`
-- `active` верхнего уровня пересчитывается: `any(s.active for s in sources.values())`
-
-## Маскировка в логах
-Те же правила что MoveFromExchange v1.1:
-- ФИО: первые 2 + `**` + последний символ каждого слова
-- Email: local_part маскируется, домен открыт
-- Login: первые 2 + `**` + последний
-- `_sync_log.md` — только счётчики, без PII
-
-## Расписание
-Воскресенье 03:00 (еженедельно), как Exchange.
-
-## Логи
-- `WorkVault/_meta/MoveFromZulip/_sync_log.md`
-- `WorkVault/_meta/MoveFromZulip/contacts.jsonl`
-- Метрики: `synced`, `new`, `updated`, `skipped_bot`, `skipped_inactive`, `duration`
-
-## Публичный API (через AnywhereContacts)
-Hermes и другие инструменты читают контакты через:
-- `create_store(path, key)` → ContactStore
-- `store.get_contact(login)` — точный поиск по логину
-- `store.find_contacts(query)` — substring-поиск по fio, email, aliases
-
-## Статус
-Бриф согласован 2026-05-28. ТЗ не написано — следующий шаг.
-Блок 8 брифа (публичный API) — в процессе обсуждения.
+## Почему Zulip, не Exchange
+Exchange ResolveNames возвращает max 100 результатов на запрос без пагинации.
+На популярные буквы (s, a, k...) часть сотрудников молча теряется.
+Zulip отдаёт всех одним запросом.
+Exchange остаётся для будущей верификации (department, position, официальные ФИО).

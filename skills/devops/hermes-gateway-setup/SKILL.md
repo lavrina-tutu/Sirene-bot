@@ -221,6 +221,22 @@ tail -20 ~/AppData/Local/hermes/logs/errors.log
 - `HTTP 403: Request not allowed` — Anthropic API отклонил запрос (лимит, неверный ключ, временная блокировка). Gateway продолжает работать, но конкретная сессия прерывается.
 - `APITimeoutError` x3 подряд → `API call failed after 3 retries` — сеть нестабильна или API перегружен. После нескольких таких ошибок процесс может упасть.
 - `[MEMORY] rss=...` записи пропали — процесс умер (был жив, потом перестал писать)
+- `Gateway runtime lock is already held` — кронджоб запустил второй gateway. **См. "Cronjob → Gateway Crash Pattern" выше.**
+
+**Как читать хронологию краша:**
+```bash
+# 1. Найти момент падения:
+grep -n "runtime lock\|ERROR\|Exiting" logs/gateway.log | tail -20
+
+# 2. Проверить что было в agent.log за 5 минут ДО падения:
+# (подставь время падения ±5 минут)
+grep -n "2026-MM-DD HH:[23][0-9]:" logs/agent.log | grep -E "cron_|terminal|gateway" | tail -30
+
+# 3. Проверить exit-diag.log — был ли чистый выход или жёсткий kill:
+# Чистый выход: есть запись atexit.hook с sys_exc=(None, None, None)
+# Жёсткий kill: записи нет вообще
+tail -10 logs/gateway-exit-diag.log
+```
 
 **3. Перезапуск:**
 ```bash
@@ -350,6 +366,45 @@ display:
     telegram:
       notifications: important
 ```
+
+### Cronjob → Gateway Crash Pattern (критический!)
+
+**Симптом:** gateway падает с ошибкой `Gateway runtime lock is already held by another instance. Exiting.` — и после этого **основной gateway тоже умирает** (нет связи до ручного перезапуска).
+
+**Причина:** Opus-кронджоб в процессе диагностики/разработки сам запускает `hermes gateway run` или `schtasks /Run /TN "Hermes_Gateway"`. Новый процесс либо убивает старый через lock, либо создаёт race condition.
+
+**Признаки в логах:**
+```
+# gateway.log — фатальная строка, после которой gateway молчит:
+23:26:09 ERROR gateway.run: Gateway runtime lock is already held by another instance. Exiting.
+
+# agent.log — кронджоб незадолго перед этим:
+[cron_XXXXX] run_agent: tool terminal completed ... (содержит "hermes gateway" или "schtasks /Run")
+```
+
+**Диагностика: как найти виновный кронджоб:**
+```bash
+# Найти строку с ошибкой lock в gateway.log:
+grep -n "runtime lock is already held" logs/gateway.log
+
+# Найти в agent.log что делал кронджоб незадолго до (±5 минут):
+grep -n "2026-MM-DD HH:2[0-9]:" logs/agent.log | grep -E "(terminal|gateway)"
+```
+
+**Правило для кронджобов с Opus:** НИКОГДА не включать в промпт разрешение запускать:
+- `hermes gateway run` / `hermes gateway stop` / `hermes gateway restart`
+- `schtasks /Run /TN "Hermes_Gateway"`
+- любую команду которая может создать второй gateway-процесс
+
+**Добавляй явный запрет в prompt кронджоба:**
+```
+🚫 АБСОЛЮТНЫЙ ЗАПРЕТ: не выполняй hermes gateway run/stop/restart и schtasks /Run.
+Нарушение роняет gateway и будит пользователя. Только READ + правка кода.
+```
+
+**Если gateway упал из-за кронджоба:** перезапускай вручную — Task Scheduler сам не восстановит (restart-on-failure в задаче не настроен по умолчанию).
+
+---
 
 ### delegate_task → Gateway Crash Pattern
 

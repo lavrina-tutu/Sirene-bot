@@ -1,4 +1,17 @@
 {
+  "dialog-backlog": {
+    "archived_at": null,
+    "created_at": "2026-05-28T09:23:41.980102+00:00",
+    "created_by": "agent",
+    "last_patched_at": "2026-05-28T13:56:41.668379+00:00",
+    "last_used_at": "2026-05-28T13:56:30.690775+00:00",
+    "last_viewed_at": "2026-05-28T13:56:30.679792+00:00",
+    "patch_count": 1,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  },
   "fireflies-obsidian-sync": {
     "archived_at": null,
     "created_at": "2026-05-22T07:30:31.118818+00:00",
@@ -43,27 +56,27 @@
     "created_at": "2026-05-22T07:56:21.032465+00:00",
     "created_by": "agent",
     "last_activity_at": null,
-    "last_patched_at": "2026-05-28T09:07:46.939079+00:00",
-    "last_used_at": "2026-05-28T09:04:30.470129+00:00",
-    "last_viewed_at": "2026-05-28T09:04:30.456137+00:00",
-    "patch_count": 12,
+    "last_patched_at": "2026-05-28T20:19:44.985668+00:00",
+    "last_used_at": "2026-05-28T20:19:18.384924+00:00",
+    "last_viewed_at": "2026-05-28T20:19:18.376925+00:00",
+    "patch_count": 18,
     "pinned": false,
     "state": "active",
-    "use_count": 10,
-    "view_count": 10
+    "use_count": 14,
+    "view_count": 14
   },
   "hermes-gateway-setup": {
     "archived_at": null,
     "created_at": "2026-05-21T07:52:19.351289+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-05-28T09:08:41.100050+00:00",
-    "last_used_at": "2026-05-28T09:04:32.506131+00:00",
-    "last_viewed_at": "2026-05-28T09:04:32.493448+00:00",
-    "patch_count": 9,
+    "last_patched_at": "2026-05-29T06:38:58.452969+00:00",
+    "last_used_at": "2026-05-29T06:38:26.046213+00:00",
+    "last_viewed_at": "2026-05-29T06:38:26.037170+00:00",
+    "patch_count": 11,
     "pinned": false,
     "state": "active",
-    "use_count": 6,
-    "view_count": 6
+    "use_count": 7,
+    "view_count": 7
   },
   "local-llm-hardware": {
     "archived_at": null,
@@ -78,18 +91,31 @@
     "use_count": 3,
     "view_count": 3
   },
+  "movefrom-confluence": {
+    "archived_at": null,
+    "created_at": "2026-05-28T19:59:01.659985+00:00",
+    "created_by": null,
+    "last_patched_at": "2026-05-28T20:19:26.778903+00:00",
+    "last_used_at": "2026-05-28T20:19:13.943548+00:00",
+    "last_viewed_at": "2026-05-28T20:19:13.932770+00:00",
+    "patch_count": 4,
+    "pinned": false,
+    "state": "active",
+    "use_count": 2,
+    "view_count": 2
+  },
   "movefrom-instruments": {
     "archived_at": null,
     "created_at": "2026-05-22T16:40:56.069347+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-05-28T09:12:10.842383+00:00",
-    "last_used_at": "2026-05-28T09:04:41.721607+00:00",
-    "last_viewed_at": "2026-05-28T09:04:40.700502+00:00",
-    "patch_count": 52,
+    "last_patched_at": "2026-05-28T19:03:51.347583+00:00",
+    "last_used_at": "2026-05-28T19:03:25.262727+00:00",
+    "last_viewed_at": "2026-05-28T19:03:25.252170+00:00",
+    "patch_count": 65,
     "pinned": false,
     "state": "active",
-    "use_count": 30,
-    "view_count": 30
+    "use_count": 34,
+    "view_count": 34
   },
   "multi-document-coordination": {
     "archived_at": null,
@@ -108,10 +134,10 @@
     "archived_at": null,
     "created_at": "2026-05-22T21:35:26.664576+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-05-28T09:11:13.023541+00:00",
+    "last_patched_at": "2026-05-28T13:56:07.234018+00:00",
     "last_used_at": "2026-05-28T09:04:46.803677+00:00",
     "last_viewed_at": "2026-05-28T09:04:46.795199+00:00",
-    "patch_count": 16,
+    "patch_count": 19,
     "pinned": false,
     "state": "active",
     "use_count": 11,

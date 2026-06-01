@@ -121,10 +121,72 @@ synced_at: "2026-05-28T22:00:00Z"
 - **Ре-синк только по запросу.** Без `--resync` существующие локальные файлы не перезаписываются (статус `skipped_exists`).
 - **`push` по умолчанию спрашивает подтверждение.** При программном вызове из другого инструмента — `--no-confirm` / `confirm=False`.
 
+## Перебор API ключей (ОБЯЗАТЕЛЬНО перед любым обращением к Confluence)
+
+Два ключа: **KEY1** — работает из офиса, **KEY2** — работает из дома. Заранее неизвестно какой сейчас активен.
+
+### Алгоритм (4 попытки, потом отказ)
+
+```
+K1 → K2 → K1 → K2 → ❌ "Нет доступа к Confluence (ни один ключ не работает)"
+```
+
+Нашёлся рабочий → **кешируем** в `/tmp/hermes_confluence_token` и используем до перезапуска gateway.
+
+### Bash-реализация
+
+```bash
+check_token() {
+  # Возвращает 0 если токен рабочий (не Anonymous)
+  DISPLAY=$(curl -s --max-time 5 -H "Authorization: Bearer $1" \
+    "https://dom.tutu.ru/rest/api/user/current" | grep -o '"displayName":"[^"]*"')
+  echo "$DISPLAY" | grep -v Anonymous | grep -q displayName
+}
+
+get_confluence_token() {
+  # 1. Сначала проверяем кеш сессии
+  CACHE=/tmp/hermes_confluence_token
+  if [ -f "$CACHE" ]; then
+    TOKEN=$(cat "$CACHE")
+    check_token "$TOKEN" && echo "$TOKEN" && return 0
+    rm -f "$CACHE"  # кеш протух — сбрасываем
+  fi
+
+  # 2. Читаем оба ключа
+  KEY1=$(grep "^CONFLUENCE_TOKEN=" /c/Users/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/MoveFromConfluence/.env | cut -d= -f2)
+  KEY2=$(grep "^CONFLUENCE_TOKEN_PREV=" /c/Users/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/MoveFromConfluence/.env | cut -d= -f2)
+
+  # 3. Перебор: K1 → K2 → K1 → K2
+  for TOKEN in "$KEY1" "$KEY2" "$KEY1" "$KEY2"; do
+    if check_token "$TOKEN"; then
+      echo "$TOKEN" > "$CACHE"   # кешируем на сессию
+      echo "$TOKEN"
+      return 0
+    fi
+  done
+
+  echo "❌ Нет доступа к Confluence — ни один ключ не работает (офис/дом?)" >&2
+  return 1
+}
+
+# Использование:
+TOKEN=$(get_confluence_token) || exit 1
+CONFLUENCE_TOKEN="$TOKEN" confluencesync pull "..." --to-context --no-recursive
+```
+
+### Правила
+
+- **Кеш** живёт в `/tmp/hermes_confluence_token` — сбрасывается при перезапуске Windows/gateway
+- При перезапуске gateway — перебор запускается заново
+- **Не обновлять `.env` файлы** — ключи там постоянные, меняется только кеш сессии
+- Если оба ключа не работают — сообщить пользователю: *"Нет доступа к Confluence — возможно, нужен VPN или ключи устарели"*
+
 ## Pitfalls (известные грабли)
 
-1. **VPN обязателен.** `dom.tutu.ru` доступен только через корпоративный VPN. Если получаешь connection error / timeout — первое, что предлагать пользователю: проверить VPN.
-2. **IndexError в конвертере макросов.** Конвертер `converter.py` может падать с `IndexError: list index out of range` в `_replace_macros` на сложных страницах (вложенные/неполные `<ac:structured-macro>`). Обходной путь:
+1. **Два ключа: офисный и домашний** — всегда запускай `get_confluence_token()` перед работой. Алгоритм K1→K2→K1→K2, кеш в `/tmp/hermes_confluence_token`. Не трогай `.env` файлы.
+2. **VPN обязателен.** `dom.tutu.ru` доступен только через корпоративный VPN. Если получаешь connection error / timeout — первое, что предлагать пользователю: проверить VPN.
+3. **Токен протухает.** Если `curl -H "Authorization: Bearer $TOKEN" https://dom.tutu.ru/rest/api/user/current` возвращает `"type":"anonymous"` — запускай `get_confluence_token()` для перебора всех ключей.
+4. **IndexError в конвертере макросов.**
    - попробуй `--no-recursive` (возможно, падает одна из дочерних)
    - попробуй другую страницу
    - сообщи пользователю баг и попроси скинуть пример страницы для фикса
@@ -133,7 +195,29 @@ synced_at: "2026-05-28T22:00:00Z"
 5. **Wiki-ссылки `[[Title]]` при push.** Резолвятся в `<ac:link>` по title в том же Space. Если страница с таким title не найдена — оставляется plain text + warning в лог.
 6. **Windows-санитизация имён.** Папки в vault урезаются до 80 символов и без `<>:"/\|?*`. Если ищешь страницу по title и не находишь — посмотри сокращённый вариант.
 7. **`.env` живёт в MoveFromConfluence.** Реальный путь: `USERTOOLS/MoveFromConfluence/.env` (там `CONFLUENCE_URL=https://dom.tutu.ru` и `CONFLUENCE_TOKEN`). ConfluenceSync ищет `.env` в порядке: `USERTOOLS/MoveFromConfluence/.env` → `USERTOOLS/MoveFromExchange/.env` → локальный `.env` рядом с пакетом. Не плоди отдельный `.env` в `USERTOOLS/ConfluenceSync/`.
-8. **VPN нужен даже для проверки токена.** Exchange и Confluence (`dom.tutu.ru`) — оба за корпоративным VPN. Простая проверка `curl ... | python` может не работать из-за отсутствия `python3` в PATH на Windows — использовать `execute_code` или `python3.11` явно.
+8. **Короткие URL `/x/XXXXX`** — ConfluenceSync не умеет их резолвить. Сначала раскрой через curl: `curl -sv "https://dom.tutu.ru/x/XXXXX" 2>&1 | grep Location` — получишь редирект на tinyurl.action, а оттуда grep `pageId=` из HTML-тела. Потом используй `pageId` в обычном URL `/pages/viewpage.action?pageId=NNN`.
+9. **Python для ConfluenceSync** — запускать через `/c/Users/tkachenkoav/AppData/Local/Programs/Python/Python311/python.exe -m confluencesync`, не через `python` или `python3.11` (uv trampoline ломается). Переменная `CONFLUENCE_TOKEN` передаётся как env: `CONFLUENCE_TOKEN="$TOKEN" python.exe -m confluencesync ...`
+8. **Короткие URL (`/x/XXXXX`) не поддерживаются напрямую.** ConfluenceSync не умеет резолвить tiny-URL формата `https://dom.tutu.ru/x/QBHcE` → `ValueError: Cannot extract page id/space from URL`. Резолви pageId так:
+   ```bash
+   TOKEN=$(get_confluence_token)
+   curl -s -H "Authorization: Bearer $TOKEN" -L \
+     "https://dom.tutu.ru/pages/tinyurl.action?urlIdentifier=XXXXX" \
+     | grep -o 'pageId=[0-9]*' | head -1
+   # Затем используй: https://dom.tutu.ru/pages/viewpage.action?pageId=<ID>
+   ```
+   Редирект 302 → tinyurl.action → страница с несколькими pageId в HTML — берём первый.
+
+8. **Короткие Confluence URL (`/x/XXXXX`)** — ConfluenceSync не умеет их резолвить. Решение: сделать curl-редирект чтобы получить pageId:
+   ```bash
+   curl -sv -H "Authorization: Bearer $TOKEN" "https://dom.tutu.ru/x/QBHcE" 2>&1 | grep Location
+   # Даёт: /pages/tinyurl.action?urlIdentifier=QBHcE
+   # Затем грузить страницу как HTML и grep pageId=[0-9]*
+   ```
+10. **`confluencesync` запускать через Python 3.11 напрямую**, не через `python` (uv trampoline ломается). Рабочий вызов:
+    ```bash
+    /c/Users/tkachenkoav/AppData/Local/Programs/Python/Python311/python.exe -m confluencesync pull "..." --to-both --no-recursive
+    ```
+    Команда `confluencesync` в PATH не работает из git-bash из-за uv trampoline.
 
 ## Пример полного UC-1 диалога
 

@@ -441,7 +441,8 @@ Zulip — основной источник контактов (1 запрос `
 | MarkObjectsFromSummary | WorkVault | 🟡 **Бриф завершён (блоки A-F+G), ТЗ не написано.** БЛОКЕР: нужен письменный список проектов/тем/инициатив от Саши с точными названиями и алиасами → файл `projects.md`. Без него ТЗ v0.1 можно написать (только контакты), но в реализацию v0.2+ не идти. | `hermes-workspace/docs/tz/MarkObjectsFromSummary_TZ_v0.1.md` (не создан) |
 | MoveFromJira | Jira (ТУТУ) | 🥈 **Приоритет #2** — только OKRAID + OKRS (цели и проекты). Нужен для быстрой постановки задач через TG. Jira доступна без VPN (`dom.tutu.ru`, PAT в `.env`). | — |
 | ConfluenceSync | Confluence (`dom.tutu.ru`) | ✅ **v1.0 реализован (28.05.2026).** 47/47 тестов зелёные. `pip install -e .` выполнен. CLI: `confluencesync pull/push/resync/log`. Двусторонний (read + write). PAT работает из дома без VPN. Путь проекта: `USERTOOLS/ConfluenceSync/`. Хранение: `WorkVault/Confluence/<Space>/<Страница>/index.md`. Скилл: `movefrom-confluence`. Логи: `WorkVault/_meta/ConfluenceSync/_sync_log.jsonl`. Режимы: `--to-file`, `--to-context`, `--to-both`. Флаг `confirm=True` по умолчанию, `confirm=False` для программных вызовов. Credentials: `USERTOOLS/MoveFromConfluence/.env`. **Питфолл:** передавать конкретный URL страницы (pageId или /display/SPACE/Title), не корень домена. | `USERTOOLS/ConfluenceSync/TZ.md` |
-| MoveFromZulip | Zulip (ТУТУ) | ✅ **v1.0 готов (28.05.2026)** — 2148 контактов в contacts.enc, schema v2. Zulip = основной источник контактов (1 запрос GET /api/v1/users). Exchange = верификация. Крон: воскресенье 03:00 (job_id: 50a30903f503). Credentials: ZULIP_URL, ZULIP_EMAIL, ZULIP_API_KEY в MoveFromExchange/.env | `USERTOOLS/MoveFromZulip/TZ.md` |
+| MoveFromZulip | Zulip (ТУТУ) | ⏸ **КРОН ОСТАНОВЛЕН (29.05.2026)** — Zulip отключают, переходят на Loop (Mattermost). Крон на паузе чтобы не перетёрлись контакты. 2148 контактов сохранены. | `USERTOOLS/MoveFromZulip/TZ.md` |
+| MoveFromLoop | Loop/Mattermost (ТУТУ) | 🆕 **Планируется** — Loop это Mattermost API v4 (loop.tutu.ru/api/v4). АКЦ остаётся в Zulip (zulip-outsource.tutu.ru). Нужен Personal Access Token: Loop → Настройки → Безопасность → Токены доступа. | — |
 
 ## Credentials (корпоративные сервисы ТУТУ)
 
@@ -768,6 +769,7 @@ find USERTOOLS -maxdepth 2 -type d -name ".pytest_cache" ! -path "*/.venv/*" -ex
 
 ## References
 
+- `references/loop-mattermost-api.md` — Loop API справочник: Loop = Mattermost API v4, эндпоинты пользователей, аутентификация через PAT, маппинг полей для MoveFromLoop.
 - `references/confluence-obsidian-storage-design.md` — архитектура хранения Confluence страниц в Obsidian: структура папок (гибрид), frontmatter, кросс-ссылки, что переиспользовать из текущего кода, питфоллы именования файлов.
 - `references/movefrom-confluence.md` — MoveFromConfluence полное ТЗ: двусторонняя синхронизация задач Confluence ↔ WorkVault, публикация summary встреч, CLI, TG-команды, парсинг action items / @mention / таблиц.
 - `references/movefrom-exchange-contacts.md` — MoveFromExchange полное ТЗ + contact-resolution: синхронизация Exchange GAL → contacts.enc (AES-256-GCM), Zulip bootstrap, filters.py (4 правила фильтрации), маскировка персданных, exchangelib Kerberos-конфиг; резолвинг свободных упоминаний людей (alias/nickname/login) по contacts.enc через AnywhereContacts API, PII-маскировка при выводе, три состояния резолвера (resolved/ambiguous/unknown).

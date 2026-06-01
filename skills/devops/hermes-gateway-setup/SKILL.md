@@ -9,6 +9,37 @@ platforms: [linux, macos, windows]
 
 # Hermes Gateway Setup
 
+## Диагностика крашей gateway (Windows)
+
+### Паттерн: кронджоб роняет gateway через schtasks
+
+**Симптом:** `Gateway runtime lock is already held by another instance. Exiting.` в gateway.log, после чего основной gateway тоже умирает (нет записи atexit в exit-diag.log).
+
+**Root cause:** Opus/агент в кронджобе запускает `schtasks /run /tn Hermes_Gateway` → это вызывает `gateway run --replace` → `taskkill /F` на живой PID (без atexit hooks) → новый инстанс проигрывает race за lock → оба мертвы.
+
+**Починено (29.05.2026):**
+1. Guard в `hermes_cli/gateway.py` — при `HERMES_CRON_SESSION=1` запрет запуска gateway (`sys.exit(2)`)
+2. `gateway_hidden.vbs` — переведён на `bWaitOnReturn=True` + проброс exit code → RestartOnFailure в Task Scheduler теперь реально срабатывает
+
+**Правило для кронджобов:** НИКОГДА не запускать `hermes gateway run/stop/restart` из кронджоба. Это убивает основной процесс.
+
+### Как читать логи краша
+
+```bash
+# Последние события в gateway.log
+tail -30 /c/Users/tkachenkoav/AppData/Local/hermes/logs/gateway.log
+
+# Был ли atexit (чистый выход) или жёсткий kill
+tail -20 /c/Users/tkachenkoav/AppData/Local/hermes/logs/gateway-exit-diag.log
+
+# Что делал кронджоб в момент краша
+grep "cron_<JOB_ID>" /c/Users/tkachenkoav/AppData/Local/hermes/logs/agent.log | tail -30
+```
+
+Если `atexit.hook` есть — чистый выход (race loser). Если нет — жёсткий `TerminateProcess` (баг).
+
+
+
 Hermes Gateway connects the agent to messaging platforms (Telegram, Discord, Slack, WhatsApp, Signal, and 15+ others). This skill covers initial setup, platform configuration, service management, and Windows-specific pitfalls.
 
 ## Quick Start
@@ -404,6 +435,20 @@ grep -n "2026-MM-DD HH:2[0-9]:" logs/agent.log | grep -E "(terminal|gateway)"
 
 **Если gateway упал из-за кронджоба:** перезапускай вручную — Task Scheduler сам не восстановит (restart-on-failure в задаче не настроен по умолчанию).
 
+### Фикс (29.05.2026, реализован Opus)
+
+**Два изменения в коде:**
+
+1. **`hermes_cli/gateway.py`** — функция `_guard_against_cronjob_context()`: при `HERMES_CRON_SESSION=1` и без `HERMES_ALLOW_GATEWAY_FROM_CRON=1` → `sys.exit(2)` с понятным сообщением. Вызывается в `run_gateway` до любых lock-операций.
+
+2. **`gateway/run.py`** — defense-in-depth дубликат guard'а внутри `start_gateway()`: возвращает `False` до `acquire_gateway_runtime_lock()` и `terminate_pid()`.
+
+3. **`gateway_hidden.vbs`** — исправлен с `bWaitOnReturn=False` на `bWaitOnReturn=True` + `WScript.Quit(code)`. Теперь Task Scheduler получает реальный exit code → **RestartOnFailure (Count=3, Interval=PT1M) работает**.
+
+**Остаточный риск:** если кронджоб вызывает `schtasks /Run /TN "Hermes_Gateway"` напрямую (новый дочерний процесс не наследует `HERMES_CRON_SESSION`), guard не срабатывает. Mitigation: VBS фикс обеспечивает автовосстановление за ≤1 минуту.
+
+**Тесты:** `tests/gateway/test_cronjob_gateway_guard.py` — 5 тестов, покрывают CLI guard и `start_gateway()` defence.
+
 ---
 
 ### delegate_task → Gateway Crash Pattern
@@ -431,8 +476,24 @@ delegation:
 ### Display/Platform Pitfalls
 - Only Telegram reads `display.platforms.telegram.notifications`. Discord/Slack ignore it — use platform-native settings.
 - `disable_notification=True` is a server-side hint; phone settings (DND, sound muting) can override it.
+
+## Баг: кронджоб убивает gateway (решено 29.05.2026)
+
+**Симптом:** gateway падает с `Gateway runtime lock is already held by another instance. Exiting.` — после чего основной процесс тоже умирает (без atexit hook).
+
+**Root cause:** кронджоб запускал `schtasks /run /tn Hermes_Gateway` → `gateway run --replace` → `taskkill /F` на живой процесс → новый инстанс проигрывал race за lock → оба мертвы.
+
+**Фикс 1 — guard в коде:** при `HERMES_CRON_SESSION=1` команда `hermes gateway run` завершается с ошибкой сразу. Кронджобы физически не могут запустить gateway.
+
+**Фикс 2 — VBS синхронный:** `gateway_hidden.vbs` переписан с `bWaitOnReturn=False` → `True` + `WScript.Quit(code)` → RestartOnFailure в Task Scheduler (3 попытки × 1 мин) теперь реально работает.
+
+**Правило:** кронджобам ЗАПРЕЩЕНО выполнять `hermes gateway run/stop/restart`. Любой промпт Opus-кронджоба должен явно содержать этот запрет.
 - Per-platform `notifications` overrides global `display.streaming` independently.
 - `cronjob` не видит контекст разговора — писать полный prompt с путями, ограничениями.
+- **Кронджоб роняет gateway** — немедленно удалить (`cronjob action=remove`), потом разбираться. Не ждать повторного падения.
+- **Диагностические кронджобы Opus** — ВСЕГДА добавлять в prompt явный запрет: `hermes gateway run/stop/restart` и `schtasks /Run`. Opus игнорирует неявные ограничения.
+- **Если пользователь спрашивает про статус крона или "это тот отчёт?"** — немедленно проверить `ls -t cron/output/*/` и прочитать файл. Никогда не угадывать по памяти разговора.
+- **Перед тем как говорить пользователю о статусе кронджоба** ("ждёт", "выполняется", "скоро придёт") — ВСЕГДА сначала проверить: `cronjob(action='list')` + `ls cron/output/<job_id>/` + последние строки `agent.log`. В 90% случаев задача уже завершена к моменту разговора. Говорить "ждём отчёт через 15 минут" когда он уже лежит в output — прямая дезинформация пользователя.
 - Субагент (Haiku) без явного запрета может испортить .env или удалить contacts.enc.
 
 See `references/gateway-telegram-notifications.md` for the complete codebase walkthrough (lines cited), noisy message regex patterns, error handling and rewriting logic.

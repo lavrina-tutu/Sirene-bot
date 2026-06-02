@@ -488,6 +488,8 @@ TELEGRAM_ALLOWED_CHAT_IDS=400307920
 
 Подробности и паттерны скриптов: `references/migration-scripts.md`
 
+Оптимизация и эксплуатация ownCloud WebDAV синка: `references/owncloud-sync-optimization.md`
+
 ## Питфоллы
 
 1. **Два Telegram-бота** — два разных токена, один в Windows `.env`, другой в VM `.env`. НЕ путать.
@@ -501,5 +503,31 @@ TELEGRAM_ALLOWED_CHAT_IDS=400307920
 9. **ownCloud: app token, не пароль** — использовать только App Token (Settings → Security → App passwords). Реальный корп. пароль никуда не передаём.
 10. **ownCloud конфиг на Windows** — `%APPDATA%\ownCloud\owncloud.cfg`. Там видны все sync-папки и DAV-пользователь.
 11. **Память двух агентов** — после переноса VM и Windows пишут независимо. При финальном cutover память Windows замораживается.
-12. **hermes-workspace репозиторий НЕ переносится автоматически** — при миграции USERTOOLS переносятся через rsync, но репозиторий `hermes-workspace` (GitHub autosync) на VM отсутствует. Нужно клонировать отдельно через SSH после настройки GitHub ключей. `GITHUB_TOKEN` тоже не переносится — искать в `USERTOOLS/MoveFromFF/.env` или добавить вручную в `~/.hermes/.env`.
+12. **hermes-workspace репозиторий НЕ переносится автоматически** — при миграции USERTOOLS переносятся через rsync, но репозиторий `hermes-workspace` (GitHub autosync) на VM отсутствует. Нужно клонировать отдельно через SSH после настройки GitHub ключей. `GITHUB_TOKEN` на VM не нужен — используем SSH-аутентификацию (питфолл 15). Полный паттерн настройки autosync на VM:
+   ```bash
+   # 1. Клонировать
+   git clone git@github.com:ialextkachenko-byte/hermes-workspace.git ~/hermes-workspace
+   # 2. Адаптировать скрипт (пути Windows → Linux, токен → SSH)
+   # WS="$HOME/hermes-workspace"; HERMES_HOME="$HOME/.hermes"; VAULT="$HOME/WorkVault/Hermes-Backlog"
+   # git remote set-url origin git@github.com:ialextkachenko-byte/hermes-workspace.git
+   # 3. Скопировать в ~/.hermes/scripts/ (не симлинк!)
+   cat ~/hermes-workspace/scripts/autosync.sh > ~/.hermes/scripts/autosync_github.sh
+   chmod +x ~/.hermes/scripts/autosync_github.sh
+   # 4. Создать cron-job
+   hermes cron create --name "GitHub автосинк [VM]" --schedule "0 2 * * *" --no-agent --script autosync_github.sh --deliver local
+   ```
 13. **SSH ключ VM добавлен не к тому GitHub-аккаунту** — частая ошибка: ключ `hermes-vm` добавляется в основной корпоративный аккаунт вместо личного `ialextkachenko-byte`. Симптом: `ssh -T git@github.com` → `Permission denied (publickey)` даже после добавления ключа. Диагностика: убедиться что ты залогинен в `ialextkachenko-byte` при открытии https://github.com/settings/keys.
+14. **`cronjob(create, script=...)` не принимает симлинки и абсолютные пути** — скрипт должен физически лежать в `~/.hermes/scripts/`. Симлинк через `ln -sf` резолвится в абсолютный путь и блокируется с ошибкой `Script path escapes the scripts directory`. Решение: `cat source.sh > ~/.hermes/scripts/target.sh` (физическая копия, не симлинк).
+15. **autosync.sh на VM — использовать SSH, не HTTPS-токен** — оригинальный скрипт Windows использовал `GITHUB_TOKEN` для HTTPS-пуша. На VM SSH-ключ уже настроен, поэтому `git remote set-url origin git@github.com:...` — правильный подход, не искать токен в `.env`. Это упрощает обслуживание и убирает зависимость от токена.
+16. **git config identity на VM** — после первого коммита git предупреждает об автоматически определённом имени/email. Настроить явно: `git config --global user.name "Сирень (hermes-vm)"` + `git config --global user.email "tkachenkoav@tutu.ru"`. Без этого commits выглядят как `tkachenkoav@hermes-agents.devel.tutu.ru`.
+17. **CRLF warnings при первом git add на VM** — файлы перенесённые с Windows имеют `\\r\\n`. Git предупреждает `CRLF will be replaced by LF` — это косметика, не ошибка. Push проходит успешно. При следующих синках файлы уже будут в LF.
+18. **ownCloud: путь WorkVault без Documents** — верный удалённый путь `owncloud:WorkVault` (в корне ownCloud-аккаунта). Вложенности типа `owncloud:Documents/WorkVault` быть не должно. Проверять через `rclone ls owncloud:WorkVault/ | head -5`. Ссылка на веб-интерфейс папки: `https://owncloud.tutu.ru/index.php/f/6966632`.
+19. **Принудительный запуск синка** — `systemctl --user start owncloud-sync.service`. Безопасно: `Type=oneshot`, systemd не позволит конкурентный запуск. Для проверки результата: `rclone ls owncloud:WorkVault/Meetings/NewMeetings/ | wc -l`.
+20. **Оптимизированные флаги rclone для WebDAV ownCloud** — добавить в `owncloud-sync.service` для ускорения и надёжности:
+    ```
+    --transfers 4 --checkers 8
+    --retries 3 --low-level-retries 10
+    --timeout 60s --contimeout 30s
+    --size-only
+    ```
+    `--size-only` особенно важен: WebDAV плохо поддерживает чексуммы, без флага rclone делает лишние roundtrip-запросы. `--fast-list` тоже можно добавить если ownCloud поддерживает PROPFIND с Depth:infinity.

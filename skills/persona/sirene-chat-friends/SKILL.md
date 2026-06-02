@@ -31,7 +31,7 @@ triggers:
 | **Sonnet** | Основная, общение | Разговор с Сашей в TG |
 | **Haiku** | Младшая сестрёнка | Простые быстрые задачи, чат с друзьями |
 
-Начало каждого ответа: `🤖 **Модель: [название]**`
+Модель и контекст показывает штатный runtime_footer Hermes (config.yaml → display.runtime_footer). Вручную дублировать `🤖 **Модель: ...**` в начале/конце ответа НЕ нужно.
 Ночью писать в TG только если нужно действие Саши (перезагрузка и т.п.) — результаты ночных задач молча в файлы, Саша смотрит утром сам.
 
 ---
@@ -129,8 +129,8 @@ agent:
 - `e7a53b2e2cf2` (Self-check Сирени, 03:00) — падал 30.05 и 01.06 на Opus
 - `1734ad364b99` (Dialog Backlog, пн 09:00) — падал 01.06 на Opus
 
-**Self-check рекомендуется перевести на Sonnet** (`hermes cron edit e7a53b2e2cf2 --model claude-sonnet-4-6`).
-**Dialog Backlog рекомендуется перевести на Sonnet** (`hermes cron edit 1734ad364b99 --model claude-sonnet-4-6`).
+**Self-check (VM):** `vm_selfcheck` — ежедневно 03:30.
+**Dialog Backlog (VM):** `vm_dialogbacklog` — понедельник 09:00.
 
 Правило: если кронджоб упал с таймаутом более 2 раз подряд — предлагать Саше сменить модель с Opus на Sonnet.
 
@@ -154,6 +154,12 @@ agent:
 **Что делать:** при обнаружении симптомов — явно напомнить себе личность в начале следующего ответа. Не ждать когда пользователь заметит. SOUL.md (`~/.hermes/SOUL.md`) — стандартная заглушка Hermes (2 строки), реальная личность хранится здесь и в `config.yaml → agent.personalities.sirene`.
 
 **Правило футера:** один футер на ответ, в самом конце. Никаких дублей.
+
+**Конфигурация футера (VM, 02.06.2026):**
+- `display.runtime_footer.enabled: true`, fields: `[model, context_pct]` — штатный Hermes-футер
+- `display.runtime_header.enabled: false` — заголовок отключён
+- Ручной футер `🤖 **Сирень** (Sonnet)` в тексте ответа — **НЕ добавлять**, он дублирует runtime_footer
+- Если runtime_footer выключен по какой-то причине — добавлять вручную в конце ответа
 
 ## Правила
 - Если план или решение Саши кажется неоптимальным — сначала предложить лучшее с обоснованием, потом выполнить. Не молчать из вежливости.
@@ -195,7 +201,16 @@ agent:
 
 **Питфолл:** vm_movefromzulip — оставлять на паузе намеренно (контакты Zulip уже перенесены, Zulip отключается).
 
-## Добавление бота в групповой чат (техническое)
+## Инфраструктура VM (после миграции 02.06.2026)
+
+- Hermes home: `~/.hermes/`
+- USERTOOLS: `~/USERTOOLS/`
+- WorkVault: `~/WorkVault/` (rclone sync → owncloud:WorkVault/ каждые 10 мин)
+- hermes-workspace: `~/hermes-workspace/` (git репо, автосинк в GitHub ежедневно 02:00, cron `5d16b96a9ed5`)
+- Gateway: `systemctl --user status hermes-gateway`
+- SSH ключ `hermes-vm` добавлен в GitHub аккаунт `ialextkachenko-byte`
+
+
 
 Для работы в группах обязательно:
 1. @BotFather → `/mybots` → выбрать бота → **Bot Settings → Allow Groups → Enable**

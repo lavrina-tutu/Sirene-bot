@@ -312,14 +312,10 @@ display:
       interim_assistant_messages: false
   runtime_footer:
     enabled: true
-    fields:
-    - model
-    - context_pct
-    - cwd
+    fields: [model, context_pct]
   copy_shortcut: auto
   runtime_header:
-    enabled: true
-    template: "\U0001F916 **\u041C\u043E\u0434\u0435\u043B\u044C: {model}**"
+    enabled: false
   tool_progress: all
   cleanup_progress: false
   background_process_notifications: all

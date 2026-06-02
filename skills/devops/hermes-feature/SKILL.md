@@ -92,7 +92,8 @@ Opus обновляет ТЗ-файл: добавляет выбранный в�
 `config.yaml` + `jobs.json` + `skills/` + `MEMORY.md` + `USER.md` + файлы специфичные для задачи
 
 ### Путь
-`/home/tkachenkoav/Documents/Cursor_projects/hermes-agent/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`
+Linux VM: `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`
+Для бэкапов отдельных компонентов (unit-файлы, rclone.conf и т.п.) — рядом с файлом: `<file>.bak-<purpose>-YYYYMMDD-HHMMSS`
 
 ### Хранение
 2 недели, 1 бэкап в день (самый ранний). Self-check чистит автоматически.
@@ -214,6 +215,29 @@ Hermes индексирует локальные скиллы через `.usage
 
 ---
 
+## Блок 9: Передача контекста между инстансами (handover)
+
+Применять при: запуск нового инстанса Сирени (новая VM, новый бот, новая среда).
+
+**Паттерн:** создать `~/.hermes/handover.md` на **источнике** перед переносом:
+1. Кто ты и кто Саша (3-4 строки)
+2. Статус миграции / последнего большого события
+3. Что нужно сделать в первую очередь (нумерованный список)
+4. Открытые задачи из бэклога (кратко, по секциям)
+5. Важные пути на новой машине
+6. Ключевые секреты и где они лежат
+7. Стиль общения (основные правила)
+
+**На новом инстансе:** при первом запуске прочитать handover.md (`read_file`), войти в контекст, затем удалить или переименовать файл.
+
+---
+
+## Справочные материалы
+
+- `references/owncloud-rclone-sync.md` — конфигурация WebDAV синка WorkVault, оптимальные флаги, питфоллы
+
+---
+
 ## Питфоллы
 
 - **Реальный API может не совпасть с документацией/предположениями в ТЗ** — фиксировать отклонение в финальном отчёте Opus. Делать живой запрос к API **перед реализацией** (это блокер для ТЗ, не после). Пример: FF `extended_sections { title items text }` → реально `{ title content }`. Opus должен: (1) записать отклонение в отчёт; (2) реализовать по реальной схеме; (3) оставить опциональные поля из ТЗ для backward-compat с моками, если это разумно.
@@ -231,10 +255,12 @@ Hermes индексирует локальные скиллы через `.usage
 - **MoveFromZulip синк:** первичный ключ контакта = `login` (часть email до @), не полный email. Schema v2: `sources: {zulip: {email, synced_at, active}}`, `active = any(source.active)`. Zulip отдаёт всех одним запросом `GET /api/v1/users`. Фильтры: `is_bot=true` и `is_active=false` — не писать вообще. messenger_ids хранятся с `{value, source, synced_at}`, `source: manual` не перезаписывается коннектором.
 - **AnywhereContacts — PII при выводе:** функция `mask_contact(contact)` из `anywhere_contacts` ОБЯЗАТЕЛЬНА перед любым выводом контакта пользователю в Telegram или CLI. `store.read()` возвращает сырые данные намеренно (для записи в Jira/Confluence нужен настоящий email). Ошибка: показать `Криворотов Кирилл` вместо `Кр**в Ки**л`.
 - **AnywhereContacts — общий lock:** все коннекторы используют единый lock-файл `WorkVault/Contacts/.contacts.enc.lock`, не per-tool lock.
-- **USERTOOLS живут в `Documents/Cursor_projects/hermes-agent/USERTOOLS/`**, не в `WorkVault/USERTOOLS/`. При запуске Opus на написание ТЗ или реализацию — передавать именно этот путь. WorkVault — только для данных и логов, не для кода.
+- **USERTOOLS живут в `~/USERTOOLS/`** на Linux VM. При запуске Opus — передавать этот путь.
+- **AnywhereContacts API на VM:** `ContactStore(path=Path('/home/tkachenkoav/WorkVault/Contacts/contacts.enc'), encryption_key=KEY)`. Python-интерпретер: `~/USERTOOLS/AnywhereContacts/.venv/bin/python3` (не системный). venv имеет структуру Windows (`Lib/`, `Scripts/`), активировать через `.venv/bin/python3` напрямую. `find_contacts(query)` возвращает `Dict[login, contact_dict]` — итерировать через `.items()`. Перед выводом: `mask_contact(c)` обязательно.
 - **Футер в cron-ответах — реализовано 28.05.2026:** `_build_cron_footer(job)` добавлена в `cron/scheduler.py` (строки 569, 648). Формат: `claude-opus-4-7 · Имя задачи` в конце `wrap_response` блока. Если футер всё равно не появляется после рестарта — проверить что `_SEP` и `_model_short` из `gateway/runtime_footer.py` доступны (могут быть приватными). Fallback: дублировать литерал `" · "` локально в `scheduler.py`.
 - **Gateway падает при рестарте во время обработки запроса:** если gateway перезапустить пока агент обрабатывает сообщение (крутит tool-вызовы) — ответ теряется, `response ready` в логе не появляется. Признак: запрос залогирован (`inbound message`), но `response ready` отсутствует, следом сразу `Starting Hermes Gateway`. Это не баг gateway, а штатное поведение при принудительном завершении процесса. Рекомендация: перед рестартом подождать пока ответ придёт (обычно видно по индикатору набора в Telegram).
-- **Cron GitHub автосинк:** промпт задачи может устареть при архивировании репо на GitHub (403 на push). Симптом: `last_status: ok` но ничего не пушится. Проверять реальный вывод лога, не только статус. Решение: обновить промпт на актуальный скрипт `bash scripts/autosync.sh`. при переносе проекта в другую папку нужно обновлять пути в cron job-промпте (`jobs.json`). Симптом: `synced=0` без ошибок — скрипт не найден по старому пути. Проверять: `last_status` + вывод job-отчёта.
+- **`cronjob(action='create')` со скриптом:** скрипт должен физически лежать в `~/.hermes/scripts/` под простым именем. Симлинки не работают — scheduler резолвит их в абсолютный путь и отклоняет. Команда: `cat source.sh > ~/.hermes/scripts/name.sh && chmod +x ~/.hermes/scripts/name.sh`. Передавать только имя файла без пути: `script="name.sh"`.
+- **Делегирование через одноразовый cron:** паттерн для Opus-задач без прерывания текущей сессии — `cronjob(action='create', schedule='Nm', repeat=1, deliver='telegram:400307920', model='claude-opus-4-7')`. Результат приходит в TG. Job самоудаляется после выполнения (`repeat=1`). Симптом: `last_status: ok` но ничего не пушится. Проверять реальный вывод лога, не только статус. Решение: обновить промпт на актуальный скрипт `bash scripts/autosync.sh`. при переносе проекта в другую папку нужно обновлять пути в cron job-промпте (`jobs.json`). Симптом: `synced=0` без ошибок — скрипт не найден по старому пути. Проверять: `last_status` + вывод job-отчёта.
 
 ## Футер (обязательно в конце каждого ответа)
 

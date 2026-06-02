@@ -15,7 +15,7 @@ platforms: [windows]
 
 ## Файл
 
-`C:/Users/tkachenkoav/WorkVault/Hermes-Backlog/dialog-backlog.md`
+`/home/tkachenkoav/WorkVault/Hermes-Backlog/dialog-backlog.md`
 
 ## Формат файла
 
@@ -73,13 +73,14 @@ next_id: 21
 
 ## БД переписки
 
-История сессий: `C:/Users/tkachenkoav/AppData/Local/hermes/state.db`
+История сессий: `/home/tkachenkoav/.local/share/hermes/state.db`
 - Таблицы: `sessions`, `messages`
 - Фильтр: `source='telegram'`, `timestamp > last_scan_at`
 
 ## Питфоллы
 
 - **Баг: конфликт якорей bk-NNN** — `backlog_merge.py` читает `next_id` из frontmatter, но если в файле уже есть якоря с бо́льшими номерами (напр. bk-029..032 из MigrationToVM-блоков добавленных вручную), утилита присвоит коллизионные ID. Признак: два разных пункта с одинаковым `^bk-NNN` в разных секциях. Фикс: перед запуском merge смотреть реальный максимальный ID в файле (`grep "^bk-" dialog-backlog.md | sort -t- -k2 -n | tail -1`) и выставлять `next_id` в frontmatter выше этого значения вручную.
+- **При изменении условий задачи** (пользователь говорит «вместо X будем делать Y») — сразу обновить текст пункта `bk-NNN` в файле, не ждать понедельничной сводки. Обновить `last_scan_at` в frontmatter.
 - **Не дублировать** уже существующие пункты при добавлении новых
 - **Читать frontmatter** перед записью — взять актуальный `next_id` и `last_scan_at`
 - **Обновлять frontmatter** после каждого изменения (`last_scan_at`, `next_id`)

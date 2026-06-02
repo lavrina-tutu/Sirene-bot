@@ -9,7 +9,7 @@ platforms: [windows]
 
 # ТУТУ — Корпоративные интеграции
 
-Все credentials хранятся в `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/.env`
+Все credentials хранятся в `/home/tkachenkoav/Documents/Cursor_projects/MoveFromFF/.env`
 
 ## ⚠️ Правило: минимизация авторизаций
 

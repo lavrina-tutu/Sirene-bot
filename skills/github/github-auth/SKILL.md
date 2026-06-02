@@ -242,6 +242,7 @@ fi
 | `remote: Permission to X denied` | Token may lack `repo` scope — regenerate with correct scopes |
 | `fatal: Authentication failed` | Cached credentials may be stale — run `git credential reject` then re-authenticate |
 | `ssh: connect to host github.com port 22: Connection refused` | Try SSH over HTTPS port: add `Host github.com` with `Port 443` and `Hostname ssh.github.com` to `~/.ssh/config` |
+| `Permission denied (publickey)` после добавления ключа | Ключ добавлен не к тому GitHub-аккаунту. Диагностика: `ssh -vT git@github.com 2>&1 | grep "Offering"` — покажет fingerprint. Сравни с ключами на https://github.com/settings/keys **нужного** аккаунта. Частая ошибка: ключ добавлен в основной (корпоративный) аккаунт вместо личного `ialextkachenko-byte`. |
 | Credentials not persisting | Check `git config --global credential.helper` — must be `store` or `cache` |
 | Multiple GitHub accounts | Use SSH with different keys per host alias in `~/.ssh/config`, or per-repo credential URLs |
 | `gh: command not found` + no sudo | Use git-only Method 1 above — no installation needed |

@@ -92,7 +92,7 @@ Opus обновляет ТЗ-файл: добавляет выбранный в�
 `config.yaml` + `jobs.json` + `skills/` + `MEMORY.md` + `USER.md` + файлы специфичные для задачи
 
 ### Путь
-`C:/Users/tkachenkoav/Documents/Cursor_projects/hermes-agent/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`
+`/home/tkachenkoav/Documents/Cursor_projects/hermes-agent/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`
 
 ### Хранение
 2 недели, 1 бэкап в день (самый ранний). Self-check чистит автоматически.
@@ -189,7 +189,7 @@ hermes config set fallback_providers '[]'
 ### Изменение `no_agent` в cron-задаче
 Инструмент `cronjob(action='update')` НЕ умеет сбрасывать `no_agent: true → false`. Нужна прямая правка JSON:
 ```
-C:/Users/tkachenkoav/AppData/Local/hermes/cron/jobs.json
+/home/tkachenkoav/.local/share/hermes/cron/jobs.json
 ```
 Найти блок по `job_id`, поменять `"no_agent": true` → `"no_agent": false`, убрать `"script": "..."` → `"script": null`. Gateway перезапускать не нужно — scheduler читает jobs.json при следующем тике.
 Hermes индексирует локальные скиллы через `.usage.json` + сканирование SKILL.md. Если скилл не появляется в `hermes skills list` после создания:

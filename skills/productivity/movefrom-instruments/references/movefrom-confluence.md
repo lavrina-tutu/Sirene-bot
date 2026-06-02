@@ -16,7 +16,7 @@ platforms: [windows]
 - **Пользователь:** tkachenkoav@tutu.ru (ТУТУ)
 - **Источник:** Confluence `dom.tutu.ru`, REST API v2, PAT-токен (`TUTU_ATLASSIAN_TOKEN` в `.env`)
 - **Хранилище задач:** `{WORKVAULT_PATH}/Tasks/` — `.md` файлы с YAML frontmatter (Obsidian-совместимо)
-- **Проект:** `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromConfluence/`
+- **Проект:** `/home/tkachenkoav/Documents/Cursor_projects/MoveFromConfluence/`
 - **ТЗ:** `hermes-workspace/docs/tz/MoveFromConfluence_TZ_v1.0.md`
 - **Тесты:** 37/37 ✅ (май 2026)
 

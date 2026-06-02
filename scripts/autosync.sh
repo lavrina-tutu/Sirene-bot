@@ -1,26 +1,16 @@
 #!/usr/bin/env bash
 # Auto-sync local Hermes state (skills, config, backlog) -> hermes-workspace repo, then push.
 # Usage: cron job invokes this.
+# Адаптировано для Linux VM (hermes-agents.devel.tutu.ru), 2026-06-02
 set -euo pipefail
 
-WS="$HOME/Documents/Cursor_projects/hermes-workspace"
-HERMES_HOME="$HOME/AppData/Local/hermes"
+WS="$HOME/hermes-workspace"
+HERMES_HOME="$HOME/.hermes"
 VAULT="$HOME/WorkVault/Hermes-Backlog"
-
-# Resolve token: prefer workspace-level .env, fall back to tools/movefromff/.env
-TOKEN=""
-if [ -f "$WS/.env" ]; then
-  TOKEN=$(grep '^GITHUB_TOKEN=' "$WS/.env" | cut -d= -f2- | tr -d '\r\n' || true)
-fi
-if [ -z "$TOKEN" ] && [ -f "$WS/tools/movefromff/.env" ]; then
-  TOKEN=$(grep '^GITHUB_TOKEN=' "$WS/tools/movefromff/.env" | cut -d= -f2- | tr -d '\r\n' || true)
-fi
-[ -z "$TOKEN" ] && { echo "[autosync] No GITHUB_TOKEN found"; exit 1; }
 
 cd "$WS"
 
 echo "[autosync] mirroring skills..."
-# Use cp -r since rsync may be flaky on Windows MSYS; clean target first to mimic --delete
 if [ -d "$HERMES_HOME/skills" ]; then
   rm -rf skills
   mkdir -p skills
@@ -29,6 +19,7 @@ if [ -d "$HERMES_HOME/skills" ]; then
 fi
 
 echo "[autosync] mirroring docs from WorkVault..."
+mkdir -p docs docs/tz docs/self-checks
 for f in "$VAULT"/backlog.md "$VAULT"/automation-tools-vision.md "$VAULT"/github-consolidation-plan.md; do
   [ -f "$f" ] && cp "$f" docs/
 done
@@ -40,15 +31,18 @@ for f in "$VAULT"/self-check-*.md; do
 done
 
 echo "[autosync] sanitizing config.yaml..."
-if [ -f "$HERMES_HOME/config.yaml" ]; then
+if [ -f "$HERMES_HOME/config.yaml" ] && [ -f "$WS/scripts/sanitize_config.sh" ]; then
   bash "$WS/scripts/sanitize_config.sh" "$HERMES_HOME/config.yaml" "$WS/config/config.yaml"
 fi
 
 echo "[autosync] running doctor..."
-bash "$WS/scripts/doctor.sh"
+if [ -f "$WS/scripts/doctor.sh" ]; then
+  bash "$WS/scripts/doctor.sh"
+fi
 
 echo "[autosync] commit + push..."
-git remote set-url origin "https://${TOKEN}@github.com/ialextkachenko-byte/hermes-workspace.git"
+# SSH уже настроен (ключ hermes-vm добавлен в GitHub)
+git remote set-url origin git@github.com:ialextkachenko-byte/hermes-workspace.git
 git add -A
 if git diff --cached --quiet; then
   echo "[autosync] no changes"

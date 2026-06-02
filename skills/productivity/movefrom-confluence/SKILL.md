@@ -52,7 +52,7 @@ confluencesync pull "<url>" --to-file              # рекурсивно по �
 confluencesync pull "<url>" --to-file --depth 2
 
 # Push обновления существующей страницы (по confluence_id из frontmatter)
-confluencesync push "C:/Users/tkachenkoav/WorkVault/Confluence/<Space>/<Page>/index.md" --no-confirm
+confluencesync push "/home/tkachenkoav/WorkVault/Confluence/<Space>/<Page>/index.md" --no-confirm
 
 # Создание новой подстраницы (если в frontmatter нет confluence_id, но есть parent)
 confluencesync push "путь/к/новой/странице.md"

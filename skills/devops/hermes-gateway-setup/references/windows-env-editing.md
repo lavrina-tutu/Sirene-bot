@@ -11,7 +11,7 @@ Use the `python` command (available in git-bash as the MSYS Python) to read, mut
 ```python
 python -c "
 import os
-path = os.path.expanduser('~/AppData/Local/hermes/.env')
+path = os.path.expanduser('~/.local/share/hermes/.env')
 with open(path, 'r', encoding='utf-8') as f:
     lines = f.readlines()
 
@@ -26,7 +26,7 @@ Then replace by index:
 ```python
 python -c "
 import os
-path = os.path.expanduser('~/AppData/Local/hermes/.env')
+path = os.path.expanduser('~/.local/share/hermes/.env')
 with open(path, 'r', encoding='utf-8') as f:
     lines = f.readlines()
 
@@ -52,5 +52,5 @@ Multiple variables are run together on one physical line (the comment block conc
 ## Notes
 
 - `python` in git-bash resolves to the MSYS/system Python (not `python3` or a store alias)
-- Paths: use `os.path.expanduser('~/AppData/Local/hermes/.env')` — works on Windows with MSYS Python
-- Always verify with `grep "TELEGRAM" ~/AppData/Local/hermes/.env` after editing
+- Paths: use `os.path.expanduser('~/.local/share/hermes/.env')` — works on Windows with MSYS Python
+- Always verify with `grep "TELEGRAM" ~/.local/share/hermes/.env` after editing

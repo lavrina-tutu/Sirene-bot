@@ -506,7 +506,7 @@ TG-поиск контактов: по имени/фамилии, до 5 рез�
 
 ## Все ТЗ и бэклог
 
-`C:/Users/tkachenkoav/WorkVault/Hermes-Backlog/`
+`/home/tkachenkoav/WorkVault/Hermes-Backlog/`
 
 ## Ежедневный self-check Сирени (крон 03:00 МСК, Opus)
 

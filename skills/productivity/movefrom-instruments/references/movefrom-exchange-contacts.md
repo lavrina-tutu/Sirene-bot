@@ -45,7 +45,7 @@ from dotenv import load_dotenv
 warnings.filterwarnings('ignore')
 sys.path.insert(0, '.')
 
-load_dotenv('C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/.env')
+load_dotenv('/home/tkachenkoav/Documents/Cursor_projects/MoveFromFF/.env')
 load_dotenv('.env', override=False)
 
 from movefromexchange.config import get_settings
@@ -114,7 +114,7 @@ store.write(updated_data)
 - **Источник:** Exchange EWS `https://cas.tutu.ru/EWS/Exchange.asmx`
 - **Хранилище:** `{WORKVAULT_PATH}/Contacts/contacts.enc` (AES-256-GCM)
 - **Объём GAL:** 1787 записей (26.05.2026, первый полный синк)
-- **Проект:** `C:/Users/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/MoveFromExchange/`
+- **Проект:** `/home/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/MoveFromExchange/`
 - **ТЗ:** нет отдельного файла в Hermes-Backlog, только README.md в проекте
 - **Крон:** каждое воскресенье 03:00 МСК (job_id: 58ab10e1ee15)
 - **pytest:** не установлен в venv проекта — перед запуском тестов: `pip install pytest`
@@ -372,7 +372,7 @@ store.write(data)
 - **fetch_gal() тихо возвращает 0 — silent failure (май 2026):** Голый `except Exception: pass` в `_fetch_people()` глотает `UnauthorizedError` на каждом из 27 паттернов wildcards → 0 контактов без ошибок. Урок: только `except Exception as e: logger.warning(...)`, никогда pass.
 - **Субагент может испортить .env и contacts.enc** — при делегировании задач диагностики субагент на Haiku менял .env (подставлял тестовые credentials) и удалял contacts.enc. Явно запрещать в промпте: "не удалять contacts.enc и .env".
 - **contacts.enc восстанавливается из Zulip** — если файл удалён, запустить `reimport_zulip.py` в корне проекта.
-- **⚠️ ДВА РАЗНЫХ contacts.enc (критично, май 2026):** В проекте MoveFromExchange есть `contacts.enc` с 2 тестовыми записями (966 байт). Настоящий рабочий файл с 1167 контактами живёт в `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/contacts.enc` (628 KB). Экспорт `--export` из MoveFromExchange берёт СВОЙ локальный файл → получается пустой xlsx. Для экспорта рабочих данных — запускать экспорт из папки MoveFromFF или явно передавать путь к нужному contacts.enc.
+- **⚠️ ДВА РАЗНЫХ contacts.enc (критично, май 2026):** В проекте MoveFromExchange есть `contacts.enc` с 2 тестовыми записями (966 байт). Настоящий рабочий файл с 1167 контактами живёт в `/home/tkachenkoav/Documents/Cursor_projects/MoveFromFF/contacts.enc` (628 KB). Экспорт `--export` из MoveFromExchange берёт СВОЙ локальный файл → получается пустой xlsx. Для экспорта рабочих данных — запускать экспорт из папки MoveFromFF или явно передавать путь к нужному contacts.enc.
 - **contacts.enc в MoveFromExchange** — содержит только тестовые данные (`test1@tutu.ru`, `test2@tutu.ru`). Не путать с рабочим файлом в MoveFromFF.
 - **Email — первичный ключ, всегда уникален.** Однофамильцы и тёзки с разными email — разные записи, никогда не схлопываются. `merger.py` использует email как ключ словаря. Не пытаться дедуплицировать по ФИО/имени.
 - **Перед первым запуском после реализации filters.py:** удалить `contacts.enc` целиком → синк пишет с нуля с фильтрацией. Без удаления старые 1787 записей останутся без фильтрации.
@@ -420,14 +420,14 @@ hits_for_display = {k: mask_contact(v) for k, v in hits.items()}
 2. Поискать через Python:
 ```python
 import sys
-sys.path.insert(0, 'C:/Users/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/AnywhereContacts')
+sys.path.insert(0, '/home/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/AnywhereContacts')
 from anywhere_contacts.store import create_store
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-load_dotenv('C:/Users/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/MoveFromExchange/.env')
+load_dotenv('/home/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/MoveFromExchange/.env')
 store = create_store(
-    Path('C:/Users/tkachenkoav/WorkVault/Contacts/contacts.enc'),
+    Path('/home/tkachenkoav/WorkVault/Contacts/contacts.enc'),
     os.environ['CONTACTS_ENCRYPTION_KEY']
 )
 data = store.read()

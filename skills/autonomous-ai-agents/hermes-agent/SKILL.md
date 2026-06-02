@@ -642,7 +642,7 @@ Config: `delegation.*` in `config.yaml`.
 
 ```bash
 # Path on Windows:
-C:/Users/<user>/AppData/Local/hermes/cron/jobs.json
+C:/Users/<user>/.local/share/hermes/cron/jobs.json
 ```
 
 Steps:

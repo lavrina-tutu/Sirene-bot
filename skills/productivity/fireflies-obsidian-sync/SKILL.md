@@ -26,7 +26,7 @@ MoveFromFF — **минимальный транспорт**: скачать 2 �
 
 **actions.md — НЕ скачиваем** (финальное решение, май 2026): дублирует `action_items` из `summary.md`, нулевая добавленная ценность. Убрано из ТЗ v2.0, кода, шаблонов и структуры проекта.
 
-**Код v2.1 написан и работает** (май 2026). Проект: `C:/Users/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/MoveFromFF/`. 83/83 тестов ✅ (было 57 до расширения summary, +26 новых). Крон: пн–пт 10:00/12:00/14:00/16:00/18:00/20:00 МСК (job_id: 1e62e18ae399). Загружено 452 встречи (авг 2025 – май 2026), из них 448 в старом формате (без Notes/Blockers/Questions) и 4 в новом (с 27.05.2026). Два бага исправлены после QA: Speaker N хардкод заменён на `speaker_label(sentence, speaker_map)` через `build_speaker_map()`; убран `.lower()` на participants (ТЗ: "как есть из FF"). Добавлен флаг `--meeting-id` для скачивания одной конкретной встречи по ID.
+**Код v2.1 написан и работает** (май 2026). Проект: `/home/tkachenkoav/Documents/Cursor_projects/hermes-agent/USERTOOLS/MoveFromFF/`. 83/83 тестов ✅ (было 57 до расширения summary, +26 новых). Крон: пн–пт 10:00/12:00/14:00/16:00/18:00/20:00 МСК (job_id: 1e62e18ae399). Загружено 452 встречи (авг 2025 – май 2026), из них 448 в старом формате (без Notes/Blockers/Questions) и 4 в новом (с 27.05.2026). Два бага исправлены после QA: Speaker N хардкод заменён на `speaker_label(sentence, speaker_map)` через `build_speaker_map()`; убран `.lower()` на participants (ТЗ: "как есть из FF"). Добавлен флаг `--meeting-id` для скачивания одной конкретной встречи по ID.
 
 **Что НЕ входит:** SHA-256, reconciler, actions.md, поля постобработки (`moved_by`, `processing_status`), `--mode deleted-check`.
 
@@ -249,7 +249,7 @@ TG_ALERT_CHAT_ID=400307920
 | `transcript.md` | Полный текст с таймкодами и спикерами, ~31KB/22мин | ✅ **Архив** — хранить, использовать точечно ("что именно было сказано про X") |
 | `actions.md` | Дословная копия раздела Action Items из summary | ❌ **Дубликат** — **ФИНАЛЬНОЕ РЕШЕНИЕ: не скачивать, не генерировать** (зафиксировано май 2026). Нужно убрать из ТЗ v2.0: алгоритм, схема `files` реестра, шаблон `actions.md.j2`. |
 
-**Код MoveFromFF v2.0 написан и работает** (май 2026). Проект: `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/`. 42/42 тестов проходят. `--mode test --dry-run` — exit 0.
+**Код MoveFromFF v2.0 написан и работает** (май 2026). Проект: `/home/tkachenkoav/Documents/Cursor_projects/MoveFromFF/`. 42/42 тестов проходят. `--mode test --dry-run` — exit 0.
 
 **Почему actions.md избыточен:** FF дублирует action items в summary. Отдельный файл не несёт добавленной ценности. Таски из FF в любом случае сырые и привязаны к неправильным сущностям — это не проблема файла, а проблема отсутствия контекста (Exchange GAL).
 
@@ -430,13 +430,13 @@ Windows: Cryptomator десктоп → виртуальный диск → Obsi
 
 ## Бэклог и ТЗ
 
-ТЗ хранятся в: `C:/Users/tkachenkoav/Documents/Cursor_projects/hermes-workspace/docs/tz/`
+ТЗ хранятся в: `/home/tkachenkoav/Documents/Cursor_projects/hermes-workspace/docs/tz/`
 - `MoveFromFF_TZ_v2.0_minimal.md` — актуальное ТЗ (v2.0, на согласовании)
 - `MoveFromFF_TZ_v1.md`, `MoveFromFF_TZ_v1.1_addendum.md` — история
 
-Бэклог задач: `C:/Users/tkachenkoav/WorkVault/Hermes-Backlog/backlog.md`
+Бэклог задач: `/home/tkachenkoav/WorkVault/Hermes-Backlog/backlog.md`
 
-**⚠️ Код заархивирован:** старая версия — `MoveFromFF.archived`. **Актуальный код:** `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/` (v2.0, 2 файла на встречу, 42 теста ✅).
+**⚠️ Код заархивирован:** старая версия — `MoveFromFF.archived`. **Актуальный код:** `/home/tkachenkoav/Documents/Cursor_projects/MoveFromFF/` (v2.0, 2 файла на встречу, 42 теста ✅).
 
 ## Корпоративные источники данных (бэклог инструментов)
 
@@ -457,7 +457,7 @@ Windows: Cryptomator десктоп → виртуальный диск → Obsi
 
 ## Корпоративные источники данных (credentials)
 
-Все credentials хранятся в `.env` проекта MoveFromFF: `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromFF/.env`
+Все credentials хранятся в `.env` проекта MoveFromFF: `/home/tkachenkoav/Documents/Cursor_projects/MoveFromFF/.env`
 
 | Сервис | Переменная | Как получить |
 |---|---|---|

@@ -27,13 +27,13 @@ platforms: [linux, macos, windows]
 
 ```bash
 # Последние события в gateway.log
-tail -30 /c/Users/tkachenkoav/AppData/Local/hermes/logs/gateway.log
+tail -30 /c/Users/tkachenkoav/.local/share/hermes/logs/gateway.log
 
 # Был ли atexit (чистый выход) или жёсткий kill
-tail -20 /c/Users/tkachenkoav/AppData/Local/hermes/logs/gateway-exit-diag.log
+tail -20 /c/Users/tkachenkoav/.local/share/hermes/logs/gateway-exit-diag.log
 
 # Что делал кронджоб в момент краша
-grep "cron_<JOB_ID>" /c/Users/tkachenkoav/AppData/Local/hermes/logs/agent.log | tail -30
+grep "cron_<JOB_ID>" /c/Users/tkachenkoav/.local/share/hermes/logs/agent.log | tail -30
 ```
 
 Если `atexit.hook` есть — чистый выход (race loser). Если нет — жёсткий `TerminateProcess` (баг).
@@ -101,7 +101,7 @@ hermes gateway start
 ### 5. Verify Connection
 Check the log for success:
 ```bash
-tail -20 ~/AppData/Local/hermes/logs/gateway.log    # Windows
+tail -20 ~/.local/share/hermes/logs/gateway.log    # Windows
 tail -20 ~/.hermes/logs/gateway.log                 # Linux/macOS
 ```
 
@@ -134,7 +134,7 @@ winreg.CloseKey(key)
 
 Запускать через hermes venv Python:
 ```bash
-/c/Users/<USER>/AppData/Local/hermes/hermes-agent/.venv/Scripts/python.exe script.py
+/c/Users/<USER>/.local/share/hermes/hermes-agent/.venv/Scripts/python.exe script.py
 ```
 
 Если нужно создать задачу через schtasks без bash, вызывай subprocess из Python (он обходит encoding-проблему bash):
@@ -150,7 +150,7 @@ wscript.exe "C:\Users\<USER>\AppData\Local\hermes\gateway_hidden.vbs"
 ```
 Проверить через 5-8 секунд:
 ```bash
-tail -5 ~/AppData/Local/hermes/logs/gateway.log
+tail -5 ~/.local/share/hermes/logs/gateway.log
 # Должно быть: [Telegram] Connected to Telegram (polling mode)
 ```
 
@@ -244,8 +244,8 @@ wmic process get ProcessId,CommandLine 2>/dev/null | grep "gateway run"
 
 **2. Последняя активность и ошибки:**
 ```bash
-tail -30 ~/AppData/Local/hermes/logs/gateway.log
-tail -20 ~/AppData/Local/hermes/logs/errors.log
+tail -30 ~/.local/share/hermes/logs/gateway.log
+tail -20 ~/.local/share/hermes/logs/errors.log
 ```
 
 **Типичные причины падения:**
@@ -273,7 +273,7 @@ tail -10 logs/gateway-exit-diag.log
 ```bash
 wscript.exe "C:\Users\<USER>\AppData\Local\hermes\gateway_hidden.vbs"
 sleep 8
-tail -5 ~/AppData/Local/hermes/logs/gateway.log
+tail -5 ~/.local/share/hermes/logs/gateway.log
 ```
 
 ## Common Problems

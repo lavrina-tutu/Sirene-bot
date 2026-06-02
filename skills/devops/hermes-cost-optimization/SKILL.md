@@ -338,7 +338,7 @@ Edit the constants at the top of the script to change host/port/models.
 
 ```python
 import sqlite3
-db = 'C:/Users/tkachenkoav/AppData/Local/hermes/state.db'
+db = '/home/tkachenkoav/.local/share/hermes/state.db'
 conn = sqlite3.connect(db)
 cur = conn.cursor()
 

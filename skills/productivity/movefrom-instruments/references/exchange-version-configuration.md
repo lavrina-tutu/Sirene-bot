@@ -117,6 +117,6 @@ except Exception as e:
 
 ## Ссылки
 
-- Code: `C:/Users/tkachenkoav/Documents/Cursor_projects/MoveFromExchange/movefromexchange/exchange_client.py` (lines 79-87)
+- Code: `/home/tkachenkoav/Documents/Cursor_projects/MoveFromExchange/movefromexchange/exchange_client.py` (lines 79-87)
 - Tests: `tests/test_exchange_client.py` (mock mode checks, реальные тесты нужна VPN)
 - TZ: `hermes-workspace/docs/tz/MoveFromExchange_TZ_contacts_v1.0.md`

@@ -523,11 +523,18 @@ TELEGRAM_ALLOWED_CHAT_IDS=400307920
 17. **CRLF warnings при первом git add на VM** — файлы перенесённые с Windows имеют `\\r\\n`. Git предупреждает `CRLF will be replaced by LF` — это косметика, не ошибка. Push проходит успешно. При следующих синках файлы уже будут в LF.
 18. **ownCloud: путь WorkVault без Documents** — верный удалённый путь `owncloud:WorkVault` (в корне ownCloud-аккаунта). Вложенности типа `owncloud:Documents/WorkVault` быть не должно. Проверять через `rclone ls owncloud:WorkVault/ | head -5`. Ссылка на веб-интерфейс папки: `https://owncloud.tutu.ru/index.php/f/6966632`.
 19. **Принудительный запуск синка** — `systemctl --user start owncloud-sync.service`. Безопасно: `Type=oneshot`, systemd не позволит конкурентный запуск. Для проверки результата: `rclone ls owncloud:WorkVault/Meetings/NewMeetings/ | wc -l`.
-20. **Оптимизированные флаги rclone для WebDAV ownCloud** — добавить в `owncloud-sync.service` для ускорения и надёжности:
-    ```
-    --transfers 4 --checkers 8
-    --retries 3 --low-level-retries 10
-    --timeout 60s --contimeout 30s
-    --size-only
-    ```
-    `--size-only` особенно важен: WebDAV плохо поддерживает чексуммы, без флага rclone делает лишние roundtrip-запросы. `--fast-list` тоже можно добавить если ownCloud поддерживает PROPFIND с Depth:infinity.
+21. **Внутренние ТУТУ-сервисы: curl работает, web_extract — нет** — Grafana (`grafana.monitoring.tutu.ru`), Confluence (`dom.tutu.ru`), Jira, Exchange EWS, Zulip (`zulip.tutu.ru`), ownCloud — VM под VPN, все сервисы доступны через `curl`. **НО**: `web_extract()` блокирует внутренние/корпоративные адреса с ошибкой `Blocked: URL targets a private or internal network address`. Всегда использовать `terminal + curl` для запросов к ТУТУ-сервисам, не web_extract.
+    - Grafana и большинство ТУТУ-сервисов используют **Keycloak SSO** (keycloak.tutu.ru). Прямой curl без авторизации — редирект на страницу входа с формой.
+    - Доменный пароль хранится в `~/.config/hermes/.env` как `TUTU_DOMAIN_PASSWORD`. Логин: `tkachenkoav` (без домена).
+    - Паттерн авторизации через Keycloak ROPC (Resource Owner Password Credentials) — работает без 2FA только если `admin-cli` клиент доступен:
+      ```bash
+      TOKEN=$(curl -s -X POST "https://keycloak.tutu.ru/realms/tutu/protocol/openid-connect/token" \
+        -d "client_id=admin-cli&grant_type=password&username=tkachenkoav&password=$TUTU_DOMAIN_PASSWORD" \
+        | python3 -c "import sys,json; print(json.load(sys.stdin).get('access_token',''))")
+      # Использовать токен:
+      curl -H "Authorization: Bearer $TOKEN" "https://grafana.monitoring.tutu.ru/api/..."
+      ```
+    - **Ограничение**: oauth2-proxy (используется на Confluence и Grafana) не принимает Bearer-токены напрямую — требует cookie `_oauth2_proxy`. Из офисной сети (VPN) Keycloak пропускает без OTP; из интернета — требует Google Authenticator.
+    - Если авторизация не нужна (здоровье сервиса): `curl -s -o /dev/null -w "%{http_code}" https://grafana.monitoring.tutu.ru/api/health` → 200 означает доступен.
+22. **SSH passphrase — убрать временно для автоматизации, вернуть потом** — для настройки скриптов миграции passphrase с ключа снимали командой `ssh-keygen -p -f ~/.ssh/id_ed25519` (Enter дважды = пустой пароль). После завершения настройки — вернуть той же командой (ввести новый пароль). После возврата passphrase SSH-подключения с ноута к VM снова требуют ввода пароля. Для беспарольной работы из скриптов использовать SSH Agent (`ssh-add ~/.ssh/id_ed25519`).
+20. **Оптимизированные флаги rclone для WebDAV ownCloud** — актуальные флаги в `owncloud-sync.service` (проверено 03.06.2026):\n    ```\n    --transfers 4 --checkers 8\n    --retries 3 --low-level-retries 10\n    --timeout 60s --contimeout 30s\n    ```\n    **НЕ использовать `--size-only`** — пропускает изменения одного размера (правки одной строки в md, ре-шифрование contacts.enc с тем же числом записей). Дефолт rclone (size+mtime) надёжнее.\n23. **Синк после инструментов (MoveFromFF, MoveFromZulip, DialogBacklog)** — каждый инструмент запускает синк ownCloud по завершению:\n    ```python\n    import subprocess\n    try:\n        subprocess.run(\n            [\"systemctl\", \"--user\", \"start\", \"--no-block\", \"owncloud-sync.service\"],\n            check=False, timeout=5,\n        )\n    except Exception:\n        pass\n    ```\n    Флаг `--no-block` критичен — не блокирует инструмент ожиданием синка. Таймер оставить 10 мин.\n24. **contacts.enc — атомарная запись** — `AnywhereContacts/anywhere_contacts/crypto.py` уже реализует atomic rename (`tmp.write_bytes()` + `tmp.replace(path)`). Не трогать — гонок нет.\n25. **Журнал кронов** — каждый Opus-крон пишет итог в `~/.hermes/cron-journal.md` через скилл `cron-journal-write`. Скрипт: `~/.hermes/skills/devops/cron-journal-write/scripts/write_journal.py`. Файл `~/.hermes/hermes.md` автозагружается в каждую сессию и напоминает читать журнал.

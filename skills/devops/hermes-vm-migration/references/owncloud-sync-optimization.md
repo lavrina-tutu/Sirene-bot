@@ -17,7 +17,7 @@ rclone ls owncloud:WorkVault/Meetings/NewMeetings/ | wc -l
 
 `Type=oneshot` — systemd не допустит конкурентный запуск, безопасно.
 
-## Оптимизированный unit-файл
+## Оптимизированный unit-файл (актуально 03.06.2026)
 
 ```ini
 [Unit]
@@ -30,10 +30,13 @@ ExecStart=/usr/bin/rclone sync /home/tkachenkoav/WorkVault owncloud:WorkVault \
   --transfers 4 --checkers 8 \
   --retries 3 --low-level-retries 10 \
   --timeout 60s --contimeout 30s \
-  --size-only \
   --log-file=/home/tkachenkoav/.local/share/hermes/logs/owncloud-sync.log \
   --log-level INFO
 ```
+
+> ⚠️ **`--size-only` УБРАН** (03.06.2026 по рекомендации Opus).
+> Причина: пропускает изменения одного размера — правки строки в md одинаковой длины,
+> ре-шифрование contacts.enc с тем же числом записей. Дефолт rclone (size+mtime) надёжнее.
 
 ## Объяснение флагов
 
@@ -41,11 +44,25 @@ ExecStart=/usr/bin/rclone sync /home/tkachenkoav/WorkVault owncloud:WorkVault \
 |---|---|
 | `--transfers 4` | Параллельные передачи файлов (ускорение) |
 | `--checkers 8` | Параллельная проверка изменений |
-| `--size-only` | Не считать чексуммы (WebDAV их плохо поддерживает, ускоряет) |
 | `--retries 3` | Повторные попытки при ошибке |
 | `--low-level-retries 10` | Retry на уровне HTTP |
 | `--timeout 60s` | Таймаут операции |
 | `--contimeout 30s` | Таймаут установки соединения |
+
+## Синк после инструментов (03.06.2026)
+
+MoveFromFF, MoveFromZulip, DialogBacklog запускают синк по завершению:
+```python
+import subprocess
+try:
+    subprocess.run(
+        ["systemctl", "--user", "start", "--no-block", "owncloud-sync.service"],
+        check=False, timeout=5,
+    )
+except Exception:
+    pass
+```
+Таймер оставить 10 мин — принудительный запуск + таймер = достаточно.
 
 ## Проверка синка
 
@@ -57,16 +74,6 @@ rclone ls owncloud:WorkVault/ | wc -l
 # Свежие встречи (должны совпадать):
 ls ~/WorkVault/Meetings/NewMeetings/ | tail -5
 rclone ls owncloud:WorkVault/Meetings/NewMeetings/ | tail -5
-```
-
-## Очистка мусорных бэкапов unit-файлов
-
-После правок накапливаются `.bak-*` файлы:
-```bash
-ls ~/.config/systemd/user/*.bak-*
-# Удалить после проверки что активный unit верный:
-rm ~/.config/systemd/user/*.bak-*
-systemctl --user status owncloud-sync.timer  # убедиться что не сломали
 ```
 
 ## Диагностика проблем

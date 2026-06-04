@@ -969,6 +969,44 @@ hermes config set auxiliary.vision.provider <your_provider>
 hermes config set auxiliary.vision.model <model_name>
 ```
 
+### Switching between Anthropic and OpenAI provider groups
+
+For temporary provider outages or cost optimization, maintain two complete configuration profiles.
+
+**`hermes model` requires an interactive terminal** — it cannot be scripted or piped. For programmatic switching, use `hermes config set`:
+
+```bash
+# Switch main model to OpenAI
+hermes config set model.default chat-latest
+hermes config set model.provider custom
+hermes config set model.base_url https://api.openai.com/v1
+
+# Switch main model to Anthropic
+hermes config set model.default claude-sonnet-4-6
+hermes config set model.provider anthropic
+# base_url not needed for anthropic provider — clear it:
+hermes config set model.base_url ""
+```
+
+**After switching, restart the gateway** so it picks up the new config:
+```bash
+systemctl --user restart hermes-gateway.service
+```
+
+**Recommended: keep backup config snapshots** in `~/.hermes/profiles-backup/` with descriptive names (e.g. `openai-profile-active-20260603.yaml`, `anthropic-profile-active-20260603.yaml`) so you can diff against them when switching.
+
+**Important verification steps** — changing the main model does NOT cascade:
+- `hermes config set` only touches the key you specify; delegation, auxiliary, compression, and cron-job models remain unchanged.
+- Audit cron jobs with `hermes cron list` — they may still point to the old provider.
+- A system may be in a mixed state (chat on OpenAI, cron jobs still on Anthropic) even though the interactive session works.
+
+Before declaring a full provider migration complete, verify:
+1. Main model (`model.default` + `model.provider`)
+2. Delegation configuration (`delegation.model` + `delegation.provider`)
+3. Auxiliary configuration (`auxiliary.*.provider` + `auxiliary.*.model`)
+4. Compression configuration (`auxiliary.compression.*`)
+5. Every cron job model/provider override
+
 ### ⚠ Compression model context mismatch warning
 
 **Symptom:** At session start: `"compression model claude-haiku-4-5 context is 200,000 tokens, but the main model claude-sonnet-4-6's compression threshold was 500,000 tokens. Auto-lowered this session's threshold to 200,000 tokens"`

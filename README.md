@@ -1,10 +1,16 @@
 # hermes-workspace
 
+Рабочий архив Hermes/Сирень: docs, ТЗ, self-checks, upstream мониторинг, scripts, tools.
+Синкается еженедельно (Вс 02:30 МСК) через `autosync_full.sh`.
+
+> Скиллы и конфиг хранятся отдельно: [hermes-config](https://github.com/ialextkachenko-byte/hermes-config) (ежедневный синк).
+
+---
+
 Consolidated personal workspace for Hermes Agent.
 
 Combines:
 - **config/** — personal Hermes config (`config.yaml`, sanitized — no secrets)
-- **skills/** — user skills (mirror of `~/AppData/Local/hermes/skills/`)
 - **tools/** — automation tools family (MoveFrom*, WorkVault helpers)
   - `tools/movefromff/` — FreshFlow → Markdown summariser (formerly the `workvault-tools` repo)
   - `tools/shared/` — shared infra (logger, lock, config loader); empty for now

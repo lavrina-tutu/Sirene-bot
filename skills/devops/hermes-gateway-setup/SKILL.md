@@ -236,7 +236,32 @@ powercfg.exe -change standby-timeout-dc 180   # 3 часа от батареи
 
 Если бот в ТГ не отвечает — проверяй в таком порядке:
 
-**1. Есть ли процесс?**
+**Linux (VM):**
+```bash
+systemctl --user status hermes-gateway.service --no-pager | head -10
+```
+Если `failed` или `inactive` — перезапустить вручную:
+```bash
+systemctl --user restart hermes-gateway.service && sleep 3 && systemctl --user status hermes-gateway.service --no-pager | head -5
+```
+
+**⚠️ Паттерн: SIGTERM + drain timeout (Linux)**
+Gateway получает SIGTERM (от systemd или другого процесса), начинает drain 180s, если агент активен — drain истекает, gateway выходит с exit code 1. `Restart=on-failure` в systemd должен поднять сам, но может не сработать (исчерпались попытки перезапуска). В этом случае — рестартовать вручную.
+
+Признаки в `~/.hermes/logs/gateway.log`:
+```
+Received SIGTERM — initiating shutdown
+Gateway drain timed out after 180.0s with 1 active agent(s); interrupting remaining work.
+Exiting with code 1 (signal-initiated shutdown without restart request)
+```
+
+**⚠️ Важно: на Linux `journalctl --user` недоступен без прав adm/wheel**
+Читай логи напрямую:
+```bash
+tail -60 ~/.hermes/logs/gateway.log
+```
+
+**1. Есть ли процесс? (Windows)**
 ```bash
 wmic process get ProcessId,CommandLine 2>/dev/null | grep "gateway run"
 # Если пусто — gateway упал, нужно перезапустить
@@ -244,7 +269,8 @@ wmic process get ProcessId,CommandLine 2>/dev/null | grep "gateway run"
 
 **2. Последняя активность и ошибки:**
 ```bash
-tail -30 ~/.local/share/hermes/logs/gateway.log
+tail -30 ~/.local/share/hermes/logs/gateway.log   # Windows
+tail -30 ~/.hermes/logs/gateway.log                # Linux
 tail -20 ~/.local/share/hermes/logs/errors.log
 ```
 
@@ -275,6 +301,79 @@ wscript.exe "C:\Users\<USER>\AppData\Local\hermes\gateway_hidden.vbs"
 sleep 8
 tail -5 ~/.local/share/hermes/logs/gateway.log
 ```
+
+## Telegram: Подключение групповых чатов
+
+### Полный чеклист — почему бот молчит в группе
+
+Групповые сообщения фильтруются на **трёх уровнях** (все три должны быть открыты):
+
+| Уровень | Где | Что проверить |
+|---------|-----|---------------|
+| 1. Bot Privacy | @BotFather | `can_read_all_group_messages` должен быть `true`. Иначе бот видит только @mentions. Проверить: `curl .../getMe` |
+| 2. `TELEGRAM_ALLOWED_CHATS` | `.env` + `config.yaml` | Оба должны быть пустыми или содержать ID группы. `config.yaml: telegram.allowed_chats: ''` |
+| 3. `TELEGRAM_GROUP_ALLOWED_CHATS` | `.env` | Отдельный allowlist для групп — нужен чтобы группа **отвечала**, а не только наблюдала |
+
+### Как отключить Privacy Mode
+
+1. @BotFather → `/mybots` → выбрать бота
+2. `Bot Settings` → `Group Privacy` → **Turn off**
+3. Перезапустить gateway: `systemctl --user restart hermes-gateway.service`
+4. Проверить: `curl -s "https://api.telegram.org/bot${TOKEN}/getMe" | python3 -m json.tool | grep can_read`
+   - Должно быть: `"can_read_all_group_messages": true`
+
+### Как найти ID группового чата
+
+**Проблема:** gateway вычитывает апдейты через long polling — `getUpdates` всегда возвращает пустой результат пока gateway работает. Групповые сообщения до лога **не доходят** (silently dropped до записи).
+
+**Решение:** временно остановить gateway, написать в группу, получить апдейты:
+```bash
+# 1. Остановить gateway
+systemctl --user stop hermes-gateway.service
+
+# 2. Получить апдейты (написать в группу ПОСЛЕ этой команды)
+TOKEN=$(grep TELEGRAM_BOT_TOKEN ~/.config/hermes/.env | cut -d= -f2)
+curl -s "https://api.telegram.org/bot${TOKEN}/getUpdates?limit=50" | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+chats = {}
+for u in data.get('result', []):
+    for key in ['message', 'my_chat_member', 'chat_member']:
+        if key in u:
+            c = u[key].get('chat', {})
+            if c.get('id'): chats[c['id']] = c
+for cid, c in sorted(chats.items()):
+    print(f'ID: {cid}  type: {c.get(\"type\")}  name: {c.get(\"title\") or c.get(\"first_name\",\"\")}')
+"
+
+# 3. Поднять gateway обратно
+systemctl --user start hermes-gateway.service
+```
+
+### Прописать ID группы в конфиг
+
+После получения ID (например `-1001234567890`):
+
+```bash
+# В .env:
+TELEGRAM_GROUP_ALLOWED_CHATS=-1001234567890
+TELEGRAM_ALLOWED_CHATS=-1001234567890   # если нужна фильтрация ответов
+
+# В config.yaml:
+# telegram.allowed_chats: '' (пусто = нет ограничений)
+```
+
+Рестарт gateway и написать в группе — должно ответить.
+
+### Где искать в коде (если нужно разобраться глубже)
+
+- `plugins/platforms/telegram/adapter.py`
+  - `_telegram_allowed_chats()` — строка ~5567: читает `config.extra["allowed_chats"]` или `TELEGRAM_ALLOWED_CHATS`
+  - `_telegram_group_allowed_chats()` — строка ~5582: читает `TELEGRAM_GROUP_ALLOWED_CHATS` (отдельный!)
+  - `_telegram_observe_allowed_chats()` — строка ~5591: объединяет оба списка
+  - Строка ~5884: `if not allowed or chat_id_str not in allowed: return False` — здесь группы дропаются **молча**
+
+---
 
 ## Common Problems
 
@@ -318,6 +417,114 @@ sudo loginctl enable-linger $USER
 | Email | `EMAIL_ADDRESS` + `EMAIL_PASSWORD` | Gmail: use App Password |
 
 Full platform docs: https://hermes-agent.nousresearch.com/docs/user-guide/messaging/
+
+## Добавление группового чата Telegram
+
+### Проблема
+Сообщения из групп фильтруются **до** записи в `gateway.log` — ID группы там не появится. `tail -f gateway.log` не поможет.
+
+### Паттерн: найти ID группы и добавить в allowlist
+
+**Шаг 1.** Временно разрешить все чаты (в `.env`):
+```bash
+# ~/.config/hermes/.env
+GATEWAY_ALLOW_ALL_USERS=true
+```
+
+**Шаг 2.** Перезапустить gateway **из отдельного терминала** (не через Hermes!):
+```bash
+systemctl --user restart hermes-gateway.service
+```
+⚠️ Gateway не может рестартить сам себя — команда из внутри процесса получает `Blocked` ошибку. Всегда перезапускай вручную из терминала VM.
+
+**Шаг 3.** Написать что-нибудь в групповой чат → теперь сообщение попадёт в лог:
+```bash
+tail -f ~/.hermes/logs/gateway.log | grep "inbound message"
+# Найдёшь строку: chat=-1001234567890
+```
+
+**Шаг 4.** Добавить найденный ID в `TELEGRAM_ALLOWED_CHATS` (через запятую, ID группы отрицательный):
+```bash
+# ~/.config/hermes/.env
+TELEGRAM_ALLOWED_CHATS=400307920,-1001234567890
+GATEWAY_ALLOW_ALL_USERS=false   # вернуть обратно
+```
+
+**Шаг 5.** Снова перезапустить gateway из терминала.
+
+### Альтернатива: найти ID через Telegram API напрямую
+Работает только если gateway **не запущен** (иначе polling уже вычитал апдейты):
+```bash
+source ~/.config/hermes/.env
+curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?limit=100&offset=-100" \
+  | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+chats = {}
+for u in data.get('result', []):
+    for key in ['message', 'my_chat_member', 'chat_member']:
+        if key in u:
+            c = u[key].get('chat', {})
+            if c.get('id'): chats[c['id']] = c
+for cid, c in sorted(chats.items()):
+    print(f'ID: {cid}  type: {c.get(\"type\")}  name: {c.get(\"title\") or c.get(\"first_name\",\"\")}')
+"
+```
+
+## Telegram: Резолв thread ID топиков группы (Forum Topics)
+
+Telegram Forum-группы создают отдельные топики (threads). Hermes создаёт отдельную сессию для каждого топика, ключ сессии: `agent:main:telegram:group:<chat_id>:<thread_id>`.
+
+### Проблема: thread ID нигде не хранится явно
+
+- `state.db` (`sessions.handoff_state`, `system_prompt`, `user_id`) — thread ID там **нет**.
+- `session_search` по истории — thread ID в метаданных **не отражается**.
+- `getUpdates` — вычитан gateway, возвращает пустой результат пока gateway работает.
+
+### Решение: читать `gateway.log`, поле `reply_to_id`
+
+В logline `Flushing text batch` видно ключ сессии с thread ID:
+```
+[Telegram] Flushing text batch agent:main:telegram:group:-1004300127777:**4** (16 chars)
+```
+
+Или в строке `inbound message` поле `reply_to`:
+```
+inbound message: ... msg='топик Hermes DEV' reply_to_id=**4** reply_to_text=''
+```
+
+**Команда для быстрого извлечения всех топиков:**
+```bash
+grep "Flushing text batch" ~/.hermes/logs/gateway.log \
+  | grep -oP "group:-\d+:(\d+)" \
+  | sort -t: -k2 -n | uniq
+# Вывод: group:-1004300127777:1, :3, :4, ...
+```
+
+**Или парный резолв имя→ID (нужно знать что писали в каждый топик):**
+```bash
+grep -E "Flushing text batch|inbound message" ~/.hermes/logs/gateway.log \
+  | grep -v "reply_to_id=None"
+# В одной паре строк: thread ID из batch key + содержание сообщения из inbound
+```
+
+### Паттерн «написать в каждый топик» для первичного резолва
+
+Чтобы узнать все thread ID за один раз: написать в каждый топик сообщение с именем топика → из `gateway.log` по `reply_to_id` восстановить полный маппинг имя → ID. Сохранить в memory.
+
+### Топики группы «Сирень Workspace» (chat=-1004300127777)
+
+| Топик | Thread ID | Deliver target |
+|-------|-----------|----------------|
+| General | 1 | `telegram:-1004300127777:1` |
+| Tools | 3 | `telegram:-1004300127777:3` |
+| Hermes DEV | 4 | `telegram:-1004300127777:4` |
+| WorkVault | 5 | `telegram:-1004300127777:5` |
+| Backlog | 6 | `telegram:-1004300127777:6` |
+| Monitoring | 7 | `telegram:-1004300127777:7` |
+| Personal | 8 | `telegram:-1004300127777:8` |
+
+---
 
 ## Useful In-Session Gateway Commands (Telegram/Discord/etc.)
 
@@ -499,7 +706,9 @@ delegation:
 - Субагент (Haiku) без явного запрета может испортить .env или удалить contacts.enc.
 
 See `references/gateway-telegram-notifications.md` for the complete codebase walkthrough (lines cited), noisy message regex patterns, error handling and rewriting logic.
-See `references/cronjob-vs-delegate-task.md` for the full decision guide on when to use cronjob vs delegate_task.
+See `references/cronjob-vs-delegate-task.md` for the full decision guide on when to use cronjob vs delegate_task for Opus tasks.
+- `references/telegram-group-chat-setup.md` for the three-level group filter architecture, debugging steps, and why `getUpdates` is always empty while gateway runs.
+- See `## Telegram: Резолв thread ID топиков группы` above for the gateway.log technique to map topic names → thread IDs (reply_to_id field).
 
 ---
 

@@ -43,6 +43,26 @@ cat ~/.hermes/cron/output/<job_id>/<файл>.md
 - Windows-пути в DEFAULT_DB / DEFAULT_FILE в старых скриптах — исправлено 03.06, не блокируют работу
 - `hermes-gateway.service` запущен — это и есть основной процесс, отдельный cron-юнит не нужен
 
+## Если Саша говорит «потерял связь с ТГ» / gateway не отвечает
+
+Сразу проверить:
+```bash
+systemctl --user status hermes-gateway.service --no-pager | head -10
+```
+Если `failed` или `inactive` — рестартовать:
+```bash
+systemctl --user restart hermes-gateway.service && sleep 3 && systemctl --user status hermes-gateway.service --no-pager | head -5
+```
+
+Причину падения смотреть через лог (journalctl недоступен без прав adm/wheel):
+```bash
+cat ~/.hermes/logs/gateway.log | tail -60
+```
+Ключевые паттерны в логе:
+- `SIGTERM` + `drain timed out` → systemd убил gateway, drain 180s не завершился, exit code 1
+- `Restart=on-failure` должен поднять сам, но если не поднял — рестартовать вручную
+- `httpx.ReadError` / `RemoteProtocolError` → сетевая ошибка ТГ, gateway восстанавливается сам (attempt N/10)
+
 ## Что сообщить Саше
 - Статус (OK / PROBLEM)
 - TL;DR из журнала

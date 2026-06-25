@@ -1,73 +1,48 @@
-# Паттерн: Post-Incident Audit эпик в бэклоге
+# Post-Incident Audit — паттерн (из инцидента 2026-06-24/25)
 
 ## Когда применять
-После любого инцидента (сбой gateway, падение крона, потеря конфига, аварийное восстановление), когда нужно провести комплексный разбор по нескольким направлениям.
+После любого сбоя gateway (цикл рестартов, ModuleNotFoundError, сетевая нестабильность).
 
-## Структура эпика в dialog-backlog.md
+## Эпик в бэклоге
+Создать секцию `## 🛡️ Эпик: Post-Incident Audit — [дата] ^epic-incident-audit` с задачами bk-NNN.
 
-```markdown
-## 🛡️ Эпик: Post-Incident Audit — <Название инцидента> <дата> ^epic-incident-audit
+## 4 стандартных аудита (параллельно через Opus-кроны)
 
-> **Контекст:** <одна строка — что произошло, когда, как восстановились>
+| Аудит | Что проверять |
+|-------|--------------|
+| Безопасность | `allowed_chats`, `guest_mode`, `require_mention`, логи `_should_process` |
+| Логирование | уровень `[DBG]` строк, PII в логах, ротация по размеру и времени |
+| Privacy mode | нужен ли `disabled`, риски, покрывает ли `allowed_chats` |
+| Инцидент | root cause из `gateway-exit-diag.log`, git log, systemd статус |
 
-- [ ] **[bk-NNN]** 🔒 Аудит безопасности — <что проверить> ^bk-NNN ^epic-incident-audit
-  - 📅 `created:: YYYY-MM-DD` · `updated:: YYYY-MM-DD`
+## Ключевые находки 2026-06-25
 
-- [ ] **[bk-NNN+1]** 📋 Аудит логирования — <что проверить> ^bk-NNN+1 ^epic-incident-audit
-  - 📅 `created:: YYYY-MM-DD` · `updated:: YYYY-MM-DD`
+### Логирование
+- `[DBG]` строки в `plugins/platforms/telegram/adapter.py` были захардкожены на уровне `logger.info` — не фильтровались при `logging.level: INFO`
+- Исправление: `logger.info("[Telegram][DBG]...")` → `logger.debug(...)`
+- `inbound message: msg='текст'` в `gateway/run.py` — заменить на `msg_len=N`
+- TTL-ротация: создать `~/.hermes/logrotate.conf` + crontab entry
 
-- [ ] **[bk-NNN+2]** 🔄 Анализ инцидента с обновлением — <root cause, стратегия> ^bk-NNN+2 ^epic-incident-audit
-  - 📅 `created:: YYYY-MM-DD` · `updated:: YYYY-MM-DD`
-```
+### Startup notification
+- Уведомление о старте шлётся ТОЛЬКО при `planned_restart_notification_pending` (planned /restart или SIGUSR1)
+- При `systemctl restart` (SIGTERM) — молчит
+- Исправление: убрать условие `if planned_restart_notification_pending` вокруг `_send_home_channel_startup_notifications`
+- Доп. каналы: `TELEGRAM_ADDITIONAL_STARTUP_CHANNELS=-1004300127777:1` в `.env` + поддержка в `gateway/config.py` и `run.py`
 
-## Запуск Opus-аудитов (параллельно через cron)
+### Root cause инцидента
+- `ModuleNotFoundError: hermes_plugins` в кроне — **by design**, не баг (namespace плагины не импортируются вне процесса gateway)
+- Цикл рестартов 04:43–05:10 — сетевая нестабильность Telegram API, systemd self-healing
+- `SystemExit: 0` на `gateway/run.py:17878` — ожидаемое поведение при штатном выходе
 
-Все 4 задачи запускаются одновременно через `cronjob(action='create', schedule='2m', repeat=1)`:
-- Модель: `claude-opus-4-7`
-- Deliver: нужный топик (`telegram:-1004300127777:4` для Hermes DEV)
-- Toolsets: `["terminal", "file"]` (добавить `"web"` если нужен поиск)
-- Каждый аудит: **только читает**, не вносит изменений
+### Безопасность
+- `guest_mode: true` → закрыть (`guest_mode: false`) для персонального ассистента
+- `require_mention: false` в группе — оставить если группа только для владельца
+- `allowed_chats` фильтрует по chat_id, но не по user_id внутри чата
 
-## Промпт-шаблон для аудита безопасности
-
-```
-Ты — Сирень. Только на русском. Задача: аудит безопасности [bk-NNN].
-
-Проверь: config.yaml (allowed_chats, guest_mode, require_mention),
-gateway.log (строки _should_process — кто проходит/блокируется),
-права бота в группе.
-
-Формат ответа:
-## 🔒 Аудит безопасности
-
-### Текущая конфигурация
-### Анализ логов  
-### Оценка рисков
-[таблица: риск | уровень | защита]
-### Рекомендации
-[✅ всё ок / ⚠️ рекомендую / ❌ нужно исправить]
-### Итог
-[БЕЗОПАСНО / ТРЕБУЕТ ВНИМАНИЯ / КРИТИЧНО]
-
-НЕ вносить изменения!
-```
-
-## Промпт-шаблон для анализа инцидента (bk-106 паттерн)
-
-Ключевые команды для сбора данных:
-```bash
-cat ~/.hermes/logs/gateway-exit-diag.log
-cat ~/.hermes/logs/gateway-shutdown-diag.log
-cd ~/hermes-agent && git log --oneline -20
-systemctl --user status hermes-gateway --no-pager | head -30
-```
-
-Вопросы для анализа: root cause → хронология → текущее состояние → безопасная процедура обновления.
-
-## Важно: после аудитов
-
-После получения всех 4 ответов Opus:
-1. Закрыть bk-пункты с пометкой результата
-2. Открытые ❌ → новые bk-задачи на исправление
-3. Обновить MEMORY если изменились ключевые факты о конфиге
-4. Обновить скилл pitfalls если найдены новые подводные камни
+## Процедура безопасного обновления Hermes
+1. `git -C ~/hermes-agent fetch origin`
+2. Запустить `upstream_monitor.sh` — получить рекомендацию 🟢/🟡/🔴
+3. При 🟢: `git -C ~/hermes-agent pull --ff-only`
+4. `pip install -e ~/hermes-agent` в venv
+5. Рестарт gateway через no_agent cron
+6. Проверить лог на `startup notification` + отсутствие ошибок

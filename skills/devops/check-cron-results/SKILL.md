@@ -37,6 +37,21 @@ ls -lt ~/.hermes/cron/output/ | head -10
 cat ~/.hermes/cron/output/<job_id>/<файл>.md
 ```
 
+## 🔴 Известные реальные проблемы (требуют починки)
+
+### no_agent Script с `&&` — Script not found
+**Симптом:** крон падает с `Script not found: /path/script.sh && bash /path/other.sh`
+**Причина:** `no_agent=True` раннер передаёт всё поле `script` как путь к файлу — `&&` и всё после него трактуется как часть имени.
+**Диагностика:** `last_status: error` в `cronjob list`, в output-файле крона — `Script not found: <длинная строка с &&>`
+**Починка:** обновить крон через `cronjob action=update`, вынести составную команду в отдельный `.sh`-скрипт-враппер, в поле `script` указать только путь к нему.
+```bash
+# Пример враппера ~/.hermes/scripts/autosync_full_with_cleanup.sh
+#!/bin/bash
+bash ~/.hermes/scripts/autosync_github.sh && bash ~/.hermes/scripts/cleanup_after_sync.sh
+```
+
+---
+
 ## ⚠️ Известные ложные тревоги (не считать PROBLEM)
 - `DialogBacklog` не имеет `.venv` — нормально, только stdlib
 - Нет юнита `hermes-cron.service` — нормально, кроны идут через `hermes-gateway`
@@ -62,6 +77,9 @@ cat ~/.hermes/logs/gateway.log | tail -60
 - `SIGTERM` + `drain timed out` → systemd убил gateway, drain 180s не завершился, exit code 1
 - `Restart=on-failure` должен поднять сам, но если не поднял — рестартовать вручную
 - `httpx.ReadError` / `RemoteProtocolError` → сетевая ошибка ТГ, gateway восстанавливается сам (attempt N/10)
+
+## Формат сводки vm_dialogbacklog
+См. `references/dialogbacklog-report-format.md` — актуальный шаблон отчёта с датами `updated::` (реализован 25.06.2026, bk-094).
 
 ## Что сообщить Саше
 - Статус (OK / PROBLEM)

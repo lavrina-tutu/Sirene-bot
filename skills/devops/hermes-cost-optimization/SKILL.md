@@ -63,6 +63,7 @@ Context compression, session search, and vision analysis each have their own mod
 - `references/compression-internals.md` — исследование Opus (май 2026): где живёт логика в коде, как работает `update_model()`, почему per-model thresholds невозможны через конфиг.
 - `references/delegate-per-call-model-patch.md` — план патча для per-call model в `delegate_task` (4 точки в `tools/delegate_tool.py`). Используй когда профили и `cronjob(model=...)` не покрывают кейс.
 - `references/gateway-response-injection.md` — паттерн `runtime_footer`/`runtime_header` для гарантированной дописки текста к каждому gateway ответу (вне контроля модели); почему хуки и prefill не работают для этого.
+- `references/context-window-analysis.md` — как измерить размер контекстного окна: структура state.db (sessions/messages), Anthropic API для лимитов моделей, count_tokens API для точной оценки, готовый скрипт анализа, расшифровка метрик (cache_read vs input_tokens).
 
 ### delegate_task model resolution (codebase reference)
 

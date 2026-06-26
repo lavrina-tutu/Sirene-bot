@@ -248,6 +248,31 @@ systemctl --user restart hermes-gateway.service && sleep 3 && systemctl --user s
 **⚠️ Паттерн: SIGTERM + drain timeout (Linux)**
 Gateway получает SIGTERM (от systemd или другого процесса), начинает drain 180s, если агент активен — drain истекает, gateway выходит с exit code 1. `Restart=on-failure` в systemd должен поднять сам, но может не сработать (исчерпались попытки перезапуска). В этом случае — рестартовать вручную.
 
+**⚠️ Диагностика: SIGTERM без видимой причины (Linux)**
+Если gateway упал с SIGTERM и в gateway.log нет ничего подозрительного — проверяй `gateway-exit-diag.log`. Там записан снимок системы в момент SIGTERM: дата, ps auxf, pstree, loadavg, dmesg.
+
+Ключевые поля для диагностики:
+```bash
+# Дата и время SIGTERM:
+grep -A1 "shutdown diagnostic" ~/.hermes/logs/gateway-exit-diag.log | grep "^20"
+
+# Кто был parent процесса (systemd / shell / другое):
+grep "pstree of self" -A3 ~/.hermes/logs/gateway-exit-diag.log
+
+# Не было ли OOM killer:
+grep -i "oom\|killed" ~/.hermes/logs/gateway-exit-diag.log
+```
+
+Типичные причины неожиданного SIGTERM на Linux VM:
+- `under_systemd=yes` + `parent_name=systemd` → systemd сам остановил юнит (ребут, `systemctl stop`, обновление, достижение лимита перезапусков)
+- Нет OOM записей, loadavg низкий → причина административная, не ресурсная
+- Несколько SIGTERM подряд с интервалом 1-10 мин → истощение лимита `RestartAttempts` в systemd, потом юнит перешёл в failed
+
+Проверить лимиты перезапуска в юните:
+```bash
+cat ~/.config/systemd/user/hermes-gateway.service | grep -E "Restart|StartLimit"
+```
+
 Признаки в `~/.hermes/logs/gateway.log`:
 ```
 Received SIGTERM — initiating shutdown

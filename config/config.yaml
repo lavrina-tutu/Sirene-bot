@@ -1,8 +1,8 @@
 model:
   default: claude-sonnet-4-6
-  provider: anthropic
+  provider: tutu
 providers: {}
-fallback_providers: '[{"model": "claude-haiku-4-5", "provider": "anthropic"}]'
+fallback_providers: '[{"model": "claude-haiku-4-5", "provider": "tutu"}]'
 credential_pool_strategies: {}
 toolsets:
 - hermes-cli
@@ -194,7 +194,7 @@ bedrock:
     trace: disabled
 auxiliary:
   vision:
-    provider: anthropic
+    provider: tutu
     model: claude-haiku-4-5
     base_url: ''
     api_key: ''
@@ -209,14 +209,14 @@ auxiliary:
     timeout: 360
     extra_body: {}
   compression:
-    provider: anthropic
+    provider: tutu
     model: claude-sonnet-4-6
     base_url: ''
     api_key: ''
     timeout: 120
     extra_body: {}
   session_search:
-    provider: anthropic
+    provider: tutu
     model: claude-haiku-4-5
     base_url: ''
     api_key: ''
@@ -385,7 +385,7 @@ memory:
   flush_min_turns: 6
 delegation:
   model: claude-sonnet-4-6
-  provider: anthropic
+  provider: tutu
   base_url: ''
   api_key: ''
   inherit_mcp_toolsets: true
@@ -567,4 +567,7 @@ gateway:
   telegram:
     token: ***REDACTED***
     enabled: true
-custom_providers: []
+custom_providers:
+- name: tutu
+  base_url: https://llm-gateway.tutu.ru/api/anthropic
+  api_key: ***REDACTED***

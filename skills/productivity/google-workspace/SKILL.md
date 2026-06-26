@@ -160,6 +160,11 @@ Should print `AUTHENTICATED`. Setup is complete — token refreshes automaticall
 ### Notes
 
 - Token is stored at `~/.hermes/google_token.json` and auto-refreshes.
+- **After re-auth on the `profiles/anthropic` profile**: `--auth-code` always writes the token to `~/.hermes/google_token.json` (default path). You must copy it to the profile path immediately after:
+  ```bash
+  cp ~/.hermes/google_token.json ~/.hermes/profiles/anthropic/google_token.json
+  ```
+  Without this, `push_to_gs.py` and other USERTOOLS scripts will fail with `invalid_grant`.
 - Pending OAuth session state/verifier are stored temporarily at `~/.hermes/google_oauth_pending.json` until exchange completes.
 - If `gws` is installed, `google_api.py` points it at the same `~/.hermes/google_token.json` credentials file. Users do not need to run a separate `gws auth login` flow.
 - To revoke: `$GSETUP --revoke`
@@ -315,6 +320,33 @@ All commands return JSON. Parse with `jq` or read directly. Key fields:
 3. **Use the Gmail search syntax reference** for complex queries — load it with `skill_view("google-workspace", file_path="references/gmail-search-syntax.md")`.
 4. **Calendar times must include timezone** — always use ISO 8601 with offset (e.g., `2026-03-01T10:00:00-06:00`) or UTC (`Z`).
 5. **Respect rate limits** — avoid rapid-fire sequential API calls. Batch reads when possible.
+
+## WorkVault sync (tkachenkoav)
+
+After writing files to `~/WorkVault/`, always sync to ownCloud:
+```bash
+rclone sync ~/WorkVault owncloud:WorkVault
+```
+WorkVault is an Obsidian vault (no git), synced via rclone to ownCloud. The remote is named `owncloud:`.
+
+## VM-specific notes (tkachenkoav @ AlmaLinux)
+
+- Token lives at `~/.hermes/profiles/anthropic/google_token.json`, NOT `~/.hermes/google_token.json`.
+  `push_to_gs.py` and other USERTOOLS scripts read `HERMES_HOME` to find the token — always invoke with:
+  ```bash
+  HERMES_HOME=/home/tkachenkoav/.hermes/profiles/anthropic python3 script.py ...
+  ```
+- **After re-auth**: `$GSETUP --auth-code "..."` saves the new token to `~/.hermes/google_token.json`.
+  USERTOOLS scripts read from the profile path. Copy immediately after re-auth:
+  ```bash
+  cp ~/.hermes/google_token.json ~/.hermes/profiles/anthropic/google_token.json
+  ```
+- `setup.py --check` reads from `~/.hermes/google_token.json` by default and will report `NOT_AUTHENTICATED`
+  even when the token exists at the profile path. This is expected — don't use `--check` to verify USERTOOLS readiness.
+- The installed `setup.py` does **not** accept `--services` or `--format json` flags — omit them.
+  Run simply: `$GSETUP --auth-url`
+- **Token scope warning**: if the auth flow only granted drive/sheets/docs scopes (user clicked through quickly),
+  setup.py prints a warning about missing gmail/calendar scopes. This is fine for MPP→GS pipeline — those scopes aren't needed.
 
 ## Troubleshooting
 

@@ -81,6 +81,36 @@ cat ~/.hermes/logs/gateway.log | tail -60
 ## Формат сводки vm_dialogbacklog
 См. `references/dialogbacklog-report-format.md` — актуальный шаблон отчёта с датами `updated::` (реализован 25.06.2026, bk-094).
 
+## Работа с dialog-backlog вручную
+
+### Пакетное закрытие нескольких bk-пунктов
+Когда Саша говорит «закрой bk-103, bk-104, bk-106» — не делать patch по одному. Использовать `execute_code` с циклом:
+```python
+from hermes_tools import patch
+
+path = "/home/tkachenkoav/WorkVault/Hermes-Backlog/dialog-backlog.md"
+changes = [
+    {"old": "- [ ] ...", "new": "- [x] ...\n  - 💬 Закрыто ДД.ММ.\n  - 📅 ... · `closed:: YYYY-MM-DD`"},
+    # ... остальные
+]
+for c in changes:
+    patch(path=path, old_string=c["old"], new_string=c["new"])
+```
+После каждого пакета — обновить `last_scan_at` в frontmatter.
+
+### Снятие задачи (не закрытие)
+Если Саша говорит «снимаем задачу» — это НЕ просто `[x]`. Добавить контекст почему снята:
+```
+- [x] Текст задачи ^bk-NNN
+  - 💬 Снято ДД.ММ: <причина>.
+  - 📅 `created:: ...` · `updated:: YYYY-MM-DD` · `closed:: YYYY-MM-DD`
+```
+
+### `[SILENT]` от vm_dialogbacklog — норма
+Если Саша вручную закрыл/снял пункты, а потом запустить крон — крон вернёт `[SILENT]`.
+Причина: агент сравнивает open-пункты с `last_scan_at`, новых нет → подавляет доставку.
+Это **не баг**, это ожидаемое поведение. Объяснять Саше при необходимости.
+
 ## Что сообщить Саше
 - Статус (OK / PROBLEM)
 - TL;DR из журнала

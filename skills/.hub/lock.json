@@ -1,1 +1,25 @@
-{"version": 1, "installed": {}}
+{
+  "version": 1,
+  "installed": {
+    "pm-requirement-review-simulator": {
+      "source": "clawhub",
+      "identifier": "pm-requirement-review-simulator",
+      "trust_level": "community",
+      "scan_verdict": "caution",
+      "content_hash": "sha256:cb26aa918957ce60",
+      "install_path": "pm-requirement-review-simulator",
+      "files": [
+        "references/report-template-pro.html",
+        "references/review-playbook.md",
+        "references/scoring-engine-deterministic.md",
+        "references/user_templates.md",
+        "skill-card.md",
+        "SKILL.md",
+        "_meta.json"
+      ],
+      "metadata": {},
+      "installed_at": "2026-06-30T20:50:24.293630+00:00",
+      "updated_at": "2026-06-30T20:50:24.293644+00:00"
+    }
+  }
+}

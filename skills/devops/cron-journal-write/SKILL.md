@@ -1,6 +1,6 @@
 ---
 name: cron-journal-write
-description: "Записать итог крон-задачи в ~/.hermes/cron-journal.md. Загружать в конце каждого Opus-крона."
+description: "Записать итог крон-задачи в ~/.hermes/cron-journal.md. Загружать в конце каждого Opus- или Sonnet-крона."
 triggers:
   - "завершение крон-задачи"
   - "записать в журнал"
@@ -62,6 +62,8 @@ python3 ~/.hermes/skills/devops/cron-journal-write/scripts/write_journal.py \
 - Скрипт `scripts/write_journal.py` — протестирован, запись появляется в журнале
 - `vm_selfcheck` и `vm_dialogbacklog` подключены через `skills=["cron-journal-write"]`
 - Журнал автозагружается в каждую сессию через `~/.hermes/hermes.md`
+- **29.06.2026:** `vm_dialogbacklog` переключён с Opus → Sonnet (`claude-sonnet-4-6`). Скилл работает для любой модели — не только Opus.
+- Правила наполнения dialog-backlog (что заносить, suggest close, >30мин) → `hermes-feature/references/dialog-backlog-rules.md`
 
 ## Ложные тревоги self-check — НЕ считать проблемами
 При проверке VM следующее является **нормой**, не ошибкой:

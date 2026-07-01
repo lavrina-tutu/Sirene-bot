@@ -1,0 +1,367 @@
+{
+  "jobs": [
+    {
+      "id": "vm_selfcheck",
+      "name": "\u0421\u0438\u0440\u0435\u043d\u044c \u2014 \u0435\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u044b\u0439 self-check (VM)",
+      "prompt": "\u0422\u044b \u0421\u0438\u0440\u0435\u043d\u044c \u2014 AI-\u0430\u0441\u0441\u0438\u0441\u0442\u0435\u043d\u0442 \u0421\u0430\u0448\u0438 \u0422\u043a\u0430\u0447\u0435\u043d\u043a\u043e (PM, \u0422\u0423\u0422\u0423). \u042d\u0442\u043e \u0437\u0430\u043f\u0443\u0441\u043a \u043d\u0430 VM hermes-agents.devel.tutu.ru.\n\n\u0412\u044b\u043f\u043e\u043b\u043d\u0438 \u0435\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u044b\u0439 self-check \u0441\u0438\u0441\u0442\u0435\u043c\u044b. \u0412\u0441\u0435 \u043e\u0442\u0432\u0435\u0442\u044b \u0442\u043e\u043b\u044c\u043a\u043e \u043d\u0430 \u0440\u0443\u0441\u0441\u043a\u043e\u043c.\n\n## \u0427\u0442\u043e \u043f\u0440\u043e\u0432\u0435\u0440\u0438\u0442\u044c\n\n### 1. Gateway\n```\nsystemctl --user status hermes-gateway.service --no-pager -l\n```\n\u041e\u0436\u0438\u0434\u0430\u0435\u0442\u0441\u044f: active (running). \u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: failed / inactive.\n\n### 2. \u041a\u0440\u043e\u043d\u044b (\u0430\u043a\u0442\u0438\u0432\u043d\u044b\u0435)\n```\nhermes cron list\n```\n\u041f\u0440\u043e\u0432\u0435\u0440\u044c: vm_selfcheck, vm_movefromff, vm_dialogbacklog, 5d16b96a9ed5 \u2014 \u0432\u0441\u0435 enabled.\nvm_movefromzulip \u2014 paused (\u044d\u0442\u043e \u043d\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e).\n\n### 3. ownCloud \u0441\u0438\u043d\u043a\n```\nsystemctl --user status owncloud-sync.timer --no-pager\ntail -20 ~/.local/share/hermes/logs/owncloud-sync.log\n```\n\u041e\u0436\u0438\u0434\u0430\u0435\u0442\u0441\u044f: \u0442\u0430\u0439\u043c\u0435\u0440 active, \u0432 \u043b\u043e\u0433\u0435 \u043d\u0435\u0442 ERR/CRIT.\n\n### 4. \u0414\u0438\u0441\u043a\n```\ndf -h ~ | tail -1\n```\n\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430 \u0435\u0441\u043b\u0438 > 85% \u0437\u0430\u043d\u044f\u0442\u043e.\n\n### 5. VPN / \u0441\u0435\u0442\u044c\n```\ncurl -s -o /dev/null -w \"%{http_code}\" --connect-timeout 5 https://api.anthropic.com\n```\n\u041e\u0436\u0438\u0434\u0430\u0435\u0442\u0441\u044f: 200 \u0438\u043b\u0438 401 (\u0434\u043e\u0441\u0442\u0443\u043f\u0435\u043d). \u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: 000 (\u043d\u0435\u0442 \u0434\u043e\u0441\u0442\u0443\u043f\u0430).\n\n### 6. GitHub \u0430\u0432\u0442\u043e\u0441\u0438\u043d\u043a (\u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0437\u0430\u043f\u0443\u0441\u043a)\n\u041f\u0440\u043e\u0432\u0435\u0440\u044c \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0441\u0442\u0430\u0442\u0443\u0441 \u043a\u0440\u043e\u043d\u0430 5d16b96a9ed5:\n```\nls -lt ~/.hermes/cron/output/5d16b96a9ed5/ | head -3\n```\n\n### 7. RAM\n```bash\nfree -h\n```\n\u0412\u044b\u0432\u0435\u0434\u0438: total / used / free / available (\u0441\u0442\u0440\u043e\u043a\u0430 Mem:).\n\u041f\u043e\u0440\u043e\u0433 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b: available < 1G.\n\n\u041f\u0430\u043c\u044f\u0442\u044c Hermes (gateway-\u043f\u0440\u043e\u0446\u0435\u0441\u0441):\n```bash\nps aux --sort=-%mem | grep \"hermes.*gateway\\|python.*hermes\" | grep -v grep | head -3\n```\n\u0412\u044b\u0432\u0435\u0434\u0438: PID, %MEM, RSS (\u0432 \u041c\u0411 = RSS/1024).\n\nObsidian vault (WorkVault \u043d\u0430 VM, \u0441\u0438\u043d\u043a\u0430\u0435\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 ownCloud):\n```bash\ndu -sh ~/WorkVault 2>/dev/null && du -sh ~/WorkVault/.obsidian 2>/dev/null || echo \"WorkVault \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\"\n```\n\u042d\u0442\u043e \u0440\u0430\u0437\u043c\u0435\u0440 \u0434\u0430\u043d\u043d\u044b\u0445 Obsidian \u043d\u0430 \u0434\u0438\u0441\u043a\u0435 VM. Obsidian \u043a\u0430\u043a \u043f\u0440\u043e\u0446\u0435\u0441\u0441 \u043d\u0430 VM \u043d\u0435 \u0437\u0430\u043f\u0443\u0449\u0435\u043d (Windows-\u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435).\n\n## \u0412\u0430\u0436\u043d\u044b\u0435 \u0437\u0430\u043c\u0435\u0447\u0430\u043d\u0438\u044f (\u043d\u0435 \u0441\u0447\u0438\u0442\u0430\u0442\u044c \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0430\u043c\u0438)\n- DialogBacklog \u041d\u0415 \u0438\u043c\u0435\u0435\u0442 .venv \u2014 \u044d\u0442\u043e \u043d\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e, \u0441\u043a\u0440\u0438\u043f\u0442\u044b \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u044e\u0442 \u0442\u043e\u043b\u044c\u043a\u043e stdlib\n- \u041d\u0435\u0442 \u044e\u043d\u0438\u0442\u0430 hermes-cron.service \u2014 \u044d\u0442\u043e \u043d\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e, \u043a\u0440\u043e\u043d\u044b \u0437\u0430\u043f\u0443\u0441\u043a\u0430\u044e\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 hermes-gateway\n- DEFAULT_DB \u0441 Windows-\u043f\u0443\u0442\u0451\u043c \u0432 backlog_fetch.py \u2014 \u0443\u0436\u0435 \u0438\u0441\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e 03.06\n- Obsidian \u043a\u0430\u043a \u043f\u0440\u043e\u0446\u0435\u0441\u0441 \u043d\u0430 VM \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u2014 \u044d\u0442\u043e \u043d\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e (Windows-\u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435)\n\n## \u0424\u043e\u0440\u043c\u0430\u0442 \u043e\u0442\u0447\u0451\u0442\u0430\n\u041a\u043e\u0440\u043e\u0442\u043a\u043e \u043f\u043e \u043a\u0430\u0436\u0434\u043e\u043c\u0443 \u043f\u0443\u043d\u043a\u0442\u0443: \u2705 OK \u0438\u043b\u0438 \u26a0\ufe0f PROBLEM + \u0434\u0435\u0442\u0430\u043b\u0438.\n\u0412 \u043a\u043e\u043d\u0446\u0435 \u2014 \u0441\u0432\u043e\u0434\u043a\u0430 \u043f\u043e RAM: \u0441\u0442\u0440\u043e\u043a\u0430 \u0432\u0438\u0434\u0430 `RAM: total=Xg, used=Xg, free=Xg, avail=Xg | Hermes: X \u041c\u0411 RSS | WorkVault: X`.\n\u0415\u0441\u043b\u0438 \u0432\u0441\u0451 OK \u2014 \u043e\u0434\u043d\u0430 \u0441\u0442\u0440\u043e\u043a\u0430 \u0438\u0442\u043e\u0433\u0430 + \u0441\u0432\u043e\u0434\u043a\u0430 RAM.\n\u0415\u0441\u043b\u0438 \u0435\u0441\u0442\u044c \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b \u2014 \u0441\u043f\u0438\u0441\u043e\u043a \u0441 \u0434\u0435\u0442\u0430\u043b\u044f\u043c\u0438.",
+      "skills": [
+        "cron-journal-write"
+      ],
+      "skill": "cron-journal-write",
+      "model": "claude-sonnet-4-6",
+      "provider": "tutu",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 3 * * 6",
+        "display": "30 3 * * 6"
+      },
+      "schedule_display": "30 3 * * 6",
+      "repeat": {
+        "times": null,
+        "completed": 9
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-02T17:30:00+03:00",
+      "next_run_at": "2026-07-04T03:30:00+03:00",
+      "last_run_at": "2026-06-29T03:31:25.985313+03:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram:400307920,telegram:-1004300127777:7",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "400307920",
+        "chat_name": "Alex Tkachenko",
+        "thread_id": null
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file",
+        "web"
+      ],
+      "workdir": null,
+      "profile": null,
+      "fire_claim": null
+    },
+    {
+      "id": "vm_movefromff",
+      "name": "MoveFromFF \u2014 \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0430\u0446\u0438\u044f \u043a\u0430\u0436\u0434\u044b\u0435 2\u0447 (\u0440\u0430\u0431\u043e\u0447\u0438\u0435 \u0434\u043d\u0438 10-20) [VM]",
+      "prompt": "\u0417\u0430\u043f\u0443\u0441\u0442\u0438 \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0430\u0446\u0438\u044e \u043d\u043e\u0432\u044b\u0445 \u0432\u0441\u0442\u0440\u0435\u0447 \u0438\u0437 Fireflies.\n\n\u041a\u043e\u043c\u0430\u043d\u0434\u0430: cd /home/tkachenkoav/USERTOOLS/MoveFromFF && /home/tkachenkoav/USERTOOLS/MoveFromFF/.venv/bin/python -m movefromff --mode cron\n\n\u0415\u0441\u043b\u0438 exit code 0 \u0438\u043b\u0438 1 \u2014 \u043c\u043e\u043b\u0447\u0438 (\u0442\u043e\u043b\u044c\u043a\u043e \u043b\u043e\u0433), \u043e\u0442\u0432\u0435\u0442\u044c `[SILENT]`.\n\u0415\u0441\u043b\u0438 exit code 3 \u0438\u043b\u0438 4 \u2014 \u0441\u043e\u043e\u0431\u0449\u0438 \u043e\u0431 \u043e\u0448\u0438\u0431\u043a\u0435 \u0432 TG (\u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0435 30 \u0441\u0442\u0440\u043e\u043a stderr).",
+      "skills": [],
+      "skill": null,
+      "model": "claude-haiku-4-5",
+      "provider": "tutu",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 10,12,14,16,18,20 * * 1-5",
+        "display": "0 10,12,14,16,18,20 * * 1-5"
+      },
+      "schedule_display": "0 10,12,14,16,18,20 * * 1-5",
+      "repeat": {
+        "times": null,
+        "completed": 35
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-02T17:30:00+03:00",
+      "next_run_at": "2026-07-02T10:00:00+03:00",
+      "last_run_at": "2026-07-01T20:00:51.234244+03:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram:400307920",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "400307920",
+        "chat_name": "Alex Tkachenko",
+        "thread_id": null
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "profile": null,
+      "fire_claim": null
+    },
+    {
+      "id": "vm_movefromzulip",
+      "name": "MoveFromZulip \u2014 \u0435\u0436\u0435\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u0430\u044f \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0430\u0446\u0438\u044f \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u043e\u0432 [VM]",
+      "prompt": "\u0417\u0430\u043f\u0443\u0441\u0442\u0438 \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0430\u0446\u0438\u044e \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u043e\u0432 \u0438\u0437 Zulip.\n\n\u041a\u043e\u043c\u0430\u043d\u0434\u0430: cd /home/tkachenkoav/USERTOOLS/MoveFromZulip && /home/tkachenkoav/USERTOOLS/MoveFromZulip/.venv/bin/python -m movefromzulip --mode cron\n\n\u0415\u0441\u043b\u0438 \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u2014 \u043e\u0442\u0432\u0435\u0442\u044c `[SILENT]`.\n\u0415\u0441\u043b\u0438 \u043e\u0448\u0438\u0431\u043a\u0430 \u2014 \u043e\u0442\u043f\u0440\u0430\u0432\u044c \u043a\u043e\u0440\u043e\u0442\u043a\u043e\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u0441 \u0442\u0435\u043a\u0441\u0442\u043e\u043c \u043e\u0448\u0438\u0431\u043a\u0438.",
+      "skills": [],
+      "skill": null,
+      "model": "claude-haiku-4-5",
+      "provider": "tutu",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 3 * * 0",
+        "display": "30 3 * * 0"
+      },
+      "schedule_display": "30 3 * * 0",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": false,
+      "state": "paused",
+      "paused_at": "2026-06-02T18:23:00+03:00",
+      "paused_reason": "manual stop by Sasha cron job",
+      "created_at": "2026-06-02T17:30:00+03:00",
+      "next_run_at": null,
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram:400307920",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "400307920",
+        "chat_name": "Alex Tkachenko",
+        "thread_id": null
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "profile": null
+    },
+    {
+      "id": "vm_dialogbacklog",
+      "name": "Dialog Backlog \u2014 \u043f\u043e\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u0438\u0447\u043d\u0430\u044f \u0441\u0432\u043e\u0434\u043a\u0430 [VM]",
+      "prompt": "\u0422\u044b \u0421\u0438\u0440\u0435\u043d\u044c \u2014 \u043b\u0438\u0447\u043d\u044b\u0439 \u043f\u043e\u043c\u043e\u0449\u043d\u0438\u043a \u0421\u0430\u0448\u0438 \u0422\u043a\u0430\u0447\u0435\u043d\u043a\u043e. \u0412\u0441\u0435 \u043e\u0442\u0432\u0435\u0442\u044b \u043d\u0430 \u0440\u0443\u0441\u0441\u043a\u043e\u043c.\n\n## \u0417\u0430\u0434\u0430\u0447\u0430: \u043e\u0431\u043d\u043e\u0432\u0438\u0442\u044c dialog-backlog \u0438 \u043e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u0441\u0432\u043e\u0434\u043a\u0443\n\n\u0423\u0442\u0438\u043b\u0438\u0442\u044b \u043b\u0435\u0436\u0430\u0442 \u0432: `/home/tkachenkoav/USERTOOLS/DialogBacklog/`\n\n### \u0428\u0430\u0433 1: \u041f\u0440\u043e\u0447\u0438\u0442\u0430\u0439 \u0442\u0435\u043a\u0443\u0449\u0438\u0439 backlog\n\u0424\u0430\u0439\u043b: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dialog-backlog.md`\n\u0417\u0430\u043f\u043e\u043c\u043d\u0438:\n- \u0412\u0441\u0435 \u043e\u0442\u043a\u0440\u044b\u0442\u044b\u0435 \u043f\u0443\u043d\u043a\u0442\u044b `- [ ]` (\u0441 \u044f\u043a\u043e\u0440\u044f\u043c\u0438 `^bk-NNN`)\n- \u0412\u0441\u0435 \u0437\u0430\u043a\u0440\u044b\u0442\u044b\u0435 `- [x]` \u2014 \u041d\u0418\u041a\u041e\u0413\u0414\u0410 \u043d\u0435 \u0442\u0440\u043e\u0433\u0430\u0442\u044c\n- \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u044f `last_scan_at` \u0438 `next_id` \u0438\u0437 frontmatter\n\n### \u0428\u0430\u0433 2: \u041f\u043e\u043b\u0443\u0447\u0438 \u043d\u043e\u0432\u044b\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u0447\u0435\u0440\u0435\u0437 \u0443\u0442\u0438\u043b\u0438\u0442\u0443\n\u0417\u0430\u043f\u0443\u0441\u0442\u0438 `backlog_fetch.py` (stdlib, \u0431\u0435\u0437 \u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439):\n```\npython3 /home/tkachenkoav/USERTOOLS/DialogBacklog/backlog_fetch.py --since <last_scan_at> --hermes-home /home/tkachenkoav/.hermes\n```\n\u0423\u0442\u0438\u043b\u0438\u0442\u0430 \u0432\u0435\u0440\u043d\u0451\u0442 JSON \u0441 \u043d\u043e\u0432\u044b\u043c\u0438 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f\u043c\u0438 \u0438\u0437 \u0441\u0435\u0441\u0441\u0438\u0439 Hermes.\n\n### \u0428\u0430\u0433 3: \u041f\u0440\u043e\u0430\u043d\u0430\u043b\u0438\u0437\u0438\u0440\u0443\u0439 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f\n\u0414\u043b\u044f \u043a\u0430\u0436\u0434\u043e\u0433\u043e \u043d\u043e\u0432\u043e\u0433\u043e \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0438: \u044d\u0442\u043e \u0437\u0430\u0434\u0430\u0447\u0430/\u0438\u0434\u0435\u044f/\u043e\u0431\u0441\u0443\u0436\u0434\u0435\u043d\u0438\u0435?\n\u0415\u0441\u043b\u0438 \u0437\u0430\u0434\u0430\u0447\u0430 \u2014 \u0434\u043e\u0431\u0430\u0432\u044c \u0432 backlog \u043a\u0430\u043a \u043d\u043e\u0432\u044b\u0439 `- [ ] ^bk-NNN` (NNN = next_id, \u0438\u043d\u043a\u0440\u0435\u043c\u0435\u043d\u0442).\n\n### \u0428\u0430\u0433 4: \u0421\u043e\u0445\u0440\u0430\u043d\u0438 backlog \u0447\u0435\u0440\u0435\u0437 merge-\u0443\u0442\u0438\u043b\u0438\u0442\u0443\n```\npython3 /home/tkachenkoav/USERTOOLS/DialogBacklog/backlog_merge.py --file /home/tkachenkoav/WorkVault/Hermes-Backlog/dialog-backlog.md --add-json <NEW_ITEMS_JSON>\n```\n\u0423\u0442\u0438\u043b\u0438\u0442\u0430 \u043e\u0431\u043d\u043e\u0432\u0438\u0442 frontmatter (last_scan_at, next_id) \u0438 \u0434\u043e\u043f\u0438\u0448\u0435\u0442 \u043f\u0443\u043d\u043a\u0442\u044b, \u043d\u0435 \u0442\u0440\u043e\u0433\u0430\u044f \u0437\u0430\u043a\u0440\u044b\u0442\u044b\u0435.\n\n### \u0428\u0430\u0433 5: \u0421\u0432\u043e\u0434\u043a\u0430 \u0432 Telegram\n\n\u0415\u0441\u043b\u0438 \u043d\u043e\u0432\u044b\u0445 \u043f\u0443\u043d\u043a\u0442\u043e\u0432 \u043d\u0435\u0442 \u2014 \u043e\u0442\u0432\u0435\u0442\u044c `[SILENT]`.\n\n\u0415\u0441\u043b\u0438 \u0435\u0441\u0442\u044c \u043d\u043e\u0432\u044b\u0435 \u043f\u0443\u043d\u043a\u0442\u044b \u2014 \u043e\u0442\u043f\u0440\u0430\u0432\u044c \u0441\u0432\u043e\u0434\u043a\u0443 \u0432 \u0444\u043e\u0440\u043c\u0430\u0442\u0435:\n\n**\u0411\u044d\u043a\u043b\u043e\u0433 \u043e\u0431\u043d\u043e\u0432\u043b\u0451\u043d \u2014 N \u043d\u043e\u0432\u044b\u0445 \u043f\u0443\u043d\u043a\u0442\u043e\u0432**\n\n\u041d\u043e\u0432\u044b\u0435:\n- `bk-NNN` \u0422\u0435\u043a\u0441\u0442 \u043f\u0443\u043d\u043a\u0442\u0430 \u00b7 _\u043e\u0431\u043d\u043e\u0432\u043b\u0451\u043d: \u0414\u0414.\u041c\u041c_\n...\n\n\u0412\u0441\u0435 \u043e\u0442\u043a\u0440\u044b\u0442\u044b\u0435 (\u0432\u0441\u0435\u0433\u043e M):\n- `bk-NNN` \u041a\u0440\u0430\u0442\u043a\u0438\u0439 \u0442\u0435\u043a\u0441\u0442 \u00b7 _\u043e\u0431\u043d\u043e\u0432\u043b\u0451\u043d: \u0414\u0414.\u041c\u041c_\n...\n\n\u0414\u043b\u044f \u043a\u0430\u0436\u0434\u043e\u0433\u043e \u043e\u0442\u043a\u0440\u044b\u0442\u043e\u0433\u043e \u043f\u0443\u043d\u043a\u0442\u0430 (`- [ ]`) \u0440\u044f\u0434\u043e\u043c \u0441 \u0442\u0435\u043a\u0441\u0442\u043e\u043c \u0434\u043e\u0431\u0430\u0432\u043b\u044f\u0439 \u0434\u0430\u0442\u0443 \u0438\u0437 `updated::` \u0432 \u0444\u043e\u0440\u043c\u0430\u0442\u0435 \u0414\u0414.\u041c\u041c (\u0434\u0435\u043d\u044c.\u043c\u0435\u0441\u044f\u0446 \u0431\u0435\u0437 \u0433\u043e\u0434\u0430). \u0415\u0441\u043b\u0438 `updated::` \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u0430 \u2014 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c `created::`. \u0413\u0440\u0443\u043f\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043f\u043e \u0441\u0435\u043a\u0446\u0438\u044f\u043c \u0438\u0437 \u0444\u0430\u0439\u043b\u0430 (## \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u0438).",
+      "skills": [
+        "cron-journal-write"
+      ],
+      "skill": "cron-journal-write",
+      "model": "claude-sonnet-4-6",
+      "provider": "tutu",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * 1",
+        "display": "0 9 * * 1"
+      },
+      "schedule_display": "0 9 * * 1",
+      "repeat": {
+        "times": null,
+        "completed": 4
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-02T17:30:00+03:00",
+      "next_run_at": "2026-07-06T09:00:00+03:00",
+      "last_run_at": "2026-06-29T14:39:35.574198+03:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram:-1004300127777:6",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "400307920",
+        "chat_name": "Alex Tkachenko",
+        "thread_id": null
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "profile": null,
+      "fire_claim": null
+    },
+    {
+      "id": "5d16b96a9ed5",
+      "name": "GitHub \u0430\u0432\u0442\u043e\u0441\u0438\u043d\u043a (hermes-workspace) [VM]",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "autosync_full_with_cleanup.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 2 * * *",
+        "display": "0 2 * * *"
+      },
+      "schedule_display": "0 2 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 9
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-02T19:32:09.853281+03:00",
+      "next_run_at": "2026-07-02T02:00:00+03:00",
+      "last_run_at": "2026-07-01T02:00:28.851402+03:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "400307920",
+        "chat_name": "Alex Tkachenko",
+        "thread_id": null
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "0e33f12eed3a",
+      "name": "Gateway watchdog (\u043f\u043e\u0434\u043d\u044f\u0442\u044c \u0435\u0441\u043b\u0438 \u043b\u0435\u0436\u0438\u0442)",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "gateway_watchdog.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/15 * * * *",
+        "display": "*/15 * * * *"
+      },
+      "schedule_display": "*/15 * * * *",
+      "repeat": {
+        "times": null,
+        "completed": 514
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-26T15:19:17.348221+03:00",
+      "next_run_at": "2026-07-02T00:00:00+03:00",
+      "last_run_at": "2026-07-01T23:45:40.390177+03:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram:400307920",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "-1004300127777",
+        "chat_name": "\u0421\u0438\u0440\u0435\u043d\u044c Workspace",
+        "thread_id": "7"
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "d77329d35ca5",
+      "name": "Upstream hermes-agent monitor [VM]",
+      "prompt": "\u0422\u044b \u0421\u0438\u0440\u0435\u043d\u044c \u2014 \u043b\u0438\u0447\u043d\u044b\u0439 \u043f\u043e\u043c\u043e\u0449\u043d\u0438\u043a \u0421\u0430\u0448\u0438 \u0422\u043a\u0430\u0447\u0435\u043d\u043a\u043e. \u0421\u043a\u0440\u0438\u043f\u0442 \u043f\u0440\u043e\u0432\u0435\u0440\u0438\u043b \u043d\u043e\u0432\u044b\u0435 \u043a\u043e\u043c\u043c\u0438\u0442\u044b \u0432 upstream NousResearch/hermes-agent.\n\n\u0415\u0441\u043b\u0438 \u0441\u043a\u0440\u0438\u043f\u0442 \u043d\u0435 \u0432\u0435\u0440\u043d\u0443\u043b \u043d\u0438\u043a\u0430\u043a\u043e\u0433\u043e \u0432\u044b\u0432\u043e\u0434\u0430 \u0438\u043b\u0438 \u0432\u044b\u0432\u043e\u0434 \u043f\u0443\u0441\u0442\u043e\u0439 \u2014 \u043e\u0442\u0432\u0435\u0442\u044c \u0440\u043e\u0432\u043d\u043e [SILENT] \u0438 \u043d\u0438\u0447\u0435\u0433\u043e \u0431\u043e\u043b\u044c\u0448\u0435.\n\n\u0415\u0441\u043b\u0438 \u0435\u0441\u0442\u044c \u043d\u043e\u0432\u044b\u0435 \u043a\u043e\u043c\u043c\u0438\u0442\u044b \u2014 \u043d\u0430\u043f\u0438\u0448\u0438 \u043a\u043e\u0440\u043e\u0442\u043a\u0438\u0439 \u0447\u0438\u0442\u0430\u0435\u043c\u044b\u0439 \u043e\u0442\u0447\u0451\u0442 \u043d\u0430 \u0440\u0443\u0441\u0441\u043a\u043e\u043c:\n- \u0441\u043a\u043e\u043b\u044c\u043a\u043e \u043d\u043e\u0432\u044b\u0445 \u043a\u043e\u043c\u043c\u0438\u0442\u043e\u0432\n- \u0447\u0442\u043e \u0438\u0437\u043c\u0435\u043d\u0438\u043b\u043e\u0441\u044c (\u043f\u043e-\u0447\u0435\u043b\u043e\u0432\u0435\u0447\u0435\u0441\u043a\u0438, \u043d\u0435 \u043f\u0440\u043e\u0441\u0442\u043e feat=N)\n- \u0435\u0441\u0442\u044c \u043b\u0438 \u0447\u0442\u043e-\u0442\u043e, \u0447\u0442\u043e \u043a\u0430\u0441\u0430\u0435\u0442\u0441\u044f \u043d\u0430\u0448\u0435\u0433\u043e \u043a\u043e\u043d\u0444\u0438\u0433\u0430 / gateway / cron / skills\n- \u0438\u0442\u043e\u0433\u043e\u0432\u0430\u044f \u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0430\u0446\u0438\u044f: \ud83d\udfe2 \u0431\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u043e \u043e\u0431\u043d\u043e\u0432\u0438\u0442\u044c / \ud83d\udfe1 \u043f\u0440\u043e\u0432\u0435\u0440\u0438\u0442\u044c \u043f\u0435\u0440\u0435\u0434 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435\u043c / \ud83d\udd34 \u043e\u0442\u043b\u043e\u0436\u0438\u0442\u044c\n\n\u0411\u0443\u0434\u044c \u043a\u0440\u0430\u0442\u043a\u043e\u0439 \u2014 \u043c\u0430\u043a\u0441\u0438\u043c\u0443\u043c 10-15 \u0441\u0442\u0440\u043e\u043a.",
+      "skills": [],
+      "skill": null,
+      "model": "claude-sonnet-4-6",
+      "provider": "tutu",
+      "base_url": null,
+      "script": "upstream_monitor.sh",
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 4 * * 6",
+        "display": "0 4 * * 6"
+      },
+      "schedule_display": "0 4 * * 6",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-29T14:29:18.417821+03:00",
+      "next_run_at": "2026-07-04T04:00:00+03:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram:400307920,telegram:-1004300127777:7",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "-1004300127777",
+        "chat_name": "\u0421\u0438\u0440\u0435\u043d\u044c Workspace",
+        "thread_id": "7"
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null
+    },
+    {
+      "id": "246386b4843f",
+      "name": "AggregateFromMeetings \u2014 \u043f\u0435\u0440\u0435\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u043c\u043e\u0434\u0435\u043b\u044c \u043d\u0430 Sonnet \u043f\u0440\u0438 \u0432\u044b\u0445\u043e\u0434\u0435 \u0432 \u043f\u0440\u043e\u0434",
+      "prompt": "\u041d\u0430\u043f\u043e\u043c\u043d\u0438 \u0421\u0430\u0448\u0435: AggregateFromMeetings \u0432\u044b\u0448\u0435\u043b \u0432 \u043f\u0440\u043e\u0434 (\u0438\u043b\u0438 \u043f\u043b\u0430\u043d\u0438\u0440\u0443\u0435\u0442\u0441\u044f \u0432\u044b\u0445\u043e\u0434). \u041d\u0443\u0436\u043d\u043e \u0432\u0440\u0443\u0447\u043d\u0443\u044e \u043f\u0435\u0440\u0435\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u043c\u043e\u0434\u0435\u043b\u044c \u0434\u043b\u044f \u0448\u0430\u0433\u0430 C (\u0438\u043d\u043a\u0440\u0435\u043c\u0435\u043d\u0442) \u0441 Haiku \u043d\u0430 Sonnet \u0432 \u043a\u043e\u043d\u0444\u0438\u0433\u0435 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u0430. Bootstrap \u043e\u0441\u0442\u0430\u0451\u0442\u0441\u044f \u043d\u0430 Haiku. \u0420\u0435\u0448\u0435\u043d\u0438\u0435 \u0437\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 pm/OPEN_QUESTIONS.md OQ-002 \u0438 PM_DECISIONS_LOG.md (\u0431\u0440\u0438\u0444 29.06.2026).",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "once",
+        "run_at": "2026-09-01T09:00:00+03:00",
+        "display": "once at 2026-09-01 09:00"
+      },
+      "schedule_display": "once at 2026-09-01 09:00",
+      "repeat": {
+        "times": 1,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-29T18:25:29.828165+03:00",
+      "next_run_at": "2026-09-01T09:00:00+03:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram:400307920",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "-1004300127777",
+        "chat_name": "\u0421\u0438\u0440\u0435\u043d\u044c Workspace",
+        "thread_id": "3"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    }
+  ],
+  "updated_at": "2026-07-01T23:45:40.391805+03:00"
+}

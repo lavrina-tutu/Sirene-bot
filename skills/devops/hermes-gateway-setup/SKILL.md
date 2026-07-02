@@ -549,6 +549,31 @@ grep -E "Flushing text batch|inbound message" ~/.hermes/logs/gateway.log \
 | Monitoring | 7 | `telegram:-1004300127777:7` |
 | Personal | 8 | `telegram:-1004300127777:8` |
 
+### Конфигурация группы в config.yaml/.env
+
+```yaml
+telegram:
+  allowed_chats: '400307920,-1004300127777'
+  require_mention: false
+  guest_mode: false
+```
+
+Privacy mode бота (@BotFather → Group Privacy) — **disabled**, оставить так (нужно чтобы бот видел все сообщения группы, не только @mentions).
+
+Уведомление о старте gateway доставляется в личку (400307920) + General (thread=1) через `TELEGRAM_ADDITIONAL_STARTUP_CHANNELS`.
+
+### Протокол при падении gateway (правило: рестарт только руками Саши)
+
+**СТРОГО ЗАПРЕЩЕНО** создавать cron-задачи с `restart_gateway_MANUAL_ONLY.sh` — no_agent cron со скриптом рестарта выполняется внутри того же gateway-процесса → systemd убивает родителя → SIGTERM-петля (инцидент 26.06.2026).
+
+Правило:
+1. Gateway упал → диагностировать причину → сообщить Саше кратко
+2. Спросить «поднять?» → ждать явного «поднимай» от Саши
+3. После «поднимай» → Саша сам запускает `bash ~/.hermes/scripts/restart_gateway_MANUAL_ONLY.sh` из внешнего шелла
+4. NO cron. NO no_agent. NO автоматического рестарта.
+
+Одноразовые кроны запускать через 2–5 минут после постановки задачи (не через `action=run` — теряет конфиг).
+
 ---
 
 ## Useful In-Session Gateway Commands (Telegram/Discord/etc.)

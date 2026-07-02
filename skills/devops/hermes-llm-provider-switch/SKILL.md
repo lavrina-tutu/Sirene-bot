@@ -38,18 +38,38 @@ Located at `~/WorkVault/UserManuals/LLM-Migration/`:
 | `user_change_delegation_models1.sh --provider tutu` | Switch all models to ТУТУ gateway |
 | `user_change_delegation_models1.sh --provider anthropic` | Switch all models back to Anthropic |
 | `switch_back_to_anthropic.sh` | Full rollback from backup |
+| `switch_to_sonnet5.sh` | Switch main model: sonnet-4-6 → sonnet-5 |
+| `switch_back_to_sonnet46.sh` | Switch main model: sonnet-5 → sonnet-4-6 |
 
 Scripts auto-backup config, patch via Python (YAML-safe), print diff, restart `hermes-gateway` via systemd.
+
+### Model-version switching (separate from provider)
+
+There are two orthogonal switching operations:
+1. **Provider switch** — changes `model.provider` + `custom_providers` (Anthropic ↔ ТУТУ)
+2. **Model version switch** — changes `model.default`, `auxiliary.*.model`, `delegation.model`
+
+Model-version scripts patch these fields: `model.default`, any `auxiliary.*` where the model matches, `delegation.model`, and model IDs in `cron/jobs.json`. They work regardless of which provider is active.
+
+Pattern for new model-version switch scripts (reusable template):
+```bash
+FROM_MODEL="claude-sonnet-4-6"
+TO_MODEL="claude-sonnet-5"
+# Python loop: data["model"]["default"], aux sections, delegation["model"]
+# Then patch cron/jobs.json separately
+# Then diff + systemd restart
+```
 
 ## ТУТУ gateway specifics
 
 - **Type**: Anthropic-compatible proxy (NOT OpenRouter)
 - **Endpoint**: `https://llm-gateway.tutu.ru/api/anthropic`
 - **Auth**: standard `x-api-key` header (same as Anthropic SDK)
-- **Models available**: `claude-sonnet-4-6`, `claude-opus-4-7`, `claude-haiku-4-5` ✅
-- **Key 1 (main)**: in `~/.config/hermes/.env` (var: TUTU_LLM_KEY_MAIN)
-- **Key 2 (reserve)**: in `~/.config/hermes/.env` (var: TUTU_LLM_KEY_RESERVE)
+- **Models available**: see `references/tutu-models-2026-07.md` for full list with pricing
+- **Key 1 (main)**: hardcoded in `config.yaml` custom_providers block (also in `~/.config/hermes/.env`)
+- **Key 2 (reserve)**: in `~/.config/hermes/.env`
 - OpenRouter hypothesis: **NOT needed** — `/v1/messages` responds 200 OK in native Anthropic format
+- **Check available models**: `curl -s https://llm-gateway.tutu.ru/api/anthropic/v1/models -H "x-api-key: <key>" -H "anthropic-version: 2023-06-01" | python3 -m json.tool`
 
 ## config.yaml changes for custom provider
 
@@ -86,4 +106,6 @@ Gateway sends a startup notification to Telegram automatically on restart — no
 ## User manuals
 
 Full instructions in WorkVault (sync via rclone to ownCloud):
-`~/WorkVault/UserManuals/LLM-Migration/`
+`~/WorkVault/UserManuals/LLM-Migration/README.md` — single source of truth, contains SSH instructions, all script commands, full models table with pricing.
+
+`references/tutu-models-2026-07.md` — condensed models + pricing snapshot for ТУТУ gateway (verified 2026-07-02).

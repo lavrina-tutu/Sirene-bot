@@ -484,6 +484,20 @@ GATEWAY_ALLOW_ALL_USERS=false
 TELEGRAM_ALLOWED_CHAT_IDS=400307920
 ```
 
+## TUTU LLM gateway (после миграции)
+
+Полная инфа (endpoints, ключи, модели+цены, скрипты переключения провайдера, SSH) — `~/WorkVault/UserManuals/LLM-Migration/README.md`.
+
+Script-файлы в cron: указывать только имя файла, без `&&` (составные команды — через wrapper-скрипт).
+
+## Ключевые VM-пути и синки
+
+- Hermes home: `~/.hermes/`
+- USERTOOLS: `~/USERTOOLS/`
+- WorkVault: `~/WorkVault/` (rclone sync → owncloud:WorkVault каждые 10 мин)
+- hermes-workspace: `~/hermes-workspace/` (git репо, автосинк в GitHub ежедневно 02:00, cron `5d16b96a9ed5`)
+- SSH-ключ `hermes-vm` добавлен в GitHub аккаунт `ialextkachenko-byte` (см. питфолл 13 — не путать с корпоративным аккаунтом)
+
 ## Скрипты и статус блоков
 
 Подробности и паттерны скриптов: `references/migration-scripts.md`

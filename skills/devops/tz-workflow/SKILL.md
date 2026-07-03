@@ -1,0 +1,122 @@
+---
+name: tz-workflow
+description: "Use when creating, editing, or archiving TZ (technical specs) in WorkVault. Enforces single-master-per-tool layout at WorkVault/Hermes-Backlog/TZ/<Tool>/<Tool>_TZ.md, YAML frontmatter versioning, mirrored backup, and no-cyrillic-in-new-filenames rule. Triggers: ТЗ, техническое задание, technical spec, MoveFromFF_TZ, AggregateFromMeetings, WorkVault/Hermes-Backlog/TZ, TZ_v, доработка инструмента, архивация ТЗ."
+version: 1.0.0
+author: agent
+tags: [workflow, tz, workvault, hermes, documentation]
+platforms: [linux, macos, windows]
+---
+
+# tz-workflow
+
+Единые правила хранения, версионирования и архивации технических заданий (ТЗ) по инструментам Hermes/USERTOOLS. Действует и для Hermes на ВМ, и для внешних LLM (Cursor на ноутбуке через синк vault).
+
+Полный набор машиночитаемых правил лежит в самом vault: `~/WorkVault/Hermes-Backlog/TZ/_TZ-WORKFLOW-RULES.md`. Этот файл — источник истины для агента. Скилл — короткий процедурный слой поверх.
+
+## Когда применять
+
+- Пользователь просит создать/дополнить/переписать ТЗ инструмента или точечное ТЗ.
+- Задача касается USERTOOLS (`MoveFromFF`, `AggregateFromMeetings`, …) и упоминается «ТЗ» / `*_TZ*.md`.
+- Нужно заархивировать ТЗ или снапшот перед крупной правкой.
+- Обновление реестра `MAIN_TZ_INVENTORY.md` или `MAIN_WORKVAULT_INVENTORY.md`.
+
+Не применять для рабочих данных vault (`Projects/`, `People/`, `Meetings/`, `Contacts/`) и git-репозиториев Hermes-конфига.
+
+## Ключевые инварианты
+
+1. **Один master-файл на инструмент:** `WorkVault/Hermes-Backlog/TZ/<Tool>/<Tool>_TZ.md`.
+2. **Не распыляться:** доработка существующего инструмента = новая датированная секция в master-ТЗ, НЕ отдельный файл. Точечные ТЗ — только если тема реально не привязана ни к какому инструменту, тогда `TZ/_misc/TZ-<topic>-<YYYYMMDD>.md`.
+3. **Латиница-only** для новых имён файлов/папок в vault (Obsidian).
+4. **Версия — только во frontmatter**, не в имени файла. `v1/v2/v3` в имени = старая схема, место в backup.
+5. **Содержательный текст ТЗ пишет только Opus** (правило hermes-feature Блок 0). Sonnet/другие модели делают только механику: переносы, переименования, обновление frontmatter, обновление инвентаря.
+6. **Согласование ТЗ ≠ команда на реализацию.** После финализации текста жди отдельного явного «берём в работу».
+7. **Никогда не рестартовать gateway** из этого скилла.
+8. **Master-ТЗ остаётся в WorkVault, пока инструмент используется.** Реализация конкретной доработки — не повод архивировать ТЗ. Архивация всей папки `TZ/<Tool>/` в `WorkVault_backup/Hermes-Backlog/TZ/_archived/<Tool>/` — только при выводе инструмента из эксплуатации, и только по явному решению Саши.
+9. **`TZ/<Tool>/` содержит ТОЛЬКО ТЗ-документы.** Рабочие материалы инструмента — брифы (`briefs/`), research-заметки (`research/`), история обсуждений (`pm/sessions/`, `_review/`), runtime-state (`*.json` вроде `classification_memory.json`) — остаются в структуре самого инструмента (`USERTOOLS/<tool>/` или `WorkVault/Tools/<Tool>/`), не переносятся в `TZ/`. Составные ТЗ (модули, decisions-log ПРО сам текст ТЗ) — исключение, они часть ТЗ-контента.
+10. **Backup не копит копии «на всякий случай/для истории».** Каждый файл в `WorkVault_backup/` — либо реальный архив выведенного из эксплуатации инструмента (по зеркальному пути), либо не нужен вовсе (уже есть в общем tgz-бэкапе миграции). Никаких доп. черновиков «сохранить на память» вне зеркальной структуры.
+11. **Полная миграция — значит полная.** Если просят «пройтись по всем инструментам» — не работать по заранее данному списку, а сначала самому пройтись `search_files` по ВСЕМ `USERTOOLS/*` и `WorkVault/Tools/*` на `*TZ*.md`/`*ТЗ*.md`, и только потом переносить. Частичный список = придётся переделывать по второму заходу.
+
+## Процедуры
+
+### A. Создать новое master-ТЗ для инструмента
+
+1. Проверить, что нет уже `WorkVault/Hermes-Backlog/TZ/<Tool>/`. Если есть — не создавать заново, идти в процедуру B.
+2. `mkdir -p ~/WorkVault/Hermes-Backlog/TZ/<Tool>/`.
+3. Скопировать `templates/tool-tz-template.md` в `TZ/<Tool>/<Tool>_TZ.md`, подставить `<Tool>`, `version: 0.1`, `date`, `status: draft`.
+4. Содержательное наполнение (Цель / Шаги / Критерии успеха / Что НЕ трогать / далее по контексту) — **делегируется Opus**.
+5. Добавить строку в `TZ/MAIN_TZ_INVENTORY.md` (таблица активных, статус `draft`).
+
+### B. Дописать секцию в существующее master-ТЗ
+
+Мелкая доработка / новая фича существующего инструмента:
+
+1. Открыть `TZ/<Tool>/<Tool>_TZ.md`, дописать в конец новую секцию с датой в подзаголовке (например `## Планируемая доработка: <название> (YYYY-MM-DD)`).
+2. Обновить `last-section-added: YYYY-MM-DD` в frontmatter.
+3. Не бампить `version` для мелких добавлений; бампить только для крупной ревизии/переписывания (>20% или смена major).
+4. Обновить `updated:` и дату строки в `MAIN_TZ_INVENTORY.md`.
+5. Не создавать новый файл под доработку — правило «не распыляться».
+
+### C. Крупная ревизия ТЗ (>20% содержимого или смена major-версии)
+
+1. **Снапшот перед правкой** (см. `references/archiving.md`):
+   ```
+   TS=$(date +%Y%m%d-%H%M)
+   mkdir -p ~/WorkVault_backup/Hermes-Backlog/TZ/<Tool>/
+   tar czf ~/WorkVault_backup/Hermes-Backlog/TZ/<Tool>/<Tool>_TZ_snapshots-$TS.tgz \
+       -C ~/WorkVault/Hermes-Backlog/TZ <Tool>/
+   echo "[$(date +%H:%M:%S)] SNAPSHOT: <Tool>_TZ_snapshots-$TS.tgz" \
+       >> ~/WorkVault_backup/_moved-$(date +%Y-%m-%d).log
+   ```
+2. Правки в текст — **делегируются Opus**.
+3. Обновить `version:` и `date:` в frontmatter.
+4. Обновить `MAIN_TZ_INVENTORY.md`.
+5. Если стало >5 tgz-снапшотов на инструмент — удалить самый старый и записать в лог.
+
+### D. Точечное ТЗ, не привязанное к инструменту
+
+1. Создать в `TZ/_misc/TZ-<topic>-<YYYYMMDD>.md` (topic — латиница/транслит).
+2. Frontmatter: `type: tz`, `topic`, `date`, `status: draft`.
+3. Добавить в раздел "Точечные ТЗ" `MAIN_TZ_INVENTORY.md`.
+4. По завершении работы над темой — переносим в `~/WorkVault_backup/Hermes-Backlog/_Done/TZ-<topic>-YYYYMMDD.md`, обновляем инвентарь.
+
+### E. Архивация ТЗ инструмента (только при выводе инструмента из эксплуатации)
+
+Триггер: **явное указание Саши**, что инструмент удаляется/не используется. Не срабатывает по завершению доработки, не по календарю.
+
+1. `mkdir -p ~/WorkVault_backup/Hermes-Backlog/TZ/_archived/<Tool>/`
+2. `mv ~/WorkVault/Hermes-Backlog/TZ/<Tool>/* ~/WorkVault_backup/Hermes-Backlog/TZ/_archived/<Tool>/`
+3. Удалить пустую `TZ/<Tool>/`.
+4. В `MAIN_TZ_INVENTORY.md` перенести строку из "Активные" в "Завершённые/архивные", статус `archived`.
+5. Записать в `~/WorkVault_backup/_moved-YYYY-MM-DD.log`.
+
+### F. Обновить ссылки на старые пути
+
+Если находишь в скиллах/скриптах/промптах жёсткие пути `USERTOOLS/<tool>/<tool>_TZ*.md`, `WorkVault/Tools/AggregateFromMeetings`, `Hermes-Backlog/_Done/`, `Hermes-Backlog/ТЗ-…` — обнови на новую схему `WorkVault/Hermes-Backlog/TZ/<Tool>/<Tool>_TZ.md` в той же операции, залогируй.
+
+## Питфоллы
+
+- **Не создавай `<Tool>_TZ_v2.md` в активной папке** — v-в-имени только для архивных снапшотов в `WorkVault_backup/`.
+- **Не переименовывай кириллические архивные файлы** в `WorkVault_backup/` (это архив, не навигация Obsidian).
+- **Не забудь обновить `MAIN_TZ_INVENTORY.md` в той же операции**, что и правку ТЗ, — иначе расхождение.
+- **Не пиши содержание ТЗ сам, если ты не Opus** — делегируй. Механику (перенос, frontmatter, инвентарь) можешь.
+- **Не рестартуй gateway.**
+- **Не трогай `Projects/`, `People/`, `Meetings/`, `Contacts/`, `~/hermes-config*`, `~/hermes-workspace`.**
+- **Не создавай отдельный точечный файл под доработку существующего инструмента** — это правило "не распыляться". Секция в master-ТЗ.
+- **Согласовать текст ≠ начать реализацию.** Ждать отдельной команды.
+- **Не путай "рабочие материалы инструмента" с "ТЗ-контентом"** — брифы/research/runtime-json остаются в папке инструмента, не в `TZ/<Tool>/`. Если сомневаешься к какой категории относится файл — не трогай его и зафиксируй как открытый вопрос, не переноси наугад.
+- **Не оставляй файлы "для истории" в backup вне зеркальной структуры** — либо это архив выведенного из строя инструмента по правильному пути, либо оно уже есть в общем tgz-снапшоте и отдельно не нужно.
+- **При задаче "перенести все ТЗ по всем инструментам" — сначала `search_files` по всему дереву**, не полагайся на список, данный в промпте: он может быть неполным (проверено на практике — первая волна пропустила 9 инструментов).
+
+## Связанные файлы
+
+- `templates/tool-tz-template.md` — каркас нового master-ТЗ.
+- `templates/misc-tz-template.md` — каркас точечного ТЗ.
+- `references/archiving.md` — эталонные команды tar/mv/логирования.
+- В vault: `~/WorkVault/Hermes-Backlog/TZ/_TZ-WORKFLOW-RULES.md` — источник истины для правил (доступен и Cursor).
+- В vault: `~/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md` — реестр всех ТЗ.
+- В vault: `~/WorkVault/MAIN_WORKVAULT_INVENTORY.md` — общий инвентарь vault.
+- Backup: `~/WorkVault_backup/_Backup-Rules.md` — правила backup.
+
+## Быстрая проверка (smoke)
+
+Если LLM просят: «Создай ТЗ для нового инструмента `FooBar`» — файл должен оказаться строго по пути `~/WorkVault/Hermes-Backlog/TZ/FooBar/FooBar_TZ.md` (латиница, без `v`-суффикса), и `MAIN_TZ_INVENTORY.md` — обновлён. Если хоть одно из двух не выполнено — процедура нарушена.

@@ -16,10 +16,13 @@ The documented vault-path convention is the `OBSIDIAN_VAULT_PATH` environment va
 
 ### Known vaults for this user
 
-- **Personal notes** (Яндекс.Диск sync): `C:\Users\tkachenkoav\Yandex.Disk`
-- **Work vault** (contacts, tasks, no sync): `C:\Users\tkachenkoav\WorkVault`
+- **Work vault** (Hermes VM, ownCloud/rclone sync to laptop): `~/WorkVault` (e.g. `/home/tkachenkoav/WorkVault`)
 
 Always ask which vault to use if the task doesn't make it obvious.
+
+### Naming convention (hard rule)
+
+**All new file and folder names in this vault must be ASCII/English only — no Cyrillic.** Cyrillic in paths breaks Obsidian wiki-links, sorting, and search. This applies to tool/project names, TZ (spec) filenames, and any new folder created inside the vault. Existing Cyrillic-named archival files (already superseded, moved to backup) don't need renaming — the rule is forward-looking for new files. Table/column headers and body prose can stay in Russian; only the filesystem-level names (files, folders) must be Latin.
 
 ## Creating a New Vault
 

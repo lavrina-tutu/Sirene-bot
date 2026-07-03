@@ -4,7 +4,7 @@ description: "Семейство инструментов MoveFrom* — выгр
 version: 1.0.0
 author: agent
 tags: [workvault, obsidian, sync, pipeline, jira, confluence, exchange, zulip, fireflies]
-platforms: [windows]
+platforms: [windows, linux, macos]
 ---
 
 # MoveFrom* — инструменты выгрузки данных в WorkVault
@@ -296,7 +296,9 @@ query {
 - `action_items` — plain-text строка, задачи сгруппированы по ФИО исполнителя с таймкодами. Единственный нативный источник «задача → человек»
 - `keywords` — list[str], ~6 тегов. Для тегирования/поиска
 - `extended_sections` — стабильно 4 секции: `Blockers`, `Questions`, `Meeting Outline`, `Topics`. Единственный источник блокеров и открытых вопросов с таймкодами
-- `apps_preview.outputs` — 2 элемента: `1:1` и `Meeting Summary Generator`. Meeting Summary Generator — самый полный протокол (4.5–7 КБ): список участников с ФИО, расширенное обсуждение, блокеры с ответственными, задачи по людям со сроками
+- `apps_preview.outputs` — массив переменной длины, содержит **ВСЕ** AI Skills прогнанные на встрече: встроенные (`1:1`, `Meeting Summary Generator`) **и любые пользовательские Custom AI Skills**, которые пользователь подключил в FF UI. Различаются по полю `title` (точное совпадение строки — имя скилла как оно называется в FF). Пользовательский скилл (например кастомный summary-промпт) появляется в `outputs[]` только начиная с даты его создания/подключения в FF — для более старых встреч элемента с этим `title` не будет.
+- **Нет ретроактивного запуска скилла через API** — проверено интроспекцией GraphQL-схемы (`__schema.mutationType.fields` и `queryType.fields`, 03.07.2026): доступные mutations — `updateMeetingTitle/Privacy/Channel`, `deleteTranscript`, `shareMeeting`, `createBite`, `createAskFredThread` и т.п.; **нет** `runApp`/`triggerSkill`/аналога. Прогнать Custom Skill на старой встрече можно **только вручную через FF UI** (тратит AI credits, по одной встрече за раз, без bulk-режима). Для backfill старых встреч кастомным скиллом — только ручной путь, программно недостижимо.
+- `Meeting Summary Generator` (встроенный) — самый полный протокол (4.5–7 КБ): список участников с ФИО, расширенное обсуждение, блокеры с ответственными, задачи по людям со сроками
 
 **Маппинг FF UI → API поля (проверено на встрече 01KSJ49AGHYFJTRARWAD088Q7N, 27.05.2026):**
 
@@ -325,6 +327,43 @@ query {
 - Полный архивный протокол → `apps_preview.outputs[Meeting Summary Generator].response`
 
 Тестовый скрипт: `USERTOOLS/MoveFromFF/test_ff_full_summary.py`
+
+## MoveFromFF — Custom AI Skills в apps_preview (консолидировано 03.07.2026)
+
+`apps_preview.outputs[]` (запрос `transcript(id)`) содержит результаты ВСЕХ AI Skills — встроенных FF (`1:1`, `Meeting Summary Generator`) и любых пользовательских Custom Skills, которые пользователь подключил в FF UI (Notes → AI Skills). Поля: `app_id`, `title`, `response` (markdown as-is), `created_at`.
+
+**Идентификация конкретного скилла — по `app_id`, с fallback на `title`** (финальное решение 03.07.2026, после ревью Cursor): `app_id` стабилен и не меняется при переименовании скилла в FF UI, `title` — только запасной вариант. При нескольких outputs с одинаковым app_id/title — брать первый непустой по порядку в списке (не сортировать по `created_at`: поле сырое, без гарантированного формата).
+
+```graphql
+query Transcript($id: String!) {
+  transcript(id: $id) {
+    apps_preview { outputs { app_id title response created_at } }
+  }
+}
+```
+
+Лёгкая проверка "есть ли вывод скилла у встречи" (без тяжёлого `response`):
+```graphql
+query Transcript($id: String!) {
+  transcript(id: $id) { apps_preview { outputs { app_id title } } }
+}
+```
+
+**Custom Skill работает только на новых встречах, НЕ ретроактивно.** `created_at` вывода совпадает по времени с самой встречей — скилл срабатывает автоматически в момент обработки транскрипта. Для встреч до даты создания/подключения скилла вывода в `apps_preview.outputs` нет и не появится через API.
+
+**В публичном GraphQL API Fireflies НЕТ мутации для запуска/перезапуска AI Skill на существующей встрече.** Подтверждено интроспекцией схемы — 18 доступных мутаций (`updateMeetingTitle`, `deleteTranscript`, `shareMeeting` и т.п.), ни одной для запуска skills. Backfill старых встреч — только вручную через FF UI (встреча → AI Skills → запустить), тратит AI credits, по одной встрече за раз, без bulk-API.
+
+**Альтернативный bulk-запрос** (не используется в коде, полезен для будущего аудита): `apps(app_id: String, transcript_id: String)` — outputs конкретного AI App по всем встречам сразу, макс. 10/запрос, нужна пагинация.
+
+**Паттерн доработки MoveFromFF:** если найден output нужного скилла → использовать его `response` как summary; если нет → fallback на стандартный формат (`overview`/`action_items`/`extended_sections`/`notes`). Идентификатор скилла — конфигурируемое поле в `Settings` (pydantic), не хардкод и не модульная константа (см. питфолл `config.py` ниже).
+
+**Техника интроспекции GraphQL-схемы стороннего API** (полезно для любого GraphQL-сервиса, не только FF):
+```graphql
+query { __schema { mutationType { fields { name } } queryType { fields { name } } } }
+```
+Быстрый способ проверить реальные возможности API вместо гадания по документации. Документация `docs.fireflies.ai` недоступна через `web_extract` (блокируется как internal network address) — интроспекция и `web_search` по `guide.fireflies.ai` надёжнее.
+
+**Питфолл `config.py`:** модульная константа `X = os.getenv(...)` на верхнем уровне файла выполняется ДО `_ensure_env_loaded()`/`load_dotenv()` в существующем паттерне MoveFromFF — значение из `.env` тихо игнорируется, всегда берётся дефолт. Новые конфигурируемые поля добавлять в pydantic `Settings`, читать в `load_settings()`. Обнаружено ревью Cursor 03.07.2026 — до этого фиксировалась в ТЗ ошибочная версия с модульной константой.
 
 ## MoveFromFF — архитектурные решения (22 мая 2026, КОД ЗАМОРОЖЕН)
 
@@ -436,15 +475,13 @@ Zulip — основной источник контактов (1 запрос `
 
 | Инструмент | Сервис | Статус | ТЗ |
 |---|---|---|---|
-| MoveFromFF | Fireflies.ai | ✅ **v2.2 готов** — 8 секций summary (Bullet points/Notes/Action items/Blockers/Questions/Meeting Outline/Topics/Keywords), reconciliation (сброс в pending при удалении файлов), backfill (fetch по ID, лимит 50/прогон, newest-first), 83 теста ✅. Крон: пн–пт 10:00–20:00 МСК каждые 2ч (job_id: 1e62e18ae399). | `USERTOOLS/MoveFromFF/MoveFromFF_TZ_v2.2.md` (обновить) |
+| MoveFromFF | Fireflies.ai | ✅ **v2.1 в проде**, доработка "custom AI skill summary" согласована и ждёт команды "берём в работу" (см. секцию в ТЗ). reconciliation (сброс в pending при удалении файлов), backfill (fetch по ID, лимит 50/прогон, newest-first), 83 теста ✅. Крон: пн–пт 10:00–20:00 МСК каждые 2ч (job_id: 1e62e18ae399). | `WorkVault/Hermes-Backlog/TZ/MoveFromFF/MoveFromFF_TZ.md` |
 | MoveFromExchange | Exchange (ТУТУ) | 🟡 **v1.0 работает, v1.1 в разработке** — 1787 контактов (после фильтрации ~944). ТЗ v1.1 согласовано 27.05.2026: filters.py (4 правила), XLSX убран, contacts.jsonl с маскировкой, TG-поиск контактов с маскировкой (Ив**в, iv**v@tutu.ru). Крон-путь сломан (старый), починить после реализации v1.1. | `USERTOOLS/MoveFromExchange/MoveFromExchange_TZ_v1.1.md` |
 | MarkObjectsFromSummary | WorkVault | 🟡 **Бриф завершён (блоки A-F+G), ТЗ не написано.** БЛОКЕР: нужен письменный список проектов/тем/инициатив от Саши с точными названиями и алиасами → файл `projects.md`. Без него ТЗ v0.1 можно написать (только контакты), но в реализацию v0.2+ не идти. | `hermes-workspace/docs/tz/MarkObjectsFromSummary_TZ_v0.1.md` (не создан) |
 | MoveFromJira | Jira (ТУТУ) | 🥈 **Приоритет #2** — только OKRAID + OKRS (цели и проекты). Нужен для быстрой постановки задач через TG. Jira доступна без VPN (`dom.tutu.ru`, PAT в `.env`). | — |
-| ConfluenceSync | Confluence (`dom.tutu.ru`) | ✅ **v1.0 реализован (28.05.2026).** 47/47 тестов зелёные. `pip install -e .` выполнен. CLI: `confluencesync pull/push/resync/log`. Двусторонний (read + write). PAT работает из дома без VPN. Путь проекта: `USERTOOLS/ConfluenceSync/`. Хранение: `WorkVault/Confluence/<Space>/<Страница>/index.md`. Скилл: `movefrom-confluence`. Логи: `WorkVault/_meta/ConfluenceSync/_sync_log.jsonl`. Режимы: `--to-file`, `--to-context`, `--to-both`. Флаг `confirm=True` по умолчанию, `confirm=False` для программных вызовов. Credentials: `USERTOOLS/MoveFromConfluence/.env`. **Питфолл:** передавать конкретный URL страницы (pageId или /display/SPACE/Title), не корень домена. | `USERTOOLS/ConfluenceSync/TZ.md` |
-| MoveFromZulip | Zulip (ТУТУ) | ⏸ **КРОН ОСТАНОВЛЕН (29.05.2026)** — Zulip отключают, переходят на Loop (Mattermost). Крон на паузе чтобы не перетёрлись контакты. 2148 контактов сохранены. | `USERTOOLS/MoveFromZulip/TZ.md` |
+| ConfluenceSync | Confluence (`dom.tutu.ru`) | ✅ **v1.0 реализован (28.05.2026).** 47/47 тестов зелёные. `pip install -e .` выполнен. CLI: `confluencesync pull/push/resync/log`. Двусторонний (read + write). PAT работает из дома без VPN. Путь проекта: `USERTOOLS/ConfluenceSync/`. Хранение: `WorkVault/Confluence/<Space>/<Страница>/index.md`. Скилл: `movefrom-confluence`. Логи: `WorkVault/_meta/ConfluenceSync/_sync_log.jsonl`. Режимы: `--to-file`, `--to-context`, `--to-both`. Флаг `confirm=True` по умолчанию, `confirm=False` для программных вызовов. Credentials: `USERTOOLS/MoveFromConfluence/.env`. **Питфолл:** передавать конкретный URL страницы (pageId или /display/SPACE/Title), не корень домена. | `WorkVault/Hermes-Backlog/TZ/ConfluenceSync/ConfluenceSync_TZ.md` |
+| MoveFromZulip | Zulip (ТУТУ) | ⏸ **КРОН ОСТАНОВЛЕН (29.05.2026)** — Zulip отключают, переходят на Loop (Mattermost). Крон на паузе чтобы не перетёрлись контакты. 2148 контактов сохранены. | `WorkVault/Hermes-Backlog/TZ/MoveFromZulip/MoveFromZulip_TZ.md` |
 | MoveFromLoop | Loop/Mattermost (ТУТУ) | 🆕 **Планируется** — Loop это Mattermost API v4 (loop.tutu.ru/api/v4). АКЦ остаётся в Zulip (zulip-outsource.tutu.ru). Нужен Personal Access Token: Loop → Настройки → Безопасность → Токены доступа. | — |
-
-## Credentials (корпоративные сервисы ТУТУ)
 
 Единая доменная учётка `tkachenkoav@tutu.ru` работает для Confluence, Jira, Exchange, Zulip.
 
@@ -462,16 +499,6 @@ TG_ALERT_CHAT_ID=400307920
 ```
 
 `redact_secrets: true` в Hermes config уже включён — токены в логах маскируются.
-
-## Правило хранения ТЗ (зафиксировано 27.05.2026)
-
-**Master-ТЗ** хранится в папке инструмента: `USERTOOLS/<tool>/<Tool>_TZ_vX.Y.md`
-- Обновляется при каждой доработке
-- Это единая точка правды по инструменту
-
-**История точечных изменений** → `WorkVault/Hermes-Backlog/_Done/ТЗ-<Tool>-<feature>-YYYYMMDD.md`
-
-При любой доработке инструмента — обновлять master-ТЗ в папке инструмента.
 
 ## MoveFromExchange — маскировка персданных (27.05.2026)
 
@@ -491,22 +518,9 @@ TG-поиск контактов: по имени/фамилии, до 5 рез�
 
 Результат: удалил файл руками → следующий cron перекачал автоматически в правильном формате.
 
-## Правило хранения ТЗ (зафиксировано 27.05.2026)
+## Где хранятся ТЗ (актуализировано 03.07.2026)
 
-**Живое полное ТЗ** каждого инструмента хранится в папке инструмента:
-`USERTOOLS/<Инструмент>/<Инструмент>_TZ_vX.Y.md`
-
-Примеры:
-- `USERTOOLS/MoveFromFF/MoveFromFF_TZ_v2.1.md` — обновляется при каждой доработке
-- `USERTOOLS/MoveFromExchange/MoveFromExchange_TZ_v1.1.md` — создан 27.05.2026
-
-`WorkVault/Hermes-Backlog/_Done/` = **история точечных изменений** (ТЗ на конкретную фичу).
-
-**При каждой доработке инструмента:** обновлять master-ТЗ в папке инструмента, не только создавать точечное ТЗ.
-
-## Все ТЗ и бэклог
-
-`/home/tkachenkoav/WorkVault/Hermes-Backlog/`
+**Единая точка правды — `WorkVault/Hermes-Backlog/TZ/<Tool>/<Tool>_TZ.md`.** Старое правило «master-ТЗ в `USERTOOLS/<tool>/`» отменено миграцией 03.07.2026. Полные правила именования/архивации/процедур — скилл `tz-workflow`, машиночитаемый источник — `WorkVault/Hermes-Backlog/TZ/_TZ-WORKFLOW-RULES.md`. В `USERTOOLS/<tool>/` остаётся только короткий `README.md`-указатель на новый путь.
 
 ## Ежедневный self-check Сирени (крон 03:00 МСК, Opus)
 

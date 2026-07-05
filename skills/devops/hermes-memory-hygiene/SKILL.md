@@ -1,7 +1,7 @@
 ---
 name: hermes-memory-hygiene
-description: "Declutter Hermes MEMORY and USER PROFILE when they approach their char budget — move technical/procedural detail into skills, keep only pointers, without losing information."
-version: 1.0.0
+description: "Declutter Hermes MEMORY and USER PROFILE when they approach their char budget — move technical/procedural detail into skills, keep only pointers, without losing information. Триггеры: почисти память, разбери память, проверь память, почисти профиль, ревизия памяти."
+version: 1.1.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -10,7 +10,23 @@ tags: [hermes, memory, user-profile, skills, decluttering, context-hygiene]
 
 # Hermes Memory & User-Profile Hygiene
 
-Use this skill whenever MEMORY or USER PROFILE usage shown in the context header climbs near its limit (roughly ≥85–90%), the user asks to "review/clean up memory," a new `add` is rejected for being full, or you notice the same technical fact duplicated in both a memory entry and a skill.
+Use this skill whenever MEMORY or USER PROFILE usage shown in the context header climbs near its limit (roughly ≥85–90%), the user asks to "review/clean up memory" (or the Russian equivalents: "почисти память", "разбери память", "проверь память", "почисти профиль" — this covers both an ad-hoc on-demand request and the weekly `vm_selfcheck` cron trigger below), a new `add` is rejected for being full, or you notice the same technical fact duplicated in both a memory entry and a skill.
+
+## Scope: which stores this skill governs
+
+This skill governs **MEMORY** and **USER PROFILE** only — the two char-budgeted stores. It does NOT cover:
+- **SOUL.md** / **agent.system_prompt** — separate, not char-budgeted, not this skill's job (see table below for why)
+- **SKILLS** themselves (dedup between skills, stale skill content, oversized SKILL.md) — that's a different hygiene pass with its own triggers/cadence, tracked separately (proposed skill `all-skills-hygiene`, not yet created as of 05.07.2026). Don't fold skill-to-skill audits into this procedure — the mechanics differ (no shared char limit, monthly cadence vs. reactive-on-%-threshold).
+
+## Two run modes — interactive vs. scheduled
+
+- **Interactive (Sasha in the chat, ad-hoc "почисти память"):** run the full block-by-block procedure below, one block per turn, wait for explicit confirmation before each edit. This is the default mode for anything triggered inside a live conversation.
+- **Scheduled / cron (`vm_selfcheck`, weekly Saturday 03:30, no user present to reply):** do NOT edit MEMORY/USER PROFILE unattended — a cron run cannot wait for per-block confirmation. Instead: read current % usage for both stores, and if either is ≥85%, add ONE line to the self-check report flagging it (e.g. "⚠️ MEMORY 87% (1780/2200) — рекомендована ревизия, скажи «почисти память»"). If both are under threshold, say nothing about them (no need to pad the report). This keeps the weekly check as a detector, not an unattended editor — actual edits still require Sasha's explicit per-block "да" in a live session.
+- **This wiring is already live (05.07.2026):** `vm_selfcheck`'s cron prompt has a step 8 ("Гигиена памяти") doing exactly this detect-and-report check, and the job's `skills` list includes `hermes-memory-hygiene`. Don't re-propose adding this hook — if it's ever missing (job edited/reset), re-add a step there rather than creating a second cron job for the same check.
+
+## Trigger-phrase pitfall (skill-authoring lesson from this session)
+
+When adding trigger keywords to a skill's `description` for auto-loading, include the **actual language the user writes in** — Sasha writes exclusively in Russian, so English-only trigger phrases ("review/clean up memory") in a description will reliably miss natural requests like "почисти память". Always add the Russian phrasing alongside the English one when the user is Russian-speaking; don't assume the matcher generalizes across languages.
 
 ## The four-tier model — what belongs where
 
@@ -37,8 +53,29 @@ Hermes actually has a fourth tier below USER/MEMORY/SKILLS: **`~/.hermes/SOUL.md
 5. **USER PROFILE follows the same pattern** but the target is different: move *technical* details (API base URLs, token file paths, field IDs) out to the skill that owns that domain; keep only identity/preference/style facts.
 6. **Verify nothing was lost** — re-open the skill that's now the sole source of truth and confirm the specific fact (key location, endpoint, ID) is actually present there, not just "probably covered."
 
+## When Sasha asks for a block-by-block review (interactive declutter session)
+
+If Sasha says "давай пробрифуемся по блокам" / "смотрим ещё раз юзер профайл" — this is NOT "go clean it all up silently." Go one block at a time:
+
+1. **Describe first, propose second — never merge the two.** For each block: state verbatim what facts it actually contains (numbered list), THEN give your reduction proposal with reasoning. Sasha corrected this explicitly once ("сначала описание что реально есть, потом предложения") — don't jump straight to a proposal or a `clarify()` multiple-choice without first showing the raw content.
+2. **One block per turn, wait for explicit reply** (usually "да" / "." / a specific edit instruction) before touching MEMORY/USER PROFILE for that block. Do not batch-execute all blocks after one blanket "ok."
+3. **Execute immediately after confirmation** — one `memory(action='replace'|'remove', ...)` call per block, then state the before/after % and byte count, then ask "переходим к следующему блоку?".
+4. **Common outcomes per block:** (a) duplicate of SOUL.md/a skill/another memory entry → remove or point to it; (b) stale version numbers/model names that will keep drifting → strip them, they're not durable; (c) genuinely unique and current → leave as-is, say so plainly instead of manufacturing a cut.
+
+## Universal open-question protocol (generalized 05.07.2026)
+
+The block-by-block Q&A pattern below is NOT limited to memory/profile-review sessions anymore — Sasha explicitly generalized it to **all dialogs** with open questions, and it's recorded in USER PROFILE as a standing rule:
+
+1. If there's a list of open questions, show the **full list** first, then ask them **one at a time** (don't dump a multi-question wall of text, but don't hide the scope either).
+2. Each question gets: brief context → 1-2 best options → an explicit recommendation for which is best. Don't present options with no opinion attached.
+3. Questions and answer options are **numbered**.
+
+This applies beyond memory hygiene — use it whenever a task surfaces multiple open decisions (TZ open questions, config choices, etc.), not only during a `USER PROFILE`/`MEMORY` cleanup pass.
+
 ## Pitfalls
 
+- **Before declaring a memory block fully redundant, check ALL plausible candidate skills, not just the first match.** In one session a "corp systems ТУТУ" block looked like it belonged to one skill, but the facts were actually split across three (`tutu-confluence-jira`, `tutu-jira-contract-approval`, `movefrom-instruments/references/tutu-corporate-integrations.md`). Load each candidate with `skill_view` and confirm the specific fact (URL, login, token name) is present before removing the memory copy — a plausible skill name is not proof.
+- **A block can become fully removable for TWO different reasons — treat them differently:** (a) the fact is duplicated in a skill → replace with a pointer or delete outright if the skill is easily found by trigger words; (b) the fact is obsoleted by an environment change (e.g. "VPN needed for LLM" stopped being true once the VM moved inside the corporate domain) → delete outright, don't leave a stale pointer. Ask the user directly when unsure which case applies — don't assume staleness without confirmation.
 - **Don't prune from memory before confirming the skill covers it.** A plausible-sounding skill name is not proof — `skill_view` it and grep for the specific fact.
 - **Don't just delete — replace with a pointer.** A bare removal loses discoverability; a one-line "see skill X" keeps the trail for future sessions.
 - **A single `memory(action='add')` call fails if the store is already full**, even if you intend to remove more than you add. Use the batched `operations` array so removal + addition are evaluated together against the limit.

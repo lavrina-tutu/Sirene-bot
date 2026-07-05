@@ -5,7 +5,7 @@ providers: {}
 fallback_providers: '[{"model": "claude-haiku-4-5", "provider": "tutu"}]'
 credential_pool_strategies: {}
 toolsets:
-- hermes-cli
+  - hermes-cli
 agent:
   max_turns: 90
   gateway_timeout: 1800
@@ -304,8 +304,8 @@ display:
   runtime_footer:
     enabled: true
     fields:
-    - model
-    - context_pct
+      - model
+      - context_pct
   copy_shortcut: auto
   runtime_header:
     enabled: false
@@ -509,6 +509,7 @@ sessions:
 onboarding:
   seen:
     busy_input_prompt: true
+    profile_build_offered: true
 updates:
   pre_update_backup: false
   backup_keep: 5
@@ -532,32 +533,32 @@ streaming:
   enabled: false
 platform_toolsets:
   cli:
-  - hermes-cli
+    - hermes-cli
   telegram:
-  - hermes-telegram
+    - hermes-telegram
   discord:
-  - hermes-discord
+    - hermes-discord
   whatsapp:
-  - hermes-whatsapp
+    - hermes-whatsapp
   slack:
-  - hermes-slack
+    - hermes-slack
   signal:
-  - hermes-signal
+    - hermes-signal
   homeassistant:
-  - hermes-homeassistant
+    - hermes-homeassistant
   qqbot:
-  - hermes-qqbot
+    - hermes-qqbot
   yuanbao:
-  - hermes-yuanbao
+    - hermes-yuanbao
   teams:
-  - hermes-teams
+    - hermes-teams
   google_chat:
-  - hermes-google_chat
+    - hermes-google_chat
 gateway:
   telegram:
     token: ***REDACTED***
     enabled: true
 custom_providers:
-- name: tutu
-  base_url: https://llm-gateway.tutu.ru/api/anthropic
-  api_key: ***REDACTED***
+  - name: tutu
+    base_url: https://llm-gateway.tutu.ru/api/anthropic
+    api_key: ***REDACTED***

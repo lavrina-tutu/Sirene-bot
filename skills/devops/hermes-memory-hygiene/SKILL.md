@@ -10,7 +10,7 @@ tags: [hermes, memory, user-profile, skills, decluttering, context-hygiene]
 
 # Hermes Memory & User-Profile Hygiene
 
-Use this skill whenever MEMORY or USER PROFILE usage shown in the context header climbs near its limit (roughly ≥85–90%), the user asks to "review/clean up memory" (or the Russian equivalents: "почисти память", "разбери память", "проверь память", "почисти профиль" — this covers both an ad-hoc on-demand request and the weekly `vm_selfcheck` cron trigger below), a new `add` is rejected for being full, or you notice the same technical fact duplicated in both a memory entry and a skill.
+Use this skill whenever MEMORY or USER PROFILE usage shown in the context header climbs near its limit (roughly ≥75%), the user asks to "review/clean up memory" (or the Russian equivalents: "почисти память", "разбери память", "проверь память", "почисти профиль" — this covers both an ad-hoc on-demand request and the weekly `vm_selfcheck` cron trigger below), a new `add` is rejected for being full, or you notice the same technical fact duplicated in both a memory entry and a skill.
 
 ## Scope: which stores this skill governs
 
@@ -21,7 +21,7 @@ This skill governs **MEMORY** and **USER PROFILE** only — the two char-budgete
 ## Two run modes — interactive vs. scheduled
 
 - **Interactive (Sasha in the chat, ad-hoc "почисти память"):** run the full block-by-block procedure below, one block per turn, wait for explicit confirmation before each edit. This is the default mode for anything triggered inside a live conversation.
-- **Scheduled / cron (`vm_selfcheck`, weekly Saturday 03:30, no user present to reply):** do NOT edit MEMORY/USER PROFILE unattended — a cron run cannot wait for per-block confirmation. Instead: read current % usage for both stores, and if either is ≥85%, add ONE line to the self-check report flagging it (e.g. "⚠️ MEMORY 87% (1780/2200) — рекомендована ревизия, скажи «почисти память»"). If both are under threshold, say nothing about them (no need to pad the report). This keeps the weekly check as a detector, not an unattended editor — actual edits still require Sasha's explicit per-block "да" in a live session.
+- **Scheduled / cron (`vm_selfcheck`, weekly Saturday 03:30, no user present to reply):** do NOT edit MEMORY/USER PROFILE unattended — a cron run cannot wait for per-block confirmation. Instead: read current % usage for both stores, and if either is ≥75%, add ONE line to the self-check report flagging it (e.g. "⚠️ MEMORY 87% (1780/2200) — рекомендована ревизия, скажи «почисти память»"). If both are under threshold, say nothing about them (no need to pad the report). This keeps the weekly check as a detector, not an unattended editor — actual edits still require Sasha's explicit per-block "да" in a live session.
 - **This wiring is already live (05.07.2026):** `vm_selfcheck`'s cron prompt has a step 8 ("Гигиена памяти") doing exactly this detect-and-report check, and the job's `skills` list includes `hermes-memory-hygiene`. Don't re-propose adding this hook — if it's ever missing (job edited/reset), re-add a step there rather than creating a second cron job for the same check.
 
 ## Trigger-phrase pitfall (skill-authoring lesson from this session)

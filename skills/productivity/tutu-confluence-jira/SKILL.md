@@ -8,7 +8,7 @@ platforms: [linux]
 metadata:
   hermes:
     tags: [TUTU, Confluence, JIRA, WorkVault, договор, согласование]
-    related_skills: [tutu-jira-contract-approval, obsidian, pm-briefing]
+    related_skills: [tutu-jira-contract-approval, tutu-jira-okr, obsidian, pm-briefing]
 ---
 
 # TUTU Confluence & JIRA
@@ -196,3 +196,5 @@ curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
 - `references/tomake-contract-fields.md` — обязательные поля для согласования договора в TOMAKE
 - `references/kbk-tech-articles.md` — справочник технических статей КБК для ИТ-договоров
 - `templates/tomake-contract-description.md` — шаблон описания задачи TOMAKE (стандарт + нестандартный случай со стартом до подписания)
+
+Работа с целями OKR (проекты OKRS/OKRAID) — отдельный скилл `tutu-jira-okr`, не здесь.

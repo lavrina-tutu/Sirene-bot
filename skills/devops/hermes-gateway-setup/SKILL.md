@@ -708,27 +708,37 @@ grep -n "2026-MM-DD HH:2[0-9]:" logs/agent.log | grep -E "(terminal|gateway)"
 
 ---
 
-### delegate_task → Gateway Crash Pattern
+### delegate_task → Gateway Crash Pattern (root cause пофикшен апстримом 06.07.2026 — идёт контролируемый пилот)
 
-`delegate_task` с Opus (`reasoning_effort=high`, `child_timeout=1200`) держит родительский стрим → `Subagent stale (no progress 15 cycles)` → `Stream stale 180s` → gateway падает.
+Старая причина: `delegate_task` с Opus (`reasoning_effort=high`, `child_timeout=1200`) держал родительский стрим → `Subagent stale (no progress 15 cycles)` → `Stream stale 180s` → gateway падает.
 
-**Решение: `cronjob` вместо `delegate_task` для задач >5 минут.**
+**Апстрим hermes-agent (наша текущая версия v0.18.0) исправил оба корневых бага:**
+- `0cc63043e` (апрель) — heartbeat stale-пороги подняты: idle 150→450с, in-tool 600→1200с (ложный "stale" на медленном reasoning больше не срабатывает так рано)
+- `bba9b519a` (июнь, #45149) — дефолтный `child_timeout_seconds` убран как жёсткий потолок: 600→0 (0 = без лимита); субагент падает только от реальных ошибок (API/tool/бюджет итераций), не от секундомера делегации
 
-| Тип задачи | Инструмент |
+**Текущий статус (с 06.07.2026) — контролируемый пилот, НЕ полный переход на "снять лимит навсегда":**
+- `child_timeout_seconds` поднят 1200→**1800** (страховка вместо апстрим-дефолта 0)
+- Первый тяжёлый Opus-таск через `delegate_task` запущен как тест 06.07.2026
+- Крон-проверка статистики/падений за неделю запланирована на 13.07.2026 — bk-115 в `WorkVault/Hermes-Backlog/dialog-backlog.md`
+- **До результата этой проверки — правило маршрутизации Opus остаётся "по умолчанию cronjob"**, delegate_task для Opus допустим только в рамках пилота (временный точечный `delegation.model`/`reasoning_effort` для одного вызова, откат сразу после)
+
+| Тип задачи | Инструмент (актуально до 13.07.2026, дальше пересмотр по итогу bk-115) |
 |---|---|
-| Разработка, исследования, ТЗ (>5 мин) | `cronjob(repeat=1, schedule='1m', model=opus)` |
+| Разработка, исследования, ТЗ (>5 мин), Opus | `cronjob(repeat=1, schedule='1m', model=opus)` |
 | Быстрые задачи (<2 мин) | `delegate_task` (Sonnet/Haiku) |
 
-**Delegation config (config.yaml):**
+**Delegation config (config.yaml, состояние на 06.07.2026):**
 ```yaml
 delegation:
-  model: claude-opus-4-7
+  model: claude-sonnet-5     # Opus включается точечно на время пилота, потом откат на sonnet
   provider: anthropic
-  reasoning_effort: high
+  reasoning_effort: medium
   max_iterations: 50
-  child_timeout_seconds: 1200
+  child_timeout_seconds: 1800   # апстрим-дефолт теперь 0 (без лимита); мы держим страховку
   max_concurrent_children: 3
 ```
+
+**Перед следующим использованием этого правила:** `cronjob(action='list')` → проверить job "Проверка пилота Opus-через-delegate_task" (bk-115) — если уже отработал и решение принято, обновить эту таблицу по факту (снять cronjob-only ограничение для Opus, либо зафиксировать откат с причиной). Не считать это правило застывшим — это временное состояние с датой пересмотра.
 
 ### Display/Platform Pitfalls
 - Only Telegram reads `display.platforms.telegram.notifications`. Discord/Slack ignore it — use platform-native settings.

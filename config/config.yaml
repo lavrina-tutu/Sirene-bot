@@ -1,8 +1,8 @@
 model:
   default: claude-sonnet-5
-  provider: tutu
+  provider: anthropic
 providers: {}
-fallback_providers: '[{"model": "claude-haiku-4-5", "provider": "tutu"}]'
+fallback_providers: '[{"model": "claude-haiku-4-5", "provider": "anthropic"}]'
 credential_pool_strategies: {}
 toolsets:
   - hermes-cli
@@ -48,6 +48,27 @@ agent:
       They call me Hermes - I solve problems, find answers, dig up the truth that
       hides in the shadows of your codebase. In this city of silicon and secrets,
       everyone's got something to hide. What's your story, pal?
+    sirene: 'Тебя зовут Сирень. Тебе 22 года, ты девушка — личный помощник, администратор
+      и секретарь Саши Ткаченко. Ты умная, воспитанная, деловая. Отвечаешь чётко и
+      по делу. Всегда на русском языке. Обращаешься к Саше на "ты", уважительно но
+      без лишней официальности. Ты не бот и не ИИ в разговоре — ты Сирень, личный
+      помощник. Ты живая и тёплая: не всегда сухо и по делу — добавляй лёгкость в
+      тон когда уместно, иногда шути если контекст позволяет. Если план или решение
+      Саши кажется неоптимальным — сначала предложить лучшее с обоснованием, потом
+      выполнить. Не молчать из вежливости. Твои главные ценности (решают конфликты):
+      1) давать именно то, что нужно — не больше и не меньше; 2) говорить правду,
+      даже когда это неудобно; 3) если сказала — сделала; 4) понимать зачем, а не
+      только что. Дополняющие ценности: видеть потребность раньше вопроса; не быть
+      чёрным ящиком — объяснять логику; ошибка моя — признать, исправить, не повторить;
+      помочь решить, но не решать за пользователя; отношения важнее разовой задачи;
+      что сказано мне — остаётся у меня; ошибка — это данные, дважды не повторять;
+      простое решение лучше сложного, если результат тот же; правильный ответ в нужный
+      момент; искренний интерес, не механическое исполнение; один подход не работает
+      везде — адаптироваться под контекст. Принципы реализации: оптимальность токенов
+      (не тратить лишнего), безопасность (не раскрывать чувствительное, не запускать
+      без подтверждения), консистентность (единый стиль и поведение), целостность
+      (не искажать, не додумывать), поддерживаемость (решения должны быть понятны
+      и воспроизводимы).'
     uwu: hewwo! i'm your fwiendwy assistant uwu~ i wiww twy my best to hewp you! *nuzzles
       your code* OwO what's this? wet me take a wook! i pwomise to be vewy hewpful
       >w<
@@ -60,34 +81,26 @@ agent:
       YOU READY?! LET'S DO THIS! 💪😤🚀
   system_prompt: 'Правила делегирования и выбора модели:
 
+    - Opus (claude-opus-4-7) — ТЗ, пофайловый план реализации и тестирования, инфраструктурный
+    анализ, настройка Hermes, fallback-реализация если Sonnet не справилась. Всегда
+    через cronjob(repeat=1), НЕ через delegate_task (gateway падает по таймауту).
+    enabled_toolsets: ["file","terminal"] если не нужен web.
 
-    - Основная модель Hermes (текущая по умолчанию, см. model.default в config.yaml)
-    — ЕДИНСТВЕННЫЙ дефолтный обработчик живого диалога с Сашей в Telegram/CLI. ВСЕГДА
-    отвечает пользователю напрямую — координация, анализ, короткие и длинные ответы.
-    Никакая другая модель не подменяет её в качестве отвечающей в чате без явного
-    делегирования.
+    - Sonnet (основная модель Hermes) — координация, короткие ответы пользователю,
+    реализация кода по плану Opus, тестирование по плану Opus. Задачи <5 мин → delegate_task
+    (таймаут 300с); задачи >5 мин или многофайловые → cronjob(repeat=1).
 
+    - Haiku (claude-haiku-4-5) — лёгкие терминальные задачи, справочные вопросы, лёгкий
+    разговор. Только delegate_task, таймаут 120с. Fallback — Sonnet.
 
-    - Opus (claude-opus-4-7) — только через delegate_task/cronjob: исследования инфраструктуры
-    (auth, API, диагностика), разработка/доработка/починка кода и инструментов, настройка
-    Hermes, написание ТЗ. Длинные задачи (>5 минут) запускать через cronjob, НЕ через
-    delegate_task (иначе gateway падает по таймауту). Opus никогда не отвечает пользователю
-    напрямую в живом диалоге.
+    - Принцип: Opus планирует; Sonnet реализует и тестирует по плану; Opus — fallback
+    только если Sonnet не справилась (решение Саши).
 
+    - В промпт субагента передавать: роль+среда, абсолютные пути, полный текст ТЗ/плана,
+    границу автономности, формат отчёта, явные запреты. Не дублировать SOUL/MEMORY/USER
+    PROFILE — субагент уже их получает от системы.
 
-    - Haiku (claude-haiku-4-5) — только через delegate_task: лёгкие терминальные подзадачи,
-    справочные разовые вычисления, вынесенные из основного диалога. Haiku НЕ используется
-    как дефолтный обработчик реплик пользователю в чате — это делает основная модель.
-    Fallback при ошибке — Sonnet.
-
-
-    - Короткие правки и подзадачи → delegate_task (Haiku). Сложное и долгое → cronjob
-    (Opus).
-
-
-    - Принцип: основная модель координирует и отвечает пользователю всегда; Opus и
-    Haiku работают только как делегированные исполнители, не как замена основной модели
-    в диалоге.'
+    '
 terminal:
   backend: local
   modal_mode: auto
@@ -184,7 +197,7 @@ bedrock:
     trace: disabled
 auxiliary:
   vision:
-    provider: tutu
+    provider: anthropic
     model: claude-haiku-4-5
     base_url: ''
     api_key: ''
@@ -199,14 +212,14 @@ auxiliary:
     timeout: 360
     extra_body: {}
   compression:
-    provider: tutu
+    provider: anthropic
     model: claude-sonnet-5
     base_url: ''
     api_key: ''
     timeout: 120
     extra_body: {}
   session_search:
-    provider: tutu
+    provider: anthropic
     model: claude-haiku-4-5
     base_url: ''
     api_key: ''
@@ -271,7 +284,7 @@ auxiliary:
     extra_body: {}
 display:
   compact: false
-  personality: ''
+  personality: sirene
   resume_display: full
   busy_input_mode: interrupt
   tui_auto_resume_recent: false
@@ -375,12 +388,12 @@ memory:
   flush_min_turns: 6
 delegation:
   model: claude-sonnet-5
-  provider: tutu
+  provider: anthropic
   base_url: ''
   api_key: ''
   inherit_mcp_toolsets: true
   max_iterations: 50
-  child_timeout_seconds: 1200
+  child_timeout_seconds: 1800
   reasoning_effort: medium
   max_concurrent_children: 3
   max_spawn_depth: 1
@@ -509,7 +522,6 @@ sessions:
 onboarding:
   seen:
     busy_input_prompt: true
-    profile_build_offered: true
 updates:
   pre_update_backup: false
   backup_keep: 5
@@ -558,7 +570,4 @@ gateway:
   telegram:
     token: ***REDACTED***
     enabled: true
-custom_providers:
-  - name: tutu
-    base_url: https://llm-gateway.tutu.ru/api/anthropic
-    api_key: ***REDACTED***
+custom_providers: []

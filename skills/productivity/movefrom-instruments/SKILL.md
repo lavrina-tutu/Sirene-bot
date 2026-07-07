@@ -212,6 +212,20 @@ TG_ALERT_CHAT_ID=400307920
 
 **Полная карта полей API + Custom AI Skills:** `references/movefromff-api-fields.md`.
 
+**Ссылки на summary-файлы для Саши в Telegram — ИТОГОВОЕ решение (07.07.2026):**
+
+`obsidian://open?vault=...&file=...` **никогда не кликабелен в Telegram у этого пользователя ни в каком виде** — ни голым текстом, ни в markdown-ссылке `[имя](url)`, никакая комбинация процент-кодирования `_`/`/` не помогает (перепробовано: `safe='/_.'`, `safe=''` с `%5F`/`%2F`, экранирование `\_` в markdown, замена `_` на пробел, .md на конце vs без него). Telegram-клиент просто не линкует кастомные URI-схемы — это архитектурное ограничение клиента, не проблема кодирования. **Не тратить время на новые варианты кодирования.**
+
+Рабочее решение — HTTP-редирект-сервер на ВМ (`~/services/obsidian-redirect/`, systemd --user `obsidian-redirect.service`, порт 8765, ~11 МБ RAM, доступен только из корп-сети tutu.ru). Отдаёт `http://` ссылку (её Telegram линкует нормально) → сервер проверяет HMAC-подпись → 302 на настоящий `obsidian://` URI.
+
+Генерация ссылки — только через хелпер:
+```bash
+cd ~/services/obsidian-redirect && python3 make_link.py "Meetings/NewMeetings/<filename без .md>"
+```
+Результат вставлять как обычную markdown-ссылку `[имя файла](http://hermes-agents.devel.tutu.ru:8765/r?...)` — с HTTP-URL это уже работает нормально, конфликтов с `_`/markdown нет.
+
+Безопасность (согласовано с Сашей): HMAC-SHA256 над `vault\nfile`, статичный секрет `~/services/obsidian-redirect/.secret` (chmod 600, **не перегенерировать без разрешения** — инвалидирует все разосланные ссылки); неверная подпись → обычный 404 (как несуществующий путь); 5 неудачных попыток с IP → блок 10 мин; всё логируется в `access.log`. Проверка живости: `systemctl --user status obsidian-redirect.service` (linger включён, переживает ребут). Полный код сервера — `references/obsidian-redirect-server.md`.
+
 ### MoveFromExchange (маскировка PII, 27.05.2026)
 
 Правило для `contacts.jsonl` и TG-отображения:
@@ -314,6 +328,7 @@ Loop = Mattermost API v4 (`loop.tutu.ru/api/v4`). PAT: Настройки → Б
 - `confluencesync-brief-v1.md` — ConfluenceSync бриф v1 (28.05.2026): архитектура, use cases, режимы вывода, тесты
 - `movefromzulip-brief-v1.md` — MoveFromZulip бриф v1: Zulip как основной источник контактов
 - `tutu-corporate-integrations.md` — credentials и auth-паттерны для всех сервисов ТУТУ
+- `obsidian-redirect-server.md` — HTTP-редирект-сервер для кликабельных Telegram-ссылок на файлы WorkVault (obsidian:// deep link не линкуется в Telegram напрямую)
 
 ## Verification Checklist
 

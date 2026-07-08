@@ -82,6 +82,10 @@ For a simple append with no stable context, `terminal` is acceptable if it is th
 
 Use `patch` for focused note changes when the current content gives you stable context. Prefer this over shell text rewriting.
 
+## Ссылки на файлы в Telegram
+
+Для отправки Саше кликабельных/копируемых ссылок на файлы vault — отдельный скилл `get-obsidian-link` (формат `obsidian://` + copy-on-tap через inline code, питфоллы и обоснование).
+
 ## Wikilinks
 
 Obsidian links notes with `[[Note Name]]` syntax. When creating notes, use these to link related content.

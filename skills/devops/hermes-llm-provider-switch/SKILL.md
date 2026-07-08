@@ -60,6 +60,14 @@ TO_MODEL="claude-sonnet-5"
 # Then diff + systemd restart
 ```
 
+### Provider switch must re-assert the target model version (fixed 06.07.2026)
+
+Provider switching and model-version switching are orthogonal, but a **rollback/restore** can silently undo a model-version upgrade: `switch_back_to_anthropic.sh` restores a golden backup config that may predate the last model-version switch — the restored file can contain an old `model.default` (e.g. `claude-sonnet-4-6`) even though the current policy is a newer default (e.g. `claude-sonnet-5`).
+
+**Fix applied to both scripts:** `user_change_delegation_models1.sh` (after patching provider) and `switch_back_to_anthropic.sh` (after restoring from golden backup) now both call the model-version switch script (e.g. `switch_to_sonnet5.sh`) as their last step, so the main model always converges on the intended current version regardless of which backup/provider path was used to get there.
+
+**Rule for any future provider-switch or rollback script:** never assume a restored/patched config carries the current desired model version — always chain an explicit model-version-assert step at the end. Check `model.default` in the resulting config as your last verification step, not just `model.provider`.
+
 ## ТУТУ gateway specifics
 
 - **Type**: Anthropic-compatible proxy (NOT OpenRouter)
@@ -102,6 +110,7 @@ Gateway sends a startup notification to Telegram automatically on restart — no
 - **`custom_providers: []`** must be populated for named provider `tutu` to resolve; if it stays empty, Hermes throws `provider 'tutu' not found`.
 - **base_url trailing slash / `/v1` suffix**: use exactly `https://llm-gateway.tutu.ru/api/anthropic` — no trailing slash, no `/v1`.
 - **Legacy `/v1/complete` endpoint**: returns 405 — this is expected; Hermes uses `/v1/messages` only.
+- **Don't hardcode `provider` in `cronjob(model={...})` calls** — if omitted, the scheduler auto-pins the current active provider at job creation time. A manually typed `"provider": "tutu"` left over from muscle memory (carried from an earlier session that used the corporate gateway) goes stale the moment you switch back to Anthropic, and the job fails at run time with `Unknown provider 'tutu'` (incident 08.07.2026). Only pass `provider` explicitly when the job deliberately needs a provider different from the one currently active — otherwise omit the field entirely.
 
 ## User manuals
 

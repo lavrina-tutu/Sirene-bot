@@ -400,6 +400,14 @@ TELEGRAM_ALLOWED_CHATS=-1001234567890   # если нужна фильтраци
 
 ---
 
+## Deliverable Mode: verify actual file delivery, don't trust a reported success
+
+Any absolute file path in the agent's response gets scanned by the gateway and uploaded as a native attachment (image inline, other files as a document) — the agent does not need to write a `MEDIA:` tag manually, just produce the file and mention its absolute path.
+
+**Known upstream gap:** file/document delivery on Telegram has had confirmed bugs where either (a) the local path gets echoed back as plain text instead of being uploaded as a real attachment, or (b) the gateway reports a successful send (returns a message ID) but the file never actually arrives in the chat. Both failure modes look identical to a successful send from the agent's side — there is no reliable internal signal that distinguishes "really delivered" from "reported success but didn't happen."
+
+**Practical rule:** after sending a file/archive/document via this mechanism, explicitly ask the user to confirm it actually arrived as an attachment (not as a text path). Always include the absolute path in the same message as a fallback, so the user has an immediate alternative (scp / direct file access) if the attachment silently failed. Don't consider a file-delivery task done until the user has confirmed receipt.
+
 ## Common Problems
 
 ### "No messaging platforms enabled"

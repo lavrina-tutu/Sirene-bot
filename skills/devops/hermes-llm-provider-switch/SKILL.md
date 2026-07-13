@@ -10,6 +10,10 @@ platforms: [linux]
 
 Switching Hermes between Anthropic API and a corporate Anthropic-compatible proxy (e.g. ТУТУ LLM Gateway).
 
+## MANDATORY rule before every `cronjob(model={...})` call
+
+**Never include `"provider"` in the `model` argument unless the job deliberately needs a provider different from the one currently active.** Pass only `{"model": "claude-opus-4-7"}` — no `provider` key at all — and the scheduler auto-pins whatever provider is active right now. This has caused a job-creation failure (`Unknown provider 'tutu'`) **twice** (08.07.2026 and again 13.07.2026) despite being documented in this skill both times — the recurring cause is muscle memory from an earlier session that used the corporate gateway, carried forward into a new `cronjob(action='create', ...)` call without re-checking the active provider first. Before typing `"provider":` into a `cronjob` model dict, stop and ask: do I actually know the current active provider is different from default, or am I copying a pattern from an old session? If in doubt, omit the field — omitting is always safe, typing a stale value is not.
+
 ## Trigger conditions
 
 - User wants to switch main LLM provider/key
@@ -110,7 +114,7 @@ Gateway sends a startup notification to Telegram automatically on restart — no
 - **`custom_providers: []`** must be populated for named provider `tutu` to resolve; if it stays empty, Hermes throws `provider 'tutu' not found`.
 - **base_url trailing slash / `/v1` suffix**: use exactly `https://llm-gateway.tutu.ru/api/anthropic` — no trailing slash, no `/v1`.
 - **Legacy `/v1/complete` endpoint**: returns 405 — this is expected; Hermes uses `/v1/messages` only.
-- **Don't hardcode `provider` in `cronjob(model={...})` calls** — if omitted, the scheduler auto-pins the current active provider at job creation time. A manually typed `"provider": "tutu"` left over from muscle memory (carried from an earlier session that used the corporate gateway) goes stale the moment you switch back to Anthropic, and the job fails at run time with `Unknown provider 'tutu'` (incident 08.07.2026). Only pass `provider` explicitly when the job deliberately needs a provider different from the one currently active — otherwise omit the field entirely.
+- **Don't hardcode `provider` in `cronjob(model={...})` calls** — see the MANDATORY rule at the top of this skill. 2 incidents so far (08.07.2026, 13.07.2026), both from stale muscle-memory `"provider": "tutu"` left in a new job-creation call after switching back to Anthropic.
 
 ## User manuals
 

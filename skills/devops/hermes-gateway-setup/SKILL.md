@@ -716,37 +716,28 @@ grep -n "2026-MM-DD HH:2[0-9]:" logs/agent.log | grep -E "(terminal|gateway)"
 
 ---
 
-### delegate_task → Gateway Crash Pattern (root cause пофикшен апстримом 06.07.2026 — идёт контролируемый пилот)
+### delegate_task → Gateway Crash Pattern (ИСПРАВЛЕНО апстримом, bk-115 закрыт 13.07.2026)
 
-Старая причина: `delegate_task` с Opus (`reasoning_effort=high`, `child_timeout=1200`) держал родительский стрим → `Subagent stale (no progress 15 cycles)` → `Stream stale 180s` → gateway падает.
+Старая проблема (до апреля-июня 2026): `delegate_task` с Opus (`reasoning_effort=high`, `child_timeout=1200`) держал родительский стрим → `Subagent stale (no progress 15 cycles)` → `Stream stale 180s` → gateway падал. Правило "Opus только через cronjob" было обходом этого бага.
 
-**Апстрим hermes-agent (наша текущая версия v0.18.0) исправил оба корневых бага:**
-- `0cc63043e` (апрель) — heartbeat stale-пороги подняты: idle 150→450с, in-tool 600→1200с (ложный "stale" на медленном reasoning больше не срабатывает так рано)
-- `bba9b519a` (июнь, #45149) — дефолтный `child_timeout_seconds` убран как жёсткий потолок: 600→0 (0 = без лимита); субагент падает только от реальных ошибок (API/tool/бюджет итераций), не от секундомера делегации
+**Апстрим-фикс (уже в нашей версии hermes-agent v0.18.0+):**
+- `0cc63043e` (апрель) — heartbeat-пороги подняты idle 150→450с, in-tool 600→1200с
+- `bba9b519a` (июнь, #45149) — дефолтный `child_timeout_seconds` 600→0 (без лимита); субагент падает только от реальных ошибок (API/tool/бюджет итераций), не от секундомера делегации
 
-**Текущий статус (с 06.07.2026) — контролируемый пилот, НЕ полный переход на "снять лимит навсегда":**
-- `child_timeout_seconds` поднят 1200→**1800** (страховка вместо апстрим-дефолта 0)
-- Первый тяжёлый Opus-таск через `delegate_task` запущен как тест 06.07.2026
-- Крон-проверка статистики/падений за неделю запланирована на 13.07.2026 — bk-115 в `WorkVault/Hermes-Backlog/dialog-backlog.md`
-- **До результата этой проверки — правило маршрутизации Opus остаётся "по умолчанию cronjob"**, delegate_task для Opus допустим только в рамках пилота (временный точечный `delegation.model`/`reasoning_effort` для одного вызова, откат сразу после)
+**Пилот на нашей VM (bk-115, 06.07–13.07.2026):** `child_timeout_seconds` поднят до 1800 на неделю пилота, gateway чист всю неделю (0 падений/SIGTERM/stale). 13.07.2026 лимит снят окончательно (`child_timeout_seconds: 0`) — решение финализировано, bk-115 закрыт в dialog-backlog.md.
 
-| Тип задачи | Инструмент (актуально до 13.07.2026, дальше пересмотр по итогу bk-115) |
-|---|---|
-| Разработка, исследования, ТЗ (>5 мин), Opus | `cronjob(repeat=1, schedule='1m', model=opus)` |
-| Быстрые задачи (<2 мин) | `delegate_task` (Sonnet/Haiku) |
+**Текущее правило (постоянное, с 13.07.2026): Opus разрешён через `delegate_task` наравне с cronjob.** Используй `cronjob(repeat=1)` когда задаче не нужен контекст текущего диалога (полностью самодостаточный prompt) или должна пережить закрытие сессии; используй `delegate_task` когда нужен быстрый параллельный запуск в рамках текущей сессии.
 
-**Delegation config (config.yaml, состояние на 06.07.2026):**
+**Delegation config (config.yaml), текущее состояние:**
 ```yaml
 delegation:
-  model: claude-sonnet-5     # Opus включается точечно на время пилота, потом откат на sonnet
+  model: claude-sonnet-5   # дефолт; пин на Opus делать точечно за вызов, если требуется
   provider: anthropic
   reasoning_effort: medium
   max_iterations: 50
-  child_timeout_seconds: 1800   # апстрим-дефолт теперь 0 (без лимита); мы держим страховку
+  child_timeout_seconds: 0   # без лимита — соответствует апстрим-дефолту
   max_concurrent_children: 3
 ```
-
-**Перед следующим использованием этого правила:** `cronjob(action='list')` → проверить job "Проверка пилота Opus-через-delegate_task" (bk-115) — если уже отработал и решение принято, обновить эту таблицу по факту (снять cronjob-only ограничение для Opus, либо зафиксировать откат с причиной). Не считать это правило застывшим — это временное состояние с датой пересмотра.
 
 ### Display/Platform Pitfalls
 - Only Telegram reads `display.platforms.telegram.notifications`. Discord/Slack ignore it — use platform-native settings.

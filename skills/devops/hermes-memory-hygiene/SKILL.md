@@ -1,7 +1,7 @@
 ---
 name: hermes-memory-hygiene
 description: "Declutter Hermes MEMORY and USER PROFILE when they approach their char budget — move technical/procedural detail into skills, keep only pointers, without losing information. Триггеры: почисти память, разбери память, проверь память, почисти профиль, ревизия памяти."
-version: 1.1.0
+version: 1.2.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -80,10 +80,19 @@ This applies beyond memory hygiene — use it whenever a task surfaces multiple 
 - **Don't just delete — replace with a pointer.** A bare removal loses discoverability; a one-line "see skill X" keeps the trail for future sessions.
 - **A single `memory(action='add')` call fails if the store is already full**, even if you intend to remove more than you add. Use the batched `operations` array so removal + addition are evaluated together against the limit.
 - **`memory(action='replace', old_text=...)` requires an EXACT substring match** — not a paraphrase, not "close enough". If your `old_text` doesn't match byte-for-byte (including trailing words you may have mis-copied), the whole batch is rejected with "no entry matched", even when other operations in the same batch would have succeeded (it's all-or-nothing). When a `replace` fails: re-read the entry via the error's `current_entries` field, copy the EXACT text from there (or use a short, unambiguous substring instead of the full entry) rather than retyping from memory of what you wrote earlier.
+- **A `replace` can ALSO fail purely on char budget, even with a perfect `old_text` match** — if the store is already near its limit and your replacement text is longer than the original (e.g. adding "повторилось дважды, дата X" context to an existing entry), the call is rejected with "Replacement would put memory at N/limit chars", distinct from the exact-match failure above. Don't retry the same longer text hoping it'll pass — either (a) make the replacement net-shorter than the original by cutting something else in the same entry, or (b) use the batched `operations` array in one call to simultaneously trim/remove a second, less-critical entry to free room, exactly like the "single add fails when full" pitfall above but applying to `replace` too. If a near-full store makes even one shortened replace impractical mid-task, it's a signal to stop and run the full hygiene procedure (this skill) rather than keep retrying single edits — repeated failed attempts burn turns without progress.
 - **MEMORY vs USER PROFILE is not "environment vs everything"** — don't dump technical/procedural facts into USER PROFILE just because MEMORY is full; that only shifts the overflow problem to the other store. Route technical detail to skills instead of either memory store.
 - **Session-level docs (e.g. a project README) can also be the pointer target**, not only a skill — if a README already has the full pricing/endpoint table, memory just needs the file path.
 - **Dead pointers are worse than no pointer.** Whenever you `skill_manage(action='delete')` a skill, immediately grep MEMORY.md, USER.md, and every other skill's SKILL.md/references for its name (`search_files` or `grep`) and fix or remove any "see skill X" references left dangling. A memory entry pointing at a skill that no longer exists sends the next session on a dead-end lookup.
 - **A persona/identity skill duplicating SOUL.md is a smell, not a feature.** If you find a skill whose content substantially restates "who the agent is / character / core values" that already lives in SOUL.md, that's duplication to fix (move the identity into SOUL.md once, leave the skill with only the class-level procedures), not a second source of truth to maintain in parallel.
+
+## Worked example: full MEMORY.md purge to zero (13.07.2026)
+
+Sasha asked to "delete unneeded blocks in memory" after an unrelated debugging session. Audit of all 8 MEMORY entries found **every single one** was a duplicate of content already documented in more detail in a specific skill (gateway/cron routing → `hermes-gateway-setup`; WorkVault Inbox timer → `workvault-sync-infra`; open-question protocol → this skill + `hermes-feature` Block 1; Confluence "never deletes, only copies" rule → `hermes-feature` pitfall 43 + `tutu-confluence-jira` + `movefrom-instruments`; contacts.enc/ContactStore → `movefrom-instruments`; username≠login CQL resolve → `tutu-confluence-jira`; "don't confirm done on subagent's word" → `hermes-feature` Block 5Б/pitfalls; side-effect permission classification → `hermes-feature` Block 5Б itself). Result: MEMORY.md was reduced to 0 bytes.
+
+**A fully-empty MEMORY store after verification is a legitimate outcome, not a sign the audit went too far or "removed too much."** Don't manufacture a residual entry just to leave something behind — if every fact really is covered elsewhere with more detail, deleting the last of them is correct. The store exists to hold NEW facts not yet covered by a skill; it doesn't need permanent occupants.
+
+**Efficient verification technique for multi-entry passes:** instead of `skill_view`-ing candidate skills one at a time per memory entry (slow when there are 6+ entries to check), batch it — glob-read all `SKILL.md` files at once and grep each memory entry's key fact/keyword (a distinctive noun, function name, or exact phrase) against the full set in one pass, then only `skill_view` the specific hits to confirm the exact fact is present (not just topically adjacent). This turns an O(entries × candidate skills) sequence of tool calls into one batch scan plus a handful of targeted confirms.
 
 ## Worked example: retiring a persona skill entirely
 

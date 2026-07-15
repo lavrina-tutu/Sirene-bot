@@ -15,6 +15,25 @@ metadata:
 
 WorkVault lives on ownCloud and is mirrored to the VM (`~/WorkVault`) via two independent systemd user timers with **different sync directions** — conflating them is the recurring failure mode.
 
+## ⚠️ NEVER hand-type `rclone sync` for WorkVault — data-loss incident 15.07.2026
+
+**Rule: to sync WorkVault, always trigger the existing systemd service — never invoke `rclone sync` directly with your own `--exclude` flags.**
+
+```bash
+systemctl --user start owncloud-sync.service
+```
+
+**What went wrong (15.07.2026):** the agent ran `rclone sync ~/WorkVault owncloud:WorkVault --exclude ".obsidian/**" --exclude "WorkVault_backup/**"` by hand instead of using the service, without first reading this skill. `rclone sync` is bidirectional-with-deletion: any cloud folder not present locally (or not covered by the exclude list) gets deleted. The hand-rolled exclude list was missing `Inbox/**` and other real entries from `~/.config/rclone/workvault-exclude.lst` — result: 164 files / 17 directories deleted on the ownCloud side (`Hermes-Backlog/_Done`, `Hermes-Backlog/MigrationToVM`, `Tools/AggregateFromMeetings/_archive`, parts of `Inbox/personal-ai-assistant-master`). Partial recovery was possible from `~/WorkVault_backup` (a stale, non-synced local mirror) but some files (Inbox subtree) had no backup at all.
+
+**Why the service call is safe and the hand-typed command is not:**
+- The service's `ExecStart` already points at `--exclude-from=~/.config/rclone/workvault-exclude.lst` — the real, maintained exclude list, kept in sync with what the Inbox pull-timer manages.
+- A hand-typed `--exclude` list is always a guess reconstructed from memory — it will miss entries (as it did here) and `rclone sync`'s destructive side runs before anyone notices.
+- If you need a one-off / immediate sync (not waiting for the timer), `systemctl --user start owncloud-sync.service` runs the exact same job on demand — there is no manual-rclone use case this doesn't cover.
+
+**If you ever think you need to run `rclone sync` with custom flags for WorkVault: stop, that is the signal you haven't read this skill yet.** Read it, use the service call, or if a genuinely new one-off sync scenario is needed, get explicit confirmation from Sasha before running anything destructive against the cloud copy.
+
+**Recovery path if a destructive sync already happened:** rclone's WebDAV backend against ownCloud does NOT support `CleanUp`/trash (`rclone backend features owncloud:` → `"CleanUp": false`) — you cannot restore deleted files via rclone itself. Options, in order: (1) ownCloud's own web UI trash (Files → Deleted files) — usually the most complete, needs Sasha's login, not the rclone technical account; (2) `~/WorkVault_backup` — a separate, NOT-synced local mirror that may hold stale-but-recoverable copies of some paths; (3) accept partial loss for anything not covered by either.
+
 ## Overview
 
 Two services, two different semantics:

@@ -1,7 +1,7 @@
 ---
 name: hermes-memory-hygiene
-description: "Declutter Hermes MEMORY and USER PROFILE when they approach their char budget — move technical/procedural detail into skills, keep only pointers, without losing information. Триггеры: почисти память, разбери память, проверь память, почисти профиль, ревизия памяти."
-version: 1.2.0
+description: "Declutter Hermes MEMORY and USER PROFILE when they approach their char budget — move technical/procedural detail into skills, keep only pointers, without losing information. Also governs WRITE-TIME discipline: before adding any new MEMORY/USER PROFILE entry, default to writing/patching a skill instead, and compress what actually needs to be a memory entry. Триггеры: почисти память, разбери память, проверь память, почисти профиль, ревизия памяти."
+version: 1.3.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -11,6 +11,27 @@ tags: [hermes, memory, user-profile, skills, decluttering, context-hygiene]
 # Hermes Memory & User-Profile Hygiene
 
 Use this skill whenever MEMORY or USER PROFILE usage shown in the context header climbs near its limit (roughly ≥75%), the user asks to "review/clean up memory" (or the Russian equivalents: "почисти память", "разбери память", "проверь память", "почисти профиль" — this covers both an ad-hoc on-demand request and the weekly `vm_selfcheck` cron trigger below), a new `add` is rejected for being full, or you notice the same technical fact duplicated in both a memory entry and a skill.
+
+**This skill also governs WRITE-TIME discipline — see the section right after Scope below — not just cleanup.** Load/apply it BEFORE every `memory(action='add')` call, not only when the store is already full.
+
+## Write-time gate — apply BEFORE every `memory(action='add')` (added 13.07.2026)
+
+This is the proactive half of this skill: cleanup (below) fixes an already-cluttered store; this gate stops new clutter from being written in the first place. Apply it every time you're about to persist a durable fact, whether triggered by an explicit "запомни X" from Sasha or by your own decision during a self-check/self-update pass.
+
+**Before calling `memory(action='add', ...)`, answer these in order:**
+
+1. **Is this a procedure, technical detail, or reusable how-to** (an endpoint, a field ID, a script, a step-by-step workflow, a tool's behavior/quirk that only matters when using that tool)? → **It does NOT go to MEMORY/USER PROFILE at all.** Write it into the skill that owns that domain instead (`skill_manage(action='patch'|'create')`). If no skill owns that domain yet, that's a signal to create one (see `hermes-agent-skill-authoring`), not to default to MEMORY because "it's faster right now."
+2. **Is this purely a fact about Sasha as a person** (a stable preference, a corrected behavior, an identity/role fact)? → USER PROFILE, not MEMORY, and only if no skill already documents this preference as part of a workflow.
+3. **Is this a durable environment/tool-quirk fact NOT covered by any skill** (and genuinely won't be covered by one — a one-off fact, not a repeatable procedure)? → Only then does it go to MEMORY.
+4. **If steps 1-3 all point away from MEMORY/USER PROFILE — don't write anything to either store.** A skill update or no write at all are both valid outcomes; "write it to memory just in case" is not.
+
+**Compression rule for whatever DOES qualify for MEMORY/USER PROFILE (step 2 or 3 above):** write it in pointer form from the first draft, not as a first pass to be compressed later during the next cleanup round:
+- Prefer `"<short fact/topic> — see skill <name>, section '<X>'"` over inline procedural detail, even on the very first write.
+- No restating context obvious from the pointer itself (drop connective filler like "важно отметить", "стоит зафиксировать").
+- If the fact naturally wants inline detail (e.g. a specific schedule, an ID, a numeric threshold) AND is not covered by a skill — keep only the inline detail that's not derivable from a doc elsewhere, no surrounding narrative.
+- Target length: aim for what a terse commit message would say, not what a paragraph would say. If your draft entry is longer than ~2 lines, that's a signal steps 1-3 above were skipped — re-check whether it actually belongs in a skill.
+
+**Why this exists:** the reactive cleanup procedure below (13.07.2026 full-purge worked example) found that **100% of existing MEMORY entries were skill duplicates written verbosely** — the gate above is meant to make that outcome the default at write-time, not something discovered only during the next audit.
 
 ## Scope: which stores this skill governs
 
@@ -85,6 +106,7 @@ This applies beyond memory hygiene — use it whenever a task surfaces multiple 
 - **Session-level docs (e.g. a project README) can also be the pointer target**, not only a skill — if a README already has the full pricing/endpoint table, memory just needs the file path.
 - **Dead pointers are worse than no pointer.** Whenever you `skill_manage(action='delete')` a skill, immediately grep MEMORY.md, USER.md, and every other skill's SKILL.md/references for its name (`search_files` or `grep`) and fix or remove any "see skill X" references left dangling. A memory entry pointing at a skill that no longer exists sends the next session on a dead-end lookup.
 - **A persona/identity skill duplicating SOUL.md is a smell, not a feature.** If you find a skill whose content substantially restates "who the agent is / character / core values" that already lives in SOUL.md, that's duplication to fix (move the identity into SOUL.md once, leave the skill with only the class-level procedures), not a second source of truth to maintain in parallel.
+- **MEMORY.md/USER.md can end up storing literal `\uXXXX` escape sequences instead of real Cyrillic characters** — a sign of double JSON-escaping somewhere upstream (a prior write went through a JSON-encode step twice). Symptom: `read_file` shows garbage like `\u0431\u0430\u0442\u0447` instead of "батч", and `memory(action='replace', old_text=...)` fails with "no entry matched" even though the text visually looks present — because the stored bytes are the literal 6-character escape sequence, not the decoded character, so your `old_text` (typed with real Cyrillic) can never match byte-for-byte. **Fix:** read the raw file content, repair it with a regex substitution — `re.sub(r'\\\\u([0-9a-fA-F]{4})', lambda m: chr(int(m.group(1), 16)), raw_text)` — then write the corrected (and, while you're at it, compressed per the write-time gate above) text back with `write_file` directly to the memory file path (`~/.hermes/memories/MEMORY.md` or `USER.md`), since the `memory` tool's `replace` action cannot target text it can't string-match. Verify the fix by re-reading the file and confirming real Cyrillic renders, not escape codes.
 
 ## Worked example: full MEMORY.md purge to zero (13.07.2026)
 

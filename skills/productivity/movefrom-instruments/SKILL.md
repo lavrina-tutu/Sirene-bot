@@ -261,6 +261,14 @@ TG-поиск контактов: по имени/фамилии, до 5 рез�
 
 **⚠️ Питфолл batch-миграции #2: Confluence username ≠ корпоративный login → дубли записей вместо обновления существующей.** Когда переносишь пачку контактов, ключуясь по корпоративному `login` (напр. из старого `tutu-contacts.md`), а целевой `contacts.enc` уже содержит тех же людей под другим ключом (Confluence-резолвленным `username`, отличающимся от корп. login — типично «фамилия без первой буквы имени»: `isereda`→`sereda`, `dnabiev`→`nabieva`, `kkrivorotov`→`krivorotov`, `azhirov`→`zhirov`) — прямой if login in contacts: update else: create создаёт дубль вместо обновления существующей записи. Починка: перед батч-миграцией собрать явный dup_map (corp_login → confluence_username) для всех известных расхождений (резолвить через CQL fullname-поиск, см. `tutu-confluence-jira` → «Резолв пользователя Confluence»), брать целевой ключ через dup_map.get(corp_login, corp_login). Если дубли уже созданы — не чинить точечными patch на дубле, а слить его поля в оригинал (store.update_contact(target_login, merged_fields)), затем удалить дубль из data["contacts"] и сделать один финальный store.write(data), с явной верификацией после.
 
+**Оргструктура (`reports_to`) — CUSTOM_FIELD, обратный поиск через `find_subordinates()` (добавлено 13.07.2026).** Схема `contacts.enc` уже содержала поле `reports_to` (login прямого руководителя), но до 13.07.2026 оно жило в `SOURCE_BASIC_FIELDS` — любой коннектор-синк (Exchange/Zulip) мог его перезаписать, что противоречило намерению «правится только вручную». Исправлено: `reports_to` перенесён в `CUSTOM_FIELDS` (`schema.py`), `merger.py` больше не трогает это поле при синке. Добавлен `ContactStore.find_subordinates(manager_login)` — обратный поиск прямых подчинённых (case-insensitive, возвращает `[]` если руководитель неизвестен/бездетный), нужен любому инструменту, работающему с иерархией «кто у кого в подчинении» (SR-сверка коллег, эскалации, авто-резолв «кому писать»). Использовать вместо хранения оргструктуры текстом в скиллах — она устаревает и расходится с реальными данными (был реальный прецедент: `tutu-jira-okr` содержал перепутанную иерархию, реальные данные в `contacts.enc` были верны). Пример:
+```python
+from anywhere_contacts import ContactStore
+store = ContactStore(path, key)
+store.get_contact(login)["reports_to"]   # login прямого руководителя или None
+store.find_subordinates(login)            # -> list[dict] прямых подчинённых
+```
+
 ### MarkObjectsFromSummary (архитектура брифа 24.05.2026)
 
 **Область v0.1:** только матчинг контактов (email из participants → contacts.enc → wiki-ссылки в frontmatter + карточки Contacts/).
@@ -362,7 +370,7 @@ python3 -c "import json; d=json.load(open('.../session/current.json')); [print(i
 ## References
 
 - `movefromff-api-fields.md` — полная карта Fireflies GraphQL API, Custom AI Skills, питфолл config.py, интроспекция схемы
-- `anywhere-contacts-architecture.md` — общая библиотека контактов: schema v2, PII masking, merger, lock, что переезжает/остаётся
+- `anywhere-contacts-architecture.md` — общая библиотека контактов: schema v2, PII masking, merger, lock, что переезжает/остаётся (включая `reports_to`/`find_subordinates()` — оргструктура, см. секцию AnywhereContacts выше)
 - `file-structure-migration.md` — реорганизация WorkVault/USERTOOLS, суффиксы `_meet`/`_cont`/`_proj`/`_task`, чеклист стадий миграции
 - `clean-install-testing.md` — тестирование в свежем venv, `--override-ini`, `--timeout-method=thread`, батч-переименование через Python
 - `loop-mattermost-api.md` — Loop = Mattermost API v4, эндпоинты, аутентификация, маппинг полей

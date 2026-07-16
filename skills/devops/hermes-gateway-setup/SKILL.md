@@ -232,6 +232,35 @@ powercfg.exe -change standby-timeout-dc 180   # 3 часа от батареи
 
 > ⚠️ **Pitfall**: `powercfg /query SCHEME_CURRENT SUB_SLEEP` через bash даёт пустой вывод из-за кодировки. Используй `powercfg.exe -query 2>&1 | cat` — выводит полный список включая SUB_SLEEP.
 
+## Пропало стартовое уведомление "Gateway online" после рестарта (не баг доставки, race condition в polling health)
+
+**Симптом:** gateway перезапустился и работает нормально (статус `active`, Telegram отвечает), но привычное сообщение `♻️ Gateway online — Hermes is back and ready.` в home-канал не пришло. Никакой другой ошибки пользователь не видит.
+
+**Диагностика (искать в `~/.hermes/logs/gateway.log` в первые 1-2 сек после `[Telegram] Connected`):**
+```bash
+grep -n "startup notification\|send_path_degraded" ~/.hermes/logs/gateway.log | tail -5
+```
+Если есть строка `Home-channel startup notification failed for telegram:<id>: send_path_degraded` — это она.
+
+**Root cause:** `_send_home_channel_startup_notifications()` (gateway/run.py) шлёт уведомление сразу после `✓ telegram connected`, но каждая новая polling-генерация в `TelegramAdapter._begin_polling_generation()` (plugins/platforms/telegram/adapter.py) выставляет `self._send_path_degraded = True` и снимает его только после первого успешного `getUpdates`. Это race condition: `adapter.send()` видит флаг ещё поднятым и возвращает `SendResult(success=False, error="send_path_degraded")` без попытки реального HTTP-запроса — сообщение тихо теряется, никакого ретрая нет.
+
+Введено апстрим-коммитом `b8295cf6f7` ("fix(telegram): gate polling health on getUpdates progress", 13.07.2026) — до этого коммита такой гонки не было. Флаг сам по себе полезен (защищает от сообщений, которые выглядят отправленными, но реально не идут при нездоровом polling) — проблема именно в порядке операций при старте.
+
+**Как найти когда баг появился в апстриме (техника, не только для этого случая):**
+```bash
+cd ~/hermes-agent
+git log -p -S'_send_path_degraded' --oneline | grep -E '^[0-9a-f]{7,}'   # все коммиты, менявшие счётчик вхождений строки
+git log -p -1 <commit> -- path/to/file.py   # посмотреть конкретный диф
+```
+`git log -S<строка>` — быстрый способ найти коммит, где появился/изменился конкретный флаг/переменная, когда просто `git log -- file` даёт слишком много шума.
+
+**Статус на 16.07.2026:** известный баг, не пофикшен ни локально, ни в апстриме. Не критично (сам gateway работает штатно, теряется только само уведомление о рестарте) — верифицировать статус после рестарта всегда через `systemctl --user status hermes-gateway` напрямую, не полагаться на приход стартового сообщения.
+
+**Варианты фикса (обсуждались с Сашей, ничего пока не выбрано):**
+1. Локальный патч у нас: startup-уведомление ждёт снятия `_send_path_degraded` (poll с коротким таймаутом) перед отправкой, либо ретраит через 2-3 сек.
+2. PR в апстрим — баг в самом продукте, релевантен всем пользователям home-channel startup notifications.
+3. Оба сразу — локальный патч сейчас + PR в фоне, чтобы не тащить diff вечно при апдейтах (наш обычный паттерн, см. context_from-инцидент 24.06.2026 выше).
+
 ## Диагностика упавшего gateway
 
 Если бот в ТГ не отвечает — проверяй в таком порядке:
@@ -742,6 +771,24 @@ delegation:
 ### Display/Platform Pitfalls
 - Only Telegram reads `display.platforms.telegram.notifications`. Discord/Slack ignore it — use platform-native settings.
 - `disable_notification=True` is a server-side hint; phone settings (DND, sound muting) can override it.
+
+### `no_agent` cron scripts: provider/GitHub API keys are stripped from subprocess env — use custom-named vars
+
+**Симптом:** `no_agent` крон-скрипт (или любой скрипт, запущенный через `terminal(background=...)`/subprocess-спавн Hermes) не видит `ANTHROPIC_API_KEY`, `GITHUB_TOKEN`, `GH_TOKEN`, `TELEGRAM_BOT_TOKEN` и другие Hermes-управляемые креды из `.env`, даже если они там прописаны и переменная точно экспортирована в `.env`. Тот же скрипт, запущенный вручную из интерактивной терминальной сессии (`terminal` tool в текущем чате), эти переменные ВИДИТ — расхождение сбивает с толку, потому что выглядит как "работает у меня, не работает в кроне".
+
+**Root cause (код):** `tools/environments/local.py::_ALWAYS_STRIP_KEYS` — жёстко зашитый список (`GH_TOKEN`, `GITHUB_TOKEN`, `TELEGRAM_BOT_TOKEN`, `DISCORD_BOT_TOKEN`, `SLACK_BOT_TOKEN`, gateway relay-креды и др.) вырезается **безусловно** из окружения любого спавнутого дочернего процесса. Отдельно `_HERMES_PROVIDER_ENV_BLOCKLIST` (строится из `PROVIDER_REGISTRY.api_key_env_vars`, то есть включает `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` и другие провайдерские ключи) тоже вырезается, если имя переменной не зарегистрировано через `env_passthrough` (skill `required_environment_variables` или `terminal.env_passthrough` в config.yaml) — но для `GITHUB_TOKEN`/`GH_TOKEN` даже passthrough не поможет, они в Tier-1 always-strip списке безусловно. Это осознанная защита от утечки кредов через скомпрометированный скилл/крон (GHSA-rhgp-j443-p4rf), не баг.
+
+**Фикс: для секретов, нужных `no_agent`-скрипту, используй ДРУГОЕ имя переменной**, не входящее в блок-лист — например `HERMES_SKILLS_DIGEST_GH_TOKEN` вместо `GITHUB_TOKEN`, `HERMES_SKILLS_DIGEST_ANTHROPIC_KEY` вместо `ANTHROPIC_API_KEY`. Прописать в `.env`:
+```bash
+# ~/.hermes/.env
+HERMES_SKILLS_DIGEST_GH_TOKEN=ghp_...
+HERMES_SKILLS_DIGEST_ANTHROPIC_KEY=sk-ant-...
+```
+и читать именно это имя в скрипте (`os.environ.get("HERMES_SKILLS_DIGEST_GH_TOKEN")`), не оригинальное. Это не обход защиты — это легитимный отдельный skill-specific credential, который Hermes не обязан и не должен трактовать как "свой" провайдерский секрет.
+
+**Питфолл при диагностике:** прямой запуск скрипта из `terminal` tool (`python3 script.py`) в текущей сессии подхватывает `.env` через окружение текущего процесса-агента — тест "работает ли скрипт" в этом режиме ничего не говорит про то, будет ли он работать из настоящего `cronjob(action='run')`/по расписанию, потому что тот выполняется в другом, урезанном subprocess-окружении. **Всегда финально проверяй именно через `cronjob(action='run', job_id=...)`**, не только прямым запуском скрипта — иначе легко доложить пользователю "готово, протестировано" по тесту, который не воспроизводит реальный прод-путь.
+
+**Ещё один питфолл: изменения в `.env` не подхватываются уже запущенным gateway-процессом.** Gateway (внутри которого крутится cron-scheduler) читает `.env` один раз при старте процесса. Добавление новой переменной в `.env` "на живую" не долетает до уже работающих cron-джобов, пока gateway не перезапущен. Требуется `systemctl --user restart hermes-gateway.service` (или для Windows — `hermes gateway restart`/VBS-перезапуск), причём **агент не может рестартить gateway сам из себя** (см. "Протокол при падении gateway" выше) — рестарт после правки `.env` для целей cron-скрипта тоже требует ручного участия пользователя.
 
 ## Баг: кронджоб убивает gateway (решено 29.05.2026)
 

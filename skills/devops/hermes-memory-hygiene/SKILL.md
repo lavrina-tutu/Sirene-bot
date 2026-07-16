@@ -83,13 +83,15 @@ If Sasha says "давай пробрифуемся по блокам" / "смо�
 3. **Execute immediately after confirmation** — one `memory(action='replace'|'remove', ...)` call per block, then state the before/after % and byte count, then ask "переходим к следующему блоку?".
 4. **Common outcomes per block:** (a) duplicate of SOUL.md/a skill/another memory entry → remove or point to it; (b) stale version numbers/model names that will keep drifting → strip them, they're not durable; (c) genuinely unique and current → leave as-is, say so plainly instead of manufacturing a cut.
 
-## Universal open-question protocol (generalized 05.07.2026)
+## Universal open-question protocol (generalized 05.07.2026, tightened 16.07.2026)
 
 The block-by-block Q&A pattern below is NOT limited to memory/profile-review sessions anymore — Sasha explicitly generalized it to **all dialogs** with open questions, and it's recorded in USER PROFILE as a standing rule:
 
 1. If there's a list of open questions, show the **full list** first, then ask them **one at a time** (don't dump a multi-question wall of text, but don't hide the scope either).
 2. Each question gets: brief context → 1-2 best options → an explicit recommendation for which is best. Don't present options with no opinion attached.
-3. Questions and answer options are **numbered**.
+3. Questions and answer options are **numbered** — **numerals only (1, 2, 3...), never letters (A, B, C)**. Sasha corrected this explicitly (16.07.2026, "варианты по номерам, не по буквам") after a question was presented with lettered options. Default to digits even for a 2-option question — don't switch to letters just because there are only two choices.
+4. **Every single time you present a question, spell out the full option text again** — the question, each option's full description, and the recommendation. Do NOT shorten to a bare "1 или 2?" once the options are already "established" earlier in the conversation, even in a fast back-and-forth brief where the user is just replying with a bare number each time. Sasha corrected this explicitly (16.07.2026, "дай нормальное полное описание с номерами") after a terse "1 или 2?" follow-up — the full option text must appear on every question, not only the first time it's introduced. Brevity for its own sake is the wrong optimization here; the user needs the actual choice restated to answer confidently, especially across a multi-question brief spanning several turns.
+5. **One question per message, one answer per message — never carry sequential numbering across separate questions.** If message N asked "1) X, 2) Y, 3) Z?" and Sasha replied "1", that "1" answers ONLY that message's question — a later, unrelated question in a DIFFERENT message must restart its own numbering from 1, not continue as "4/5/6" or assume Sasha's next bare digit reply refers to the earlier list. Sasha corrected this explicitly (16.07.2026, "Один вопрос один ответ это правила брифа") after the agent asked a fresh question and Sasha replied with a bare "3", which the agent almost mis-attributed to the wrong question's option list. When in doubt after a bare-digit reply arrives to a message that didn't clearly repeat the options — re-show the options before applying the answer, or ask which question it's answering.
 
 This applies beyond memory hygiene — use it whenever a task surfaces multiple open decisions (TZ open questions, config choices, etc.), not only during a `USER PROFILE`/`MEMORY` cleanup pass.
 

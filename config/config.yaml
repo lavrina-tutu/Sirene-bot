@@ -618,7 +618,4 @@ platform_toolsets:
   google_chat:
     - hermes-google_chat
 custom_providers: []
-mcp_servers:
-  qmd:
-    url: http://localhost:8181/mcp
-    enabled: true
+mcp_servers: {}

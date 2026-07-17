@@ -154,3 +154,4 @@ Example: `ND_ML_платформа_Ресурсы_План_внедрения_v_
 ## References
 
 - `references/mpxj-color-research.md` — how row background colors are stored in MPP and read via mpxj
+- `references/google-sheets-api-pitfalls.md` — GS API quirks: locale-dependent sheet name («Лист1» vs «Sheet1»), empty columns dropped by `sheets get`

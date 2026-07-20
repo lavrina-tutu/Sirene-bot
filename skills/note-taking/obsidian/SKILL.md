@@ -1,6 +1,6 @@
 ---
 name: obsidian
-description: Read, search, create, and edit notes in the Obsidian vault.
+description: "Read, search, create, and edit notes in the Obsidian vault (WorkVault). Load FIRST when working in Tools/WorkVault topics or when looking for links, files, docs, meeting notes, TZ, or any data — search WorkVault before asking Sasha. Triggers: найди в хранилище, есть ли у нас, что у нас по X, открой заметку, создай заметку, WorkVault, Obsidian."
 platforms: [linux, macos, windows]
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: tutu-confluence-jira
-description: "ТУТУ корп. системы: скачать страницы Confluence в WorkVault, работать с JIRA (создание задач, поля, проекты). Базовый URL dom.tutu.ru, аутентификация через ConfluenceSync .env."
+description: "ТУТУ корп. системы: Confluence + JIRA. Загружать при: скачать/открыть страницу Confluence, создать/найти задачу в Jira, кто такой X (оргструктура: Аралов→Ткаченко→Криворотов), согласование договора, резолв участника по ФИО/userkey, публикация протокола встречи, экспорт Jira-задач в Obsidian. URL: dom.tutu.ru / hq.tutu.ru. Auth: ConfluenceSync .env."
 version: 1.3.0
 author: agent
 license: MIT
@@ -261,6 +261,14 @@ for el in body_el.iter():
    При проектировании любой операции "перенести/восстановить/переопубликовать данные о встрече" — явно фиксировать для каждой из них, откуда именно берутся данные (живой Confluence vs исходный файл), не предполагать по умолчанию, что это одно и то же.
 
 См. также `hermes-feature` (Pitfall 24-26) — процесс эмпирической проверки архитектурных решений через delegate_task перед их фиксацией в ТЗ, когда вопрос брифа зависит от непроверенного факта о поведении внешней системы.
+
+## Workflow: creating/updating Jira tasks
+
+Restate the task spec, wait for Sasha's answers, then act ("делай"). Task URL pattern: `https://hq.tutu.ru/browse/KEY`.
+
+## Экспорт Jira-задач в Obsidian
+
+**Именование файлов (per-task экспорт):** `{KEY} + первые ~60 символов названия задачи` — читаемые имена, не голый ключ. Кириллица в имени файла допустима ради читаемости (осознанное исключение из правила ASCII-only Obsidian-скилла).
 
 ## Питфоллы
 

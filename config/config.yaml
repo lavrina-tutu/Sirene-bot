@@ -564,6 +564,13 @@ gateway:
   telegram:
     token: ***REDACTED***
     enabled: true
+  profile_routes:
+  - name: hermesdev-topic
+    platform: telegram
+    chat_id: '-1004300127777'
+    thread_id: '4'
+    profile: tz-dev
+  multiplex_profiles: true
 streaming:
   enabled: false
 sessions:

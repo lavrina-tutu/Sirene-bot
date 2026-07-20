@@ -1,6 +1,6 @@
 ---
 name: tutu-jira-okr
-description: "Use when работаешь с целями OKR в Jira ТУТУ (проект OKRS/OKRAID) — выгрузка иерархии Objective/KR, сверка Q1/Q2/квартальных чекинов, подготовка отчёта закрытия периода в Obsidian. Отдельно от общего tutu-confluence-jira: здесь только структура данных OKR, JQL-паттерны и формат отчёта."
+description: "Use when работаешь с целями OKR в Jira ТУТУ (проект OKRS/OKRAID) — выгрузка иерархии Objective/KR, сверка Q1/Q2/квартальных чекинов, подготовка отчёта закрытия периода в Obsidian. Триггеры: OKR, цели департамента, Key Result, квартальный чекин, закрытие периода OKR, что у нас по OKR, прогресс по целям, OKR АИД. Отдельно от tutu-confluence-jira: здесь только структура данных OKR, JQL-паттерны и формат отчёта."
 version: 2.0.0
 author: agent
 license: MIT

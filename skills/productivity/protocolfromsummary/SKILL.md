@@ -1,6 +1,6 @@
 ---
 name: protocolfromsummary
-description: "Use when working with the ProtocolFromSummary (PFS) tool — publishes Fireflies meeting-summary .md files into Confluence protocol tables (~/USERTOOLS/ProtocolFromSummary). Триггеры: PFS, протокол встречи, опубликовать протокол, задача не резолвится/не мешенится, ROUTES, page_layout, republish, страница протокола поменялась."
+description: "Use when working with the ProtocolFromSummary (PFS) tool — publishes Fireflies meeting-summary .md files into Confluence protocol tables (~/USERTOOLS/ProtocolFromSummary). Триггеры: PFS, протокол встречи, опубликовать протокол, задача не резолвится/не мешенится, ROUTES, page_layout, republish, страница протокола поменялась, out_of_scope встречи, роутинг крона PFS."
 version: 1.0.0
 author: agent
 license: MIT
@@ -87,6 +87,20 @@ per-project protocol tables on Confluence (dom.tutu.ru). Code lives at
    anchor macro survives. This is the only reliable way to find "this meeting's row" again on
    republish; task-id-based lookup is the fallback for rows published before this mechanism
    existed.
+
+5. **`out_of_scope` for all meetings is expected during pilot phase** — the PFS batch cron
+   (`a6e62d06249f`) only covers two entities (Trisigma + Кирилл 1-1 per §3 of the TZ). Everything
+   else correctly falls through to `out_of_scope`. A report of "239 files, all out_of_scope" is
+   normal, not a bug — it means no new meetings matched the pilot scope.
+
+## Cron routing rules (17.07.2026)
+
+**Batch cron `a6e62d06249f`** (`deliver=local`):
+- `published=0, error=0` → silent, no notification sent.
+- `published>0` → also silent; individual notifications are handled by the separate `notify_pending` cron (`21255143c523`) which delivers to WorkVault topic.
+- `error>0` → agent sends alert via `hermes send --to "telegram:-1004300127777:5"` with meeting_id(s) and error detail. This is the ONLY case the batch cron actively sends anything.
+
+Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша explicitly requested no routine run reports.
 
 ## Verification checklist
 

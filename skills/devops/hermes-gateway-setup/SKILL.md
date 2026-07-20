@@ -360,6 +360,60 @@ sleep 8
 tail -5 ~/.local/share/hermes/logs/gateway.log
 ```
 
+## Profile Routing (profile_routes + multiplex_profiles)
+
+### ⚠️ Обязательный флаг: `gateway.multiplex_profiles: true`
+
+`profile_routes` в `config.yaml` **полностью игнорируется** без `multiplex_profiles: true`. Роутинг возвращает `None` для каждого сообщения — жёсткий гейт в коде (`gateway/run.py::_profile_name_for_source`):
+
+```python
+if not getattr(config, "multiplex_profiles", False):
+    return None
+```
+
+Без флага сообщения идут в дефолтный профиль даже при правильно настроенном `profile_routes`. Флаг тихо не установлен по умолчанию — ошибки нет, просто роутинг не работает.
+
+**Правильный конфиг:**
+```yaml
+gateway:
+  multiplex_profiles: true   # ← БЕЗ ЭТОГО profile_routes не работает
+  profile_routes:
+    - name: hermesdev-topic
+      platform: telegram
+      chat_id: '-1004300127777'
+      thread_id: '4'
+      profile: tz-dev
+```
+
+### Требования к целевому профилю
+
+1. **Модель должна быть задана** — `hermes profile list` показывает `—` если модель не прописана. Задать через `hermes config set model <model> --profile <name>` или напрямую в `~/.hermes/profiles/<name>/profile.yaml`.
+
+2. **Профиль должен существовать на диске** — `hermes profile list` покажет его. Если профиль не существует, gateway логирует warning и падает обратно на дефолтный.
+
+3. **После изменений — рестарт gateway обязателен.** `multiplex_profiles` и `profile_routes` читаются один раз при старте.
+
+### Диагностика: почему роутинг не работает
+
+```bash
+# 1. Проверить что multiplex_profiles установлен
+python3 -c "import yaml; c=yaml.safe_load(open('~/.hermes/config.yaml'.replace('~',__import__('os').path.expanduser('~')))); print('multiplex_profiles:', c.get('gateway',{}).get('multiplex_profiles','NOT SET'))"
+
+# 2. Проверить profile_routes
+python3 -c "import yaml; c=yaml.safe_load(open('~/.hermes/config.yaml'.replace('~',__import__('os').path.expanduser('~')))); print('profile_routes:', c.get('gateway',{}).get('profile_routes','NOT SET'))"
+
+# 3. Проверить что профиль существует с моделью
+hermes profile list
+```
+
+В `gateway.log` при успешном роутинге в сессионном ключе будет `agent:<profile>:telegram:...` вместо `agent:main:telegram:...`. Если ключ по-прежнему `agent:main` — `multiplex_profiles` не установлен или нет рестарта.
+
+### Питфолл: `/new` создаёт новую сессию, но профиль уже мог быть открыт
+
+Если до включения `multiplex_profiles` в топике была активная сессия (профиль `default`), `/new` создаёт новую сессию — но только для нового роутинга. **Старая сессия в этом топике могла быть уже открыта с `agent:main`**. Gateway не переключает профиль для существующих сессий — только для новых входящих сообщений после рестарта с `multiplex_profiles: true`.
+
+---
+
 ## Telegram: Подключение групповых чатов
 
 ### Полный чеклист — почему бот молчит в группе

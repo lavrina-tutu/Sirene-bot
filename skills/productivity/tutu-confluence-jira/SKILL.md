@@ -22,7 +22,9 @@ metadata:
 | Система | Файл | Переменная |
 |---|---|---|
 | Confluence (`dom.tutu.ru`) | `~/USERTOOLS/ConfluenceSync/.env` | `CONFLUENCE_TOKEN` |
-| JIRA (`hq.tutu.ru`) | `~/.hermes/profiles/anthropic/.env` или `~/.config/hermes/.env` | `JIRA_TOKEN` + `JIRA_BASE_URL=https://hq.tutu.ru` |
+| JIRA (`hq.tutu.ru`) | `~/.hermes/profiles/anthropic/.env` | `JIRA_TOKEN` + `JIRA_BASE_URL=https://hq.tutu.ru` |
+
+⚠️ **`~/.config/hermes/.env` сломан** — содержит спецсимволы в `TUTU_DOMAIN_PASSWORD`, bash падает с syntax error при `source`. Для JIRA использовать **только** `~/.hermes/profiles/anthropic/.env`.
 
 Загрузить Confluence: `source ~/USERTOOLS/ConfluenceSync/.env`
 
@@ -33,7 +35,7 @@ curl -H "Authorization: Bearer $CONFLUENCE_TOKEN" "https://dom.tutu.ru/rest/api/
 
 Для JIRA curl:
 ```bash
-source ~/.config/hermes/.env  # или ~/.hermes/profiles/anthropic/.env
+source ~/.hermes/profiles/anthropic/.env
 curl -H "Authorization: Bearer $JIRA_TOKEN" \
      -H "Content-Type: application/json" \
      "https://hq.tutu.ru/rest/api/2/..."
@@ -279,8 +281,9 @@ Restate the task spec, wait for Sasha's answers, then act ("делай"). Task U
 - **REST API возвращает 404 на некоторые pageId** — не ошибка конфигурации. Причины: страница в пространстве без прав для PAT, или пространство использует SSO/keycloak-only авторизацию (v2 API редиректит на keycloak). Это нормально — зафиксируй ссылку для ручного открытия, не трать время на обходы.
 - **confluencesync pull выводит «✓ pulled 0 page(s)»** на уже скачанной странице — нужен флаг `--resync` для перезаписи. Без флага пропускает существующие файлы молча.
 - **Найти дочерние страницы проекта (протоколы/минутки/материалы)** — `curl ... "https://dom.tutu.ru/rest/api/content/<rootPageId>/child/page?limit=50"`, возвращает `results[].{id,title}`. Полезно, когда известен только `confluence_id` корня проекта (как в `card.md`), а не сама страница протокола.
+- **Тело Confluence-страницы содержит backslash-последовательности** — `json.loads()` на stdout curl падает с `JSONDecodeError: Invalid \escape`. Решение: сохранить в файл (`curl ... > /tmp/page.json`), читать через `json.load(open('/tmp/page.json'))`. Удалять `/tmp/page.json` сразу после использования (PII/внутренний контент).
+- **Python в `terminal()` с кавычками и регэкспами** — использовать `python3 - << 'PYEOF'` (single-quoted HEREDOC, shell не интерполирует внутри). Избегать `-c "..."` при сложной логике с кавычками.
 
----
 
 ## Связанные скиллы
 

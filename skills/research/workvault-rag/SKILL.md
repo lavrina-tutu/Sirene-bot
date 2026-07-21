@@ -1,7 +1,7 @@
 ---
 name: workvault-rag
 description: "Use when Саша спрашивает что-либо по прошедшим встречам, задачам, решениям, рискам или блокерам — 'кто что обещал', 'какие задачи ждёт X', 'что решили по Y', 'какие риски по Z', 'что обсуждали за последние N дней/недель'. Точный 4-шаговый алгоритм фильтрации (дата → участники → проект → тип сущности) — см. раздел 'Алгоритм поиска по встречам'. Также покрывает вопросы по ТЗ (Hermes-Backlog/TZ)."
-version: 2.1.0
+version: 2.2.0
 author: Sirene
 license: MIT
 platforms: [linux]
@@ -133,6 +133,34 @@ metadata:
 
 **Признак нетегированного архива:** `projects: []` и `tools: []` в frontmatter при ненулевом содержимом тела = MOFS не запускался или бутстрап ещё не применён, не ошибка данных.
 
+## Архитектура поиска v2 — три режима одного скилла (21.07.2026)
+
+Единый скилл `workvault-rag` покрывает три режима — глубину определяет характер вопроса:
+
+| Вопрос | Режим | Источник | Время |
+|---|---|---|---|
+| «Какие встречи по ML в июле?» | Поиск | SQLite+FTS5 (`mofs index`) | <10 мс |
+| «Что решили на встрече 10 июля?» | Детали | `summary.md` конкретной встречи | <1 сек |
+| «Кто реально что сказал про ML?» | Транскрипт | `transcript.md` → LLM | <5 сек |
+
+**Связь summary↔transcript** — детерминированная, замена суффикса:
+```
+2026-07-08 11-05-00 Кирилл 1-1 - summary.md
+2026-07-08 11-05-00 Кирилл 1-1 - transcript.md
+```
+Хранить ссылку во frontmatter не нужно — вычисляется на лету.
+
+**`mofs index`** — SQLite+FTS5 индекс, живёт в `~/USERTOOLS/MofsIndex/state/index.sqlite`.
+Индексирует: frontmatter (4 корзины slugs + date) + тело summary + тело transcript.
+Обновляется: хук в конце `mofs run`/`mofs rematch` (только real-mode, не dry-run).
+ТЗ: `WorkVault/Hermes-Backlog/TZ/MofsIndex/MofsIndex_TZ.md` v0.1.0.
+
+**Ripgrep (grep по файлам)** при наличии mofs index — не нужен, медленнее на порядок.
+Использовать только как fallback когда индекс устарел или не построен.
+
+**НЕ создавать отдельные скиллы** `workvault-search` / `workvault-deep` — всё в одном `workvault-rag`.
+Три режима определяются характером вопроса внутри скилла, не переключением между скиллами.
+
 ## Архитектурное решение: связи/wiki-links, не векторный RAG (16.07.2026)
 
 Когда встаёт вопрос «как ещё улучшить качество/скорость поиска по WorkVault» — ответ **structural links (Obsidian wikilinks + Dataview + canonical entity registry), не переход на векторный RAG/semantic search**. Не переоткрывать этот вопрос с нуля каждый раз, если не появилось принципиально новое обстоятельство:
@@ -146,6 +174,82 @@ metadata:
 
 Полное архитектурное решение по стыковке `entities.json` с `MarkObjectsFromSummary`/`AggregateFromMeetings` (naming-конфликт слугов, устав vs протокол-страница, двойная классификация типа «Метротека = проект и инструмент», 4 корзины при массовом NER-прогоне архива: люди/сущности/инструменты/переговорки) — см. `movefrom-instruments`, секция «EntityRegistry ↔ MarkObjectsFromSummary (MOFS) / AggregateFromMeetings (AFM)».
 
+## Алгоритм поиска через mofs index (быстрый путь, приоритет над grep)
+
+Использовать ПЕРВЫМ при любом структурном запросе (slug/дата/текст). Fallback на grep — только если индекс не построен.
+
+### Режим 1 — поиск встреч (список)
+
+```python
+# Импорт
+import sys
+sys.path.insert(0, '/home/tkachenkoav/USERTOOLS/ProtocolFromSummary/.venv/lib/python3.11/site-packages')
+from mofs_index import search_meetings
+
+# По slug проекта
+hits = search_meetings(slugs={'projects': ['kirill_1on1']}, limit=20)
+
+# По дате + slug
+hits = search_meetings(
+    date_from='2026-07-01', date_to='2026-07-31',
+    slugs={'projects': ['ml_platforma']},
+)
+
+# По FTS-тексту + дата
+hits = search_meetings(query='DWH метрики', date_from='2026-06-01')
+
+# По контакту
+hits = search_meetings(slugs={'contacts': ['Криворотов Кирилл']})
+
+# Вывод результатов
+for h in hits:
+    print(h.meeting_date, h.meeting_id, h.title)
+    print('  obsidian:', h.obsidian_url)
+```
+
+`slug_mode='all'` — пересечение (все slugs должны быть), `'any'` (по умолчанию) — объединение.
+
+### Режим 2 — детали встречи (summary)
+
+```python
+from mofs_index import get_meeting
+rec = get_meeting('2026-07-08 11-05-00 Кирилл 1-1')
+# rec.summary_body — полный текст summary
+# rec.slugs — {'projects': [...], 'contacts': [...], ...}
+```
+
+Или напрямую: `read_file('/home/tkachenkoav/WorkVault/Meetings/NewMeetings/<meeting_id> - summary.md')`
+
+### Режим 3 — цитаты из транскрипта
+
+```python
+from mofs_index import get_transcript_snippets
+snippets = get_transcript_snippets('2026-07-08 11-05-00 Кирилл 1-1', 'ML-платформа')
+# snippets — список строк с контекстом вокруг совпадения
+```
+
+Или читать файл целиком: путь = `summary_path.replace('-summary.md', '-transcript.md')`.
+LLM отвечает на вопрос Саши по тексту транскрипта.
+
+### Проверка состояния индекса
+
+```bash
+source ~/USERTOOLS/ProtocolFromSummary/.venv/bin/activate
+mofs-index stats    # число записей, дата последнего rebuild
+mofs-index verify   # несогласованности файлов и БД
+```
+
+Если индекс устарел или не построен → `mofs-index index --rebuild --yes` (занимает ~5с).
+
+### Формирование Obsidian-ссылки из meeting_id
+
+```python
+import urllib.parse
+mid = '2026-07-08 11-05-00 Кирилл 1-1'
+path = f'Meetings/NewMeetings/{mid} - summary.md'
+url = 'obsidian://open?vault=WorkVault&file=' + urllib.parse.quote(path, safe='/')
+```
+
 ## Verification Checklist
 
 - [ ] Структурный запрос (дата/участник/проект + сущность) прошёл 4-шаговый алгоритм, не угадан на глаз
@@ -154,3 +258,5 @@ metadata:
 - [ ] Широкий запрос (>10 файлов) — фильтрация делегирована Haiku, не читается инлайн Sonnet целиком
 - [ ] "Неясная запись" — при совпадении 2+ признаков задача отнесена к Саше, источник явно помечен
 - [ ] Не предлагать/не пытаться восстанавливать qmd без явного запроса Саши
+- [ ] При структурном запросе (slug/дата) — использовать `mofs index` через `search_meetings()` как первый путь; fallback на grep только если индекс не построен (`mofs-index verify` покажет)
+- [ ] Запрос «кто что сказал / детально что обсуждалось» — читать `transcript.md` (суффикс `-transcript.md` вместо `-summary.md`), не summary; LLM отвечает по тексту транскрипта

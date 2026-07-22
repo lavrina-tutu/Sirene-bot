@@ -21,7 +21,7 @@
 - npm-пакет `@tobilu/qmd` глобально + бинарник `~/.local/bin/qmd`
 - Кэш моделей эмбеддинга `~/.cache/qmd` (~2.2GB)
 - Индексы коллекций `~/.local/share/qmd-collections` (~12MB)
-- Упоминания в скиллах `tell-about-skills`, `research-paper-writing` (точечные строки)
+- Упоминания в скилле `research-paper-writing` (точечные строки)
 
 ## Бэкапы (на случай отката)
 

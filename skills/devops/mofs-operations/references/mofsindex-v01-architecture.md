@@ -1,5 +1,32 @@
 # MofsIndex v0.1.0 — архитектурные детали
 
+## ⚠️ Известная проблема: namespace-package при editable install
+
+`pip install -e .` с `[tool.setuptools.packages.find] include = ["mofs_index*"]` создаёт namespace-package — `__init__.py` не выполняется, публичный API недоступен.
+
+Симптомы: `mofs_index.__file__ is None`, `from mofs_index import search_meetings` → ImportError.
+
+Фикс — заменить в `pyproject.toml`:
+```toml
+# БЫЛО:
+[tool.setuptools.packages.find]
+include = ["mofs_index*"]
+
+# СТАЛО:
+[tool.setuptools]
+packages = ["mofs_index"]   # явный список, без find-эвристики
+```
+Переустановить: `pip uninstall -y mofs-index && pip install -e /home/tkachenkoav/USERTOOLS/MofsIndex`
+
+Проверка: `python3 -c "from mofs_index import search_meetings; print('OK')"`
+
+Временный workaround (пока фикс не применён):
+```python
+import sys
+sys.path.insert(0, '/home/tkachenkoav/USERTOOLS/MofsIndex')
+from mofs_index.searcher import search_meetings
+```
+
 Дата реализации: 21.07.2026
 
 ## Структура пакета

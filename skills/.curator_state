@@ -1,9 +1,9 @@
 {
-  "last_report_path": "/home/tkachenkoav/.hermes/logs/curator/20260715-214322",
-  "last_run_at": "2026-07-15T21:43:22.490095+00:00",
-  "last_run_duration_seconds": 1.830129,
+  "last_report_path": "/home/tkachenkoav/.hermes/logs/curator/20260722-223145",
+  "last_run_at": "2026-07-22T22:31:45.976590+00:00",
+  "last_run_duration_seconds": 1.954798,
   "last_run_summary": "auto: no changes; llm: skipped (consolidation off)",
   "last_run_summary_shown_at": null,
   "paused": false,
-  "run_count": 5
+  "run_count": 6
 }

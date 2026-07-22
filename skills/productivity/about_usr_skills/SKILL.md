@@ -1,7 +1,7 @@
 ---
-name: movefrom-instruments
-description: "Use when: разработка/эксплуатация семейства инструментов MoveFrom* (Fireflies, Exchange, Zulip, Confluence, Jira, Loop) — выгрузка данных из корпоративных сервисов в WorkVault (Obsidian). Общая архитектура, принципы, статусы, ссылки на ТЗ."
-version: 2.1.0
+name: about_usr_skills
+description: "Use when: (1) Саша спрашивает «что ты умеешь / расскажи о себе / какие у тебя инструменты / что автоматизировано» — точка входа с алгоритмом опроса всех источников; (2) разработка/эксплуатация пользовательских инструментов USERTOOLS (MoveFrom*, MOFS, PFS, TaskRefresh, EntityRegistryCLI, OrgLookup, ConfluenceSync, SRTool, MofsIndex, workvault-rag и др.) — общая архитектура, принципы, статусы, ссылки на ТЗ."
+version: 2.3.0
 author: agent
 license: MIT
 tags: [workvault, obsidian, sync, pipeline, jira, confluence, exchange, zulip, fireflies, loop]
@@ -12,7 +12,50 @@ metadata:
     related_skills: [hermes-feature, tz-workflow, movefrom-confluence, hermes-agent-skill-authoring]
 ---
 
-# MoveFrom* — инструменты выгрузки данных в WorkVault
+# USERTOOLS — экосистема инструментов Саши (мастер-гайд)
+
+Мастер-скилл по ВСЕМ пользовательским инструментам (не только MoveFrom*): выгрузка, разметка, публикация, поиск, индексация, реестры. Он же — единственная точка входа на вопрос «что ты умеешь / расскажи о себе / какие инструменты / что автоматизировано».
+
+## Точка входа: «что ты умеешь / расскажи о себе / какие инструменты»
+
+Когда Саша спрашивает про мои возможности — НИКОГДА не пересказывать список из этого файла как факт: версии/статусы/кроны меняются в течение одного дня. Вместо этого выполнить 4-шаговый алгоритм и собрать ответ из живых данных.
+
+**Приоритет в ответе:** (1) наши USERTOOLS + активные ТЗ; (2) наши доработанные скиллы (tutu-*, workvault-rag, pm-briefing, get-obsidian-link, tz-workflow и т.п.); (3) generic Hermes-возможности «из коробки» — только если Саша спросил прямо.
+
+### Шаг 1 — реестр инструментов (source of truth)
+```
+read_file("/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md")
+```
+Таблица «Активные ТЗ» — актуальный список инструментов с версией/статусом/датой. Оттуда — MoveFromFF, MarkObjectsFromSummary (MOFS), ProtocolFromSummary (PFS), TaskRefresh, EntityRegistry+EntityRegistryCLI, ExchangeOrgLookup, MofsIndex, AnywhereContacts, ConfluenceSync, SRTool, StatusSnapshot, MeetingScheduler, DialogBacklog, AggregateFromMeetings, MoveFromJira, MoveFromZulip и др. Не из памяти.
+
+### Шаг 2 — детали конкретного инструмента (если Саша спросил про один)
+Прочитать `TZ/<Инструмент>/<Инструмент>_TZ.md` по пути из инвентаря — там история брифа с реальными решениями. Если ТЗ большое — `search_files` внутри файла по ключевому слову.
+
+### Шаг 3 — наши скиллы
+```
+skills_list()
+```
+Отфильтровать «наши» по признаку: описание про Jira/Confluence/WorkVault/АИД/OKR/SR/протоколы встреч у Саши — наш. Про универсальный внешний сервис (spotify, minecraft, github-*, ascii-*, creative-*) — generic, упоминать по остаточному принципу.
+
+### Шаг 4 — живые примеры из брифов
+Самое ценное в ответе — не абстракция, а деталь из реального кейса:
+- `session_search(query="<тема>")` — реальный диалог, где инструмент обсуждался.
+- Секции ТЗ «§Бриф-сессия», «§Открытые вопросы», «§Решения» — реальные вопросы-ответы с обоснованиями.
+
+### Формат ответа
+1. 2-3 предложения общего резюме — что за экосистема.
+2. Список активных инструментов с ОДНОЙ строкой каждый (что делает, не как реализовано), сгруппировать логически: сбор данных (MoveFrom*) → структурирование (MOFS, AnywhereContacts, EntityRegistry) → публикация (ProtocolFromSummary) → работа с задачами (TaskRefresh, DialogBacklog) → поиск/индексация (MofsIndex, workvault-rag/QMD-Search) → служебные (ConfluenceSync, ExchangeOrgLookup, SRTool, MeetingScheduler).
+3. Если вопрос про область — 1-2 живых примера с деталями из брифа.
+4. Про generic-возможности Hermes — только если явно спросили.
+
+### Питфоллы точки входа
+- Не пересказывать версии/статусы из этого файла как факт (устареют за день — прецедент ProtocolFromSummary draft→v1.1/active за сутки).
+- Не путать «наш» инструмент с generic — критерий: привязка к ТУТУ/Сашиной работе.
+- На вопрос «а можешь X?» — не отвечать общим списком, найти конкретный ответ через шаги 1-4.
+
+---
+
+# Операционная часть: MoveFrom* и смежные инструменты
 
 Семейство Python-инструментов: выгрузка данных из корпоративных сервисов в локальный Obsidian vault (`WorkVault`). Каждый инструмент — поставщик данных для конвейера обработки.
 
@@ -145,14 +188,21 @@ projects:
 
 | Инструмент | Сервис | Статус | Крон (job_id) | Актуальное ТЗ |
 |---|---|---|---|---|
-| **MoveFromFF** | Fireflies.ai | ✅ **v2.2 в проде** (2026-07-05). Реализованы: reconciliation, backfill (newest-first, лимит 50/прогон), обрезка длины имени файла (XFS 255B), apps-preview-summary. 83+ теста ✅. | `vm_movefromff` — пн–пт 08-19 МСК, такт каждый час (5 8-19 * * 1-5) | `TZ/MoveFromFF/MoveFromFF_TZ.md` v2.2 |
+| **MoveFromFF** | Fireflies.ai | ✅ **v2.2 в проде** (2026-07-05). Реализованы: reconciliation, backfill (newest-first, лимит 50/прогон), обрезка длины имени файла (XFS 255B), apps-preview-summary. 83+ теста ✅. | `vm_movefromff` — пн–пт 08-19 МСК, такт **ежечасно** (`5 8-19 * * 1-5`) | `TZ/MoveFromFF/MoveFromFF_TZ.md` v2.2 |
 | **MoveFromExchange** | Exchange (ТУТУ) | ⛔ **Decommissioned (подтверждено 09.07.2026)** — физического кода не существует (`find ~ -iname "*exchange*"` не находит `USERTOOLS/MoveFromExchange`). Заменён инструментом **ExchangeOrgLookup** (`~/USERTOOLS/OrgLookup`, пакет `orglookup`) — контакт-резолв через Exchange GAL/EWS; с 09.07.2026 умеет также выгружать список переговорных комнат (`orglookup rooms` → `WorkVault/Contacts/meeting-rooms.md`, 31 комната, реальные Room Lists API сработал без фоллбэка). | нет — см. ExchangeOrgLookup | `TZ/ExchangeOrgLookup/ExchangeOrgLookup_TZ.md` |
 | **AnywhereContacts** | (библиотека) | ✅ **v0.1.0** — 2148 контактов в `contacts.enc` (1747 Exchange + 401 Zulip). Schema v2 с sources. | (не крон) | `TZ/AnywhereContacts/AnywhereContacts_TZ.md` v0.1.0 |
-| **MarkObjectsFromSummary** | WorkVault | ✅ **Код реализован в 2 захода (17.07.2026), откатан после бага dry-run.** Заход 1: базовая реализация (4 корзины, pipe-alias, карточки). Заход 2: provenance/mofs edit/bootstrap undo/mofs review — 76 тестов зелёных. **⚠️ Найдено 2 бага на первом тестовом прогоне:** (1) `--dry-run` не блокировал мутации — применял изменения к реальным файлам (баг в коде); (2) `matcher_contacts.py` матчил по frontmatter `participants` (поле отсутствует или пустое в реальных файлах), а не по тексту тела summary (`## Участники:`, `## Задачи:`). Прогон по ошибке затронул 564 встречи всего архива (2025-08-12—2026-07-16), откат выполнен через `mofs bootstrap --undo 20260716T204117Z --yes` (517 frontmatter восстановлено, 30 карточек удалено, ownCloud синхронизирован). **Оба бага требуют фикса перед следующим тестовым прогоном.** Три крона (`mofs_contacts_hourly`/`mofs_daily`/`mofs_digest_weekly`) спроектированы, НЕ созданы — ждут отдельного явного подтверждения после успешного тестового прогона. | планируются, не созданы | `TZ/MarkObjectsFromSummary/MarkObjectsFromSummary_TZ.md` v0.6.0 |
+| **MarkObjectsFromSummary** | WorkVault | ✅ **v0.9.0 в проде (22.07.2026).** contacts v0.2 (три формата заголовков: ##/bold/plain-text), стоп-лист unmatched, editable install mofs_index fix, backfill S1+S2 468/514 ✅ (S3 не потребовался), tools 13 инструментов ✅, 573/575 встреч с projects ✅, mofs-index SQLite+FTS5 72MB 575 встреч ✅, workvault-rag v2.3. 148/148 тестов. LLM-фолбэк + авто-rematch — ТЗ v1.0.0 готово, реализация в работе (22.07.2026). | `mofs_run_cron` — `16 8-19 * * 1-5` | `TZ/MarkObjectsFromSummary/MarkObjectsFromSummary_TZ.md` v0.9.0 |
 | **MoveFromJira** | Jira (ТУТУ) | 🥈 **Приоритет #2**, ТЗ v0.1 (draft). Только OKRAID + OKRS. Доступно без VPN (`dom.tutu.ru`, PAT). | — | `TZ/MoveFromJira/MoveFromJira_TZ.md` v0.1 |
 | **ConfluenceSync** | Confluence (`dom.tutu.ru`) | ✅ **v1.0** (28.05.2026). 47/47 тестов ✅. CLI `confluencesync pull/push/resync/log`. Двусторонний. PAT работает из дома без VPN. Скилл: `movefrom-confluence`. | — | `TZ/ConfluenceSync/ConfluenceSync_TZ.md` v1.0 |
 | **MoveFromZulip** | Zulip (ТУТУ) | ⏸ **КРОН ОСТАНОВЛЕН** (29.05.2026) — Zulip отключают, переход на Loop. 2148 контактов сохранены. | `vm_movefromzulip` (disabled) | `TZ/MoveFromZulip/MoveFromZulip_TZ.md` v1.0 |
 | **MoveFromLoop** | Loop/Mattermost (ТУТУ) | 🆕 **Планируется.** Loop = Mattermost API v4 (`loop.tutu.ru/api/v4`). АКЦ остаётся в Zulip. Нужен PAT: Loop → Настройки → Безопасность → Токены. | — | ещё не создано |
+| **MofsIndex** | WorkVault (SQLite+FTS5) | ✅ **v0.4.0 в проде (22.07.2026).** 575 встреч, 72MB, full rebuild 4.9с, search(slug) 1.69мс. Установлен в общий venv. Ежедневный rebuild 23:00. | `mofs_index_rebuild` — `0 23 * * *` | `TZ/MofsIndex/MofsIndex_TZ.md` v0.4.0 |
+| **EntityRegistryCLI** | WorkVault/Registries | ✅ **v0.2.0 в проде (16.07.2026).** CLI `entity-registry add/remove/edit/list/validate`. 27/27 тестов. Единый canonical реестр `entities.json` для PFS/TaskRefresh/MOFS/workvault-rag. Общий venv с PFS/TaskRefresh. | — | `TZ/EntityRegistryCLI/EntityRegistryCLI_TZ.md` v0.2.0 |
+| **AggregateFromMeetings** | WorkVault | 📋 **ТЗ v1.8 (active), код НЕ реализован.** Агрегация задач/решений/рисков из встреч. Зависит от MOFS (frontmatter). В ТЗ есть §3.2 реестр проектов — устарел, будет перенесён в entities.json. | — | `TZ/AggregateFromMeetings/TZ_aggregate_main.md` v1.8 |
+| **DialogBacklog** | Hermes (WorkVault) | ✅ **v1.4 в проде.** Ведёт бэклог открытых вопросов/задач сессий Сирени. CLI `dialog-backlog`. Крон — ежечасная и еженедельная сводки. | `defc4425a957` (Haiku, 2ч) + `vm_dialogbacklog` (Sonnet, пн 9:00) | `TZ/DialogBacklog/DialogBacklog_TZ.md` v1.4 |
+| **MeetingScheduler** | WorkVault | ✅ **v1.3 в проде.** Планирование встреч через Exchange EWS. | — | `TZ/MeetingScheduler/MeetingScheduler_TZ.md` v1.3 |
+| **SRTool** | Jira (ТУТУ) | 🟡 **ТЗ v1.1 active, код существует** (`~/USERTOOLS/SRTool/sr_fill.py`), но скилл не создан и в проде не эксплуатируется. Заполнение Self-Review в Jira. | — | `TZ/SRTool/SRTool_TZ.md` v1.1 |
+| **StatusSnapshot** | WorkVault | 📋 **ТЗ v1.2 draft, код отсутствует.** Снапшоты статусов проектов. | — | `TZ/StatusSnapshot/StatusSnapshot_TZ.md` v1.2 |
 | **ProtocolFromSummary** | Confluence (`dom.tutu.ru`) | ✅ v1.5 в проде (с 16.07.2026) — публикует "Минутки" по всем 16 протоколам реестра (проекты/1:1/мультисинки/fallback) из MoveFromFF summary. anchor-макрос + Content Property (row_anchor), МЕХАНИЗМ А (copy между Confluence-страницами) и МЕХАНИЗМ Б (copy в Obsidian) реализованы. Batch-раннер (`run-pending`) и TG-уведомление о публикации (`notify_pending.py`) — оба на автокроне; см. "PFS batch↔notify неразрывны" ниже. **`config.py::ROUTES` с 16.07.2026 читает `WorkVault/Registries/entities.json`** (см. секцию EntityRegistry ниже), `route.py` не изменён. | `pfs_batch` + `pfs_notify` | `TZ/ProtocolFromSummary/ProtocolFromSummary_TZ.md` v1.5 |
 | **TaskRefresh** | Confluence (`dom.tutu.ru`), `<ac:task>` по всем страницам с `label="_aid"` | ✅ Первый прод-кейс 13.07.2026 — живой CQL-скан задач Саши (F1-F6 фильтры: исполнитель/проект/дедлайн/дата/статус), диалоговый read→apply→confirm, точечная правка текст/исполнитель/дедлайн/статус прямо на странице-источнике. W4 (закрыть/открыть) включён в MVP по факту первого использования. **`ProjectRegistry.load()` с 16.07.2026 читает `entities.json`** (старый `project_registry.json` — legacy-fallback). Git-репозиторий инициализирован 16.07.2026 (ранее был не под версионированием). | не крон — интерактивный CLI по запросу | `TZ/TaskRefresh/TaskRefresh_TZ.md` v1.1, §14-15 — баги первого прод-прогона |
 
@@ -205,7 +255,11 @@ TG_ALERT_CHAT_ID=400307920
 
 Диалог с уточняющими вопросами — по одному, не монолог. Вопросы помогают отрезать лишнее и двигаться к сути. При постановке задачи через TG — всегда спрашивать 1) цель департамента, 2) проект. Когда OKRAID+OKRS в кэше — предлагать сама. Лишний раз не переспрашивать если можно догадаться.
 
-**Правило брифа по открытым вопросам ТЗ (закреплено 16-17.07.2026):** один вопрос в сообщении — один явный ответ на него. Не переносить сквозную нумерацию вариантов между разными вопросами/сообщениями (прецедент: Саша поправил "Один вопрос один ответ это правила брифа", когда ассистент трактовал голый номер "3" как продолжение нумерации из предыдущего сообщения вместо ответа на новый двухвариантный вопрос). Если ответ неоднозначен (голый номер после смены контекста вопроса) — переспросить какой именно вариант имеется в виду, не гадать.
+**Правило брифа по открытым вопросам ТЗ (закреплено 16-17.07.2026, уточнено 22.07.2026):** один вопрос в сообщении — один явный ответ на него. Не переносить сквозную нумерацию вариантов между разными вопросами/сообщениями. Если ответ неоднозначен (голый номер после смены контекста вопроса) — переспросить.
+
+**⚠️ ВАРИАНТЫ ТОЛЬКО ЦИФРАМИ 1/2/3 — НИКАКИХ A/B/C (22.07.2026).** Саша явно поправил: «не удобно абц или abc — так неприемлемо». Формат варианта: `1. [текст варианта]`, Саша отвечает числом. Никаких латинских букв как меток вариантов.
+
+**⚠️ ВАРИАНТЫ ТОЛЬКО ЦИФРАМИ 1/2/3 — НИКАКИХ A/B/C (22.07.2026).** Саша явно поправил: «не удобно абц или abc — так неприемлемо». Формат варианта: `1. [текст варианта]`, Саша отвечает числом. Никаких латинских букв как меток вариантов.
 
 **Рекомендации по вопросам WorkVault/поиска/EntityRegistry-класса — всегда по двум критериям:** скорость поиска (сколько шагов/файлов нужно агенту для ответа на будущий запрос) и сложность поддержки (устареет ли поле/структура без сопровождения — ручной или автоматической). Пример: выбор `[[slug|display_name]]` вместо голого `[[slug]]` для wiki-ссылок обоснован тем, что это не меняет стабильность target (Dataview/backlinks/граф матчат по slug), но даёт читаемость — выигрыш по обоим критериям без компромисса.
 
@@ -342,9 +396,75 @@ python3 -c "import json; d=json.load(open('.../session/current.json')); [print(i
 
 Полное описание найденных багов, фиксов и тестов — `WorkVault/Hermes-Backlog/TZ/TaskRefresh/TaskRefresh_TZ.md` §14 (дубль `<time>`) и §15 (рассинхронизация нумерации + W4).
 
+### ProtocolFromSummary — реестр (питфолл ключа, 22.07.2026)
+
+**⚠️ PFS `_registry.json` использует ключ `entries`, НЕ `meetings`.**
+```python
+path = Path("/home/tkachenkoav/WorkVault/ProtocolFromSummary/_registry.json")
+data = json.loads(path.read_text())
+entries = data["entries"]        # ✅ правильно — 379+ записей
+data.get("meetings", {})         # ❌ вернёт пустой dict — ключа нет
+```
+- `published_at` — ISO строка (`"2026-07-22T11:11:07.482752Z"`). Фильтровать через `.startswith("2026-07-22")`.
+- `entity` — slug из `entities.json` (напр. `aralov_1on1`, `ai_ready`, `trisigma`).
+- `schema_version: "1.1"` в этом файле — отличается от других реестров семейства.
+
+### ⚠️ Расширение aliases в entities.json вызывает ретроактивную публикацию старых встреч (22.07.2026)
+
+**Проблема-класс:** при добавлении новых aliases к PFS-сущности в `entities.json` старые встречи (Sep 2025 – Jun 2026), которые раньше не матчились на ROUTES, начинают матчиться. Если их нет в реестре PFS (`_registry.json`), `process_pending` трактует их как «новые» и публикует — независимо от года встречи.
+
+**Почему `historical_no_reload` не спасает:** флаг проверяется только для записей, УЖЕ находящихся в реестре. Для записей где `registry.get = None` — никакой проверки нет, они уходят в `pending_new` и публикуются.
+
+**Фикс — CUTOVER_DATE guard в `process_pending` (pipeline.py):**
+```python
+CUTOVER_DATE = date(2026, 7, 10)  # §11.7 — встречи старше не публикуются через run-pending
+
+pending_new = [
+    (p, s) for p, s in parsed
+    if registry.get(s.meeting_id) is None
+    and s.meeting_date >= CUTOVER_DATE
+]
+historical_skipped = [(p, s) for p, s in parsed
+    if registry.get(s.meeting_id) is None and s.meeting_date < CUTOVER_DATE]
+if historical_skipped:
+    log.info("process_pending: пропущено %d исторических встреч (до %s) — historical guard",
+             len(historical_skipped), CUTOVER_DATE)
+```
+
+**Реактивный фикс:** нечаянно опубликованные записи пометить `historical_no_reload: true` в реестре (перебрать entries где `published_at` сегодня и `meeting_id[:10] != today`).
+
+**Паттерн перед расширением aliases:** перед добавлением нового alias к PFS-сущности проверить сколько старых встреч начнёт матчиться:
+```bash
+grep -rl "<новый alias>" ~/WorkVault/Meetings/NewMeetings/*summary* 2>/dev/null | wc -l
+```
+Если >0 — убедиться что они уже в реестре PFS или добавить CUTOVER_DATE guard.
+
+**Инцидент 22.07.2026:** крон Opus диагностики MOFS добавил широкие aliases → pfs_batch опубликовал 42 встречи Sep 2025 – Jun 2026. Откат: 42 записи помечены `historical_no_reload: true`, в pipeline.py добавлен CUTOVER_DATE guard.
+
+### ProtocolFromSummary — реестр (питфолл ключа)
+
+**⚠️ PFS `_registry.json` использует ключ `entries`, НЕ `meetings`.**
+```python
+data = json.loads(Path(".../ProtocolFromSummary/_registry.json").read_text())
+entries = data["entries"]        # ✅ правильно — 379+ записей
+data.get("meetings", {})         # ❌ вернёт пустой dict — ключа нет
+```
+`schema_version: "1.1"` в этом файле — отличается от реестров MoveFromFF.
+
+### ProtocolFromSummary — historical guard (закреплено 22.07.2026)
+
+**⚠️ ПИТФОЛЛ: расширение aliases в entities.json публикует старый архив через pfs_batch.** Прецедент 22.07.2026: добавление новых aliases (в рамках диагностики MOFS) сделало 42 встречи (Sep 2025 – Jun 2026) видимыми для ROUTES. Они никогда не были в реестре PFS → `process_pending` обработал их как новые → опубликовал без команды Саши.
+
+**Защита (реализована 22.07.2026, §11.7 ТЗ):**
+1. `CUTOVER_DATE = date(2026, 7, 10)` в `pipeline.py` — `process_pending` автоматически пропускает встречи с `meeting_date < CUTOVER_DATE` (197 встреч в guard-зоне). Guard логирует: `пропущено N исторических встреч (до 2026-07-10) — historical guard`.
+2. Уже опубликованные старые встречи помечаются `historical_no_reload: true` — `notify_pending.py` их не уведомляет.
+3. При любом расширении aliases — делать `run-pending --dry-run` и проверять что published=0 по старым датам.
+
+**Публикация исторических встреч вручную:** использовать `protocol_publish` напрямую, не `run-pending`.
+
 ### ProtocolFromSummary — расписание кронов (закреплено 14.07.2026)
 
-**Цепочка MoveFromFF → pfs_batch → pfs_notify всегда идёт с фиксированным сдвигом +5 мин на каждое звено** (пример рабочей конфигурации: синк `5 8-19 * * 1-5` → batch `10 8-19 * * 1-5` → notify `15 8-19 * * 1-5`, т.е. час:05 синк, час:10 публикация, час:15 уведомление).
+**Цепочка MoveFromFF → pfs_batch → pfs_notify → MOFS всегда идёт с фиксированным сдвигом** (рабочая конфигурация: MoveFromFF `5 8-19 * * 1-5` → pfs_batch `10 8-19 * * 1-5` → pfs_notify `15 8-19 * * 1-5` → MOFS `16 8-19 * * 1-5`, т.е. час:05 синк, час:10 публикация, час:15 уведомление, час:16 разметка MOFS).
 
 **⚠️ Железное правило: `pfs_batch` и `pfs_notify` — неразрывная пара, не два независимых крона.** Если Саша просит перенастроить частоту `pfs_batch` (например «синк раз в час вместо раза в 2ч») — **автоматически пересчитывать и `pfs_notify` вместе с ним**, не только батч. Notify всегда планируется на `batch_time + 5мин`. Не спрашивать отдельно «а нотификации тоже?» — это подразумевается по определению пары; спросить только если сдвиг между ними (сейчас 5 мин) нужно поменять на другое значение.
 
@@ -414,6 +534,53 @@ python3 -c "import json; d=json.load(open('.../session/current.json')); [print(i
 
 **Iron rule:** кастомные поля (не из API-источника) не перезаписываются при синке — `aliases`, `messenger_ids`, `notes`, `custom_updated_at` в MoveFromExchange правятся только вручную через `/contact edit`.
 
+## Скиллы без ТЗ (важные, входят в экосистему)
+
+| Скилл | Что делает | Триггеры |
+|---|---|---|
+| `tutu-confluence-jira` | Confluence + Jira ТУТУ: чтение страниц, поиск задач, оргструктура (Аралов→Ткаченко→Криворотов), auth PAT | открой страницу Confluence, найди задачу в Jira, кто такой X |
+| `tutu-jira-okr` | OKR в Jira (OKRS/OKRAID): выгрузка иерархии Objective/KR, сверка Q1/Q2, отчёт закрытия периода | OKR, цели департамента, Key Result, прогресс по целям |
+| `tutu-jira-sr` | Self-Review в Jira: план на период, заполнение, проверка чужого SR, черновик итогов | SR, мой SR, заполнить SR, проверить SR Криворотова |
+| `tutu-jira-contract-approval` | Согласование договоров/ДС через JIRA Service Desk (АДД) — КБК, участники, вложения | согласовать договор, создать задачу на согласование |
+| `protocolfromsummary` | Операционный гайд по PFS: публикация протоколов, ROUTES, republish, page_layout, out_of_scope | PFS, протокол встречи, ROUTES, republish |
+| `mofs-operations` | Операционный гайд по MOFS: запуски, диагностика, entities.json, bootstrap, rematch | mofs run, mofs rematch, entities.json, тегирование встреч |
+| `workvault-rag` | Поиск по архиву встреч через mofs index (SQLite+FTS5): встречи/задачи/решения/риски | найди в архиве, что обсуждали с X, что решили по Y |
+| `obsidian` | Работа с WorkVault (Obsidian): чтение, поиск, создание заметок — читать ПЕРЕД вопросом Саше | найди в хранилище, есть ли у нас, открой заметку |
+| `get-obsidian-link` | Ссылки `obsidian://` на файлы WorkVault для отправки в Telegram (inline code, тап = копирование) | вышли ссылку на саммари, дай линк на встречу |
+| `pm-briefing` | PM-брифование: пошаговое закрытие открытых вопросов с записью ответов в WorkVault pm/ | забриф по проекту, открытые вопросы, pm-бриф |
+| `workvault-sync-infra` | Диагностика и настройка синка WorkVault↔ownCloud (systemd, rclone, Inbox) | файл не появился на ВМ, синк WorkVault, owncloud-sync |
+| `tz-workflow` | Работа с ТЗ в Hermes-Backlog: создание, версионирование, архивация, правила именования | ТЗ, техническое задание, доработка инструмента |
+| `hermes-feature` | Разработка фич и инструментов USERTOOLS: ТЗ → варианты → код → тесты → документация | разработай, новый инструмент, напиши ТЗ, баг, не работает |
+| `taskrefresh` | Операционный гайд по TaskRefresh: чтение задач из Confluence, правка дедлайнов/статусов/текста | мои задачи, что горит, подвинь дедлайн, закрой задачу |
+| `movefromff` | Детальный гайд по MoveFromFF: API, backfill, reconciliation, форсированный пересбор | MoveFromFF, Fireflies API, backfill встреч |
+| `movefrom-confluence` | Детальный гайд по ConfluenceSync: двусторонняя синхронизация, pull/push, TG-команды | ConfluenceSync, синк Confluence, pull/push страниц |
+| `mpp-to-google-sheets` | Читает .mpp (MS Project) файлы → Google Sheets через MppReader pipeline | mpp, MS Project, план проекта в таблицу |
+| `teams-meeting-pipeline` | Саммари встреч через Teams + Hermes CLI: статус pipeline, replay jobs, Graph subscriptions | Teams, саммари Teams-встречи |
+
+## Сервисные скиллы Hermes (перепрограммированы под нашу экосистему)
+
+| Скилл | Что делает | Триггеры |
+|---|---|---|
+| `sirene-chat-friends` | **Ключевой сервисный скилл Сирени** — процедуры, воркфлоу, модели делегирования по задачам, инфраструктура. Загружается автоматически в каждой сессии | (автозагрузка) |
+| `hermes-gateway-setup` | Настройка и эксплуатация Hermes Gateway: топики Telegram, конфигурация платформ, routing delegate_task vs cronjob, crash-диагностика | настрой gateway, топик не работает, подключи Telegram |
+| `hermes-memory-hygiene` | Чистка памяти и профиля: консолидация, удаление устаревших записей, перенос в скиллы | почисти память, разбери память, ревизия памяти |
+| `all-skills-hygiene` | Аудит скиллов: дубли, мёртвые скиллы, oversized SKILL.md, висячие ссылки | проверь скиллы, почисти скиллы, ревизия скиллов |
+| `hermes-upstream-check` | Мониторинг апстрима hermes-agent: диф с HEAD, рекомендация обновлять/ждать, проведение обновления | какая версия апстрима, обновляемся, сравни с апстримом |
+| `hermes-llm-provider-switch` | Переключение между LLM-провайдерами (Anthropic ↔ корп. прокси): custom_providers, delegation, backup/rollback | переключись на OpenAI, смени провайдер, корп. прокси |
+| `hermes-cost-optimization` | Оптимизация токенов: роутинг делегирования на дешёвые модели, compression, local/корп. LLM | уменьши расход токенов, подключи локальную модель |
+| `check-cron-results` | Проверка последних результатов кронов — загружать когда ждёшь ответа от Opus/Sonnet-крона | статус задачи, что вернул крон, проверь результат |
+| `cron-journal-write` | Запись итогов крон-задачи в `~/.hermes/cron-journal.md` — загружается в конце каждого Opus/Sonnet-крона | (сервисный, в конце кронов) |
+| `full-workvault-backup` | Полный tgz-бэкап `~/WorkVault` → `~/WorkVault_backup/`, ежедневно 23:30 | сделай бэкап хранилища, бэкап WorkVault |
+| `cleanup-after-sync` | Чистка мусора после GitHub-синка (no_agent, 0 токенов) — запускается автоматически после autosync | (автозапуск после GitHub-синка) |
+| `skill-authoring-principles` | Принципы написания самодостаточных скиллов: границы ответственности, самодостаточность | создай скилл, напиши скилл, как оформить скилл |
+| `hermes-skills-discovery` | Мониторинг внешней экосистемы скиллов (skills.sh, GitHub): новые и популярные скиллы | найди скиллы по теме X, что нового в сообществе скиллов |
+| `skill-portability` | Экспорт скиллов для другого Hermes-агента: деперсонализация, упаковка, инструкции установки | поделись скиллом, экспортируй скилл для другого агента |
+| `kanban-orchestrator` | Плейбук оркестратора Kanban: декомпозиция, routing через воркеров, anti-temptation | Kanban оркестратор, разбей задачу на воркеров |
+| `kanban-worker` | Плейбук воркера Kanban: питфоллы, lifecycle, edge cases | Kanban воркер, детали исполнения в Kanban |
+| `webhook-subscriptions` | Event-driven запуски агента через вебхуки | настрой вебхук, event-driven крон |
+
+
+
 ## Ежедневный self-check Сирени
 
 Крон `vm_selfcheck` (сб 03:30 МСК, Opus): проверяет консистентность скиллов и настроек, аудит распределения задач по моделям, новые коммиты в hermes-agent, ищет улучшения на hermes-agent.nousresearch.com, сохраняет отчёт `WorkVault/Hermes-Backlog/self-check-YYYY-MM-DD.md`.
@@ -452,4 +619,5 @@ python3 -c "import json; d=json.load(open('.../session/current.json')); [print(i
 - [ ] Crontab `job_id` в этой таблице совпадает с `cronjob(action='list')` (при изменении крона — обновить статус-таблицу).
 - [ ] Перед реализацией новой фичи по MoveFrom* сделан живой запрос к API — реальная схема совпала с ТЗ (или отклонение зафиксировано в отчёте Opus).
 - [ ] Кастомные поля (`aliases`/`messenger_ids`/`notes`/`custom_updated_at`) не перезаписываются коннектором.
+- [ ] **PFS-специфично:** перед расширением aliases в `entities.json` — проверить grep по архиву встреч, сколько старых файлов начнут матчиться. При наличии CUTOVER_DATE guard в pipeline.py (§11.7) — проверить его актуальность.
 - [ ] Разработка запущена только после явного «ок, берём в работу» от Саши в TG.

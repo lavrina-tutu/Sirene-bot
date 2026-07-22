@@ -1,10 +1,10 @@
 # MoveFrom* / FF API / AnywhereContacts — питфоллы
 
-Родственный скилл: `movefrom-instruments` (полные детали инструментов).
+Родственный скилл: `about_usr_skills` (полные детали инструментов).
 
 ## FF API `outline` всегда null (research pitfall)
 
-`extended_sections` содержит 4 секции: Blockers/Questions/Meeting Outline/Topics. `apps_preview.outputs` содержит ВСЕ AI Skills (встроенные `1:1`/`Meeting Summary Generator` + любые пользовательские Custom Skills, отличаются по `title`) — детали, GraphQL-запрос и ограничения (нет ретроактивного запуска через API) см. скилл `movefrom-instruments`.
+`extended_sections` содержит 4 секции: Blockers/Questions/Meeting Outline/Topics. `apps_preview.outputs` содержит ВСЕ AI Skills (встроенные `1:1`/`Meeting Summary Generator` + любые пользовательские Custom Skills, отличаются по `title`) — детали, GraphQL-запрос и ограничения (нет ретроактивного запуска через API) см. скилл `about_usr_skills`.
 
 ## Реальный API может не совпасть с ТЗ
 

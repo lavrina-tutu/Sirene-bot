@@ -1,7 +1,7 @@
 ---
 name: workvault-rag
-description: "Use when Саша спрашивает что-либо по прошедшим встречам, задачам, решениям, рискам или блокерам — 'кто что обещал', 'какие задачи ждёт X', 'что решили по Y', 'какие риски по Z', 'что обсуждали за последние N дней/недель'. Точный 4-шаговый алгоритм фильтрации (дата → участники → проект → тип сущности) — см. раздел 'Алгоритм поиска по встречам'. Также покрывает вопросы по ТЗ (Hermes-Backlog/TZ)."
-version: 2.2.0
+description: "Use when: 'найди в архиве', 'архив', 'найди в базе', 'найди во встречах' — или любой вопрос по прошедшим встречам, задачам, решениям, рискам, блокерам ('кто что обещал', 'что решили по Y', 'что обсуждали с X'). Поиск через mofs index (SQLite+FTS5) + три режима: список встреч / детали summary / цитаты из transcript. Также покрывает вопросы по ТЗ (Hermes-Backlog/TZ)."
+version: 2.3.0
 author: Sirene
 license: MIT
 platforms: [linux]
@@ -9,7 +9,7 @@ tags: [Obsidian, WorkVault, meetings, search, knowledge-base]
 metadata:
   hermes:
     tags: [Obsidian, WorkVault, meetings, search, knowledge-base]
-    related_skills: [obsidian, tz-workflow, movefrom-instruments]
+    related_skills: [obsidian, tz-workflow, about_usr_skills]
 ---
 
 # WorkVault — поиск по MD-заметкам (встречи, ТЗ)
@@ -150,13 +150,22 @@ metadata:
 ```
 Хранить ссылку во frontmatter не нужно — вычисляется на лету.
 
-**`mofs index`** — SQLite+FTS5 индекс, живёт в `~/USERTOOLS/MofsIndex/state/index.sqlite`.
-Индексирует: frontmatter (4 корзины slugs + date) + тело summary + тело transcript.
-Обновляется: хук в конце `mofs run`/`mofs rematch` (только real-mode, не dry-run).
-ТЗ: `WorkVault/Hermes-Backlog/TZ/MofsIndex/MofsIndex_TZ.md` v0.1.0.
+**`mofs index`** — SQLite+FTS5 индекс, живёт в `~/USERTOOLS/MofsIndex/state/index.sqlite`.\nИндексирует: frontmatter (4 корзины slugs + date) + тело summary + тело transcript.\nОбновляется: хук в конце `mofs run`/`mofs rematch` (только real-mode, не dry-run).\nТЗ: `WorkVault/Hermes-Backlog/TZ/MofsIndex/MofsIndex_TZ.md` v0.1.0.\n\n**⚠️ Реальная польза mofs index (22.07.2026, подтверждена практикой):**\n- **Хорошо работает:** поиск встреч по slug проекта (нашёл 9 встреч ML-платформы за июль мгновенно). Поиск по тексту тоже работает — `search_meetings(query='отпуск')` нашёл 18 встреч с упоминанием.\n- **Слабое место — contacts:** frontmatter `contacts` заполнен только у ~50% встреч за июль 2026 и практически пуст в архиве до июля. Поиск `search_meetings(slugs={'contacts': ['Гладких Юрий']})` возвращает неполные результаты — нужно дополнять grep по тексту саммари.\n- **Практический вывод:** для поиска «кто что сделал» или «что обсуждали с N» — сначала индекс (список встреч по проекту/дате/тексту), потом grep по телу саммари и транскриптам для конкретных строк.\n\n**Ripgrep (grep по файлам)** при наличии mofs index — НЕ замена, а дополнение для другого класса запросов:
+- `mofs index` → «какие встречи по теме X» — возвращает список встреч (meeting_id + title)
+- `grep` → «какие именно строки говорят про X» — возвращает точные цитаты с контекстом из файлов
 
-**Ripgrep (grep по файлам)** при наличии mofs index — не нужен, медленнее на порядок.
-Использовать только как fallback когда индекс устарел или не построен.
+Когда нужны точные формулировки (например «что именно обсуждали про отпуск» → нужна строка «Криворотов планирует взять отпуск 20-26 июля»), grep по `*summary*` эффективнее:
+```bash
+grep -rn -i 'КЛЮЧЕВОЕ_СЛОВО' \
+  '/home/tkachenkoav/WorkVault/Meetings/NewMeetings/' \
+  --include='*2026-07*summary*'
+```
+Для широкого архивного поиска без фильтра по дате — сначала `search_meetings(query=...)` чтобы получить список файлов, затем grep только по ним.
+
+Читать контекст вокруг найденной строки транскрипта (±15 строк от номера N):
+```bash
+sed -n '$((N-15)),$((N+15))p' '/path/to/transcript.md'
+```
 
 **НЕ создавать отдельные скиллы** `workvault-search` / `workvault-deep` — всё в одном `workvault-rag`.
 Три режима определяются характером вопроса внутри скилла, не переключением между скиллами.
@@ -172,7 +181,7 @@ metadata:
 
 ## Верхнеуровневая связь с EntityRegistry↔MOFS/AFM
 
-Полное архитектурное решение по стыковке `entities.json` с `MarkObjectsFromSummary`/`AggregateFromMeetings` (naming-конфликт слугов, устав vs протокол-страница, двойная классификация типа «Метротека = проект и инструмент», 4 корзины при массовом NER-прогоне архива: люди/сущности/инструменты/переговорки) — см. `movefrom-instruments`, секция «EntityRegistry ↔ MarkObjectsFromSummary (MOFS) / AggregateFromMeetings (AFM)».
+Полное архитектурное решение по стыковке `entities.json` с `MarkObjectsFromSummary`/`AggregateFromMeetings` (naming-конфликт слугов, устав vs протокол-страница, двойная классификация типа «Метротека = проект и инструмент», 4 корзины при массовом NER-прогоне архива: люди/сущности/инструменты/переговорки) — см. `about_usr_skills`, секция «EntityRegistry ↔ MarkObjectsFromSummary (MOFS) / AggregateFromMeetings (AFM)».
 
 ## Алгоритм поиска через mofs index (быстрый путь, приоритет над grep)
 
@@ -180,11 +189,7 @@ metadata:
 
 ### Режим 1 — поиск встреч (список)
 
-```python
-# Импорт
-import sys
-sys.path.insert(0, '/home/tkachenkoav/USERTOOLS/ProtocolFromSummary/.venv/lib/python3.11/site-packages')
-from mofs_index import search_meetings
+```python\n# Правильный импорт (после editable install фикса 22.07.2026):\nimport sys\nsys.path.insert(0, '/home/tkachenkoav/USERTOOLS/MofsIndex')\nfrom mofs_index.searcher import search_meetings\nfrom mofs_index.searcher import get_meeting, get_transcript_snippets  # если нужны\n# Альтернативно (если пакет правильно установлен):\n# from mofs_index import search_meetings  — может работать после pip install -e
 
 # По slug проекта
 hits = search_meetings(slugs={'projects': ['kirill_1on1']}, limit=20)
@@ -201,13 +206,12 @@ hits = search_meetings(query='DWH метрики', date_from='2026-06-01')
 # По контакту
 hits = search_meetings(slugs={'contacts': ['Криворотов Кирилл']})
 
-# Вывод результатов
+# MeetingHit — dataclass с атрибутами (НЕ dict, нет .get()):
 for h in hits:
-    print(h.meeting_date, h.meeting_id, h.title)
-    print('  obsidian:', h.obsidian_url)
+    print(h.meeting_date, h.title)   # атрибуты: meeting_date, title, meeting_id, obsidian_url
 ```
 
-`slug_mode='all'` — пересечение (все slugs должны быть), `'any'` (по умолчанию) — объединение.
+`slug_mode='all'` — пересечение, `'any'` (по умолчанию) — объединение.
 
 ### Режим 2 — детали встречи (summary)
 
@@ -250,6 +254,14 @@ path = f'Meetings/NewMeetings/{mid} - summary.md'
 url = 'obsidian://open?vault=WorkVault&file=' + urllib.parse.quote(path, safe='/')
 ```
 
+## Топики для поиска
+
+- **WorkVault (thread=5)** — основной топик для поиска по архиву встреч
+- **Tools (thread=3)** — дополнительный
+- Chat: `-1004300127777`
+
+Триггеры загрузки скилла: «найди в архиве», «архив», «найди в базе», «найди во встречах».
+
 ## Verification Checklist
 
 - [ ] Структурный запрос (дата/участник/проект + сущность) прошёл 4-шаговый алгоритм, не угадан на глаз
@@ -259,4 +271,7 @@ url = 'obsidian://open?vault=WorkVault&file=' + urllib.parse.quote(path, safe='/
 - [ ] "Неясная запись" — при совпадении 2+ признаков задача отнесена к Саше, источник явно помечен
 - [ ] Не предлагать/не пытаться восстанавливать qmd без явного запроса Саши
 - [ ] При структурном запросе (slug/дата) — использовать `mofs index` через `search_meetings()` как первый путь; fallback на grep только если индекс не построен (`mofs-index verify` покажет)
+- [ ] `MeetingHit` — dataclass, не dict. Использовать `h.meeting_date`, `h.title`, `h.meeting_id` — НЕ `h.get('...')` (AttributeError)
 - [ ] Запрос «кто что сказал / детально что обсуждалось» — читать `transcript.md` (суффикс `-transcript.md` вместо `-summary.md`), не summary; LLM отвечает по тексту транскрипта
+- [ ] Contacts заполнены только для встреч с июля 2026 и тех старых, где есть раздел «Участники». Для архива до июля без раздела «Участники» — contacts пустые. Не считать пустой contacts признаком бага — это ожидаемое состояние архива до backfill. При поиске по человеку — дополнять grep по тексту саммари.
+- [ ] Если ответ на вопрос не найден в summary — проверить transcript, прежде чем сообщать «не нашла». Саммари часто не фиксирует мотивацию/контекст решений, только сами решения.

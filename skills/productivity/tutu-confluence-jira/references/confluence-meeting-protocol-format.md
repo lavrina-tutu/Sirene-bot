@@ -61,7 +61,7 @@ curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
 ## userkey → ФИО, найденные в реальных минутках, изначально отсутствовавшие в contacts.enc
 
 Люди, встретившиеся как участники/исполнители задач в этих трёх протоколах — на 09.07.2026
-все перенесены в `contacts.enc` (единственное разрешённое хранилище, см. `movefrom-instruments`
+все перенесены в `contacts.enc` (единственное разрешённое хранилище, см. `about_usr_skills`
 → AnywhereContacts/ContactStore); таблица ниже — история резолва, не актуальный источник данных:
 
 | Confluence username | ФИО |
@@ -90,9 +90,9 @@ curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
 - Семантика двух дат, идемпотентность, резолв проекта встречи (по названию встречи, не по
   содержимому), резолв переговорок (исключаются из участников, задача на fallback tkachenkoav),
   триггер (автоматический крон), scope (все 3 типа сущностей: проекты+1:1+мультисинк) — все
-  решены, детали в `movefrom-instruments` → `references/confluence-minutki-protocol-format.md`
+  решены, детали в `about_usr_skills` → `references/confluence-minutki-protocol-format.md`
   (единый источник истины по формату протокола, не дублируется здесь второй раз).
 - **10.07.2026 — весь реестр протоколов закрыт полностью** (17 сущностей: 6 проектов, 4 персональных
   1:1, DataTalks, Встречи ПРО, Встречи неразобранное, Синк АиД, Общий список задач). Каноническое
   ТЗ: `WorkVault/Hermes-Backlog/TZ/ProtocolFromSummary/ProtocolFromSummary_TZ.md`. Первый пилотный
-  прогон разработки+теста выбран на Trisigma + Кирилл 1-1 (см. movefrom-instruments reference).
+  прогон разработки+теста выбран на Trisigma + Кирилл 1-1 (см. about_usr_skills reference).

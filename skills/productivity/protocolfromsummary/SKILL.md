@@ -65,6 +65,7 @@ per-project protocol tables on Confluence (dom.tutu.ru). Code lives at
    Room-redirect logic (meeting-room "assignee" → DEFAULT_ASSIGNEE_LOGIN) now also handles the
    mixed case (some assignees are rooms, some are people). See
    `references/multi-assignee-fix-2026-07-15.md` for the full before/after and test names.
+   Инцидент с массовой публикацией из-за aliases и рецепт восстановления: `references/historical-guard-incident-20260722.md`.
 2. **`page_layout` in `ROUTES` can silently drift from the REAL Confluence table structure** — the
    user sometimes manually edits a protocol page's table (adds/removes a column) without telling
    the tool. A stale `page_layout` will render the wrong number of `<td>` cells and corrupt the
@@ -93,6 +94,35 @@ per-project protocol tables on Confluence (dom.tutu.ru). Code lives at
    else correctly falls through to `out_of_scope`. A report of "239 files, all out_of_scope" is
    normal, not a bug — it means no new meetings matched the pilot scope.
 
+6. **Расширение aliases в entities.json вызывает непреднамеренную массовую публикацию** —
+   если добавить новые aliases, ранее невидимые исторические встречи становятся видимыми для
+   ROUTES. Если они отсутствуют в реестре (`registry.get = None`), `process_pending` публикует
+   их как новые. **Инцидент 22.07.2026**: 42 встречи Sep 2025 – Jun 2026 опубликованы без команды.
+   Canary-тест: `test_baseline_invariant_matches_pfs_routes` в `test_entities_registry.py` — если
+   он падает после правки aliases, ОСТАНОВИТЬ cron до синхронизации `config.py` ROUTES.
+   **Лечение инцидента**:
+   1. Бэкап реестра: `cp _registry.json _registry.json.bak-YYYYMMDD-fix`
+   2. Пометить пострадавшие записи `"historical_no_reload": true` — атомарно (tmp + os.replace):
+      записи где `published_at` начинается с сегодня, а `meeting_id` НЕ начинается с сегодня.
+   3. `CUTOVER_DATE` guard (§11.7, Питфол 7) предотвращает повторение.
+
+7. **`CUTOVER_DATE` guard (§11.7) — обязательная защита от исторических публикаций** —
+   константа в `pipeline.py`, добавляется сразу после блока импортов из `.config`:
+   ```python
+   # §11.7 — встречи старше этой даты не публикуются автоматически через run-pending.
+   # Обходить через: run-pending --allow-historical или protocol_publish напрямую.
+   CUTOVER_DATE = date(2026, 7, 10)
+   ```
+   В `process_pending` фильтр `pending_new` включает `and s.meeting_date >= CUTOVER_DATE`.
+   Плюс логирование: `пропущено N исторических встреч (до YYYY-MM-DD) — historical guard`.
+   Проверка: `python -m protocolfromsummary run-pending --dry-run 2>&1 | grep -E 'исторических|пропущено|published'`
+
+8. **Тесты `test_process_pending.py` падают после изменения `CUTOVER_DATE`** — все
+   захардкоженные даты фикстур должны быть >= CUTOVER_DATE, иначе guard отфильтрует тестовые
+   встречи и тесты упадут. При изменении константы — поднять все даты в тестовых фикстурах
+   (`_write_summary` + `RegistryEntry.meeting_date`) до значения >= CUTOVER_DATE.
+   Симптом: `AssertionError: assert None is not None` в `test_process_pending_registry_updated_after_publish`.
+
 ## Cron routing rules (17.07.2026)
 
 **Batch cron `a6e62d06249f`** (`deliver=local`):
@@ -113,3 +143,7 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
       task-ids) — didn't trust `action == "published"`/`"republished"` alone
 - [ ] Full offline suite green (`pytest -q -m "not live_confluence"`) before AND after any code
       change to `pipeline.py`/`storage_xml.py`/`contacts_resolver.py`/`summary_parser.py`
+- [ ] После любой правки aliases в `entities.json` — проверить `test_baseline_invariant_matches_pfs_routes`
+      до запуска cron; если тест падает — синхронизировать ROUTES в `config.py` перед следующим прогоном
+- [ ] Dry-run проверка CUTOVER_DATE guard: `run-pending --dry-run | grep -E 'исторических|пропущено|published'`
+      должен показывать `пропущено N исторических встреч` и `published: 0` (если нет новых реальных встреч)

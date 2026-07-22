@@ -1,4 +1,4 @@
-# MOFS v0.7.0 — детальный статус (21.07.2026)
+# MOFS v0.7.0/v0.8.x — детальный статус + MofsIndex v0.1.0
 
 ## Что сделано в сессии 21.07.2026
 
@@ -16,51 +16,68 @@
 - `pipeline.py`: ContactStore один раз на run_pipeline
 - `config.py`: абсолютный путь к `.env` → cwd-независимость
 - `test_matcher_contacts.py`: полностью переписан (13 тестов)
-- **Итого: 101/101 тестов**
 
-### Прочее
-- `README.md` переписан, ТЗ → v0.7.0, инвентарь обновлён
-- `tsu` alias: убран `"цу "`, оставлен `"цу."` (startswith)
-- `.env` симлинк: `~/USERTOOLS/MarkObjectsFromSummary/.env` → `~/USERTOOLS/AnywhereContacts/.env`
+### Contacts v0.2.1 — поддержка bold-формата (v0.8.1)
+MoveFromFF генерирует заголовки разделов в двух форматах:
+- Markdown: `## Участники:` / `## Задачи:` — 36/61 встреч
+- Bold: `**Участники:**` / `**Задачи:**` — 23/61 встреч (Trisigma и др.)
 
-## Реализованные изменения v0.7.0 (Safety — детально)
+Фикс в `text_extractor.py`:
+- Добавлен `_SECTION_BOLD = re.compile(r"^\*\*([^\n*]+?)\*?\*?:?\s*$", re.MULTILINE)`
+- `_extract_section` собирает кандидатов обоих форматов, сортирует по позиции
+- `_is_fio` и логика разделов не изменились
+- Добавлены 2 теста в `test_matcher_contacts.py`: `test_extract_fio_bold_header_participants`, `test_extract_fio_bold_tasks_section`
+- **Итого: 110/110 тестов**
 
-**pipeline.py:**
-- `run_pipeline(dry_run, date_from, date_to)` — при dry_run не пишет файлы и реестр,
-  возвращает `(stats, plan)` где `plan` = список `{meeting_id, would_add, cards_to_create}`
-- `process_meeting(dry_run)` — при dry_run пропускает `write_frontmatter` и `card_writer`
-- `filter_by_date(files, date_from, date_to)` — фильтрация по дате в имени файла
+При добавлении новых форматов заголовков — расширять `_extract_section`, не дублировать логику.
 
-**cli.py:**
-- `mofs run`: `--dry-run`, `--from`, `--to`, `--meeting-id`, `--all`
-  safeguard: без скоупа в ручном режиме → exit 2 (кроме --mode=cron)
-  префлайт `SCOPE: N meetings, bucket=X, mode=dry-run|real` в stderr
-- `mofs rematch`: `--dry-run`, `--from`, `--to`, `--yes`
-  safeguard: без скоупа → exit 2; `--all` без `--yes` → показывает N, требует подтверждения
-  dry-run не снимает снапшот
-- `mofs edit`: `--dry-run` — валидация без записи
-- `mofs bootstrap --snapshot --dry-run` — план снапшота без создания файла
-- `_validate_date_flags()` — валидация YYYY-MM-DD и to >= from
+### date: во frontmatter
+- `pipeline.py` — в `process_meeting` после merge корзин: `fm["date"] = m_date.group(1)` (идемпотентно)
 
-**manual_edit.py:**
-- `add_entry(dry_run)` — при True: валидация + план, без записи
-- `remove_entry(dry_run)` — то же
+### MofsIndex (SQLite+FTS5, реализован 21.07.2026)
 
-## Статус по корзинам (июль 2026, 60 встреч)
+**Архитектура:**
+```
+meetings          -- метаданные + mtime/sha1 для инкремента
+meeting_slugs     -- (bucket, slug) с индексом
+meetings_fts      -- FTS5 standalone: title + summary_body + transcript_body
+meta              -- schema_version, last_full_reindex_at
+```
 
-| Корзина | Встреч с данными | Уникальных | Статус |
-|---|---|---|---|
-| projects | 60/60 | 15 | ✅ реальный прогон выполнен |
-| tools | 5/60 | 1 (omd) | ✅ |
-| rooms | 10/60 | 6 | ✅ |
-| contacts | 28/60 (dry-run) | ~80+ | ⏳ ждёт `rematch --bucket contacts` |
+**Отклонения от ТЗ (SQLite 3.34 ограничения):**
+1. FTS5 standalone (не `content=meetings`) — external content несовместим с DELETE по meeting_id
+2. Тела только в FTS (не дублируются в meetings) — 57 MB vs ~108 MB
+3. OR-условия вместо `WHERE (bucket,slug) IN (...)` — row-value syntax не поддерживается
+4. ThreadPoolExecutor не добавлен — GIL; 3 транзакции (parse → meetings+slugs → FTS+optimize)
 
-## Следующие шаги
+**Замеры (575 встреч):**
+| Операция | Результат | Цель |
+|---|---|---|
+| Full rebuild | 4.9с | <10с ✅ |
+| search по slug | 1.69мс | <10мс ✅ |
+| search FTS+дата | 20.5мс | <10мс ⚠️ тикет v0.2 |
+| get_meeting | 0.91мс | <2мс ✅ |
+| Размер БД | 57 MB | <60 MB ✅ |
 
-1. `mofs rematch --bucket contacts --from 2026-07-01 --to 2026-07-31 --yes`
-2. Саша проверяет в Obsidian (Properties + Graph view)
-3. NER-прогон по архиву на Haiku → пополнение entities.json
-4. Крон mofs_daily — только после «ок» от Саши
+**Тесты:** MofsIndex 65/65 + MOFS 108/108 (103 + 5 интеграционных)
+
+**Пути:**
+```
+~/USERTOOLS/MofsIndex/mofs_index/
+  db.py, parser.py, indexer.py, searcher.py, cli.py, hooks.py
+~/USERTOOLS/MofsIndex/state/index.sqlite  (WAL)
+```
+Установлен editable в `ProtocolFromSummary/.venv`.
+
+## Статус по корзинам (июль 2026, 61 встреча)
+
+| Корзина | Встреч с данными | Статус |
+|---|---|---|
+| projects | 61/61 | ✅ |
+| tools | 5/61 | ✅ |
+| rooms | 10/61 | ✅ |
+| contacts | ~30/61 | ✅ v0.8.1 (оба формата) |
+| date | 61/61 | ✅ |
 
 ## entities.json — полная таблица (19 сущностей)
 
@@ -81,29 +98,15 @@
 | vstrechi_pro | multisync | ПРО (гильдия РП) | 2 |
 | sink_aid | sync_aid | Синк АиД | 2 |
 | metroteka | project | Метротека | 1 |
-| cu | project | ЦУ (Central University) | 1 |
-| tsu | unknown | ЦУ → неразобранное | 0 |
+| cu | project | ЦУ | 1 |
+| tsu | unknown | ЦУ неразобранное | 0 |
 | devrel | project | DevRel | 0 |
-| vstrechi_nerazobrannoe | unknown | Встречи — неразобранное | 0 |
+| vstrechi_nerazobrannoe | unknown | неразобранное | 0 |
 
 ## Alias tsu — диагностика и фикс (21.07.2026)
 
-**Проблема:** alias `"цу "` (substring + пробел) ложно матчил
-«страницу», «таблицу» в 8 встречах июля.
+**Проблема:** alias `"цу "` (substring + пробел) ложно матчил «страницу», «таблицу» в 8 встречах.
 
-**Диагностика:**
-```bash
-grep -oi ".{0,20}цу.{0,20}" "path/to/summary.md"
-# показал: "страницу" и "таблицу" — окончания слов, не аббревиатура
-```
-
-**Фикс:**
-```bash
-entity-registry edit tsu aliases "цу " --remove-item -y
-# оставить только "цу." (startswith)
-```
-
-**Результат:** 0 ложных срабатываний на 60 встречах июля.
+**Фикс:** убрать `"цу "`, оставить только `"цу."` (startswith) → 0 ложных срабатываний.
 
 **Правило:** для 2-3-буквенных кириллических аббревиатур — ТОЛЬКО alias с точкой.
-Substring слишком широк для коротких слов.

@@ -132,6 +132,6 @@ When verifying a project suite, produce a table like this:
 ## References
 
 - **ТЗ locations:** `hermes-workspace/docs/tz/MoveFrom*_TZ_*.md`
-- **Skill governing MoveFrom* architecture:** `movefrom-instruments`
+- **Skill governing MoveFrom* architecture:** `about_usr_skills`
 - **Typical run:** 15–30 min per project (depends on code size)
 - **When to expand:** If new pitfall found, update this file under "Common Pitfalls"

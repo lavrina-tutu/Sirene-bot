@@ -1,7 +1,7 @@
 ---
 name: hermes-memory-hygiene
 description: "Declutter Hermes MEMORY and USER PROFILE when they approach their char budget — move technical/procedural detail into skills, keep only pointers, without losing information. Also governs WRITE-TIME discipline: before adding any new MEMORY/USER PROFILE entry, default to writing/patching a skill instead, and compress what actually needs to be a memory entry. Триггеры: почисти память, разбери память, проверь память, почисти профиль, ревизия памяти."
-version: 1.3.0
+version: 1.4.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -17,6 +17,23 @@ Use this skill whenever MEMORY or USER PROFILE usage shown in the context header
 ## Write-time gate — apply BEFORE every `memory(action='add')` (added 13.07.2026)
 
 This is the proactive half of this skill: cleanup (below) fixes an already-cluttered store; this gate stops new clutter from being written in the first place. Apply it every time you're about to persist a durable fact, whether triggered by an explicit "запомни X" from Sasha or by your own decision during a self-check/self-update pass.
+
+**Категории разрешённых записей** (только они попадают в MEMORY):
+- `env-quirk` — quirk среды/инструмента, не меняется → **предпочтительнее в `~/.hermes/HERMES.md`** (не char-budgeted, не инвалидирует кеш при правках MEMORY)
+- `pointer` — указатель на скилл/файл где живёт процедура (напр. «PFS crons → about_usr_skills»)
+- `decision` — зафиксированное решение Саши без TTL (напр. «contacts только в contacts.enc»)
+
+**Правило роутинга нового факта:**
+- «свойство среды/платформы/интеграции» (env-quirk) → `~/.hermes/HERMES.md` секция `## 🔧 Env quirks`
+- «эвристика/паттерн/оперативное состояние» → `MEMORY.md`
+
+**⚠️ HERMES.md — только uppercase:** реальный файл `~/.hermes/HERMES.md`. Строчный `~/.hermes/hermes.md` НЕ загружается — механизм `_find_hermes_md()` ищет `.hermes.md` или `HERMES.md` (walk from cwd к git root), Linux case-sensitive. Прецедент 23.07.2026: Sonnet записал изменения в строчный `hermes.md` — файл существовал на диске, но gateway его игнорировал. Симптом: изменение не влияло на поведение агента. Диагностика: `ls -la ~/.hermes/hermes.md ~/.hermes/HERMES.md`. При делегировании субагентам — явно указывать полный путь с заглавными.
+
+**Запрещено в MEMORY** (нарушают стабильность):
+- События с датой: «X произошло ДД.ММ» — это лог, не факт → в бэклог или насовсем
+- Версии инструментов: «tool v1.2.3» — устареют → в скилл
+- Открытые задачи/вопросы: «требует решения Саши» — это TODO → в бэклог
+- Процедуры и how-to — это → в скилл
 
 **Before calling `memory(action='add', ...)`, answer these in order:**
 
@@ -95,6 +112,10 @@ The block-by-block Q&A pattern below is NOT limited to memory/profile-review ses
 
 This applies beyond memory hygiene — use it whenever a task surfaces multiple open decisions (TZ open questions, config choices, etc.), not only during a `USER PROFILE`/`MEMORY` cleanup pass.
 
+## Skill audit pattern (when asked to review a skill)
+
+Когда Саша просит «проверь/почисти скилл X»: читать целиком → брифовать по одному предложению (что есть + куда перенести) → список решений → один Opus-кронджоб на все патчи. Не запускать правки без явного «ок» по каждому пункту. Из скилла разработки удалять: прецеденты с датами (→ питфоллы), правила поведения агента (→ SOUL), специфику других скиллов (→ профильный скилл), разовые операции (→ насовсем).
+
 ## Pitfalls
 
 - **Before declaring a memory block fully redundant, check ALL plausible candidate skills, not just the first match.** In one session a "corp systems ТУТУ" block looked like it belonged to one skill, but the facts were actually split across three (`tutu-confluence-jira`, `tutu-jira-contract-approval`, `about_usr_skills/references/tutu-corporate-integrations.md`). Load each candidate with `skill_view` and confirm the specific fact (URL, login, token name) is present before removing the memory copy — a plausible skill name is not proof.
@@ -106,9 +127,24 @@ This applies beyond memory hygiene — use it whenever a task surfaces multiple 
 - **A `replace` can ALSO fail purely on char budget, even with a perfect `old_text` match** — if the store is already near its limit and your replacement text is longer than the original (e.g. adding "повторилось дважды, дата X" context to an existing entry), the call is rejected with "Replacement would put memory at N/limit chars", distinct from the exact-match failure above. Don't retry the same longer text hoping it'll pass — either (a) make the replacement net-shorter than the original by cutting something else in the same entry, or (b) use the batched `operations` array in one call to simultaneously trim/remove a second, less-critical entry to free room, exactly like the "single add fails when full" pitfall above but applying to `replace` too. If a near-full store makes even one shortened replace impractical mid-task, it's a signal to stop and run the full hygiene procedure (this skill) rather than keep retrying single edits — repeated failed attempts burn turns without progress.
 - **MEMORY vs USER PROFILE is not "environment vs everything"** — don't dump technical/procedural facts into USER PROFILE just because MEMORY is full; that only shifts the overflow problem to the other store. Route technical detail to skills instead of either memory store.
 - **Session-level docs (e.g. a project README) can also be the pointer target**, not only a skill — if a README already has the full pricing/endpoint table, memory just needs the file path.
+- **`~/.hermes/HERMES.md` — только UPPERCASE.** Механизм `_find_hermes_md()` ищет `.hermes.md` или `HERMES.md` при walk from cwd, Linux case-sensitive. Строчный `~/.hermes/hermes.md` существует на диске, но gateway его не загружает — изменения молча игнорируются. Симптом: env-quirk добавлен, но в следующей сессии агент его «не знает». Диагностика: `ls -la ~/.hermes/hermes.md ~/.hermes/HERMES.md`. При делегировании субагентам — передавать полный путь `~/.hermes/HERMES.md` явно.
 - **Dead pointers are worse than no pointer.** Whenever you `skill_manage(action='delete')` a skill, immediately grep MEMORY.md, USER.md, and every other skill's SKILL.md/references for its name (`search_files` or `grep`) and fix or remove any "see skill X" references left dangling. A memory entry pointing at a skill that no longer exists sends the next session on a dead-end lookup.
 - **A persona/identity skill duplicating SOUL.md is a smell, not a feature.** If you find a skill whose content substantially restates "who the agent is / character / core values" that already lives in SOUL.md, that's duplication to fix (move the identity into SOUL.md once, leave the skill with only the class-level procedures), not a second source of truth to maintain in parallel.
 - **MEMORY.md/USER.md can end up storing literal `\uXXXX` escape sequences instead of real Cyrillic characters** — a sign of double JSON-escaping somewhere upstream (a prior write went through a JSON-encode step twice). Symptom: `read_file` shows garbage like `\u0431\u0430\u0442\u0447` instead of "батч", and `memory(action='replace', old_text=...)` fails with "no entry matched" even though the text visually looks present — because the stored bytes are the literal 6-character escape sequence, not the decoded character, so your `old_text` (typed with real Cyrillic) can never match byte-for-byte. **Fix:** read the raw file content, repair it with a regex substitution — `re.sub(r'\\\\u([0-9a-fA-F]{4})', lambda m: chr(int(m.group(1), 16)), raw_text)` — then write the corrected (and, while you're at it, compressed per the write-time gate above) text back with `write_file` directly to the memory file path (`~/.hermes/memories/MEMORY.md` or `USER.md`), since the `memory` tool's `replace` action cannot target text it can't string-match. Verify the fix by re-reading the file and confirming real Cyrillic renders, not escape codes.
+
+## MEMORY overflows char budget — write_file fallback (23.07.2026)
+
+When `memory(action='add'|'replace')` is rejected because the store already exceeds its 2200-char budget (e.g. 3081/2200 = 140%), the `memory` tool cannot help at all — even a remove+add batch fails because the store is already corrupt. Fix: use `write_file` with `cross_profile=True` directly on `~/.hermes/memories/MEMORY.md`, writing only the entries that belong there (per the write-time gate above). After the write, verify with `wc -c` that the file is under 2200 bytes.
+
+## hermes.md as a fifth tier for env-quirks (23.07.2026)
+
+`~/.hermes/hermes.md` is auto-loaded every session, has NO char budget, and rarely changes → it is the correct home for **env-quirks** (platform/integration constraints that never change). MEMORY is for **operational state** (pointers, decisions, heuristics that evolve). Routing rule:
+- **env/platform/integration property** (e.g. «Telegram strips hyperlinks», «cron deliver strips thread_id») → `hermes.md` under `## 🔧 Env quirks`
+- **heuristic/pattern/operational pointer** (e.g. «PFS crons → skill X») → `MEMORY.md`
+
+Why it wasn't done earlier: `memory` tool is available in-dialog and feels convenient; `write_file` on hermes.md requires an explicit deliberate step. The routing rule above closes the gap.
+
+**Benefit:** env-quirks in hermes.md don't change → system prompt stays byte-stable → prompt cache is not invalidated. Env-quirks in MEMORY invalidate cache every time any MEMORY edit happens.
 
 ## Worked example: full MEMORY.md purge to zero (13.07.2026)
 

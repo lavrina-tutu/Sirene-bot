@@ -101,6 +101,21 @@ active_humans = [m for m in members if m.get('is_active') and not m.get('is_bot'
 
 **Zulip → contacts.enc bootstrap:** Zulip — основной источник для первичного заполнения справочника контактов (см. `movefrom-exchange-contacts`). Выгружает email + ФИО + zulip_id. Department/position недоступны (не хранятся в Zulip) — обогащать через Exchange когда заработает.
 
+## Zoom API
+
+- **Путь:** `~/USERTOOLS/ZoomAPI/` — задел готов (README.md + test_zoom.py)
+- **Auth:** Server-to-Server OAuth (JWT deprecated с сентября 2023)
+- **Env:** `ZOOM_ACCOUNT_ID=KqCR_LU4SvODVaVYTu_BYQ`, `ZOOM_CLIENT_ID=xbMKhrqHQU6zk5agAOlWbg`, `ZOOM_CLIENT_SECRET` — **прописаны в `~/.hermes/profiles/anthropic/.env`** (23.07.2026)
+- **Приложение:** «Hermes Meeting Bot», Account ID: `KqCR_LU4SvODVaVYTu_BYQ`
+- **Статус (23.07.2026):** токен получается ✅, userId `6fU9sTauSgeCx-x27gbikQ` (tkachenkoav@tutu.ru) ✅. Создание встречи ❌ — корпоративный аккаунт ТУТУ не выдаёт scope `meeting:write:meeting`.
+- **Ожидает:** разрешения Zoom-админа ТУТУ на scope `meeting:write:meeting` для приложения
+- **Fallback:** PMI (Personal Meeting Room) — статическая ссылка `https://zoom.us/j/<PMI>` из профиля zoom.us/profile. Вставляется в `location` Exchange-встречи без API.
+- **Создать/найти credentials:** https://marketplace.zoom.us/ → Develop → Build App → Server-to-Server OAuth
+- **Scopes:** `meeting:write:meeting` (обязателен), `meeting:read:meeting`, `user:read:user`
+- **⚠️ Питфолл scope в UI Marketplace:** поиск по `write` не находит нужный scope. Нужно: перейти в раздел **Meetings** в левом меню → прокрутить список или искать `Create a meeting`. В корпоративном аккаунте ТУТУ admin-версии scopes (`:admin` суффикс) недоступны для выбора.
+- **Проверка:** `python3 ~/USERTOOLS/ZoomAPI/test_zoom.py` → должен печатать `join_url`
+- **Назначение:** будущий инструмент «назначить встречу» (Exchange + Zoom + Fireflies)
+
 ## GitHub
 
 - **Пользователь:** `ialextkachenko-byte`

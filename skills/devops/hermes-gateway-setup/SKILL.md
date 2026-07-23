@@ -1,7 +1,7 @@
 ---
 name: hermes-gateway-setup
 description: "Set up, configure, and operate Hermes Gateway: platform integrations (Telegram, Discord, Slack), display/notification config, Windows service install, crash diagnosis, and delegate_task vs cronjob routing patterns."
-version: 1.1.0
+version: 1.2.0
 author: agent
 tags: [hermes, gateway, telegram, discord, slack, messaging, setup, windows]
 platforms: [linux, macos, windows]
@@ -825,6 +825,40 @@ delegation:
   child_timeout_seconds: 0   # без лимита — соответствует апстрим-дефолту
   max_concurrent_children: 3
 ```
+
+### ⚠️ HERMES.md filename: uppercase only — `~/.hermes/HERMES.md` (23.07.2026)
+
+`_find_hermes_md()` ищет `.hermes.md` или `HERMES.md` при walk от cwd вверх. На Linux файловая система **case-sensitive** — `hermes.md` (строчные) **не находится и молча игнорируется**.
+
+- ✅ Правильно: `~/.hermes/HERMES.md`
+- ❌ Неправильно: `~/.hermes/hermes.md` — файл существует, но никогда не загружается
+
+**При делегировании субагентам (Sonnet/cronjob) — явно указывать полный путь** `~/.hermes/HERMES.md` в промпте, иначе субагент создаёт строчный вариант.
+
+**Проверка что файл найдётся:**
+```bash
+python3 -c "
+from pathlib import Path
+cwd = Path('~/.hermes').expanduser().resolve()
+for p in [cwd, *cwd.parents]:
+    for n in ('.hermes.md', 'HERMES.md'):
+        if (p/n).exists(): print('FOUND:', p/n); break
+"
+```
+
+### Profile routing pitfall (multiplex_profiles)
+
+`profile_routes` в `config.yaml` молча игнорируется если `gateway.multiplex_profiles: true` не выставлен — жёсткий гейт в `run.py`. Также у целевого профиля обязательно должна быть задана модель (`hermes profile list` покажет `—` если не задана). После любых изменений конфига — рестарт gateway обязателен.
+
+### Delivery target mismatch — no_agent cron (23.07.2026)
+
+`no_agent` кроны с `script:` доставляют сообщение через поле `deliver` в jobs.json. Если скрипт содержит хардкод chat_id/thread_id в docstring/комментарии — это только документация, не реальный адрес. Реальный адрес = только `deliver` в cronjob.
+
+Симптом: сообщения уходят не в тот топик несмотря на правильно выглядящий скрипт.
+Диагностика: `hermes cron list` → смотреть поле `deliver`.
+Прецедент: `pfs_notify` доставлял в thread 5 (WorkVault) вместо thread 7 (Monitoring) — `deliver` в cronjob был `:5`. Починка: `cronjob(action='update', job_id=..., deliver='telegram:-1004300127777:7')`.
+
+После правки `deliver` — обновить docstring/комментарий в скрипте чтобы они совпадали (человекочитаемость).
 
 ### Display/Platform Pitfalls
 - Only Telegram reads `display.platforms.telegram.notifications`. Discord/Slack ignore it — use platform-native settings.

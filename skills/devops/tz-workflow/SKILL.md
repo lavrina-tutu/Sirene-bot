@@ -1,6 +1,6 @@
 ---
 name: tz-workflow
-description: "Use when creating, editing, or archiving TZ (technical specs) OR infrastructure setup/deployment plans in WorkVault. Enforces single-master-per-tool layout at WorkVault/Hermes-Backlog/TZ/<Tool>/<Tool>_TZ.md, YAML frontmatter versioning, mirrored backup, and no-cyrillic-in-new-filenames rule. Includes workflow steps 1-4 with model assignments. Triggers: ТЗ, техническое задание, technical spec, MoveFromFF_TZ, AggregateFromMeetings, WorkVault/Hermes-Backlog/TZ, TZ_v, доработка инструмента, архивация ТЗ, план установки, план настройки, инфраструктурный план, deployment plan."
+description: "Use when creating, editing, or archiving TZ (technical specs) OR infrastructure setup/deployment plans in WorkVault. Enforces single-master-per-tool layout at WorkVault/Hermes-Backlog/TZ/<Tool>/<Tool>_TZ.md, YAML frontmatter versioning, mirrored backup, and no-cyrillic-in-new-filenames rule. Includes workflow steps 1-4 with model assignments. Triggers: ТЗ, техническое задание, technical spec, MoveFromFF_TZ, AggregateFromMeetings, WorkVault/Hermes-Backlog/TZ, TZ_v, доработка инструмента, архивация ТЗ, план установки, план настройки, инфраструктурный план, deployment plan, исследуй, исследование, проанализируй, изучи инструмент."
 version: 1.9.0
 author: agent
 license: MIT

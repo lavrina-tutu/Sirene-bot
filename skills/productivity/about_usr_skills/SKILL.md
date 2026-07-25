@@ -196,7 +196,7 @@ projects:
 | **ConfluenceSync** | Confluence (`dom.tutu.ru`) | ✅ **v1.0** (28.05.2026). 47/47 тестов ✅. CLI `confluencesync pull/push/resync/log`. Двусторонний. PAT работает из дома без VPN. Скилл: `movefrom-confluence`. | — | `TZ/ConfluenceSync/ConfluenceSync_TZ.md` v1.0 |
 | **MoveFromZulip** | Zulip (ТУТУ) | ⏸ **КРОН ОСТАНОВЛЕН** (29.05.2026) — Zulip отключают, переход на Loop. 2148 контактов сохранены. | `vm_movefromzulip` (disabled) | `TZ/MoveFromZulip/MoveFromZulip_TZ.md` v1.0 |
 | **MoveFromLoop** | Loop/Mattermost (ТУТУ) | ✅ **v1+v2 в проде (24.07.2026).** v1: синк контактов (added=88, updated=1132, 1220 активных, 58/58 тестов). v2: мониторинг — срочные `*/3` (job f61b26, no_agent) + дайджест `0 8-20 пн-пт` (job 2865cc, no_agent) → топик Messages thread=6556. Urgent: gladkikh/malyy/fedotovav/klimovskiyrb/aralov. merger.py(username fix)✅. Дедупликация срочный↔дайджест через seen_ids(TTL 48ч)✅. | v1: крон вс 03:30 (планируется), v2: ✅ кроны активны | `TZ/MoveFromLoop/MoveFromLoop_TZ.md` v0.4.0 |
-| **ExchangeMonitor** | Exchange EWS (ТУТУ) | 📋 **ТЗ v0.1.0 + план реализации ready (24.07.2026)** — мониторинг Inbox, фильтр реальных людей (contacts.enc + DisplayName), теги (приватное)/(личное), срочные+дайджест в топик Messages. Интеграция в кроны MFL. Код не реализован. | — | `TZ/ExchangeMonitor/ExchangeMonitor_TZ.md` v0.1.0 |
+| **ExchangeMonitor** | Exchange EWS (ТУТУ) | ✅ **v0.1.0 в проде (24.07.2026).** 67/67 тестов. Фильтр реальных людей (contacts.enc + DisplayName + стоп-слова). Теги: `(приватное)` = ты единственный в To:, `(личное)` = ты в To: среди других, `(инф)` = ты в CC:. exchangelib 5.6.0, системный python3.11. Патч в mfl_urgent_check.py + mfl_digest.py — Exchange проверяется после Loop. Формат: `[DD.MM HH:MM]`. | те же кроны MFL: f61b26(*/3) + 2865cc(0 8-20пн-пт) | `TZ/ExchangeMonitor/ExchangeMonitor_TZ.md` v0.1.0 |
 | **MofsIndex** | WorkVault (SQLite+FTS5) | ✅ **v0.4.0 в проде (22.07.2026).** 575 встреч, 72MB, full rebuild 4.9с, search(slug) 1.69мс. Установлен в общий venv. Ежедневный rebuild 23:00. | `mofs_index_rebuild` — `0 23 * * *` | `TZ/MofsIndex/MofsIndex_TZ.md` v0.4.0 |
 | **EntityRegistryCLI** | WorkVault/Registries | ✅ **v0.2.0 в проде (16.07.2026).** CLI `entity-registry add/remove/edit/list/validate`. 27/27 тестов. Единый canonical реестр `entities.json` для PFS/TaskRefresh/MOFS/workvault-rag. Общий venv с PFS/TaskRefresh. | — | `TZ/EntityRegistryCLI/EntityRegistryCLI_TZ.md` v0.2.0 |
 | **AggregateFromMeetings** | WorkVault | 📋 **ТЗ v1.8 (active), код НЕ реализован.** Агрегация задач/решений/рисков из встреч. Зависит от MOFS (frontmatter). В ТЗ есть §3.2 реестр проектов — устарел, будет перенесён в entities.json. | — | `TZ/AggregateFromMeetings/TZ_aggregate_main.md` v1.8 |
@@ -533,50 +533,13 @@ data.get("meetings", {})         # ❌ вернёт пустой dict — клю
 
 **Iron rule:** кастомные поля (не из API-источника) не перезаписываются при синке — `aliases`, `messenger_ids`, `notes`, `custom_updated_at` в MoveFromExchange правятся только вручную через `/contact edit`.
 
-## Скиллы без ТЗ (важные, входят в экосистему)
+## Скиллы — живой список
 
-| Скилл | Что делает | Триггеры |
-|---|---|---|
-| `tutu-confluence-jira` | Confluence + Jira ТУТУ: чтение страниц, поиск задач, оргструктура (Аралов→Ткаченко→Криворотов), auth PAT | открой страницу Confluence, найди задачу в Jira, кто такой X |
-| `tutu-jira-okr` | OKR в Jira (OKRS/OKRAID): выгрузка иерархии Objective/KR, сверка Q1/Q2, отчёт закрытия периода | OKR, цели департамента, Key Result, прогресс по целям |
-| `tutu-jira-sr` | Self-Review в Jira: план на период, заполнение, проверка чужого SR, черновик итогов | SR, мой SR, заполнить SR, проверить SR Криворотова |
-| `tutu-jira-contract-approval` | Согласование договоров/ДС через JIRA Service Desk (АДД) — КБК, участники, вложения | согласовать договор, создать задачу на согласование |
-| `protocolfromsummary` | Операционный гайд по PFS: публикация протоколов, ROUTES, republish, page_layout, out_of_scope | PFS, протокол встречи, ROUTES, republish |
-| `mofs-operations` | Операционный гайд по MOFS: запуски, диагностика, entities.json, bootstrap, rematch | mofs run, mofs rematch, entities.json, тегирование встреч |
-| `workvault-rag` | Поиск по архиву встреч через mofs index (SQLite+FTS5): встречи/задачи/решения/риски | найди в архиве, что обсуждали с X, что решили по Y |
-| `obsidian` | Работа с WorkVault (Obsidian): чтение, поиск, создание заметок — читать ПЕРЕД вопросом Саше | найди в хранилище, есть ли у нас, открой заметку |
-| `get-obsidian-link` | Ссылки `obsidian://` на файлы WorkVault для отправки в Telegram (inline code, тап = копирование) | вышли ссылку на саммари, дай линк на встречу |
-| `pm-briefing` | PM-брифование: пошаговое закрытие открытых вопросов с записью ответов в WorkVault pm/ | забриф по проекту, открытые вопросы, pm-бриф |
-| `workvault-sync-infra` | Диагностика и настройка синка WorkVault↔ownCloud (systemd, rclone, Inbox) | файл не появился на ВМ, синк WorkVault, owncloud-sync |
-| `tz-workflow` | Работа с ТЗ в Hermes-Backlog: создание, версионирование, архивация, правила именования | ТЗ, техническое задание, доработка инструмента |
-| `hermes-feature` | Разработка фич и инструментов USERTOOLS: ТЗ → варианты → код → тесты → документация | разработай, новый инструмент, напиши ТЗ, баг, не работает |
-| `taskrefresh` | Операционный гайд по TaskRefresh: чтение задач из Confluence, правка дедлайнов/статусов/текста | мои задачи, что горит, подвинь дедлайн, закрой задачу |
-| `movefromff` | Детальный гайд по MoveFromFF: API, backfill, reconciliation, форсированный пересбор | MoveFromFF, Fireflies API, backfill встреч |
-| `movefrom-confluence` | Детальный гайд по ConfluenceSync: двусторонняя синхронизация, pull/push, TG-команды | ConfluenceSync, синк Confluence, pull/push страниц |
-| `mpp-to-google-sheets` | Читает .mpp (MS Project) файлы → Google Sheets через MppReader pipeline | mpp, MS Project, план проекта в таблицу |
-| `teams-meeting-pipeline` | Саммари встреч через Teams + Hermes CLI: статус pipeline, replay jobs, Graph subscriptions | Teams, саммари Teams-встречи |
+**Статическая таблица скиллов УДАЛЕНА.** При ответе на «что умеешь» — всегда выполнять Шаги 1-4 выше:
+- `skills_list()` → фильтровать наши по признаку привязки к ТУТУ/WorkVault/АИД
+- `read_file(MAIN_TZ_INVENTORY.md)` → актуальные инструменты с версиями
 
-## Сервисные скиллы Hermes (перепрограммированы под нашу экосистему)
-
-| Скилл | Что делает | Триггеры |
-|---|---|---|
-| `sirene-chat-friends` | **УДАЛЁН (03.07.2026)** — был дублём agent.system_prompt/MEMORY. Процедуры и воркфлоу перенесены в системный промпт Сирени. | (не существует) |
-| `hermes-gateway-setup` | Настройка и эксплуатация Hermes Gateway: топики Telegram, конфигурация платформ, routing delegate_task vs cronjob, crash-диагностика | настрой gateway, топик не работает, подключи Telegram |
-| `hermes-memory-hygiene` | Чистка памяти и профиля: консолидация, удаление устаревших записей, перенос в скиллы | почисти память, разбери память, ревизия памяти |
-| `all-skills-hygiene` | Аудит скиллов: дубли, мёртвые скиллы, oversized SKILL.md, висячие ссылки | проверь скиллы, почисти скиллы, ревизия скиллов |
-| `hermes-upstream-check` | Мониторинг апстрима hermes-agent: диф с HEAD, рекомендация обновлять/ждать, проведение обновления | какая версия апстрима, обновляемся, сравни с апстримом |
-| `hermes-llm-provider-switch` | Переключение между LLM-провайдерами (Anthropic ↔ корп. прокси): custom_providers, delegation, backup/rollback | переключись на OpenAI, смени провайдер, корп. прокси |
-| `hermes-cost-optimization` | Оптимизация токенов: роутинг делегирования на дешёвые модели, compression, local/корп. LLM | уменьши расход токенов, подключи локальную модель |
-| `check-cron-results` | Проверка последних результатов кронов — загружать когда ждёшь ответа от Opus/Sonnet-крона | статус задачи, что вернул крон, проверь результат |
-| `cron-journal-write` | Запись итогов крон-задачи в `~/.hermes/cron-journal.md` — загружается в конце каждого Opus/Sonnet-крона | (сервисный, в конце кронов) |
-| `full-workvault-backup` | Полный tgz-бэкап `~/WorkVault` → `~/WorkVault_backup/`, ежедневно 23:30 | сделай бэкап хранилища, бэкап WorkVault |
-| `cleanup-after-sync` | Чистка мусора после GitHub-синка (no_agent, 0 токенов) — запускается автоматически после autosync | (автозапуск после GitHub-синка) |
-| `skill-authoring-principles` | Принципы написания самодостаточных скиллов: границы ответственности, самодостаточность | создай скилл, напиши скилл, как оформить скилл |
-| `hermes-skills-discovery` | Мониторинг внешней экосистемы скиллов (skills.sh, GitHub): новые и популярные скиллы | найди скиллы по теме X, что нового в сообществе скиллов |
-| `skill-portability` | Экспорт скиллов для другого Hermes-агента: деперсонализация, упаковка, инструкции установки | поделись скиллом, экспортируй скилл для другого агента |
-| `kanban-orchestrator` | Плейбук оркестратора Kanban: декомпозиция, routing через воркеров, anti-temptation | Kanban оркестратор, разбей задачу на воркеров |
-| `kanban-worker` | Плейбук воркера Kanban: питфоллы, lifecycle, edge cases | Kanban воркер, детали исполнения в Kanban |
-| `webhook-subscriptions` | Event-driven запуски агента через вебхуки | настрой вебхук, event-driven крон |
+Критерий «наш» скилл: description содержит ТУТУ/Confluence/Jira/WorkVault/Loop/Exchange/OKR/SR/Fireflies/протоколы встреч. Generic (spotify, minecraft, ascii, github-*) — упоминать только если явно спросили.
 
 
 

@@ -127,6 +127,9 @@ memory(action='...', operations=[
 - **`old_text` в replace не совпадает байт-в-байт** → batch отклоняется. Копировать точный текст из `current_entries` в ответе об ошибке.
 - **MEMORY >2200 chars** → `memory` tool не поможет. Писать напрямую через `write_file`.
 - **`~/.hermes/HERMES.md` — только UPPERCASE**. Строчный `hermes.md` gateway не загружает.
+- **При чистке >40% объёма — `write_file` эффективнее батча.** Прецедент 26.07.2026: MEMORY 86% (2685 байт), много мелких удалений — один `write_file` с только нужными записями чище и надёжнее, чем 8+ `memory(remove)` вызовов. Писать только что принадлежит MEMORY (без статусов/счётчиков), проверить `wc -c < 2200`.
+- **Скиллы субагента созданы в профиле `default`, а не в активном** — Opus/Haiku по умолчанию пишет в `~/.hermes/profiles/default/skills/`, даже если сессия работает под `tz-dev`. Симптом: крон запускается, но видит `⚠️ Skill not found and skipped: <name>`. Фикс: `cp -r ~/.hermes/profiles/default/skills/devops/<skill> ~/.hermes/profiles/tz-dev/skills/devops/`. Предотвращение: явно указывать в промпте субагента полный путь: `~/.hermes/profiles/tz-dev/skills/devops/<name>/`. Прецедент 27.07.2026: backlog-collector и backlog-analyst.
+- **Отвечать о статусе задачи/крона/инструмента без реальной проверки — нарушение Integrity (SOUL.md).** Даже если кажется что «ещё идёт» — всегда сначала `cronjob(action='list')` + `cat output/*.md`. «Ещё N минут» без инструмента = ложь. Прецедент 27.07.2026: правило зафиксировано в USER PROFILE и SOUL.md, но должно быть и здесь как напоминание перед началом dev-сессии.
 - **Dead pointers** — при удалении скилла сразу grep MEMORY.md, USER.md и скиллы на его имя.
 - **`\uXXXX` escape-sequences вместо кириллицы** — двойной JSON-encode. Fix: `re.sub(r'\\\\u([0-9a-fA-F]{4})', lambda m: chr(int(m.group(1), 16)), raw)` → `write_file`.
 

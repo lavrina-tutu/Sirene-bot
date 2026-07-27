@@ -67,13 +67,20 @@ Each skill covers exactly its stage — never capture the neighboring stage:
 
 STOP-gate and implementation checklist → `hermes-feature`, not `tz-workflow`.
 
+**One skill = one responsibility (Sasha's rule, 26.07.2026).** When designing a new skill/cron, check for mixed responsibilities:
+- Test: can skill 2 run without skill 1 and still make sense? If yes → two independent skills.
+- Test: does the skill both *collect* data AND *analyze* it? → split.
+
+Precedent: `vm_dialogbacklog` mixed collection + analysis. Split into `backlog-collector` (reads sessions → writes backlog) and `backlog-analyst` (reads backlog → compares with skills/inventory). Both are independent — analyst just reads the already-written file.
+
 ## 7 — Common Pitfalls (authoring-specific)
 
 - **Append instead of merge** → skill bloats invisibly over months.
 - **Wrong owner:** pitfall added to discovery skill, not application skill → duplication, drift on updates.
 - **description >1024 chars** → skill silently fails to load.
 - **`platforms: [all]`** → invalid syntax, skill fails to load; use `[linux, macos, windows]`.
-- **New skill without checking trigger conflicts** → two skills load simultaneously; check `skills_list()` + grep descriptions first.
+- **New skill without checking trigger conflicts** → two skills load simultaneously; check `skills_list()` + grep descriptions first. Решения 26.07.2026: «исследуй»/«проанализируй» убраны из `hermes-feature` → перенесены в `tz-workflow` (исследование → ТЗ, не код); «почисти перед новым инструментом» убрано из `hermes-memory-hygiene` (слово «инструмент» пересекалось с `hermes-feature` и `tz-workflow`). Принцип: каждый триггер должен однозначно указывать на один скилл — если слово есть у двух скиллов, оно бесполезно как триггер.
+- **Skill created in wrong profile** → cron can't find it. When Opus-cron creates skills, it may write to `~/.hermes/profiles/default/skills/` while the active profile is `tz-dev`. Fix: `cp -r ~/.hermes/profiles/default/skills/devops/<skill> ~/.hermes/profiles/tz-dev/skills/devops/`. After creating a skill via cron, verify with `ls ~/.hermes/profiles/tz-dev/skills/devops/<skill>/`. Precedent 27.07.2026: `backlog-collector` and `backlog-analyst` created in `default`, crons in `tz-dev` could not find them (`⚠️ Skill not found and skipped`).
 - **Reference instead of duplication** → referenced skill not loaded, reference is useless unless both are in the same `skills=[...]`.
 - **Forgetting version bump** → cache serves stale content.
 

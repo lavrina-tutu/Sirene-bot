@@ -203,15 +203,81 @@ tests/
 exchange_enabled: true
 ```
 
+## Keyword-фильтрация писем (реализовано 27.07.2026)
+
+Параллельно фильтрации по отправителю — фильтрация по фразе/URL в теле письма. Позволяет отслеживать письма от сервисных адресов (JIRA, Confluence) по содержимому.
+
+### Конфиг (loop_rules.yaml)
+```yaml
+exchange_urgent_keywords:
+  - "https://hq.tutu.ru/browse/ADD-613444"
+# exchange_digest_keywords: []  # зарезервировано, пустое
+```
+
+**Как добавить фразу:** отредактировать `~/USERTOOLS/MoveFromLoop/loop_rules.yaml`, добавить строку. Перезапуск не нужен.
+
+### Архитектура keyword-пути
+- Реализован в `urgent.py` как **отдельный параллельный проход** — не требует `is_real_person`, не проверяет `urgent_emails`
+- Фолбэк на HTML body: `body = (item.text_body or "") + " " + str(getattr(item, "body", "") or "")` — JIRA шлёт только HTML, без фолбэка keyword не найдётся
+- `keyword_checker.py` — модуль `matches_keywords(text, keywords) -> (bool, matched_kw)`
+- Поле `"body"` добавлено в `.only(...)` в `fetcher.py`
+
+### ⚠️ Известный gap: is_read не проверяется
+Exchange-запросы фильтруют по `datetime_received >= watermark`, но флаг `is_read` не проверяется. Прочитанное письмо попадёт в выборку если пришло после watermark (защита только через `state.is_seen()`).
+
+**Фикс (одна строка в fetcher.py):**
+```python
+messages = account.inbox.filter(
+    datetime_received__gte=since_dt,
+    is_read=False       # ← добавить
+).order_by('datetime_received')
+```
+
 ## TODO / открытые вопросы
 
 - [x] Адрес OWA: `https://cas.tutu.ru/owa` (подтверждён 24.07.2026)
 - [x] ТЗ ExchangeMonitor v0.1.0 создано (24.07.2026)
 - [x] Реализация завершена (24.07.2026, 67/67 тестов)
 - [x] exchangelib уже в системном python3.11 — отдельный venv не нужен
+- [ ] Добавить `is_read=False` в Exchange-запрос fetcher.py (gap выявлен 27.07.2026)
+
+## Бизнес-правило: фильтрация ответов на встречи
+
+Письма от срочных контактов о **принятии встречи** — НЕ пересылать.
+Письма об **отклонении** или **предложении нового времени** — пересылать как обычные.
+
+```python
+MEETING_ACCEPT_CLASSES = {"IPM.Schedule.Meeting.Resp.Pos"}
+MEETING_DECLINE_CLASSES = {
+    "IPM.Schedule.Meeting.Resp.Neg",    # отклонение
+    "IPM.Schedule.Meeting.Resp.Tent",   # под вопросом (tentative)
+    "IPM.Schedule.Meeting.Counter",     # предложение нового времени
+}
+
+def should_skip(item) -> bool:
+    """True = не пересылать (принятие встречи)."""
+    mc = getattr(item, "message_class", None) or ""
+    return mc in MEETING_ACCEPT_CLASSES
+```
+
+Требует `"message_class"` в `.only(...)` в fetcher.
 
 ## Pitfalls
 
+- **`TUTU_DOMAIN_PASSWORD` со спецсимволами** — `source ~/.config/hermes/.env` падает с `SyntaxError: unexpected token ')'` если пароль содержит скобки/кавычки. Правильный паттерн чтения:
+  ```python
+  import subprocess, shlex
+  pwd = subprocess.check_output(
+      "grep TUTU_DOMAIN_PASSWORD ~/.config/hermes/.env | cut -d= -f2-",
+      shell=True, text=True
+  ).strip()
+  # Передавать через env-переменную:
+  result = subprocess.run(
+      f'TUTU_DOMAIN_PASSWORD={shlex.quote(pwd)} python3 script.py',
+      shell=True, ...
+  )
+  ```
+  Никогда не использовать `set -a; source ~/.config/hermes/.env` — падает при спецсимволах.
 - **`TUTU_DOMAIN_PASSWORD` в `~/.config/hermes/.env`** — не в `.hermes/profiles/anthropic/.env`. Проверять оба файла.
 - **Autodiscover отключён** — `autodiscover=False`, сервер задаётся явно как `cas.tutu.ru`.
 - **Username может потребовать DOMAIN\\user** — пробовать три варианта как в `create_meeting.py`.

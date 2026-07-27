@@ -110,6 +110,28 @@ hits = search_meetings(query='Криворотов', date_from='2026-07-01')  # 
 snippets = get_transcript_snippets(meeting_id, 'ключевое слово')
 ```
 
+**MofsIndex v0.5 — индексация TZ-документов (27.07.2026):**
+```bash
+# Индексировать ТЗ-документы (инкрементально, <1 сек)
+mofs-index index docs
+
+# Полная перестройка индекса ТЗ
+mofs-index index docs --rebuild --yes
+```
+
+Новая таблица `docs` + `docs_fts` в той же БД `index.sqlite`. Скоуп: `~/WorkVault/Hermes-Backlog/TZ/**/*_TZ.md` + `*_impl_plan.md`. Типы: `doc_type='tz'` / `'impl_plan'`.
+
+**API для поиска по ТЗ:**
+```python
+from mofs_index import search_docs, get_doc
+# Полнотекстовый поиск по всем ТЗ (используется backlog_analyst)
+hits = search_docs('FileNameTooLong ownCloud', limit=5)
+# → top-1: MoveFromFF_TZ.md, rank=-6.18 (косвенная связь через FTS5)
+doc = get_doc('Hermes-Backlog/TZ/MoveFromFF/MoveFromFF_TZ.md')
+```
+
+**Важно:** после создания/правки ТЗ вызвать `mofs-index index docs` — иначе `backlog_analyst` и `workvault-rag` не увидят новое ТЗ до ночного rebuild. Хук встроен в процедуры A/B/C/D скилла `tz-workflow`.
+
 **Замеры (575 встреч):**
 | Операция | Результат | Цель |
 |---|---|---|

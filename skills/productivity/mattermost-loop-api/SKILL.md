@@ -422,6 +422,27 @@ urgent_contacts:
   - fedotovav     # Федотов Андрей
   - klimovskiyrb  # Климовский Руслан
   - aralov        # Аралов Александр
+  - korneev       # Корнеев Александр (добавлен 24.07.2026)
+```
+
+## Поиск пользователя по имени
+
+`GET /api/v4/users?term=X` ненадёжен — возвращает алфавитный список, совпадения по имени случайны.
+Использовать autocomplete:
+
+```python
+r = requests.get(
+    f"{base_url}/api/v4/users/autocomplete",
+    params={"name": "kornee"},
+    headers={"Authorization": f"Bearer {token}"}
+)
+for u in (r.json().get('users') or []) + (r.json().get('out_of_channel') or []):
+    print(u['username'], u['first_name'], u['last_name'])
+```
+
+**LOOP_TOKEN не в .env** — искать в логах кронов:
+```bash
+grep -r 'LOOP_TOKEN' ~/.hermes/cron/output/ | grep -v '.example' | head -5
 ```
 
 ## Формат уведомлений — финальные правила (25.07.2026)

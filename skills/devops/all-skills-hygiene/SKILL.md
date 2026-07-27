@@ -105,8 +105,27 @@ Once those hand-fixes were in and Sasha confirmed the skill was checked against 
 
 **Third pass, verify-then-fix on "stale technical detail" pitfalls (13.07.2026):** Sasha asked to walk `hermes-feature`'s largest Common Pitfalls entries one by one, biggest-to-smallest, and for several ("didn't we already fix this in the tool?") to check the real code rather than trust the pitfall's prose. Of 4 checked: 2 turned out already fixed (confirmed by reading the actual source + existing tests, then shortened the pitfall to a brief confirmation note); 2 were genuinely still open and were fixed live in the same pass — one needed a new guard clause plus a new regression test file proving the exact original failure mode no longer causes an unhandled crash; the other needed only a missing test added for an inverse/rollback function that already existed in the source but had zero coverage. Full test suites re-run after each fix (153/153 and 130/130 respectively) before updating the corresponding pitfall text. This is the "Stale technical detail" category from the table above in its most active form — audit-that-becomes-a-fix, not just prose cleanup.
 
+## Проверка пересечений триггеров между скиллами
+
+При аудите description проверять не только дубли содержимого, но и **пересечения триггерных слов** — одно слово в двух description = оба скилла загружаются на один запрос.
+
+**Паттерн:**
+1. Выписать триггеры каждого скилла из description
+2. Найти пересечения между близкими по теме скиллами
+3. Для пересекающегося слова решить: где оно правильнее по смыслу?
+4. Убрать из одного, оставить в другом
+
+**Прецедент 26.07.2026:** `hermes-feature` имел триггеры «исследуй», «проанализируй» — при запросе «исследуй инструмент X» загружались и `hermes-feature`, и `tz-workflow`. Исправление: исследование = предпроектная фаза → триггеры переехали в `tz-workflow`.
+
+**Правило роутинга по смыслу (ТУТУ-экосистема):**
+- «исследуй», «проанализируй», «изучи инструмент» → `tz-workflow` (предпроектная фаза)
+- «разработай», «реализуй», «баг», «не работает» → `hermes-feature` (фаза кода)
+- «почисти память», «dev reset» → `hermes-memory-hygiene`
+
 ## Common Pitfalls
 
+- **При сверке «скилл существует?» — искать во ВСЕХ категориях, не только devops/productivity.** Прецедент 26.07.2026: скрипт проверял только devops/ и productivity/, пропустил `get-obsidian-link` (note-taking/), `obsidian` (note-taking/), `workvault-rag` (research/) — они были ошибочно помечены как несуществующие. Правильный поиск: `find ~/.hermes/skills ~/.hermes/profiles/<profile>/skills -name "SKILL.md"` — по всему дереву без фильтра категории.
+- **Скилл созданный Opus-кроном оседает в `profiles/default/`, а не в активном профиле.** Симптом: крон сообщает «Skill not found and skipped: \<name\>». Фикс: `cp -r ~/.hermes/profiles/default/skills/devops/<name> ~/.hermes/profiles/tz-dev/skills/devops/`. Профилактика: в промпте Opus явно указывать полный путь установки скилла: `Создай скилл в ~/.hermes/profiles/tz-dev/skills/devops/<name>/SKILL.md`. Прецедент 27.07.2026: `backlog-collector` и `backlog-analyst` созданы в default, не найдены при первом запуске кронов.
 - **Two skills in one Opus cron is fine** — confirmed 06.07.2026: `hermes-gateway-setup` + `hermes-cost-optimization` processed sequentially in one cron job. Saves one context-launch worth of tokens vs two separate crons. Only combine skills that are truly independent (no shared files, no ordering dependency between them).
 - **A plausible skill name is not proof of duplication** — before merging two skills, `skill_view` both and confirm the specific fact is actually restated, not just topically adjacent.
 - **`use_count=0` alone isn't proof of "dead"** — a skill can be legitimately used without the counter incrementing in every code path (e.g. injected via cron `skills=[...]` rather than triggered by description match). Cross-check against cron job configs (`cronjob(action='list')` → `skills` field) before recommending deletion.

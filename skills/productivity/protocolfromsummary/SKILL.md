@@ -123,6 +123,66 @@ per-project protocol tables on Confluence (dom.tutu.ru). Code lives at
    (`_write_summary` + `RegistryEntry.meeting_date`) до значения >= CUTOVER_DATE.
    Симптом: `AssertionError: assert None is not None` в `test_process_pending_registry_updated_after_publish`.
 
+9. **`risks` поле не рендерилось в протоколах (починено v1.6.1)** — `summary_parser.py` парсит
+   `MeetingSummary.risks: list[str]` корректно, но `render_row()` / `_render_row_5col_aid()` /
+   `_render_row_ncol_content_at()` не принимали параметр `risks` и не рендерили блок
+   `<h2>Риски:</h2>`. Исправлено: добавлен keyword-only параметр `risks: list[str] = []` во все
+   три функции, блок рендерится после блокеров, перед задачами. Pipeline передаёт
+   `risks=summary.risks`. Если риски снова пропадут — проверить `storage_xml.py::render_row`
+   signature и `pipeline.py` call-site.
+
+10. **Дублирование даты задачи в протоколе** — симптом: строка вида
+    «Ткаченко /3 августа 2026 3 авг. 2026 г.» означает что Fireflies записал дату прямо в текст
+    задачи без разделителя ` / `, и `_parse_task_line` не смог выделить `deadline_raw`. Тогда
+    `task.text` содержит строку с датой, а `_task_body()` всё равно добавляет `<time datetime=.../>`.
+    Итого — дата в виде текста + дата в виде Confluence-тега.
+    **Диагностика:** найти summary-файл встречи, проверить строку задачи — есть ли ` / ` перед датой.
+    **Фикс:** переопубликовать встречу через `run --confirm-republish` — НЕ чинить summary-файл
+    (источник истины у Fireflies). Fireflies иногда не ставит пробел перед `/`.
+
+## Dedup module (`dedup.py`)
+
+`dedup.py` implements LLM-backed deduplication of tasks/decisions/blockers/risks against
+published history. Key design points:
+
+- **Three LLM paths** — each uses a different JSON field for the duplicate index:
+  - `_llm_check_tasks` → `duplicate_of_published_index` in `PROMPT_TASK_DEDUP` results
+  - `_llm_check_section` → `duplicate_of_published_index` in `PROMPT_SECTION_DEDUP` results
+  - `_check_risks_impl` → `same_as_published_index` (+ `severity_changed` gate) in `PROMPT_RISK_DEDUP` results
+- **`reasoning` field** is present in all three prompts' JSON schema — Haiku always returns it
+  as a short one-phrase justification. It's `None`/missing when the model omits it (treat as `"нет"`).
+- **Fuzzy-first, LLM-second** — tasks/sections first do `SequenceMatcher.ratio() >= 0.80`; only
+  misses go to the LLM batch. Risks skip fuzzy entirely (severity-change logic requires semantic
+  understanding).
+
+### Adding `log.info` for LLM-detected duplicates
+
+When adding debug/audit logging for LLM-detected duplicates, the standard pattern is:
+
+```python
+reasoning = result_item.get("reasoning")   # or extracted from results loop
+log.info(
+    "dedup: дубль [%s] %r → %r (reasoning: %s)",
+    section_ru,          # "задача" / "решение" / "блокер" / "риск"
+    new_text[:80],       # truncate to 80 chars
+    pub_text[:80],       # truncate to 80 chars
+    reasoning or "нет",
+)
+```
+
+In `_llm_check_tasks` and `_llm_check_section`, `reasoning` requires a **second pass** over
+`results` (the first pass only extracts the index). In `_check_risks_impl`, `reasoning` is
+available directly from `result_item` (already found in the first loop). When adding the log,
+place it BEFORE the `dups.append(...)` call, AFTER resolving `pub_text` from `all_published`.
+
+### Tests for dedup
+
+```bash
+cd ~/USERTOOLS/ProtocolFromSummary && source .venv/bin/activate
+python -m pytest tests/test_dedup.py tests/test_pipeline_dedup.py -q
+```
+Expect `36 passed` (as of 2026-07-27). All tests use mock `llm_fn` — no real Haiku calls.
+
 ## Cron routing rules (17.07.2026)
 
 **Batch cron `a6e62d06249f`** (`deliver=local`):
@@ -143,6 +203,8 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
       task-ids) — didn't trust `action == "published"`/`"republished"` alone
 - [ ] Full offline suite green (`pytest -q -m "not live_confluence"`) before AND after any code
       change to `pipeline.py`/`storage_xml.py`/`contacts_resolver.py`/`summary_parser.py`
+- [ ] After changes to `dedup.py` — run `pytest tests/test_dedup.py tests/test_pipeline_dedup.py -q`
+      (separate from the main suite for speed; expect 36 passed)
 - [ ] После любой правки aliases в `entities.json` — проверить `test_baseline_invariant_matches_pfs_routes`
       до запуска cron; если тест падает — синхронизировать ROUTES в `config.py` перед следующим прогоном
 - [ ] Dry-run проверка CUTOVER_DATE guard: `run-pending --dry-run | grep -E 'исторических|пропущено|published'`

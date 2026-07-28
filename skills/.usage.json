@@ -133,26 +133,26 @@
     "archived_at": null,
     "created_at": "2026-07-27T08:11:57.995082+00:00",
     "created_by": null,
-    "last_patched_at": "2026-07-27T12:44:19.392778+00:00",
-    "last_used_at": "2026-07-27T12:44:07.277646+00:00",
-    "last_viewed_at": "2026-07-27T12:44:07.271690+00:00",
-    "patch_count": 5,
+    "last_patched_at": "2026-07-28T08:14:54.353548+00:00",
+    "last_used_at": "2026-07-28T08:14:35.456647+00:00",
+    "last_viewed_at": "2026-07-28T08:14:35.451185+00:00",
+    "patch_count": 6,
     "pinned": false,
     "state": "active",
-    "use_count": 6,
-    "view_count": 5
+    "use_count": 9,
+    "view_count": 7
   },
   "backlog-collector": {
     "archived_at": null,
     "created_at": "2026-07-27T08:11:32.636949+00:00",
     "created_by": null,
     "last_patched_at": null,
-    "last_used_at": "2026-07-27T12:01:32.199154+00:00",
+    "last_used_at": "2026-07-28T05:00:17.536751+00:00",
     "last_viewed_at": "2026-07-27T12:01:32.194155+00:00",
     "patch_count": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 3,
+    "use_count": 4,
     "view_count": 2
   },
   "baoyu-infographic": {
@@ -277,12 +277,12 @@
     "created_at": "2026-06-03T06:30:28.330398+00:00",
     "created_by": null,
     "last_patched_at": "2026-07-01T15:14:22.295978+00:00",
-    "last_used_at": "2026-07-27T08:11:58.084735+00:00",
+    "last_used_at": "2026-07-28T05:05:17.743381+00:00",
     "last_viewed_at": "2026-07-26T08:09:33.738388+00:00",
     "patch_count": 5,
     "pinned": false,
     "state": "active",
-    "use_count": 205,
+    "use_count": 207,
     "view_count": 7
   },
   "design-md": {
@@ -563,14 +563,14 @@
     "created_at": "2026-05-22T07:56:21.032465+00:00",
     "created_by": "agent",
     "last_activity_at": null,
-    "last_patched_at": "2026-07-27T15:47:05.731444+00:00",
-    "last_used_at": "2026-07-27T15:46:48.586386+00:00",
-    "last_viewed_at": "2026-07-27T15:46:48.581698+00:00",
-    "patch_count": 209,
+    "last_patched_at": "2026-07-28T07:12:04.292967+00:00",
+    "last_used_at": "2026-07-28T07:11:20.402508+00:00",
+    "last_viewed_at": "2026-07-28T07:11:20.393257+00:00",
+    "patch_count": 211,
     "pinned": false,
     "state": "active",
-    "use_count": 166,
-    "view_count": 165
+    "use_count": 167,
+    "view_count": 166
   },
   "hermes-gateway-setup": {
     "archived_at": null,
@@ -603,13 +603,13 @@
     "created_at": "2026-07-02T07:05:37.754624+00:00",
     "created_by": "agent",
     "last_patched_at": "2026-07-27T11:21:17.602120+00:00",
-    "last_used_at": "2026-07-27T12:04:41.405064+00:00",
-    "last_viewed_at": "2026-07-27T12:04:41.399651+00:00",
+    "last_used_at": "2026-07-28T13:17:45.624897+00:00",
+    "last_viewed_at": "2026-07-28T13:17:45.618360+00:00",
     "patch_count": 27,
     "pinned": false,
     "state": "active",
-    "use_count": 48,
-    "view_count": 44
+    "use_count": 50,
+    "view_count": 46
   },
   "hermes-skills-discovery": {
     "archived_at": null,
@@ -771,14 +771,14 @@
     "archived_at": null,
     "created_at": "2026-07-21T13:54:09.735848+00:00",
     "created_by": null,
-    "last_patched_at": "2026-07-27T15:43:27.466592+00:00",
-    "last_used_at": "2026-07-27T15:43:06.623340+00:00",
-    "last_viewed_at": "2026-07-27T15:43:06.618239+00:00",
-    "patch_count": 70,
+    "last_patched_at": "2026-07-28T14:01:45.935656+00:00",
+    "last_used_at": "2026-07-28T14:00:46.042695+00:00",
+    "last_viewed_at": "2026-07-28T14:00:46.036787+00:00",
+    "patch_count": 75,
     "pinned": false,
     "state": "active",
-    "use_count": 48,
-    "view_count": 48
+    "use_count": 52,
+    "view_count": 52
   },
   "moscow-suburban-trains": {
     "archived_at": null,
@@ -1018,14 +1018,14 @@
     "archived_at": null,
     "created_at": "2026-07-15T16:31:42.750106+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-07-27T15:42:59.826559+00:00",
-    "last_used_at": "2026-07-27T15:42:39.252954+00:00",
-    "last_viewed_at": "2026-07-27T15:42:39.246158+00:00",
-    "patch_count": 10,
+    "last_patched_at": "2026-07-28T15:08:03.020572+00:00",
+    "last_used_at": "2026-07-28T15:06:51.464295+00:00",
+    "last_viewed_at": "2026-07-28T15:06:51.459472+00:00",
+    "patch_count": 15,
     "pinned": false,
     "state": "active",
-    "use_count": 6,
-    "view_count": 6
+    "use_count": 12,
+    "view_count": 12
   },
   "python-debugpy": {
     "archived_at": null,
@@ -1123,13 +1123,13 @@
     "created_at": "2026-07-20T14:47:55.866756+00:00",
     "created_by": "agent",
     "last_patched_at": "2026-07-27T12:09:49.810968+00:00",
-    "last_used_at": "2026-07-27T12:09:30.304042+00:00",
-    "last_viewed_at": "2026-07-27T12:09:30.298870+00:00",
+    "last_used_at": "2026-07-28T08:44:03.686294+00:00",
+    "last_viewed_at": "2026-07-28T08:44:03.677570+00:00",
     "patch_count": 13,
     "pinned": false,
     "state": "active",
-    "use_count": 14,
-    "view_count": 14
+    "use_count": 15,
+    "view_count": 15
   },
   "skill-portability": {
     "archived_at": null,
@@ -1213,14 +1213,14 @@
     "archived_at": null,
     "created_at": "2026-07-13T16:42:02.542996+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-07-24T15:38:28.466014+00:00",
-    "last_used_at": "2026-07-27T15:03:14.140001+00:00",
-    "last_viewed_at": "2026-07-27T15:03:14.135033+00:00",
-    "patch_count": 27,
+    "last_patched_at": "2026-07-28T14:00:22.697677+00:00",
+    "last_used_at": "2026-07-28T15:05:41.082582+00:00",
+    "last_viewed_at": "2026-07-28T15:05:41.076281+00:00",
+    "patch_count": 33,
     "pinned": false,
     "state": "active",
-    "use_count": 18,
-    "view_count": 18
+    "use_count": 26,
+    "view_count": 26
   },
   "teams-meeting-pipeline": {
     "archived_at": null,
@@ -1279,13 +1279,13 @@
     "created_at": "2026-07-01T15:31:28.365360+00:00",
     "created_by": "agent",
     "last_patched_at": "2026-07-24T15:37:58.068206+00:00",
-    "last_used_at": "2026-07-24T15:37:40.839024+00:00",
-    "last_viewed_at": "2026-07-24T15:37:40.834162+00:00",
+    "last_used_at": "2026-07-28T08:44:03.659499+00:00",
+    "last_viewed_at": "2026-07-28T08:44:03.653078+00:00",
     "patch_count": 61,
     "pinned": false,
     "state": "active",
-    "use_count": 68,
-    "view_count": 68
+    "use_count": 69,
+    "view_count": 69
   },
   "tutu-jira-contract-approval": {
     "archived_at": null,
@@ -1330,14 +1330,14 @@
     "archived_at": null,
     "created_at": "2026-07-03T15:24:28.501380+00:00",
     "created_by": null,
-    "last_patched_at": "2026-07-27T15:42:28.985271+00:00",
-    "last_used_at": "2026-07-27T15:47:56.524226+00:00",
-    "last_viewed_at": "2026-07-27T15:47:56.518811+00:00",
-    "patch_count": 41,
+    "last_patched_at": "2026-07-28T13:19:12.059931+00:00",
+    "last_used_at": "2026-07-28T14:02:09.246631+00:00",
+    "last_viewed_at": "2026-07-28T14:02:09.241248+00:00",
+    "patch_count": 45,
     "pinned": false,
     "state": "active",
-    "use_count": 71,
-    "view_count": 66
+    "use_count": 81,
+    "view_count": 76
   },
   "weights-and-biases": {
     "archived_at": null,

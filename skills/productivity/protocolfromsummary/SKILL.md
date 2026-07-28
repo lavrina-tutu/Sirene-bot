@@ -94,6 +94,68 @@ per-project protocol tables on Confluence (dom.tutu.ru). Code lives at
    else correctly falls through to `out_of_scope`. A report of "239 files, all out_of_scope" is
    normal, not a bug — it means no new meetings matched the pilot scope.
 
+11. **`KeyError: 'vstrechi_nerazobrannoe'` (и аналогичные) — отсутствие системных fallback-entity в ROUTES** —
+    Четыре entity — `vstrechi_nerazobrannoe`, `sink_aid`, `vstrechi_pro`, `aralov_1on1` — это
+    **системные fallback-таргеты** `route.py`. Если любой из них отсутствует в `entities.json`
+    или присутствует **без блока `pfs`**, `_load_routes_from_registry()` не включает его в ROUTES,
+    и `_route_from_entity(slug)` падает с `KeyError` при первой встрече, попавшей в fallback.
+    Симптом: краш в `route.py::resolve_route`, шаг 3 (строки 163–169), а не ошибка маршрутизации.
+    **Диагностика (быстрая проверка):**
+    ```python
+    from protocolfromsummary.config import ROUTES
+    for key in ["vstrechi_nerazobrannoe", "sink_aid", "vstrechi_pro", "aralov_1on1"]:
+        print(key, "→", "OK" if key in ROUTES else "MISSING!")
+    ```
+    **Фикс:** добавить в `entities.json` отсутствующую сущность с блоком `pfs`.
+    Эталонный page_id берётся из `tests/test_entities_registry.py` (строка 74/101):
+    - `vstrechi_nerazobrannoe` → page_id `508804852`, kind `unknown`, aliases `[]`
+    - `sink_aid` → page_id `331125844`, kind `sync_aid`
+    После правки проверить: `pytest tests/test_entities_registry.py -q`.
+    См. `references/entities-json-routing-bug-20260728.md` для полного разбора инцидента.
+
+12. **Встреча не резолвится (попадает в fallback) из-за отсутствия `pfs` у entity** —
+    Если в `entities.json` у сущности (например, `okr`) есть `aliases`, но нет блока `pfs`,
+    `_load_routes_from_registry()` её пропускает (`if not pfs: continue`) — entity не входит
+    в ROUTES, name_match не срабатывает, встреча проваливается в fallback (и может упасть с
+    KeyError по Питфолу 11).
+    **Диагностика:**
+    ```python
+    from protocolfromsummary.config import ROUTES
+    print("okr" in ROUTES)  # False = pfs не задан в entities.json
+    ```
+    **Фикс:** добавить в `entities.json` блок `pfs` с реальным `page_id` Confluence и тегом:
+    ```json
+    "pfs": { "page_id": "<CONFLUENCE_PAGE_ID>", "tag": "OKR." }
+    ```
+    Шаблон: найти нужную страницу в Confluence → взять page_id из URL → добавить в entities.json
+    → проверить `test_baseline_invariant_matches_pfs_routes`.
+
+13. **PFS публикует пустую строку если MFF записал Bullet points формат вместо Custom Skill** —
+    Fireflies иногда не возвращает Custom AI Skill output для конкретной встречи. Тогда MFF пишет
+    `## Bullet points` + `## Notes` вместо `Участники:/Задачи:/Решения:`. `summary_parser.py` не
+    находит секций → публикуется пустая строка в Confluence без участников/задач/решений.
+    **Диагностика:** если summary содержит `## Bullet points` и нет `Участники:` — Custom Skill не сработал.
+    **Фикс — перескачать встречу через MFF:**
+    ```bash
+    # Найти meeting_id
+    python3 -c "
+    import json; data = json.load(open('~/WorkVault/Meetings/NewMeetings/_registry_meet.json'))
+    for k,v in data.get('meetings',{}).items():
+        if '<название>' in v.get('title',''): print('meeting_id:', k)
+    "
+    # Удалить запись из registry (чтобы MFF перескачал)
+    python3 -c "
+    import json; path='~/WorkVault/Meetings/NewMeetings/_registry_meet.json'
+    data=json.load(open(path)); del data['meetings']['<meeting_id>']
+    with open(path,'w') as f: json.dump(data,f,ensure_ascii=False,indent=2)
+    "
+    rm "~/WorkVault/Meetings/NewMeetings/<filename> - summary.md"
+    cd ~/USERTOOLS/MoveFromFF && source ~/USERTOOLS/ProtocolFromSummary/.venv/bin/activate
+    python3 -m movefromff --mode manual --meeting-id <meeting_id> --no-tg --verbose
+    ```
+    После перескачивания — убедиться что появились секции `Участники:`, затем republish через PFS.
+    Доработка MFF (retry + TG-уведомление при Bullet points формате) — запланирована в MFF v2.1.
+
 6. **Расширение aliases в entities.json вызывает непреднамеренную массовую публикацию** —
    если добавить новые aliases, ранее невидимые исторические встречи становятся видимыми для
    ROUTES. Если они отсутствуют в реестре (`registry.get = None`), `process_pending` публикует
@@ -137,8 +199,10 @@ per-project protocol tables on Confluence (dom.tutu.ru). Code lives at
     `task.text` содержит строку с датой, а `_task_body()` всё равно добавляет `<time datetime=.../>`.
     Итого — дата в виде текста + дата в виде Confluence-тега.
     **Диагностика:** найти summary-файл встречи, проверить строку задачи — есть ли ` / ` перед датой.
-    **Фикс:** переопубликовать встречу через `run --confirm-republish` — НЕ чинить summary-файл
-    (источник истины у Fireflies). Fireflies иногда не ставит пробел перед `/`.
+    **Фикс парсера (v1.6.1):** `summary_parser.py` теперь ловит оба варианта через
+    `_DEADLINE_SEP_RE = re.compile(r" /\s*")` (модульная константа) — ищет последнее вхождение
+    `" /"` с любым количеством пробелов после. `rfind(" / ")` заменён на `finditer + last match`.
+    **Фикс для уже опубликованных строк:** переопубликовать встречу через `run --confirm-republish`.
 
 ## Dedup module (`dedup.py`)
 
@@ -207,5 +271,10 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
       (separate from the main suite for speed; expect 36 passed)
 - [ ] После любой правки aliases в `entities.json` — проверить `test_baseline_invariant_matches_pfs_routes`
       до запуска cron; если тест падает — синхронизировать ROUTES в `config.py` перед следующим прогоном
+- [ ] Четыре системных fallback-entity (`vstrechi_nerazobrannoe`, `sink_aid`, `vstrechi_pro`,
+      `aralov_1on1`) присутствуют в ROUTES — проверить `python -c "from protocolfromsummary.config
+      import ROUTES; [print(k, 'OK' if k in ROUTES else 'MISSING!') for k in
+      ['vstrechi_nerazobrannoe','sink_aid','vstrechi_pro','aralov_1on1']]"` при подозрении на
+      KeyError в fallback-ветке
 - [ ] Dry-run проверка CUTOVER_DATE guard: `run-pending --dry-run | grep -E 'исторических|пропущено|published'`
       должен показывать `пропущено N исторических встреч` и `published: 0` (если нет новых реальных встреч)

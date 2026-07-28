@@ -21,7 +21,7 @@ wiki-ссылками Obsidian по 4 корзинам: projects, tools, rooms, 
 - **Версия кода:** v1.0.0, 186/186 тестов ✅ (MOFS v0.9.0 + LLM-фолбэк + авто-rematch)
 - **ТЗ:** `~/WorkVault/Hermes-Backlog/TZ/MarkObjectsFromSummary/MarkObjectsFromSummary_TZ.md` v0.9.0; приложение v1.0.0: `MarkObjectsFromSummary_v100_TZ.md`
 - **entities.json:** `~/WorkVault/Registries/entities.json` (~44 сущности: проекты/1-1/синки + 13 tools + adm/okr/sr/vestnik/atribuciya/antibot/dayana_1on1/alfa/adm и др. добавлены 22.07)
-- **Реестр:** `~/USERTOOLS/MarkObjectsFromSummary/_mark_objects_registry.json`; `mofs_unmatched.md` → `~/WorkVault/Registries/mofs_unmatched.md`
+- **Реестр:** `~/USERTOOLS/AnywhereContacts/_mark_objects_registry.json` (**не** в папке MarkObjectsFromSummary!); `mofs_unmatched.md` → `~/WorkVault/Registries/mofs_unmatched.md`
 - **Архив:** 575 встреч, 573/575 с projects, contacts backfill S1+S2 468/514 ✅ (S3 не потребовался)
 - **MofsIndex:** v0.4.0, 575 встреч, 72 MB, `~/USERTOOLS/MofsIndex/state/index.sqlite`
 - **Кроны:**
@@ -42,9 +42,13 @@ mofs run --dry-run --from 2026-07-01 --to 2026-07-31
 # 2. только после проверки плана — реальный прогон
 mofs run --from 2026-07-01 --to 2026-07-31
 
-# 3. точечно — одна встреча
+# 3. точечно — одна встреча (только через --meeting-id, БЕЗ пути к файлу!)
 mofs run --meeting-id "2026-07-08 11-05-00 Кирилл 1-1" --dry-run
 ```
+
+**⚠️ КРИТИЧНО: `mofs run` НЕ принимает путь к файлу как позиционный аргумент.**
+`mofs run "/path/to/summary.md" --yes` → `error: unrecognized arguments` (exit 2).
+`--meeting-id` принимает строку meeting_id формата `YYYY-MM-DD HH-MM-SS Название` — **без суффикса ` - summary.md`**.
 
 **Safeguard (v0.7.0):**
 - `run`/`rematch` без скоупа → `exit 2`
@@ -432,6 +436,8 @@ print(f"obsidian://open?vault={vault}&file={encoded}")
   Команду передавать ДОСЛОВНО с `--dry-run`.
 - **Alias для коротких аббревиатур** — только с точкой (startswith), не substring.
 - **entities.json** — только через `entity-registry` CLI, не вручную.
+- **Сущность без блока `pfs` не попадает в PFS ROUTES.** `_load_routes_from_registry()` пропускает записи без `pfs` — встреча уходит в fallback «неразобранное» даже если alias совпадает. Фикс: добавить `pfs: {page_id: "...", tag: "ИМЯ."}`. Прецедент 28.07.2026: OKR-встреча не резолвилась — у сущности `okr` был alias, но не было блока `pfs`.
+- **Fallback `vstrechi_nerazobrannoe` обязан присутствовать в entities.json.** Если запись отсутствует — при любом fallback в PFS будет `KeyError: 'vstrechi_nerazobrannoe'`. Симптом в отчёте PFS: `error: 'vstrechi_nerazobrannoe'`. Прецедент 28.07.2026.
 - **⚠️ Расширение aliases → PFS публикует старый архив (22.07.2026).** При добавлении новых aliases к PFS-сущностям в entities.json — старые встречи (до CUTOVER_DATE) начинают матчиться на ROUTES PFS. Если их нет в реестре PFS — `process_pending` публикует как новые. Перед масштабным добавлением aliases: `grep -rl "<новый alias>" ~/WorkVault/Meetings/NewMeetings/*summary* | wc -l`. При наличии CUTOVER_DATE guard в PFS pipeline.py (с 22.07.2026) — встречи до 2026-07-10 защищены автоматически.
 
 - **MOFS v1.0.0 (22.07.2026): LLM-фолбэк + авто-rematch реализованы.** При `projects=[]` после regex → Haiku классифицирует по entities.json (threshold=0.90). Low-confidence → `mofs_unmatched.md`. При изменении entities.json → авто-rematch по SHA-256 хэшу файла. Ежедневный full-reindex — крон `mofs_index_rebuild` (23:00, job: 7e013cd5c6f9). Скрипт: `~/.hermes/scripts/mofs_index_rebuild.sh`.
@@ -441,6 +447,21 @@ print(f"obsidian://open?vault={vault}&file={encoded}")
 - **cwd не важен** — с v0.7.0 `.env` читается по абсолютному пути из `config.py`.
   Крон можно запускать из любой директории.
 - **Порядок поштучного ревью dry-run:** сначала dry-run → поштучный разбор проблем → фикс aliases → повторный dry-run → реальный прогон. Не торопиться к реальному прогону.
+
+- **⚠️ MoveFromFF иногда возвращает Bullet points вместо Custom Summary (28.07.2026).** Симптом: summary содержит только `## Bullet points` + `## Notes` без секций `Участники:/Задачи:/Решения:`. Причина: Custom AI Skill в Fireflies не вернул output для встречи. PFS публикует пустую строку в протокол. Диагностика: `grep "## Bullet" <summary>.md` — если есть, Custom Skill не сработал. Решение — принудительный refetch: (1) найти meeting_id из `_registry_meet.json` по title, (2) удалить запись из registry, (3) удалить файл summary, (4) `python3 -m movefromff --mode manual --meeting-id <id> --no-tg --verbose`, (5) проверить `## Участники:`, (6) republish через PFS с `--confirm-republish`.
+
+- **⚠️ Диагностика "skipped=N, processed=0" при ручном запуске (28.07.2026).** Если `mofs run --from X --to Y` возвращает `skipped=N` для встреч у которых внешне frontmatter кажется пустым или неполным — это означает что реестр `~/USERTOOLS/AnywhereContacts/_mark_objects_registry.json` уже содержит запись с `objects_version=0.6.0` (крон отработал раньше). Диагностика:
+  ```python
+  import json
+  with open('/home/tkachenkoav/USERTOOLS/AnywhereContacts/_mark_objects_registry.json') as f:
+      reg = json.load(f)
+  meeting_id = '2026-07-28 12-30-00 Название'
+  entry = (reg.get('meetings') or {}).get(meeting_id, {})
+  print('objects_version:', entry.get('objects_version'))
+  print('processed_at:', entry.get('processed_at'))
+  ```
+  Если `objects_version` совпадает с `OBJECTS_VERSION` в `pipeline.py` (сейчас `0.6.0`) — встреча уже обработана, skipped — норма. Frontmatter при этом уже корректный.
+  Для принудительного перепрогона: `mofs rematch --meeting-id "..." --bucket all`.
 
 ## References
 

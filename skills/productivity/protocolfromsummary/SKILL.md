@@ -256,6 +256,112 @@ Expect `36 passed` (as of 2026-07-27). All tests use mock `llm_fn` — no real H
 
 Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша explicitly requested no routine run reports.
 
+14. **MOFS генерирует `## Секция` без двоеточия — PFS не парсит (28.07.2026)** —
+    `summary_parser._find_sections()` ищет заголовки по паттерну `^{name}\b.*:\s*$` — обязательно
+    двоеточие в конце. MoveFromFF старый формат: `Участники:` (plain, с двоеточием) — парсится.
+    MOFS новый формат: `## Участники` (markdown H2, без двоеточия) — НЕ парсится → PFS публикует
+    пустую строку.
+    **Диагностика:** `grep "^## Участники\|^Участники:" <summary>.md` — если `## Участники` (без `:`)
+    — парсер не найдёт секции.
+    **Быстрый фикс для конкретной встречи:**
+    ```bash
+    sed -i \
+      -e 's/^## Участники$/Участники:/' \
+      -e 's/^## Решения$/Решения:/' \
+      -e 's/^## Блокеры$/Блокеры:/' \
+      -e 's/^## Задачи$/Задачи:/' \
+      -e 's/^## Риски$/Риски:/' \
+      "<путь>/summary.md"
+    python -m protocolfromsummary run "<путь>/summary.md" --confirm-republish
+    ```
+    **Системный фикс (реализован 29.07.2026)** — в `summary_parser._find_sections()` строка 130
+    расширен regex: двоеточие стало опциональным, добавлена защита от ложных срабатываний:
+    ```python
+    # было:
+    if re.match(rf"^{re.escape(name)}\b.*:\s*$", header_candidate, re.IGNORECASE):
+    # стало:
+    if re.match(rf"^{re.escape(name)}\b[^:\n]*:?\s*$", header_candidate, re.IGNORECASE):
+    ```
+    `[^:\\n]*` вместо `.*` — не зацепить строки с двоеточием посередине (`Участники: обсудили X`).
+    Регэксп уже снимал `##` на строке 123, поэтому оба формата парсятся корректно.
+    Тест: `test_find_sections_header_without_colon` в `tests/test_summary_parser.py`.
+
+15. **Встреча с Лёней/1-1-контактом роутится по названию, а не по участникам** —
+    `route.py` шаг 2 (name_match) срабатывает ДО шага 3 (participants fallback). Если встреча
+    называется «OKR. ...» но участник — Цыба Леонид, встреча пойдёт в `okr`, а не `lenya_1on1`.
+    **Это известное ограничение**: только `aralov_1on1` определяется по составу участников
+    (хардкодное правило в шаге 1). Остальные 1-1 идут по name_match на alias в названии.
+    **Практика**: убедиться что встречи с Лёней называются «Лёня 1-1» в Fireflies, а не по теме.
+    Если встреча попала не туда — переопубликовать с `--confirm-republish` после переименования
+    или ручной правки summary-файла (добавить `lenya_1on1` в frontmatter `projects:`).
+    **lenya_1on1** → page_id `508804891` (та же страница что и `ilya_1on1` — Лёня заменил Илью).
+    Подробный рецепт переноса: `references/force-route-meeting-29072026.md`.
+
+## Перенос встречи на другую страницу (force-route)
+
+Полные рецепты обоих методов — `references/force-route-meeting-29072026.md`.
+
+**Выбор метода по ситуации:**
+- **Метод A (прямой API, РЕКОМЕНДОВАН)** — строка **уже опубликована** на Confluence. GET source → вырезать `<tr>` с нужным anchor (счётчик вложенности `<tr>`) → PUT source (version+1) → вставить после `</tr>` строки-заголовка на target → PUT target (version+1) → обновить реестр. Не требует PFS pipeline.
+- **Метод B (monkey-patch + run_pilot)** — строки ещё нет на Confluence или нужно переопубликовать от оригинального summary-файла. Удалить из реестра → monkey-patch resolve_route → dry_run → live.
+
+**Питфолл: поле `space` отсутствует в GET-ответе** — `?expand=body.storage,version` не возвращает `space`. Для payload PUT нужны только `title` + `version.number`. Если нужен space_key — явно добавить `expand=...,space`.
+
+**Критически важный порядок шагов (Метод A):**
+
+1. **Убедись, что строка существует на source-странице** (GET + проверь anchor) перед удалением.
+2. **Вырежи `<tr>...</tr>` с нужным anchor** — `rfind('<tr>', 0, anchor_pos)` + счётчик глубины для matching `</tr>`.
+3. **PUT source** (version+1) с body без строки.
+4. **Вставь строку на target** сразу после `</tr>` строки-заголовка (`find('</tr>', find('<th>'))`).
+5. **PUT target** (version+1).
+6. **Бэкап реестра** + обновить `page_id` и `entity` атомарно (tmp + os.replace).
+7. **Верификация:** GET обеих страниц, проверить anchor присутствует/отсутствует.
+
+**Критически важный порядок шагов (Метод B):**
+
+1. **Убедись, что строка существует на source-странице**, прежде чем удалять её — `copy_meeting_to_page` ищет anchor на source_page из реестра. Если удалить строку до вызова copy — получишь `action=not_found`.
+2. **Удали строку с исходной страницы** через прямой API PUT.
+3. **Бэкап реестра:** `cp _registry.json _registry.json.bak-YYYYMMDD-reason`
+4. **Удали запись из реестра** (иначе `run_pilot` вернёт `skipped_duplicate`):
+   ```python
+   import json; from pathlib import Path
+   reg = Path('~/WorkVault/ProtocolFromSummary/_registry.json').expanduser()
+   data = json.loads(reg.read_text())
+   data['entries'].pop('<meeting_id>', None)
+   reg.write_text(json.dumps(data, ensure_ascii=False, indent=2))
+   ```
+5. **Monkey-patch и dry_run=True:**
+   ```python
+   import protocolfromsummary.pipeline as pm
+   from protocolfromsummary.route import _route_from_entity
+   from pathlib import Path
+
+   pm.resolve_route = lambda name, **kw: _route_from_entity('target_entity_slug')
+   result = pm.run_pilot(Path('/path/to/summary.md'), dry_run=True)
+   # ожидаем: action=published, entity=target_entity_slug, page_id=<correct>
+   print(result.action, result.entity, result.page_id)
+   ```
+6. Убедившись — запусти с `dry_run=False`. Реестр обновится автоматически.
+
+**Pitfall: `kind: person_1on1` vs `kind: one_on_one` в entities.json** —
+`pipeline.py` проверяет `route.kind == "one_on_one"` для включения режима one_on_one в `render_row`.
+`kind: person_1on1` (новый тип для людей без папки) этот флаг НЕ триггерит. Если нужен режим
+1-1 в рендере — используй `kind: one_on_one` в entities.json.
+
+**Pitfall: `resolve_participants` и `render_row` — актуальные сигнатуры (29.07.2026)** —
+```python
+# resolve_participants требует confluence=
+resolve_participants(raws, *, store, confluence, rooms)
+# render_row НЕ принимает meeting_id — только через row_anchor отдельно
+render_row(*, meeting_date, meeting_name, participants, decisions, blockers,
+           risks=[], tasks, tag_prefix, task_id_start=1, is_one_on_one=False,
+           row_anchor=None, layout='2col', content_column_index=None)
+# tasks = list[tuple[MeetingTask, list[ResolvedParticipant], date]] — НЕ raw strings
+# Собирать через pipeline._resolve_tasks или запускать через run_pilot
+```
+При прямом вызове `render_row` вне pipeline — проще вызвать `run_pilot` с monkey-patched route,
+чем собирать resolved_tasks вручную (это 50+ строк кода из pipeline.py).
+
 ## Verification checklist
 
 - [ ] Ran `dry_run=True` and inspected `row_xml` before any live write

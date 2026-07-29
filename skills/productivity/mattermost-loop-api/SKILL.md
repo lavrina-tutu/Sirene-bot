@@ -250,15 +250,17 @@ state/watermark.json    # персистентный state
 - Срочный: job `f61b26cbbdf5`, `*/3 * * * *`, no_agent=true, deliver=`telegram:-1004300127777:6556`
 - Дайджест: job `2865cc674493`, `0 8-20 * * 1-5`, no_agent=true, deliver=`telegram:-1004300127777:6556`
 
-**Формат уведомления (финальный, утверждён 24.07.2026):**
+**Формат уведомления (финальный, утверждён 29.07.2026):**
 ```
-@username [HH:MM]:
+📅 29 июл 2026, 14:35 МСК
 Первая непустая строка сообщения
-🔗 https://loop.tutu.ru/tutu/pl/{post_id} | #{channel_name} | @{username}
+🔗 https://loop.tutu.ru/tutu/pl/{post_id}
+#{channel_name} · @{username}
 ```
-- Время сообщения в МСК (UTC+3), формат `HH:MM`
+- Дата и время МСК — ПЕРВАЯ строка каждой карточки
+- Собственные сообщения (`my_username: tkachenkoav`) фильтруются в `digest.py` и `urgent.py` после резолва авторов
 - Срочный: несколько сообщений разделяются `───`
-- Дайджест: заголовок `📬 Loop — дайджест HH:MM` + все упоминания за период
+- Дайджест: заголовок `📬 Loop · N сообщ.` + все упоминания за период
 - Пустой stdout = SILENT (ничего не доставляется)
 
 **Управление `urgent_contacts`:** добавлять username из Loop. Пример: `gladkikh`, `malyy`, `fedotovav`, `klimovskiyrb`. Резолв через `GET /api/v4/users/username/{name}` с кешем в state на 24ч.

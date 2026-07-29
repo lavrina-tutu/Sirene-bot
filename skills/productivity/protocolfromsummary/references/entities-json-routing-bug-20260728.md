@@ -1,4 +1,4 @@
-# Инцидент: entities.json routing bug (2026-07-28)
+# Инцидент: entities.json routing bug (2026-07-28) — ИСПРАВЛЕНО
 
 ## Встреча
 `2026-07-28 11-30-00 OKR. Рассказ о логике ведения целей и KR в АИД`  
@@ -22,7 +22,7 @@ if not pfs:
 Итог: `okr` не входит в ROUTES → name_match (шаг 2) не срабатывает → встреча падает в fallback.
 
 ### Дефект 2: entity `vstrechi_nerazobrannoe` отсутствует в entities.json
-Файл: `~/WorkVault/Registries/entities.json` — сущности нет совсем.
+Файл: `~/WorkVault/Registries/entities.json` — сущности не было совсем.
 
 `vstrechi_nerazobrannoe` — системный fallback-таргет, жёстко прописан в `route.py` (строка 169)
 и `config.py` (строка 100). Без блока `pfs` в entities.json он не попадает в ROUTES → KeyError
@@ -35,20 +35,7 @@ if not pfs:
 2. `_has_pro_topic("OKR. Рассказ...")` → `False` (нет слов: `pmo`, `гильдия`, `лекци`, `управлени проект`, `адм.`)
 3. → `return _route_from_entity("vstrechi_nerazobrannoe")` → **KeyError**
 
-## Диагностика (воспроизведение)
-
-```python
-cd ~/USERTOOLS/ProtocolFromSummary && source .venv/bin/activate
-python3 -c "
-from protocolfromsummary.route import resolve_route
-r = resolve_route(
-    'OKR. Рассказ о логике ведения целей и KR в АИД',
-    participants=['Цыба Леонид', 'Ткаченко Александр Владимирович'],
-)
-print(r)
-"
-# → KeyError: 'vstrechi_nerazobrannoe'
-```
+## Диагностика
 
 Быстрая проверка состояния ROUTES:
 ```python
@@ -57,25 +44,22 @@ for key in ["okr", "vstrechi_nerazobrannoe", "sink_aid", "vstrechi_pro"]:
     print(key, "→", "OK" if key in ROUTES else "MISSING!")
 ```
 
-## Необходимые правки entities.json (не сделаны в рамках этой сессии)
+## Фикс (применён 28.07.2026)
 
-### 1. Добавить `pfs` к `okr`
+### 1. Добавлен `pfs` к `okr`
 ```json
 "okr": {
-  "kind": "project",
-  "display_name": "OKR",
-  "aliases": ["окр", "okr", "цели и ключевые результаты", "заполняем джиру",
-               "собираем q2", "собираем q1", "выравнивание по целям", "okr-tool"],
+  ...existing fields...,
   "pfs": {
-    "page_id": "<РЕАЛЬНЫЙ page_id Confluence-страницы OKR-протоколов>",
+    "page_id": "508804852",
     "tag": "OKR."
-  },
-  "parent": null,
-  "folder": "Entities/okr"
+  }
 }
 ```
+OKR-встречи публикуются на страницу «Встречи неразобранное» (508804852) до появления
+отдельной страницы протоколов для OKR.
 
-### 2. Добавить `vstrechi_nerazobrannoe` (системный fallback)
+### 2. Добавлена `vstrechi_nerazobrannoe`
 ```json
 "vstrechi_nerazobrannoe": {
   "kind": "unknown",
@@ -89,12 +73,22 @@ for key in ["okr", "vstrechi_nerazobrannoe", "sink_aid", "vstrechi_pro"]:
   "folder": null
 }
 ```
-page_id `508804852` — из `tests/test_entities_registry.py` строки 74, 101.
+page_id `508804852` — страница «Встречи неразобранное» в Confluence.
 
-## Проверка после правки
+## Результат
+После фикса встреча опубликована: `action=published, entity=okr, page_id=508804852, version 10→11`.
+
+## Проверка после любой правки entities.json
 ```bash
 cd ~/USERTOOLS/ProtocolFromSummary && source .venv/bin/activate
 python -m pytest tests/test_entities_registry.py -q
 # Обязательно: test_baseline_invariant_matches_pfs_routes
 python -m pytest -q -m "not live_confluence"
 ```
+
+## Правило
+Четыре системных fallback-entity ОБЯЗАНЫ присутствуют в ROUTES:
+- `vstrechi_nerazobrannoe` (page_id 508804852)
+- `sink_aid` (page_id 331125844)
+- `vstrechi_pro`
+- `aralov_1on1`

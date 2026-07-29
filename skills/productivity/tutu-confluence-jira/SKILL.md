@@ -272,6 +272,24 @@ URL сервиса искать в сводной таблице родител�
 
 **Стиль ссылок в тексте задач и страниц:** ссылка вшивается в осмысленное слово текста (`<a href="...">страничке</a>`), а не оформляется отдельным словом `(ссылка)` после текста. Это правило распространяется на задачи в Confluence-минутках и на тело страниц.
 
+## Перенос строки таблицы между страницами Confluence
+
+Паттерн: вырезать `<tr>...</tr>` из одной страницы и вставить в другую. Используется например при переносе протокола встречи из «неразобранных» в нужный проект.
+
+**Алгоритм:**
+1. GET обеих страниц (`?expand=body.storage,version`) → сохранить в `/tmp/src.json` и `/tmp/dst.json`
+2. Найти строку в src: `tr_start = body.rfind('<tr>', 0, anchor_idx)`, `tr_end = body.find('</tr>', anchor_idx) + len('</tr>')`
+3. Вырезать из src: `new_src = body[:tr_start] + body[tr_end:]`
+4. Вставить в dst после первой строки (`</tr>`): `insert_at = body_dst.find('</tr>') + len('</tr>')`
+5. PUT обе страницы с bumped version
+
+**Питфолл:** `first_tr_end` находит заголовочную строку — вставка идёт после неё (вверх таблицы). Если нужно в конец — искать последний `</tr>` перед `</table>`.
+
+**Поиск строки по `pfsrow-*` anchor:**
+- `pfsrow-7e76e50296a9` — это row_anchor из реестра `~/WorkVault/ProtocolFromSummary/_registry.json`
+- `grep -B5 -A15 'pfsrow-<id>' ~/WorkVault/ProtocolFromSummary/_registry.json` покажет `source_summary`, `meeting_name`, `page_id`
+- Anchor физически живёт в теле страницы как `<ac:structured-macro ac:name="anchor"><ac:parameter>pfsrow-...</ac:parameter></ac:structured-macro>`
+
 ## Ручное удаление строки таблицы минуток
 
 **Загрузи скилл `taskrefresh` перед выполнением** — полная процедура там, раздел «Ручное удаление строки таблицы минуток». Общая техника «GET → find `<tr>...</tr>` → PUT» одинаковая, различается только семантика владельца задачи.
@@ -309,8 +327,9 @@ Restate the task spec, wait for Sasha's answers, then act ("делай"). Task U
 - **Zoom Marketplace Server-to-Server OAuth scope `meeting:write:meeting:admin`** — в корпоративном аккаунте ТУТУ этот scope недоступен для выбора (не отображается в UI, скрыт политикой аккаунта). Нужно обращаться к Zoom-админу ТУТУ. Токен и само приложение создаются нормально, ошибка проявляется только при вызове `POST /v2/users/{id}/meetings` → код 4711. Credentials хранятся в `~/.hermes/profiles/anthropic/.env` (`ZOOM_ACCOUNT_ID`, `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET`). Скрипт тестирования: `/home/tkachenkoav/USERTOOLS/ZoomAPI/test_zoom.py`. Детали — `references/zoom-api-setup.md`.
 - **confluencesync pull выводит «✓ pulled 0 page(s)»** на уже скачанной странице — нужен флаг `--resync` для перезаписи. Без флага пропускает существующие файлы молча.
 - **Найти дочерние страницы проекта (протоколы/минутки/материалы)** — `curl ... "https://dom.tutu.ru/rest/api/content/<rootPageId>/child/page?limit=50"`, возвращает `results[].{id,title}`. Полезно, когда известен только `confluence_id` корня проекта (как в `card.md`), а не сама страница протокола.
-- **Тело Confluence-страницы содержит backslash-последовательности** — `json.loads()` на stdout curl падает с `JSONDecodeError: Invalid \escape`. Решение: сохранить в файл (`curl ... > /tmp/page.json`), читать через `json.load(open('/tmp/page.json'))`. Удалять `/tmp/page.json` сразу после использования (PII/внутренний контент).
-- **Python в `terminal()` с кавычками и регэкспами** — использовать `python3 - << 'PYEOF'` (single-quoted HEREDOC, shell не интерполирует внутри). Избегать `-c "..."` при сложной логике с кавычками.
+- **Тело Confluence-страницы содержит backslash-последовательности** — `json.loads()` на stdout curl падает с `JSONDecodeError: Invalid \\escape`. Решение: сохранить в файл (`curl ... > /tmp/page.json`), читать через `json.load(open('/tmp/page.json'))`. Удалять `/tmp/page.json` сразу после использования (PII/внутренний контент).
+- **Поле `space` отсутствует в GET-ответе по умолчанию** — `?expand=body.storage,version` не возвращает поле `space`. Для payload PUT существующей страницы нужны только `title` + `version.number` + `type: "page"` + `body` — `space` не требуется. Если space_key необходим явно — добавить `expand=body.storage,version,space`. Попытка читать `data['space']` без этого expand → `KeyError`.
+- **Python в `terminal()` с кавычками и регэкспами**
 
 
 ## Связанные скиллы
@@ -342,6 +361,14 @@ Restate the task spec, wait for Sasha's answers, then act ("делай"). Task U
 - `references/kbk-tech-articles.md` — справочник технических статей КБК для ИТ-договоров
 - `references/confluence-meeting-protocol-format.md` — реальный формат страниц-протоколов "Задачи и договоренности (Минутки)" (оба варианта таблицы, формат `<ac:task>`, userkey найденных людей вне основного реестра контактов)
 - `references/confluence-storage-format-hidden-markers.md` — экспериментально проверенные варианты невидимых маркеров/ID в ячейках таблицы Confluence storage-формата: что переживает API PUT round-trip, что вырезается сервером, что осталось непроверенным (реальное ручное редактирование через веб-UI)
-- `templates/tomake-contract-description.md` — шаблон описания задачи TOMAKE (стандарт + нестандартный случай со стартом до подписания)
+- `references/zoom-api-setup.md`
+
+**Ключевые pageId:**
+- Общий список задач: `432316254`
+- Trisigma-минутки: `490170597`
+- AI-аналитик минутки: `477061038`
+- Неразобранные summary встреч: `508804852`
+- Аралов 1-1: `508804897`
+- OpenTasks: `492610494`
 
 Работа с целями OKR (проекты OKRS/OKRAID) — отдельный скилл `tutu-jira-okr`, не здесь.

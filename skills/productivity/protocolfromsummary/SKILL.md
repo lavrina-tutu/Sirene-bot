@@ -286,6 +286,19 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
     Регэксп уже снимал `##` на строке 123, поэтому оба формата парсятся корректно.
     Тест: `test_find_sections_header_without_colon` в `tests/test_summary_parser.py`.
 
+16. **MFF retry Custom AI Skill (v2.1, реализовано 29.07.2026)** —
+    При `summary_format == "bullet_points"` MFF планирует 3 повторных попытки (+5/+10/+15 мин).
+    После 3 неудачных попыток → `status = "completed"` + TG-уведомление в мониторинг-топик:
+    ```
+    ⚠️ MoveFromFF: не получен custom summary
+    📌 <название встречи> | 🕐 <дата Europe/Moscow>
+    ❗ Custom AI Skill не вернул результат после 3 попыток
+    🔧 Для переимпорта: python -m movefromff --mode manual --meeting-id <id>
+    ```
+    Bullet points файл **не удаляется** между ретраями — перезаписывается при успехе.
+    Поля в MeetingRecord: `summary_format: str`, `custom_skill_retries: int`.
+    Конфиг: `MFF_CUSTOM_SKILL_RETRY_DELAYS = [5, 10, 15]` (минуты).
+
 15. **Встреча с Лёней/1-1-контактом роутится по названию, а не по участникам** —
     `route.py` шаг 2 (name_match) срабатывает ДО шага 3 (participants fallback). Если встреча
     называется «OKR. ...» но участник — Цыба Леонид, встреча пойдёт в `okr`, а не `lenya_1on1`.
@@ -384,3 +397,5 @@ render_row(*, meeting_date, meeting_name, participants, decisions, blockers,
       KeyError в fallback-ветке
 - [ ] Dry-run проверка CUTOVER_DATE guard: `run-pending --dry-run | grep -E 'исторических|пропущено|published'`
       должен показывать `пропущено N исторических встреч` и `published: 0` (если нет новых реальных встреч)
+- [ ] Пустой протокол в Confluence? → проверить `grep "## Bullet\|Участники:" <summary>.md` — если только Bullet points, Custom Skill не сработал → перескачать через MFF (Питфолл 13); с v2.1 MFF сам сделает retry и уведомит в мониторинг
+- [ ] `lenya_1on1` → page_id `508804891` (та же страница что и `ilya_1on1`). Встречи с Лёней Цыбой где в названии НЕ «Лёня 1-1» — уйдут по name_match не туда (Питфолл 15); переносить вручную через Метод A

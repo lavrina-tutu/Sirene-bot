@@ -460,6 +460,73 @@ grep -r 'LOOP_TOKEN' ~/.hermes/cron/output/ | grep -v '.example' | head -5
 
 Теги **не применяются** к Loop-уведомлениям — там нет `To:/CC:`.
 
+## Диагностика: почему urgent-уведомление не пришло
+
+> Полный воспроизводимый рецепт: `references/mfl-notify-debug-recipe.md`
+
+При жалобе «уведомление не сработало» — работай в этом порядке.
+
+**Шаг 1 — `seen_ids` как источник истины:**
+```bash
+python3 -c "
+import json
+data = json.load(open('/home/tkachenkoav/USERTOOLS/MoveFromLoop/state/watermark.json'))
+target = 'POST_ID_ИЗ_URL'
+hit = next((e for e in data['seen_ids'] if e['id'] == target), None)
+if hit:
+    from datetime import datetime, timezone, timedelta
+    MSK = timezone(timedelta(hours=3))
+    ts = hit['ts']
+    print('В seen_ids:', datetime.fromtimestamp(ts/1000, tz=MSK))
+else:
+    print('НЕТ в seen_ids')
+"
+```
+- **Есть в `seen_ids`** → крон НАШЁЛ пост, вызвал `mark_seen`. Проблема на стороне deliver (Telegram/сеть).
+- **Нет в `seen_ids`** → крон пост НЕ ВИДЕЛ. Причина: `mention_count=0` (прочитал в телефоне до тика), автор не в `urgent_contacts`, ошибка API, или крон не запускался.
+
+**Шаг 2 — определи автора и канал:**
+```bash
+curl -s --max-time 15 -H "Authorization: Bearer $LOOP_TOKEN" \
+  "https://loop.tutu.ru/api/v4/posts/$POST_ID" | python3 -m json.tool
+```
+Сверь `user_id` с `user_cache` в `watermark.json` → получишь username.
+
+**Шаг 3 — статус Telegram:**
+```bash
+cat ~/.hermes/gateway_state.json | python3 -m json.tool | grep -A3 telegram
+```
+Если `"state": "disconnected"` — deliver бесшумно теряет уведомления. `last_delivery_error` при этом остаётся `null` — это **ложное ощущение что всё ОК**. Это самая частая причина потерянных уведомлений.
+
+**Шаг 4 — логи крона:**
+```bash
+ls ~/.hermes/cron/output/f61b26cbbdf5/ | sort | tail -5
+cat ~/.hermes/cron/output/f61b26cbbdf5/<latest>.md
+```
+⚠️ **Крон */3 = ~480 файлов/день → логи ротируются быстро, за вчера могут не сохраниться.** Это НЕ значит что крон не работал. Единственный надёжный источник истины о прошлых запусках — `seen_ids` в `watermark.json`.
+
+**Шаг 5 — временна́я шкала:**
+```python
+from datetime import datetime, timezone, timedelta
+MSK = timezone(timedelta(hours=3))
+# Из seen_ids — когда крон обработал пост
+seen_ts = 1785354719778
+print('Обработан:', datetime.fromtimestamp(seen_ts/1000, tz=MSK))
+# Из поста — когда создан
+create_at = 1785354625861
+print('Создан:', datetime.fromtimestamp(create_at/1000, tz=MSK))
+print('Задержка:', (seen_ts - create_at)/1000, 'сек')
+```
+
+**Известный структурный баг в `urgent.py`:** `seen_ids` помечаются ДО подтверждения deliver от Hermes. Если Telegram disconnected в момент тика — уведомление **теряется навсегда**, повторно не доставляется (пост уже `is_seen`). Дайджест следующего часа тоже пропустит его по той же причине.
+
+**Дайджест silent после urgent-тика** — это **нормально**: `digest.py` явно проверяет `state.is_seen(pid)` и пропускает посты уже обработанные urgent-кроном. Не путай «дайджест silent» с «уведомление не было отправлено».
+
+**Сравнение логов urgent vs дайджест:**
+- Дайджест `2865cc674493` (раз в час) — логи живут несколько дней.
+- Urgent `f61b26cbbdf5` (каждые 3 мин) — логи живут ~несколько часов из-за ротации.
+- Если нужно понять работал ли urgent-крон в момент X — смотри `seen_ids` и/или логи дайджеста рядом по времени (если дайджест доставлял — Telegram был connected).
+
 ## Pitfalls
 
 - **`per_page=200` в `/channels/members` игнорируется** — API возвращает все каналы (~3344) одним ответом. Цикл пагинации: `if len(batch) != per_page: break` — корректно обработает и этот случай, но реально страниц не будет. Не добавлять sleep/retry при получении «всего» в первом ответе.
@@ -494,3 +561,7 @@ grep -r 'LOOP_TOKEN' ~/.hermes/cron/output/ | grep -v '.example' | head -5
 - **Профиль `.env` для кронов — `anthropic`, не `default`.** `mfl_urgent_check.py` и `mfl_digest.py` грузят `.env` из `/home/tkachenkoav/.hermes/profiles/anthropic/.env` (там LOOP_TOKEN, CONTACTS_ENCRYPTION_KEY). Профиль `tz-dev` использует этот же файл. Не путать с `~/.config/hermes/.env` — там только TUTU_DOMAIN_PASSWORD для Exchange.
 - **Скрипты `~/.hermes/scripts/` — только относительные пути.** `cronjob(script=...)` принимает только имя файла относительно `~/.hermes/scripts/`. Абсолютный путь или путь из USERTOOLS/ → «Script not found». Паттерн: скопировать entry-point в `~/.hermes/scripts/mfl_*.py`, хардкодить `_ROOT = Path("/home/tkachenkoav/USERTOOLS/MoveFromLoop")` внутри.
 - **Кроны MoveFromLoop (24.07.2026):** срочный `f61b26cbbdf5` (*/3), дайджест `2865cc674493` (0 8-20 пн-пт). Оба `no_agent=true`, deliver=`telegram:-1004300127777:6556`. Скрипты: `mfl_urgent_check.py`, `mfl_digest.py`.
+- **`telegram: disconnected` — deliver падает бесшумно, `last_delivery_error` остаётся `null`.** Не доверяй `null` как признаку успешной доставки. Проверяй `gateway_state.json` → `platforms.telegram.state` явно. Признак проблемы: крон с непустым stdout (данные в seen_ids) + пользователь не получает уведомления. Фикс: `systemctl --user restart hermes-gateway`.
+- **Логи urgent-крона (*/3) ротируются быстро** (~несколько часов). Нет логов за прошлый день ≠ крон не работал. Единственный надёжный источник истины — `state/watermark.json` (`seen_ids`, `urgent_last_ts`).
+- **`seen_ids` помечаются ДО подтверждения deliver.** Структурный баг в `urgent.py`: `state.mark_seen(seen_ids)` вызывается до `return format_urgent(items)`, и deliver происходит уже в Hermes после возврата. Если deliver падает — пост теряется навсегда. Обходной путь (не реализован): не добавлять в `seen_ids` если deliver вернул ошибку.
+- **Пост автора из `urgent_contacts` может оказаться в канале без `mention_count > 0`.** `fetch_mentions` смотрит только каналы с `mention_count > 0`. Если urgent-контакт написал в канал где тебя не @упомянули — `mention_count` не инкрементируется и пост не будет найден. Срочный крон покрывает только @упоминания+DM, не "все сообщения от urgent_contacts".

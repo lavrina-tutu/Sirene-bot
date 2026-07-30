@@ -95,6 +95,24 @@ custom_providers:
 
 Then set `provider: tutu` everywhere `provider: anthropic` appears (except `provider: auto` sections — leave those alone).
 
+## Смена провайдера только в конкретном профиле
+
+Если нужно изменить провайдер не в дефолтном профиле, а в конкретном — использовать флаг `--profile`:
+
+```bash
+hermes --profile tz-dev config set model.provider tutu
+hermes --profile tz-dev config set model.default claude-sonnet-4-6
+```
+
+**Без `--profile`** команда бьёт в `~/.hermes/config.yaml` (дефолтный профиль), даже если текущая сессия работает под другим профилем.
+
+Проверка:
+```bash
+hermes --profile <name> config | grep -E "model|provider"
+```
+
+Изменение вступает в силу с новой сессии — текущая продолжает работать с тем провайдером, с которым стартовала.
+
 ## Sections to leave as `provider: auto`
 
 `web_extract`, `skills_hub`, `approval`, `mcp`, `title_generation`, `triage_specifier`, `curator`, `kanban_decomposer`, `profile_describer` — these inherit the main model automatically.

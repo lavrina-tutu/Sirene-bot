@@ -735,6 +735,13 @@ display:
 
 **⚠️ `display.runtime_header` НЕ СУЩЕСТВУЕТ** — поиск по кодовой базе даёт 0 результатов. Молча игнорируется. Используй только `runtime_footer`.
 
+**Проверка размеров контекста модели:** при вопросах о context window не гадать и не опираться только на имя модели. Сначала искать официальную документацию провайдера/карточку модели и уточнять, что число зависит от интеграции. Для Hermes/Hosted моделей полезно сверять одновременно: docs Hermes, provider docs и model card (например, DeepSeek/OpenRouter). Если найдено несколько значений, отдавать приоритет официальному provider docs; если Hermes docs показывают пример для конкретной интеграции, явно говорить, что это значение именно для неё.
+
+**Типовой вывод для пользователя:**
+- `gpt-5.4-mini` в Hermes docs: 400000 контекст для Azure Foundry примера.
+- `deepseek-v4-pro`: 1M context в официальных DeepSeek docs и model cards.
+- Если найдено расхождение, сообщать о нём отдельно и не смешивать API-лимиты разных провайдеров.
+
 ### How Interim Messages Work (codebase reference)
 1. Agent emits status events → `status_callback()` → `_status_callback_sync()` in `gateway/run.py:16049`
 2. `_prepare_gateway_status_message()` (line 225) filters noisy messages

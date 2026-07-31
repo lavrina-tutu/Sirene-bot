@@ -29,7 +29,7 @@ Strategies to reduce API token costs while keeping main conversation quality hig
 
 ## Core Principle
 
-Route expensive bulk/auxiliary work to cheap models; keep the main user-facing conversation on a capable model (e.g. Sonnet).
+Route expensive bulk/auxiliary work to cheap models; keep the main user-facing conversation on a capable model (e.g. Sonnet or a verified faster/stricter alternative).
 
 ---
 

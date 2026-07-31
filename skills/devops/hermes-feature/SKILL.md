@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: разработка фич и инструментов Hermes/USERTOOLS (ТЗ → варианты → код → тесты → документация), диагностика багов. Триггеры: разработай, новый инструмент, напиши ТЗ, MoveFrom*, ошибка, баг, не работает."
-version: 1.20.0
+version: 1.20.1
 author: agent
 license: MIT
 platforms: [windows, linux, macos]
@@ -190,18 +190,18 @@ Linux VM: `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`.
 
 ### Инструмент запуска
 
-**Правило против хардкода (решение Саши 08.07.2026 — переживает переключение Anthropic↔TUTU):**
+**Правило против хардкода:**
 - **Sonnet-задачи — НЕ передавать `model` вообще.** Sonnet это всегда текущий основной провайдер/модель Hermes (`model.default`/`delegation.model` в `config.yaml`) — эти два поля синхронно обновляются скриптами переключения (`switch_to_sonnet5.sh`, `user_change_delegation_models1.sh`). Если не указывать `model` в `cronjob`/`delegate_task`, система сама берёт актуальное значение — не нужно править скилл при каждом переключении профиля.
-- **Opus/Haiku — модель передавать явно** (они намеренно НЕ основная модель), но БЕЗ `provider` (см. Pitfall 23 — провайдер система подставит сама). Конкретные ID (`claude-opus-4-7`, `claude-haiku-4-5`) подтверждены одинаковыми на Anthropic и TUTU (см. `WorkVault/UserManuals/LLM-Migration/README.md`, таблица моделей) — переживают переключение провайдера. Переживут смену **версии** модели (когда выйдет Opus 4.8 и т.п.) — только если кто-то обновит эту таблицу вручную; проверять актуальность раз в несколько недель, не считать вечной истиной.
+- **Opus/Haiku — модель передавать явно** (они намеренно НЕ основная модель), но БЕЗ `provider` (см. Pitfall 23 — провайдер система подставит сама). Конкретные ID и `reasoning`-уровни берём из текущей таблицы ниже; если модель/режим поменяются, обновлять таблицу вручную и перепроверять перед использованием.
 
 | Задача | Модель (параметр `model`) | Инструмент | Таймаут |
 |---|---|---|---|
-| Opus: ТЗ / пофайловый план | `{"model": "claude-opus-4-7"}` (без provider) | `cronjob(repeat=1)` | — |
-| Opus: сложная реализация (fallback) | `{"model": "claude-opus-4-7"}` (без provider) | `cronjob(repeat=1)` | — |
-| Opus: инфраструктурный анализ | `{"model": "claude-opus-4-7"}` (без provider) | `cronjob(repeat=1)` | — |
+| Opus: ТЗ / пофайловый план | {"model": "deepseek/deepseek-v4-pro", "reasoning": "high"} (без provider) | `cronjob(repeat=1)` | — |
+| Opus: сложная реализация (fallback) | {"model": "deepseek/deepseek-v4-pro", "reasoning": "high"} (без provider) | `cronjob(repeat=1)` | — |
+| Opus: инфраструктурный анализ | {"model": "deepseek/deepseek-v4-pro", "reasoning": "high"} (без provider) | `cronjob(repeat=1)` | — |
 | Sonnet: реализация по плану (>5 мин или многофайловая) | **не передавать** `model` — наследует текущий default | `cronjob(repeat=1)` | — |
 | Sonnet: короткая задача (<5 мин) | **не передавать** `model` — наследует `delegation.*` | `delegate_task` | 300с |
-| Haiku: справочный / терминальный запрос | `{"model": "claude-haiku-4-5"}` (без provider) | `delegate_task` | 120с |
+| Haiku: справочный / терминальный запрос | {"model": "deepseek/deepseek-v4-pro", "reasoning": "low"} (без provider) | `delegate_task` | 120с |
 
 **Никогда не использовать `delegate_task` с Opus** — reasoning_effort=high держит родительский стрим → gateway-зависания ("Stream stale for 180s"). Всегда `cronjob(repeat=1)`.
 
@@ -229,7 +229,7 @@ Linux VM: `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`.
 
 **НЕ дублировать в промпте:** SOUL.md, системный промпт Hermes. Cron-сессии всегда грузят `SOUL.md` (`load_soul_identity=True`) — идентичность агента субагент получает автоматически.
 
-**НО: cron-сессии НЕ получают MEMORY и USER PROFILE вообще.** Проверено по коду (`cron/scheduler.py`, флаг `skip_memory=True` с комментарием «Cron system prompts would corrupt user representations») — это намеренное архитектурное решение Hermes, не баг и не то, что можно включить конфигом. Субагент через `cronjob` не видит ни одной записи из MEMORY/USER PROFILE, даже если они содержат критичный для задачи факт (например «Саша сейчас на Anthropic, не TUTU» или правило про формат имён файлов WorkVault).
+**НО: cron-сессии НЕ получают MEMORY и USER PROFILE вообще.** Проверено по коду (`cron/scheduler.py`, флаг `skip_memory=True` с комментарием «Cron system prompts would corrupt user representations») — это намеренное архитектурное решение Hermes, не баг и не то, что можно включить конфигом. Субагент через `cronjob` не видит ни одной записи из MEMORY/USER PROFILE, даже если они содержат критичный для задачи факт (например текущий активный провайдер или правило про формат имён файлов WorkVault).
 
 **Практическое следствие:** если факт из MEMORY/USER PROFILE нужен субагенту для корректного выполнения — **передавать его явно в промпте**, не полагаться, что «он и так знает». Особенно критично для: текущего активного провайдера/модели, стабильных конвенций именования (например «латиница-only в WorkVault»), организационных фактов (кто есть кто), правил из этого самого скилла (`hermes-feature`), если задача их использует. Секции `## Контекст и уже принятые решения` в промптах установочных планов (см. пример `QMD-Search`) — это правильный паттерн именно по этой причине.
 
@@ -305,6 +305,7 @@ Opus сохраняет план в `_fix_plan_YYYYMMDD.md` рядом с инс
 
 ## Справочные материалы
 
+- `references/model-family-switch-verification.md` — короткий чеклист проверки миграции model+reasoning в табличных пайплайнах и кронах.
 - `references/config-qa.md` — QA-процесс, опасные параметры конфига, откат, рестарт gateway.
 - `references/cron-and-scheduler.md` — cron-питфоллы: `cronjob(create/run/update)`, SILENT-guard, thread_id топиков, футер, «слепая зона» Sonnet.
 - `references/movefrom-and-anywhere.md` — MoveFrom*/FF API/AnywhereContacts: backfill, дедуп, rate-limit, reconciliation, PII-маскирование.
@@ -361,7 +362,7 @@ Opus сохраняет план в `_fix_plan_YYYYMMDD.md` рядом с инс
 
 22. **Форсированный пересбор summary/transcript (MoveFromFF)** — переименовать файл (`... - summary.md_old`), `reconcile_registry()` сам сбросит запись в pending; запуск `--mode manual --from-date --to-date`. Побочный эффект: writer атомарен — transcript перезапишется тоже. (movefrom-and-anywhere.md)
 
-23. **Никогда не указывать `provider` вручную в `cronjob(model={...})`** — система сама подставит текущий активный провайдер; ручной hardcode устаревает при переключении Anthropic↔TUTU и роняет крон `Unknown provider`. **Повторилось дважды несмотря на правило** — перед вызовом `cronjob(create/update)` явно перечитать литерал `model` и убедиться что там ТОЛЬКО ключ `"model"`. Для Sonnet-задач `model` не передавать вообще (наследует из `delegation.model`). → `references/pitfalls-incidents.md#pitfall-23`
+23. **Никогда не указывать `provider` вручную в `cronjob(model={...})`** — система сама подставит текущий активный провайдер; ручной hardcode устаревает и роняет крон `Unknown provider`. **Повторилось дважды несмотря на правило** — перед вызовом `cronjob(create/update)` явно перечитать литерал `model` и убедиться что там ТОЛЬКО ключ `"model"`. Для Sonnet-задач `model` не передавать вообще (наследует из `delegation.model`). → `references/pitfalls-incidents.md#pitfall-23`
 
 24. **Cron-субагенты НЕ получают MEMORY/USER PROFILE** (`skip_memory=True` в `cron/scheduler.py`, намеренно — «cron system prompts would corrupt user representations»). SOUL.md грузится (`load_soul_identity=True`), MEMORY/USER PROFILE — нет, ни при каких условиях. Критичные факты (провайдер, конвенции именования, кто есть кто) — передавать явно в промпт cronjob, не полагаться что субагент их «и так знает». Обнаружено 08.07.2026 при ревизии Блока 6Б.
 

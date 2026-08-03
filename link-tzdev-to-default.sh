@@ -1,5 +1,7 @@
 #!/bin/bash
 # link-tzdev-to-default.sh — создаёт в tz-dev симлинки на кастомные скиллы из default
+# ВАЖНО: tz-dev/skills — симлинк на ~/.hermes/skills
+# Относительный путь: (depth+1) раз "../" + "profiles/default/skills/<skill_dir>"
 set -euo pipefail
 
 DEFAULT_SKILLS="$HOME/.hermes/profiles/default/skills"
@@ -22,13 +24,16 @@ while IFS= read -r symlink; do
     tzdev_target="$TZDEV_SKILLS/$skill_dir"
     mkdir -p "$(dirname "$tzdev_target")"
 
+    # Calculate: depth = number of slashes in skill_dir
+    # Need (depth+1) "../" to get from ~/.hermes/skills/<skill_dir> to ~/.hermes/
+    # Then profiles/default/skills/<skill_dir>
+    depth=$(echo "$skill_dir" | tr -cd '/' | wc -c)
+    back=""
+    for ((i=0; i<=depth; i++)); do back="../$back"; done
+    expected="${back}profiles/default/skills/$skill_dir"
+
     if [ -L "$tzdev_target" ]; then
         current="$(readlink "$tzdev_target")"
-        # Calculate expected relative path
-        depth=$(echo "$skill_dir" | tr -cd '/' | wc -c)
-        expected=""
-        for ((i=0; i<=depth+1; i++)); do expected="../$expected"; done
-        expected="${expected}default/skills/$skill_dir"
         if [ "$current" = "$expected" ]; then
             ok=$((ok + 1))
         else
@@ -41,10 +46,7 @@ while IFS= read -r symlink; do
         skipped=$((skipped + 1))
     else
         echo "  [NEW] $skill_dir"
-        depth=$(echo "$skill_dir" | tr -cd '/' | wc -c)
-        back=""
-        for ((i=0; i<=depth+1; i++)); do back="../$back"; done
-        ln -s "${back}default/skills/$skill_dir" "$tzdev_target"
+        ln -s "$expected" "$tzdev_target"
         created=$((created + 1))
     fi
 done < <(find "$DEFAULT_SKILLS" -mindepth 2 -maxdepth 3 -type l 2>/dev/null)

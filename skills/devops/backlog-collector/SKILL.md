@@ -1,6 +1,10 @@
 ---
 name: backlog-collector
 description: "DialogBacklog Сборщик v1.5. Читает новые сессии/сообщения с last_scan_at, находит открытые задачи и пишет их в ~/WorkVault/Hermes-Backlog/dialog-backlog.md с полем idea_summary. Не сверяет с реализацией — только сбор."
+version: 1.5.0
+author: agent
+license: MIT
+platforms: [linux, macos, windows]
 triggers:
   - "собери бэклог"
   - "прогнать сборщик бэклога"

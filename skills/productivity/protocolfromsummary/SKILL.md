@@ -213,8 +213,17 @@ published history. Key design points:
   - `_llm_check_tasks` → `duplicate_of_published_index` in `PROMPT_TASK_DEDUP` results
   - `_llm_check_section` → `duplicate_of_published_index` in `PROMPT_SECTION_DEDUP` results
   - `_check_risks_impl` → `same_as_published_index` (+ `severity_changed` gate) in `PROMPT_RISK_DEDUP` results
-- **`reasoning` field** is present in all three prompts' JSON schema — Haiku always returns it
-  as a short one-phrase justification. It's `None`/missing when the model omits it (treat as `"нет"`).
+- LLM вызывается через `llm_fn` (инъектируется из `pipeline.py::_dedup_llm_fn`, который создаёт
+  `openai.OpenAI(base_url="https://llm-gateway.tutu.ru/api/openrouter/v1")` — ТУТУ-шлюз в
+  OpenRouter-совместимом формате). Модель/провайдер/усилие вынесены в `config.py` (§16,
+  единая точка правки — смена модели не требует изменений в `dedup.py`/`pipeline.py`):
+  - `DEDUP_LLM_MODEL` — по умолчанию `deepseek/deepseek-v4-pro` (заменил `claude-haiku-4-5`)
+  - `DEDUP_LLM_PROVIDER` — по умолчанию `"default"`: маршрутизацию к апстриму делегируем шлюзу,
+    без явного `provider.order`-override
+  - `DEDUP_LLM_REASONING_EFFORT` — по умолчанию `"high"`
+- **`reasoning` field** is present in all three prompts' JSON schema — the LLM (DeepSeek v4 Pro)
+  always returns it as a short one-phrase justification. It's `None`/missing when the model omits
+  it (treat as `"нет"`).
 - **Fuzzy-first, LLM-second** — tasks/sections first do `SequenceMatcher.ratio() >= 0.80`; only
   misses go to the LLM batch. Risks skip fuzzy entirely (severity-change logic requires semantic
   understanding).
@@ -245,7 +254,7 @@ place it BEFORE the `dups.append(...)` call, AFTER resolving `pub_text` from `al
 cd ~/USERTOOLS/ProtocolFromSummary && source .venv/bin/activate
 python -m pytest tests/test_dedup.py tests/test_pipeline_dedup.py -q
 ```
-Expect `36 passed` (as of 2026-07-27). All tests use mock `llm_fn` — no real Haiku calls.
+Expect `36 passed` (as of 2026-07-27). All tests use mock `llm_fn` — no real LLM calls.
 
 ## Cron routing rules (17.07.2026)
 

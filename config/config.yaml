@@ -1,6 +1,6 @@
 model:
-  default: x-ai/grok-4.20
-  provider: custom:tutu
+  default: deepseek/deepseek-v4-pro
+  provider: tutu
 fallback_providers: '[{"model": "deepseek/deepseek-v4-pro", "provider": "tutu"}]'
 toolsets:
 - hermes-cli
@@ -266,7 +266,7 @@ auxiliary:
     timeout: 360
   compression:
     provider: tutu
-    model: x-ai/grok-4.20
+    model: deepseek/deepseek-v4-pro
     base_url: ''
     api_key: ''
     timeout: 120
@@ -430,7 +430,7 @@ memory:
   nudge_interval: 10
   flush_min_turns: 6
 delegation:
-  model: x-ai/grok-4.20
+  model: deepseek/deepseek-v4-pro
   provider: tutu
   base_url: ''
   api_key: ''
@@ -566,7 +566,7 @@ lsp:
   wait_timeout: 5.0
   install_strategy: auto
 x_search:
-  model: grok-4.20-reasoning
+  model: deepseek/deepseek-v4-pro
   timeout_seconds: 180
   retries: 2
 _config_version: 33

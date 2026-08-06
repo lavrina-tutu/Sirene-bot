@@ -1,7 +1,7 @@
 ---
 name: tutu-confluence-jira
 description: "ТУТУ корп. системы: Confluence + JIRA. Загружать при: скачать/открыть страницу Confluence, создать/найти задачу в Jira, кто такой X (оргструктура: Аралов→Ткаченко→Криворотов), согласование договора, резолв участника по ФИО/userkey, публикация протокола встречи, экспорт Jira-задач в Obsidian. URL: dom.tutu.ru / hq.tutu.ru. Auth: ConfluenceSync .env."
-version: 1.3.0
+version: 1.4.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -193,6 +193,35 @@ curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
 ## Формат страниц-протоколов (Минутки) — знание для будущей автопубликации
 
 Реальная структура найдена в проектах Trisigma / AI-ready / AI-аналитик / ML-платформа — детали и оба варианта таблицы см. `references/confluence-meeting-protocol-format.md`. Кратко: страница — дочерняя (`child/page`) от корневой страницы проекта, называется `<Проект>. Задачи и договоренности (Минутки)`; задачи хранятся как `<ac:task>` с `<ri:user>`-упоминаниями и inline `<time datetime="YYYY-MM-DD"/>` — не отдельный макрос даты. **Полный источник истины по всем брифованным бизнес-решениям (тег проекта, идемпотентность, резолв проекта/участников/переговорок, триггер, scope) — скилл `about_usr_skills` → `references/confluence-minutki-protocol-format.md`; файл здесь — только техническая справка по формату Confluence Storage.**
+
+## Извлечение закрытых задач `<ac:task>` со страницы минутки: `parse_tasks_from_page`
+
+Готовый метод в `confluencesync.tasks` — парсит `<ac:task>` из `body.storage` страницы минутки и возвращает только задачи, закрытые конкретным человеком в заданном периоде. Реализован по запросу SRTool v2.0 (selfcheck конца периода, см. `tutu-jira-sr`), но общий — переиспользуется любым инструментом, которому нужны закрытые задачи со страницы минутки (TaskRefresh, ProtocolFromSummary), не только SRTool.
+
+```python
+from confluencesync.confluence_client import ConfluenceClient
+from confluencesync.tasks import parse_tasks_from_page, TaskRecord
+
+client = ConfluenceClient(base_url, token)  # см. авторизацию выше
+tasks: list[TaskRecord] = parse_tasks_from_page(
+    client,
+    page_id="490170597",           # напр. Trisigma-минутки
+    userkey="8a8383b593a26ea60194abdf8d090020",  # ri:userkey исполнителя, не username
+    date_from=date(2026, 7, 1),
+    date_to=date(2026, 7, 31),
+)
+for t in tasks:
+    print(t.date, t.raw_text)      # TaskRecord: task_id, status, userkey, date, raw_text, source_page
+```
+
+**Фильтры (все обязательны, задача исключается если хоть один не проходит):**
+- `<ac:task-status>complete</ac:task-status>` — статус проверяется по тексту дочернего элемента, не по атрибуту.
+- `ri:userkey` внутри `<ac:link><ri:user ri:userkey="..."/></ac:link>` внутри `<ac:task-body>` — сравнение точное, передавать userkey (см. резолв выше), не username/login.
+- `<time datetime="YYYY-MM-DD"/>` внутри `<ac:task-body>` — дата должна попадать в `[date_from, date_to]` включительно; задачи без `<time>` пропускаются молча (не ошибка).
+
+`raw_text` — очищенный текст задачи (`<span>` unwrap, `<ac:link>`/`<ac:structured-macro>`/`<time>` удалены), пригодный для прямой вставки как plain text.
+
+**Питфол:** страница минутки может редактироваться человеком вручную (см. принцип выше про правку `<time>`/`<ac:link>` внутри `<ac:task-body>`) — метод ищет теги через `BeautifulSoup.find()` внутри `task_body`, что учитывает произвольную глубину вложенности (в отличие от lxml `element.find()`, который смотрит только на прямых потомков), так что обёртка `<p><span>...</span></p>` вокруг содержимого не ломает парсинг.
 
 ## Скрытые маркеры в теле страницы (storage format) — что реально переживает API PUT
 

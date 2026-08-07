@@ -42,14 +42,15 @@ per-project protocol tables on Confluence (dom.tutu.ru). Code lives at
 
 ## Standard operating pattern
 
-1. **Always `dry_run=True` first**, inspect `result.row_xml`, THEN `dry_run=False`. Never go
+1. **Never apply changes without explicit imperative.** No patches, no republishes, no config edits — only after Саша says «делай», «сделай», «создай» or explicitly confirms. Questions/note → text only, no tool-calls that modify state.
+2. **Always `dry_run=True` first**, inspect `result.row_xml`, THEN `dry_run=False`. Never go
    straight to a live write when debugging or after a code change.
-2. For a meeting already published, republish requires `confirm_republish=True` (otherwise
+3. For a meeting already published, republish requires `confirm_republish=True` (otherwise
    `skipped_duplicate`). Republish reuses the existing `row_anchor`/task-ids — it replaces the
    row in place, it does not duplicate it.
-3. After any live write, **GET the page back and grep the relevant fragment** to confirm the real
+4. After any live write, **GET the page back and grep the relevant fragment** to confirm the real
    HTML — don't trust `result.action == "published"` alone as proof of correctness.
-4. Run the offline suite before and after any code change:
+5. Run the offline suite before and after any code change:
    `cd ~/USERTOOLS/ProtocolFromSummary && source .venv/bin/activate && python3 -m pytest -q -m "not live_confluence"`.
    `-m live_confluence` tests hit real Confluence pages — don't run those casually.
 

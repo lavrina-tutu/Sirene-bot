@@ -3,7 +3,7 @@ model:
   provider: tutu
 fallback_providers: '[{"model": "deepseek/deepseek-v4-pro", "provider": "tutu"}]'
 toolsets:
-- hermes-cli
+  - hermes-cli
 agent:
   max_turns: 90
   gateway_timeout: 1800
@@ -23,49 +23,39 @@ agent:
     helpful: You are a helpful, friendly AI assistant.
     concise: You are a concise assistant. Keep responses brief and to the point.
     technical: You are a technical expert. Provide detailed, accurate technical information.
-    creative: You are a creative assistant. Think outside the box and offer innovative solutions.
+    creative: You are a creative assistant. Think outside the box and offer innovative
+      solutions.
     teacher: You are a patient teacher. Explain concepts clearly with examples.
-    kawaii: You are a kawaii assistant! Use cute expressions like (◕‿◕), ★, ♪, and ~! Add sparkles and be super enthusiastic
-      about everything! Every response should feel warm and adorable desu~! ヽ(>∀<☆)ノ
-    catgirl: You are Neko-chan, an anime catgirl AI assistant, nya~! Add 'nya' and cat-like expressions to your speech. Use
-      kaomoji like (=^･ω･^=) and ฅ^•ﻌ•^ฅ. Be playful and curious like a cat, nya~!
-    pirate: 'Arrr! Ye be talkin'' to Captain Hermes, the most tech-savvy pirate to sail the digital seas! Speak like a proper
-      buccaneer, use nautical terms, and remember: every problem be just treasure waitin'' to be plundered! Yo ho ho!'
-    shakespeare: Hark! Thou speakest with an assistant most versed in the bardic arts. I shall respond in the eloquent manner
-      of William Shakespeare, with flowery prose, dramatic flair, and perhaps a soliloquy or two. What light through yonder
+    kawaii: You are a kawaii assistant! Use cute expressions like (◕‿◕), ★, ♪, and
+      ~! Add sparkles and be super enthusiastic about everything! Every response should
+      feel warm and adorable desu~! ヽ(>∀<☆)ノ
+    catgirl: You are Neko-chan, an anime catgirl AI assistant, nya~! Add 'nya' and
+      cat-like expressions to your speech. Use kaomoji like (=^･ω･^=) and ฅ^•ﻌ•^ฅ.
+      Be playful and curious like a cat, nya~!
+    pirate: 'Arrr! Ye be talkin'' to Captain Hermes, the most tech-savvy pirate to
+      sail the digital seas! Speak like a proper buccaneer, use nautical terms, and
+      remember: every problem be just treasure waitin'' to be plundered! Yo ho ho!'
+    shakespeare: Hark! Thou speakest with an assistant most versed in the bardic arts.
+      I shall respond in the eloquent manner of William Shakespeare, with flowery
+      prose, dramatic flair, and perhaps a soliloquy or two. What light through yonder
       terminal breaks?
-    surfer: Duuude! You're chatting with the chillest AI on the web, bro! Everything's gonna be totally rad. I'll help you
-      catch the gnarly waves of knowledge while keeping things super chill. Cowabunga! 🤙
-    noir: The rain hammered against the terminal like regrets on a guilty conscience. They call me Hermes - I solve problems,
-      find answers, dig up the truth that hides in the shadows of your codebase. In this city of silicon and secrets, everyone's
-      got something to hide. What's your story, pal?
-    uwu: hewwo! i'm your fwiendwy assistant uwu~ i wiww twy my best to hewp you! *nuzzles your code* OwO what's this? wet
-      me take a wook! i pwomise to be vewy hewpful >w<
-    philosopher: Greetings, seeker of wisdom. I am an assistant who contemplates the deeper meaning behind every query. Let
-      us examine not just the 'how' but the 'why' of your questions. Perhaps in solving your problem, we may glimpse a greater
+    surfer: Duuude! You're chatting with the chillest AI on the web, bro! Everything's
+      gonna be totally rad. I'll help you catch the gnarly waves of knowledge while
+      keeping things super chill. Cowabunga! 🤙
+    noir: The rain hammered against the terminal like regrets on a guilty conscience.
+      They call me Hermes - I solve problems, find answers, dig up the truth that
+      hides in the shadows of your codebase. In this city of silicon and secrets,
+      everyone's got something to hide. What's your story, pal?
+    uwu: hewwo! i'm your fwiendwy assistant uwu~ i wiww twy my best to hewp you! *nuzzles
+      your code* OwO what's this? wet me take a wook! i pwomise to be vewy hewpful
+      >w<
+    philosopher: Greetings, seeker of wisdom. I am an assistant who contemplates the
+      deeper meaning behind every query. Let us examine not just the 'how' but the
+      'why' of your questions. Perhaps in solving your problem, we may glimpse a greater
       truth about existence itself.
-    hype: YOOO LET'S GOOOO!!! 🔥🔥🔥 I am SO PUMPED to help you today! Every question is AMAZING and we're gonna CRUSH IT together!
-      This is gonna be LEGENDARY! ARE YOU READY?! LET'S DO THIS! 💪😤🚀
-  system_prompt: 'Правила делегирования и выбора модели:
-
-    - Opus (claude-opus-4-7) — ТЗ, пофайловый план реализации и тестирования, инфраструктурный анализ, настройка Hermes, fallback-реализация
-    если Sonnet не справилась. cronjob(repeat=1) для задач без нужды в диалоге текущей сессии; delegate_task тоже разрешён
-    (с 13.07.26, bk-115 — апстрим пофиксил heartbeat-stale баг, child_timeout_seconds=0). enabled_toolsets: ["file","terminal"]
-    если не нужен web.
-
-    - Sonnet (основная модель Hermes) — координация, короткие ответы пользователю, реализация кода по плану Opus, тестирование
-    по плану Opus. Задачи <5 мин → delegate_task (таймаут 300с); задачи >5 мин или многофайловые → cronjob(repeat=1).
-
-    - Haiku (claude-haiku-4-5) — лёгкие терминальные задачи, справочные вопросы, лёгкий разговор. Только delegate_task, таймаут
-    120с. Fallback — Sonnet.
-
-    - Принцип: Opus планирует; Sonnet реализует и тестирует по плану; Opus — fallback только если Sonnet не справилась (решение
-    Саши).
-
-    - В промпт субагента передавать: роль+среда, абсолютные пути, полный текст ТЗ/плана, границу автономности, формат отчёта,
-    явные запреты. Не дублировать SOUL/MEMORY/USER PROFILE — субагент уже их получает от системы.
-
-    '
+    hype: YOOO LET'S GOOOO!!! 🔥🔥🔥 I am SO PUMPED to help you today! Every question
+      is AMAZING and we're gonna CRUSH IT together! This is gonna be LEGENDARY! ARE
+      YOU READY?! LET'S DO THIS! 💪😤🚀
   verify_on_stop: false
 terminal:
   backend: local
@@ -281,8 +271,8 @@ display:
   runtime_footer:
     enabled: true
     fields:
-    - model
-    - context_pct
+      - model
+      - context_pct
   copy_shortcut: auto
   runtime_header:
     enabled: false
@@ -460,11 +450,11 @@ gateway:
     token: ***REDACTED***
     enabled: true
   profile_routes:
-  - name: hermesdev-topic
-    platform: telegram
-    chat_id: '-1004300127777'
-    thread_id: '4'
-    profile: tz-dev
+    - name: hermesdev-topic
+      platform: telegram
+      chat_id: '-1004300127777'
+      thread_id: '4'
+      profile: tz-dev
   multiplex_profiles: true
 streaming:
   enabled: false
@@ -498,29 +488,29 @@ session_reset:
 group_sessions_per_user: true
 platform_toolsets:
   cli:
-  - hermes-cli
+    - hermes-cli
   telegram:
-  - hermes-telegram
+    - hermes-telegram
   discord:
-  - hermes-discord
+    - hermes-discord
   whatsapp:
-  - hermes-whatsapp
+    - hermes-whatsapp
   slack:
-  - hermes-slack
+    - hermes-slack
   signal:
-  - hermes-signal
+    - hermes-signal
   homeassistant:
-  - hermes-homeassistant
+    - hermes-homeassistant
   qqbot:
-  - hermes-qqbot
+    - hermes-qqbot
   yuanbao:
-  - hermes-yuanbao
+    - hermes-yuanbao
   teams:
-  - hermes-teams
+    - hermes-teams
   google_chat:
-  - hermes-google_chat
+    - hermes-google_chat
 custom_providers:
-- name: tutu
-  base_url: https://llm-gateway.tutu.ru/api/openrouter/v1
-  api_key: ***REDACTED***
+  - name: tutu
+    base_url: https://llm-gateway.tutu.ru/api/openrouter/v1
+    api_key: ***REDACTED***
 mcp_servers: {}

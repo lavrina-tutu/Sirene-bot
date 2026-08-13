@@ -24,7 +24,7 @@
 
 ## 4. .env из неверного профиля
 
-Скрипты `mfl_urgent_check.py` и `mfl_digest.py` грузили `.env` из `/home/tkachenkoav/.hermes/profiles/anthropic/.env` (старый профиль), а не из `tz-dev/.env` или `~/.config/hermes/.env`. Следствия:
+Скрипты `mfl_urgent_check.py` и `mfl_digest.py` грузили `.env` из `/home/tkachenkoav/.hermes/profiles/anthropic/.env` (старый профиль), а не из `default/.env` или `~/.config/hermes/.env`. Следствия:
 - `TUTU_DOMAIN_PASSWORD` не грузится → ExchangeMonitor **постоянно и незаметно неработоспособен** (RuntimeError гасится в try/except)
 - `CONTACTS_ENCRYPTION_KEY`, `CONTACTS_PATH` не заданы → проверка `contacts.enc` отключена
 

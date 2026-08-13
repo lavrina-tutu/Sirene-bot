@@ -17,7 +17,7 @@ metadata:
 
 Единый процесс работы над фичами Hermes и USERTOOLS: от ТЗ до кода, тестов, документации, диагностики и отката. Все блоки выполняются через Cursor CLI (`agent -p`). Архитектор (claude-sonnet-5-thinking-medium через Cursor) планирует, исполнитель (composer-2.5 через Cursor) пишет и тестирует.
 
-**ЖЁСТКОЕ ПРАВИЛО:** Архитектор tz-dev НЕ пишет ТЗ, планы, анализ самостоятельно в чате. Все задачи архитектора — ТОЛЬКО через Cursor CLI (`agent -p`). Текущий агент tz-dev координирует: вызывает Cursor CLI, передаёт контекст, принимает результат. Никаких попыток «написать план самому» без Cursor CLI.
+**ЖЁСТКОЕ ПРАВИЛО:** Архитектор default (Сирень) НЕ пишет ТЗ, планы, анализ самостоятельно в чате. Все задачи архитектора — ТОЛЬКО через Cursor CLI (`agent -p`). Текущий агент default (Сирень) координирует: вызывает Cursor CLI, передаёт контекст, принимает результат. Никаких попыток «написать план самому» без Cursor CLI.
 
 ## When to Use
 
@@ -44,7 +44,7 @@ metadata:
 ### Паттерн вызова Cursor CLI
 
 ```bash
-agent -p "задача" -f --model claude-sonnet-5-thinking-medium --output-format json
+cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model claude-sonnet-5-thinking-medium --output-format json
 ```
 
 - `-p` — print-mode (неинтерактивный)

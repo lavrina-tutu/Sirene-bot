@@ -8,7 +8,7 @@
 - **Upstream:** origin/main (5136 commits ahead)
 - **Fork:** git@github.com:ialextkachenko-byte/hermes-agent.git
 - **Install dir:** `/home/tkachenkoav/hermes-agent`
-- **Config:** `~/.hermes/profiles/tz-dev/config.yaml`
+- **Config:** `~/.hermes/profiles/default/config.yaml`
 
 ## Our 12 Local Commits (top→bottom) — статус подтверждён 07.08.2026
 
@@ -49,7 +49,7 @@
 
 - **Git:** `git tag -a "pre-upgrade-$(date '+%Y%m%d-%H%M%S')"` + `git commit -A` if dirty
 - **Local:** `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS.tar.gz`
-- **Contents:** config.yaml, .env, profiles/tz-dev/, state.db, cron/, logs/, auth.json
+- **Contents:** config.yaml, .env, profiles/default/, state.db, cron/, logs/, auth.json
 - **Retention:** 14 days, cleanup via `find -mtime +14 -exec rm -rf {} +`
 
 ## Execution Results (07.08.2026)
@@ -68,7 +68,7 @@
 - `composer-2.5` → **completed** conflict resolution in 80s, test update in 182s
 
 ### `hermes doctor --fix` for config migration
-After merge, `hermes doctor` showed `Config version outdated (v0 → v33)`. Running `hermes -p tz-dev doctor --fix` auto-migrated config.yaml to v33.
+After merge, `hermes doctor` showed `Config version outdated (v0 → v33)`. Running `hermes -p default doctor --fix` auto-migrated config.yaml to v33.
 
 ## Upstream Turbulence Signal
 

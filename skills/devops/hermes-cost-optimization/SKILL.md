@@ -398,3 +398,48 @@ cronjob(action='create',
 - `fallback_model` в config.yaml применяется только к **основной модели**, не к delegation.
 - **`hermes config show` не отображает секцию `delegation`** — это UX-баг CLI. Параметры в config.yaml есть и работают, просто не показываются в выводе команды.
 - **exo chat completions may return empty body** if the target model is not loaded in memory yet. First request to a cold model times out silently. Fix: send a warm-up request via the exo web UI (`http://<host>:<port>`) before using the endpoint programmatically.
+
+## 11. Стек моделей Hermes (tutu-роутинг, DeepSeek/Gemini/Qwen)
+
+Альтернативная схема роутинга — через tutu-гейтвей с DeepSeek/Gemini/Qwen (не через anthropic-модели). Актуально для профилей/задач с основным провайдером tutu.
+
+### Текущая конфигурация (06.08.2026)
+
+| Роль | Модель | Провайдер | Цена |
+|---|---|---|---|
+| Основной чат | `deepseek/deepseek-v4-pro` | tutu | $0.435/M in, $0.0036/M cache_hit, $0.87/M out |
+| Compression | `google/gemini-3-flash-preview` | tutu | $0.50/M in, $0.05/M cache_hit, $3.00/M out |
+| Session search | `google/gemini-3-flash-preview` | tutu | То же что compression |
+| Исследования/оркестрация | `qwen/qwen3.6-plus` | tutu | $0.325/M in, $1.95/M out |
+| Delegation | `deepseek/deepseek-v4-pro` | tutu | Как основной |
+
+### Cursor CLI
+
+| Роль | Модель |
+|---|---|
+| Архитектор (ТЗ, планы) | `claude-sonnet-5-thinking-high` |
+| Исполнитель (код, тесты) | `composer-2.5` |
+| Координатор | `gemini-3.6-flash-low` |
+
+### Кроны (free tier) — PITFALL
+
+- `nvidia/nemotron-3-super-120b-a12b:free` — selfcheck, upstream, backlog
+- `openai/gpt-oss-20b:free` — batch processing
+
+**Pitfall (07.08.2026):** Free-tier модели на Tutu-гейтвее (`nemotron-3-super-120b:free`) нестабильны для критичных кронов. Причина: очереди на inference, низкий приоритет обработки, большие задержки. Результат — таймаут крона после 600s ожидания API-ответа (`TimeoutError: idle for 602s — waiting for non-streaming API response`).
+
+**Правило:** Для критичных кронов (backlog-collector, pfs_batch и т.д.) использовать платные модели (Haiku-4-5, gpt-oss-20b:free допустим только для no_agent/скриптовых кронов). Экономия на free-tier не стоит потери надёжности.
+
+### Исторические цены (Anthropic direct, июнь-июль 2026)
+
+| Модель | $/1K in | $/1K cache_hit | $/1K out | Effective $/1K out |
+|---|---|---|---|---|
+| Sonnet-4-6 | $0.003 | $0.0003 | $0.015 | $0.1006 |
+| Opus-4-7 | $0.005 | $0.0005 | $0.025 | $0.0699 |
+| Sonnet-5 (intro ≤31.08) | $0.001 | $0.0001 | $0.005 | $0.0185 |
+| Haiku-4-5 | $0.001 | $0.0001 | $0.005 | $0.0414 |
+
+### Экономия
+
+- API Hermes: $307/мес → $44/мес (**86%**)
+- + Cursor Pro ($200/мес): $307 → $244/мес (**20%**)

@@ -41,7 +41,7 @@ metadata:
 ### Паттерн вызова Cursor CLI
 
 ```bash
-agent -p "задача" -f --model claude-sonnet-5-thinking-medium --output-format json
+cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model claude-sonnet-5-thinking-medium --output-format json
 ```
 
 - `-p` — print-mode (неинтерактивный)

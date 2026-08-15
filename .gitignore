@@ -35,4 +35,7 @@ Thumbs.db
 # backups
 *.bak
 *.bak.*
+*.bak-*
+*.bak_*
+*.bkp
 _bak*

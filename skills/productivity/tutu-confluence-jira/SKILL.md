@@ -319,6 +319,30 @@ URL сервиса искать в сводной таблице родител�
 - `grep -B5 -A15 'pfsrow-<id>' ~/WorkVault/ProtocolFromSummary/_registry.json` покажет `source_summary`, `meeting_name`, `page_id`
 - Anchor физически живёт в теле страницы как `<ac:structured-macro ac:name="anchor"><ac:parameter>pfsrow-...</ac:parameter></ac:structured-macro>`
 
+## Вставка JIRA-задачи в таблицу Confluence — JIRA-макрос, а не обычная ссылка
+
+Когда переносишь список JIRA-задач в таблицу Confluence (колонка «Задача JIRA»), **не используй обычную гиперссылку** `<a href="https://hq.tutu.ru/browse/ADD-...">ADD-...</a>`. Саша предпочитает/переделывает на **JIRA-макрос** (`ac:structured-macro ac:name="jira"`) — он рендерится со статусом/иконкой задачи и кликабелен. Правило из практики (17.08.2026, страница Trisigma pageId=514890974): после вставки обычными ссылками Саша попросил переделать все на JIRA-макросы.
+
+**Формат ячейки «Задача JIRA» (заменяет голую ссылку):**
+```html
+<div class="content-wrapper"><p><ac:structured-macro ac:name="jira" ac:schema-version="1" ac:macro-id="<uuid>">
+<ac:parameter ac:name="server">hq.tutu.ru JIRA</ac:parameter>
+<ac:parameter ac:name="serverId">96df2b63-d15b-3ac4-b14d-2b3359ac8420</ac:parameter>
+<ac:parameter ac:name="key">ADD-620619</ac:parameter>
+</ac:structured-macro></p></div>
+```
+
+**Правила сборки:**
+- `key` — номер задачи (`ADD-...`) — единственное, что меняется от строки к строке
+- `server` = `hq.tutu.ru JIRA`, `serverId` = `96df2b63-d15b-3ac4-b14d-2b3359ac8420` — константы JIRA-сервера ТУТУ
+- `macro-id` — **уникальный uuid4 на каждый макрос** (не повторять один id на все строки)
+- Обёртка `<div class="content-wrapper"><p>...</p></div>` вокруг макроса — как в выходе веб-редактора; при вставке внутри `<td>` её сохранить
+
+**Питфоллы:**
+- Не копировать один и тот же `macro-id` на все строки — каждая ячейка должна иметь свой uuid4
+- Массовую замену существующих ссылок выполнять через строковую `replace` по ключу (`<a href="...">{KEY}</a>` → макрос), проверять результат повторным GET: `b.count('ac:name="jira"')` == числу задач, `len(re.findall(r'href="https://hq.tutu.ru/browse/', b))` == 0
+- Схема таблицы (колонки Задача JIRA / Подразделение / Исполнитель) уже существует на странице — заполнять пустые `<tr>`, не пересоздавать таблицу
+
 ## Ручное удаление строки таблицы минуток
 
 **Загрузи скилл `taskrefresh` перед выполнением** — полная процедура там, раздел «Ручное удаление строки таблицы минуток». Общая техника «GET → find `<tr>...</tr>` → PUT» одинаковая, различается только семантика владельца задачи.

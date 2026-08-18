@@ -166,7 +166,7 @@ auxiliary:
     timeout: 360
   compression:
     provider: tutu
-    model: deepseek/deepseek-v4-flash-0731
+    model: ''
     base_url: ''
     api_key: ''
     timeout: 120
@@ -330,7 +330,7 @@ memory:
   nudge_interval: 10
   flush_min_turns: 6
 delegation:
-  model: deepseek/deepseek-v4-flash-0731
+  model: ''
   provider: tutu
   base_url: ''
   api_key: ''
@@ -472,7 +472,7 @@ lsp:
   wait_timeout: 5.0
   install_strategy: auto
 x_search:
-  model: deepseek/deepseek-v4-flash-0731
+  model: ''
   timeout_seconds: 180
   retries: 2
 _config_version: 33

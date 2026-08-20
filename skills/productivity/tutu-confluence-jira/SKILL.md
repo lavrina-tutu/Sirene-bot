@@ -1,7 +1,7 @@
 ---
 name: tutu-confluence-jira
 description: "ТУТУ корп. системы: Confluence + JIRA. Загружать при: скачать/открыть страницу Confluence, создать/найти задачу в Jira, кто такой X (оргструктура: Аралов→Ткаченко→Криворотов), согласование договора, резолв участника по ФИО/userkey, публикация протокола встречи, экспорт Jira-задач в Obsidian. URL: dom.tutu.ru / hq.tutu.ru. Auth: ConfluenceSync .env."
-version: 1.4.0
+version: 1.5.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -319,9 +319,11 @@ URL сервиса искать в сводной таблице родител�
 - `grep -B5 -A15 'pfsrow-<id>' ~/WorkVault/ProtocolFromSummary/_registry.json` покажет `source_summary`, `meeting_name`, `page_id`
 - Anchor физически живёт в теле страницы как `<ac:structured-macro ac:name="anchor"><ac:parameter>pfsrow-...</ac:parameter></ac:structured-macro>`
 
-## Вставка JIRA-задачи в таблицу Confluence — JIRA-макрос, а не обычная ссылка
+## Вставка JIRA-задачи в Confluence — два контекста
 
-Когда переносишь список JIRA-задач в таблицу Confluence (колонка «Задача JIRA»), **не используй обычную гиперссылку** `<a href="https://hq.tutu.ru/browse/ADD-...">ADD-...</a>`. Саша предпочитает/переделывает на **JIRA-макрос** (`ac:structured-macro ac:name="jira"`) — он рендерится со статусом/иконкой задачи и кликабелен. Правило из практики (17.08.2026, страница Trisigma pageId=514890974): после вставки обычными ссылками Саша попросил переделать все на JIRA-макросы.
+### 1. Ячейка таблицы (колонка «Задача JIRA»)
+
+Когда переносишь список JIRA-задач в **таблицу** Confluence (колонка «Задача JIRA»), **не используй обычную гиперссылку** `<a href="https://hq.tutu.ru/browse/ADD-...">ADD-...</a>`. Саша предпочитает/переделывает на **JIRA-макрос** (`ac:structured-macro ac:name="jira"`) — он рендерится со статусом/иконкой задачи и кликабелен. Правило из практики (17.08.2026, страница Trisigma pageId=514890974): после вставки обычными ссылками Саша попросил переделать все на JIRA-макросы.
 
 **Формат ячейки «Задача JIRA» (заменяет голую ссылку):**
 ```html
@@ -342,6 +344,25 @@ URL сервиса искать в сводной таблице родител�
 - Не копировать один и тот же `macro-id` на все строки — каждая ячейка должна иметь свой uuid4
 - Массовую замену существующих ссылок выполнять через строковую `replace` по ключу (`<a href="...">{KEY}</a>` → макрос), проверять результат повторным GET: `b.count('ac:name="jira"')` == числу задач, `len(re.findall(r'href="https://hq.tutu.ru/browse/', b))` == 0
 - Схема таблицы (колонки Задача JIRA / Подразделение / Исполнитель) уже существует на странице — заполнять пустые `<tr>`, не пересоздавать таблицу
+
+### 2. Тело задачи `<ac:task-body>` (минутки, OpenTasks)
+
+Для **ссылок внутри задачи** (не ячейки таблицы) — использовать **TaskRefresh**:
+
+```bash
+cd ~/USERTOOLS/TaskRefresh
+./tr apply "#N ссылка https://hq.tutu.ru/browse/ADD-568390"
+./tr apply "#N ссылка https://hq.tutu.ru/browse/ADD-1,https://hq.tutu.ru/browse/TOMAKE-2"
+./tr confirm
+```
+
+| URL | Куда вставляется | Формат |
+|---|---|---|
+| `https://hq.tutu.ru/browse/<KEY>` | `<ac:task-body>` | JIRA-макрос `ac:name="jira"` (через `./tr`) |
+| Любой иной URL | `<ac:task-body>` | Обычная `<a href>` (через `./tr`) |
+| JIRA в колонке таблицы | `<td>` ячейки | JIRA-макрос (ручной PUT или шаблон ниже) |
+
+Подробности: скилл `taskrefresh`, раздел «JIRA-референсы в теле задачи» (§25).
 
 ## Ручное удаление строки таблицы минуток
 

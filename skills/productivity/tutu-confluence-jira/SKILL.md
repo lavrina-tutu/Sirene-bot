@@ -26,7 +26,23 @@ metadata:
 
 ⚠️ **`~/.config/hermes/.env` сломан** — содержит спецсимволы в `TUTU_DOMAIN_PASSWORD`, bash падает с syntax error при `source`. Для JIRA использовать **только** `~/.hermes/profiles/anthropic/.env`.
 
-Загрузить Confluence: `source ~/USERTOOLS/ConfluenceSync/.env`
+Загрузить Confluence (только нужные переменные, БЕЗ распыления generic-переменных):
+```bash
+# Загружает из ConfluenceSync/.env ТОЛЬКО токен и при необходимости WORKVAULT_PATH,
+# НЕ мутируя окружение чужими generic-переменными (TOOL_DIR/LOGS_PATH и т.п.),
+# которые распыляются из этого .env при использовании `source` и ломают другие тулы
+# (см. баг MOFS CONF-001, решён 20.08.2026).
+load_confluence_env() {
+  while IFS='=' read -r _k _v; do
+    case "$_k" in
+      CONFLUENCE_TOKEN|WORKVAULT_PATH)
+        [ -n "$_v" ] && export "$_k=$_v"
+        ;;
+    esac
+  done < "$HOME/USERTOOLS/ConfluenceSync/.env"
+}
+load_confluence_env
+```
 
 Для Confluence curl:
 ```bash
@@ -73,7 +89,7 @@ URL вида `https://dom.tutu.ru/pages/viewpage.action?pageId=389284624` → pa
 
 ### Прямой REST API (без сохранения)
 ```bash
-source ~/USERTOOLS/ConfluenceSync/.env
+load_confluence_env
 curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
   "https://dom.tutu.ru/rest/api/content/<pageId>?expand=body.storage" \
   | python3 -c "
@@ -109,7 +125,7 @@ print(re.sub(r'\n{3,}', '\n\n', text).strip())
 
 ### REST API: создать задачу
 ```bash
-source ~/USERTOOLS/ConfluenceSync/.env
+load_confluence_env
 
 curl -s -X POST \
   -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
@@ -129,7 +145,7 @@ curl -s -X POST \
 
 ### REST API: получить поля проекта
 ```bash
-source ~/USERTOOLS/ConfluenceSync/.env
+load_confluence_env
 # Все задачи проекта
 curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
   "https://dom.tutu.ru/rest/api/2/project/TOMAKE" | python3 -m json.tool
@@ -166,7 +182,7 @@ curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
 **Три рабочих эндпоинта (Confluence Server REST API, не Cloud):**
 
 ```bash
-source ~/USERTOOLS/ConfluenceSync/.env
+load_confluence_env
 
 # 1. По известному login (может не совпадать с корпоративным!) → userKey + displayName
 curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
@@ -265,7 +281,7 @@ for el in body_el.iter():
 ## Создание новой дочерней страницы (POST)
 
 ```bash
-source ~/USERTOOLS/ConfluenceSync/.env
+load_confluence_env
 curl -s -X POST \
   -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
   -H "Content-Type: application/json" \
@@ -394,7 +410,7 @@ Restate the task spec, wait for Sasha's answers, then act ("делай"). Task U
 ## Питфоллы
 
 - **`web_extract` блокирует dom.tutu.ru** — resolves to internal 10.x.x.x. Всегда использовать `terminal` + curl или ConfluenceSync CLI.
-- **ConfluenceSync .env содержит PAT** — `source ~/USERTOOLS/ConfluenceSync/.env` перед curl.
+- **ConfluenceSync .env содержит PAT** — `load_confluence_env` перед curl.
 - **`--dest` флага нет** у confluencesync pull — путь сохранения определяется автоматически по иерархии Confluence; управление через `.env` WORKVAULT_PATH.
 - После изменений в WorkVault — `rclone sync ~/WorkVault owncloud:WorkVault`.
 - **REST API возвращает 404 на некоторые pageId** — не ошибка конфигурации. Причины: страница в пространстве без прав для PAT, или пространство использует SSO/keycloak-only авторизацию. Это нормально — зафиксируй ссылку для ручного открытия, не трать время на обходы. **Единственный выход при 404 — дать пользователю готовый текст/инструкцию и попросить вставить вручную.** Пример: pageId=511559466 («Настройка ссылки Zoom») — 404 через PAT даже при валидном токене (23.07.2026).

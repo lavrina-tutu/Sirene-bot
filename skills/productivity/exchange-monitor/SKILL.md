@@ -1,7 +1,7 @@
 ---
 name: exchange-monitor
 description: "Мониторинг входящей почты Exchange (EWS) — фильтрация реальных людей, срочные уведомления и часовой дайджест в Telegram Messages. Интегрируется в кроны MoveFromLoop. Триггеры: Exchange мониторинг, входящие письма, ExchangeMeeting, email дайджест, письма от реальных людей."
-version: 0.1.0
+version: 0.2.0
 author: Sirene
 license: MIT
 platforms: [linux]
@@ -239,7 +239,7 @@ messages = account.inbox.filter(
 - [x] ТЗ ExchangeMonitor v0.1.0 создано (24.07.2026)
 - [x] Реализация завершена (24.07.2026, 67/67 тестов)
 - [x] exchangelib уже в системном python3.11 — отдельный venv не нужен
-- [ ] Добавить `is_read=False` в Exchange-запрос fetcher.py (gap выявлен 27.07.2026)
+- [x] Добавить `is_read=False` в Exchange-запрос fetcher.py (gap закрыт 20.08.2026) — now фильтрует только непрочитанные + регресс-тест `test_filters_unread_only`.
 
 ## Бизнес-правило: фильтрация ответов на встречи
 
@@ -261,6 +261,8 @@ def should_skip(item) -> bool:
 ```
 
 Требует `"message_class"` в `.only(...)` в fetcher.
+
+**Где живёт сейчас (после CONF-002, 20.08.2026):** модуль `should_skip` перенесён в `USERTOOLS/ExchangeMonitor/exchangemonitor/meeting_filter.py` (пакет ExchangeMonitor). `exchangemonitor/urgent.py` импортирует его как `from .meeting_filter import should_skip`. **НЕ использовать** старый `movefromloop.exchange_filter` — он помечен DEPRECATED (устаревший дубль, кронами не используется). fetcher `.only()` ещё включает `message_class` рядом с `item_class`.
 
 ## Pitfalls
 

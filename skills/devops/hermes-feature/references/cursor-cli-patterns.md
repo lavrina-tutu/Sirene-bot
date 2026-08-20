@@ -24,9 +24,36 @@ agent -p "задача" -f --model <MODEL> --output-format json
 
 | Роль | Модель | reasoning |
 |---|---|---|
-| Архитектор | `claude-sonnet-5-thinking-high` | Высокий (ТЗ, планы, архитектура) |
+| Компрессор ТЗ | `gemini-3.6-flash-low` (запасн. `gemini-3.7-flash-low`) | Низкий (full-coverage экстракт 3–5 КБ) |
+| Архитектор | `claude-sonnet-5-thinking-medium` | Высокий (ТЗ, планы, архитектура) |
 | Исполнитель | `composer-2.5` | Средний (код, тесты) |
 | Координатор | `gemini-3.6-flash-low` | Низкий (сбор данных, механика) |
+
+## Раздельные задачи Cursor по моделям
+
+**Инвариант:** один `agent -p` = одна модель. Сирень передаёт выход шага N как вход шага N+1.
+
+| # | Модель | Задача | Вход | Выход |
+|---|---|---|---|---|
+| 0 | `gemini-3.6-flash-low` | Компрессия ТЗ | master-ТЗ + `tz-compressor-prompt.md` | Актуальная спецификация 3–5 КБ (без кэша) |
+| 1 | `claude-sonnet-5-thinking-medium` | ТЗ / пофайловый план | digest + экстракты Шага 0 + бриф | Драфт ТЗ или план |
+| 2 | `composer-2.5` | Реализация | план архитектора + экстракты | код, конфиги, скиллы |
+| 3 | `composer-2.5` | Контроль / тесты | план + diff | pytest/CLI отчёт ✅/❌ |
+
+```bash
+# Шаг 0 — только компрессия (gemini)
+agent -p "Компрессия ТЗ по tz-compressor-prompt: …" -f --model gemini-3.6-flash-low --output-format json
+
+# Шаг 1 — только архитектор (отдельный вызов)
+agent -p "Архитектор: драфт ТЗ/план. Экстракты: … Digest: …" \
+  -f --model claude-sonnet-5-thinking-medium --output-format json
+
+# Шаг 2 — только исполнитель
+agent -p "Реализуй по плану: …" -f --model composer-2.5 --output-format json
+
+# Шаг 3 — контроль
+agent -p "Проверь по плану: pytest …" -f --model composer-2.5 --output-format json
+```
 
 ## JSON-вывод (--output-format json)
 

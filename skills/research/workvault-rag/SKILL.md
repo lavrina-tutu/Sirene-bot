@@ -1,7 +1,7 @@
 ---
 name: workvault-rag
 description: "Use when: 'найди в архиве', 'архив', 'найди в базе', 'найди во встречах' — или любой вопрос по прошедшим встречам, задачам, решениям, рискам, блокерам ('кто что обещал', 'что решили по Y', 'что обсуждали с X'). Поиск через mofs index (SQLite+FTS5) + три режима: список встреч / детали summary / цитаты из transcript. Также покрывает вопросы по ТЗ (Hermes-Backlog/TZ)."
-version: 2.6.0
+version: 2.7.0
 author: Sirene
 license: MIT
 platforms: [linux]
@@ -45,8 +45,9 @@ metadata:
 | «Что решили на встрече 10 июля?» | 2. Детали | `get_meeting_body(meeting_id)` |
 | «Кто реально что сказал про ML?» | 3. Транскрипт | `get_transcript_snippets()` / `get_meeting_body(..., include_transcript=True)` |
 | «Что написано в ТЗ по X?» | ТЗ | `search_docs()` / `get_doc()` |
+| «Что согласовано в протоколе проекта?» | Протокол Confluence | `search_protocols()` |
 
-**Импорт:** `sys.path.insert(0, '/home/tkachenkoav/USERTOOLS/MofsIndex')`, затем `from mofs_index import search_meetings, get_meeting_body, get_transcript_snippets, search_docs, get_doc` (полный пример — `references/mofs-index-usage.md`).
+**Импорт:** `sys.path.insert(0, '/home/tkachenkoav/USERTOOLS/MofsIndex')`, затем `from mofs_index import search_meetings, get_meeting_body, get_transcript_snippets, search_docs, get_doc, search_protocols` (полный пример — `references/mofs-index-usage.md`).
 
 **Режим 1** — `search_meetings(query=..., date_from=..., date_to=..., slugs={'projects': [...], 'contacts': [...]}, slug_mode='any')` → список `MeetingHit` (атрибуты, не dict!): `.meeting_id`, `.meeting_date`, `.title`, `.obsidian_url`, `.matched_slugs`.
 
@@ -55,6 +56,14 @@ metadata:
 **Режим 3** — `get_transcript_snippets(meeting_id, query, max_snippets=5, window=40)` → сниппеты с контекстом; для «кто что реально сказал» (summary часто не фиксирует мотивацию, только решения).
 
 **ТЗ** — `search_docs(query, doc_type='tz'|'impl_plan'|None, tool_name=None)` → `DocHit` (title, snippet, rank BM25) вместо файлового grep+read по `Hermes-Backlog/TZ/`; `get_doc(doc_id)` — карточка документа.
+
+**Протокол проекта (Confluence, OFC)** — `search_protocols(query, entity_slug=None)` → `DocHit` с `doc_type='protocol'`; в индексе `tool_name` = `entity_slug` из frontmatter `Entities/<slug>/protocol.md`.
+
+**Подпись слоя в ответе (обязательно, не смешивать без пометки):**
+- результаты `search_meetings()` → префикс «Найдено во встречах (FF, черновик)»;
+- результаты `search_protocols()` → префикс «Найдено в протоколе проекта (Confluence, согласовано)».
+
+При запросах про задачи/решения по проекту вызывать **оба** источника параллельно, если релевантны.
 
 Полное руководство и code-snippets (`list_slugs`, проверка индекса, Obsidian-ссылка, grep-дополнение) — `references/mofs-index-usage.md`.
 
@@ -135,4 +144,5 @@ Items без разделения "Имя: задача" — общий спис
 - [ ] Тело встречи — через `get_meeting_body(meeting_id)`; прямого поля с телом на `MeetingRecord`/`MeetingHit` не существует
 - [ ] «Кто что сказал / детально обсуждалось» → `get_transcript_snippets()`/`get_meeting_body(..., include_transcript=True)`, не summary; если ответа нет в summary — проверить transcript до «не нашла»
 - [ ] Вопрос по ТЗ — `search_docs()`/`get_doc()`, не файловый grep+read по `Hermes-Backlog/TZ/`
+- [ ] Запрос про задачи/решения по проекту — вызваны оба источника (`search_meetings` и `search_protocols`), результат подписан по слою («Найдено во встречах (FF, черновик)» / «Найдено в протоколе проекта (Confluence, согласовано)»), не смешан без пометки
 - [ ] Contacts покрывают 93% встреч (`search_meetings(slugs={'contacts': [...]})` — основной путь). Пустой результат/редкое или уменьшительное имя → grep-fallback строго по секции «Участники:» (детали — `references/known-limits.md`), не по всему телу файла

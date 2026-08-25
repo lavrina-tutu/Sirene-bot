@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
-description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов. Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.0.0
+description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
+version: 2.1.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -278,6 +278,7 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 - `references/cursor-cli.md` — установка, аутентификация, pitfall'ы Cursor CLI
 - `references/cursor-cli-patterns.md` — справочник вызовов Cursor CLI
 - `references/cursor-cli-limitations.md` — ограничения Cursor CLI
+- `references/pitfall-remediation-workflow.md` — процедура починки код-питфоллов (Pitfall Scan → закрытие в *-pitfalls.md)
 - `references/srtool-v2-pitfalls.md`
 - `references/movefromloop-v042-pitfalls.md`
 - `references/movefromloop-v043-pitfalls.md`

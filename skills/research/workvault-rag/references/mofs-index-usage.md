@@ -13,6 +13,7 @@ sys.path.insert(0, '/home/tkachenkoav/USERTOOLS/MofsIndex')
 from mofs_index import (
     search_meetings, get_meeting, get_meeting_body,
     get_transcript_snippets, list_slugs, search_docs, get_doc,
+    search_protocols,
 )
 ```
 
@@ -104,6 +105,21 @@ doc = get_doc(hits[0].doc_id)
 
 `doc_type` — `'tz'` / `'impl_plan'` / `None` (все). `query` — FTS5-выражение или
 свободная строка (тогда OR по словам).
+
+## Поиск по протоколам проектов (`search_protocols`)
+
+Параллельный источник к встречам FF — согласованный протокол из Confluence
+(`Entities/<slug>/protocol.md`, индексируется как `doc_type='protocol'`):
+
+```python
+hits = search_protocols('эксперимент alpha', entity_slug='trisigma')
+# DocHit: doc_type='protocol', tool_name='trisigma' (entity_slug из frontmatter)
+for h in hits:
+    print(h.title, h.snippet)
+```
+
+В ответе пользователю подписывать слой: «Найдено в протоколе проекта (Confluence, согласовано)»
+(симметрично «Найдено во встречах (FF, черновик)» для `search_meetings()`).
 
 ## list_slugs — список значений в корзине
 

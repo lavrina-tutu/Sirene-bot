@@ -11,16 +11,31 @@
 - Schema v2 с `sources` в production
 - migration v1→v2 происходит автоматически при первом чтении
 
-## PII Masking при выводе контактов (КРИТИЧНО)
+## PII Masking при выводе контактов (КРИТИЧНО, обновлено 27.08.2026)
 
-Функция `mask_contact(contact)` экспортируется из `anywhere_contacts`. Вызывать ВСЕГДА перед выводом в Telegram или CLI.
+**Актуальный API (v0.2.0):** `render_contact(contact, level="summary"|"full")`
+из `anywhere_contacts/display.py` — заменяет более ранний `mask_contact`.
+Вызывать ВСЕГДА перед выводом в Telegram/CLI/чат, если не запрошен явный
+`level="full"`.
 
 ```python
-from anywhere_contacts import mask_contact
-hits_for_display = {k: mask_contact(v) for k, v in hits.items()}
+from anywhere_contacts import render_contact
+hits_for_display = {k: render_contact(v, level="summary") for k, v in hits.items()}
 ```
 
-Правильно: `Кр**в Ки**л`, `kr**v@tutu.ru`. Без маскировки — ошибка.
+Для чтения+показа за один вызов — `ContactStore.get_contact_for_display(login)`
+/ `find_contacts_for_display(query)` (маскируют автоматически, читают через
+штатные `get_contact`/`find_contacts`, которые сами не изменены и остаются
+доступны внутренним потребителям полного email).
+
+`summary` открывает fio/display_name/department/position/status/active;
+маскирует email/login/messenger_ids/sources. `full` — без маскирования,
+только по явному запросу.
+
+Полные правила показа (включая OrgLookup `--reveal` и запрет генерации
+`tutu-contacts.md`) — рантайм-скилл
+`~/.hermes/skills/productivity/show-contacts/SKILL.md` и
+`TZ/AnywhereContacts/AnywhereContacts_TZ.md` §9.
 
 ## Что переезжает в AnywhereContacts
 

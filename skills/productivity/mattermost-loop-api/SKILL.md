@@ -16,9 +16,7 @@ Loop — корпоративный мессенджер ТУТУ на базе 
 
 **Только Personal Access Token (Bearer) — логин/пароль не использовать.**
 
-Токен хранится в `WorkVault/Inbox/Loop Hermes token.md`:
-- Token ID: `u3sbn7obibrijj5ppdmiuj3r7r`
-- Access Token: `ujde9bzqepb6t8hraym6wz73ir`
+Токен (Personal Access Token) хранится в `WorkVault/Inbox/Loop Hermes token.md` и в `LOOP_TOKEN` в `.env` инструмента.
 
 В `.env` инструмента: `LOOP_TOKEN=<access_token>`
 

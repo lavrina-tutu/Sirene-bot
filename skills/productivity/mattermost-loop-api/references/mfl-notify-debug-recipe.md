@@ -39,7 +39,7 @@ else:
 grep -A10 "urgent_contacts:" /home/tkachenkoav/USERTOOLS/MoveFromLoop/loop_rules.yaml
 
 # Получить автора поста
-LOOP_TOKEN="ujde9bzqepb6t8hraym6wz73ir"
+LOOP_TOKEN="<LOOP_TOKEN>"
 POST_ID="ТВОЙ_POST_ID"
 curl -s --max-time 15 -H "Authorization: Bearer $LOOP_TOKEN" \
   "https://loop.tutu.ru/api/v4/posts/$POST_ID" | python3 -c "

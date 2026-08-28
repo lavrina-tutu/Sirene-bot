@@ -436,6 +436,8 @@ draft = scheduler.parse_phrase(phrase)
 
 Проверить draft: `participants` (если пусто — «Кого пригласить?»), `agenda` (если `None` — спросить), `duration_minutes` (дефолт 60).
 
+**Вопрос о переговорке (обязательный шаг):** если Саша явно указал тему и/или текст встречи, но НЕ сказал явно, нужна ли переговорка — Сирень обязана задать вопрос «Нужна ли переговорка?» (и, если да — на сколько человек). Вопрос не задаётся только если про переговорку сказано явно (например «в переговорке на 5» или «без переговорки»). Если переговорка нужна — ищем свободную переговорку МСК ёмкостью 4–8 человек. Только после этого — free/busy и поиск слотов.
+
 **Лимит участников:** если `len(draft.participants) + 1 > 10` — немедленно «Слишком много участников (N), максимум 10», free/busy не запрашивать.
 
 ### Форматирование слотов
@@ -486,6 +488,28 @@ for item in existing:
         return  # ждём явного «да»
 ```
 
+### Loop-уведомление Required-участникам (после create_meeting, §6.2 v1.7)
+
+Вызывается **только после** успешного `create_meeting` (после `item.save()`). Ошибки Loop
+не откатывают и не блокируют встречу — только лог и опциональная строка в TG-отчёте Саше.
+Вызов **синхронный** (не в фон): Саша должен сразу видеть готовую строку отчёта, если были
+пропуски или ошибки.
+
+```python
+from MeetingScheduler.loop_notify import LoopNotifier
+notifier = LoopNotifier()
+summary = notifier.notify_all(
+    required_participants=draft.required_participants,
+    organizer_email=ORGANIZER_EMAIL,
+    chosen_start=draft.chosen_start,
+    chosen_end=draft.chosen_end,
+    zoom_join_url=draft.zoom_join_url or ZOOM_LINK,
+    meeting_draft_id=result.exchange_item_id,
+)
+loop_report_line = notifier.format_report_line(summary)
+# добавить loop_report_line к тексту §6.1, только если не None
+```
+
 ### Перенос и отмена встречи
 
 ```python
@@ -533,7 +557,7 @@ scheduler.cancel_meeting(item.id, item.changekey)
 ТЗ: `/home/tkachenkoav/WorkVault/Tools/MeetingScheduler/TZ_meeting_scheduler_v1.0.md`
 Код: `/home/tkachenkoav/USERTOOLS/ExchangeMeeting/create_meeting.py`
 
-Флоу: фраза → парсинг (AnywhereContacts) → free/busy (GetUserAvailability) → 3 слота → выбор → переговорка → preview → подтверждение → Zoom + Exchange + Fireflies.
+Флоу: фраза → парсинг (AnywhereContacts) → вопрос о переговорке (если не указано явно) → free/busy (GetUserAvailability) → 3 слота → выбор → переговорка → preview → подтверждение → Zoom + Exchange.
 
 ## Интеграции
 - **Fireflies** → `fred@fireflies.ai` как Attendee (см. выше)

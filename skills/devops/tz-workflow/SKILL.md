@@ -36,15 +36,15 @@ metadata:
 
 | Шаг | Модель | Когда |
 |---|---|---|
-| Шаг 0 — Компрессия ТЗ | `gemini-3.6-flash-low` (запасн. `gemini-3.7-flash-low`) | Перед архитектурой: экстракт master-ТЗ 3–5 КБ |
-| Шаг 1 — Анализ и драфт | `claude-sonnet-5-thinking-medium` | Начало каждого нового ТЗ (вход: digest + экстракты Шага 0) |
-| Шаги 2–4 — Архитектура, написание, финализация | `claude-sonnet-5-thinking-medium` | Архитектурные решения и текст ТЗ |
-| Механические задачи | `gemini-3.6-flash-low` | Операторские кроны, инвентарь без семантики |
+| Шаг 0 — Компрессия ТЗ | `composer-2.5` | Перед архитектурой: экстракт master-ТЗ 3–5 КБ |
+| Шаг 1 — Анализ и драфт | `cursor-grok-4.6-high` | Начало каждого нового ТЗ (вход: digest + экстракты Шага 0) |
+| Шаги 2–4 — Архитектура, написание, финализация | `cursor-grok-4.6-high` | Архитектурные решения и текст ТЗ |
+| Механические задачи | `composer-2.5` | Операторские кроны, инвентарь без семантики |
 
 ### Шаг 0 — Компрессия ТЗ (отдельная задача Cursor)
 
 - **Промпт:** `~/WorkVault/Registries/tz-compressor-prompt.md`
-- **Модель:** `gemini-3.6-flash-low` (запасн. `gemini-3.7-flash-low`). **НЕ** composer.
+- **Модель:** `composer-2.5`.
 - **Вход:** полный текст master-ТЗ инструмента (+ зависимые ТЗ, если связаны).
 - **Выход:** «актуальная спецификация» 3–5 КБ, full-coverage (100% сущностей/полей/API/лимитов, имена дословно).
 - **Без кэша:** экстракты не сохраняются между задачами — только в памяти сессии до передачи архитектору.
@@ -53,13 +53,13 @@ metadata:
 
 ```bash
 cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "Шаг 0 tz-workflow: компрессия ТЗ по tz-compressor-prompt.md для [Tool]. Полный текст ТЗ: …" \
-  -f --model gemini-3.6-flash-low --output-format json
+  -f --model composer-2.5 --output-format json
 ```
 
 ### Паттерн вызова Cursor CLI
 
 ```bash
-cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model claude-sonnet-5-thinking-medium --output-format json
+cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-grok-4.6-high --output-format json
 ```
 
 - `-p` — print-mode (неинтерактивный)
@@ -69,7 +69,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model claude-so
 
 ### Шаг 1 — Анализ и планирование
 
-**Отдельная задача Cursor** на `claude-sonnet-5-thinking-medium` (не в том же вызове, что Шаг 0).
+**Отдельная задача Cursor** на `cursor-grok-4.6-high` (не в том же вызове, что Шаг 0).
 
 - Вход: экстракты Шага 0 (своего + зависимых инструментов) + `EcosystemManifest.digest.md` + бриф Саши.
 - Прочитать `MAIN_TZ_INVENTORY.md` — полный список существующих инструментов.
@@ -110,7 +110,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model claude-so
 
 1. **Бриф** — вопросы по процедуре H, фиксация решений в чате и драфте ТЗ.
 2. **ТЗ** — Шаги 2-4 через Cursor CLI (`agent -p`), версионирование, регистрация в `MAIN_TZ_INVENTORY.md`.
-3. **Обновление ТЗ** — после каждого брифа исполнитель (composer-2.5) вносит правки; архитектурные изменения — архитектор (claude-sonnet-5-thinking-medium через Cursor CLI).
+3. **Обновление ТЗ** — после каждого брифа исполнитель (composer-2.5) вносит правки; архитектурные изменения — архитектор (cursor-grok-4.6-high через Cursor CLI).
 4. **Реализация** — ждать явного «берём в работу». Реализация — отдельный процесс через hermes-feature.
 
 ### Правила автономии
@@ -123,7 +123,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model claude-so
 
 1. **Один master-файл на инструмент:** `TZ/<Tool>/<Tool>_TZ.md`. Доработка = секция внутри, не новый файл.
 2. **Латиница-only** для новых имён файлов/папок. Версия — только во frontmatter.
-3. **Содержательный текст ТЗ пишет только архитектор (claude-sonnet-5-thinking-medium через Cursor).** Исполнитель (composer-2.5) / координатор (gemini-3.6-flash-low) — механика (переносы, frontmatter, инвентарь).
+3. **Содержательный текст ТЗ пишет только архитектор (cursor-grok-4.6-high через Cursor).** Исполнитель (composer-2.5) / координатор (composer-2.5) — механика (переносы, frontmatter, инвентарь).
 4. **Согласование ТЗ ≠ команда на реализацию.** Ждать отдельного «берём в работу».
 5. **`TZ/<Tool>/` содержит ТОЛЬКО ТЗ-документы.** Брифы, research, runtime-json — в папке инструмента.
 6. **Reuse-first: новые сущности — только на согласование (см. references/reuse-first-rule.md).**
@@ -147,7 +147,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model claude-so
 
 - [ ] Новое ТЗ по пути `TZ/<Tool>/<Tool>_TZ.md` (латиница, без v-суффикса)
 - [ ] `MAIN_TZ_INVENTORY.md` обновлён в той же операции
-- [ ] Содержательный текст писал архитектор (claude-sonnet-5-thinking-medium через Cursor); механика — исполнитель (composer-2.5) / координатор (gemini-3.6-flash-low)
+- [ ] Содержательный текст писал архитектор (cursor-grok-4.6-high через Cursor); механика — исполнитель (composer-2.5) / координатор (composer-2.5)
 - [ ] Согласование ≠ реализация (ждём «берём в работу»)
 - [ ] После записи ТЗ — `mofs-index index docs` (инкрементально)
 - [ ] В цепочке ТЗ→бриф→обновление каждый Cursor CLI вызов явно помечен «правка ТЗ» / «начинаю реализацию»

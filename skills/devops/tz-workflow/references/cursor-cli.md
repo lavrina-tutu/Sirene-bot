@@ -44,9 +44,9 @@ Claude (Opus, Sonnet, Fable), GPT-5.x, Cursor Grok, Composer, Gemini, Kimi, GLM.
 
 | Роль | Модель | Назначение |
 |---|---|---|
-| Архитектор | `claude-sonnet-5-thinking-high` | ТЗ, планы, архитектурные решения |
+| Архитектор | `cursor-grok-4.6-high` | ТЗ, планы, архитектурные решения |
 | Исполнитель | `composer-2.5` | Код, тесты, механические правки |
-| Координатор | `gemini-3.6-flash-low` | Сбор данных, лёгкая механика |
+| Координатор | `composer-2.5` | Сбор данных, лёгкая механика |
 
 ## Pitfall: Workspace Trust
 

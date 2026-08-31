@@ -24,7 +24,7 @@
 
 ## Шаг 2. Пофайловый план архитектора (Блок 1А)
 
-Модель: `claude-sonnet-5-thinking-medium` через Cursor CLI (`agent -p`).
+Модель: `cursor-grok-4.6-high` через Cursor CLI (`agent -p`).
 
 План должен содержать:
 - затронутые файлы (создать / изменить);

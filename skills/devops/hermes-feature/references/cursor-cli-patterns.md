@@ -24,10 +24,10 @@ agent -p "задача" -f --model <MODEL> --output-format json
 
 | Роль | Модель | reasoning |
 |---|---|---|
-| Компрессор ТЗ | `gemini-3.6-flash-low` (запасн. `gemini-3.7-flash-low`) | Низкий (full-coverage экстракт 3–5 КБ) |
-| Архитектор | `claude-sonnet-5-thinking-medium` | Высокий (ТЗ, планы, архитектура) |
+| Компрессор ТЗ | `composer-2.5` | Низкий (full-coverage экстракт 3–5 КБ) |
+| Архитектор | `cursor-grok-4.6-high` | Высокий (ТЗ, планы, архитектура) |
 | Исполнитель | `composer-2.5` | Средний (код, тесты) |
-| Координатор | `gemini-3.6-flash-low` | Низкий (сбор данных, механика) |
+| Координатор | `composer-2.5` | Низкий (сбор данных, механика) |
 
 ## Раздельные задачи Cursor по моделям
 
@@ -35,18 +35,18 @@ agent -p "задача" -f --model <MODEL> --output-format json
 
 | # | Модель | Задача | Вход | Выход |
 |---|---|---|---|---|
-| 0 | `gemini-3.6-flash-low` | Компрессия ТЗ | master-ТЗ + `tz-compressor-prompt.md` | Актуальная спецификация 3–5 КБ (без кэша) |
-| 1 | `claude-sonnet-5-thinking-medium` | ТЗ / пофайловый план | digest + экстракты Шага 0 + бриф | Драфт ТЗ или план |
+| 0 | `composer-2.5` | Компрессия ТЗ | master-ТЗ + `tz-compressor-prompt.md` | Актуальная спецификация 3–5 КБ (без кэша) |
+| 1 | `cursor-grok-4.6-high` | ТЗ / пофайловый план | digest + экстракты Шага 0 + бриф | Драфт ТЗ или план |
 | 2 | `composer-2.5` | Реализация | план архитектора + экстракты | код, конфиги, скиллы |
 | 3 | `composer-2.5` | Контроль / тесты | план + diff | pytest/CLI отчёт ✅/❌ |
 
 ```bash
-# Шаг 0 — только компрессия (gemini)
-agent -p "Компрессия ТЗ по tz-compressor-prompt: …" -f --model gemini-3.6-flash-low --output-format json
+# Шаг 0 — только компрессия (composer)
+agent -p "Компрессия ТЗ по tz-compressor-prompt: …" -f --model composer-2.5 --output-format json
 
 # Шаг 1 — только архитектор (отдельный вызов)
 agent -p "Архитектор: драфт ТЗ/план. Экстракты: … Digest: …" \
-  -f --model claude-sonnet-5-thinking-medium --output-format json
+  -f --model cursor-grok-4.6-high --output-format json
 
 # Шаг 2 — только исполнитель
 agent -p "Реализуй по плану: …" -f --model composer-2.5 --output-format json
@@ -85,13 +85,13 @@ agent -p "Проверь по плану: pytest …" -f --model composer-2.5 --
 ### Архитектор — ТЗ/план
 ```bash
 cd /path/to/project && agent -p "Составь ТЗ для инструмента FooBar. Прочитай MAIN_TZ_INVENTORY.md, проанализируй связи." \
-  -f --model claude-sonnet-5-thinking-high --output-format json
+  -f --model cursor-grok-4.6-high --output-format json
 ```
 
 ### Архитектор — анализ (read-only)
 ```bash
 agent -p "Проанализируй архитектуру проекта. Только чтение, без правок." \
-  -f --model claude-sonnet-5-thinking-high --mode plan --output-format json
+  -f --model cursor-grok-4.6-high --mode plan --output-format json
 ```
 
 ### Исполнитель — реализация
@@ -109,7 +109,7 @@ cd /path/to/project && agent -p "Напиши тесты для [модуль]. 
 ### Координатор — сбор данных
 ```bash
 agent -p "Найди в кодовой базе все использования [паттерн]. Выведи список файлов и строк." \
-  -f --model gemini-3.6-flash-low --output-format json
+  -f --model composer-2.5 --output-format json
 ```
 
 ## Возобновление сессий

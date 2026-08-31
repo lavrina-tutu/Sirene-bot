@@ -417,9 +417,9 @@ cronjob(action='create',
 
 | Роль | Модель |
 |---|---|
-| Архитектор (ТЗ, планы) | `claude-sonnet-5-thinking-high` |
+| Архитектор (ТЗ, планы) | `cursor-grok-4.6-high` |
 | Исполнитель (код, тесты) | `composer-2.5` |
-| Координатор | `gemini-3.6-flash-low` |
+| Координатор | `composer-2.5` |
 
 ### Кроны (free tier) — PITFALL
 

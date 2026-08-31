@@ -521,6 +521,57 @@ manager.reschedule_meeting(item.id, item.changekey, new_start, new_end)
 scheduler.cancel_meeting(item.id, item.changekey)
 ```
 
+### Добавление участника в существующую встречу
+
+**Когда:** Саша просит добавить человека во встречу, которая уже создана — без пересоздания, отмены, смены времени или правки текста приглашения.
+
+**Флоу:**
+
+```python
+from MeetingScheduler.manage_meeting import MeetingManager
+from MeetingScheduler.models import Participant
+
+manager = MeetingManager(scheduler)
+meetings = manager.find_meetings_by_hint(hint)
+# 0 → «Не нашла встреч»; 1 → подтвердить; 2+ → выбрать
+# resolve_contact → email нового участника
+participant = Participant(display_name="...", email="...")
+result = manager.add_participant(item.id, item.changekey, participant)
+# отчёт Саше: кого добавили + result.loop_report_line (если Loop не ушёл)
+```
+
+**Важно:**
+- Приглашение Exchange уходит **только новому** участнику (`SendToChangedAndSaveCopy` / `SEND_TO_CHANGED_AND_SAVE_COPY`) — существующие участники **не** получают повторное письмо.
+- Прямое создание/правка через `CalendarItem(...)` **запрещено** (guard bk-172) — только `MeetingManager.add_participant`.
+- External-участник (не `@tutu.ru`) — Loop-уведомление пропускается автоматически (`skipped_external`); добавление в Exchange всё равно выполняется.
+
+### Массовые встречи (v1.8, >8 участников)
+
+**Подтверждение размера** — перед free/busy, если обязательных > 8:
+```
+Точно {N} человек? Подтверди, чтобы продолжить
+```
+После «да» → `draft.bulk_size_confirmed = True` → `find_slots(draft)`.
+
+**Строка резолва bulk** (если не все имена резолвились):
+```
+👥 Резолвлено {resolved} из {total}, не резолвлено: {имена}
+```
+Или через `draft.resolve_summary.as_report_line()`.
+
+**Недоступные участники** (bulk, tail после head-5):
+```
+⚠️ Приглашены, но недоступны: {имена}
+```
+
+**Переговорка впритык** (буфер 15 мин не влез):
+```
+«{room_name}» ⚠️ впритык
+```
+
+**Массовое добавление** — `MeetingManager.add_participants_bulk(item_id, changekey, participants)`:
+один get/save, optional_attendees, Loop не отправляется.
+
 ### Ключевые питфоллы MeetingScheduler
 
 - `MeetingDraft` использует `chosen_start`/`chosen_end`, НЕ `start`/`end`
@@ -623,8 +674,13 @@ item.save(send_meeting_invitations="SendToNone")  # личное, без рас�
 ⚠️ **Pitfall (19.06.2026):** `categories=["Оранжевый"]` не работает — категория не применяется. Нужно полное русское название с окончанием: `"Оранжевая категория"`.
 
 ### Когда использовать напрямую vs MeetingScheduler
-- **Личные события** (конференции, блокировка, напоминания) → `CalendarItem` напрямую по паттерну выше
-- **Встречи с участниками** (free/busy, слоты, переговорки) → MeetingScheduler
+- **Личные события БЕЗ участников** (participants == [], конференции-для-себя, блокировка времени, напоминания) →
+  `CalendarItem` напрямую по паттерну выше, ОБЯЗАТЕЛЬНО с комментарием `# guard-override: personal-event`
+  в исполняемом коде (иначе guard-хук bk-172 заблокирует вызов) и `required_attendees` не задан / пуст.
+- **Любая встреча с ≥1 участником** (создание, перенос, отмена, добавление участника) →
+  ТОЛЬКО через MeetingScheduler / MeetingManager (`create_meeting`, `reschedule_meeting`,
+  `cancel_meeting`, `add_participant`). Прямой `CalendarItem(...)` с `required_attendees`
+  ЗАПРЕЩЁН — это инцидент bk-172 (31.08, «Парсинг. Прокси»): терялись Привет!/Zoom/Loop.
 
 ---
 

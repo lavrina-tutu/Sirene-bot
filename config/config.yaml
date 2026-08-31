@@ -402,6 +402,11 @@ approvals:
   destructive_slash_confirm: true
 command_allowlist: []
 hooks_auto_accept: false
+hooks:
+  pre_tool_call:
+    - matcher: "terminal|execute_code"
+      command: "~/.hermes/agent-hooks/guard-calendaritem.sh"
+      timeout: 5
 security:
   allow_private_urls: false
   redact_secrets: true

@@ -1,7 +1,7 @@
 ---
 name: exchange-monitor
-description: "Мониторинг входящей почты Exchange (EWS) — фильтрация реальных людей, срочные уведомления и часовой дайджест в Telegram Messages. Интегрируется в кроны MoveFromLoop. Триггеры: Exchange мониторинг, входящие письма, ExchangeMeeting, email дайджест, письма от реальных людей."
-version: 0.2.0
+description: "Мониторинг входящей почты Exchange (EWS) — фильтрация реальных людей, срочные уведомления и часовой дайджест в Telegram Messages. Интегрируется в кроны MoveFromLoop. Триггеры: Exchange мониторинг, входящие письма, ExchangeMeeting, email дайджест, письма от реальных людей, allowlist поддеревьев Confluence, Confluence уведомления."
+version: 0.3.0
 author: Sirene
 license: MIT
 platforms: [linux]
@@ -263,6 +263,27 @@ def should_skip(item) -> bool:
 Требует `"message_class"` в `.only(...)` в fetcher.
 
 **Где живёт сейчас (после CONF-002, 20.08.2026):** модуль `should_skip` перенесён в `USERTOOLS/ExchangeMonitor/exchangemonitor/meeting_filter.py` (пакет ExchangeMonitor). `exchangemonitor/urgent.py` импортирует его как `from .meeting_filter import should_skip`. **НЕ использовать** старый `movefromloop.exchange_filter` — он помечен DEPRECATED (устаревший дубль, кронами не используется). fetcher `.only()` ещё включает `message_class` рядом с `item_class`.
+
+## Доработка 31.08.2026 — bk-170 / bk-171 (ExchangeMonitor v0.3.0)
+
+### bk-170: письма Ollama проходят в дайджест (исправлено)
+- Баг: `hello@ollama.com` кэшировался `val:true` в `exchange_person_cache`, а `is_external_sender()` стоял ПОСЛЕ cache-хит → external-фильтр не срабатывал.
+- Фикс: в `person_checker.is_real_person()` порядок теперь — `is_external_sender()` и `_has_bot_marker()` СРАЗУ перед cache-хит (детерминированный False, без чтения/записи кеша); потом cache, contacts, sender_name.
+- `get_person_cache()` (ex_state) отбрасывает ключи внешних отправителей (гигиена кеша).
+- `hq@tutu.ru` НЕ в EXTERNAL_SENDER_* — нужен для bk-171 (Confluence проходит is_real_person).
+
+### bk-171: allowlist поддеревьев Confluence (только digest)
+- Возможность: получать Confluence-уведомления про страницы 2 корней и их подстраницы БЕЗ упоминания пользователя.
+- Корни (WATCH_ROOT_IDS в confluence_filter.py): `480923430` (Trisigma проект), `467458830` («ТОЧКА СБОРКИ AI-ready Туту»).
+- Работает ТОЛЬКО в digest, НЕ в срочном канале.
+- Модуль `confluence_tree.py`: CQL-prefetch (`/rest/api/content/search?cql=(id=ROOT OR ancestor=ROOT) AND type=page` с пагинацией limit=100), ancestor-miss (`?expand=ancestors` для новых страниц), fail-closed (нет токена/ошибка REST → пустой allowlist, поведение = как раньше).
+- Кеш `exchange_confluence_watch` в watermark.json (TTL 6ч), refresh в начале _run_digest, не per-письмо.
+- Фильтр `should_suppress_confluence(..., watch_ids, watch_titles)`: None-аргументы ⇒ старое поведение (совместимость).
+- Токен: `_load_confluence_env()` только CONFLUENCE_URL/TOKEN из ~/USERTOOLS/ConfluenceSync/.env, HTTP — urllib.
+- `extract_page_ids()` из subject+text_body+body, `subject_leaf_title()` — fallback exact-match по title.
+
+### Файлы, затронутые реализацией bk-170/171
+Изменены: person_checker.py, ex_state.py, confluence_filter.py, config.py, digest.py + тесты. Новый: confluence_tree.py, tests/test_confluence_tree.py. Полный прогон пакета: 140 passed.
 
 ## Pitfalls
 

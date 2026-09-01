@@ -37,7 +37,7 @@ Google Calendar не используется никогда — даже есл
 4. **2–5 кандидатов** → показать список, Саша выбирает.
 5. **0 кандидатов** → «Не нашла [имя] в контактах, уточни написание».
 
-**⚠️ Pitfall MeetingScheduler relative imports:** `meeting_scheduler.py` использует `from .models import ...` — это сломается при запуске как скрипт (`python3 meeting_scheduler.py`). Запускать через `python3 -m MeetingScheduler` или добавить `__init__.py` и использовать как пакет. Зависимости: `pip install exchangelib portalocker loguru pydantic-settings`.
+**⚠️ Pitfall MeetingScheduler relative imports:** `meeting_scheduler.py` использует `from .models import ...` — это сломается при запуске как скрипт (`python3 meeting_scheduler.py`). Запускать через `python3 -m MeetingScheduler` (требует `PYTHONPATH=/home/tkachenkoav/USERTOOLS`, иначе `No module named MeetingScheduler`) или добавить `__init__.py` и использовать как пакет. Зависимости: `pip install exchangelib portalocker loguru pydantic-settings`.
 
 **⚠️ Pitfall Whisper:** голосовой ввод (Whisper/VoiceFlow) искажает русские фамилии — буква может замениться (Криворотов → «Кривородов», Калмыкова → «Колмыкова»). Всегда запускать нечёткий поиск, не только точный. Если нашли похожих — показать список, не угадывать.
 
@@ -137,47 +137,19 @@ for rl in rooms:
 
 **Проблема:** встреча задваивается если пользователь уже создал её вручную или бот вызван дважды.
 
-Перед каждым созданием — `calendar.view(start ± 5 мин)`:
-- overlap ≥ 2 участников ИЛИ fuzzy-совпадение темы (ratio ≥ 0.7) → показать предупреждение, ждать явного «да»
+Перед каждым созданием — `MeetingScheduler.check_duplicate(draft)` (окно ±5 мин, overlap ≥2 участников ИЛИ fuzzy-тема ≥0.7). При дубле без явного подтверждения — **не создавать**.
 
+**CLI:** флаг `--force` обходит guard (только после явного «да» от Саши).
+
+**Python (если не CLI):**
 ```python
-import difflib
-from datetime import timedelta
-check_start = EWSDateTime.from_datetime((start - timedelta(minutes=5)).replace(tzinfo=None)).replace(tzinfo=MSK)
-check_end   = EWSDateTime.from_datetime((end + timedelta(minutes=5)).replace(tzinfo=None)).replace(tzinfo=MSK)
-existing = list(account.calendar.view(start=check_start, end=check_end))
-for item in existing:
-    overlap = {a.mailbox.email_address for a in (item.required_attendees or [])} & attendee_emails
-    ratio = difflib.SequenceMatcher(None, subject.lower(), item.subject.lower()).ratio()
-    if len(overlap) >= 2 or ratio >= 0.7:
-        # дубль — показать предупреждение
+dup = scheduler.check_duplicate(draft)
+if dup is not None:
+    respond(f"Похоже, такая встреча уже есть:\n📅 {dup.subject}\n🕒 {dup.start}\n\nВсё равно создать?")
+    return  # ждём явного «да» → повтор с force или --force в CLI
 ```
 
-## ⚠️ Anti-duplicate guard — ОБЯЗАТЕЛЬНО перед create_meeting
-
-Встречи задваиваются если не проверять дубли. Перед каждым `create_meeting`:
-
-```python
-from datetime import timedelta
-import difflib
-
-check_start = EWSDateTime.from_datetime(chosen_start - timedelta(minutes=5)).astimezone(MSK)
-check_end   = EWSDateTime.from_datetime(chosen_end + timedelta(minutes=5)).astimezone(MSK)
-existing = list(scheduler.account.calendar.view(start=check_start, end=check_end))
-
-attendee_emails = {p.email for p in draft.participants}
-for item in existing:
-    item_attendees = {a.mailbox.email_address for a in (item.required_attendees or [])}
-    overlap = attendee_emails & item_attendees
-    title_sim = difflib.SequenceMatcher(None, draft.subject.lower(), item.subject.lower()).ratio()
-    if len(overlap) >= 2 or title_sim >= 0.7:
-        respond(f"Похоже, такая встреча уже есть:\n📅 {item.subject}\n🕒 {item.start}\n👥 {list(item_attendees)}\n\nВсё равно создать? (да/нет)")
-        return  # ждать явного «да»
-```
-
-Критерии дубля: 2+ участника совпадают ИЛИ похожая тема (ratio ≥ 0.7). Без явного «да» от PM — не создавать.
-
-⚠️ **Реальный кейс (18.06.2026):** встреча задвоилась — оригинал уже существовал с другим названием но теми же участниками. PM убирал дубль вручную из Exchange. Guard обязателен.
+⚠️ **Реальный кейс (18.06.2026):** встреча задвоилась — guard обязателен.
 
 ## Fireflies
 
@@ -424,7 +396,56 @@ print(f"Created: {item.id}")
 ```
 и `sys.path.insert(0, '/home/tkachenkoav/USERTOOLS')` перед импортом.
 
-### Инициализация и parse_phrase
+### Создание встречи — ТОЛЬКО через CLI
+
+**⚠️ ЗАПРЕЩЕНО при создании и мутациях встреч:** `write_file` / heredoc / `python3 -c` с `MeetingDraft(...)` или прямым `CalendarItem` с `required_attendees` (bk-172). Единственный путь — CLI MeetingScheduler.
+
+**СТОП перед `create` / `reschedule`:**
+1. `--subject` = дословная формулировка Саши (допустима только орфография по-русски, В23). **Запрещено** укороченный subject / ярлык / обрезка по первой точке.
+2. Обязателен `--notify-loop` **или** `--no-notify-loop` (без флага CLI exit ≠ 0). На переносе вопрос задаётся **заново**, ответ create не наследуется (В22).
+3. `--duration` default 60 — не спрашивать, если Саша не указал.
+4. `--agenda` = только блок 3 тела; HTML собирает `_build_html_body`.
+
+```bash
+PYTHONPATH=/home/tkachenkoav/USERTOOLS /home/tkachenkoav/USERTOOLS/AnywhereContacts/venv_linux/bin/python3 -m MeetingScheduler create \
+  --attendee krivorotov@tutu.ru \
+  --subject "AI-аналитик. Обсуждаем задачи необходимые и достаточные для достижения целей + видение архитектуры" \
+  --agenda "Обсуждаем как достигаем цель …" \
+  --duration 60 \
+  --start "2026-09-02T11:00:00+03:00" \
+  --notify-loop \
+  --dry-run
+```
+
+Флаги `create`:
+| Флаг | Назначение |
+|------|------------|
+| `--attendee` | повторяемый; email напрямую или имя → `resolve_contact` |
+| `--subject` | тема дословно (± орфография В23); дефолт «Собрание Ткаченко А.» |
+| `--duration` | минуты (дефолт 60, не спрашивать) |
+| `--no-room` | `need_room=False` |
+| `--room-name` | переговорка по названию |
+| `--start` | ISO datetime; без него — первый слот через `find-slots` / `find_slots` |
+| `--window-end` | верхняя граница окна поиска слота |
+| `--agenda` / `--agenda-file` | повестка / блок 3 (обязательна) |
+| `--notify-loop` / `--no-notify-loop` | **обязательная пара** на create и reschedule |
+| `--dry-run` | preview JSON без создания |
+| `--force` | обойти `check_duplicate` после явного «да» |
+
+**Мутации — только CLI** (без Loop-флагов на add/remove/cancel):
+```bash
+PYTHONPATH=/home/tkachenkoav/USERTOOLS python3 -m MeetingScheduler add --item-id ID --changekey CK --participant email@tutu.ru
+PYTHONPATH=/home/tkachenkoav/USERTOOLS python3 -m MeetingScheduler remove --item-id ID --changekey CK --participant email@tutu.ru
+PYTHONPATH=/home/tkachenkoav/USERTOOLS python3 -m MeetingScheduler reschedule --item-id ID --changekey CK --start ISO --notify-loop
+PYTHONPATH=/home/tkachenkoav/USERTOOLS python3 -m MeetingScheduler cancel --item-id ID --changekey CK
+PYTHONPATH=/home/tkachenkoav/USERTOOLS python3 -m MeetingScheduler find-slots --attendee … --agenda …
+```
+
+Алгоритм CLI create: VPN → `MeetingDraft` → (без `--start`) `find_slots` → `--dry-run`? → `check_duplicate` → `create_meeting` (Loop только при `--notify-loop`) → JSON.
+
+При `status: duplicate` в JSON — спросить Сашу; при «да» — повтор с `--force`.
+
+### parse_phrase (только для разбора фразы в диалоге)
 
 ```python
 import sys
@@ -434,7 +455,9 @@ scheduler = MeetingScheduler()
 draft = scheduler.parse_phrase(phrase)
 ```
 
-Проверить draft: `participants` (если пусто — «Кого пригласить?»), `agenda` (если `None` — спросить), `duration_minutes` (дефолт 60).
+`parse_phrase` — для извлечения полей из фразы Саши. **Создание встречи** — только CLI (см. выше), не `MeetingDraft(...)` + `create_meeting()` вручную.
+
+Проверить draft: участники (если пусто — «Кого пригласить?»), `agenda` (если `None` — спросить), `duration_minutes` (дефолт 60).
 
 **Вопрос о переговорке (обязательный шаг):** если Саша явно указал тему и/или текст встречи, но НЕ сказал явно, нужна ли переговорка — Сирень обязана задать вопрос «Нужна ли переговорка?» (и, если да — на сколько человек). Вопрос не задаётся только если про переговорку сказано явно (например «в переговорке на 5» или «без переговорки»). Если переговорка нужна — ищем свободную переговорку МСК ёмкостью 4–8 человек. Только после этого — free/busy и поиск слотов.
 
@@ -473,77 +496,42 @@ def format_slots(slots):
 
 ### Anti-duplicate guard (ВСЕГДА перед созданием)
 
-```python
-from datetime import timedelta
-import difflib
-check_start = EWSDateTime.from_datetime((draft.chosen_start - timedelta(minutes=5)).replace(tzinfo=None)).replace(tzinfo=MSK)
-check_end = EWSDateTime.from_datetime((draft.chosen_end + timedelta(minutes=5)).replace(tzinfo=None)).replace(tzinfo=MSK)
-existing = list(scheduler.account.calendar.view(start=check_start, end=check_end))
-for item in existing:
-    item_emails = {a.mailbox.email_address for a in (item.required_attendees or [])}
-    overlap = {p.email for p in draft.participants} & item_emails
-    subject_ratio = difflib.SequenceMatcher(None, draft.subject.lower(), item.subject.lower()).ratio()
-    if len(overlap) >= 2 or subject_ratio >= 0.7:
-        respond(f"Похоже, такая встреча уже есть:\n📅 {item.subject}\n🕒 {item.start}\n\nВсё равно создать?")
-        return  # ждём явного «да»
+Используй `check_duplicate(draft)` / CLI без `--force`. При дубле — предупреждение Саше, ждать «да», затем `--force`.
+
+```bash
+# dry-run для preview, затем create; при duplicate — повтор с --force
+PYTHONPATH=/home/tkachenkoav/USERTOOLS /home/tkachenkoav/USERTOOLS/AnywhereContacts/venv_linux/bin/python3 -m MeetingScheduler create ... --dry-run
+PYTHONPATH=/home/tkachenkoav/USERTOOLS /home/tkachenkoav/USERTOOLS/AnywhereContacts/venv_linux/bin/python3 -m MeetingScheduler create ... 
+PYTHONPATH=/home/tkachenkoav/USERTOOLS /home/tkachenkoav/USERTOOLS/AnywhereContacts/venv_linux/bin/python3 -m MeetingScheduler create ... --force   # только после «да»
 ```
 
-### Loop-уведомление Required-участникам (после create_meeting, §6.2 v1.7)
+### Loop-уведомление Required-участникам (v1.9)
 
-Вызывается **только после** успешного `create_meeting` (после `item.save()`). Ошибки Loop
-не откатывают и не блокируют встречу — только лог и опциональная строка в TG-отчёте Саше.
-Вызов **синхронный** (не в фон): Саша должен сразу видеть готовую строку отчёта, если были
-пропуски или ошибки.
+**Обязательный вопрос перед create и reschedule:** «уведомление в Loop? (да/нет)». Без ответа CLI не вызывать. `--no-notify-loop` → 0 постов в Loop. Add/remove/cancel — Loop без переспроса (add — только новому; cancel — всем Required кроме организатора).
 
-```python
-from MeetingScheduler.loop_notify import LoopNotifier
-notifier = LoopNotifier()
-summary = notifier.notify_all(
-    required_participants=draft.required_participants,
-    organizer_email=ORGANIZER_EMAIL,
-    chosen_start=draft.chosen_start,
-    chosen_end=draft.chosen_end,
-    zoom_join_url=draft.zoom_join_url or ZOOM_LINK,
-    meeting_draft_id=result.exchange_item_id,
-)
-loop_report_line = notifier.format_report_line(summary)
-# добавить loop_report_line к тексту §6.1, только если не None
+«Привет!» в Loop — по переписке **за сегодня** (00:00 МСК), не по дню встречи. Ссылка в Loop — PMI `https://tutu-ru.zoom.us/my/tkachenkoav.meet`.
+
+Loop вызывается **внутри** `create_meeting` / `reschedule_meeting` / `add_participant` / `cancel_meeting` — **не** вызывать `LoopNotifier` напрямую из скилла при штатном флоу.
+
+### Перенос и отмена встречи — только CLI
+
+```bash
+PYTHONPATH=/home/tkachenkoav/USERTOOLS python3 -m MeetingScheduler reschedule \
+  --item-id ID --changekey CK --start "2026-09-02T15:00:00+03:00" --notify-loop
+PYTHONPATH=/home/tkachenkoav/USERTOOLS python3 -m MeetingScheduler cancel \
+  --item-id ID --changekey CK
 ```
 
-### Перенос и отмена встречи
+Идентификация встречи в диалоге: `find_meetings_by_hint(hint)` через Python **только для поиска**, мутация — CLI.
 
-```python
-from MeetingScheduler.manage_meeting import MeetingManager
-manager = MeetingManager(scheduler)
-meetings = manager.find_meetings_by_hint(hint)
-# 0 → «Не нашла встреч»; 1 → подтвердить; 2+ → выбрать
-manager.reschedule_meeting(item.id, item.changekey, new_start, new_end)
-scheduler.cancel_meeting(item.id, item.changekey)
+### Добавление участника — только CLI
+
+```bash
+PYTHONPATH=/home/tkachenkoav/USERTOOLS python3 -m MeetingScheduler add \
+  --item-id ID --changekey CK --participant email@tutu.ru
 ```
 
-### Добавление участника в существующую встречу
-
-**Когда:** Саша просит добавить человека во встречу, которая уже создана — без пересоздания, отмены, смены времени или правки текста приглашения.
-
-**Флоу:**
-
-```python
-from MeetingScheduler.manage_meeting import MeetingManager
-from MeetingScheduler.models import Participant
-
-manager = MeetingManager(scheduler)
-meetings = manager.find_meetings_by_hint(hint)
-# 0 → «Не нашла встреч»; 1 → подтвердить; 2+ → выбрать
-# resolve_contact → email нового участника
-participant = Participant(display_name="...", email="...")
-result = manager.add_participant(item.id, item.changekey, participant)
-# отчёт Саше: кого добавили + result.loop_report_line (если Loop не ушёл)
-```
-
-**Важно:**
-- Приглашение Exchange уходит **только новому** участнику (`SendToChangedAndSaveCopy` / `SEND_TO_CHANGED_AND_SAVE_COPY`) — существующие участники **не** получают повторное письмо.
-- Прямое создание/правка через `CalendarItem(...)` **запрещено** (guard bk-172) — только `MeetingManager.add_participant`.
-- External-участник (не `@tutu.ru`) — Loop-уведомление пропускается автоматически (`skipped_external`); добавление в Exchange всё равно выполняется.
+Loop на add — автоматически новому участнику (без вопроса «уведомление в Loop?»).
 
 ### Массовые встречи (v1.8, >8 участников)
 
@@ -605,10 +593,10 @@ result = manager.add_participant(item.id, item.changekey, participant)
 
 ## Инструмент «Назначить встречу» (bk-084)
 
-ТЗ: `/home/tkachenkoav/WorkVault/Tools/MeetingScheduler/TZ_meeting_scheduler_v1.0.md`
-Код: `/home/tkachenkoav/USERTOOLS/ExchangeMeeting/create_meeting.py`
+ТЗ: `/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MeetingScheduler/MeetingScheduler_TZ.md`
+Код: `/home/tkachenkoav/USERTOOLS/MeetingScheduler/` — CLI: `python -m MeetingScheduler create ...`
 
-Флоу: фраза → парсинг (AnywhereContacts) → вопрос о переговорке (если не указано явно) → free/busy (GetUserAvailability) → 3 слота → выбор → переговорка → preview → подтверждение → Zoom + Exchange.
+Флоу: фраза → парсинг (AnywhereContacts) → вопрос о переговорке (если не указано явно) → free/busy → 3 слота → выбор → переговорка → preview → подтверждение → **CLI create** → Exchange + Loop.
 
 ## Интеграции
 - **Fireflies** → `fred@fireflies.ai` как Attendee (см. выше)

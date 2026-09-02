@@ -26,7 +26,7 @@
 ### Классификация отправителей за 14 дней (образец для правил)
 
 **Внешние рассылки/сервисы — кандидаты на блок:**
-`hello@ollama.com`, `team@mail.cursor.com`, `hi@cursor.com`, `noreply@dion.vc` (dion_robot), `noreply@mail.manus.im`, `support+notifications@figma.com`, `leander@fireflies.ai`, `no-reply@todoist.com`, `team@mail.miro.com`, `info@sberuniversity.ru`, `catie.ditmore@tavily.com`, `owncloud@tutu.ru`, `ok@tutu.ru` (HR-автоматика), `hotel@tutu.ru` («Отель из избранного»).
+`hello@ollama.com`, `team@mail.cursor.com`, `hi@cursor.com`, `noreply@dion.vc` (dion_robot), `noreply@mail.manus.im`, `support+notifications@figma.com`, `leander@fireflies.ai`, `no-reply@todoist.com`, `team@mail.miro.com`, `info@sberuniversity.ru`, `catie.ditmore@tavily.com`, `owncloud@tutu.ru`, `ok@tutu.ru` (HR-автоматика), `hotel@tutu.ru` («Отель из избранного»), `gabe@news.openwhispr.com` (OpenWhispr, добавлен 02.09.2026).
 
 **Внутренние автопоставки `hq@tutu.ru`:** `(Confluence)` и `(Jira)` — глушить, НО оставлять, если в теме ИЛИ теле есть тег: `Ткаченко Александр Владимирович`, `tkachenko`, либо @-упоминание в формате Confluence.
 

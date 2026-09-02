@@ -1,7 +1,7 @@
 ---
 name: loop-channel-digest
-description: "Use when: дайджест канала Loop, новости канала."
-version: 1.0.0
+description: "Use when: дайджест канала Loop, новости канала, новости в чате руководителей АИД, синк АИД, руководители аид, общий чат, чат компании, Trisigma, внутренний Trisigma, Внешний Trisigma, AI-аналитик, что в парсинге, новости по парсингу, LLM (БЯМ)."
+version: 1.1.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -13,27 +13,63 @@ related_skills: [mattermost-loop-api, cursor-cli]
 
 ## When to Use
 - «сделай дайджест канала X», «новости канала Y», «что было в Loop за неделю/месяц»
-- Периодический краткий отчёт о движении по вопросам в канале Loop
+- Colloquial: «новости в чате руководителей АИД», «синк АИД», «общий чат», «Trisigma», «AI-аналитик», «что в парсинге» (resolve via mapping; do not re-ask if mapped)
+- Periodic short report of issue movement in a Loop channel
 
-## Механика
-Два слоя (экономия токенов): **CLI-инструмент** собирает и агрегирует данные детерминированно (без LLM), **эта модель** пишет финальный markdown-дайджест из JSON.
+## Name → channel (resolve BEFORE CLI)
+Match Sasha's phrase (case-insensitive, substring) → slug. **Do not ask** if mapped. Unmapped → ask.
 
-### 1. Вызвать инструмент
+URL pattern: `https://loop.tutu.ru/tutu/channels/<slug>`
+
+| Colloquial (as Sasha says) | Slug |
+|---|---|
+| «чат руководителей АИД», «синк АИД», «руководители аид» | `chat-rukovoditeley-departamenta-aid` |
+| «Общий чат», «чат компании» | `general` |
+| «Trisigma чат», «внутренний Trisigma» | `trisigma-proyekt-pilot-vnutrenny` |
+| «Внешний Trisigma» | `trisigma-proyekt-pilot-s-zakazchikom` |
+| «AI-аналитик внутренний», «просто AI-аналитик чат» | `ai-analitik-multiagentnaya-sistema-aid` |
+| «LLM (БЯМ)» | `llm-byam` |
+| «парсинг», «новости по парсингу», «что в парсинге» | **GROUP** → procedure below |
+
+`llm-byam` ≠ `llm` (`llm` has no topics). «LLM (БЯМ)» → `llm-byam`.
+
+### Group «парсинг» — one combined digest
+One colloquial name → several channels. Run CLI **once per slug**, **same** `--since`/`--until`, merge JSON into **one** markdown digest.
+
+Fixed order:
+1. `parsing-avia`
+2. `parsing-avtobusy`
+3. `parsing-zhd`
+4. `parsing-oteli`
+5. `parsing-elektrichki`
+
+Merge:
+- Shared window for all calls. Save each stdout: `/tmp/digest-<slug>.json`.
+- Header: `## 📰 Парсинг — дайджест <ДД.ММ-ДД.ММ>`
+- Each theme names the source: `### <Тема> (<slug>) — <status>`
+- Concatenate `topics[].threads[]` across JSONs; same theme-extraction/status rules.
+- Empty channel in window → skip (no invented themes). All empty → «за период активности нет».
+- Experts block: 2–4 most active across the **whole group**.
+- Tool still handles **one** channel per invocation (incl. that channel's topics).
+
+## Mechanics
+Two layers: **CLI** aggregates deterministically (no LLM); **this model** writes markdown from JSON.
+
+### 1. Call the tool
 ```bash
 cd ~/USERTOOLS/LoopChannelDigest && venv_linux/bin/python -m loop_channel_digest \
   --channel <name> --since <YYYY-MM-DD> --until <YYYY-MM-DD> --format json
 ```
-- Параметры (только они переключаемы): `--channel` (имя), `--since`/`--until` (окно). Всё остальное — константы.
-- Дефолт — **все подтопики** канала (`--topics all`).
-- Опционально: `--team <id>` (дефолт ТУТУ), `--topics` (CSV-фильтр), `--format md` (debug-дамп).
-- ВАЖНО про имена: у канала может быть и полное имя, и короткое. Пример: «LLM (БЯМ)» = `llm-byam` (родитель с 38 подтопиками), а `llm` — отдельный канал без подтопиков. Уточнить у Саши имя, если неочевидно.
-- stdout → сохранить JSON: `> /tmp/digest.json` (stderr — прогресс, игнорировать).
-- Коды: 0 успех, 2 канал/конфиг, 3 сетевая ошибка. При коде ≠0 показать stderr.
+- Switchable: `--channel` (slug), `--since`/`--until`. Rest are constants.
+- Default: **all topics** (`--topics all`).
+- Optional: `--team <id>` (default ТУТУ), `--topics` (CSV), `--format md` (debug).
+- stdout → `/tmp/digest.json` (single) or `/tmp/digest-<slug>.json` (group). Ignore stderr progress.
+- Exit: 0 ok, 2 channel/config, 3 network. If ≠0, show stderr.
 
-### 2. Составить дайджест из JSON
-Прочитать `/tmp/digest.json` и сгенерировать отчёт СТРОГО по формату ниже. Не добавлять FF-шаблон, временные метки, цитаты-формулировки.
+### 2. Write digest from JSON
+Read JSON and generate STRICTLY in the format below. No FF template, timestamps, or verbatim quotes.
 
-## Формат вывода (константа)
+## Output format (constant)
 ```markdown
 ## 📰 <Канал> — дайджест <ДД.ММ-ДД.ММ>
 
@@ -45,20 +81,20 @@ cd ~/USERTOOLS/LoopChannelDigest && venv_linux/bin/python -m loop_channel_digest
 ...
 **Ключевые вкладчики-эксперты:** Фамилия, Фамилия.
 ```
-- Статус ровно из трёх: ✅ закрыто / 🔄 в работе / 📣 анонс (грядёт, ещё нет итога).
-- Только прогресс движения по вопросам, кратко. Без ссылок на время, без дословных цитат.
-- Участники — только те, кто реально участвовал в обсуждении (ФИО из `participants`/`author`).
-- Блок «Ключевые вкладчики-эксперты» — 2-4 самых активных/значимых участника.
-- Если за окно активности нет — сообщить «за период активности нет», не выдумывать.
+- Status exactly one of: ✅ закрыто / 🔄 в работе / 📣 анонс (upcoming, no outcome yet).
+- Issue-progress only, brief. No time refs, no verbatim quotes.
+- Participants = people who actually posted (`participants`/`author`).
+- Experts = 2–4 most active/significant.
+- No activity in window → «за период активности нет», do not invent.
 
-## Правила извлечения тем (из агрегированных тредов)
-- JSON уже сгруппирован по топикам (`topics[].threads[]`). По умолчанию **1 топик = 1 тема** дайджеста; дробить на отдельные темы только если внутри топика явно несколько несвязанных обсуждений (по смыслу решает модель).
-- Треды одного вопроса могут быть разбиты по `root_id` (особенно с `root_missing=true`) — склеивать их в одну тему по смыслу, не плодить дубли.
-- `truncated=true` — был усечён (маркер "...N сообщений пропущено..."), суть/итог надо восстановить по сохранённым head+tail.
+## Theme extraction (from aggregated threads)
+- JSON grouped by topic (`topics[].threads[]`). Default **1 topic = 1 digest theme**; split only if one topic has clearly unrelated discussions.
+- Same-issue threads may split by `root_id` (esp. `root_missing=true`) — merge by meaning, no dupes.
+- `truncated=true` — truncated (`...N сообщений пропущено...`); recover gist from saved head+tail.
 
-## Питфоллы
-- `requests`/`httpx` зависают на loop.tutu.ru — инструмент использует curl+subprocess, не менять.
-- Канал с подтопиками: основной канал пуст, активность в топиках — инструмент это уже учитывает.
-- Два канала с похожими именами (llm vs llm-byam) — уточнять имя у Саши.см. mattermost-loop-api.
-- `since`/`until` в мс — конвертация внутри инструмента, модели дату передавать в `YYYY-MM-DD`.
-- Токен (LOOP_TOKEN) — из `~/.config/hermes/.env` или локального `.env`, никогда не хардкодить и не логировать.
+## Pitfalls
+- `requests`/`httpx` hang on loop.tutu.ru — tool uses curl+subprocess; do not change.
+- Topic channels: parent may be empty; activity is in topics — tool already handles this.
+- Unmapped name → ask Sasha. `llm` ≠ `llm-byam`.
+- `since`/`until` in ms — conversion inside the tool; pass `YYYY-MM-DD`.
+- Token (LOOP_TOKEN) from `~/.config/hermes/.env` or local `.env`; never hardcode or log.

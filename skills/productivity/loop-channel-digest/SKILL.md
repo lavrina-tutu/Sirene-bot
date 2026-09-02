@@ -42,6 +42,7 @@ Fixed order:
 3. `parsing-zhd`
 4. `parsing-oteli`
 5. `parsing-elektrichki`
+6. `fa7knzpx93f55gihaanxkrdbya` (Парсеры цен конкурентов)
 
 Merge:
 - Shared window for all calls. Save each stdout: `/tmp/digest-<slug>.json`.

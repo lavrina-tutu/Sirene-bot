@@ -55,9 +55,16 @@ def run_digest(
     targets = list(manifest.pages.items())
 
   for page_id, page in targets:
-    slug = compress_leaf(page_id, page, overlay, workvault, cfg, dry_run=dry_run)
-    if slug:
-      compressed.append(slug)
+    try:
+      slug = compress_leaf(page_id, page, overlay, workvault, cfg, dry_run=dry_run)
+      if slug:
+        compressed.append(slug)
+    except Exception as exc:
+      from .fail import DigestError
+
+      if isinstance(exc, DigestError):
+        continue
+      raise
 
   if not dry_run:
     full_run = only is None and not all_stale
@@ -73,7 +80,7 @@ def run_digest(
 
     rebuild_graph(overlay, manifest, generated_at)
     for page_id, page in manifest.pages.items():
-      if page.get("digest_slug") in compressed:
+      if page.get("digest_slug") in compressed and page.get("digest_status") != "rejected":
         page["digest_status"] = "fresh"
     _save_manifest(overlay, manifest)
 

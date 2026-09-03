@@ -31,8 +31,34 @@ class ProjectConfig:
     return list(self.confluence.get("pmo_seeds") or [])
 
   @property
+  def task_pages(self) -> list[dict[str, Any]]:
+    return list(self.confluence.get("task_pages") or [])
+
+  @property
   def meeting_project_slugs(self) -> list[str]:
     return list(self.meetings.get("project_slugs") or [])
+
+  @property
+  def tasks(self) -> dict[str, str]:
+    """task_id → page_id from optional ``tasks`` map or ``task_pages`` list."""
+    result: dict[str, str] = {}
+    explicit = self.confluence.get("tasks") or {}
+    if isinstance(explicit, dict):
+      result.update({str(k): str(v) for k, v in explicit.items()})
+    for entry in self.confluence.get("task_pages") or []:
+      if not isinstance(entry, dict):
+        continue
+      page_id = str(entry.get("page_id") or "")
+      if not page_id:
+        continue
+      role = str(entry.get("role") or "")
+      if role:
+        result[role] = page_id
+        if role.endswith("_draft"):
+          result[role.removesuffix("_draft")] = page_id
+        if role.endswith("_gap"):
+          result[role.removesuffix("_gap")] = page_id
+    return result
 
 
 def project_yaml_path(workvault: Path, slug: str) -> Path:
@@ -88,6 +114,10 @@ confluence:
   pmo_seeds:
     - { page_id: "490166551", title: "Бриф", space: PMO }
     - { page_id: "490167911", title: "Устав", space: PMO }
+  task_pages:
+    - { page_id: "519487958", role: charter_draft, space: PMO }
+    - { page_id: "519489611", role: feature_gap }
+    - { page_id: "514903239", role: feature_compare }
   follow_outbound: pmo-from-root
 mpp:
   expected_name: "Антибот внедрение Отели + исследование внедрение вертикали 260925"

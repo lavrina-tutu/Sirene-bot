@@ -17,6 +17,17 @@ MINI_L0 = FIXTURES / "mini_l0"
 
 
 @pytest.fixture
+def table_l0_setup(mini_workvault: Path) -> Path:
+  """Copy table_page fixture into mini WorkVault."""
+  rel = "Confluence/DPAN/table_page/index.md"
+  src = MINI_L0 / "table_page" / "index.md"
+  dest = mini_workvault / rel
+  dest.parent.mkdir(parents=True, exist_ok=True)
+  dest.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+  return dest
+
+
+@pytest.fixture
 def skill_root() -> Path:
   return SKILL_ROOT
 

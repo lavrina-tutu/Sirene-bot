@@ -11,6 +11,7 @@ from typing import Any
 from .confluence_pull import run_pull
 from .cursor_jobs import write_diff
 from .digest_io import mark_stale_manifest, utc_now_iso
+from .fail import ValidationError
 from .manifest import rebuild_all
 from .meetings import index_meetings, write_meetings_pointer
 from .models import Manifest
@@ -56,6 +57,19 @@ def _meetings_changed(overlay: Path, cfg: ProjectConfig) -> bool:
   return new_ids != old_ids
 
 
+def _assert_task_pages_in_manifest(cfg: ProjectConfig, manifest: Manifest) -> None:
+  for entry in cfg.task_pages:
+    page_id = str(entry.get("page_id") or "")
+    if not page_id:
+      continue
+    if page_id not in manifest.pages:
+      role = entry.get("role") or page_id
+      raise ValidationError(
+        f"task_pages role={role} page_id={page_id} not in MANIFEST — "
+        "добавь в task_pages и collect"
+      )
+
+
 def refresh_pages(
   cfg: ProjectConfig,
   manifest: Manifest,
@@ -63,8 +77,10 @@ def refresh_pages(
   workvault: Path,
   *,
   dry_run: bool = False,
+  extract_tables: bool = False,
 ) -> RefreshReport:
   report = RefreshReport(dry_run=dry_run)
+  _assert_task_pages_in_manifest(cfg, manifest)
   client = _client()
 
   for page_id, page in manifest.pages.items():
@@ -131,4 +147,10 @@ def refresh_pages(
       json.dumps(manifest.to_dict(), ensure_ascii=False, indent=2) + "\n",
       encoding="utf-8",
     )
+
+  if extract_tables and not dry_run:
+    from .table_extract import extract_for_task_pages
+
+    extract_for_task_pages(cfg, overlay, workvault, manifest)
+
   return report

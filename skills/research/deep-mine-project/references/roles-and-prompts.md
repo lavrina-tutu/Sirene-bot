@@ -20,8 +20,10 @@ agent -p "$(cat ~/WorkVault/Registries/project-context-compressor-prompt.md)
 
 ## Analyze (G)
 
-Input: `digest/_index.md`, `digest/themes/*.md`, `docs/_inbox/diff.md`.  
-**Forbidden:** raw `Confluence/**/index.md` bodies.
+Input: `docs/_inbox/<task_id>/PACK.md` + `BRIEF.md` (when `--task` set).  
+**Forbidden:** raw `Confluence/**/index.md` bodies; starting G with empty invariant checklist.
+
+Template: `references/architect-brief.template.md`. Manual brief in chat is bypass — forbidden in SKILL.md.
 
 ## Document (H)
 

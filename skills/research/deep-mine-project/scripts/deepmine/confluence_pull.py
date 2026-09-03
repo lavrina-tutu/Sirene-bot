@@ -56,3 +56,5 @@ def pull_seed_tree(cfg: ProjectConfig) -> None:
   run_pull(cfg.root_page_id, depth=6, recursive=True, resync=True)
   for seed in cfg.pmo_seeds:
     run_pull(str(seed["page_id"]), recursive=False, resync=True)
+  for task in cfg.task_pages:
+    run_pull(str(task["page_id"]), recursive=False, resync=True)

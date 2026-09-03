@@ -103,6 +103,13 @@ def cmd_collect(args: argparse.Namespace) -> int:
       encoding="utf-8",
     )
 
+  if getattr(args, "extract_tables", False):
+    from .table_extract import extract_for_task_pages
+
+    manifest = load_manifest(overlay, slug=cfg.slug)
+    written = extract_for_task_pages(cfg, overlay, wv, manifest)
+    summary["steps"].append(f"extract_tables:{len(written)}")
+
   if args.json_out:
     print(json.dumps(summary, ensure_ascii=False))
   else:
@@ -117,7 +124,11 @@ def cmd_refresh(args: argparse.Namespace) -> int:
   cfg = load_project_config(args.slug, workvault=wv)
   overlay = overlay_dir(wv, args.slug)
   manifest = load_manifest(overlay, slug=cfg.slug)
-  report = refresh_pages(cfg, manifest, overlay, wv, dry_run=args.dry_run)
+  report = refresh_pages(
+    cfg, manifest, overlay, wv,
+    dry_run=args.dry_run,
+    extract_tables=getattr(args, "extract_tables", False),
+  )
   out = {
     "checked": report.checked,
     "skipped": report.skipped,
@@ -162,13 +173,34 @@ def cmd_mine(args: argparse.Namespace) -> int:
   return cmd_digest(digest_args)
 
 
+def cmd_pack(args: argparse.Namespace) -> int:
+  from .pack import run_pack
+
+  wv = workvault_root(args.workvault)
+  cfg = load_project_config(args.slug, workvault=wv)
+  overlay = overlay_dir(wv, args.slug)
+  pack_dir = run_pack(
+    cfg, overlay, wv, args.task,
+    page_id=getattr(args, "page_id", None),
+  )
+  result = {"pack_dir": str(pack_dir), "task": args.task}
+  if args.json_out:
+    print(json.dumps(result, ensure_ascii=False))
+  else:
+    print(f"pack ok: {pack_dir}")
+  return 0
+
+
 def cmd_analyze(args: argparse.Namespace) -> int:
   from .cursor_jobs import analyze
 
   wv = workvault_root(args.workvault)
   cfg = load_project_config(args.slug, workvault=wv)
   overlay = overlay_dir(wv, args.slug)
-  result = analyze(overlay, cfg, dry_run=args.dry_run)
+  pack_dir = None
+  if getattr(args, "task", None):
+    pack_dir = overlay / "docs" / "_inbox" / args.task
+  result = analyze(overlay, cfg, pack_dir=pack_dir, dry_run=args.dry_run)
   if args.dry_run:
     print(result)
     return 0
@@ -210,9 +242,19 @@ def build_parser() -> argparse.ArgumentParser:
   p_collect.add_argument("--skip-d", action="store_true")
   p_collect.add_argument("--skip-e", action="store_true")
   p_collect.add_argument("--skip-entity", action="store_true")
+  p_collect.add_argument(
+    "--extract-tables",
+    action="store_true",
+    help="Extract L0 tables to docs/_inbox/<role>/extracts/ for task_pages",
+  )
 
   p_refresh = sub.add_parser("refresh", help="Incremental refresh")
   _add_common(p_refresh)
+  p_refresh.add_argument(
+    "--extract-tables",
+    action="store_true",
+    help="Extract L0 tables for task_pages after refresh",
+  )
 
   for name, handler in (
     ("digest", cmd_digest),
@@ -226,6 +268,13 @@ def build_parser() -> argparse.ArgumentParser:
       p.add_argument("--only", default=None)
       p.add_argument("--all-stale", action="store_true")
       p.add_argument("--plan-only", action="store_true")
+    if name == "analyze":
+      p.add_argument("--task", default=None, help="Task id for pack-based analyze (G)")
+
+  p_pack = sub.add_parser("pack", help="Build task pack for architect (PACK.md + BRIEF.md)")
+  _add_common(p_pack)
+  p_pack.add_argument("--task", required=True, help="Task id from PROJECT.yaml")
+  p_pack.add_argument("--page-id", default=None, help="Override page id")
 
   return parser
 
@@ -239,6 +288,7 @@ def main(argv: list[str] | None = None) -> int:
     "refresh": cmd_refresh,
     "digest": cmd_digest,
     "mine": cmd_mine,
+    "pack": cmd_pack,
     "analyze": cmd_analyze,
     "document": cmd_document,
   }

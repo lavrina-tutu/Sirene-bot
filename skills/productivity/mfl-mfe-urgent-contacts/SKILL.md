@@ -23,13 +23,13 @@ related_skills: [about_usr_skills, hermes-feature]
 
 Этот файл используется обоими инструментами через общие скрипты `mfl_urgent_check.py` и `mfl_digest.py`.
 
-## Текущий список (после обновления 04.08.2026)
+## Текущий список (после обновления 03.09.2026)
 
 ```yaml
 urgent_contacts:
   - alekseeva.ym  # Алексеева Юлия
   - aralov        # Аралов Александр
-  - arut          # Агабабян Арут
+  - agababyan     # Агабабян Арут
   - gladkikh      # Гладких Юрий
   - khrupov       # Хрупов Дмитрий
   - kotelnikova   # Котельникова Ольга
@@ -38,13 +38,14 @@ urgent_contacts:
   - peretyatkova  # Перетяткова Екатерина
   - rasov         # Расов Арсений
   - tsyba         # Цыба Леонид
+  - zaynullin     # Зайнуллин Ильдар
   - zhirov        # Жиров Александр
 ```
 
-**История изменения (21.08.2026):**
-- Добавлены руководители АиД: alekseeva.ym (Алексеева Юлия), kotelnikova (Котельникова Ольга), nabieva (Набиева Даяна), peretyatkova (Перетяткова Екатерина), rasov (Расов Арсений), zhirov (Жиров Александр)
-- Солдатенков (soldatenkov) не добавлен по явной просьбе Саши
-- Середа (sereda) исключён — уволился 21.08.2026
+**История изменения:**
+- 21.08.2026: добавлены руководители АиД: alekseeva.ym, kotelnikova, nabieva, peretyatkova, rasov, zhirov
+- 21.08.2026: Солдатенков (soldatenkov) не добавлен по явной просьбе Саши; Середа (sereda) исключён — уволился
+- 03.09.2026: добавлен zaynullin (Зайнуллин Ильдар), username подтверждён через Loop API (infrastructural engineer)
 
 ## Процедура обновления
 

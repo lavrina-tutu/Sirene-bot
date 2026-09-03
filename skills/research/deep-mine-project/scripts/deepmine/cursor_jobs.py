@@ -23,6 +23,8 @@ from .digest_io import (
 )
 from .graph import collect_edges, recompute_backlinks, write_links_md
 from .l0 import parse_l0_page
+from .digest_validate import rejection_reason, validate_digest_body
+from .fail import DigestError, digest_failed
 from .paths import COMPRESSOR_PROMPT, l0_abs
 from .project_config import ProjectConfig
 
@@ -66,7 +68,26 @@ def build_compress_prompt(
   )
 
 
-def build_analyze_prompt(overlay: Path, cfg: ProjectConfig) -> str:
+def build_analyze_prompt(overlay: Path, cfg: ProjectConfig, *, pack_dir: Path | None = None) -> str:
+  if pack_dir is not None:
+    assert_brief_ready(pack_dir)
+    parts = [
+      "Ты — архитектор проекта. Анализируй только каталог pack, не весь overlay.",
+      f"Проект: {cfg.display_name} ({cfg.slug})",
+      "",
+      f"## {pack_dir / 'PACK.md'}",
+    ]
+    pack_md = pack_dir / "PACK.md"
+    parts.append(pack_md.read_text(encoding="utf-8") if pack_md.exists() else "(missing PACK.md)")
+    brief_md = pack_dir / "BRIEF.md"
+    parts.append(f"\n## {brief_md}")
+    parts.append(brief_md.read_text(encoding="utf-8") if brief_md.exists() else "(missing BRIEF.md)")
+    parts.append(
+      "\nЗапрещено использовать Confluence/**/index.md. "
+      "Выход: docs/architect-plan.md с выводами и рекомендациями."
+    )
+    return "\n".join(parts)
+
   parts = [
     "Ты — архитектор проекта. Анализируй digest-архив, не сырые L0 Confluence.",
     f"Проект: {cfg.display_name} ({cfg.slug})",
@@ -88,6 +109,26 @@ def build_analyze_prompt(overlay: Path, cfg: ProjectConfig) -> str:
     "Выход: docs/architect-plan.md с выводами и рекомендациями."
   )
   return "\n".join(parts)
+
+
+_INVARIANT_ROW = re.compile(r"^\|\s*\d+\s*\|", re.MULTILINE)
+_INVARIANT_STATUS = re.compile(r"\|\s*(да|нет|нп)\s*\|", re.IGNORECASE)
+
+
+def assert_brief_ready(pack_dir: Path) -> None:
+  brief = pack_dir / "BRIEF.md"
+  if not brief.is_file():
+    raise ValueError(f"BRIEF.md missing in {pack_dir}")
+  text = brief.read_text(encoding="utf-8")
+  rows = _INVARIANT_ROW.findall(text)
+  if len(rows) < 6:
+    raise ValueError("BRIEF.md checklist invariants incomplete (need 6 filled rows)")
+  statuses = _INVARIANT_STATUS.findall(text)
+  if len(statuses) < 6:
+    raise ValueError("BRIEF.md checklist invariants must be да/нет/нп for each row")
+  for status in statuses[:6]:
+    if status.lower() not in ("да", "нет", "нп"):
+      raise ValueError("BRIEF.md checklist has empty invariant status")
 
 
 def build_document_prompt(overlay: Path) -> str:
@@ -191,6 +232,26 @@ def parse_digest_text(text: str) -> tuple[dict[str, Any], str]:
   return fm, body
 
 
+def _validate_and_apply_digest(
+  path: Path,
+  md_text: str,
+  sources: str | None,
+  *,
+  fallback_fm: dict[str, Any] | None = None,
+  l0_body: str | None = None,
+) -> tuple[dict[str, Any], str]:
+  fm = _apply_digest_output(path, md_text, sources, fallback_fm=fallback_fm)
+  _, body = parse_digest(path)
+  status = validate_digest_body(body, l0_body=l0_body)
+  if status == "rejected":
+    fm["status"] = "rejected"
+    write_digest(path, fm, body)
+    digest_failed(rejection_reason(body, l0_body=l0_body))
+  fm["status"] = "fresh"
+  write_digest(path, fm, body)
+  return fm, status
+
+
 def compress_leaf(
   page_id: str,
   page: dict[str, Any],
@@ -222,8 +283,12 @@ def compress_leaf(
   md = extract_md_from_agent(result)
   sources = _sources_block(l0, rec.confluence_url, slug)
   fallback = _leaf_frontmatter(page_id, page, rec, slug)
-  _apply_digest_output(dest, md, sources, fallback_fm=fallback)
-  page["digest_status"] = "fresh"
+  try:
+    _validate_and_apply_digest(dest, md, sources, fallback_fm=fallback, l0_body=rec.body)
+    page["digest_status"] = "fresh"
+  except DigestError:
+    page["digest_status"] = "rejected"
+    raise
   return slug
 
 
@@ -270,6 +335,7 @@ def compress_plan(overlay: Path, cfg: ProjectConfig, *, dry_run: bool = False) -
 
 
 def compress_theme(theme: str, overlay: Path, cfg: ProjectConfig, *, dry_run: bool = False) -> str | None:
+  """Build theme digest from leaf digests only (never raw L0)."""
   leaves = load_all_digests(overlay)
   themed = [s for s, d in leaves.items() if theme in (d.get("related") or []) or theme in str(d.get("title", "")).lower()]
   if not themed and dry_run:
@@ -290,7 +356,10 @@ def compress_theme(theme: str, overlay: Path, cfg: ProjectConfig, *, dry_run: bo
   if result.returncode != 0:
     raise RuntimeError(result.stderr or result.stdout)
   md = extract_md_from_agent(result)
-  _apply_digest_output(dest, md)
+  try:
+    _validate_and_apply_digest(dest, md, l0_body=None)
+  except DigestError:
+    raise
   return theme
 
 
@@ -314,8 +383,14 @@ def rebuild_graph(overlay: Path, manifest, generated_at: str) -> None:
   write_index_md(overlay, digests, generated_at)
 
 
-def analyze(overlay: Path, cfg: ProjectConfig, *, dry_run: bool = False) -> AgentResult | str:
-  prompt = build_analyze_prompt(overlay, cfg)
+def analyze(
+  overlay: Path,
+  cfg: ProjectConfig,
+  *,
+  pack_dir: Path | None = None,
+  dry_run: bool = False,
+) -> AgentResult | str:
+  prompt = build_analyze_prompt(overlay, cfg, pack_dir=pack_dir)
   if dry_run:
     return prompt
   return run_agent(prompt, ARCHITECT_MODEL, overlay)

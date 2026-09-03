@@ -52,6 +52,13 @@ def write_digest(
   path.write_text(text, encoding="utf-8")
 
 
+def set_digest_status(path: Path, status: str) -> None:
+  """Update frontmatter status (e.g. ``rejected``)."""
+  fm, body = parse_digest(path)
+  fm["status"] = status
+  write_digest(path, fm, body)
+
+
 def archive_history(overlay: Path, slug: str, version: str, source_sha: str) -> Path | None:
   for sub in ("leaves", "themes"):
     src = overlay / "digest" / sub / f"{slug}.md"

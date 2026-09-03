@@ -13,6 +13,6 @@ def test_cli_commands_exist():
     cwd=script.parent,
   )
   assert proc.returncode == 0
-  for cmd in ("init", "collect", "refresh", "digest", "mine", "analyze", "document"):
+  for cmd in ("init", "collect", "refresh", "digest", "pack", "mine", "analyze", "document"):
     assert cmd in proc.stdout
   assert "cron" not in proc.stdout

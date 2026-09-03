@@ -1,7 +1,7 @@
 ---
 name: tutu-confluence-jira
 description: "ТУТУ корп. системы: Confluence + JIRA. Загружать при: скачать/открыть страницу Confluence, создать/найти задачу в Jira, кто такой X (оргструктура: Аралов→Ткаченко→Криворотов), согласование договора, резолв участника по ФИО/userkey, публикация протокола встречи, экспорт Jira-задач в Obsidian. URL: dom.tutu.ru / hq.tutu.ru. Auth: ConfluenceSync .env."
-version: 1.5.0
+version: 1.7.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -56,6 +56,70 @@ curl -H "Authorization: Bearer $JIRA_TOKEN" \
      -H "Content-Type: application/json" \
      "https://hq.tutu.ru/rest/api/2/..."
 ```
+
+---
+
+## Патч секции (не PUT всего поля моделью)
+
+**Запрет:** LLM (grok/composer) **не генерирует** `body.storage.value` целиком и не собирает XHTML «на глаз».  
+Выход grok — markdown/текст поля. В storage вставляет **только скрипт** `scripts/section_patch.py`.
+
+### Алгоритм (B0)
+
+1. GET `?expand=body.storage,version` → файл JSON.
+2. Найти секцию по маркеру-заголовку (напр. «Ключевые поставки и сроки»).
+3. Заменить **только внутренность** секции (заголовок и пояснение под ним — вне span).
+4. PUT: `title` + `type:page` + `version.number+1` + полный body; **`space` не передавать**.
+5. Повторный GET + чеклист verify (7 пунктов, см. ниже).
+
+Детали: `references/section-patch.md`, `references/verify-skeleton.md`.
+
+```bash
+python3 ~/hermes-workspace/skills/productivity/tutu-confluence-jira/scripts/section_patch.py \
+  patch PAGE_ID --heading "Ключевые поставки и сроки" --inner-file /tmp/inner.html
+```
+
+Composer-2.5 как оператор **вызывает** скрипт; не имеет права писать storage руками в промпте.
+
+### Verify skeleton (7 пунктов)
+
+После каждого PUT координатор делает GET и проверяет:
+
+1. `version` — ожидание или подхвачена ручная правка.
+2. Счёт `ac:structured-macro` не изменился без причины в брифе.
+3. Целевой **заголовок секции** на месте (по маркеру, не по данным таблицы).
+4. Удаляемые значения отсутствуют (`kw not in body`).
+5. Нет дубля `<table>` под одним заголовком.
+6. Нет служебного текста брифа: «Не копировать», «Уточнить до ПК», «источник:», «см. бриф».
+7. Число `<td>` в затронутой таблице = эталону шаблона.
+
+Провал любого пункта = не «успех»; откат или повторный патч той же секции.
+
+```bash
+python3 ~/hermes-workspace/skills/productivity/tutu-confluence-jira/scripts/verify_skeleton.py \
+  --storage /tmp/after.json --reference /tmp/before.json \
+  --heading "Ключевые поставки и сроки"
+```
+
+---
+
+## Батч-резолв userkey (не точечный curl)
+
+Извлечь все `ri:userkey` со страницы → уникальный список → **один GET на ключ** (`/rest/api/user?key=`), повтор из кэша сессии.  
+**Запрет:** plaintext-реестры контактов; `/rest/api/user/search` (404); выдумывать «Неизвестный пользователь». CQL `user.fullname` — только если userkey нет.
+
+Запись `confluence_login` / `confluence_userkey` — **только** в `contacts.enc` через `ContactStore.update_contact` на существующих контактах.
+
+```bash
+# JSON {userkey, username, displayName}
+python3 ~/hermes-workspace/skills/productivity/tutu-confluence-jira/scripts/userkey_resolve.py \
+  --storage-file /tmp/page.json
+
+python3 ~/hermes-workspace/skills/productivity/tutu-confluence-jira/scripts/userkey_resolve.py \
+  --page-id 490170597 --write-contacts
+```
+
+Grok получает уже резолвнутую таблицу; REST не дергает.
 
 ---
 
@@ -450,6 +514,8 @@ Restate the task spec, wait for Sasha's answers, then act ("делай"). Task U
 - `references/tomake-contract-fields.md` — обязательные поля для согласования договора в TOMAKE
 - `references/kbk-tech-articles.md` — справочник технических статей КБК для ИТ-договоров
 - `references/confluence-meeting-protocol-format.md` — реальный формат страниц-протоколов "Задачи и договоренности (Минутки)" (оба варианта таблицы, формат `<ac:task>`, userkey найденных людей вне основного реестра контактов)
+- `references/section-patch.md` — патч одной секции storage (GET → inner replace → PUT)
+- `references/verify-skeleton.md` — 7-пунктовый чеклист после PUT
 - `references/confluence-storage-format-hidden-markers.md` — экспериментально проверенные варианты невидимых маркеров/ID в ячейках таблицы Confluence storage-формата: что переживает API PUT round-trip, что вырезается сервером, что осталось непроверенным (реальное ручное редактирование через веб-UI)
 - `references/zoom-api-setup.md`
 

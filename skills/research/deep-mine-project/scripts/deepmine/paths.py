@@ -9,6 +9,8 @@ CONFLUENCE_SYNC_CWD = Path.home() / "USERTOOLS" / "ConfluenceSync"
 MOFS_INDEX_ROOT = Path.home() / "USERTOOLS" / "MofsIndex"
 MPP_READER = Path.home() / "USERTOOLS" / "MppReader" / "read_mpp.py"
 COMPRESSOR_PROMPT = DEFAULT_WORKVAULT / "Registries" / "project-context-compressor-prompt.md"
+SKILL_ROOT = Path(__file__).resolve().parents[2]
+ARCHITECT_BRIEF_TEMPLATE = SKILL_ROOT / "references" / "architect-brief.template.md"
 
 OVERLAY_SUBDIRS = (
     "attachments",

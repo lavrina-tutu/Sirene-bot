@@ -1,7 +1,7 @@
 ---
 name: deep-mine-project
 description: "Use when: глубокий анализ проекта, глубокое бурение, собери/обнови архив проекта, deep-mine refresh, digest проекта, проектная документация полного внедрения. Полуавтоматический сбор контекста (Confluence+MPP+встречи+сущность) в MD-overlay, сжатие digest, ручной refresh. Не для точечного RAG (workvault-rag), не sync одной страницы (ConfluenceSync), не компрессия ТЗ (tz-compressor-prompt)."
-version: 0.1.0
+version: 0.4.0
 platforms: [linux]
 metadata:
   hermes:
@@ -37,13 +37,14 @@ Semi-automated deep project mining: Confluence L0 + MPP + meetings + entity → 
 | собери архив / пробури | `mine --slug TrisigmaFull` |
 | обнови архив / refresh | `refresh --slug TrisigmaFull` |
 | сожми digest | `digest --slug TrisigmaFull` |
-| анализ архитектору | `analyze --slug TrisigmaFull` |
+| анализ архитектору | `analyze --slug TrisigmaFull --task <task_id>` |
+| pack для задачи | `pack --slug TrisigmaFull --task feature_compare` |
 | оформи документы | `document --slug TrisigmaFull` |
 
 ```bash
 ~/hermes-agent/.venv/bin/python3 \
   ~/hermes-workspace/skills/research/deep-mine-project/scripts/deep_mine.py \
-  init|collect|refresh|digest|mine|analyze|document --slug TrisigmaFull
+  init|collect|refresh|digest|pack|mine|analyze|document --slug TrisigmaFull
 ```
 
 **No crons** in v0.1 unless user says «ставь кроны».
@@ -57,8 +58,8 @@ Semi-automated deep project mining: Confluence L0 + MPP + meetings + entity → 
 | C | `read_mpp.py --format both` → CSV; plan via composer (digest) | 3 CSV in `mpp/` |
 | D | `search_meetings(limit=500)` → `pointers/meetings.md` | no transcript copies |
 | E | MANIFEST 1.0, TREE, SOURCES, sha256 | hierarchical TREE |
-| F | compress leaves/themes/plan (`project-context-compressor-prompt.md`) | digest `status: fresh` |
-| G | architect analyze digests only | no raw Confluence bodies |
+| F | compress leaves/themes/plan (`project-context-compressor-prompt.md`) | digest `status: fresh` (journal → `rejected`) |
+| G | architect analyze **pack** only (`BRIEF.md` checklist filled; PACK includes leaf + relevant theme digests) | no raw Confluence bodies |
 | H | docs from `architect-plan.md` | `docs/*.md` draft |
 | I | user acceptance | — |
 

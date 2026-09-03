@@ -1,7 +1,9 @@
-"""Digest contract: slug, frontmatter, Источники first, history."""
+"""Digest contract: slug, frontmatter, Источники first, history, journal reject."""
 from __future__ import annotations
 
 from pathlib import Path
+
+import pytest
 
 from deepmine.digest_io import (
   SOURCES_HEADER,
@@ -11,6 +13,9 @@ from deepmine.digest_io import (
   parse_digest,
   write_digest,
 )
+from deepmine.digest_validate import validate_digest_body
+
+FIXTURES = Path(__file__).parent / "fixtures" / "digest"
 
 
 def test_leaf_slug_page():
@@ -53,3 +58,20 @@ def test_archive_history(tmp_path: Path):
   assert dest is not None
   assert dest.exists()
   assert dest.parent.name == "_history"
+
+
+def test_journal_fixture_rejected():
+  body = (FIXTURES / "p514903239_journal.md").read_text(encoding="utf-8")
+  assert validate_digest_body(body) == "rejected"
+
+
+def test_facts_fixture_ok():
+  body = (FIXTURES / "p514903239_facts.md").read_text(encoding="utf-8")
+  l0_with_table = "| A | B |\n|---|---|\n| 1 | 2 |\n"
+  assert validate_digest_body(body, l0_body=l0_with_table) == "ok"
+
+
+def test_l0_table_without_digest_table_rejected():
+  body = "## Источники\n\n- L0: path\n\nТолько текст без таблицы."
+  l0 = "<table><tr><td>x</td></tr></table>"
+  assert validate_digest_body(body, l0_body=l0) == "rejected"

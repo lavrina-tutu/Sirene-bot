@@ -1,0 +1,12 @@
+# Копировать в Projects/<Slug>/docs/_inbox/<task_id>/FIELD_MAP.yaml
+# Заполняет координатор ДО запуска grok. Пустые обязательные поля → fail-loud.
+
+source_page_id: "519489611"
+
+columns:
+  feature: "Название задачи"      # колонка страницы → название задачи в плане
+  gap: "Текст1"                   # «чего не хватает» / комментарий
+  complexity: "Длительность"      # через complexity-map.yaml, не grok
+
+resource_name: "Гладких Юрий"
+start_date: "2026-09-07"          # ISO YYYY-MM-DD; календарь считает скрипт (волна 6)

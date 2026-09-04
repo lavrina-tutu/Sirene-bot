@@ -82,6 +82,7 @@ def refresh_pages(
   report = RefreshReport(dry_run=dry_run)
   _assert_task_pages_in_manifest(cfg, manifest)
   client = _client()
+  stale_slugs: list[str] = []
 
   for page_id, page in manifest.pages.items():
     report.checked += 1
@@ -100,6 +101,7 @@ def refresh_pages(
     report.stale.append(slug)
     report.diff_entries.append({"slug": slug, "old": str(local_v), "new": str(remote_v)})
     mark_stale_manifest(manifest, slug)
+    stale_slugs.append(slug)
     if not dry_run:
       run_pull(page_id, recursive=False, resync=True)
       page["digest_status"] = "stale"
@@ -118,6 +120,8 @@ def refresh_pages(
       digests=manifest.get("digests", {}),
     )
     manifest = manifest_obj
+    for slug in stale_slugs:
+      mark_stale_manifest(manifest, slug)
 
   if _meetings_changed(overlay, cfg) and not dry_run:
     rows = index_meetings(cfg.meeting_project_slugs)

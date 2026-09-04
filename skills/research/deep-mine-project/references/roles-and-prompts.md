@@ -2,12 +2,12 @@
 
 One `agent -p` = one model = one role.
 
-| Role | Model | Step |
-|---|---|---|
-| Coordinator | Сирень + composer-2.5 mechanics | A–E, refresh |
-| Compressor | composer-2.5 | F (`project-context-compressor-prompt.md`) |
-| Architect | cursor-grok-4.6-high | G |
-| Executor | composer-2.5 | H |
+| Role | Model | Step | Source |
+|---|---|---|---|
+| Coordinator | Сирень + composer-2.5 mechanics | A–E, refresh | L0 (collect/refresh) |
+| Compressor | composer-2.5 | F (`project-context-compressor-prompt.md`) | **L0** (`index.md`) |
+| Architect | cursor-grok-4.6-high | G | **pack + digest** (no L0) |
+| Executor | composer-2.5 | H | **plan + digest** (no L0) |
 
 ## Compress leaf
 
@@ -21,10 +21,15 @@ agent -p "$(cat ~/WorkVault/Registries/project-context-compressor-prompt.md)
 ## Analyze (G)
 
 Input: `docs/_inbox/<task_id>/PACK.md` + `BRIEF.md` (when `--task` set).  
-**Forbidden:** raw `Confluence/**/index.md` bodies; starting G with empty invariant checklist.
+Agent reads digest leaves by path from PACK — bodies are not inlined.  
+**Forbidden:** raw `Confluence/**/index.md` and `WorkVault/Confluence/**`; starting G with empty invariant checklist.
+
+For full-archive mode: `--full-archive` (all pages must have fresh digest; use `--allow-stale` for read-only stale tolerance).
 
 Template: `references/architect-brief.template.md`. Manual brief in chat is bypass — forbidden in SKILL.md.
 
 ## Document (H)
 
-Input: `docs/architect-plan.md` + specified digests → `docs/*.md` with `status: draft`.
+Input: `docs/architect-plan.md` + digest paths from plan/pack → `docs/*.md` with `status: draft`.  
+Preflight: every referenced page must have fresh digest (fail-loud otherwise).  
+**Forbidden:** L0 `Confluence/**/index.md`.

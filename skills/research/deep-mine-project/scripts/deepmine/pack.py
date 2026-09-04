@@ -5,12 +5,11 @@ from pathlib import Path
 from typing import Any
 
 from .digest_io import leaf_digest_path, leaf_slug_page, parse_digest, theme_digest_path
-from .digest_validate import l0_has_table
 from .fail import ValidationError
 from .manifest import load_manifest
-from .paths import ARCHITECT_BRIEF_TEMPLATE, l0_abs
+from .paths import ARCHITECT_BRIEF_TEMPLATE
 from .project_config import ProjectConfig
-from .table_extract import extract_tables
+from .source import require_fresh_digest
 
 
 def resolve_task_page_id(
@@ -106,7 +105,6 @@ def _pack_index_lines(
     f"- page_id: `{page_id}`",
     f"- title: {page.get('title', '')}",
     f"- version: {page.get('version', '?')}",
-    f"- local_path: `{page.get('local_path', '')}`",
     f"- digest: `digest/leaves/{slug}.md` (status: {digest_status})",
     "",
     "## Theme digests",
@@ -157,25 +155,25 @@ def run_pack(
       f"page_id {resolved_page_id} not in MANIFEST — добавь в task_pages и collect"
     )
 
+  require_fresh_digest(
+    overlay,
+    resolved_page_id,
+    manifest_page=page,
+    slug=cfg.slug,
+    task_hint=task_id,
+  )
+
   pack_dir = overlay / "docs" / "_inbox" / task_id
   pack_dir.mkdir(parents=True, exist_ok=True)
   extracts_dir = pack_dir / "extracts"
   extracts_dir.mkdir(exist_ok=True)
 
-  local_path = str(page.get("local_path") or "")
-  l0_path = l0_abs(workvault, local_path) if local_path else None
-  l0_body = l0_path.read_text(encoding="utf-8") if l0_path and l0_path.is_file() else None
-
-  if l0_path and l0_path.is_file():
-    extract_tables(l0_path, extracts_dir, resolved_page_id, task_id)
-
-  if l0_body and l0_has_table(l0_body):
-    csv_files = list(extracts_dir.glob("*.csv"))
-    if not csv_files:
-      raise ValidationError(
-        f"L0 page {resolved_page_id} has table but no CSV extract in {extracts_dir} — "
-        "run collect --extract-tables or fix table_extract"
-      )
+  csv_files = list(extracts_dir.glob("*.csv"))
+  if page.get("has_tables") and not csv_files:
+    raise ValidationError(
+      f"page {resolved_page_id} has_tables but no CSV extract in {extracts_dir} — "
+      "run collect --extract-tables"
+    )
 
   pack_md = pack_dir / "PACK.md"
   pack_md.write_text(
@@ -187,19 +185,21 @@ def run_pack(
     f"- theme `{theme}`: `{path.relative_to(overlay)}`"
     for theme, path, _ in _pack_theme_entries(cfg, overlay, resolved_page_id)
   ]
-  pack_paths = "\n".join([
+  digest_slug = page.get("digest_slug", leaf_slug_page(resolved_page_id))
+  path_lines = [
     f"- `{pack_md.relative_to(overlay)}`",
-    f"- digest: `digest/leaves/{page.get('digest_slug', leaf_slug_page(resolved_page_id))}.md`",
-    f"- L0: `{page.get('local_path', '')}`",
+    f"- digest: `digest/leaves/{digest_slug}.md`",
     *theme_path_lines,
-  ])
+  ]
+  if csv_files:
+    for csv in sorted(csv_files):
+      path_lines.append(f"- extract: `{csv.relative_to(overlay)}`")
+  mpp_dir = overlay / "mpp"
+  if mpp_dir.is_dir():
+    for csv in sorted(mpp_dir.glob("*__tasks.csv")):
+      path_lines.append(f"- mpp: `{csv.relative_to(overlay)}`")
+  pack_paths = "\n".join(path_lines)
   brief_md = pack_dir / "BRIEF.md"
   brief_md.write_text(_brief_skeleton(task_id, pack_paths), encoding="utf-8")
-
-  digest_path = leaf_digest_path(overlay, resolved_page_id)
-  if digest_path.exists():
-    fm, _ = parse_digest(digest_path)
-    if fm.get("status") == "rejected":
-      raise ValidationError(f"digest {digest_path.name} is rejected — re-compress before pack")
 
   return pack_dir

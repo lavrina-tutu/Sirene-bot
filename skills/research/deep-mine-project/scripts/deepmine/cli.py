@@ -9,7 +9,7 @@ from pathlib import Path
 from .attachments import sync_attachments
 from .confluence_pull import pull_seed_tree
 from .entity import write_entity_pointer
-from .fail import DeepMineError, exit_from_error
+from .fail import DeepMineError, ValidationError, exit_from_error
 from .manifest import load_manifest, rebuild_all
 from .meetings import index_meetings, write_meetings_pointer
 from .mpp_run import export_csv, find_mpp_attachment, register_mpp_in_manifest
@@ -193,14 +193,51 @@ def cmd_pack(args: argparse.Namespace) -> int:
 
 def cmd_analyze(args: argparse.Namespace) -> int:
   from .cursor_jobs import analyze
+  from .pack import resolve_task_page_id
+  from .source import list_unready_pages, require_fresh_digest
 
   wv = workvault_root(args.workvault)
   cfg = load_project_config(args.slug, workvault=wv)
   overlay = overlay_dir(wv, args.slug)
+  task = getattr(args, "task", None)
+  full_archive = getattr(args, "full_archive", False)
+  allow_stale = getattr(args, "allow_stale", False)
+
+  if bool(task) == bool(full_archive):
+    raise ValidationError("нужен --task или --full-archive (исключающе)")
+
+  manifest = load_manifest(overlay, slug=cfg.slug)
   pack_dir = None
-  if getattr(args, "task", None):
-    pack_dir = overlay / "docs" / "_inbox" / args.task
-  result = analyze(overlay, cfg, pack_dir=pack_dir, dry_run=args.dry_run)
+
+  if full_archive:
+    unready = list_unready_pages(overlay, manifest)
+    if allow_stale:
+      unready = [p for p in unready if p["status"] != "stale"]
+    if unready:
+      lines = [f"  - {p['page_id']} ({p['status']}): {p['digest_path']}" for p in unready]
+      raise ValidationError(
+        "digest archive not ready for full-archive analyze:\n" + "\n".join(lines)
+      )
+  else:
+    page_id = resolve_task_page_id(cfg, task, page_id=getattr(args, "page_id", None))
+    page = manifest.pages.get(page_id)
+    require_fresh_digest(
+      overlay,
+      page_id,
+      allow_stale=allow_stale,
+      manifest_page=page,
+      slug=cfg.slug,
+      task_hint=task,
+    )
+    pack_dir = overlay / "docs" / "_inbox" / task
+
+  result = analyze(
+    overlay,
+    cfg,
+    pack_dir=pack_dir,
+    full_archive=full_archive,
+    dry_run=args.dry_run,
+  )
   if args.dry_run:
     print(result)
     return 0
@@ -212,11 +249,14 @@ def cmd_analyze(args: argparse.Namespace) -> int:
 
 
 def cmd_document(args: argparse.Namespace) -> int:
-  from .cursor_jobs import document
+  from .cursor_jobs import document, document_preflight
 
   wv = workvault_root(args.workvault)
+  cfg = load_project_config(args.slug, workvault=wv)
   overlay = overlay_dir(wv, args.slug)
-  result = document(overlay, dry_run=args.dry_run)
+  manifest = load_manifest(overlay, slug=cfg.slug)
+  document_preflight(overlay, cfg, manifest)
+  result = document(overlay, cfg, dry_run=args.dry_run)
   if args.dry_run:
     print(result)
     return 0
@@ -270,6 +310,16 @@ def build_parser() -> argparse.ArgumentParser:
       p.add_argument("--plan-only", action="store_true")
     if name == "analyze":
       p.add_argument("--task", default=None, help="Task id for pack-based analyze (G)")
+      p.add_argument(
+        "--full-archive",
+        action="store_true",
+        help="Analyze full digest archive (all pages must have fresh digest)",
+      )
+      p.add_argument(
+        "--allow-stale",
+        action="store_true",
+        help="Allow stale digests (analyze only, read-only)",
+      )
 
   p_pack = sub.add_parser("pack", help="Build task pack for architect (PACK.md + BRIEF.md)")
   _add_common(p_pack)

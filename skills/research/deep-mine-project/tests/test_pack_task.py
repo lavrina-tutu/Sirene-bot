@@ -10,6 +10,24 @@ from deepmine.pack import run_pack
 from deepmine.fail import ValidationError
 
 
+def _write_fresh_digest(overlay: Path, page_id: str) -> None:
+  leaves_dir = overlay / "digest" / "leaves"
+  leaves_dir.mkdir(parents=True, exist_ok=True)
+  (leaves_dir / f"p{page_id}.md").write_text(
+    f"""---
+page_id: "{page_id}"
+status: fresh
+---
+## Источники
+
+- Digest: [[p{page_id}]]
+
+Pack facts.
+""",
+    encoding="utf-8",
+  )
+
+
 def _write_manifest(overlay: Path, page_id: str, local_path: str) -> None:
   data = {
     "schema_version": "1.0",
@@ -68,6 +86,7 @@ meetings:
   from deepmine.project_config import load_project_config
 
   cfg = load_project_config("TestProject", workvault=mini_workvault)
+  _write_fresh_digest(mini_overlay, page_id)
   pack_dir = run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
   assert pack_dir.is_dir()
   assert (pack_dir / "PACK.md").is_file()
@@ -79,6 +98,8 @@ meetings:
   pack = (pack_dir / "PACK.md").read_text(encoding="utf-8")
   assert "514903239" in pack
   assert "digest/leaves/p514903239.md" in pack
+  assert "local_path:" not in pack
+  assert "Confluence/" not in pack
 
 
 def _setup_pack_project(mini_overlay: Path, *, themes: list[str] | None = None) -> None:
@@ -167,6 +188,7 @@ Digest записан: сжал до 39,8% от L0.
   from deepmine.project_config import load_project_config
 
   cfg = load_project_config("TestProject", workvault=mini_workvault)
+  _write_fresh_digest(mini_overlay, page_id)
   pack_dir = run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
   pack = (pack_dir / "PACK.md").read_text(encoding="utf-8")
   assert "digest/themes/pmo.md" in pack
@@ -202,6 +224,7 @@ related:
   from deepmine.project_config import load_project_config
 
   cfg = load_project_config("TestProject", workvault=mini_workvault)
+  _write_fresh_digest(mini_overlay, page_id)
   pack_dir = run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
   pack = (pack_dir / "PACK.md").read_text(encoding="utf-8")
   assert "(none)" in pack.split("## Theme digests")[1].split("##")[0]
@@ -235,3 +258,78 @@ meetings:
   cfg = load_project_config("TestProject", workvault=mini_workvault)
   with pytest.raises(ValidationError, match="not in MANIFEST"):
     run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
+
+
+def test_pack_missing_digest_fails(mini_workvault: Path, mini_overlay: Path):
+  page_id = "514903239"
+  _write_manifest(mini_overlay, page_id, "Confluence/DPAN/child/index.md")
+  _setup_pack_project(mini_overlay)
+
+  from deepmine.project_config import load_project_config
+
+  cfg = load_project_config("TestProject", workvault=mini_workvault)
+  with pytest.raises(ValidationError, match="status=missing"):
+    run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
+
+
+def test_pack_rejected_digest_fails(mini_workvault: Path, mini_overlay: Path):
+  page_id = "514903239"
+  _write_manifest(mini_overlay, page_id, "Confluence/DPAN/child/index.md")
+  _setup_pack_project(mini_overlay)
+  leaves_dir = mini_overlay / "digest" / "leaves"
+  leaves_dir.mkdir(parents=True, exist_ok=True)
+  (leaves_dir / "p514903239.md").write_text(
+    """---
+page_id: "514903239"
+status: rejected
+---
+## Источники
+
+Rejected digest.
+""",
+    encoding="utf-8",
+  )
+
+  from deepmine.project_config import load_project_config
+
+  cfg = load_project_config("TestProject", workvault=mini_workvault)
+  with pytest.raises(ValidationError, match="status=rejected"):
+    run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
+
+
+def test_pack_tables_uses_extracts_not_l0(mini_workvault: Path, mini_overlay: Path, table_l0_setup: Path):
+  page_id = "514903239"
+  data = {
+    "schema_version": "1.0",
+    "slug": "TestProject",
+    "pages": {
+      page_id: {
+        "title": "Table page",
+        "local_path": "Confluence/DPAN/table_page/index.md",
+        "version": "1",
+        "digest_slug": f"p{page_id}",
+        "digest_status": "fresh",
+        "has_tables": True,
+      }
+    },
+    "attachments": [],
+    "digests": {},
+  }
+  (mini_overlay / "MANIFEST.json").write_text(json.dumps(data, indent=2), encoding="utf-8")
+  _setup_pack_project(mini_overlay)
+  _write_fresh_digest(mini_overlay, page_id)
+
+  extracts_dir = mini_overlay / "docs" / "_inbox" / "feature_compare" / "extracts"
+  extracts_dir.mkdir(parents=True, exist_ok=True)
+  (extracts_dir / f"{page_id}__feature_compare.csv").write_text("H1,H2\na,b\n", encoding="utf-8")
+
+  from deepmine.project_config import load_project_config
+
+  cfg = load_project_config("TestProject", workvault=mini_workvault)
+  pack_dir = run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
+  brief = (pack_dir / "BRIEF.md").read_text(encoding="utf-8")
+  pack = (pack_dir / "PACK.md").read_text(encoding="utf-8")
+  assert "L0:" not in brief
+  assert "Confluence/DPAN" not in brief
+  assert "Confluence/DPAN" not in pack
+  assert "extract" in brief

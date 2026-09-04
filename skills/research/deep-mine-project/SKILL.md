@@ -69,6 +69,8 @@ Flags: `references/cli.md`. Contract: `references/overlay-contract.md`.
 
 L0 canonical MD stays in `Confluence/`, `Meetings/`, `Entities/`. Overlay holds pointers, manifest, digests, MPP artifacts. Deleting overlay does not destroy canon.
 
+**Document work (G/H/pack)** uses `digest/leaves` as canonical page source. L0 is allowed only for compressor F and collect/refresh/table_extract. Missing/rejected/stale digest → fail-loud (exit 2), not L0 fallback.
+
 ## Roles
 
 One `agent -p` = one model. Compressor `composer-2.5`, architect `cursor-grok-4.6-high`, executor `composer-2.5`. Coordinator runs CLI steps A–E without mixing models.
@@ -79,7 +81,7 @@ One `agent -p` = one model. Compressor `composer-2.5`, architect `cursor-grok-4.
 - L0 `children: []` — rebuild TREE by parent inversion
 - P0 sha was 16 hex — full 64 hex required
 - `search_meetings` default limit 50 — use 500
-- Do not feed G with `Confluence/**/index.md`
+- Do not feed G/H with `Confluence/**/index.md` — CLI enforces digest-only (no L0 in PACK/BRIEF; missing digest → exit 2)
 - Do not use `tz-compressor-prompt.md`
 
 ## Verification

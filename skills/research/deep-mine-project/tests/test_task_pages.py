@@ -138,6 +138,7 @@ def test_pack_with_table_extracts_csv(mini_workvault: Path, mini_overlay: Path, 
         "content_sha256": "a" * 64,
         "digest_slug": f"p{page_id}",
         "digest_status": "fresh",
+        "has_tables": True,
       }
     },
     "attachments": [],
@@ -163,6 +164,22 @@ meetings:
 """,
     encoding="utf-8",
   )
+  leaves_dir = mini_overlay / "digest" / "leaves"
+  leaves_dir.mkdir(parents=True, exist_ok=True)
+  (leaves_dir / f"p{page_id}.md").write_text(
+    f"""---
+page_id: "{page_id}"
+status: fresh
+---
+## Источники
+
+Facts.
+""",
+    encoding="utf-8",
+  )
+  extracts_dir = mini_overlay / "docs" / "_inbox" / "feature_compare" / "extracts"
+  extracts_dir.mkdir(parents=True, exist_ok=True)
+  (extracts_dir / f"{page_id}__feature_compare.csv").write_text("H1,H2\na,b\n", encoding="utf-8")
   cfg = load_project_config("TestProject", workvault=mini_workvault)
   pack_dir = run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
   csv_path = pack_dir / "extracts" / "514903239__feature_compare.csv"
@@ -174,7 +191,7 @@ meetings:
 def test_pack_table_without_csv_path_fails(
   mini_workvault: Path, mini_overlay: Path, table_l0_setup,
 ):
-  """If extract fails silently, pack must fail when L0 has table."""
+  """Pack must fail when has_tables and no CSV extract (no L0 read)."""
   page_id = "514903239"
   rel = "Confluence/DPAN/table_page/index.md"
   data = {
@@ -186,6 +203,7 @@ def test_pack_table_without_csv_path_fails(
         "local_path": rel,
         "version": "1",
         "digest_slug": f"p{page_id}",
+        "has_tables": True,
       }
     },
     "attachments": [],
@@ -211,7 +229,19 @@ meetings:
 """,
     encoding="utf-8",
   )
+  leaves_dir = mini_overlay / "digest" / "leaves"
+  leaves_dir.mkdir(parents=True, exist_ok=True)
+  (leaves_dir / f"p{page_id}.md").write_text(
+    f"""---
+page_id: "{page_id}"
+status: fresh
+---
+## Источники
+
+Facts.
+""",
+    encoding="utf-8",
+  )
   cfg = load_project_config("TestProject", workvault=mini_workvault)
-  with patch("deepmine.pack.extract_tables", return_value=[]):
-    with pytest.raises(ValidationError, match="has table but no CSV"):
-      run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
+  with pytest.raises(ValidationError, match="has_tables but no CSV"):
+    run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")

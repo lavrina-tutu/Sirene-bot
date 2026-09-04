@@ -27,6 +27,8 @@
 
 ## 4. Входные пути pack
 
+Только digest-листы, extracts, MPP CSV — **не** L0 `Confluence/**/index.md`.
+
 {{pack_paths}}
 
 ## 5. Поля / вопросы пачки

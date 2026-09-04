@@ -66,6 +66,8 @@ If L0 has a table and CSV extract is missing → `pack` fails.
 `pack --task <task_id>` → `docs/_inbox/<task_id>/{PACK.md,BRIEF.md,extracts/}`.  
 Step G reads pack only (not full overlay). BRIEF checklist must be filled before analyze.
 
+**Document-work source = digest.** Pack requires **fresh** digest leaf (`require_fresh_digest`); missing / rejected / stale / `missing_remote` → fail-loud (exit 2), no silent L0 fallback. PACK.md lists `page_id`, title, version, digest path — **not** `local_path` (L0). Table CSV extracts come from `collect --extract-tables` only; pack does not read L0.
+
 ### Theme digests in pack (A2)
 
 `digest/themes/<theme>.md` — compressed from **leaf** digests (`compress_theme`), same «no journal» contract as leaves.  
@@ -75,6 +77,7 @@ Missing theme file → skip (not fail). `status: rejected` → omit from PACK.md
 ## Invariants
 
 - L0 bodies stay in `WorkVault/Confluence/**` — not copied to overlay.
+- **G/H/pack** use `digest/leaves` (+ theme digests, extracts, MPP CSV) as canonical source; L0 is only for F (compress) and collect/refresh/table_extract.
 - `content_sha256` = full 64-char sha256 of MD body after YAML frontmatter.
 - TREE.md = hierarchical parent→children, not flat by space.
 - PMO seeds appear at top level alongside DPAN root tree.

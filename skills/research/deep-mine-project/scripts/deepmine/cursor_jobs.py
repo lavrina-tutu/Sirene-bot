@@ -24,9 +24,10 @@ from .digest_io import (
 from .graph import collect_edges, recompute_backlinks, write_links_md
 from .l0 import parse_l0_page
 from .digest_validate import rejection_reason, validate_digest_body
-from .fail import DigestError, digest_failed
+from .fail import DigestError, ValidationError, digest_failed
 from .paths import COMPRESSOR_PROMPT, l0_abs
 from .project_config import ProjectConfig
+from .source import require_fresh_digest
 
 COMPRESSOR_MODEL = "composer-2.5"
 ARCHITECT_MODEL = "cursor-grok-4.6-high"
@@ -44,9 +45,18 @@ class AgentResult:
   model: str
 
 
-def run_agent(prompt: str, model: str, cwd: Path) -> AgentResult:
+def run_agent(
+  prompt: str,
+  model: str,
+  cwd: Path,
+  *,
+  source_mode: str | None = None,
+) -> AgentResult:
   cmd = ["agent", "-p", prompt, "-f", "--model", model, "--output-format", "json"]
-  proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, env=os.environ.copy())
+  env = os.environ.copy()
+  if source_mode:
+    env["DEEP_MINE_SOURCE_MODE"] = source_mode
+  proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, env=env)
   return AgentResult(proc.returncode, proc.stdout, proc.stderr, model)
 
 
@@ -68,7 +78,19 @@ def build_compress_prompt(
   )
 
 
-def build_analyze_prompt(overlay: Path, cfg: ProjectConfig, *, pack_dir: Path | None = None) -> str:
+_DIGEST_ONLY_LINE = (
+  "Факты только из digest/leaves, digest/themes и pack extracts; "
+  "Confluence/**/index.md и WorkVault/Confluence/** запрещены."
+)
+
+
+def build_analyze_prompt(
+  overlay: Path,
+  cfg: ProjectConfig,
+  *,
+  pack_dir: Path | None = None,
+  full_archive: bool = False,
+) -> str:
   if pack_dir is not None:
     assert_brief_ready(pack_dir)
     parts = [
@@ -83,10 +105,14 @@ def build_analyze_prompt(overlay: Path, cfg: ProjectConfig, *, pack_dir: Path | 
     parts.append(f"\n## {brief_md}")
     parts.append(brief_md.read_text(encoding="utf-8") if brief_md.exists() else "(missing BRIEF.md)")
     parts.append(
-      "\nЗапрещено использовать Confluence/**/index.md. "
+      f"\nЧитай digest-листы по путям из PACK.md — не инлайнить тела листьев в ответ.\n"
+      f"{_DIGEST_ONLY_LINE}\n"
       "Выход: docs/architect-plan.md с выводами и рекомендациями."
     )
     return "\n".join(parts)
+
+  if not full_archive:
+    raise ValueError("build_analyze_prompt requires pack_dir or full_archive=True")
 
   parts = [
     "Ты — архитектор проекта. Анализируй digest-архив, не сырые L0 Confluence.",
@@ -96,16 +122,19 @@ def build_analyze_prompt(overlay: Path, cfg: ProjectConfig, *, pack_dir: Path | 
   ]
   index = overlay / "digest" / "_index.md"
   parts.append(index.read_text(encoding="utf-8") if index.exists() else "(empty)")
-  parts.append("\n## digest/themes")
+  parts.append("\n## digest/themes (пути — читай файлы сам, не жди инлайн)")
   themes_dir = overlay / "digest" / "themes"
-  if themes_dir.is_dir():
+  if themes_dir.is_dir() and any(themes_dir.glob("*.md")):
     for path in sorted(themes_dir.glob("*.md")):
-      parts.append(f"\n### {path.name}\n{path.read_text(encoding='utf-8')}")
+      parts.append(f"- `{path.relative_to(overlay)}`")
+  else:
+    parts.append("(none)")
   diff = overlay / "docs" / "_inbox" / "diff.md"
   parts.append("\n## docs/_inbox/diff.md")
   parts.append(diff.read_text(encoding="utf-8") if diff.exists() else "(no changes)")
   parts.append(
-    "\nЗапрещено использовать Confluence/**/index.md. "
+    f"\nЛистья читай по путям из _index.md — не инлайнить все листья в промпт.\n"
+    f"{_DIGEST_ONLY_LINE}\n"
     "Выход: docs/architect-plan.md с выводами и рекомендациями."
   )
   return "\n".join(parts)
@@ -131,12 +160,57 @@ def assert_brief_ready(pack_dir: Path) -> None:
       raise ValueError("BRIEF.md checklist has empty invariant status")
 
 
-def build_document_prompt(overlay: Path) -> str:
+def _page_ids_from_plan_and_packs(overlay: Path) -> set[str]:
+  ids: set[str] = set()
   plan = overlay / "docs" / "architect-plan.md"
-  text = plan.read_text(encoding="utf-8") if plan.exists() else ""
+  if plan.is_file():
+    text = plan.read_text(encoding="utf-8")
+    ids.update(re.findall(r"page_id:\s*`?(\d+)`?", text))
+    ids.update(re.findall(r"\bp(\d{6,})\b", text))
+  inbox = overlay / "docs" / "_inbox"
+  if inbox.is_dir():
+    for pack_md in inbox.glob("*/PACK.md"):
+      text = pack_md.read_text(encoding="utf-8")
+      match = re.search(r"page_id:\s*`(\d+)`", text)
+      if match:
+        ids.add(match.group(1))
+  return ids
+
+
+def document_preflight(overlay: Path, cfg: ProjectConfig, manifest) -> None:
+  plan = overlay / "docs" / "architect-plan.md"
+  if not plan.is_file():
+    raise ValidationError("architect-plan.md missing — run analyze first")
+  page_ids = _page_ids_from_plan_and_packs(overlay)
+  if not page_ids:
+    raise ValidationError(
+      "no page_id found in architect-plan.md or pack dirs — cannot verify digest readiness"
+    )
+  for page_id in sorted(page_ids):
+    page = manifest.pages.get(page_id)
+    require_fresh_digest(
+      overlay,
+      page_id,
+      manifest_page=page,
+      slug=cfg.slug,
+    )
+
+
+def build_document_prompt(overlay: Path, cfg: ProjectConfig) -> str:
+  plan = overlay / "docs" / "architect-plan.md"
+  plan_text = plan.read_text(encoding="utf-8")
+  index = overlay / "digest" / "_index.md"
+  index_text = index.read_text(encoding="utf-8") if index.exists() else "(empty)"
+  page_ids = sorted(_page_ids_from_plan_and_packs(overlay))
+  digest_refs = "\n".join(
+    f"- `digest/leaves/p{pid}.md`" for pid in page_ids
+  )
   return (
     "Ты — исполнитель проектной документации.\n"
-    f"Вход architect-plan:\n{text}\n"
+    f"Вход architect-plan:\n{plan_text}\n\n"
+    f"## digest/_index.md\n{index_text}\n\n"
+    f"## Digest paths (канон страниц)\n{digest_refs}\n\n"
+    f"{_DIGEST_ONLY_LINE}\n"
     "Создай docs/*.md со status: draft по плану архитектора."
   )
 
@@ -277,7 +351,7 @@ def compress_leaf(
     archive_history(overlay, slug, rec.version, rec.content_sha256)
   prompt = build_compress_prompt(source, cfg, existing)
   prompt += f"\nСодержимое L0:\n\n{l0.read_text(encoding='utf-8')}"
-  result = run_agent(prompt, COMPRESSOR_MODEL, overlay)
+  result = run_agent(prompt, COMPRESSOR_MODEL, overlay, source_mode="l0_allowed")
   if result.returncode != 0:
     raise RuntimeError(result.stderr or result.stdout)
   md = extract_md_from_agent(result)
@@ -352,7 +426,7 @@ def compress_theme(theme: str, overlay: Path, cfg: ProjectConfig, *, dry_run: bo
       bodies.append(path.read_text(encoding="utf-8"))
   prompt = build_compress_prompt(f"theme:{theme} из листьев {themed}", cfg, list(leaves))
   prompt += "\n\n" + "\n---\n".join(bodies)
-  result = run_agent(prompt, COMPRESSOR_MODEL, overlay)
+  result = run_agent(prompt, COMPRESSOR_MODEL, overlay, source_mode="l0_allowed")
   if result.returncode != 0:
     raise RuntimeError(result.stderr or result.stdout)
   md = extract_md_from_agent(result)
@@ -388,16 +462,17 @@ def analyze(
   cfg: ProjectConfig,
   *,
   pack_dir: Path | None = None,
+  full_archive: bool = False,
   dry_run: bool = False,
 ) -> AgentResult | str:
-  prompt = build_analyze_prompt(overlay, cfg, pack_dir=pack_dir)
+  prompt = build_analyze_prompt(overlay, cfg, pack_dir=pack_dir, full_archive=full_archive)
   if dry_run:
     return prompt
-  return run_agent(prompt, ARCHITECT_MODEL, overlay)
+  return run_agent(prompt, ARCHITECT_MODEL, overlay, source_mode="digest_only")
 
 
-def document(overlay: Path, *, dry_run: bool = False) -> AgentResult | str:
-  prompt = build_document_prompt(overlay)
+def document(overlay: Path, cfg: ProjectConfig, *, dry_run: bool = False) -> AgentResult | str:
+  prompt = build_document_prompt(overlay, cfg)
   if dry_run:
     return prompt
-  return run_agent(prompt, EXECUTOR_MODEL, overlay)
+  return run_agent(prompt, EXECUTOR_MODEL, overlay, source_mode="digest_only")

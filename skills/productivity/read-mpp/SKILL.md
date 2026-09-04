@@ -1,12 +1,12 @@
 ---
 name: read-mpp
-description: "Конвертация планов проектов в Google Sheets по шаблону Саши. Поддерживает два формата: (1) .mpp — присылать как .zip, создаёт GS документ с именем файла; (2) Gantt CSV (gantt-chart-export_*.csv) — аналогично. Форматирование как в MS Project: Calibri 11, суммарные задачи жирные, верхний уровень Calibri 16, заголовок Arial 9. Права автоматически на tkachenkoav@tutu.ru и i.alex.tkachenko@gmail.com. Триггер: «прочитай mpp», «открой .mpp», «конвертируй mpp в gs», «залей csv в gs», «gantt csv в gs»."
-version: "1.0.0"
+description: "Конвертация планов проектов в Google Sheets по шаблону Саши. Три входа: (1) .mpp — присылать как .zip; (2) Gantt CSV (gantt-chart-export_*.csv); (3) GS-роадмап (URL) → план MS Project. Каждый прогон — новый GS. Форматирование как в MS Project: Calibri 11, суммарные жирные, верхний уровень Calibri 16, заголовок Arial 9. Права только на tkachenkoav@tutu.ru и i.alex.tkachenko@gmail.com (writer), без anyone. Триггер: «прочитай mpp», «конвертируй mpp в gs», «залей csv в gs», «план из роадмапа», «план MS Project в GS из роадмапа». Для deep-mine-project этот скилл НЕ вызывать (нужен CSV через read_mpp.py)."
+version: "1.1.0"
 platforms: [linux, macos, windows]
 tools: [terminal, read_file, write_file]
 metadata:
   hermes:
-    tags: [mpp, ms-project, files, planning]
+    tags: [mpp, ms-project, files, planning, roadmap]
 ---
 
 # Read MPP — чтение Microsoft Project файлов
@@ -18,6 +18,11 @@ metadata:
 - «read mpp», «parse mpp», «разбери mpp»
 - «залей в gs», «конвертируй mpp», «пришли xlsx из mpp»
 - «конвертируй csv в gs», «залей gantt csv», «gantt-chart-export в gs»
+- «план из роадмапа», «план MS Project в GS из роадмапа», «сделай план MS Project в GS из роадмапа»
+
+## ⚠️ Не вызывать для deep-mine-project
+Бурение проекта (`deep-mine-project`) нуждается в CSV/`plan.md` в overlay, **не** в Google Sheets.
+Для шага C вызывай напрямую `read_mpp.py --format csv` / `--format both`. Этот скилл для deep-mine **не** грузить.
 
 ## ⚠️ Важно: .mpp не принимается напрямую
 Hermes блокирует файлы .mpp. Пользователь должен **переименовать файл в `.zip`** перед отправкой.
@@ -131,7 +136,8 @@ head -1 /tmp/gs.csv
 
 ## MPP → Google Sheets напрямую (OAuth настроен)
 
-OAuth настроен (17.06.2026), токен: `~/.hermes/profiles/anthropic/google_token.json`.
+OAuth настроен, токен: `~/.hermes/google_token.json` (не `profiles/anthropic/` — профиль удалён).
+Переопределение: env `GOOGLE_TOKEN_PATH` или `HERMES_HOME/google_token.json`.
 Scopes: Drive + Sheets + Docs. Аккаунт: `tkachenkoav@tutu.ru`.
 
 Пайплайн «пришли .mpp → получи ссылку на новый лист GS»:
@@ -151,8 +157,8 @@ $GAPI sheets create --title "<название из mpp>"
 $GAPI sheets update <SHEET_ID> "A1:H1" --values '[["No","Название задачи","Длительность","Названия ресурсов","Текст1","Начало","Окончание","Предшественники"]]'
 $GAPI sheets append <SHEET_ID> "A:H" --values '<JSON массив строк>'
 
-# 4. Даём доступ (опционально)
-$GAPI drive share <SHEET_ID> --type anyone --role reader
+# 4. Права — НЕ anyone. Скрипт push_to_gs.py / roadmap_gs_to_gs.py сам раздаёт
+#    writer на tkachenkoav@tutu.ru и i.alex.tkachenko@gmail.com.
 ```
 
 Вернуть пользователю: `spreadsheetUrl` из ответа `sheets create`.
@@ -195,8 +201,26 @@ python3 /home/tkachenkoav/USERTOOLS/MppReader/push_to_gs.py <stem> --dir /tmp
 
 1. **Каждый .mpp → отдельный новый GS документ** (не вкладка в существующем файле)
 2. Скрипт `push_to_gs.py` сам создаёт документ, заливает данные и раздаёт права — всё в одном запуске
-3. **Права раздаются автоматически** скриптом на: `tkachenkoav@tutu.ru` и `i.alex.tkachenko@gmail.com` (writer)
+3. **Права раздаются автоматически** скриптом на: `tkachenkoav@tutu.ru` и `i.alex.tkachenko@gmail.com` (writer). **Не** `--share anyone`.
 4. **Возвращать ссылку** на новый документ: `https://docs.google.com/spreadsheets/d/<ID>/edit`
+
+## Роадмап GS → план MS Project в GS (третий вход)
+
+Триггер: «сделай план MS Project в GS из роадмапа `<url>`», «план из роадмапа».
+Правила маппинга и квартальных меток — закрыты, **не переспрашивать** (ТЗ `TZ/MppReader/MppReader_TZ.md`).
+
+```bash
+source /home/tkachenkoav/hermes-agent/.venv/bin/activate
+python3 /home/tkachenkoav/USERTOOLS/MppReader/roadmap_gs_to_gs.py "<URL>" --title "Роадмап в план MS Project"
+# Последняя строка stdout: READY:https://docs.google.com/spreadsheets/d/<ID>/edit
+```
+
+Профиль колонок (гибрид 10, не export 16 и не import 8):
+`No | Название задачи | % выполнения | Длительность | Названия ресурсов | Текст1 | Текст2 | Начало | Окончание | Предшественники`
+
+Кратко: Название=Инициатива, Текст1=Описание, Текст2=Комментарий, %=Done 100 / In progress 50 / Backlog 0, Начало=релиз SaaS, Окончание=релиз VPC, длительность/ресурсы/предшественники пусто. Квартал: early/mid/end → последний день 1/2/3-го месяца квартала; диапазон в ячейке → конец B; `-` пусто; Deprioritized = max дат этого плана.
+
+Тесты без сети: `cd ~/USERTOOLS/MppReader && python3 -m pytest -m "not live"`. Live Google — только по явной команде Саши.
 
 ## Запись изменений в .mpp
 
@@ -214,5 +238,8 @@ mpxj **читает** .mpp, но **писать** обратно в .mpp не у
 - `/home/tkachenkoav/USERTOOLS/MppReader/mpp_to_gs_xlsx.py` — конвертер MPP → XLSX в формате GS-шаблона Саши.
 - `/home/tkachenkoav/USERTOOLS/MppReader/push_to_gs.py` — заливка MPP в GS (новый документ + форматирование + права).
 - `/home/tkachenkoav/USERTOOLS/MppReader/gantt_csv_to_gs.py` — заливка Gantt CSV (gantt-chart-export_*.csv) в GS. Использование: `python3 gantt_csv_to_gs.py <файл.csv> [--title "Название"]`
+- `/home/tkachenkoav/USERTOOLS/MppReader/roadmap_gs_to_gs.py` — роадмап GS/CSV → гибрид-план в новом GS.
+- `/home/tkachenkoav/USERTOOLS/MppReader/quarter_labels.py` — парсер квартальных меток (`26Q3`, early/mid/end, диапазоны, Deprioritized).
 - `/home/tkachenkoav/USERTOOLS/MppReader/extract_predecessors.py` — извлечение predecessors из MPP с типом связи и лагом.
 - `/home/tkachenkoav/USERTOOLS/MppReader/read_write_mpp_com.py` — заготовка для Windows (COM, требует MS Project).
+- ТЗ: `~/WorkVault/Hermes-Backlog/TZ/MppReader/MppReader_TZ.md`

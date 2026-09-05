@@ -1,7 +1,7 @@
 ---
 name: tz-workflow
 description: "Use when: создание, доработка, архивация ТЗ и инфраструктурных планов. Triggers: ТЗ, техническое задание, спецификация, доработка ТЗ, дорабатываем ТЗ, правки в ТЗ, обнови ТЗ, архивация ТЗ, план установки, инфраструктурный план, добавь в ТЗ, секция в ТЗ, примечание в ТЗ."
-version: 2.0.0
+version: 2.1.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -118,6 +118,79 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 - **Side-effect только по императиву** — никаких правок без явного «делай».
 - **Кроны НЕ создаются автоматически** — перечисляются в отчёте, создаются только по «ставь».
 - **НЕТ шорткатов даже для багфиксов с известным root cause.** Прецедент (MoveFromLoop v0.4.2, 07.08.2026): агент с готовой диагностикой от архитектора предложил «использовать диагностику как spec → сразу hermes-feature» или «короткий бриф вместо ТЗ» — пользователь отклонил. **Правило:** для ЛЮБОЙ задачи доработки ТЗ ИЛИ реализации — всегда tz-workflow (Шаги 1-4 → ТЗ-файл → MAIN_TZ_INVENTORY.md) → ждать «берём в работу» → hermes-feature. Нет исключений для багфиксов, хотфиксов, мелких правок. Если сомнения в правильном варианте — **спросить Сашу**, НЕ предлагать альтернативы.
+
+## Канбан-шаг
+
+> DevKanbanPipeline (`TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md`). Все карточки `assignee=default`. Граф задаёт скилл, не decomposer (`auto_decompose: false`).
+
+### Когда создавать граф
+
+Создавать граф `DEV/<slug>/…`, если: цикл 2+ шагов tz-workflow/hermes-feature; работа должна пережить обрыв сессии; есть гейт Саши; нужен audit trail. **Не создавать** для одношагового ответа / `delegate_task` / однострочного вопроса Саши.
+
+### Вход триггера (до Шага 0)
+
+Если графа ещё нет — `kanban_create` корня `DEV/<slug>` + фазы TZ:* + `GATE:take-into-work` с `parents=[...]` **в том же create** (сначала родители, `task_id` из return, затем дети). Все карточки `assignee=default`.
+
+Граф TZ-фаз (parents обязательны):
+
+```
+DEV/<slug>                          корень (живёт до GATE:done)
+├─ TZ:stabilize
+├─ TZ:compress          parents=[TZ:stabilize]
+├─ TZ:analyze           parents=[TZ:compress]
+├─ TZ:architect         parents=[TZ:analyze]
+├─ TZ:finalize          parents=[TZ:architect]
+└─ GATE:take-into-work  parents=[TZ:finalize]
+```
+
+`workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на карточке: `tz-workflow`, `cursor-cli`, `cursor-task-context`. Idempotency: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
+
+### Шаги 0–4 (воркер)
+
+На каждом Шаге 0–4:
+
+1. `kanban_show()` — статус мог смениться (blocked/archived → стоп).
+2. Сверка `version`/`mtime` мастер-ТЗ с диска (см. `cursor-task-context`).
+3. `kanban_heartbeat` на длинных `agent -p`.
+4. По успеху — `kanban_complete` текущей фазы (metadata: `tz_path`, `tz_version`, `tz_mtime`, `extract_chars` для compress, `cursor_session_ids`).
+5. Следующая фаза станет `ready` автоматически (`auto_promote_children`).
+
+| Шаг | Фаза | Модель |
+|---|---|---|
+| 0 | TZ:compress | composer-2.5 |
+| 1 | TZ:analyze | cursor-grok-4.6-high |
+| 2–4 | TZ:architect | cursor-grok-4.6-high (`--resume`) |
+| 4 | TZ:finalize | cursor-grok-4.6-high — запись `TZ/<Tool>/<Tool>_TZ.md` + `MAIN_TZ_INVENTORY.md` |
+
+Шаг 4 — роль архитектора на карточке `TZ:finalize`, не исполнителя HF.
+
+### HITL-вопросы (процедура H / R3)
+
+Вопрос Саше → `kanban_comment` с полным контекстом + `kanban_block(kind=needs_input, reason=<один вопрос>)`. **Не** `clarify` (у воркера нет живого пользователя). Снятие: ответ Саши в Telegram **или** unblock на дашборде канбана — равнозначны; Сирень: `kanban_comment` + `kanban_unblock`. Повторное снятие — no-op.
+
+### После TZ:finalize
+
+- **Пошаговый ход** — не стартовать hermes-feature; `GATE:take-into-work` → `kanban_comment` (путь ТЗ) + `kanban_block(reason="review-required: ждать «берём в работу»")`.
+- **Режим «делай в 1 проход»** (ТЗ на диске, открытых вопросов нет, фраза Саши «делай в 1 проход»): `GATE:take-into-work` — comment `auto-pass: one-pass mode` + `kanban_complete` без block; переход к HF-ветке (создаёт hermes-feature).
+
+### Гейты — оба канала
+
+`GATE:take-into-work` снимается фразой «берём в работу» в Telegram **или** unblock/approve на дашборде канбана. Оба канала действуют одновременно; на конкретном гейте Саша выбирает один. `kanban_complete` на гейте — только после unblock: `approved by Sasha` (или `auto-pass: one-pass mode`).
+
+### Ручной feed идеи (бэклог)
+
+Триггер: явная фраза Саши «положить в бэклог / triage / разбери идею». **Не** запускать DEV-граф.
+
+1. `kanban_create` корня `IDEA/<slug>` + child `IDEA:analyze` (`--triage` на create).
+2. Сразу в том же ходе перевести `IDEA:analyze` в `ready` (без decomposer): `kanban_specify` / `hermes kanban specify <id>` (triage→todo→ready); **не** `promote` с triage.
+3. Silent-воркер `default` → `agent -p --model cursor-grok-4.6-high` → заключение в `kanban_comment` → `kanban_block(reason="review-required: заключение по идее, ждать Сашу")`.
+4. «Берём в работу» по заключению (Telegram **или** дашборд) → `IDEA:analyze` complete → оркестратор создаёт граф `DEV/<slug>` обычного цикла; корень `IDEA/<slug>` → `done`/`archived`.
+
+Idempotency: `devpipe:idea:<slug>:analyze`.
+
+### TZ drift / reclaim
+
+Расхождение disk vs card → comment `TZ drift: …` + `kanban_block(kind=dependency, reason="TZ master changed on disk")`. Mid-flight bump → `hermes kanban reclaim` + comment «не retry этой карточки, TZ bumped» + **новая** child той же phase с обновлёнными parents; старую — `archived` с summary `superseded`.
 
 ## Ключевые инварианты (топ-5)
 

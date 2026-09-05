@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.1.0
+version: 2.2.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -30,6 +30,89 @@ metadata:
 Не для: правок стиля общения (см. `hermes-memory-hygiene`), простой рутины без ТЗ и вариантов.
 
 **Связь с tz-workflow:** после согласования ТЗ и получения «берём в работу» — перейти к этому скиллу для реализации.
+
+---
+
+## Канбан-шаг
+
+> DevKanbanPipeline (`TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md`). Все карточки `assignee=default`. Исполнители **не** пишут в `EcosystemManifest.json` / `entities.json` / `.env` / `jobs.json` — только `ORCH:shared-state`.
+
+### Вход
+
+Вход только если: корень `DEV/<slug>` существует **и** `GATE:take-into-work` снят (Саша **или** авто-проход «делай в 1 проход»). Иначе стоп + текст «нет „берём в работу“ / нет one-pass».
+
+Если HF-фаз ещё нет (граф оборвался) — создать HF:* / GATE:* / ORCH / GATE:done с parents, не продолжать «по памяти чата».
+
+Граф HF-фаз (parents обязательны):
+
+```
+GATE:take-into-work  (уже снят)
+├─ HF:compress          parents=[GATE:take-into-work]
+├─ HF:plan              parents=[HF:compress]
+├─ GATE:plan-approve    parents=[HF:plan]
+├─ HF:backup            parents=[GATE:plan-approve]
+├─ HF:impl              parents=[HF:backup, TZ:stabilize]
+├─ HF:test              parents=[HF:impl]
+├─ HF:docs-handoff      parents=[HF:test]
+├─ ORCH:shared-state    parents=[HF:docs-handoff]
+└─ GATE:done            parents=[ORCH:shared-state]
+```
+
+Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`, `cursor-task-context`. ORCH:shared-state — только `hermes-feature`.
+
+### Блок 6В (багфикс)
+
+При триггере «почини» — **до** TZ-ветки:
+
+```
+BUG:diagnose            # read-only, план П.1…П.N → _fix_plan_YYYYMMDD.md
+GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
+→ далее TZ:* → GATE:take-into-work → HF:*
+```
+
+Инвариант: даже с известным root cause — нет перехода в hermes-feature без ТЗ-файла. Режим «1 проход» **не** обходит `GATE:diagnose-review`.
+
+### Воркер HF-фаз
+
+1. `kanban_show()` → сверка TZ version/mtime → `cd $HERMES_KANBAN_WORKSPACE`.
+2. `kanban_heartbeat` на длинных `agent -p`; `session_id` → `kanban_comment` после первого вызова.
+3. `kanban_complete` с metadata:
+
+```json
+{
+  "changed_files": ["..."],
+  "registry_touches": [],
+  "manifest_hints": ["tools.<key> fields to set"],
+  "skills_to_sync": ["tz-workflow"],
+  "tz_version": "0.1.0",
+  "tz_mtime": "2026-09-05T12:00:00Z",
+  "cursor_session_ids": ["..."],
+  "pipeline_schema": "1.0"
+}
+```
+
+Непустой `registry_touches` → `kanban_block(kind=capability, reason="executor touched shared state")`.
+
+### GATE:plan-approve
+
+- **Пошаговый ход** — второе «берём в работу» по плану 1А: `review-required: ждать «берём в работу» по плану`. Снятие: Telegram **или** дашборд.
+- **Режим «делай в 1 проход»** — авто-проход: comment `auto-pass: one-pass mode` + `kanban_complete` без block.
+
+### Блок 4 — владелец общего state
+
+- Исполнитель = `HF:docs-handoff`: текст скилла/ТЗ-секции **кроме** манифеста; `manifest_hints` в metadata.
+- Запись манифеста, digest/render, `restore-all-skills.sh`, `.env`/`jobs.json`/`entities.json` — **только** `ORCH:shared-state` (после `done` всех инструментных карточек).
+- `ORCH:shared-state` workspace: `dir:/home/tkachenkoav/WorkVault/Registries`.
+
+### GATE:done — статус «готово»
+
+**Пошаговый ход:** только Саша (Telegram «готово» **или** дашборд). После `ORCH:shared-state` Сирень показывает итог в Telegram и просит подтвердить. Корень `DEV/<slug>` закрывается только после `GATE:done`.
+
+**Режим «делай в 1 проход»:** `GATE:done` **входит в полный проход** — финальный шаг завершается автоматически (авто-complete `GATE:done` + закрытие корня) под конец one-pass цикла, без отдельного ручного «готово».
+
+### Режим «делай в 1 проход»
+
+Условия: мастер-ТЗ на диске; открытых вопросов нет; не обход diagnose-review. Авто-проход `GATE:take-into-work`, `GATE:plan-approve` **и `GATE:done`**; цепочка HF:* → ORCH:shared-state одним заходом; `GATE:done` автоматически завершается как часть прохода.
 
 ---
 
@@ -119,6 +202,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 2. **Бэкап создан** (см. Блок 5).
 3. Пофайловый план архитектора согласован.
 4. Если план вводит новую сущность — согласование Саши получено отдельно от общего „берём в работу“.
+5. **Канбан:** `GATE:plan-approve` = done/unblocked **или** auto-pass one-pass (режим «делай в 1 проход»).
 
 ---
 
@@ -292,6 +376,6 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 - [ ] Модели: архитектор (cursor-grok-4.6-high) планирует, исполнитель (composer-2.5) пишет/тестирует
 - [ ] Cron-субагент: критичные факты из MEMORY переданы явно в промпт
 - [ ] Перед каждым side-effect — категория разрешающего сигнала определена (Блок 5Б)
-- [ ] Статус «готово» ставит только Саша (Блок 3)
+- [ ] Статус «готово»: пошагово — только Саша (Блок 3); в режиме «делай в 1 проход» — автоматически как часть прохода
 - [ ] Все вызовы через Cursor CLI (`agent -p`)
 - [ ] Новые сущности (если предлагались) — явно вынесены на согласование Саше, не внедрены самостоятельно.

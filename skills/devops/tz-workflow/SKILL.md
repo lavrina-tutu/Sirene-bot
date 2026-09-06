@@ -179,14 +179,30 @@ DEV/<slug>                          корень (живёт до GATE:done)
 
 ### Ручной feed идеи (бэклог)
 
-Триггер: явная фраза Саши «положить в бэклог / triage / разбери идею». **Не** запускать DEV-граф.
+Два режима — **не смешивать**. См. `TZ/DialogBacklogToKanban/DialogBacklogToKanban_TZ.md`.
 
-1. `kanban_create` корня `IDEA/<slug>` + child `IDEA:analyze` (`--triage` на create).
-2. Сразу в том же ходе перевести `IDEA:analyze` в `ready` (без decomposer): `kanban_specify` / `hermes kanban specify <id>` (triage→todo→ready); **не** `promote` с triage.
-3. Silent-воркер `default` → `agent -p --model cursor-grok-4.6-high` → заключение в `kanban_comment` → `kanban_block(reason="review-required: заключение по идее, ждать Сашу")`.
-4. «Берём в работу» по заключению (Telegram **или** дашборд) → `IDEA:analyze` complete → оркестратор создаёт граф `DEV/<slug>` обычного цикла; корень `IDEA/<slug>` → `done`/`archived`.
+#### A) «Положить в бэклог» / «в triage» (passive-inbox)
 
-Idempotency: `devpipe:idea:<slug>:analyze`.
+Триггеры: «положи в бэклог», «положить в triage», «сохрани идею в бэклог», миграция, «собери идеи в бэклог» (через `backlog-collector`). **Без** слова «разбери».
+
+1. Только `kanban_create` корня `IDEA/<slug>` с `--triage`, `assignee=default`.
+2. **Не** создавать child `IDEA:analyze`.
+3. **Не** вызывать `kanban_specify` / `promote` — карточка остаётся в `triage`, воркер не берёт.
+4. Body при ручном feed: без `migrate:passive` (это маркер миграции); idempotency: `dialogbacklog-feed:<iso-timestamp>:<short-hash>`.
+
+#### B) «Разбери идею» (analyze)
+
+Триггеры: «разбери идею», «разбери bk-NNN», «разбери <slug>`. **Не** запускать DEV-граф до «берём в работу» по заключению.
+
+1. Если корня `IDEA/<slug>` нет — создать с `--triage`.
+2. Создать child `IDEA:analyze` с `parents=[корень]`.
+3. Сразу в том же ходе: `kanban_specify` / `hermes kanban specify <analyze_id>` (triage→todo→ready); **не** `promote` с triage.
+4. Silent-воркер `default` → `agent -p --model cursor-grok-4.6-high` → заключение в `kanban_comment` → `kanban_block(reason="review-required: заключение по идее, ждать Сашу")`.
+5. «Берём в работу» по заключению (Telegram **или** дашборд) → `IDEA:analyze` complete → оркестратор создаёт граф `DEV/<slug>` обычного цикла; корень `IDEA/<slug>` → `done`/`archived`.
+
+Idempotency analyze: `devpipe:idea:<slug>:analyze`.
+
+**Запрет:** на карточках с `migrate:passive` в body или passive-inbox без явного «разбери» — **не** specify, **не** создавать `IDEA:analyze`.
 
 ### TZ drift / reclaim
 

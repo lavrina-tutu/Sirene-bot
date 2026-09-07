@@ -62,7 +62,7 @@ for i in quarterly_issues:
 | `customfield_43822` | Что было сделано |
 | `customfield_44601` | Вложенные задачи (CSV, черновой) |
 | `customfield_44600` | Вышестоящая задача (черновой) |
-| `customfield_43715` | Дата обновления % выполнения |
+| `customfield_43715` | Дата обновления % выполнения (**read-only** — Jira вернёт `400` при PUT) |
 | `customfield_43713` | Текущее значение метрики |
 | `customfield_43782` | % выполнения (0-100%) |
 | `customfield_43728` | Влияет на OKR Туту |
@@ -70,7 +70,9 @@ for i in quarterly_issues:
 
 Поля `customfield_43706`, `customfield_43822`, `customfield_43717`, `customfield_43713`, `customfield_43782` = вкладка **"Чекин"** в интерфейсе Jira — это тот набор, который Саша требует полностью в отчётах по OKR (и в детальном блоке, и в сводной таблице, не только в тексте).
 
-Большинство значений — plain string/number, кроме select-list полей (`customfield_43701`, `customfield_43706`, `customfield_43728`, `customfield_43743`), которые приходят как `{"value": "..."}` или список таких объектов.
+**Запись чекин-полей — только через OKRTool** (`python3 -m okrtool.cli checkin apply` + `push --confirm`). Прямой `curl PUT /issue` на чекин-customfield — только с маркировкой `OKR_BYPASS` (см. скилл).
+
+Большинство значений — plain string/number. Select-list поля (`customfield_43701`, **`customfield_43706`**, `customfield_43728`, `customfield_43743`) при чтении приходят как `{"value": "..."}`; при **записи** `customfield_43706` передавать объект `{"value": "At Risk"}`, не голую строку (OKRTool делает это автоматически).
 
 ## Команды
 
@@ -126,6 +128,18 @@ curl -s -X POST -H "Authorization: Bearer $JIRA_TOKEN" -H "Content-Type: applica
     "fields": ["summary","customfield_43701","fixVersions","status","issuelinks"]
   }'
 ```
+
+Получить чекин-поля для набора ключей — **через OKRTool** (рабочий флоу):
+
+```bash
+cd ~/USERTOOLS/OKRTool
+python3 -m okrtool.cli checkin show --keys OKRS-89,OKRS-94
+python3 -m okrtool.cli checkin pull --keys OKRS-89,OKRS-94 --force
+```
+
+## Appendix: отладочный curl (не рабочий флоу чекина)
+
+Использовать только при `OKR_BYPASS`, когда OKRTool недоступен. После обхода — обновить per-task MD.
 
 Получить чекин-поля для набора ключей одним запросом:
 ```bash

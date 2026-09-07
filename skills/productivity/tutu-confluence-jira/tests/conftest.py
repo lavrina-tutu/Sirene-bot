@@ -32,3 +32,23 @@ def storage_ok(fixtures_dir: Path) -> str:
 @pytest.fixture
 def storage_heading_gone(fixtures_dir: Path) -> str:
   return (fixtures_dir / "storage_deliveries_heading_gone.xml").read_text(encoding="utf-8")
+
+
+@pytest.fixture
+def storage_vestnik_ok(fixtures_dir: Path) -> str:
+  return (fixtures_dir / "storage_vestnik_ok.xml").read_text(encoding="utf-8")
+
+
+@pytest.fixture
+def storage_vestnik_no_empty(fixtures_dir: Path) -> str:
+  return (fixtures_dir / "storage_vestnik_no_empty.xml").read_text(encoding="utf-8")
+
+
+@pytest.fixture
+def storage_vestnik_wrong_cols(fixtures_dir: Path) -> str:
+  return (fixtures_dir / "storage_vestnik_wrong_cols.xml").read_text(encoding="utf-8")
+
+
+@pytest.fixture
+def storage_vestnik_theme_conflict(fixtures_dir: Path) -> str:
+  return (fixtures_dir / "storage_vestnik_theme_conflict.xml").read_text(encoding="utf-8")

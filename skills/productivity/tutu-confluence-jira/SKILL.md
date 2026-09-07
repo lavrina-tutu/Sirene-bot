@@ -1,7 +1,7 @@
 ---
 name: tutu-confluence-jira
 description: "ТУТУ корп. системы: Confluence + JIRA. Загружать при: скачать/открыть страницу Confluence, создать/найти задачу в Jira, кто такой X (оргструктура: Аралов→Ткаченко→Криворотов), согласование договора, резолв участника по ФИО/userkey, публикация протокола встречи, экспорт Jira-задач в Obsidian. URL: dom.tutu.ru / hq.tutu.ru. Auth: ConfluenceSync .env."
-version: 1.7.0
+version: 1.8.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -485,6 +485,33 @@ Restate the task spec, wait for Sasha's answers, then act ("делай"). Task U
 - **Поле `space` отсутствует в GET-ответе по умолчанию** — `?expand=body.storage,version` не возвращает поле `space`. Для payload PUT существующей страницы нужны только `title` + `version.number` + `type: "page"` + `body` — `space` не требуется. Если space_key необходим явно — добавить `expand=body.storage,version,space`. Попытка читать `data['space']` без этого expand → `KeyError`.
 - **Python в `terminal()` с кавычками и регэкспами**
 
+
+## Вестник (VestnikTheme)
+
+Триггеры: «добавь тему в вестник», «добавь в вестник», «тема для вестника», «размести на страничке вестника» + ссылка(и) на материал Confluence.
+
+**Запрет:** LLM не генерирует `body.storage` Вестника. Строка таблицы собирается только скриптом `scripts/vestnik_theme.py`.
+
+Страница: `pageId=324382467` («Вестник Аналитики и Данных», space `DPAN`). Патч — первая пустая `<tr>` таблицы «Итоговый материал» первого `horizontal-nav-item`.
+
+```bash
+# Превью (по умолчанию, PUT нет)
+python3 ~/hermes-workspace/skills/productivity/tutu-confluence-jira/scripts/vestnik_theme.py \
+  add --page-id 517103930
+
+# Запись в Confluence
+python3 ~/hermes-workspace/skills/productivity/tutu-confluence-jira/scripts/vestnik_theme.py \
+  add --page-id 517103930 --apply
+```
+
+Для GAL/AC при live-run: `~/USERTOOLS/AnywhereContacts/venv_linux/bin/python` (тот же скрипт).
+
+- `--dry-run` — режим по умолчанию (без `--apply`): GET разрешён, PUT нет.
+- `--apply` — PUT с `version+1`, payload **без** `space`.
+- HITL (контакт не найден, конфликт темы) — stdout, exit 2, **не** ErrorBus.
+- Технические ошибки → `~/.hermes/scripts/report_error.sh --tool VestnikTheme --source-kind skill`.
+
+---
 
 ## Связанные скиллы
 

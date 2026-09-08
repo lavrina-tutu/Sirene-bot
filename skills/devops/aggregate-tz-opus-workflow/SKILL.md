@@ -1,7 +1,7 @@
 ---
 name: aggregate-tz-opus-workflow
-description: Обязательный рабочий процесс Opus при работе с ТЗ AggregateFromMeetings — pre-check целостности перед любыми правками
-version: "1.0.0"
+description: "Обязательный рабочий процесс Opus при работе с ТЗ AggregateFromMeetings — pre-check целостности перед любыми правками. Не для DEV-пайплайна (tz-workflow/hermes-feature/GLOSSARY §2)."
+version: "1.0.1"
 triggers:
   - "любая задача по ТЗ AggregateFromMeetings"
   - "правки ТЗ Aggregate"

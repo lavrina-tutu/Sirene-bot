@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.2.0
+version: 2.3.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -12,6 +12,10 @@ metadata:
 ---
 
 # hermes-feature
+
+## Термины
+Перед первым `PREFIX:фаза` читать `~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md`.
+Имена фаз/ролей/скиллов только из канона. Голые TZ/HF/ORCH/DEV без двоеточия запрещены.
 
 ## Overview
 
@@ -39,19 +43,21 @@ metadata:
 
 ### Вход
 
-Вход только если: корень `DEV/<slug>` существует **и** `GATE:take-into-work` снят (Саша **или** авто-проход «делай в 1 проход»). Иначе стоп + текст «нет „берём в работу“ / нет one-pass».
+- Любой HF `agent -p` без корня `DEV/<slug>` → **стоп** + оркестратор. Исключения DPK: `BRF:*` в TG; одношаговый ответ; RESEARCH.
+- Вход в HF-ветку только если корень `DEV/<slug>` существует **и** `GATE:take-into-work` снят (Саша **или** `auto-pass: one-pass mode`). Иначе стоп + текст «нет „берём в работу“ / нет one-pass».
+- `GATE:plan-approve` / `HF:backup` / `HF:impl`: если `HF:plan` не `done` → **стоп** (GLOSSARY инвариант 6). Не skip плана в one-pass.
+- Off-board: только retro-create + comment `done off-board, session ids`.
 
-Если HF-фаз ещё нет (граф оборвался) — создать HF:* / GATE:* / ORCH / GATE:done с parents, не продолжать «по памяти чата».
-
-Граф HF-фаз (parents обязательны):
+Граф HF-фаз — развёртка `PLAN-IMPL-TAIL` + `HF-TAIL` (GLOSSARY §5.1; сборка кейсов — §2):
 
 ```
 GATE:take-into-work  (уже снят)
-├─ HF:compress          parents=[GATE:take-into-work]
+├─ HF:compress          parents=[GATE:take-into-work]   # опц., skip на stub/BUGFIX/…
 ├─ HF:plan              parents=[HF:compress]
-├─ GATE:plan-approve    parents=[HF:plan]
+├─ REV:plan             parents=[HF:plan]               # по умолчанию; искл. лёгкие BUGFIX/SKILL-CHANGE ≤3 файла
+├─ GATE:plan-approve    parents=[REV:plan|HF:plan]
 ├─ HF:backup            parents=[GATE:plan-approve]
-├─ HF:impl              parents=[HF:backup, TZ:stabilize]
+├─ HF:impl              parents=[HF:backup]
 ├─ HF:test              parents=[HF:impl]
 ├─ HF:docs-handoff      parents=[HF:test]
 ├─ ORCH:shared-state    parents=[HF:docs-handoff]
@@ -62,21 +68,29 @@ Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`
 
 ### Блок 6В (багфикс)
 
-При триггере «почини» — **до** TZ-ветки:
+При триггере «почини» — **до** TZ-ветки (кейс BUGFIX, GLOSSARY §2):
 
 ```
 BUG:diagnose            # read-only, план П.1…П.N → _fix_plan_YYYYMMDD.md
 GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
-→ далее TZ:* → GATE:take-into-work → HF:*
+→ далее TZ-WRITE(patch) → GATE:take-into-work → PLAN-IMPL-TAIL
 ```
 
-Инвариант: даже с известным root cause — нет перехода в hermes-feature без ТЗ-файла. Режим «1 проход» **не** обходит `GATE:diagnose-review`.
+Диагноз → `BUG:diagnose`; реализация → `HF:impl`. **`HF:fix` запрещён** (GLOSSARY §7). Инвариант: даже с известным root cause — нет перехода в hermes-feature без ТЗ-файла. Режим «1 проход» **не** обходит `GATE:diagnose-review`.
 
 ### Воркер HF-фаз
 
 1. `kanban_show()` → сверка TZ version/mtime → `cd $HERMES_KANBAN_WORKSPACE`.
 2. `kanban_heartbeat` на длинных `agent -p`; `session_id` → `kanban_comment` после первого вызова.
-3. `kanban_complete` с metadata:
+3. Промпт Cursor CLI — **одна роль, одна фаза:**
+
+```
+Одна роль: {role} ({model}). Только фаза {phase}. Чужие фазы не выполнять.
+```
+
+Роли/модели (PI B3): compress=компрессор `composer-2.5`; plan/patch/finalize=архитектор `cursor-grok-4.6-high`; REV=ревизор `claude-sonnet-5-medium`; impl/test/docs-handoff=исполнитель `composer-2.5`; backup=координатор `composer-2.5`; ORCH=оркестратор.
+
+4. `kanban_complete` с metadata:
 
 ```json
 {
@@ -87,9 +101,13 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
   "tz_version": "0.1.0",
   "tz_mtime": "2026-09-05T12:00:00Z",
   "cursor_session_ids": ["..."],
+  "role": "исполнитель",
+  "model": "composer-2.5",
   "pipeline_schema": "1.0"
 }
 ```
+
+5. **Свёртка по `changed_files`:** на фазах **исполнителя** `HF:impl` и `HF:test`: если `changed_files` содержит путь `*_TZ.md` **или** `HF-plan*` → не complete, а `kanban_block(reason="review-required: collapsed-chain")`. Не применять к `HF:plan` (план — его артефакт) и к `HF:docs-handoff` (ТЗ — его артефакт).
 
 Непустой `registry_touches` → `kanban_block(kind=capability, reason="executor touched shared state")`.
 
@@ -106,13 +124,28 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
 
 ### GATE:done — статус «готово»
 
+Порядок воркера `GATE:done`:
+
+1. `kanban_show()`.
+2. **Первый рабочий шаг:**  
+   `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <DEV|CHANGE|BUGFIX> [--flag-rev]`  
+   (`--case` с карточки/корня).
+3. exit 0 → пошагово: итог в TG, ждать Сашу (Telegram **или** дашборд); one-pass: comment `auto-pass: one-pass mode` + `kanban_complete` + закрытие корня.
+4. exit 1 или 2 → comment чек-лист stderr; `kanban_block`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) или `review-required: collapsed-chain` (exit 2).
+
 **Пошаговый ход:** только Саша (Telegram «готово» **или** дашборд). После `ORCH:shared-state` Сирень показывает итог в Telegram и просит подтвердить. Корень `DEV/<slug>` закрывается только после `GATE:done`.
 
-**Режим «делай в 1 проход»:** `GATE:done` **входит в полный проход** — финальный шаг завершается автоматически (авто-complete `GATE:done` + закрытие корня) под конец one-pass цикла, без отдельного ручного «готово».
+**Режим «делай в 1 проход»:** `GATE:done` auto-complete **только после** preflight exit 0 — comment `auto-pass: one-pass mode` + `kanban_complete` + закрытие корня.
 
 ### Режим «делай в 1 проход»
 
-Условия: мастер-ТЗ на диске; открытых вопросов нет; не обход diagnose-review. Авто-проход `GATE:take-into-work`, `GATE:plan-approve` **и `GATE:done`**; цепочка HF:* → ORCH:shared-state одним заходом; `GATE:done` автоматически завершается как часть прохода.
+Условия: мастер-ТЗ на диске; открытых вопросов нет; не обход diagnose-review.
+
+**One-pass = auto-complete трёх гейтов:** `GATE:take-into-work`, `GATE:plan-approve`, `GATE:done`. Auto ≠ skip: карточка гейта создаётся и complete'ится (`auto-pass: one-pass mode`); родительские фазы выполняются **отдельными** `agent -p`. `GATE:done` auto **только после** preflight exit 0.
+
+**Не auto:** `GATE:diagnose-review`, `GATE:go`, `GATE:block-accept`.
+
+One-pass — **не** «одним `agent -p` исполнителя» и **не** «одним заходом»; это авто-гейты, а не склейка фаз.
 
 ---
 
@@ -219,7 +252,8 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 ## Блок 4: Документирование
 
 - ТЗ-файл в `TZ/<Tool>/<Tool>_TZ.md` пока инструмент используется. Архивация — только при выводе из эксплуатации.
-- **Обязательно после Шага 2/3 реализации:** обновить `WorkVault/Registries/EcosystemManifest.json` (tools/entities/links/conflicts), перегенерировать `render_manifest.py --render` и `--digest`.
+- Исполнитель (`HF:docs-handoff`): текст скилла/ТЗ-секции **кроме** манифеста; `manifest_hints` в `kanban_complete.metadata`.
+- **Манифест, digest/render, `restore-all-skills.sh`, `.env`/`jobs.json`/`entities.json` — только `ORCH:shared-state`** (оркестратор Сирень). Исполнитель не пишет в `EcosystemManifest.json`.
 - **Скилл:** мелкая правка → архитектор сам; новый раздел → предлагает Саше.
 - **MEMORY и скиллы:** см. `hermes-memory-hygiene`.
 
@@ -323,7 +357,7 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 
 Расхождения — в отчёт Саше; обновление манифеста — после согласованной реализации (Блок 4).
 
-**Метод:** скилл `systematic-debugging` (4 фазы: root cause → pattern → hypothesis → fix).
+**Метод:** скилл `systematic-debugging` (4 фазы: root cause → pattern → hypothesis → fix). Диагноз — `BUG:diagnose`; фикс — `HF:impl` (не `HF:fix`).
 
 **Reuse-first при фиксе (см. references/reuse-first-rule.md):** root cause чинится через существующие инструменты; новый инструмент — только предложение на согласование.
 
@@ -376,6 +410,6 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 - [ ] Модели: архитектор (cursor-grok-4.6-high) планирует, исполнитель (composer-2.5) пишет/тестирует
 - [ ] Cron-субагент: критичные факты из MEMORY переданы явно в промпт
 - [ ] Перед каждым side-effect — категория разрешающего сигнала определена (Блок 5Б)
-- [ ] Статус «готово»: пошагово — только Саша (Блок 3); в режиме «делай в 1 проход» — автоматически как часть прохода
+- [ ] Статус «готово»: пошагово — только Саша (Блок 3); в режиме «делай в 1 проход» — auto-complete трёх гейтов после preflight exit 0
 - [ ] Все вызовы через Cursor CLI (`agent -p`)
 - [ ] Новые сущности (если предлагались) — явно вынесены на согласование Саше, не внедрены самостоятельно.

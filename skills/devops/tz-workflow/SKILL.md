@@ -1,7 +1,7 @@
 ---
 name: tz-workflow
 description: "Use when: создание, доработка, архивация ТЗ и инфраструктурных планов. Triggers: ТЗ, техническое задание, спецификация, доработка ТЗ, дорабатываем ТЗ, правки в ТЗ, обнови ТЗ, архивация ТЗ, план установки, инфраструктурный план, добавь в ТЗ, секция в ТЗ, примечание в ТЗ."
-version: 2.1.0
+version: 2.2.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -12,6 +12,10 @@ metadata:
 ---
 
 # tz-workflow
+
+## Термины
+Перед первым `PREFIX:фаза` читать `~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md`.
+Имена фаз/ролей/скиллов только из канона. Голые TZ/HF/ORCH/DEV без двоеточия запрещены.
 
 ## Overview
 
@@ -34,12 +38,17 @@ metadata:
 
 **Инвариант:** один вызов `agent -p` = одна модель = одна роль. Сирень координирует цепочку, **не смешивает** модели в одном промпте.
 
-| Шаг | Модель | Когда |
-|---|---|---|
-| Шаг 0 — Компрессия ТЗ | `composer-2.5` | Перед архитектурой: экстракт master-ТЗ 3–5 КБ |
-| Шаг 1 — Анализ и драфт | `cursor-grok-4.6-high` | Начало каждого нового ТЗ (вход: digest + экстракты Шага 0) |
-| Шаги 2–4 — Архитектура, написание, финализация | `cursor-grok-4.6-high` | Архитектурные решения и текст ТЗ |
-| Механические задачи | `composer-2.5` | Операторские кроны, инвентарь без семантики |
+**Запрет склейки TZ-WRITE:** промпты вида «напиши ТЗ целиком», «весь TZ-WRITE одним `agent -p`», склейка `TZ:compress`+`TZ:patch`+`TZ:finalize` (и тем более с ролью исполнителя) — **запрещены**. `TZ-WRITE(mode)` = отдельные карточки и отдельные `agent -p` по GLOSSARY §5.1. Один вызов закрывает **ровно одну** фазу из `{TZ:stabilize, TZ:compress, TZ:patch, REV:tz, TZ:finalize}`.
+
+| Шаг | Роль | Модель | Когда |
+|---|---|---|---|
+| BRF | оркестратор (Сирень) | `deepseek-v4-flash-0731` | Бриф в TG: `BRF:*` → `GATE:brief-closed` (не карточка) |
+| Шаг 0 — Компрессия ТЗ | компрессор | `composer-2.5` | `TZ:compress`: экстракт master-ТЗ 3–5 КБ |
+| TZ-WRITE | архитектор | `cursor-grok-4.6-high` | `TZ:patch` / `TZ:finalize`: анализ, архитектура, текст ТЗ |
+| REV | ревизор | `claude-sonnet-5-medium` | `REV:tz` — по умолчанию во всех dev-задачах; искл. лёгкие BUGFIX/SKILL-CHANGE ≤3 файла (08.09.2026) |
+| Механические задачи | координатор | `composer-2.5` | Операторские кроны, инвентарь без семантики |
+
+Сборка кейсов (DEV/CHANGE/BUGFIX/…) — блоки из GLOSSARY §2/§5.1, не рукописные цепочки. Канон: `~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md`.
 
 ### Шаг 0 — Компрессия ТЗ (отдельная задача Cursor)
 
@@ -127,23 +136,36 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 
 Создавать граф `DEV/<slug>/…`, если: цикл 2+ шагов tz-workflow/hermes-feature; работа должна пережить обрыв сессии; есть гейт Саши; нужен audit trail. **Не создавать** для одношагового ответа / `delegate_task` / однострочного вопроса Саши.
 
-### Вход триггера (до Шага 0)
+### Вход триггера (после BRIEF-CLOSE)
 
-Если графа ещё нет — `kanban_create` корня `DEV/<slug>` + фазы TZ:* + `GATE:take-into-work` с `parents=[...]` **в том же create** (сначала родители, `task_id` из return, затем дети). Все карточки `assignee=default`.
+Бриф (`BRF:full` / `light` / `delta` / `scope` / `confirm`) — **только в TG** через оркестратора (Сирень), не карточка. После `GATE:brief-closed` — `kanban_create` корня `DEV/<slug>` + блок `TZ-WRITE(mode)` + `GATE:take-into-work` с `parents=[...]` **в том же create** (сначала родители, `task_id` из return, затем дети). Все карточки `assignee=default`. Режим `mode` — из кейса GLOSSARY §2 (`new` / `full` / `patch` / `freeze`).
 
-Граф TZ-фаз (parents обязательны):
+Граф TZ-фаз — развёртка `TZ-WRITE(mode)` (parents обязательны):
 
 ```
 DEV/<slug>                          корень (живёт до GATE:done)
 ├─ TZ:stabilize
 ├─ TZ:compress          parents=[TZ:stabilize]
-├─ TZ:analyze           parents=[TZ:compress]
-├─ TZ:architect         parents=[TZ:analyze]
-├─ TZ:finalize          parents=[TZ:architect]
+├─ TZ:patch             parents=[TZ:compress]     # архитектор, --resume
+├─ REV:tz               parents=[TZ:patch]        # по умолчанию во всех dev-задачах
+├─ TZ:finalize          parents=[REV:tz]          # + MAIN_TZ_INVENTORY.md
 └─ GATE:take-into-work  parents=[TZ:finalize]
 ```
 
 `workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на карточке: `tz-workflow`, `cursor-cli`, `cursor-task-context`. Idempotency: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
+
+### Чек-лист TZ-WRITE(full)
+
+Режим `full` = кейс CHANGE (GLOSSARY §2). Все пункты — **отдельные карточки**; parents как в графе выше:
+
+- [ ] `TZ:stabilize` done (path, `version`, `mtime` в metadata)
+- [ ] `TZ:compress` done (экстракт 3–5 КБ, без кэша, модель компрессора `composer-2.5`)
+- [ ] `TZ:patch` done (архитектор `cursor-grok-4.6-high`, `--resume` своей сессии)
+- [ ] `REV:tz` done **или** comment `flag-waived: Sasha` (default ON для CHANGE)
+- [ ] `TZ:finalize` done (запись `TZ/<Tool>/<Tool>_TZ.md` + инвентарь) — **только после** родителей ниже
+- [ ] ни один из шагов не выполнен «тем же» `agent -p`, что соседний
+
+Для `TZ-WRITE(new)` / `(patch)` — тот же запрет склейки; набор карточек по §5.2 (stabilize/compress в скобках §5.1).
 
 ### Шаги 0–4 (воркер)
 
@@ -158,15 +180,24 @@ DEV/<slug>                          корень (живёт до GATE:done)
 | Шаг | Фаза | Модель |
 |---|---|---|
 | 0 | TZ:compress | composer-2.5 |
-| 1 | TZ:analyze | cursor-grok-4.6-high |
-| 2–4 | TZ:architect | cursor-grok-4.6-high (`--resume`) |
-| 4 | TZ:finalize | cursor-grok-4.6-high — запись `TZ/<Tool>/<Tool>_TZ.md` + `MAIN_TZ_INVENTORY.md` |
+| TZ-WRITE | TZ:patch | cursor-grok-4.6-high (`--resume`) |
+| REV | REV:tz | claude-sonnet-5-medium |
+| finalize | TZ:finalize | cursor-grok-4.6-high — запись `TZ/<Tool>/<Tool>_TZ.md` + `MAIN_TZ_INVENTORY.md` |
 
-Шаг 4 — роль архитектора на карточке `TZ:finalize`, не исполнителя HF.
+`TZ:finalize` — роль архитектора, не исполнителя HF. Перед записью master-ТЗ воркер `TZ:finalize`:
+
+1. `kanban_show` текущей и родителей.
+2. Parents: `TZ:compress` done, `TZ:patch` done, и (`REV:tz` done **или** waive `flag-waived: Sasha`). Если REV-карточки нет и кейс DEV с opt REV — parent = `TZ:patch` (как DPK граф `parents=[REV:tz|TZ:patch]`).
+3. Любой parent не done → **стоп**, не писать ТЗ (карточка не complete).
+4. Metadata complete: `role=архитектор`, `model=cursor-grok-4.6-high`, `cursor_session_ids`, `tz_path`/`tz_version`/`tz_mtime` (PI B3).
+
+**Усиление:** TZ `agent -p` без корня `DEV/<slug>` → **стоп** (не создавать корень «по памяти»).
 
 ### HITL-вопросы (процедура H / R3)
 
-Вопрос Саше → `kanban_comment` с полным контекстом + `kanban_block(kind=needs_input, reason=<один вопрос>)`. **Не** `clarify` (у воркера нет живого пользователя). Снятие: ответ Саши в Telegram **или** unblock на дашборде канбана — равнозначны; Сирень: `kanban_comment` + `kanban_unblock`. Повторное снятие — no-op.
+**Запрет** `kanban_block(kind=needs_input)` на TZ-фазах: бриф и вопросы — **только в TG** через оркестратора (`BRF:*`). Воркер TZ-фаз не блокирует карточку вопросом.
+
+Гейты Саши — только `$GATE:*` через `kanban_comment` + `kanban_block(reason="review-required: …")`. Снятие: ответ/фраза в Telegram **или** unblock на дашборде — равнозначны; Сирень: `kanban_comment` + `kanban_unblock`. Повторное снятие — no-op.
 
 ### После TZ:finalize
 

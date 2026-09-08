@@ -1,7 +1,7 @@
 ---
 name: skill-authoring-principles
 description: "Load when: creating a new skill, updating/patching any existing skill, reviewing skill quality. Triggers: создай скилл, обнови скилл, добавь в скилл, патч скилла, напиши скилл, skill_manage, skill authoring, проверь скилл, skill hygiene."
-version: 2.2.0
+version: 2.2.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -66,6 +66,8 @@ Each skill covers exactly its stage — never capture the neighboring stage:
 | `hermes-feature` | "берём в работу" | Tests passed, Sasha confirmed "готово" |
 
 STOP-gate and implementation checklist → `hermes-feature`, not `tz-workflow`.
+
+**Фазы и блоки пайплайна** — только канон GLOSSARY (`~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md` §5/§5.1/§7). Запрещены как фазы: `TZ:analyze`, `TZ:architect`, `HF:fix`, `HF:docs`; карточка = `PREFIX:фаза`, не имя блока (`PLAN-IMPL-TAIL` и др.).
 
 **One skill = one responsibility (Sasha's rule, 26.07.2026).** When designing a new skill/cron, check for mixed responsibilities:
 - Test: can skill 2 run without skill 1 and still make sense? If yes → two independent skills.

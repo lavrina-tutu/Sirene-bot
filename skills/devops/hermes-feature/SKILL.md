@@ -46,7 +46,7 @@ metadata:
 - Любой HF `agent -p` без корня `DEV/<slug>` → **стоп** + оркестратор. Исключения DPK: `BRF:*` в TG; одношаговый ответ; RESEARCH.
 - Вход в HF-ветку только если корень `DEV/<slug>` существует **и** `GATE:take-into-work` снят (Саша **или** `auto-pass: one-pass mode`). Иначе стоп + текст «нет „берём в работу“ / нет one-pass».
 - `GATE:plan-approve` / `HF:backup` / `HF:impl`: если `HF:plan` не `done` → **стоп** (GLOSSARY инвариант 6). Не skip плана в one-pass.
-- Off-board: только retro-create + comment `done off-board, session ids`.
+- Off-board: **предусловие** — сначала вывести граф из диспатча (comment корня `dispatch-paused: off-board`, снять/не диспатчить remaining), затем retro-create + comment `done off-board, session ids`. Без `dispatch-paused` прямой `agent -p` на живой граф запрещён (инвариант 8).
 
 Граф HF-фаз — развёртка `PLAN-IMPL-TAIL` + `HF-TAIL` (GLOSSARY §5.1; сборка кейсов — §2):
 
@@ -108,6 +108,12 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
 ```
 
 5. **Свёртка по `changed_files`:** на фазах **исполнителя** `HF:impl` и `HF:test`: если `changed_files` содержит путь `*_TZ.md` **или** `HF-plan*` → не complete, а `kanban_block(reason="review-required: collapsed-chain")`. Не применять к `HF:plan` (план — его артефакт) и к `HF:docs-handoff` (ТЗ — его артефакт).
+6. **Машинный факт на диске для read-only фаз `HF:plan`/`REV:plan`** (контроль premature-impl, инвариант 8/Блок 1А). На фазе планирования целевой каталог скилла не должен получать impl-артефактов:
+   - **до** `agent -p`: снимок `disk_before` целевого каталога скилла из ТЗ — `python3 ~/WorkVault/Registries/pipeline_hf_plan_diskfact.py snapshot --skill-dir <abs>` → `kanban_comment` (JSON).
+   - после: `disk_after` + `diff --before --after`. Если `PREMATURE_IMPL` (появились `SKILL.md`/`scripts/`/`tests/`/`references`/`cli.py`, которых не было в before) → `kanban_block(reason="review-required: impl-before-plan-approve")`; self-report «каталог есть» при `disk_before.exists=false` = это же block.
+   - Легальный черновик (каталог был в before, код в этой фазе не менялся) → complete ок; `HF:impl` затем сверяет с планом, не пишет второй раз.
+   - В `kanban_complete.metadata` класть `disk_before`, `disk_after`, `premature_impl: false|true`, `allowed_writes` (план-файлы `HF-plan_*.md`).
+
 
 Непустой `registry_touches` → `kanban_block(kind=capability, reason="executor touched shared state")`.
 
@@ -146,6 +152,10 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
 **Не auto:** `GATE:diagnose-review`, `GATE:go`, `GATE:block-accept`.
 
 One-pass — **не** «одним `agent -p` исполнителя» и **не** «одним заходом»; это авто-гейты, а не склейка фаз.
+
+**XOR-канал координатора (влечён из инварианта 8, GLOSSARY §5.2):** пока граф `DEV/<slug>` диспатчится (есть дети `todo/ready/running`), координатор **не** вызывает свой `agent -p` на фазы графа — гейты авто-проходятся, фазы выполняет диспетчер. Прежде чем сделать любой **ручной** cursor-cli по слагу:
+1. `kanban_show` корня: дети в `todo|ready|running` → канал `kanban`, свой вызов **стоп** (ждать очередь / auto-pass гейтов).
+2. Нужен прямой ход (crash-spawn, спешка) → **сначала** вывести граф: comment корня `dispatch-paused: off-board`, снять/не диспатчить remaining → потом свои вызовы + retro-create `done off-board, session ids`, **и только при снятом `GATE:plan-approve`** (для кодосодержащих фаз). Иначе живёт двойной канал (воркер + координатор) на одной фазе — запрещено.
 
 ---
 
@@ -214,6 +224,8 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 
 **Перед «берём в работу»** — проверить ключевые фактические утверждения плана напрямую (`which`, `read_file`).
 
+**⚠️ Неожиданный каталог скилла на диске = аномалия, не «сверить и дописать».** Если в фазе `HF:plan`/`REV:plan` (read-only по коду скилла) в workspace уже появились `SKILL.md`/`scripts/`/`tests/`, которых не было в `disk_before` — это impl-before-plan-approve (иначе параллельный процесс). Зафиксировать `premature_impl: true` в comment, `kanban_block("review-required: impl-before-plan-approve")`, НЕ копировать/дорабатывать чужой код в фазе планирования.
+
 **Устойчивость к сбою:** `## Прогресс выполнения` с чекбоксами в файле плана.
 
 **Completion criterion:** Саша сказал «берём в работу» по пофайловому плану.
@@ -236,6 +248,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 3. Пофайловый план архитектора согласован.
 4. Если план вводит новую сущность — согласование Саши получено отдельно от общего „берём в работу“.
 5. **Канбан:** `GATE:plan-approve` = done/unblocked **или** auto-pass one-pass (режим «делай в 1 проход»).
+6. **Auto-pass гейта ≠ «можно код сейчас».** Auto-complete `GATE:plan-approve` (one-pass) разрешает **диспетчеру** запустить `HF:impl`; координатору он не даёт права писать код вне очереди графа (XOR-канал, инвариант 8). Прямой impl координатора — только после `dispatch-paused` + off-board.
 
 ---
 

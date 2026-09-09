@@ -1,0 +1,28 @@
+# OKR — полный Verification Checklist
+
+- [ ] Чекин через okrtool (`show`/`pull`/`apply`/`push`); curl только с `OKR_BYPASS`
+- [ ] Правило №0: glob MD по всему `okr-tool/` до Jira
+- [ ] Objective: `issuetype = 6` + `cf[43743] = "АИД"`
+- [ ] KR: `issuetype.name == "UserStory"`; SR/чужие issuelinks исключены или помечены
+- [ ] Период из `fixVersion`, не из текста названия
+- [ ] Иерархия через `issuelinks` Contains, не `parent`
+- [ ] Сверка % верхнего со средним нижнего; расхождение прокомментировано
+- [ ] Wiki-ссылки с `\|`; столбцы таблиц совпадают
+- [ ] Ссылки в сводной таблице резолвятся на заголовки ниже
+- [ ] rclone sync после WorkVault
+- [ ] Клонирование: постановка подтверждена до `POST`
+- [ ] Клонирование: числа JSON-числом; поля после transition; Contains в issuelinks обеих сторон
+- [ ] Чекин-поля пустые — не в payload (не 0, не "")
+- [ ] Незнакомый проект: `createmeta`, не копия OKRS
+- [ ] Префикс `KR{n}.O{цель}.` у каждого нового KR
+- [ ] Пометка «Удалить»: риск озвучен, формат подтверждён, область уточнена
+- [ ] Статус: при JQL `400` — фильтр в Python
+- [ ] АИД-фильтр по умолчанию в OKRS и OKRAID
+- [ ] Смена assignee: URL-кодирование; только перечисленные ключи; batch verify
+- [ ] Dependency: inwardIssue Contains; assignee batch-запросом
+- [ ] Excel: hyperlink + оформление; папка по ФИО при запросе
+- [ ] Per-task MD сохранён в структуру `okr-tool/`
+- [ ] Scope не расширен самовольно; ветки вне scope зафиксированы
+- [ ] Имя файла с суффиксом summary; N подтверждён пользователем
+- [ ] GS: auth check; явный python; имя листа; `<br>` в md / `\n` в Sheets
+- [ ] «Всё выгружено?» — свежий issuelinks, не память сессии

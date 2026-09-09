@@ -22,9 +22,9 @@ metadata:
 | Система | Файл | Переменная |
 |---|---|---|
 | Confluence (`dom.tutu.ru`) | `~/USERTOOLS/ConfluenceSync/.env` | `CONFLUENCE_TOKEN` |
-| JIRA (`hq.tutu.ru`) | `~/.hermes/profiles/anthropic/.env` | `JIRA_TOKEN` + `JIRA_BASE_URL=https://hq.tutu.ru` |
+| JIRA (`hq.tutu.ru`) | `~/.hermes/profiles/default/.env` (fallback: `anthropic/.env`) | `JIRA_TOKEN` + `JIRA_BASE_URL=https://hq.tutu.ru` |
 
-⚠️ **`~/.config/hermes/.env` сломан** — содержит спецсимволы в `TUTU_DOMAIN_PASSWORD`, bash падает с syntax error при `source`. Для JIRA использовать **только** `~/.hermes/profiles/anthropic/.env`.
+⚠️ **`~/.config/hermes/.env` сломан** — содержит спецсимволы в `TUTU_DOMAIN_PASSWORD`, bash падает с syntax error при `source`. Для JIRA: канон `~/.hermes/profiles/default/.env`, fallback `~/.hermes/profiles/anthropic/.env`.
 
 Загрузить Confluence (только нужные переменные, БЕЗ распыления generic-переменных):
 ```bash
@@ -51,7 +51,7 @@ curl -H "Authorization: Bearer $CONFLUENCE_TOKEN" "https://dom.tutu.ru/rest/api/
 
 Для JIRA curl:
 ```bash
-source ~/.hermes/profiles/anthropic/.env
+source ~/.hermes/profiles/default/.env  # fallback: anthropic/.env
 curl -H "Authorization: Bearer $JIRA_TOKEN" \
      -H "Content-Type: application/json" \
      "https://hq.tutu.ru/rest/api/2/..."

@@ -20,18 +20,30 @@ def migrate_manifest_p0(raw: dict[str, Any], *, slug: str) -> Manifest:
     pages = {str(k): dict(v) for k, v in raw.items()}
     attachments: list[dict[str, Any]] = []
     digests: dict[str, Any] = {}
+    contexts: dict[str, Any] = {}
   else:
     pages = {str(k): dict(v) for k, v in (raw.get("pages") or {}).items()}
     attachments = list(raw.get("attachments") or [])
     digests = dict(raw.get("digests") or {})
+    contexts = dict(raw.get("contexts") or {})
   manifest = Manifest(
-    schema_version=SCHEMA_VERSION,
+    schema_version=raw.get("schema_version") or SCHEMA_VERSION,
     slug=slug,
     pages=pages,
     attachments=attachments,
     digests=digests,
+    contexts=contexts,
   )
+  if manifest.schema_version == "1.0":
+    manifest.schema_version = SCHEMA_VERSION
   return manifest
+
+
+def save_manifest(manifest: Manifest, overlay: Path) -> None:
+  (overlay / "MANIFEST.json").write_text(
+    json.dumps(manifest.to_dict(), ensure_ascii=False, indent=2) + "\n",
+    encoding="utf-8",
+  )
 
 
 def rebuild_children(pages: dict[str, dict[str, Any]]) -> None:

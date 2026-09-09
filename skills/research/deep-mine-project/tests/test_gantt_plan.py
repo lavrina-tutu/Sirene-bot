@@ -232,6 +232,8 @@ def test_default_trisigma_yaml_plan_gantt():
   assert "gantt_page_id: \"519492770\"" in text
   assert "b10931f5-7163-4270-95c4-b8d1ca9d23ac" in text
   assert "rate_rub_per_hour: 3000" in text
+  assert "root_page_id: \"480923430\"" in text
+  assert "charter_body_page_ids" in text
   assert "\nmpp:" not in text
 
 
@@ -307,7 +309,10 @@ meetings:
     with patch("deepmine.refresh._meetings_changed", return_value=False):
       with patch("deepmine.refresh._sync_gantt_attachments"):
         with patch("deepmine.refresh.write_diff"):
-          report = refresh_pages(cfg, manifest, mini_overlay, mini_workvault, dry_run=False)
+          with patch("deepmine.refresh.run_graph"):
+            with patch("deepmine.refresh.run_facts"):
+              with patch("deepmine.context_run.run_context"):
+                report = refresh_pages(cfg, manifest, mini_overlay, mini_workvault, dry_run=False)
 
   assert "plan" in report.stale
   disk = json.loads((mini_overlay / "MANIFEST.json").read_text(encoding="utf-8"))
@@ -418,9 +423,12 @@ meetings:
         with patch("deepmine.refresh.list_whitelist", side_effect=fake_list_whitelist):
           with patch("deepmine.refresh.download_attachment", side_effect=fake_download):
             with patch("deepmine.refresh.write_diff"):
-              report = refresh_pages(
-                cfg, manifest, mini_overlay, mini_workvault, dry_run=False
-              )
+              with patch("deepmine.refresh.run_graph"):
+                with patch("deepmine.refresh.run_facts"):
+                  with patch("deepmine.context_run.run_context"):
+                    report = refresh_pages(
+                      cfg, manifest, mini_overlay, mini_workvault, dry_run=False
+                    )
 
   assert (att_dir / gantt_name).is_file()
   assert mpp.is_file()

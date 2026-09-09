@@ -416,8 +416,11 @@ def export_plan(
   workvault: Path | None = None,
   gantt_page_id: str = "",
   manifest: Any | None = None,
+  project_title: str = "Project plan",
 ) -> CsvTriple:
   """Gantt JSON → CSV; fallback to MppReader for .mpp/.mpx/.xml."""
+  from .plan_outline import write_plan_md_from_csv
+
   if is_gantt_json(path) or path.suffix.lower() == ".json":
     if l0_page is None:
       if workvault is None:
@@ -425,10 +428,13 @@ def export_plan(
       l0_page = resolve_plan_l0_page(
         workvault, gantt_page_id=gantt_page_id, manifest=manifest
       )
-    return gantt_to_csv(
+    result = gantt_to_csv(
       path, out_dir, rate_rub_per_hour=rate_rub_per_hour, l0_page=l0_page
     )
-  return export_csv(path, out_dir)
+  else:
+    result = export_csv(path, out_dir)
+  write_plan_md_from_csv(out_dir, project_title=project_title)
+  return result
 
 
 def find_gantt_json(attachments_dir: Path, instance: str = "") -> Path | None:

@@ -1,15 +1,15 @@
 """Pack task context for architect steps G/H (A0)."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
-from .digest_io import leaf_digest_path, leaf_slug_page, parse_digest, theme_digest_path
 from .fail import ValidationError
 from .manifest import load_manifest
-from .paths import ARCHITECT_BRIEF_TEMPLATE
+from .paths import ARCHITECT_BRIEF_TEMPLATE, ARCH_MD, CHARTER_MD, GRAPH_JSON
 from .project_config import ProjectConfig
-from .source import require_fresh_digest
+from .source import require_fresh_context
 
 
 def resolve_task_page_id(
@@ -50,41 +50,6 @@ def _brief_skeleton(task_id: str, pack_paths: str) -> str:
   return text
 
 
-def _leaf_related_themes(overlay: Path, page_id: str) -> set[str]:
-  """Themes linked from the task leaf digest frontmatter (built from leaves, not L0)."""
-  digest_path = leaf_digest_path(overlay, page_id)
-  if not digest_path.is_file():
-    return set()
-  fm, _ = parse_digest(digest_path)
-  return {str(t) for t in (fm.get("related") or [])}
-
-
-def _pack_theme_entries(
-  cfg: ProjectConfig,
-  overlay: Path,
-  page_id: str,
-) -> list[tuple[str, Path, str]]:
-  """Fresh theme digests relevant to pack: cfg.themes ∩ leaf.related; missing/rejected skipped."""
-  configured = set(cfg.themes)
-  leaf_related = _leaf_related_themes(overlay, page_id)
-  if leaf_related:
-    candidates = configured & leaf_related
-  else:
-    candidates = configured
-
-  entries: list[tuple[str, Path, str]] = []
-  for theme in sorted(candidates):
-    path = theme_digest_path(overlay, theme)
-    if not path.is_file():
-      continue
-    fm, _ = parse_digest(path)
-    status = str(fm.get("status") or "unknown")
-    if status == "rejected":
-      continue
-    entries.append((theme, path, status))
-  return entries
-
-
 def _pack_index_lines(
   task_id: str,
   page_id: str,
@@ -92,34 +57,24 @@ def _pack_index_lines(
   overlay: Path,
   cfg: ProjectConfig,
 ) -> list[str]:
-  slug = page.get("digest_slug") or leaf_slug_page(page_id)
-  digest_path = overlay / "digest" / "leaves" / f"{slug}.md"
-  digest_status = page.get("digest_status", "missing")
-  if digest_path.exists():
-    fm, _ = parse_digest(digest_path)
-    digest_status = str(fm.get("status") or digest_status)
-
   lines = [
     f"# Pack: {task_id}",
     "",
     f"- page_id: `{page_id}`",
     f"- title: {page.get('title', '')}",
     f"- version: {page.get('version', '?')}",
-    f"- digest: `digest/leaves/{slug}.md` (status: {digest_status})",
     "",
-    "## Theme digests",
+    "## Context SoT (v1.0.0)",
     "",
-    "Theme digests built from **leaf** compress (not raw L0). "
-    "Same «no journal» contract as leaf digests. "
-    "Missing theme file is OK (not compressed yet); `rejected` themes omitted.",
+    f"- `{CHARTER_MD}`",
+    f"- `{ARCH_MD}`",
+    f"- `{GRAPH_JSON}`",
   ]
-  theme_entries = _pack_theme_entries(cfg, overlay, page_id)
-  if theme_entries:
-    for theme, path, status in theme_entries:
-      rel = path.relative_to(overlay)
-      lines.append(f"- `{rel}` (theme: {theme}, status: {status})")
-  else:
-    lines.append("(none)")
+
+  graph_path = overlay / GRAPH_JSON
+  if graph_path.is_file():
+    graph = json.loads(graph_path.read_text(encoding="utf-8"))
+    lines.append(f"- GRAPH nodes: {len(graph.get('nodes') or {})}")
 
   mpp_dir = overlay / "mpp"
   csv_files = sorted(mpp_dir.glob("*__tasks.csv")) if mpp_dir.is_dir() else []
@@ -158,13 +113,7 @@ def run_pack(
       f"page_id {resolved_page_id} not in MANIFEST — добавь в task_pages и collect"
     )
 
-  require_fresh_digest(
-    overlay,
-    resolved_page_id,
-    manifest_page=page,
-    slug=cfg.slug,
-    task_hint=task_id,
-  )
+  require_fresh_context(overlay, "charter", slug=cfg.slug)
 
   pack_dir = overlay / "docs" / "_inbox" / task_id
   pack_dir.mkdir(parents=True, exist_ok=True)
@@ -184,15 +133,11 @@ def run_pack(
     encoding="utf-8",
   )
 
-  theme_path_lines = [
-    f"- theme `{theme}`: `{path.relative_to(overlay)}`"
-    for theme, path, _ in _pack_theme_entries(cfg, overlay, resolved_page_id)
-  ]
-  digest_slug = page.get("digest_slug", leaf_slug_page(resolved_page_id))
   path_lines = [
     f"- `{pack_md.relative_to(overlay)}`",
-    f"- digest: `digest/leaves/{digest_slug}.md`",
-    *theme_path_lines,
+    f"- `{CHARTER_MD}`",
+    f"- `{ARCH_MD}`",
+    f"- `{GRAPH_JSON}`",
   ]
   if csv_files:
     for csv in sorted(csv_files):

@@ -1,4 +1,4 @@
-"""TREE.md and SOURCES.md writers."""
+"""TREE.md, SOURCES.md, and LINKS table writers."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -72,6 +72,60 @@ def write_tree_md(
     lines.append("")
 
   path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+
+
+def write_tree_from_graph(
+  graph: dict[str, Any],
+  path: Path,
+  *,
+  cfg_root: str | None,
+) -> None:
+  nodes = graph.get("nodes") or {}
+  edges = graph.get("edges") or []
+  children_map: dict[str, list[str]] = {}
+  for edge in edges:
+    if edge.get("type") == "child":
+      children_map.setdefault(edge.get("from"), []).append(edge.get("to"))
+
+  def _lines(page_id: str, depth: int = 0) -> list[str]:
+    node = nodes.get(page_id, {})
+    indent = "  " * depth
+    title = node.get("title") or page_id
+    kind = node.get("kind", "page")
+    lines = [f"{indent}- {title} (id={page_id}, kind={kind})"]
+    for child_id in sorted(children_map.get(page_id, [])):
+      lines.extend(_lines(child_id, depth + 1))
+    return lines
+
+  slug = graph.get("slug", "")
+  lines = [
+    f"# {slug} — карта архива (GRAPH)",
+    "",
+    f"generated_at: {graph.get('generated_at', '')}",
+    "",
+    "## Дерево",
+    "",
+  ]
+  roots = [cfg_root] if cfg_root and cfg_root in nodes else []
+  if not roots:
+    roots = sorted(nodes.keys())[:5]
+  for root_id in roots:
+    lines.extend(_lines(root_id))
+    lines.append("")
+  path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+
+
+def write_links_table(graph: dict[str, Any], path: Path) -> None:
+  lines = [
+    "# LINKS.md — граф связей",
+    "",
+    f"generated_at: {graph.get('generated_at', '')}",
+    "",
+    "from,to,edge",
+  ]
+  for edge in graph.get("edges") or []:
+    lines.append(f"{edge.get('from')},{edge.get('to')},{edge.get('type')}")
+  path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def write_sources_md(manifest: Manifest, path: Path) -> None:

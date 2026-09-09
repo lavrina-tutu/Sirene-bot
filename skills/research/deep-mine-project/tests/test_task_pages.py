@@ -13,6 +13,21 @@ from deepmine.pack import run_pack
 from deepmine.project_config import default_trisigma_yaml, load_project_config
 from deepmine.refresh import refresh_pages
 from deepmine.models import Manifest
+from deepmine.paths import CHARTER_MD, GRAPH_JSON
+
+
+def _write_charter(overlay: Path) -> None:
+  (overlay / CHARTER_MD).write_text(
+    """---
+status: fresh
+---
+## Источники
+
+- GRAPH.json
+""",
+    encoding="utf-8",
+  )
+  (overlay / GRAPH_JSON).write_text('{"nodes": {}, "edges": []}', encoding="utf-8")
 
 
 def test_default_trisigma_yaml_has_task_pages():
@@ -205,6 +220,7 @@ Facts.
   extracts_dir = mini_overlay / "docs" / "_inbox" / "feature_compare" / "extracts"
   extracts_dir.mkdir(parents=True, exist_ok=True)
   (extracts_dir / f"{page_id}__feature_compare.csv").write_text("H1,H2\na,b\n", encoding="utf-8")
+  _write_charter(mini_overlay)
   cfg = load_project_config("TestProject", workvault=mini_workvault)
   pack_dir = run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")
   csv_path = pack_dir / "extracts" / "514903239__feature_compare.csv"
@@ -267,6 +283,7 @@ Facts.
 """,
     encoding="utf-8",
   )
+  _write_charter(mini_overlay)
   cfg = load_project_config("TestProject", workvault=mini_workvault)
   with pytest.raises(ValidationError, match="has_tables but no CSV"):
     run_pack(cfg, mini_overlay, mini_workvault, "feature_compare")

@@ -42,6 +42,10 @@ class DigestError(DeepMineError):
   exit_code = EXIT_DIGEST
 
 
+class ContextError(DeepMineError):
+  exit_code = EXIT_DIGEST
+
+
 def confluence_down(reason: str) -> None:
   raise ConfluenceDownError(f"Confluence unavailable: {reason}")
 
@@ -60,6 +64,10 @@ def meetings_failed(reason: str) -> None:
 
 def digest_failed(reason: str) -> None:
   raise DigestError(f"Digest validation failed: {reason}")
+
+
+def context_failed(reason: str) -> None:
+  raise ContextError(f"Context validation failed: {reason}")
 
 
 def exit_from_error(exc: DeepMineError) -> int:

@@ -11,6 +11,21 @@ MPP_READER = Path.home() / "USERTOOLS" / "MppReader" / "read_mpp.py"
 COMPRESSOR_PROMPT = DEFAULT_WORKVAULT / "Registries" / "project-context-compressor-prompt.md"
 SKILL_ROOT = Path(__file__).resolve().parents[2]
 ARCHITECT_BRIEF_TEMPLATE = SKILL_ROOT / "references" / "architect-brief.template.md"
+PRO_CATALOG = (
+  Path.home()
+  / "hermes-workspace"
+  / "skills"
+  / "productivity"
+  / "pmo-charter-fill"
+  / "references"
+  / "pro-field-catalog.md"
+)
+
+GRAPH_JSON = "GRAPH.json"
+LINKS_MD = "LINKS.md"
+FACTS_JSON = "facts.json"
+CHARTER_MD = "charter-context.md"
+ARCH_MD = "architecture-context.md"
 
 OVERLAY_SUBDIRS = (
     "attachments",
@@ -20,6 +35,7 @@ OVERLAY_SUBDIRS = (
     "digest/themes",
     "digest/_history",
     "docs/_inbox",
+    "context_cache",
 )
 
 

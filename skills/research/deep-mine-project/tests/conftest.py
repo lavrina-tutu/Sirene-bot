@@ -105,3 +105,25 @@ meetings:
 @pytest.fixture
 def mini_overlay(mini_workvault: Path) -> Path:
   return mini_workvault / "Projects" / "TestProject"
+
+
+@pytest.fixture
+def charter_context(mini_overlay: Path) -> Path:
+  """Fresh charter-context.md for pack/analyze tests."""
+  path = mini_overlay / "charter-context.md"
+  path.write_text(
+    """---
+schema_version: "1.0"
+kind: charter
+status: fresh
+sources_sha: "deadbeef"
+---
+## Источники
+
+- GRAPH.json
+""",
+    encoding="utf-8",
+  )
+  graph = mini_overlay / "GRAPH.json"
+  graph.write_text('{"nodes": {}, "edges": []}', encoding="utf-8")
+  return path

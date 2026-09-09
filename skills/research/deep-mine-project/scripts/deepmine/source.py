@@ -1,14 +1,50 @@
-"""Canonical document-work source resolver (digest-only for G/H/pack)."""
+"""Canonical document-work source resolver (context SoT for G/H/pack)."""
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
 from .digest_io import leaf_digest_path, leaf_slug_page, parse_digest
 from .fail import ValidationError
+from .paths import ARCH_MD, CHARTER_MD
 
 FRESH = "fresh"
 STALE = "stale"
+
+
+def _read_context_status(path: Path) -> tuple[str, str | None]:
+  if not path.is_file():
+    return "missing", None
+  text = path.read_text(encoding="utf-8")
+  match = re.search(r"^status:\s*(\w+)", text, re.MULTILINE)
+  status = match.group(1) if match else "unknown"
+  sha_match = re.search(r'^sources_sha:\s*["\']?([a-f0-9]+)', text, re.MULTILINE)
+  return status, sha_match.group(1) if sha_match else None
+
+
+def context_readiness(overlay: Path, kind: str) -> tuple[str, Path | None]:
+  path = overlay / (CHARTER_MD if kind == "charter" else ARCH_MD)
+  status, _ = _read_context_status(path)
+  return status, path
+
+
+def require_fresh_context(
+  overlay: Path,
+  kind: str = "charter",
+  *,
+  slug: str | None = None,
+) -> Path:
+  status, path = context_readiness(overlay, kind)
+  rel = CHARTER_MD if kind == "charter" else ARCH_MD
+  if status == FRESH:
+    return path  # type: ignore[return-value]
+  slug_part = slug or "<slug>"
+  raise ValidationError(
+    f"context not ready for {kind}: status={status}\n"
+    f"file: {rel}\n"
+    f"fix: python3 .../deep_mine.py {kind} --slug {slug_part}"
+  )
 
 
 def digest_readiness(
@@ -72,12 +108,26 @@ def require_fresh_digest(
 
 
 def canonical_source(overlay: Path, page_id: str) -> Path:
-  """Always return digest leaf path — never L0."""
+  """Return digest leaf path — legacy; prefer context SoT."""
   return leaf_digest_path(overlay, page_id)
 
 
+def list_unready_contexts(overlay: Path) -> list[dict[str, str]]:
+  unready: list[dict[str, str]] = []
+  for kind, rel in (("charter", CHARTER_MD), ("architecture", ARCH_MD)):
+    status, path = context_readiness(overlay, kind)
+    if status == FRESH:
+      continue
+    unready.append({
+      "kind": kind,
+      "status": status,
+      "path": rel,
+    })
+  return unready
+
+
 def list_unready_pages(overlay: Path, manifest) -> list[dict[str, str]]:
-  """Pages without a fresh digest (for coordinator report / full-archive gate)."""
+  """Pages without a fresh digest (legacy coordinator report)."""
   unready: list[dict[str, str]] = []
   for page_id, page in manifest.pages.items():
     status, path = digest_readiness(overlay, page_id, manifest_page=page)

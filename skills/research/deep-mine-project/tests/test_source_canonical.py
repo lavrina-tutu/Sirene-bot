@@ -9,8 +9,10 @@ from deepmine.fail import ValidationError
 from deepmine.manifest import load_manifest
 from deepmine.source import (
   canonical_source,
+  context_readiness,
   digest_readiness,
   list_unready_pages,
+  require_fresh_context,
   require_fresh_digest,
 )
 
@@ -75,6 +77,19 @@ def test_canonical_source_never_confluence_index(mini_overlay: Path):
   assert "Confluence/" not in text
   assert "index.md" not in text
   assert text.endswith(f"p{page_id}.md")
+
+
+def test_context_fresh(mini_overlay: Path):
+  path = mini_overlay / "charter-context.md"
+  path.write_text("---\nstatus: fresh\n---\n## Источники\n\nx\n", encoding="utf-8")
+  status, ctx_path = context_readiness(mini_overlay, "charter")
+  assert status == "fresh"
+  assert require_fresh_context(mini_overlay, "charter") == ctx_path
+
+
+def test_context_missing_raises(mini_overlay: Path):
+  with pytest.raises(ValidationError, match="status=missing"):
+    require_fresh_context(mini_overlay, "charter", slug="TestProject")
 
 
 def test_list_unready_pages(mini_overlay: Path):

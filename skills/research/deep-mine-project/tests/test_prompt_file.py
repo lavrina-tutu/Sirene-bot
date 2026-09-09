@@ -8,7 +8,7 @@ def test_compressor_prompt_exists():
   assert COMPRESSOR_PROMPT.is_file()
   text = COMPRESSOR_PROMPT.read_text(encoding="utf-8")
   assert "журнал" in text.lower() or "Digest записан" in text
-  assert "сжал до" in text
+  assert "deepseek" in text.lower()
 
 
 def test_architect_brief_template_exists():

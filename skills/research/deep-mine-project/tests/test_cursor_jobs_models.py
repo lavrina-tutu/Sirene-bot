@@ -15,16 +15,13 @@ from deepmine.cursor_jobs import (
 )
 from deepmine.fail import ValidationError
 from deepmine.manifest import load_manifest
-from deepmine.paths import COMPRESSOR_PROMPT
+from deepmine.paths import ARCH_MD, CHARTER_MD, COMPRESSOR_PROMPT, GRAPH_JSON
 from deepmine.project_config import load_project_config
 
 
-def _write_fresh_digest(overlay: Path, page_id: str) -> None:
-  path = overlay / "digest" / "leaves" / f"p{page_id}.md"
-  path.parent.mkdir(parents=True, exist_ok=True)
-  path.write_text(
-    f"""---
-page_id: "{page_id}"
+def _write_fresh_context(overlay: Path) -> None:
+  (overlay / CHARTER_MD).write_text(
+    """---
 status: fresh
 ---
 ## Источники
@@ -33,13 +30,24 @@ Facts.
 """,
     encoding="utf-8",
   )
+  (overlay / ARCH_MD).write_text(
+    """---
+status: fresh
+---
+## Источники
+
+Arch facts.
+""",
+    encoding="utf-8",
+  )
+  (overlay / GRAPH_JSON).write_text('{"nodes": {}}', encoding="utf-8")
 
 
 def test_compress_uses_composer_and_compressor_prompt(mini_workvault, mini_overlay):
   cfg = load_project_config("TestProject", workvault=mini_workvault)
   prompt = build_compress_prompt("L0 test", cfg, ["p493477568"])
-  assert COMPRESSOR_MODEL == "composer-2.5"
-  assert str(COMPRESSOR_PROMPT) in prompt or COMPRESSOR_PROMPT.name in prompt
+  assert COMPRESSOR_MODEL == "deepseek-v4-flash-0731"
+  assert "project-context-compressor" in prompt
   assert "project-context-compressor" in COMPRESSOR_PROMPT.read_text(encoding="utf-8")
 
 
@@ -47,32 +55,33 @@ def test_analyze_prompt_uses_grok_model():
   assert ARCHITECT_MODEL == "cursor-grok-4.6-high"
 
 
-def test_analyze_prompt_no_confluence_bodies(mini_workvault, mini_overlay):
+def test_analyze_prompt_uses_contexts_not_l0(mini_workvault, mini_overlay):
   cfg = load_project_config("TestProject", workvault=mini_workvault)
   overlay = mini_overlay
-  (overlay / "digest").mkdir(exist_ok=True)
-  (overlay / "digest" / "_index.md").write_text("---\nslug: _index\n---\n# index\n", encoding="utf-8")
-  (overlay / "digest" / "themes").mkdir(exist_ok=True)
+  _write_fresh_context(overlay)
   (overlay / "docs" / "_inbox").mkdir(parents=True, exist_ok=True)
   (overlay / "docs" / "_inbox" / "diff.md").write_text("# diff\n", encoding="utf-8")
   l0_body = "SECRET L0 BODY confluence_id marker"
   confluence_path = mini_workvault / "Confluence" / "DPAN" / "root" / "index.md"
   confluence_path.write_text(f"---\nconfluence_id: '493477568'\n---\n{l0_body}\n", encoding="utf-8")
   prompt = build_analyze_prompt(overlay, cfg, full_archive=True)
-  assert "_index.md" in prompt
+  assert CHARTER_MD in prompt
+  assert ARCH_MD in prompt
+  assert GRAPH_JSON in prompt
   assert "diff.md" in prompt
   assert "SECRET L0 BODY" not in prompt
   assert "Confluence/DPAN" not in prompt
-  assert "- L0:" not in prompt
-  assert "digest/themes" in prompt
+  assert "digest/leaves/p" not in prompt
+  assert "digest/themes/" not in prompt
 
 
 def test_analyze_task_prompt_no_l0(mini_workvault, mini_overlay, skill_root):
   cfg = load_project_config("TestProject", workvault=mini_workvault)
+  _write_fresh_context(mini_overlay)
   pack_dir = mini_overlay / "docs" / "_inbox" / "feature_compare"
   pack_dir.mkdir(parents=True)
   (pack_dir / "PACK.md").write_text(
-    "# Pack\n\n- page_id: `514903239`\n- digest: `digest/leaves/p514903239.md`\n",
+    f"# Pack\n\n- page_id: `514903239`\n- `{CHARTER_MD}`\n",
     encoding="utf-8",
   )
   template = (skill_root / "references" / "architect-brief.template.md").read_text(encoding="utf-8")
@@ -85,7 +94,7 @@ def test_analyze_task_prompt_no_l0(mini_workvault, mini_overlay, skill_root):
     .replace("{{inv_dates}}", "да")
     .replace("{{task_id}}", "feature_compare")
     .replace("{{role_goal}}", "test")
-    .replace("{{pack_paths}}", "- digest")
+    .replace("{{pack_paths}}", f"- {CHARTER_MD}")
     .replace("{{fields_questions}}", "q")
     .replace("{{open_gaps}}", "g"),
     encoding="utf-8",
@@ -94,32 +103,27 @@ def test_analyze_task_prompt_no_l0(mini_workvault, mini_overlay, skill_root):
   assert "Confluence/DPAN" not in prompt
   assert "- L0:" not in prompt
   assert "local_path:" not in prompt
-  assert "digest/leaves" in prompt
+  assert CHARTER_MD in prompt
 
 
 def test_document_prompt_no_l0(mini_workvault, mini_overlay):
   cfg = load_project_config("TestProject", workvault=mini_workvault)
   overlay = mini_overlay
   (overlay / "docs").mkdir(exist_ok=True)
-  (overlay / "digest").mkdir(exist_ok=True)
+  _write_fresh_context(overlay)
   (overlay / "docs" / "architect-plan.md").write_text(
     "Plan referencing page_id: `514903239`\n",
     encoding="utf-8",
   )
-  (overlay / "digest" / "_index.md").write_text("---\n---\n# index\n", encoding="utf-8")
-  _write_fresh_digest(overlay, "514903239")
-  pack_dir = overlay / "docs" / "_inbox" / "feature_compare"
-  pack_dir.mkdir(parents=True)
-  (pack_dir / "PACK.md").write_text("- page_id: `514903239`\n", encoding="utf-8")
 
   prompt = build_document_prompt(overlay, cfg)
   assert "Confluence/DPAN" not in prompt
   assert "- L0:" not in prompt
-  assert "digest/leaves/p514903239.md" in prompt
-  assert "_index.md" in prompt
+  assert CHARTER_MD in prompt
+  assert ARCH_MD in prompt
 
 
-def test_document_preflight_fails_without_digest(mini_workvault, mini_overlay):
+def test_document_preflight_fails_without_context(mini_workvault, mini_overlay):
   cfg = load_project_config("TestProject", workvault=mini_workvault)
   (mini_overlay / "docs").mkdir(exist_ok=True)
   (mini_overlay / "docs" / "architect-plan.md").write_text(

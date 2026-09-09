@@ -8,7 +8,7 @@ def test_migrate_p0_to_schema(mini_overlay, mini_workvault):
   raw = json.loads((mini_overlay / "MANIFEST.json").read_text(encoding="utf-8"))
   assert is_p0_manifest(raw)
   m = migrate_manifest_p0(raw, slug="TestProject")
-  assert m.schema_version == "1.0"
+  assert m.schema_version == "1.1"
   assert len(m.pages) == 3
   assert "493477568" in m.pages
   assert m.pages["493477568"]["title"] == "Root"
@@ -18,7 +18,7 @@ def test_migrate_idempotent(mini_overlay):
   raw = json.loads((mini_overlay / "MANIFEST.json").read_text(encoding="utf-8"))
   m1 = migrate_manifest_p0(raw, slug="TestProject").to_dict()
   m2 = migrate_manifest_p0(m1, slug="TestProject")
-  assert m2.schema_version == "1.0"
+  assert m2.schema_version == "1.1"
   assert len(m2.pages) == 3
 
 

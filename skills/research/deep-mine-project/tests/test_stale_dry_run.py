@@ -68,7 +68,10 @@ def test_stale_non_dry_run_persists_after_rebuild(mini_workvault, mini_overlay):
     with patch("deepmine.refresh.run_pull"):
       with patch("deepmine.refresh._meetings_changed", return_value=False):
         with patch("deepmine.refresh.write_diff"):
-          report = refresh_pages(cfg, manifest, mini_overlay, mini_workvault, dry_run=False)
+          with patch("deepmine.refresh.run_graph"):
+            with patch("deepmine.refresh.run_facts"):
+              with patch("deepmine.context_run.run_context"):
+                report = refresh_pages(cfg, manifest, mini_overlay, mini_workvault, dry_run=False)
 
   assert report.dry_run is False
   assert report.stale == ["p499549642"]

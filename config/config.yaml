@@ -167,7 +167,7 @@ auxiliary:
     timeout: 360
   compression:
     provider: tutu
-    model: ''
+    model: deepseek/deepseek-v4-flash-0731
     base_url: ''
     api_key: ''
     timeout: 120
@@ -434,8 +434,7 @@ kanban:
   auto_decompose: false
   auto_decompose_per_tick: 3
   dispatch_stale_timeout_seconds: 14400
-  max_in_progress_per_profile: 1
-  max_in_progress: 1
+  max_in_progress_per_profile: 3
 code_execution:
   mode: project
   timeout: 300

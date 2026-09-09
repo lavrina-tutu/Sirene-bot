@@ -17,6 +17,7 @@ from .paths import ensure_overlay_dirs, overlay_dir, workvault_root
 from .project_config import (
   default_trisigma_yaml,
   load_project_config,
+  migrate_project_yaml,
   project_yaml_path,
 )
 
@@ -26,6 +27,7 @@ def _add_common(sp: argparse.ArgumentParser) -> None:
   sp.add_argument("--workvault", default=None, help="WorkVault root (default ~/WorkVault)")
   sp.add_argument("--dry-run", action="store_true", help="Report only, no writes")
   sp.add_argument("--json", dest="json_out", action="store_true", help="Machine-readable summary")
+  sp.add_argument("--skip-llm", action="store_true", help="Skip LLM steps (facts llm, context)")
 
 
 def cmd_init(args: argparse.Namespace) -> int:
@@ -40,6 +42,7 @@ def cmd_init(args: argparse.Namespace) -> int:
     else:
       print(f"Create PROJECT.yaml manually: {yaml_path}", file=sys.stderr)
       return 2
+  migrate_project_yaml(yaml_path)
   result = {"overlay": str(overlay), "project_yaml": str(yaml_path)}
   if args.json_out:
     print(json.dumps(result, ensure_ascii=False))
@@ -83,6 +86,7 @@ def cmd_collect(args: argparse.Namespace) -> int:
         workvault=wv,
         gantt_page_id=cfg.gantt_page_id,
         manifest=manifest,
+        project_title=str(cfg.plan.get("project_title") or cfg.display_name),
       )
       if manifest is None:
         manifest = load_manifest(overlay, slug=cfg.slug)
@@ -128,6 +132,69 @@ def cmd_collect(args: argparse.Namespace) -> int:
   return 0
 
 
+def cmd_graph(args: argparse.Namespace) -> int:
+  from .graph_build import run_graph
+
+  wv = workvault_root(args.workvault)
+  cfg = load_project_config(args.slug, workvault=wv)
+  overlay = overlay_dir(wv, args.slug)
+  graph = run_graph(cfg, overlay, wv, dry_run=args.dry_run)
+  result = {"nodes": len(graph.get("nodes") or {}), "edges": len(graph.get("edges") or [])}
+  if args.json_out:
+    print(json.dumps(result, ensure_ascii=False))
+  else:
+    print(f"graph ok: nodes={result['nodes']} edges={result['edges']}")
+  return 0
+
+
+def cmd_facts(args: argparse.Namespace) -> int:
+  from .facts_run import run_facts
+
+  wv = workvault_root(args.workvault)
+  cfg = load_project_config(args.slug, workvault=wv)
+  overlay = overlay_dir(wv, args.slug)
+  manifest = load_manifest(overlay, slug=cfg.slug)
+  data = run_facts(
+    cfg, overlay, wv, manifest.pages,
+    skip_llm=args.skip_llm or args.dry_run,
+    dry_run=args.dry_run,
+  )
+  if args.json_out:
+    print(json.dumps({"facts_sha": data.get("facts_sha")}, ensure_ascii=False))
+  else:
+    print(f"facts ok: sha={data.get('facts_sha', '?')[:12]}")
+  return 0
+
+
+def cmd_context(args: argparse.Namespace) -> int:
+  from .context_run import run_context
+
+  wv = workvault_root(args.workvault)
+  cfg = load_project_config(args.slug, workvault=wv)
+  overlay = overlay_dir(wv, args.slug)
+  kind = getattr(args, "context_kind", None) or getattr(args, "kind", "charter")
+  result = run_context(
+    cfg, overlay, wv, kind,
+    skip_llm=args.skip_llm,
+    dry_run=args.dry_run,
+  )
+  if args.json_out:
+    print(json.dumps(result, ensure_ascii=False))
+  else:
+    print(f"context {kind} ok: {result.get('path', result)}")
+  return 0
+
+
+def cmd_charter(args: argparse.Namespace) -> int:
+  args.context_kind = "charter"
+  return cmd_context(args)
+
+
+def cmd_architecture(args: argparse.Namespace) -> int:
+  args.context_kind = "architecture"
+  return cmd_context(args)
+
+
 def cmd_refresh(args: argparse.Namespace) -> int:
   from .refresh import refresh_pages
 
@@ -139,12 +206,16 @@ def cmd_refresh(args: argparse.Namespace) -> int:
     cfg, manifest, overlay, wv,
     dry_run=args.dry_run,
     extract_tables=getattr(args, "extract_tables", False),
+    skip_llm=args.skip_llm,
   )
   out = {
     "checked": report.checked,
     "skipped": report.skipped,
     "stale": report.stale,
     "dry_run": report.dry_run,
+    "graph": report.graph,
+    "facts": report.facts,
+    "contexts": report.contexts,
   }
   if args.json_out:
     print(json.dumps(out, ensure_ascii=False))
@@ -178,11 +249,15 @@ def cmd_mine(args: argparse.Namespace) -> int:
   rc = cmd_collect(args)
   if rc != 0:
     return rc
-  digest_args = argparse.Namespace(**vars(args))
-  digest_args.plan_only = False
-  digest_args.only = None
-  digest_args.all_stale = False
-  return cmd_digest(digest_args)
+  for handler in (cmd_graph, cmd_facts, cmd_charter, cmd_architecture):
+    rc = handler(args)
+    if rc != 0:
+      return rc
+  if args.json_out:
+    print(json.dumps({"mine": "ok", "steps": ["collect", "graph", "facts", "charter", "architecture"]}))
+  else:
+    print("mine ok: collect → graph → facts → charter → architecture")
+  return 0
 
 
 def cmd_pack(args: argparse.Namespace) -> int:
@@ -206,7 +281,7 @@ def cmd_pack(args: argparse.Namespace) -> int:
 def cmd_analyze(args: argparse.Namespace) -> int:
   from .cursor_jobs import analyze
   from .pack import resolve_task_page_id
-  from .source import list_unready_pages, require_fresh_digest
+  from .source import list_unready_contexts, require_fresh_context
 
   wv = workvault_root(args.workvault)
   cfg = load_project_config(args.slug, workvault=wv)
@@ -218,29 +293,20 @@ def cmd_analyze(args: argparse.Namespace) -> int:
   if bool(task) == bool(full_archive):
     raise ValidationError("нужен --task или --full-archive (исключающе)")
 
-  manifest = load_manifest(overlay, slug=cfg.slug)
   pack_dir = None
 
   if full_archive:
-    unready = list_unready_pages(overlay, manifest)
-    if allow_stale:
-      unready = [p for p in unready if p["status"] != "stale"]
-    if unready:
-      lines = [f"  - {p['page_id']} ({p['status']}): {p['digest_path']}" for p in unready]
+    unready = list_unready_contexts(overlay)
+    if not allow_stale and unready:
+      lines = [f"  - {p['kind']} ({p['status']}): {p['path']}" for p in unready]
       raise ValidationError(
-        "digest archive not ready for full-archive analyze:\n" + "\n".join(lines)
+        "context archive not ready for full-archive analyze:\n" + "\n".join(lines)
       )
+    require_fresh_context(overlay, "charter", slug=cfg.slug)
+    require_fresh_context(overlay, "architecture", slug=cfg.slug)
   else:
     page_id = resolve_task_page_id(cfg, task, page_id=getattr(args, "page_id", None))
-    page = manifest.pages.get(page_id)
-    require_fresh_digest(
-      overlay,
-      page_id,
-      allow_stale=allow_stale,
-      manifest_page=page,
-      slug=cfg.slug,
-      task_hint=task,
-    )
+    require_fresh_context(overlay, "charter", slug=cfg.slug)
     pack_dir = overlay / "docs" / "_inbox" / task
 
   result = analyze(
@@ -300,15 +366,12 @@ def build_parser() -> argparse.ArgumentParser:
     help="Extract L0 tables to docs/_inbox/<role>/extracts/ for task_pages",
   )
 
-  p_refresh = sub.add_parser("refresh", help="Incremental refresh")
-  _add_common(p_refresh)
-  p_refresh.add_argument(
-    "--extract-tables",
-    action="store_true",
-    help="Extract L0 tables for task_pages after refresh",
-  )
-
   for name, handler in (
+    ("graph", cmd_graph),
+    ("facts", cmd_facts),
+    ("charter", cmd_charter),
+    ("architecture", cmd_architecture),
+    ("refresh", cmd_refresh),
     ("digest", cmd_digest),
     ("mine", cmd_mine),
     ("analyze", cmd_analyze),
@@ -325,18 +388,28 @@ def build_parser() -> argparse.ArgumentParser:
         help="Recompress all pages (default: stale only)",
       )
       p.add_argument("--plan-only", action="store_true")
+    if name == "refresh":
+      p.add_argument(
+        "--extract-tables",
+        action="store_true",
+        help="Extract L0 tables for task_pages after refresh",
+      )
     if name == "analyze":
       p.add_argument("--task", default=None, help="Task id for pack-based analyze (G)")
       p.add_argument(
         "--full-archive",
         action="store_true",
-        help="Analyze full digest archive (all pages must have fresh digest)",
+        help="Analyze full context archive",
       )
       p.add_argument(
         "--allow-stale",
         action="store_true",
-        help="Allow stale digests (analyze only, read-only)",
+        help="Allow stale contexts (analyze only, read-only)",
       )
+
+  p_context = sub.add_parser("context", help="Synthesize charter or architecture context")
+  _add_common(p_context)
+  p_context.add_argument("--context", dest="context_kind", choices=["charter", "architecture"], required=True)
 
   p_pack = sub.add_parser("pack", help="Build task pack for architect (PACK.md + BRIEF.md)")
   _add_common(p_pack)
@@ -352,6 +425,11 @@ def main(argv: list[str] | None = None) -> int:
   handlers = {
     "init": cmd_init,
     "collect": cmd_collect,
+    "graph": cmd_graph,
+    "facts": cmd_facts,
+    "charter": cmd_charter,
+    "architecture": cmd_architecture,
+    "context": cmd_context,
     "refresh": cmd_refresh,
     "digest": cmd_digest,
     "mine": cmd_mine,

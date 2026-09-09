@@ -1,4 +1,4 @@
-"""Refresh: poll Confluence version, stale tracking, diff."""
+"""Refresh: poll Confluence version, stale tracking, diff, graph/facts/context."""
 from __future__ import annotations
 
 import hashlib
@@ -18,7 +18,9 @@ from .confluence_pull import run_pull
 from .cursor_jobs import write_diff
 from .digest_io import mark_stale_manifest, utc_now_iso
 from .fail import ValidationError, confluence_down
-from .manifest import rebuild_all
+from .facts_run import run_facts
+from .graph_build import run_graph
+from .manifest import rebuild_all, save_manifest
 from .meetings import index_meetings, write_meetings_pointer
 from .models import Manifest
 from .mpp_run import (
@@ -40,6 +42,9 @@ class RefreshReport:
   stale: list[str] = field(default_factory=list)
   diff_entries: list[dict[str, str]] = field(default_factory=list)
   dry_run: bool = False
+  graph: bool = False
+  facts: bool = False
+  contexts: list[str] = field(default_factory=list)
 
 
 def _client():
@@ -129,11 +134,13 @@ def refresh_pages(
   *,
   dry_run: bool = False,
   extract_tables: bool = False,
+  skip_llm: bool = False,
 ) -> RefreshReport:
   report = RefreshReport(dry_run=dry_run)
   _assert_task_pages_in_manifest(cfg, manifest)
   client = _client()
   stale_slugs: list[str] = []
+  stale_page_ids: set[str] = set()
 
   for page_id, page in manifest.pages.items():
     report.checked += 1
@@ -144,6 +151,7 @@ def refresh_pages(
       slug = page.get("digest_slug") or f"p{page_id}"
       report.stale.append(slug)
       report.diff_entries.append({"slug": slug, "old": str(local_v), "new": "missing"})
+      stale_page_ids.add(page_id)
       continue
     if remote_v == local_v:
       report.skipped += 1
@@ -153,6 +161,7 @@ def refresh_pages(
     report.diff_entries.append({"slug": slug, "old": str(local_v), "new": str(remote_v)})
     mark_stale_manifest(manifest, slug)
     stale_slugs.append(slug)
+    stale_page_ids.add(page_id)
     if not dry_run:
       run_pull(page_id, recursive=False, resync=True)
       page["digest_status"] = "stale"
@@ -169,6 +178,7 @@ def refresh_pages(
       pages=manifest["pages"],
       attachments=manifest.get("attachments", []),
       digests=manifest.get("digests", {}),
+      contexts=manifest.get("contexts", {}),
     )
     manifest = manifest_obj
     for slug in stale_slugs:
@@ -214,6 +224,7 @@ def refresh_pages(
         workvault=workvault,
         gantt_page_id=cfg.gantt_page_id,
         manifest=manifest,
+        project_title=str(cfg.plan.get("project_title") or cfg.display_name),
       )
       register_plan_in_manifest(manifest, csv, overlay)
       manifest.digests.setdefault(PLAN_DIGEST_KEY, get_plan_digest(manifest))
@@ -233,18 +244,32 @@ def refresh_pages(
 
   if report.diff_entries and not dry_run:
     write_diff(overlay, report.diff_entries)
-  elif report.diff_entries and dry_run:
-    pass
 
   if not dry_run:
-    (overlay / "MANIFEST.json").write_text(
-      json.dumps(manifest.to_dict(), ensure_ascii=False, indent=2) + "\n",
-      encoding="utf-8",
-    )
+    save_manifest(manifest, overlay)
 
   if extract_tables and not dry_run:
     from .table_extract import extract_for_task_pages
 
     extract_for_task_pages(cfg, overlay, workvault, manifest)
+
+  if stale_page_ids or report.stale:
+    if not dry_run:
+      run_graph(cfg, overlay, workvault)
+      report.graph = True
+      run_facts(
+        cfg, overlay, workvault, manifest.pages,
+        skip_llm=skip_llm,
+        only_page_ids=stale_page_ids if stale_page_ids else None,
+      )
+      report.facts = True
+      from .context_run import run_context
+
+      for kind in ("charter", "architecture"):
+        try:
+          run_context(cfg, overlay, workvault, kind, skip_llm=skip_llm)
+          report.contexts.append(kind)
+        except Exception:
+          pass
 
   return report

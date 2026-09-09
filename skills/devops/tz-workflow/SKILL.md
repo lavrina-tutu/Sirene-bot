@@ -43,17 +43,17 @@ metadata:
 | Шаг | Роль | Модель | Когда |
 |---|---|---|---|
 | BRF | оркестратор (Сирень) | `deepseek-v4-flash-0731` | Бриф в TG: `BRF:*` → `GATE:brief-closed` (не карточка) |
-| Шаг 0 — Компрессия ТЗ | компрессор | `composer-2.5` | `TZ:compress`: экстракт master-ТЗ 3–5 КБ |
+| Шаг 0 — Компрессия ТЗ | оркестратор (Сирень) | `deepseek-v4-flash-0731` (осн. Hermes) | `TZ:compress`: экстракт master-ТЗ 3–5 КБ, без Cursor |
 | TZ-WRITE | архитектор | `cursor-grok-4.6-high` | `TZ:patch` / `TZ:finalize`: анализ, архитектура, текст ТЗ |
 | REV | ревизор | `claude-sonnet-5-medium` | `REV:tz` — по умолчанию во всех dev-задачах; искл. лёгкие BUGFIX/SKILL-CHANGE ≤3 файла (08.09.2026) |
 | Механические задачи | координатор | `composer-2.5` | Операторские кроны, инвентарь без семантики |
 
 Сборка кейсов (DEV/CHANGE/BUGFIX/…) — блоки из GLOSSARY §2/§5.1, не рукописные цепочки. Канон: `~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md`.
 
-### Шаг 0 — Компрессия ТЗ (отдельная задача Cursor)
+### Шаг 0 — Компрессия ТЗ (выполняет оркестратор, без Cursor)
 
 - **Промпт:** `~/WorkVault/Registries/tz-compressor-prompt.md`
-- **Модель:** `composer-2.5`.
+- **Модель:** `deepseek/deepseek-v4-flash-0731` (основная Hermes), оркестратор; **не через Cursor CLI**.
 - **Вход:** полный текст master-ТЗ инструмента (+ зависимые ТЗ, если связаны).
 - **Выход:** «актуальная спецификация» 3–5 КБ, full-coverage (100% сущностей/полей/API/лимитов, имена дословно).
 - **Без кэша:** экстракты не сохраняются между задачами — только в памяти сессии до передачи архитектору.
@@ -61,8 +61,7 @@ metadata:
 - **Контекст экосистемы:** опционально `EcosystemManifest.digest.md` для связей (не вместо экстракта своего ТЗ).
 
 ```bash
-cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "Шаг 0 tz-workflow: компрессия ТЗ по tz-compressor-prompt.md для [Tool]. Полный текст ТЗ: …" \
-  -f --model composer-2.5 --output-format json
+Компрессию выполняет оркестратор (Сирень) напрямую: промпт tz-compressor-prompt.md + полный текст ТЗ → «Актуальная спецификация» 3–5 КБ в ответ. Без вызова `agent -p`.
 ```
 
 ### Паттерн вызова Cursor CLI
@@ -180,7 +179,7 @@ TZ:patch (секция + version bump + инвентарь в том же ход
 Режим `full` = кейс CHANGE (GLOSSARY §2). Все пункты — **отдельные карточки**; parents как в графе выше:
 
 - [ ] `TZ:stabilize` done (path, `version`, `mtime` в metadata)
-- [ ] `TZ:compress` done (экстракт 3–5 КБ, без кэша, модель компрессора `composer-2.5`)
+- [ ] `TZ:compress` done (экстракт 3–5 КБ, без кэша, модель `deepseek-v4-flash-0731` оркестратором)
 - [ ] `TZ:patch` done (архитектор `cursor-grok-4.6-high`, `--resume` своей сессии)
 - [ ] `REV:tz` done **или** comment `flag-waived: Sasha` (default ON для CHANGE)
 - [ ] `TZ:finalize` done (запись `TZ/<Tool>/<Tool>_TZ.md` + инвентарь) — **только после** родителей ниже
@@ -200,7 +199,7 @@ TZ:patch (секция + version bump + инвентарь в том же ход
 
 | Шаг | Фаза | Модель |
 |---|---|---|
-| 0 | TZ:compress | composer-2.5 |
+| 0 | TZ:compress | deepseek-v4-flash-0731 (оркестратор) |
 | TZ-WRITE | TZ:patch | cursor-grok-4.6-high (`--resume`) |
 | REV | REV:tz | claude-sonnet-5-medium |
 | finalize | TZ:finalize | cursor-grok-4.6-high — запись `TZ/<Tool>/<Tool>_TZ.md` + `MAIN_TZ_INVENTORY.md` |

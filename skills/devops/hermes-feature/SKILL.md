@@ -88,7 +88,7 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
 Одна роль: {role} ({model}). Только фаза {phase}. Чужие фазы не выполнять.
 ```
 
-Роли/модели (PI B3): compress=компрессор `composer-2.5`; plan/patch/finalize=архитектор `cursor-grok-4.6-high` (CHANGE-LIGHT ≤3 файла: допустим `cursor-grok-4.6-medium`); REV=ревизор `claude-sonnet-5-medium`; impl/test/docs-handoff=исполнитель `composer-2.5`; backup=координатор `composer-2.5`; ORCH=оркестратор.
+Роли/модели (PI B3): compress=оркестратор `deepseek-v4-flash-0731` (без Cursor; заключение t_645aa647); plan/patch/finalize=архитектор `cursor-grok-4.6-high` (CHANGE-LIGHT ≤3 файла: допустим `cursor-grok-4.6-medium`); REV=ревизор `claude-sonnet-5-medium`; impl/test/docs-handoff=исполнитель `composer-2.5`; backup=координатор `composer-2.5`; ORCH=оркестратор.
 
 4. `kanban_complete` с metadata:
 
@@ -167,7 +167,7 @@ One-pass — **не** «одним `agent -p` исполнителя» и **не
 
 | Шаг | Роль | Модель | Блок |
 |---|---|---|---|
-| 0 | Компрессия ТЗ | `composer-2.5` | Блок 0 / tz-workflow Шаг 0 |
+| 0 | Компрессия ТЗ | `deepseek-v4-flash-0731` (оркестратор, без Cursor) | Блок 0 / tz-workflow Шаг 0 |
 | 1 | Архитектор (ТЗ, план, риски) | `cursor-grok-4.6-high` | Блок 0, 1, 1А, 6В |
 | 2 | Исполнитель (код, тесты) | `composer-2.5` | Блок 1А baseline, 2–4, 7 |
 | 3 | Контроль (тесты, верификация) | `composer-2.5` | Блок 3 |

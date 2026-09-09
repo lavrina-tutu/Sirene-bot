@@ -196,7 +196,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 
 ## Блок 1: Анализ вариантов
 
-**Шаг 0 (отдельный Cursor, composer):** компрессия master-ТЗ по `tz-compressor-prompt.md` — full-coverage 3–5 КБ, без кэша.
+**Шаг 0 (оркестратор, без Cursor):** компрессия master-ТЗ по `tz-compressor-prompt.md` на `deepseek-v4-flash-0731` — full-coverage 3–5 КБ, без кэша.
 
 **Шаг 1 (отдельный Cursor, архитектор):** анализ вариантов на входе digest + экстракты Шага 0.
 

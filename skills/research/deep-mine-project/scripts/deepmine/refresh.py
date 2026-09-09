@@ -8,16 +8,23 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from .attachments import (
+  download_attachment,
+  expected_attachment_names,
+  is_ole2_or_zip,
+  list_whitelist,
+)
 from .confluence_pull import run_pull
 from .cursor_jobs import write_diff
 from .digest_io import mark_stale_manifest, utc_now_iso
-from .fail import ValidationError
+from .fail import ValidationError, confluence_down
 from .manifest import rebuild_all
 from .meetings import index_meetings, write_meetings_pointer
 from .models import Manifest
 from .mpp_run import (
   PLAN_DIGEST_KEY,
   export_plan,
+  find_gantt_json,
   find_plan_source,
   get_plan_digest,
   register_plan_in_manifest,
@@ -74,6 +81,44 @@ def _assert_task_pages_in_manifest(cfg: ProjectConfig, manifest: Manifest) -> No
         f"task_pages role={role} page_id={page_id} not in MANIFEST — "
         "добавь в task_pages и collect"
       )
+
+
+def _is_gantt_source(cfg: ProjectConfig) -> bool:
+  return str(cfg.plan.get("source") or "").lower() == "gantt" and bool(cfg.gantt_page_id)
+
+
+def _sync_gantt_attachments(cfg: ProjectConfig, manifest: Manifest, overlay: Path) -> None:
+  """Download whitelist attachments from the Gantt page; merge, do not drop other files."""
+  page_id = cfg.gantt_page_id
+  if not page_id:
+    return
+  client = _client()
+  if not client.ping():
+    confluence_down("ping failed")
+  expected = expected_attachment_names(cfg)
+  dest = overlay / "attachments"
+  now = utc_now_iso()
+  downloaded: list[dict[str, Any]] = []
+  for meta in list_whitelist(page_id, client, expected):
+    local = download_attachment(meta, client, dest)
+    data = local.read_bytes()
+    downloaded.append(
+      {
+        "filename": meta.filename,
+        "page_id": meta.page_id,
+        "download_url": meta.download_url,
+        "local_path": str(local.relative_to(overlay)),
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "filesize": len(data),
+        "format_hint": is_ole2_or_zip(local),
+        "synced_at": now,
+      }
+    )
+  if not downloaded:
+    return
+  names = {row["filename"] for row in downloaded}
+  kept = [row for row in manifest.attachments if row.get("filename") not in names]
+  manifest.attachments = kept + downloaded
 
 
 def refresh_pages(
@@ -136,8 +181,13 @@ def refresh_pages(
     if "m-index" not in report.stale:
       report.stale.append("m-index")
 
+  att_dir = overlay / "attachments"
+  old_sha_by_name = {a.get("filename"): a.get("sha256") for a in manifest.attachments}
+  if _is_gantt_source(cfg) and not dry_run:
+    _sync_gantt_attachments(cfg, manifest, overlay)
+
   plan_path = find_plan_source(
-    overlay / "attachments",
+    att_dir,
     gantt_instance=cfg.gantt_instance,
     expected_name=str(cfg.plan.get("expected_name") or ""),
   )
@@ -149,16 +199,14 @@ def refresh_pages(
 
   if plan_path:
     new_sha = hashlib.sha256(plan_path.read_bytes()).hexdigest()
-    old_sha = next(
-      (
-        a.get("sha256")
-        for a in manifest.attachments
-        if a.get("filename") == plan_path.name
-      ),
-      next((a.get("sha256") for a in manifest.attachments), None),
+    old_sha = old_sha_by_name.get(plan_path.name)
+    sha_changed = old_sha != new_sha
+    switched_to_gantt = (
+      _is_gantt_source(cfg)
+      and plan_path.name.lower().startswith("gantt-chart-")
+      and get_plan_digest(manifest).get("kind") != "gantt"
     )
-    sha_changed = bool(old_sha and new_sha != old_sha)
-    if (sha_changed or gantt_page_stale) and not dry_run:
+    if (sha_changed or gantt_page_stale or switched_to_gantt) and not dry_run:
       csv = export_plan(
         plan_path,
         overlay / "mpp",
@@ -172,11 +220,16 @@ def refresh_pages(
       manifest.digests[PLAN_DIGEST_KEY]["status"] = "stale"
       if PLAN_DIGEST_KEY not in report.stale:
         report.stale.append(PLAN_DIGEST_KEY)
-    elif gantt_page_stale and dry_run:
+    elif dry_run and (gantt_page_stale or switched_to_gantt or sha_changed):
       if PLAN_DIGEST_KEY not in report.stale:
         report.stale.append(PLAN_DIGEST_KEY)
-  elif gantt_page_stale and PLAN_DIGEST_KEY not in report.stale:
-    report.stale.append(PLAN_DIGEST_KEY)
+  elif _is_gantt_source(cfg) or gantt_page_stale:
+    if PLAN_DIGEST_KEY not in report.stale:
+      report.stale.append(PLAN_DIGEST_KEY)
+
+  if dry_run and _is_gantt_source(cfg) and find_gantt_json(att_dir, cfg.gantt_instance) is None:
+    if PLAN_DIGEST_KEY not in report.stale:
+      report.stale.append(PLAN_DIGEST_KEY)
 
   if report.diff_entries and not dry_run:
     write_diff(overlay, report.diff_entries)

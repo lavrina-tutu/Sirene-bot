@@ -1,7 +1,7 @@
 ---
 name: deep-mine-project
 description: "Use when: глубокий анализ проекта, глубокое бурение, собери/обнови архив проекта, deep-mine refresh, digest проекта, проектная документация полного внедрения. Полуавтоматический сбор контекста (Confluence+Gantt JSON+встречи+сущность) в MD-overlay, сжатие digest, ручной refresh. Не для точечного RAG (workvault-rag), не sync одной страницы (ConfluenceSync), не компрессия ТЗ (tz-compressor-prompt)."
-version: 0.5.0
+version: 0.5.1
 platforms: [linux]
 metadata:
   hermes:
@@ -95,6 +95,7 @@ One `agent -p` = one model. Compressor `composer-2.5`, architect `cursor-grok-4.
 - Do not feed G/H with `Confluence/**/index.md` — CLI enforces digest-only (no L0 in PACK/BRIEF; missing digest → exit 2)
 - Do not use `tz-compressor-prompt.md`
 - Do not treat `Trisigma_Plan.mpp` as the plan source — Gantt JSON on page 519492770 is canonical for WBS
+- `refresh` with `plan.source=gantt` downloads `gantt-chart-*.json` before CSV; leftover `.mpp` in `attachments/` is not the plan source
 - Cost is **not** JSON leaf sum: always «Трудозатраты» from L0 «Итого» × rate; JSON hours may drift
 
 ## Verification

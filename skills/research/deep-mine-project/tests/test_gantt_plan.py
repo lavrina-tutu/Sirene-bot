@@ -305,8 +305,9 @@ meetings:
 
   with patch("deepmine.refresh.poll_version", side_effect=fake_poll):
     with patch("deepmine.refresh._meetings_changed", return_value=False):
-      with patch("deepmine.refresh.write_diff"):
-        report = refresh_pages(cfg, manifest, mini_overlay, mini_workvault, dry_run=False)
+      with patch("deepmine.refresh._sync_gantt_attachments"):
+        with patch("deepmine.refresh.write_diff"):
+          report = refresh_pages(cfg, manifest, mini_overlay, mini_workvault, dry_run=False)
 
   assert "plan" in report.stale
   disk = json.loads((mini_overlay / "MANIFEST.json").read_text(encoding="utf-8"))
@@ -315,3 +316,121 @@ meetings:
   assert disk["digests"]["plan"]["cost_rub"] == 19_536_000.0
   assert disk["digests"]["plan"]["effort_source"] == "l0-page-total"
   assert list((mini_overlay / "mpp").glob("*__tasks.csv"))
+
+
+def test_refresh_downloads_gantt_json_instead_of_using_local_mpp(
+  mini_workvault, mini_overlay,
+):
+  """plan.source=gantt: refresh must fetch gantt-chart-*.json, not export leftover .mpp."""
+  from unittest.mock import MagicMock, patch
+
+  from deepmine.attachments import AttachmentMeta
+  from deepmine.manifest import migrate_manifest_p0, rebuild_all
+  from deepmine.project_config import load_project_config
+  from deepmine.refresh import refresh_pages
+
+  rebuild_all(
+    mini_overlay,
+    mini_workvault,
+    slug="TestProject",
+    root_page_id="493477568",
+    pmo_seeds=[{"page_id": "490166551"}],
+  )
+  l0_rel = "Confluence/DPAN/timeline/index.md"
+  l0_path = mini_workvault / l0_rel
+  l0_path.parent.mkdir(parents=True, exist_ok=True)
+  l0_path.write_text(L0_ITOGO.read_text(encoding="utf-8"), encoding="utf-8")
+
+  (mini_overlay / "PROJECT.yaml").write_text(
+    """schema_version: "1.0"
+slug: TestProject
+display_name: Test
+entity_slug: trisigma
+confluence:
+  root_page_id: "493477568"
+  root_title: Root
+  space_primary: DPAN
+  pmo_seeds:
+    - { page_id: "490166551", title: PMO, space: PMO }
+plan:
+  source: gantt
+  gantt_page_id: "519492770"
+  gantt_instance: b10931f5-7163-4270-95c4-b8d1ca9d23ac
+  rate_rub_per_hour: 3000
+meetings:
+  project_slugs: [trisigma]
+""",
+    encoding="utf-8",
+  )
+
+  att_dir = mini_overlay / "attachments"
+  att_dir.mkdir(parents=True, exist_ok=True)
+  mpp = att_dir / "Trisigma_Plan.mpp"
+  mpp.write_bytes(b"\xd0\xcf\x11\xe0" + b"old-mpp")
+  gantt_name = "gantt-chart-b10931f5-7163-4270-95c4-b8d1ca9d23ac.json"
+  assert not (att_dir / gantt_name).exists()
+
+  raw = json.loads((mini_overlay / "MANIFEST.json").read_text(encoding="utf-8"))
+  raw["attachments"] = [
+    {"filename": mpp.name, "sha256": "a" * 64, "local_path": f"attachments/{mpp.name}"}
+  ]
+  raw.setdefault("pages", {})
+  raw["pages"]["519492770"] = {
+    "title": "Timeline",
+    "local_path": l0_rel,
+    "digest_slug": "p519492770",
+    "version": "2",
+  }
+  raw["digests"] = {"plan": {"kind": "mpp", "status": "fresh", "effort_hours": 0}}
+  (mini_overlay / "MANIFEST.json").write_text(
+    json.dumps(raw, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+  )
+
+  cfg = load_project_config("TestProject", workvault=mini_workvault)
+  manifest = migrate_manifest_p0(raw, slug="TestProject")
+
+  def fake_poll(client, page_id):
+    return int(manifest.pages[page_id].get("version") or 0)
+
+  def fake_list_whitelist(page_id, client, expected_names):
+    assert page_id == "519492770"
+    return [
+      AttachmentMeta(
+        page_id=page_id,
+        filename=gantt_name,
+        download_url="https://example.invalid/gantt.json",
+        filesize=100,
+      )
+    ]
+
+  def fake_download(meta, client, dest_dir):
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    dest = dest_dir / meta.filename
+    dest.write_text(MINI_GANTT.read_text(encoding="utf-8"), encoding="utf-8")
+    return dest
+
+  mock_client = MagicMock()
+  mock_client.ping.return_value = True
+
+  with patch("deepmine.refresh._client", return_value=mock_client):
+    with patch("deepmine.refresh.poll_version", side_effect=fake_poll):
+      with patch("deepmine.refresh._meetings_changed", return_value=False):
+        with patch("deepmine.refresh.list_whitelist", side_effect=fake_list_whitelist):
+          with patch("deepmine.refresh.download_attachment", side_effect=fake_download):
+            with patch("deepmine.refresh.write_diff"):
+              report = refresh_pages(
+                cfg, manifest, mini_overlay, mini_workvault, dry_run=False
+              )
+
+  assert (att_dir / gantt_name).is_file()
+  assert mpp.is_file()
+  assert "plan" in report.stale
+  disk = json.loads((mini_overlay / "MANIFEST.json").read_text(encoding="utf-8"))
+  assert disk["digests"]["plan"]["kind"] == "gantt"
+  assert disk["digests"]["plan"]["effort_hours"] == 6512.0
+  assert disk["digests"]["plan"]["cost_rub"] == 19_536_000.0
+  gantt_csv = list((mini_overlay / "mpp").glob("gantt-chart-*__tasks.csv"))
+  assert gantt_csv
+  mpp_csv = list((mini_overlay / "mpp").glob("Trisigma_Plan__tasks.csv"))
+  assert not mpp_csv
+

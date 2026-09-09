@@ -15,7 +15,13 @@ from .fail import ValidationError
 from .manifest import rebuild_all
 from .meetings import index_meetings, write_meetings_pointer
 from .models import Manifest
-from .mpp_run import export_csv, find_mpp_attachment, register_mpp_in_manifest
+from .mpp_run import (
+  PLAN_DIGEST_KEY,
+  export_plan,
+  find_plan_source,
+  get_plan_digest,
+  register_plan_in_manifest,
+)
 from .paths import CONFLUENCE_SYNC_CWD
 from .project_config import ProjectConfig
 
@@ -130,16 +136,47 @@ def refresh_pages(
     if "m-index" not in report.stale:
       report.stale.append("m-index")
 
-  mpp_path = find_mpp_attachment(overlay / "attachments", cfg.mpp.get("expected_name", ""))
-  if mpp_path:
-    new_sha = hashlib.sha256(mpp_path.read_bytes()).hexdigest()
-    old_sha = next((a.get("sha256") for a in manifest.attachments), None)
-    if old_sha and new_sha != old_sha and not dry_run:
-      csv = export_csv(mpp_path, overlay / "mpp")
-      register_mpp_in_manifest(manifest, csv, overlay)
-      manifest.digests.setdefault("mpp-plan", {})["status"] = "stale"
-      if "mpp-plan" not in report.stale:
-        report.stale.append("mpp-plan")
+  plan_path = find_plan_source(
+    overlay / "attachments",
+    gantt_instance=cfg.gantt_instance,
+    expected_name=str(cfg.plan.get("expected_name") or ""),
+  )
+  gantt_page_id = cfg.gantt_page_id
+  gantt_page_stale = False
+  if gantt_page_id and gantt_page_id in manifest.pages:
+    gantt_slug = manifest.pages[gantt_page_id].get("digest_slug") or f"p{gantt_page_id}"
+    gantt_page_stale = gantt_slug in report.stale
+
+  if plan_path:
+    new_sha = hashlib.sha256(plan_path.read_bytes()).hexdigest()
+    old_sha = next(
+      (
+        a.get("sha256")
+        for a in manifest.attachments
+        if a.get("filename") == plan_path.name
+      ),
+      next((a.get("sha256") for a in manifest.attachments), None),
+    )
+    sha_changed = bool(old_sha and new_sha != old_sha)
+    if (sha_changed or gantt_page_stale) and not dry_run:
+      csv = export_plan(
+        plan_path,
+        overlay / "mpp",
+        rate_rub_per_hour=cfg.rate_rub_per_hour,
+        workvault=workvault,
+        gantt_page_id=cfg.gantt_page_id,
+        manifest=manifest,
+      )
+      register_plan_in_manifest(manifest, csv, overlay)
+      manifest.digests.setdefault(PLAN_DIGEST_KEY, get_plan_digest(manifest))
+      manifest.digests[PLAN_DIGEST_KEY]["status"] = "stale"
+      if PLAN_DIGEST_KEY not in report.stale:
+        report.stale.append(PLAN_DIGEST_KEY)
+    elif gantt_page_stale and dry_run:
+      if PLAN_DIGEST_KEY not in report.stale:
+        report.stale.append(PLAN_DIGEST_KEY)
+  elif gantt_page_stale and PLAN_DIGEST_KEY not in report.stale:
+    report.stale.append(PLAN_DIGEST_KEY)
 
   if report.diff_entries and not dry_run:
     write_diff(overlay, report.diff_entries)

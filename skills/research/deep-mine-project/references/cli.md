@@ -32,7 +32,7 @@ Entry-point:
 
 - `--skip-a` — skip Confluence pull
 - `--skip-b` — skip attachments
-- `--skip-c` — skip MPP CSV
+- `--skip-c` — skip plan CSV (Gantt JSON / MPP fallback)
 - `--skip-d` — skip meetings index
 - `--skip-e` — skip manifest rebuild
 - `--skip-entity` — skip entity pointer
@@ -49,7 +49,7 @@ Entry-point:
 | 0 | ok |
 | 2 | validation / PROJECT.yaml |
 | 3 | Confluence down / 401 / 403 |
-| 4 | MPP / Java error |
+| 4 | plan export (Gantt JSON) / MPP / Java error |
 | 5 | meetings index unavailable |
 | 6 | digest validation rejected |
 

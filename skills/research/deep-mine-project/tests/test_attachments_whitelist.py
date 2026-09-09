@@ -6,8 +6,10 @@ def test_whitelist_extensions():
   assert is_whitelisted("plan.mpp", set())
   assert is_whitelisted("plan.mpx", set())
   assert is_whitelisted("data.xml", set())
+  assert is_whitelisted("gantt-chart-abc.json", set())
   assert not is_whitelisted("notes.pdf", set())
   assert is_whitelisted("custom name", {"custom name"})
+  assert ".json" in WHITELIST_EXT
 
 
 def test_zip_not_unzipped(tmp_path):

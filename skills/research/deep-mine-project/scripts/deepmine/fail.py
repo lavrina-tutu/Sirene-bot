@@ -50,6 +50,10 @@ def mpp_failed(reason: str) -> None:
   raise MppError(f"MPP export failed: {reason}")
 
 
+def plan_failed(reason: str) -> None:
+  raise MppError(f"Plan export failed: {reason}")
+
+
 def meetings_failed(reason: str) -> None:
   raise MeetingsIndexError(f"Meetings index unavailable: {reason}")
 

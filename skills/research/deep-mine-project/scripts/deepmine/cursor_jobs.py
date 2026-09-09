@@ -375,22 +375,35 @@ def compress_plan(overlay: Path, cfg: ProjectConfig, *, dry_run: bool = False) -
     return
   plan_path = mpp_dir / "plan.md"
   existing = sorted(load_all_digests(overlay))
+  summaries = sorted(mpp_dir.glob("*__summary.json"))
   source = f"CSV в {mpp_dir}: " + ", ".join(p.name for p in csv_files)
+  if summaries:
+    source += "; summary: " + ", ".join(p.name for p in summaries)
   if dry_run:
     return
   parts = [build_compress_prompt(source, cfg, existing)]
+  rate = cfg.rate_rub_per_hour
+  parts.append(
+    "\nПравило стоимости: трудозатраты из блока «Итого» L0-страницы плана "
+    f"(не сумма листьев Gantt JSON) × {rate} ₽/чел-час. "
+    "Длительность периода — из «Итого»; ИСР, даты задач и ресурсы — из CSV/JSON.\n"
+  )
+  for summary in summaries[:2]:
+    parts.append(f"\n### {summary.name}\n```\n{summary.read_text(encoding='utf-8')[:4000]}\n```")
   for csv in csv_files[:3]:
     parts.append(f"\n### {csv.name}\n```\n{csv.read_text(encoding='utf-8')[:8000]}\n```")
   result = run_agent("\n".join(parts), COMPRESSOR_MODEL, overlay)
   if result.returncode != 0:
     raise RuntimeError(result.stderr or result.stdout)
   md = extract_md_from_agent(result)
+  title = cfg.plan.get("project_title") or "Project plan"
+  kind = "gantt" if summaries or cfg.plan.get("source") == "gantt" else "mpp"
   fallback = {
     "schema_version": "1.0",
-    "kind": "mpp",
-    "slug": "mpp-plan",
-    "title": cfg.mpp.get("project_title", "MPP plan"),
-    "source_kind": "mpp",
+    "kind": kind,
+    "slug": "plan",
+    "title": title,
+    "source_kind": kind,
     "status": "fresh",
     "generated_at": utc_now_iso(),
     "generated_by": COMPRESSOR_MODEL,
@@ -401,8 +414,8 @@ def compress_plan(overlay: Path, cfg: ProjectConfig, *, dry_run: bool = False) -
     fm, body = parse_digest_text(md)
   except ValueError:
     fm, body = fallback, md
-  fm.setdefault("kind", "mpp")
-  fm.setdefault("slug", "mpp-plan")
+  fm.setdefault("kind", kind)
+  fm.setdefault("slug", "plan")
   fm.setdefault("status", "fresh")
   fm.setdefault("generated_by", COMPRESSOR_MODEL)
   write_digest(plan_path, fm, body)

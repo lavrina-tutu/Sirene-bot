@@ -58,3 +58,6 @@ def pull_seed_tree(cfg: ProjectConfig) -> None:
     run_pull(str(seed["page_id"]), recursive=False, resync=True)
   for task in cfg.task_pages:
     run_pull(str(task["page_id"]), recursive=False, resync=True)
+  gantt_page_id = cfg.gantt_page_id
+  if gantt_page_id:
+    run_pull(gantt_page_id, recursive=False, resync=True)

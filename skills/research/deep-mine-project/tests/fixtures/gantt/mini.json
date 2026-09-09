@@ -1,0 +1,64 @@
+{
+  "eventsData": [
+    {
+      "id": 1,
+      "parentId": null,
+      "name": "Root project",
+      "startDate": "2026-09-28T09:00:00",
+      "endDate": "2026-10-12T09:00:00",
+      "duration": 10,
+      "durationUnit": "day",
+      "effortUnit": "hour",
+      "percentDone": 0,
+      "rollup": true,
+      "unscheduled": false,
+      "constraintType": "",
+      "children": [
+        {
+          "id": 2,
+          "parentId": 1,
+          "name": "Leaf A",
+          "startDate": "2026-09-28T09:00:00",
+          "endDate": "2026-10-05T09:00:00",
+          "duration": 5,
+          "durationUnit": "day",
+          "effort": 8,
+          "effortUnit": "hour",
+          "percentDone": 0,
+          "rollup": false,
+          "unscheduled": false,
+          "constraintType": "",
+          "children": []
+        },
+        {
+          "id": 3,
+          "parentId": 1,
+          "name": "Leaf B",
+          "startDate": "2026-10-05T09:00:00",
+          "endDate": "2026-10-12T09:00:00",
+          "duration": 5,
+          "durationUnit": "day",
+          "effort": 2,
+          "effortUnit": "hour",
+          "percentDone": 0,
+          "rollup": false,
+          "unscheduled": false,
+          "constraintType": "startnoearlierthan",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "resourcesData": [
+    {"id": 10, "name": "Alice", "resourceType": "custom", "parentId": null}
+  ],
+  "dependenciesData": [
+    {"id": 20, "from": 2, "to": 3, "type": 2, "lag": 0, "lagUnit": "day", "active": true}
+  ],
+  "assignmentsData": [
+    {"id": 30, "event": 2, "resource": 10, "units": 100}
+  ],
+  "startDate": "2026-09-28",
+  "macroConfig": {},
+  "calendarsData": []
+}

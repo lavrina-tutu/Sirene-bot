@@ -8,6 +8,7 @@ from typing import Any
 from .cursor_jobs import compress_leaf, compress_plan, compress_theme, rebuild_graph
 from .digest_io import list_stale, utc_now_iso
 from .manifest import load_manifest
+from .mpp_run import PLAN_DIGEST_KEY, get_plan_digest
 from .project_config import ProjectConfig
 
 
@@ -35,9 +36,11 @@ def run_digest(
   if plan_only:
     compress_plan(overlay, cfg, dry_run=dry_run)
     if not dry_run:
-      manifest.digests.setdefault("mpp-plan", {})["status"] = "fresh"
+      entry = get_plan_digest(manifest)
+      entry["status"] = "fresh"
+      manifest.digests[PLAN_DIGEST_KEY] = entry
     _save_manifest(overlay, manifest)
-    return {"compressed": ["mpp-plan"], "plan_only": True}
+    return {"compressed": [PLAN_DIGEST_KEY], "plan_only": True}
 
   targets: list[tuple[str, dict[str, Any]]] = []
   if only:
@@ -72,11 +75,12 @@ def run_digest(
       for theme in cfg.themes:
         compress_theme(theme, overlay, cfg, dry_run=False)
 
-      mpp_info = manifest.digests.get("mpp-plan", {})
-      if mpp_info.get("status") in ("pending_compress", "stale", None):
+      plan_info = get_plan_digest(manifest)
+      if plan_info.get("status") in ("pending_compress", "stale", None):
         if list((overlay / "mpp").glob("*__tasks.csv")):
           compress_plan(overlay, cfg)
-          mpp_info["status"] = "fresh"
+          plan_info["status"] = "fresh"
+          manifest.digests[PLAN_DIGEST_KEY] = plan_info
 
     rebuild_graph(overlay, manifest, generated_at)
     for page_id, page in manifest.pages.items():

@@ -22,6 +22,7 @@ def test_default_trisigma_yaml_has_task_pages():
   assert "519489611" in text
   assert "514903239" in text
   assert "490167911" not in text.split("task_pages:")[1].split("follow_outbound")[0]
+  assert "gantt_page_id:" in text
 
 
 def test_project_config_task_pages_property(mini_workvault: Path, mini_overlay: Path):
@@ -65,13 +66,37 @@ def test_pull_seed_tree_includes_task_pages(mock_pull: MagicMock):
       "pmo_seeds": [{"page_id": "2"}],
       "task_pages": [{"page_id": "514903239", "role": "feature_compare"}],
     },
-    mpp={},
+    plan={},
     meetings={},
   )
   pull_seed_tree(cfg)
   pulled_ids = [c.args[0] for c in mock_pull.call_args_list]
   assert "514903239" in pulled_ids
   assert mock_pull.call_args_list[-1].kwargs.get("recursive") is False
+
+
+@patch("deepmine.confluence_pull.run_pull")
+def test_pull_seed_tree_includes_gantt_page(mock_pull: MagicMock):
+  from deepmine.project_config import ProjectConfig
+
+  cfg = ProjectConfig(
+    schema_version="1.0",
+    slug="T",
+    display_name="T",
+    entity_slug="t",
+    confluence={
+      "root_page_id": "1",
+      "root_title": "R",
+      "space_primary": "X",
+      "pmo_seeds": [],
+      "task_pages": [],
+    },
+    plan={"gantt_page_id": "519492770"},
+    meetings={},
+  )
+  pull_seed_tree(cfg)
+  pulled_ids = [c.args[0] for c in mock_pull.call_args_list]
+  assert "519492770" in pulled_ids
 
 
 def _manifest_with_page(page_id: str, local_path: str) -> Manifest:

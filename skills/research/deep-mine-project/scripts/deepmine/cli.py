@@ -12,7 +12,7 @@ from .entity import write_entity_pointer
 from .fail import DeepMineError, ValidationError, exit_from_error
 from .manifest import load_manifest, rebuild_all
 from .meetings import index_meetings, write_meetings_pointer
-from .mpp_run import export_csv, find_mpp_attachment, register_mpp_in_manifest
+from .mpp_run import export_plan, find_plan_source, register_plan_in_manifest
 from .paths import ensure_overlay_dirs, overlay_dir, workvault_root
 from .project_config import (
   default_trisigma_yaml,
@@ -70,15 +70,26 @@ def cmd_collect(args: argparse.Namespace) -> int:
     summary["steps"].append(f"B:attachments:{att['downloaded']}")
 
   if not args.skip_c:
-    mpp_path = find_mpp_attachment(overlay / "attachments", cfg.mpp.get("expected_name", ""))
-    if mpp_path:
-      csv = export_csv(mpp_path, overlay / "mpp")
+    plan_path = find_plan_source(
+      overlay / "attachments",
+      gantt_instance=cfg.gantt_instance,
+      expected_name=str(cfg.plan.get("expected_name") or ""),
+    )
+    if plan_path:
+      csv = export_plan(
+        plan_path,
+        overlay / "mpp",
+        rate_rub_per_hour=cfg.rate_rub_per_hour,
+        workvault=wv,
+        gantt_page_id=cfg.gantt_page_id,
+        manifest=manifest,
+      )
       if manifest is None:
         manifest = load_manifest(overlay, slug=cfg.slug)
-      register_mpp_in_manifest(manifest, csv, overlay)
-      summary["steps"].append("C:mpp_csv")
+      register_plan_in_manifest(manifest, csv, overlay)
+      summary["steps"].append(f"C:plan_csv:{csv.kind}")
     else:
-      summary["steps"].append("C:mpp_csv:skipped_no_file")
+      summary["steps"].append("C:plan_csv:skipped_no_file")
 
   if not args.skip_d:
     rows = index_meetings(cfg.meeting_project_slugs)
@@ -278,7 +289,7 @@ def build_parser() -> argparse.ArgumentParser:
   _add_common(p_collect)
   p_collect.add_argument("--skip-a", action="store_true")
   p_collect.add_argument("--skip-b", action="store_true")
-  p_collect.add_argument("--skip-c", action="store_true")
+  p_collect.add_argument("--skip-c", action="store_true", help="skip plan CSV (Gantt JSON / MPP fallback)")
   p_collect.add_argument("--skip-d", action="store_true")
   p_collect.add_argument("--skip-e", action="store_true")
   p_collect.add_argument("--skip-entity", action="store_true")

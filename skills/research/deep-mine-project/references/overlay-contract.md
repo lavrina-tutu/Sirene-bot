@@ -22,11 +22,26 @@
     }
   },
   "attachments": [],
-  "digests": {}
+  "digests": {
+    "plan": {
+      "kind": "gantt",
+      "csv_tasks": "mpp/<stem>__tasks.csv",
+      "csv_resources": "mpp/<stem>__resources.csv",
+      "csv_assignments": "mpp/<stem>__assignments.csv",
+      "plan_path": "mpp/plan.md",
+      "status": "fresh|stale|pending_compress",
+      "effort_hours": 6512,
+      "rate_rub_per_hour": 3000,
+      "cost_rub": 19536000,
+      "effort_source": "l0-page-total"
+    }
+  }
 }
 ```
 
 P0 flat map migrates to `pages` wrapper. `children` rebuilt by parent inversion (L0 `children: []` is normal).
+
+On read, `digests["plan"]` is canonical; `digests["mpp-plan"]` is accepted as a legacy alias. Cost = L0 «Трудозатраты» × `PROJECT.yaml` `plan.rate_rub_per_hour` (`effort_source: l0-page-total`). JSON leaf sum is not used.
 
 ## Digest frontmatter
 
@@ -77,7 +92,7 @@ Missing theme file → skip (not fail). `status: rejected` → omit from PACK.md
 ## Invariants
 
 - L0 bodies stay in `WorkVault/Confluence/**` — not copied to overlay.
-- **G/H/pack** use `digest/leaves` (+ theme digests, extracts, MPP CSV) as canonical source; L0 is only for F (compress) and collect/refresh/table_extract.
+- **G/H/pack** use `digest/leaves` (+ theme digests, extracts, plan CSV from Gantt JSON) as canonical source; L0 is only for F (compress) and collect/refresh/table_extract.
 - `content_sha256` = full 64-char sha256 of MD body after YAML frontmatter.
 - TREE.md = hierarchical parent→children, not flat by space.
 - PMO seeds appear at top level alongside DPAN root tree.

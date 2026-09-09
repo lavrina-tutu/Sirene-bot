@@ -124,9 +124,12 @@ def _pack_index_lines(
   mpp_dir = overlay / "mpp"
   csv_files = sorted(mpp_dir.glob("*__tasks.csv")) if mpp_dir.is_dir() else []
   if csv_files:
-    lines.extend(["", "## MPP CSV"])
+    lines.extend(["", "## Plan CSV"])
     for csv in csv_files:
       lines.append(f"- `{csv.relative_to(overlay)}`")
+    summary = sorted(mpp_dir.glob("*__summary.json"))
+    for path in summary:
+      lines.append(f"- `{path.relative_to(overlay)}`")
 
   extracts_dir = overlay / "docs" / "_inbox" / task_id / "extracts"
   lines.extend(["", "## Extracts"])
@@ -197,7 +200,9 @@ def run_pack(
   mpp_dir = overlay / "mpp"
   if mpp_dir.is_dir():
     for csv in sorted(mpp_dir.glob("*__tasks.csv")):
-      path_lines.append(f"- mpp: `{csv.relative_to(overlay)}`")
+      path_lines.append(f"- plan: `{csv.relative_to(overlay)}`")
+    for summary in sorted(mpp_dir.glob("*__summary.json")):
+      path_lines.append(f"- plan summary: `{summary.relative_to(overlay)}`")
   pack_paths = "\n".join(path_lines)
   brief_md = pack_dir / "BRIEF.md"
   brief_md.write_text(_brief_skeleton(task_id, pack_paths), encoding="utf-8")

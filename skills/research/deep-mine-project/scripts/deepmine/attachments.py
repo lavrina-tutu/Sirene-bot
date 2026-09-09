@@ -14,7 +14,7 @@ from .paths import CONFLUENCE_SYNC_CWD
 from .project_config import ProjectConfig
 
 
-WHITELIST_EXT = {".mpp", ".mpx", ".xml"}
+WHITELIST_EXT = {".mpp", ".mpx", ".xml", ".json"}
 OLE2_SIG = b"\xd0\xcf\x11\xe0"
 ZIP_SIG = b"PK\x03\x04"
 
@@ -45,12 +45,25 @@ def is_whitelisted(filename: str, expected_names: set[str]) -> bool:
 
 
 def is_ole2_or_zip(path: Path) -> str:
+  if path.suffix.lower() == ".json":
+    return "json"
   head = path.read_bytes()[:4]
   if head.startswith(OLE2_SIG):
     return "ole2"
   if head.startswith(ZIP_SIG):
     return "zip"
   return "unknown"
+
+
+def expected_attachment_names(cfg: ProjectConfig) -> set[str]:
+  names: set[str] = set()
+  expected = cfg.plan.get("expected_name") or ""
+  if expected:
+    names.add(str(expected))
+  instance = cfg.gantt_instance
+  if instance:
+    names.add(f"gantt-chart-{instance}.json")
+  return names
 
 
 def list_whitelist(page_id: str, client: Any, expected_names: set[str]) -> list[AttachmentMeta]:
@@ -89,9 +102,8 @@ def sync_attachments(cfg: ProjectConfig, manifest: Manifest, overlay: Path) -> d
   client = _client()
   if not client.ping():
     confluence_down("ping failed")
-  expected = {cfg.mpp.get("expected_name", "")}
-  expected.discard("")
-  page_ids = [cfg.root_page_id] + [str(s["page_id"]) for s in cfg.pmo_seeds]
+  expected = expected_attachment_names(cfg)
+  page_ids = cfg.attachment_page_ids
   now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
   records: list[dict[str, Any]] = []
   for page_id in page_ids:

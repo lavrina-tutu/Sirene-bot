@@ -88,7 +88,7 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
 Одна роль: {role} ({model}). Только фаза {phase}. Чужие фазы не выполнять.
 ```
 
-Роли/модели (PI B3): compress=компрессор `composer-2.5`; plan/patch/finalize=архитектор `cursor-grok-4.6-high`; REV=ревизор `claude-sonnet-5-medium`; impl/test/docs-handoff=исполнитель `composer-2.5`; backup=координатор `composer-2.5`; ORCH=оркестратор.
+Роли/модели (PI B3): compress=компрессор `composer-2.5`; plan/patch/finalize=архитектор `cursor-grok-4.6-high` (CHANGE-LIGHT ≤3 файла: допустим `cursor-grok-4.6-medium`); REV=ревизор `claude-sonnet-5-medium`; impl/test/docs-handoff=исполнитель `composer-2.5`; backup=координатор `composer-2.5`; ORCH=оркестратор.
 
 4. `kanban_complete` с metadata:
 
@@ -140,6 +140,8 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
 4. exit 1 или 2 → comment чек-лист stderr; `kanban_block`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) или `review-required: collapsed-chain` (exit 2).
 
 **Пошаговый ход:** только Саша (Telegram «готово» **или** дашборд). После `ORCH:shared-state` Сирень показывает итог в Telegram и просит подтвердить. Корень `DEV/<slug>` закрывается только после `GATE:done`.
+
+**Скриптовый one-pass (A1):** в режиме «1 проход» `GATE:done` **не требует отдельного LLM-воркера** — preflight (`pipeline_gate_done_preflight.py --case ...`) уже скрипт и единственная проверка. `kanban_complete` выполняет тот же воркер, что закрыл родителя (или 10-строчный hook), с comment `auto-pass: one-pass mode`. Не разворачивать `agent -p` ради написания «отчёта» — итог в TG пишет оркестратор.
 
 **Режим «делай в 1 проход»:** `GATE:done` auto-complete **только после** preflight exit 0 — comment `auto-pass: one-pass mode` + `kanban_complete` + закрытие корня.
 

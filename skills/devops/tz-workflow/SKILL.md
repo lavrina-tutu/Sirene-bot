@@ -154,6 +154,27 @@ DEV/<slug>                          корень (живёт до GATE:done)
 
 `workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на карточке: `tz-workflow`, `cursor-cli`, `cursor-task-context`. Idempotency: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
 
+#### Быстрый путь CHANGE-LIGHT (опционально, ≤3 файла)
+
+Для малых доработок существующего инструмента (без новых сущностей/cron/.env),
+когда канон `GLOSSARY §2/§5.1` выбран кейс `CHANGE-LIGHT` (6 карточек вместо полного графа):
+
+```
+TZ:patch (секция + version bump + инвентарь в том же ходе, stabilize/compress skip)
+  → HF:impl → HF:test → HF:docs-handoff (создаёт version-handoff)
+  → GATE:done (auto-pass one-pass: preflight → complete)
+```
+
+- `TZ:stabilize`/`TZ:compress` — **skip** (архитектор читает целевые §, не весь master-ТЗ).
+- `REV:tz` — **OFF** при ≤3 файлах кода вне shared/foundational-модулей
+  (не трогать общие модули: парсинг дат, запись задач, резолв людей).
+- `HF:plan`/`GATE:plan-approve`/`HF:backup`/`ORCH:shared-state` — **skip** для ≤3 файлов
+  (бэккап = git/копия 3 файлов; манифест не меняется).
+- Такая карточка НЕ содержит «склейку фаз одним agent -p» — каждая из
+  TZ:patch / HF:impl / HF:test / HF:docs-handoff — отдельная карточка/вызов.
+
+`GLOSSARY` канон — источник истины; этот раздел — сокращённая шпаргалка.
+
 ### Чек-лист TZ-WRITE(full)
 
 Режим `full` = кейс CHANGE (GLOSSARY §2). Все пункты — **отдельные карточки**; parents как в графе выше:

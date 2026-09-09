@@ -1,7 +1,7 @@
 ---
 name: deep-mine-project
 description: "Use when: глубокий анализ проекта, глубокое бурение, собери/обнови архив проекта, deep-mine refresh, digest проекта, проектная документация полного внедрения. Полуавтоматический сбор контекста (Confluence+Gantt JSON+встречи+сущность) в MD-overlay, сжатие digest, ручной refresh. Не для точечного RAG (workvault-rag), не sync одной страницы (ConfluenceSync), не компрессия ТЗ (tz-compressor-prompt)."
-version: 0.5.1
+version: 0.5.2
 platforms: [linux]
 metadata:
   hermes:
@@ -36,7 +36,8 @@ Semi-automated deep project mining: Confluence L0 + Gantt-JSON plan + meetings +
 |---|---|
 | собери архив / пробури | `mine --slug TrisigmaFull` |
 | обнови архив / refresh | `refresh --slug TrisigmaFull` |
-| сожми digest | `digest --slug TrisigmaFull` |
+| сожми digest (stale + plan) | `digest --slug TrisigmaFull` |
+| полный пересбор digest | `digest --slug TrisigmaFull --full` |
 | анализ архитектору | `analyze --slug TrisigmaFull --task <task_id>` |
 | pack для задачи | `pack --slug TrisigmaFull --task feature_compare` |
 | оформи документы | `document --slug TrisigmaFull` |

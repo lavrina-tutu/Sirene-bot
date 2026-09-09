@@ -163,6 +163,7 @@ def cmd_digest(args: argparse.Namespace) -> int:
     cfg, overlay, wv,
     only=args.only,
     all_stale=args.all_stale,
+    full=getattr(args, "full", False),
     plan_only=args.plan_only,
     dry_run=args.dry_run,
   )
@@ -318,6 +319,11 @@ def build_parser() -> argparse.ArgumentParser:
     if name == "digest":
       p.add_argument("--only", default=None)
       p.add_argument("--all-stale", action="store_true")
+      p.add_argument(
+        "--full",
+        action="store_true",
+        help="Recompress all pages (default: stale only)",
+      )
       p.add_argument("--plan-only", action="store_true")
     if name == "analyze":
       p.add_argument("--task", default=None, help="Task id for pack-based analyze (G)")

@@ -26,6 +26,7 @@ def run_digest(
   *,
   only: str | None = None,
   all_stale: bool = False,
+  full: bool = False,
   plan_only: bool = False,
   dry_run: bool = False,
 ) -> dict[str, Any]:
@@ -49,13 +50,13 @@ def run_digest(
       targets.append(found)
     elif only.startswith("p") and only[1:] in manifest.pages:
       targets.append((only[1:], manifest.pages[only[1:]]))
-  elif all_stale:
+  elif full:
+    targets = list(manifest.pages.items())
+  else:
     for slug in list_stale(manifest):
       found = _page_by_slug(manifest, slug)
       if found:
         targets.append(found)
-  else:
-    targets = list(manifest.pages.items())
 
   for page_id, page in targets:
     try:
@@ -70,13 +71,19 @@ def run_digest(
       raise
 
   if not dry_run:
-    full_run = only is None and not all_stale
-    if full_run:
+    if full:
       for theme in cfg.themes:
         compress_theme(theme, overlay, cfg, dry_run=False)
 
       plan_info = get_plan_digest(manifest)
       if plan_info.get("status") in ("pending_compress", "stale", None):
+        if list((overlay / "mpp").glob("*__tasks.csv")):
+          compress_plan(overlay, cfg)
+          plan_info["status"] = "fresh"
+          manifest.digests[PLAN_DIGEST_KEY] = plan_info
+    elif not only:
+      plan_info = get_plan_digest(manifest)
+      if plan_info.get("status") in ("pending_compress", "stale"):
         if list((overlay / "mpp").glob("*__tasks.csv")):
           compress_plan(overlay, cfg)
           plan_info["status"] = "fresh"

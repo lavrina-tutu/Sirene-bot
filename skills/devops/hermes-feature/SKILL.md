@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.3.0
+version: 2.4.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -63,6 +63,8 @@ GATE:take-into-work  (уже снят)
 ├─ ORCH:shared-state    parents=[HF:docs-handoff]
 └─ GATE:done            parents=[ORCH:shared-state]
 ```
+
+Граф выше — **пошаговый** режим (после снятия `GATE:take-into-work` оркестратор разворачивает `PLAN-IMPL-TAIL` + `HF-TAIL` через `kanban_create`). В **корневом** one-pass (корень сам делает работу) этот хвост **не создавать** — см. «One-pass не плодит хвост».
 
 Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`, `cursor-task-context`. ORCH:shared-state — только `hermes-feature`.
 
@@ -149,11 +151,34 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
 
 Условия: мастер-ТЗ на диске; открытых вопросов нет; не обход diagnose-review.
 
-**One-pass = auto-complete трёх гейтов:** `GATE:take-into-work`, `GATE:plan-approve`, `GATE:done`. Auto ≠ skip: карточка гейта создаётся и complete'ится (`auto-pass: one-pass mode`); родительские фазы выполняются **отдельными** `agent -p`. `GATE:done` auto **только после** preflight exit 0.
+**One-pass = auto-complete трёх гейтов:** `GATE:take-into-work`, `GATE:plan-approve`, `GATE:done`. Auto ≠ skip: карточка гейта создаётся и complete'ится (`auto-pass: one-pass mode`). `GATE:done` auto **только после** preflight exit 0.
 
 **Не auto:** `GATE:diagnose-review`, `GATE:go`, `GATE:block-accept`.
 
-One-pass — **не** «одним `agent -p` исполнителя» и **не** «одним заходом»; это авто-гейты, а не склейка фаз.
+One-pass — **не** склейка нескольких **дочерних** фаз в одном промпте на одной карточке (`TZ:patch`+`HF:impl` и т.п. — запрещено GLOSSARY). Это авто-гейты, а не «пропуск» обязательной работы.
+
+#### One-pass не плодит хвост (оркестратор, правило C)
+
+**Когда:** режим «делай в 1 проход» и корень `DEV/<slug>` (типично `CHANGE` / `SKILL-CHANGE` / малый `DEV`) **сам** выполняет цикл целиком — один воркер на корне закрывает ТЗ-правку, код, тесты, docs-handoff; на корне или в comment — `auto-pass: one-pass mode` / явная пометка one-pass от Саши.
+
+**При постановке — не разворачивать полный хвост (~16 фаз):** вместе с корнем **не** создавать через `kanban_create` типовой граф `TZ-WRITE` (`TZ:stabilize` → … → `GATE:take-into-work`, см. `tz-workflow`) **плюс** `PLAN-IMPL-TAIL` + `HF-TAIL` (`HF:compress` → … → `ORCH:shared-state` → `GATE:done`, см. граф выше). Работа уже в корневом `agent -p`; дочерний граф после `complete` корня только дублирует её и съедает слот диспетчера.
+
+Допустимые варианты:
+
+- **Только корень** (предпочтительно для «корень сделал всё»).
+- **Корень + гейты** без промежуточных TZ/HF-фаз (три гейта для audit, сразу `auto-pass: one-pass mode`).
+- **Минимальный граф** по кейсу (например `CHANGE-LIGHT` в GLOSSARY §5.1), если размер задачи совпадает — не полный DEV/CHANGE.
+
+Полный хвост «на всякий случай» при корневом one-pass **запрещён**.
+
+**Пошаговый one-pass** (редко, если хвост уже нужен по размеру): промежуточные фазы графа — **отдельные** `agent -p` на каждую карточку; гейты — auto-pass. Не путать с корневым one-pass.
+
+**После `kanban_complete` корня** (корневой one-pass, артефакты на диске), если дочерние фазы **уже** были созданы (legacy, ошибка постановки):
+
+1. `kanban_show` корня — список детей в `todo|ready|running|blocked`.
+2. Каждую такую карточку **снять с диспатча без нового `agent -p`:** `kanban archive` (CLI/tool), либо при block — `kanban_unblock`, затем `kanban_complete` с comment `auto-archived: one-pass root done`.
+3. `GATE:done` (если карточка есть): `pipeline_gate_done_preflight.py` → exit 0 → `auto-pass: one-pass mode` + `kanban_complete` + закрытие корня.
+4. Comment на корне: `one-pass tail archived: <N> cards` (audit).
 
 **XOR-канал координатора (влечён из инварианта 8, GLOSSARY §5.2):** пока граф `DEV/<slug>` диспатчится (есть дети `todo/ready/running`), координатор **не** вызывает свой `agent -p` на фазы графа — гейты авто-проходятся, фазы выполняет диспетчер. Прежде чем сделать любой **ручной** cursor-cli по слагу:
 1. `kanban_show` корня: дети в `todo|ready|running` → канал `kanban`, свой вызов **стоп** (ждать очередь / auto-pass гейтов).

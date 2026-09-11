@@ -1,0 +1,14 @@
+# Пример --user-map. Не содержит боевых id.
+# Ключи: первый матч побеждает (session_key → source:chat:thread → thread_id → user_id).
+
+session_key:
+  "agent:main:telegram:group:chat-example:topic-1": "Топик Пример 1"
+
+source_chat_thread:
+  "telegram:chat-example:topic-2": "Топик Пример 2"
+
+thread_id:
+  "topic-3": "Топик Пример 3"
+
+user_id:
+  "u-example": "Аналитик Пример"

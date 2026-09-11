@@ -399,6 +399,45 @@ URL сервиса искать в сводной таблице родител�
 - `grep -B5 -A15 'pfsrow-<id>' ~/WorkVault/ProtocolFromSummary/_registry.json` покажет `source_summary`, `meeting_name`, `page_id`
 - Anchor физически живёт в теле страницы как `<ac:structured-macro ac:name="anchor"><ac:parameter>pfsrow-...</ac:parameter></ac:structured-macro>`
 
+## Перенос страниц (с деревом) между пространствами Confluence
+
+**Цель:** перенести родителя «Встречи неразобранные» и все дочерние минутки из личного `~tkachenkoav` в пространство `DPAN` под корень «Общий список задач» (432316254), сохранив pageId (чтобы не сломать PFS/OFC/TR, цепляющиеся на id).
+
+### Главный питфолл: **move через REST НЕВОЗМОЖЕН на Server/DC**
+Проверено (11.09.2026, Confluence 8.9.4). Автоматически перенести страницу в **другое пространство** через API нельзя:
+- `PUT /rest/api/content/{id}` с `space:{key}` → **400 «You can't change an existing page's space»**
+- Cloud-эндпоинты `/move/append/{targetId}`, `/move` → **404** (нет на Server)
+- XML-RPC `confluence2.movePage` — метод есть, но требует `login(username, password)`; **PAT как пароль не проходит** (`AuthenticationFailedException`)
+
+→ **Единственный способ — ручной Move через UI:** ⋯ → **Переместить (Move)** → в другое пространство → вставить как дочернюю к нужной. При move страницы **иерархия детей утащится следом**, pageId **не меняются** (CONTENTID в БД тот же) — ссылки `?pageId=`, вложения, история целы. Copy/recreate — НЕ использовать (новые id → ломает реестры).
+
+**Проверка после move:**
+```bash
+curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" "https://dom.tutu.ru/rest/api/content/<id>?expand=space,ancestors" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d['space']['key'],[a['id'] for a in d['ancestors']])"
+curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" "https://dom.tutu.ru/rest/api/content/<parent>/child/page"  # дети сохранили id
+```
+
+**Совместимость с дашбордами задач (OpenTasks 492610494, «Активные задачи по проектам АиД» 412092707):** они построены на макросе `tasks-report-macro`, фильтрующем по `spaces` + `labels` (обычно `_aid`), **не по pageId**. Поэтому после переноса страниц в DPAN задачи продолжают отображаться автоматически — при условии, что на странице стоит метка, которую макрос требует. Проверять label: `GET /rest/api/content/{id}/label` → `results[].name`; отсутствие `_aid` на странице = её задачи не попадают в дашборд (это было так и до переноса).
+
+### Персональные права (restrictions) в Server/DC
+
+Два слоя: **space permissions** (на всё пространство) и **content restrictions** на странице (сужают, операции `read`/`update`).
+
+**Ставить restriction (Server 8.8+, PUT):**
+```bash
+curl -s -X PUT -H "Authorization: Bearer $CONFLUENCE_TOKEN" -H "Content-Type: application/json" \
+  "https://dom.tutu.ru/rest/api/content/<pageId>/restriction" -d '[
+    {"operation":"read","restrictions":{"user":[{"type":"known","username":"tkachenkoav"},{"type":"known","username":"<login>"}],"group":[]}},
+    {"operation":"update","restrictions":{"user":[{"type":"known","username":"tkachenkoav"},{"type":"known","username":"<login>"}],"group":[]}}
+  ]'
+```
+**Питфоллы:**
+- **В список обязательно включать `tkachenkoav`** — Bearer инструментов = тот же аккаунт; иначе PFS/TR потеряют GET/PUT к странице.
+- **GET `/restriction/byOperation` без суффикса возвращает `size: null`** (пусто выглядит так же, как нет данных). Читать по каждой операции: `/restriction/byOperation/read` и `/restriction/byOperation/update` — именно они показывают реальных юзеров.
+- Restriction **не наследуется на детей** — приватность выставляется **на каждой странице отдельно** (вариант А: закрыть только сами 1-1, родитель оставить открытым — тогда в дереве видны заголовки чужих, но содержимое недоступно).
+- При `PUT` пустые массивы `user:[]` снимают restriction по этой операции; **нельзя снять доступ у самого себя**.
+- Для move в другой space на restricted-страницы нужна проверка права **Restrict** в целевом space; безопаснее: сначала move (страницы открытые), затем сразу restriction (окно утечки — минуты).
+
 ## Вставка JIRA-задачи в Confluence — два контекста
 
 ### 1. Ячейка таблицы (колонка «Задача JIRA»)

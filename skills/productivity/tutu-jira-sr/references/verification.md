@@ -1,5 +1,6 @@
 # SR — полный Verification Checklist
 
+- [ ] Источник правды по блокам: MD (Obsidian) → утверждённый текст в Jira; доработки снова MD → Jira
 - [ ] SELFCHECK/CHECK: сначала `srtool report`/`preview`; ручной флоу — при сбое
 - [ ] FILL: transition `61`, не PUT; `\r\n`, буллет `·`
 - [ ] CHECK: raw + check MD в `sr-tool/<ФИО>/`
@@ -17,7 +18,8 @@
 - [ ] Заливка: только запрошенные поля (итоги ≠ план)
 - [ ] Заливка: GET transitions перед POST; итоги — `271`
 - [ ] Заливка: GET подтвердил текст и статус
-- [ ] rclone sync после WorkVault
+- [ ] После заливки в Jira: `sync_md_header` / `--sync-md` (шапка MD, не перезапись блоков из Jira) + `systemctl --user start owncloud-sync.service` (не ручной `rclone sync`)
+- [ ] Нет повторного GET issue, если srtool fill-plan/report уже вернул success
 - [ ] Методика описана и подтверждена до нестандартного анализа
 - [ ] PLAN: факт прошлого SR первым
 - [ ] PLAN: fixVersion уточнён при расхождении

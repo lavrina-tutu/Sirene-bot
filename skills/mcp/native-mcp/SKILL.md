@@ -1,7 +1,7 @@
 ---
 name: native-mcp
 description: "MCP client: connect servers, register tools (stdio/HTTP)."
-version: 1.0.0
+version: 1.1.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -171,6 +171,59 @@ mcp_servers:
 ```
 
 If HTTP support is not available in your installed `mcp` version, the server will fail with an ImportError and other servers will continue normally.
+
+### OAuth 2.1 (remote MCP with OAuth)
+
+Many remote MCP servers (Miro, Figma, GitHub, …) require OAuth 2.1 + PKCE,
+not a static Bearer token. Hermes supports this via `hermes mcp`, but the CLI
+behaves differently in headless (no browser/TTY) vs interactive environments.
+
+**Pitfall — `hermes mcp add --auth oauth` silently drops the auth flag on a headless VM.**
+In a non-interactive environment `cmd_mcp_add` tries to build an OAuth provider
+and fails (no cached tokens → `OAuthNonInteractiveError`), so it finishes with
+«Continue without authentication?» and **saves the server WITHOUT `auth: oauth`**
+(server ends up `auth=None`, login later fails with «not configured for OAuth»).
+The `--auth oauth` flag is not persisted.
+
+**Fix (verified 2026-09-14, Miro): add the server, then inject `auth: oauth` manually:**
+```bash
+hermes mcp add miro-mcp --url https://mcp.miro.com/ --auth oauth   # saves, but auth=None
+hermes config set mcp_servers.miro-mcp.auth oauth                  # ← injects the flag
+```
+Config file patch is blocked by the security guard on `config.yaml` — always use
+`hermes config set mcp_servers.<name>.auth oauth`, not direct file edits.
+
+**Then authenticate interactively in a user SSH session (paste-back, no port forward):**
+Port forwarding to the VM is often blocked by admins (`AllowTcpForwarding no`), so
+the cleanest path is paste-back. Run in the **user's** SSH session (not through the
+agent's own background terminal — the loopback callback must land on the VM where
+the login process runs):
+```bash
+hermes mcp login miro-mcp
+```
+It prints an authorize URL and waits at «paste the redirect URL here». User:
+1. Opens the URL in their browser, completes the provider OAuth (select team/org).
+2. Browser redirects to `http://127.0.0.1:<port>/callback?code=...&state=...` and
+   shows a connection error (nothing listens on the laptop) — **that's expected.**
+3. Copies the FULL address-bar URL and pastes it back at the terminal prompt.
+4. `hermes mcp` extracts `code`, swaps it for tokens, saves to `~/.hermes/mcp-tokens/`.
+
+Successful output: `✓ Authenticated N tool(s) available`. The shell retries the
+OAuth flow (~5–15 min timeout) and crashes with «callback port already in use» if
+the user is too slow → just re-run `hermes mcp login` and paste promptly.
+
+**After auth: enable + verify**
+```bash
+hermes config set mcp_servers.<name>.enabled true   # server is saved disabled by default
+hermes mcp test <name>                              # → ✓ Connected, Tools discovered: N
+```
+Server restarts only pick up the tools (`Adding/removing servers requires agent
+restart`, no hot-reload) — after enabling, the gateway/agent must restart for the
+`mcp_<name>_*` tools to appear.
+
+**Each OAuth client has its own token store** — a token from Claude Code/Cursor is
+not shared with Hermes. Every client authorizes separately, and many providers
+enforce «last one wins» (a second client login revokes the first).
 
 ## Security
 

@@ -1,14 +1,14 @@
 ---
 name: tutu-jira-sr
 description: "Self-Review (SR) в Jira ТУТУ: план периода (plan), заполнение плана (fill), сверка чужого SR (check), итоги своего SR (selfcheck). Триггеры: self-review, SR, мой SR, заполнить SR, проверить SR, план на период, итоги периода, оценка по SR, перенести открытые пункты."
-version: 1.13.0
+version: 1.14.0
 author: agent
 license: MIT
 platforms: [linux]
 metadata:
   hermes:
     tags: [TUTU, JIRA, SR, self-review, WorkVault, Obsidian]
-    related_skills: [tutu-confluence-jira, tutu-jira-okr]
+    related_skills: [tutu-confluence-jira, tutu-jira-okr, workvault-sync, get-obsidian-link]
 ---
 
 # TUTU Jira Self-Review (SR)
@@ -41,7 +41,7 @@ PUT на эти поля **не работает** — только transition.
 |---|---|
 | `61` | «Отредактировать SR» — **план** 44401–44403 |
 | `271` | «Заполнить итоги» — **итоги** 44404–44406 |
-| `11`/`281` | согласование — **только пользователь**, не агент |
+| `11`/`281` | согласование — **только по явной команде** («отправь на согласование», `fill-plan --submit`). Без команды — не слать. |
 
 ⚠️ Итоги через `61` → `400`. Перед каждой заливкой — `GET /issue/{key}/transitions`, не кэшировать id из начала сессии.
 
@@ -53,7 +53,7 @@ PUT на эти поля **не работает** — только transition.
 |---|---|
 | Итоги (selfcheck) | `python3 -m srtool report SR-XXXXX [--from … --to …]` |
 | Превью план/факт | `python3 -m srtool preview SR-XXXXX` |
-| Заполнение плана (fill) | srtool fill-команды (см. SRTool_TZ.md) |
+| Заполнение плана (fill) | `python3 -m srtool fill-plan SR-XXXXX --from-md <path> [--submit] [--yes] [--sync-md]` |
 
 Запрещено: `curl PUT` на 44401–44406; transition без свежего GET transitions. Исключение: `SR_BYPASS` с явной причиной (инструмент недоступен).
 
@@ -65,6 +65,34 @@ PUT на эти поля **не работает** — только transition.
 - **PLAN** — факт предыдущего SR (44404–44406) первым; см. `references/flow-plan.md`.
 - **Оргструктура:** `contacts.enc` → `find_subordinates`, не по памяти.
 - **Правки методики SR** — архитектору (Cursor), не default в чате.
+- **Источник правды по блокам SR** — локальный MD в Obsidian
+  (`Projects/sr-tool/<ФИО>/SR-<key>_<месяц>_<год>.md` и связанные `_draft.md` / `_selfcheck.md`).
+  Jira — след утверждённого текста, не первоисточник формулировок.
+
+## Рабочий поток: сначала MD (Obsidian) → потом Jira (always-on)
+
+Канбан и встречи этим скиллом **не** ведём — только SR-план/итоги/доработки.
+
+1. **План, итоги, доработки** — сначала правим и дополняем в MD (Obsidian / WorkVault).
+2. **Утверждённый вариант** заливаем в Jira:
+   план — `srtool fill-plan --from-md <path>`; итоги — по `flow-selfcheck.md` + `flow-fill-push.md`.
+3. **Доработка после заливки** — снова **сначала MD**, затем повторная заливка в Jira.
+   Не править блоки 1–6 в Jira вручную как основной способ правки.
+
+### После успешной заливки в Jira (метаданные в том же MD)
+
+Любой успешный POST transition (61 / 271 / 11 / 281):
+
+1. **`sync_md_header`** (в `fill-plan` по умолчанию с `--sync-md`):
+   в шапку **того же** MD, из которого заливали, записать статус Jira, дату, id/имя transition.
+   Это журнал последней заливки, **не** перенос текста блоков из Jira в MD и не смена источника правды.
+2. `systemctl --user start owncloud-sync.service`
+   (скилл `workvault-sync`; **не** ручной `rclone sync`).
+3. В ответ пользователю: статус Jira + путь MD. Ссылку obsidian:// —
+   только по просьбе, скиллом `get-obsidian-link` (формат не менять).
+
+Не делать повторный GET issue, если `srtool fill-plan` / `report` уже вернул success.
+Повторный GET — только при ошибке CLI или `SR_BYPASS`.
 
 ## Питфоллы (кратко)
 
@@ -93,5 +121,7 @@ PUT на эти поля **не работает** — только transition.
 - [ ] SELFCHECK: блок 5 по всем N целям + «Итог:»; draft → check → заливка
 - [ ] CHECK: критерии поштучно; объективность — причинно-следственная связь
 - [ ] Заливка: только явно запрошенные поля; `\r\n`, буллет `·`
-- [ ] rclone sync после WorkVault
+- [ ] Поток: блоки сначала в MD (Obsidian), затем заливка в Jira; доработки — снова MD → Jira
+- [ ] После заливки: `sync_md_header` / `--sync-md` (шапка MD) + `systemctl --user start owncloud-sync.service`
+- [ ] Нет повторного GET, если srtool уже верифицировал
 - [ ] Полный чеклист: `references/verification.md`

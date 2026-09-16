@@ -634,6 +634,8 @@ grep -E "Flushing text batch|inbound message" ~/.hermes/logs/gateway.log \
 
 ### Топики группы «Сирень Workspace» (chat=-1004300127777)
 
+Канон топиков (ровно 8, включая Errors=`11112`) — скилл `tutu-telegram-delivery` / `references/sirene-workspace-topics.yaml`. Restore: `scripts/restore_telegram_topics.sh`. Эта таблица — историческое зеркало без Errors; не расширять.
+
 | Топик | Thread ID | Deliver target |
 |-------|-----------|----------------|
 | General | 1 | `telegram:-1004300127777:1` |

@@ -52,12 +52,14 @@ bash scripts/run_tests.sh -q 2>&1 | tee /tmp/postmerge_tests.log
 # Сравнить с baseline: фейлов НЕ больше, чем было до
 ```
 
-### Шаг 7: Smoke-проверки
+### Шаг 7: Smoke-проверки (import/health, НЕ доставка)
 ```bash
 hermes -p default doctor
 hermes -p default status
 hermes -p default cron list
 ```
+
+Это **не** закрытие попытки. После FF (и после рестарта gateway, если Саша его дал) обязателен чеклист «После FF» в `SKILL.md`: токен-аудит, эффективный allowlist, smoke **группы и DM**. `doctor` / `status` / одно сообщение в DM / cron outbound в топик — недостаточны (прецедент 16.09.2026). Не делать диагностический `getUpdates` на боевом токене.
 
 ### Шаг 8: Commit
 ```bash
@@ -73,7 +75,7 @@ git log -1 --oneline
 
 ## Питфоллы
 
-1. **thinking-high таймаутится на больших задачах.** Для анализа 5000+ коммитов использовать `claude-sonnet-5-thinking-medium` — справляется быстрее при сопоставимом качестве плана.
+1. **thinking-high таймаутится на больших задачах.** Анализ/план на 5000+ коммитов — архитектор `cursor-grok-4.6-high`; `claude-sonnet-5-thinking-*` из паттерна убрать; историческую заметку 07.08 оставить как прецедент; при нехватке объёма резать анализ по директориям (cron/gateway/plugins/agent), не откатываться на Claude.
 2. **.git/index.lock** — может остаться от предыдущих сессий/Cursor. `rm .git/index.lock` перед git-операциями.
 3. **`python -m pytest` не годится** — collection errors на `tests/acp*`. Всегда `scripts/run_tests.sh` (per-file subprocess isolation).
 4. **Фоновые тесты убивает `pkill`** — не использовать `pkill -f` для остановки процессов, использовать `process(action='kill')` по session_id.

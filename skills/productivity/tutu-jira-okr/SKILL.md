@@ -37,6 +37,14 @@ Objective (issuetype 6) + KR (UserStory 12809), связь **Contains** чере
 
 Перед Jira: glob `**/OKRS-*_*.md` / `**/OKRAID-*_*.md` по всему `WorkVault/Projects/okr-tool/`. MD есть → работать с диска; Jira только по явному «обнови». Детали: `references/flow-checkin.md`.
 
+## Направление связи Contains (канон OKRS)
+
+Со стороны **KR (UserStory)** к Objective (Большая задача) связь читается как **«is contained in»** — у KR физически записано `inwardIssue = <родитель-Objective>`, outward пуст. У Objective (родителя) те же связи видны как `outwardIssue = <KR>`; у самой Objective связь к её родителю — `inwardIssue`.
+
+**Питфолл направления:** при создании связи из Objective-родителя `POST /issueLink` указывать `outwardIssue` = родитель-Objective, `inwardIssue` = KR (UserStory). Иначе у KR получится зеркальное `outwardIssue` вместо `inwardIssue`, и связь будет читаться в обратную сторону. Проверять с трёх сторон: родитель `out=<KR>`, KR `in=<parent>`, родитель `in=<его родитель>`.
+
+Между задачами проекта OKRS всегда используем связь **Contains** (KR→Objective = is contained in; Objective уровнем выше = Contains).
+
 ## Карта полей чекина (compact)
 
 | Поле | ID |

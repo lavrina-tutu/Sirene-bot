@@ -1,7 +1,7 @@
 ---
 name: loop-personalized-broadcast
 description: "Send personalized Loop DM messages to a list of recipients."
-version: 1.0.0
+version: 1.0.1
 author: agent
 license: MIT
 platforms: [linux]
@@ -14,6 +14,8 @@ metadata:
 # Loop Personalized Broadcast
 
 Send personalized DM messages from Sasha via Loop to a list of recipients, typically built from a Confluence table row: `Задача JIRA` / `Подразделение` / `Исполнитель`.
+
+**Bulk broadcasts (10+ recipients):** do NOT also send to the Loop channel itself (никому Loop); do NOT include external attendees. Apply default venue «Платформа - Переговорка» and verbatim subject (same as bulk meeting defaults in `exchange-meeting`).
 
 ## Workflow (read-only plan first, then send on explicit OK)
 

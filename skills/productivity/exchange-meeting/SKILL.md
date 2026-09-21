@@ -1,7 +1,7 @@
 ---
 name: exchange-meeting
 description: "Exchange calendar operations via EWS: create meetings, check free/busy, find slots, invite attendees. Integrates with AnywhereContacts for email lookup and Zoom API for meeting links."
-version: "1.0.0"
+version: "1.1.0"
 platforms: [linux, macos, windows]
 tools: [terminal]
 metadata:
@@ -222,6 +222,19 @@ pip install exchangelib python-dotenv
 ```python
 tz = EWSTimeZone("Europe/Moscow")
 ```
+
+## ⚠️ Pitfall: ПДн календаря — не печатать списки участников (инцидент 19.09.2026)
+
+Ад-хок exchangelib-скрипты в терминале (перебор календаря с печатью тем встреч и списков
+участников) оставляют stdout в `~/.hermes/logs/process-results/proc_*.json` в сыром виде
+(ФИО+email, до 7 суток) и порождают шторм PIIScan (19.09 — 4764 находок, 811 critical в ErrorBus).
+
+Правила:
+- Календарь/участников смотреть **только через CLI JSON** (`MeetingScheduler`, `ExchangeMonitor`) —
+  там поля разнесены и не создают декартовых «ФИО × email».
+- Никаких одноразовых `exchangelib`-скриптов с `print` списков участников/тем.
+- В чат/TG — имя/логин, **не** пары ФИО+email; при уточнении кандидата — одно имя.
+- Не трогать: `process_registry_results.py` (ядро Hermes, вне скоупа — решение Саши 21.09).
 
 ## ⚠️ Pitfall: чтение пароля из ~/.config/hermes/.env
 
@@ -511,9 +524,13 @@ PYTHONPATH=/home/tkachenkoav/USERTOOLS /home/tkachenkoav/USERTOOLS/AnywhereConta
 
 «Привет!» в Loop — по переписке **за сегодня** (00:00 МСК), не по дню встречи. Ссылка в Loop — PMI `https://tutu-ru.zoom.us/my/tkachenkoav.meet`.
 
+**«Направил встречу» (отдельная ветка, не смешивать с «Привет!»):** Loop-notify on **meeting date**, not message activity: if the meeting is **TODAY** → auto-send «Направил встречу»; otherwise (future date) → **ASK Sasha** before notifying. SEPARATE branch from the «Привет!» greeting-on-today's-correspondence rule — do NOT merge them.
+
 **Create (шаблон §6.2):** между строкой со ссылкой Zoom и строкой «на …» (дата/время) — отдельная строка `Тема: <subject из Exchange>`. В add / reschedule / cancel отдельной строки «Тема:» нет (тема в заголовке сообщения).
 
 Loop вызывается **внутри** `create_meeting` / `reschedule_meeting` / `add_participant` / `cancel_meeting` — **не** вызывать `LoopNotifier` напрямую из скилла при штатном флоу.
+
+**`--notify-loop` JSON contract:** interpret `loop_report_line=null` as «тихий успех» (silent success); `loop_delivered` = success. Do not treat `null` as failure/no-op.
 
 ### Перенос и отмена встречи — только CLI
 
@@ -536,6 +553,8 @@ PYTHONPATH=/home/tkachenkoav/USERTOOLS python3 -m MeetingScheduler add \
 Loop на add — автоматически новому участнику (без вопроса «уведомление в Loop?»).
 
 ### Массовые встречи (v1.8, >8 участников)
+
+**Create defaults (bulk 10+):** default venue `location` = «Платформа - Переговорка»; `--subject` verbatim (дословно); no external attendees (без внешних участников). Limit `>10` already enforced (see above).
 
 **Подтверждение размера** — перед free/busy, если обязательных > 8:
 ```

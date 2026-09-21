@@ -1,7 +1,7 @@
 ---
 name: tutu-jira-okr
 description: "OKR в Jira ТУТУ (OKRS/OKRAID): чекин, план периода, иерархия Objective/KR, выгрузка в Obsidian. Триггеры: OKR, цели департамента, Key Result, квартальный чекин, закрытие периода OKR, что у нас по OKR, прогресс по целям, OKR АИД, OKRAID."
-version: 2.3.0
+version: 2.3.1
 author: agent
 license: MIT
 platforms: [linux]
@@ -85,6 +85,7 @@ Objective (issuetype 6) + KR (UserStory 12809), связь **Contains** чере
 
 ## Питфоллы (кратко)
 
+- **Pitfall (A11):** field-ID map (`43782`/`43822`/`43717`/`43706`/`43715`) is REFERENCE ONLY — NOT a license to write via direct `curl PUT /issue`. All checkin-field writes → `okrtool checkin apply → push --confirm`; direct PUT only with `OKR_BYPASS` marker. Older note/MEMORY/past session saying «прямой PUT» = STALE (canon v2.3.0+): do not restore — remove from source.
 - SR в Contains-цепочке — фильтровать KR по `issuetype == UserStory`.
 - `parent` в JQL для OKR не работает — только `issuelinks`.
 - Q1–Q4 в названии ≠ период — смотреть `fixVersion`.

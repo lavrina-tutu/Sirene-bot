@@ -1,7 +1,7 @@
 ---
 name: deep-mine-project
 description: "Use when: глубокий анализ проекта, глубокое бурение, собери/обнови архив проекта, deep-mine refresh, charter-context, architecture-context, проектная документация полного внедрения. Полуавтоматический сбор контекста (Confluence+Gantt JSON+встречи+сущность) в 3-слойный overlay (GRAPH/facts/contexts). Не для точечного RAG (workvault-rag), не sync одной страницы (ConfluenceSync), не компрессия ТЗ (tz-compressor-prompt)."
-version: 1.0.0
+version: 1.0.1
 platforms: [linux]
 metadata:
   hermes:
@@ -93,6 +93,7 @@ L0 canonical MD stays in `Confluence/`, `Meetings/`, `Entities/`. Overlay SoT fo
 
 ## Pitfalls
 
+- **Per-page LLM compression is unreliable** — extract facts via script into `charter-context.md`, never per-page LLM. Legacy layer F = legacy; charter = separate command (`--slug` / `--full` flags already exist).
 - VPN fail-loud (exit 3)
 - Context synthesis reject → `*.rejected.json` + exit 6; valid `.md` not overwritten on fail (J4)
 - Same `sources_sha` → 0 LLM for context (J8)

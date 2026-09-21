@@ -1,7 +1,7 @@
 ---
 name: edit-plan-confluence
 description: "Заливка плана MS Project (.mpp/.zip) на страницу Confluence с макросом gantt-chart-planner: полная замена JSON-вложения, календарь MPP, блок «Итого», создание дочерней страницы. Триггеры: «поправь план», «обнови план на страничке», «помести план на страничку», «скорректируй план», «добавь задачу в план», «создай страницу с планом», «поставь гант на страницу» + файл .mpp/.zip. Гейт: дифф + «лей»/«пиши»/«да». Без pageId — спросить. Живая AB 519492935 — только с --allow-live-ab."
-version: "0.2.0"
+version: "0.2.1"
 platforms: [linux]
 tools: [terminal, read_file, write_file]
 metadata:
@@ -70,6 +70,7 @@ $PY $CLI convert --mpp /path/plan.mpp --out /tmp/out.json
 
 ## Питфоллы
 
+- **MPP ↔ Confluence gantt reconciliation:** source of truth is the MPP file («mpp главнее»). Applies ONLY to Confluence-gantt comparison — Jira reconciliation (`plan-reconciliation-mpp-jira`) has a different SoT; do not copy this rule there.
 - `idCounter` = max(все id)+1, **не** 300000.
 - Активные ресурсы = max id на имя; мёртвые копии не включать.
 - На существующем макросе `macro-id`/`id`/`hash` не менять.

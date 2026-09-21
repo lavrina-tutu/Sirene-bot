@@ -1,7 +1,7 @@
 ---
 name: movefrom-instruments
 description: "MoveFrom* umbrella: WorkVault sync pipeline for Fireflies (MoveFromFF), Confluence (ConfluenceSync), Exchange, Zulip, Jira. Architecture principles and per-tool quickref."
-version: 1.0.0
+version: 1.0.1
 author: agent
 tags: [workvault, obsidian, sync, pipeline, jira, confluence, exchange, zulip, fireflies]
 platforms: [windows]
@@ -100,6 +100,10 @@ MoveFrom<Service>/
 2. **Риски выявляются рано** — из реальных данных, до того как стало поздно. PMBOK-подход. Риски оперативные — сегодняшнего дня. Возможности = риски со знаком плюс.
 
 **⚠️ Риск-модуль заморожен до готовности сбора контекста.** Сначала: собрать контекст со всех каналов → страница проекта с текущей ситуацией → PMBOK-разметка.
+
+## Urgent report format (MFE/MFL)
+
+1) date 2) from (от кого) 3) essence + link (суть + ссылка). Repeats: 1 line per task (повторы — 1 стр/задача). Report format only — distinct from urgent-contacts list in `mfl-mfe-urgent-contacts`.
 
 ## Железное правило публикации
 

@@ -1,7 +1,7 @@
 ---
 name: mofs-operations
 description: "Use when: работа с инструментом MarkObjectsFromSummary (MOFS) — запуск прогонов, диагностика, bootstrap архива, управление entities.json, contacts из тела summary. Триггеры: mofs run, mofs rematch, entities.json, словарь тегов, тегирование встреч, wiki-ссылки Obsidian, contacts, ФИО участников, mofs index."
-version: 1.3.0
+version: 1.3.1
 author: Sirene
 license: MIT
 platforms: [linux]
@@ -28,6 +28,7 @@ wiki-ссылками Obsidian по 4 корзинам: projects, tools, rooms, 
   - `mofs_run_cron` (job_id: aeeccba37e4a) — `16 8-19 * * 1-5`, no_agent, deliver=local. Молчит при processed=0, ⚠️ при unmatched_count>0.
   - `mofs_index_rebuild` (job_id: 7e013cd5c6f9) — `0 23 * * *`, no_agent, deliver=local. Ежедневный full-rebuild как страховка.
   - Цепочка: MoveFromFF XX:05 → PFS-batch XX:10 → PFS-notify XX:15 → MOFS XX:16.
+  - **Ошибка крона MOFS → канбан, не самому (21.09.2026).** При ошибке `mofs_run_cron` (job aeeccba37e4a) или `mofs_index_rebuild` (job 7e013cd5c6f9) НЕ чинить самому и НЕ звать архитектора напрямую через `agent -p`. Постановка на канбан: `BUG:diagnose` (root cause + план П.1…П.N) → `GATE:diagnose-review` → `HF:impl`/`HF:test` (по hermes-feature Блок 6В). План починки — `_fix_plan_YYYYMMDD.md` рядом с инструментом (`~/USERTOOLS/MarkObjectsFromSummary/`). Локальный обход средствами скилла (rematch/entity-registry) — только как одношаговый ответ, не как реализация фикса кода `pipeline.py`. Прецедент: NameError parse_rooms 19.09.2026 — починено через BUG:diagnose-граф, не напрямую.
 
 ## Запуск прогонов — обязательный порядок
 

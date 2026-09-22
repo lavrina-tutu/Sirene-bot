@@ -1,7 +1,7 @@
 ---
 name: protocolfromsummary
 description: "Use when working with the ProtocolFromSummary (PFS) tool — publishes Fireflies meeting-summary .md files into Confluence protocol tables (~/USERTOOLS/ProtocolFromSummary). Триггеры: PFS, протокол встречи, опубликовать протокол, задача не резолвится/не мешенится, ROUTES, page_layout, republish, страница протокола поменялась, out_of_scope встречи, роутинг крона PFS."
-version: 1.0.0
+version: 1.1.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -319,6 +319,75 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
     или ручной правки summary-файла (добавить `lenya_1on1` в frontmatter `projects:`).
     **lenya_1on1** → page_id `508804891` (та же страница что и `ilya_1on1` — Лёня заменил Илью).
     Подробный рецепт переноса: `references/force-route-meeting-29072026.md`.
+
+## Проход 2 (Link-n-Dedup promote): площадка → чистовой target (§22–23, дельта v2)
+
+Проход 2 — дельта v2 (`DEV/protocol-from-summary-v2`, план §23). После обычной публикации
+(проход 1) PFS **дописывает копию строки на «площадку»** (playground, `PLAYGROUND_PAGE_ID =
+"523032632"`), а отдельный механизм **promote** переносит готовую строку с площадки на чистовую
+страницу-цель. Публикация напрямую в минутки работает как раньше; promote — отдельный второй проход.
+
+### Когда именно работает проход 2
+
+- **Ingest на площадку** — `pipeline.run_pilot` после `action ∈ {published, republished}` и
+  `not dry_run` вызывает `ingest_after_publish` (kill-switch `PFS_PLAYGROUND_INGEST_OFF ∈
+  {1,true,yes,on}` выключает; автозапрещён в conftest, поэтому e2e-тесты ingest не трогают).
+  `playground_ingest.py`.
+- **Second pass (promote)** — `process_pending` **всегда** вызывает `second_pass_all` в try/except
+  (fail-soft), даже если файлов summary нет (`pipeline.py:763–769`). Кандидат: реестровая запись
+  с `row_anchor` и пустым `promoted_at`; на площадке строка 4col и td3 (флаг «обработано») complete.
+  `playground_promote.second_pass_all`.
+
+### Поля реестра прохода 2 (RegistryEntry §23, schema_version «1.1»)
+
+`playground_ingested_at`, `first_pass_hash` (sha256 нормализованного td1 боевой строки),
+`route_page_id_at_publish` (цель на момент ingest, пишется только если пусто), `row_anchor`
+(общий якорь page_merger), `promoted_at`, `promote_body_diff` (дифф first-pass→playground td1,
+обрезан 8000), `promote_target_diff` (`route_page_id_at_publish=… -> target=…`, пусто если не менялась),
+`target_override` ({from,to,at} при смене цели), `last_action` (`promoted` / `promote_invalid_target`).
+
+### CLI promote
+
+```bash
+python -m protocolfromsummary promote --meeting-id <id>            # живой
+python -m protocolfromsummary promote --meeting-id <id> --dry-run  # превью, ничего не пишет
+```
+exit 0 если `action == "promoted"`, иначе 1.
+
+### Поведение (не сломать)
+
+1. **dry-run полный read-only** — реестр/proposal/PUT цели ничего не пишет.
+2. **invalid_target sticky** (`_apply_invalid_target`) — dry-run не пишет вовсе; живой повтор при
+   `last_action == "promote_invalid_target"` НЕ переставляет `notified=False` (не шумит в TG
+   повторно). Первый живой invalid пишет реестр + `notified=False`.
+3. **Порядок живого promote** (`promote_meeting`): резолв цели → strip → GET цели (fail →
+   invalid_target) → если якорь уже на цели → `replace_row_by_anchor` (id прохода 1, без
+   next_task_id); иначе insert через `next_task_id`+`reallocate_task_ids` → `insert_row_chronological`;
+   PUT цели → **после успешного PUT** `_record_promote_diffs` и запись реестра.
+4. **Журнал (proposal)** — `_record_promote_diffs` пишет
+   `WorkVault/Registries/prompts/_proposals/link-n-dedup-promote-<id>-<TS>.json`
+   (left = sidecar `{meeting_id}-first-pass.td1.html`, right = td1 площадки, обе через
+   `_normalize_body_html`; body_diff = unified_diff left→right). Файл append-only, пишется только
+   после успешного PUT. `promote_target_diff` НЕ фолбэчится на `entry.page_id`, только
+   `route_page_id_at_publish → target`.
+5. **Инвариант #12** — `entry.page_id == PLAYGROUND_PAGE_ID` → `action=error` (promote на площадку запрещён).
+6. **Запрещено в promote**: `DedupChecker` (проход 2 не дедуплицирует), `remove_row_by_anchor`,
+   `copy_meeting_to_page`, `update_page` на `PLAYGROUND_PAGE_ID`.
+
+### Sidecar прохода 1
+
+`ingest_after_publish` рядом с `{meeting_id}-first-pass.md` пишет sidecar
+`{meeting_id}-first-pass.td1.html` (сырой td1 боевой строки — тот же кусок, что хеширует
+`hash_battle_row_body`). Читается `load_first_pass_td1(meeting_id)`. Нет sidecar → `log.warning`,
+left = "" (НЕ подставлять текущую td1). Артефакт runtime в `GOLD_PROTOCOLS_DIR`, не поле реестра.
+
+### Тесты
+
+```bash
+cd ~/USERTOOLS/ProtocolFromSummary && source .venv/bin/activate
+python -m pytest tests/test_promote_v2.py tests/test_promote_title_resolve.py \
+    tests/test_link_n_dedup_transition.py tests/test_process_pending.py -q
+```
 
 ## Перенос встречи на другую страницу (force-route)
 

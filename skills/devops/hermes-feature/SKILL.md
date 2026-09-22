@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.5.0
+version: 2.6.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -37,7 +37,7 @@ metadata:
 
 | Триггерные слова | Маршрут (ОБЯЗАТЕЛЬНО) |
 |---|---|
-| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | канбан-граф BUGFIX = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch) → PLAN-IMPL-TAIL. ПЕРВЫЙ шаг — kanban_create карточки BUG:diagnose, ДО любого agent -p / cronjob / delegate |
+| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | канбан-граф BUGFIX = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ tool-шаг — `kanban_create` корня `DEV/<slug>` И карточки BUG:diagnose в одном create-батче, ДО любого agent -p / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared) |
 | «спроси», «проверь», «вычисли», «найди данные», «найди в архиве», «сколько», «покажи» | прямой ответ (без кода/процесса; нет карточки) |
 | «одношаговый ответ», RESEARCH-триггеры («проанализируй», «исследуй» без починки) | прямой ответ / RS-граф (по DPK-исключениям) |
 
@@ -82,13 +82,21 @@ Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`
 
 При триггере «почини» — **до** TZ-ветки (кейс BUGFIX, GLOSSARY §2):
 
-```
-BUG:diagnose            # read-only, план П.1…П.N → _fix_plan_YYYYMMDD.md
-GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
-→ далее TZ-WRITE(patch) → GATE:take-into-work → PLAN-IMPL-TAIL
+```none
+корень DEV/<slug> + BUG:diagnose   # в ОДНОМ kanban_create-батче (инвариант 9), до agent -p
+GATE:diagnose-review  parents=[BUG:diagnose]   # review-required, HITL, never auto
+→ далее TZ-WRITE(patch|light) → GATE:take-into-work → PLAN-IMPL-TAIL | PLAN-IMPL-TAIL-LIGHT
 ```
 
-Диагноз → `BUG:diagnose`; реализация → `HF:impl`. **`HF:fix` запрещён** (GLOSSARY §7). Инвариант: даже с известным root cause — нет перехода в hermes-feature без ТЗ-файла. Режим «1 проход» **не** обходит `GATE:diagnose-review`. Режим «1 проход» НЕ обходит GATE:diagnose-review И не отменяет создание карточки BUG:diagnose. DX всегда идёт как карточки на канбане, даже в one-pass. «делай в 1 проход» = авто-проход гейтов take-into-work/plan-approve/done, НЕ «делай вообще без канбана». Баг-триггер всегда начинает с карточки BUG:diagnose.
+`BUG:diagnose` — read-only, план П.1…П.N → `_fix_plan_YYYYMMDD.md`. Диагноз → `BUG:diagnose`; реализация → `HF:impl`. **`HF:fix` запрещён** (GLOSSARY §7). Инвариант: даже с известным root cause — нет перехода в hermes-feature без ТЗ-файла. Режим «1 проход» **не** обходит `GATE:diagnose-review`. Режим «1 проход» НЕ обходит GATE:diagnose-review И не отменяет создание карточки BUG:diagnose. DX всегда идёт как карточки на канбане, даже в one-pass. «делай в 1 проход» = авто-проход гейтов take-into-work/plan-approve/done, НЕ «делай вообще без канбана». Баг-триггер всегда начинает с карточки BUG:diagnose.
+
+**Корень `DEV/<slug>` создаётся СРАЗУ, в том же create-батче, что и `BUG:diagnose`** (не ретро, инвариант 9). Ретро-корень = нарушение (прецедент pfs-promote-bugfix 22.09: preflight GATE:done красный). Первый tool-шаг при баг-триггере — `kanban_create` корня `DEV/<slug>` **И** DX в одном батче, **до** любого agent -p / cronjob(repeat=1) / delegate / cronjob-аутсорсинга диагностики.
+
+**Классификация LIGHT (кейс BUGFIX-LIGHT, GLOSSARY §2/§5.2)** — **после** `GATE:diagnose-review`, а не на холодном старте. Критерий: ≤3 файла кода+тесты, вне shared-модулей, без новых сущностей/cron/.env/манифеста. Тогда:
+- корень `DEV/<slug>` + `BUG:diagnose` → `GATE:diagnose-review` → `TZ:patch` → `TZ:finalize` → `GATE:take-into-work` → `HF:impl` → `HF:test` → `HF:docs-handoff` → `GATE:done` (preflight `--case BUGFIX-LIGHT`);
+- skip: `HF:plan`, `GATE:plan-approve`, `HF:backup`, `REV:tz`/`REV:plan`, `HF:compress`, `ORCH:shared-state`;
+- план = `_fix_plan_*.md` **или** непустой body `BUG:diagnose` (утверждён уже на diagnose-review);
+- не генерировать пустые `auto-pass`-флаги (фальшивый audit).
 
 ### Воркер HF-фаз
 
@@ -146,8 +154,8 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # review-required
 
 1. `kanban_show()`.
 2. **Первый рабочий шаг:**  
-   `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <DEV|CHANGE|BUGFIX> [--flag-rev]`  
-   (`--case` с карточки/корня).
+   `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <DEV|CHANGE|BUGFIX|BUGFIX-LIGHT|CHANGE-LIGHT> [--flag-rev]`  \
+      (`--case` с карточки/корня).
 3. exit 0 → пошагово: итог в TG, ждать Сашу (Telegram **или** дашборд); one-pass: comment `auto-pass: one-pass mode` + `kanban_complete` + закрытие корня.
 4. exit 1 или 2 → comment чек-лист stderr; `kanban_block`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) или `review-required: collapsed-chain` (exit 2).
 
@@ -469,5 +477,5 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 - [ ] Статус «готово»: пошагово — только Саша (Блок 3); в режиме «делай в 1 проход» — auto-complete трёх гейтов после preflight exit 0
 - [ ] Все вызовы через Cursor CLI (`agent -p`)
 - [ ] Новые сущности (если предлагались) — явно вынесены на согласование Саше, не внедрены самостоятельно.
-- [ ] На любой баг-триггер первым tool-шагом было kanban_create карточки BUG:diagnose (до agent -p)
+- [ ] На любой баг-триггер первым tool-шагом было **kanban_create корня DEV/<slug> + BUG:diagnose в одном create-батче** (до agent -p), ретро-корень нет (инвариант 9)
 - [ ] Если готовился вызвать agent -p / cronjob(repeat=1) / delegate_task на диагностику/план/реализацию бага — предварительно сделан kanban_show БУГ-карточки; карточка существует, иначе стоп

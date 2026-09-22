@@ -1,7 +1,7 @@
 ---
 name: tz-workflow
 description: "Use when: создание, доработка, архивация ТЗ и инфраструктурных планов. Triggers: ТЗ, техническое задание, спецификация, доработка ТЗ, дорабатываем ТЗ, правки в ТЗ, обнови ТЗ, архивация ТЗ, план установки, инфраструктурный план, добавь в ТЗ, секция в ТЗ, примечание в ТЗ."
-version: 2.2.0
+version: 2.3.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -175,6 +175,30 @@ TZ:patch (секция + version bump + инвентарь в том же ход
   TZ:patch / HF:impl / HF:test / HF:docs-handoff — отдельная карточка/вызов.
 
 `GLOSSARY` канон — источник истины; этот раздел — сокращённая шпаргалка.
+
+#### Багфикс (кейс BUGFIX / BUGFIX-LIGHT)
+
+Триггер «баг/ошибка/не работает/почини/разберись/cron run failed» — **первый tool-шаг**:
+`kanban_create` корня `DEV/<slug>` **И** `BUG:diagnose` в одном create-батче
+(инвариант 9, GLOSSARY §2/§5.2), **до** любого agent -p / cronjob / delegate.
+Ретро-корень запрещён (прецедент pfs-promote-bugfix 22.09 → preflight красный).
+
+```
+корень DEV/<slug> + BUG:diagnose      # ОДИН create-батч, до agent -p
+GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto
+→ TZ-WRITE(patch) → GATE:take-into-work → ...
+```
+
+Графы:
+- **BUGFIX** (полный): после `GATE:diagnose-review` → `TZ:patch` → `TZ:finalize`
+  → `GATE:take-into-work` → `PLAN-IMPL-TAIL` (HF:plan/GATE:plan-approve/… полный ряд).
+- **BUGFIX-LIGHT** (≤3 файла кода+тесты, вне shared; классификация **после**
+  `GATE:diagnose-review`): `TZ:patch` → `TZ:finalize` → `GATE:take-into-work`
+  → `HF:impl` → `HF:test` → `HF:docs-handoff` → `GATE:done`
+  (preflight `--case BUGFIX-LIGHT`; план = `_fix_plan_*.md` или body `BUG:diagnose`).
+
+`GATE:diagnose-review` **никогда** не auto-pass (DX не one-pass). LIGHT-карточка
+НЕ содержит склейку фаз одним `agent -p` — каждая фаза — отдельная карточка/вызов.
 
 ### Чек-лист TZ-WRITE(full)
 

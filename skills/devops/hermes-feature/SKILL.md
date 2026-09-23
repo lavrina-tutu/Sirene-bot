@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.6.0
+version: 2.6.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -78,12 +78,29 @@ GATE:take-into-work  (уже снят)
 
 Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`, `cursor-task-context`. ORCH:shared-state — только `hermes-feature`.
 
+#### Подписка графа на уведомления (notify-subscribe)
+
+Сразу после `kanban_create` (в том же ходе) подписать **ВСЕ** `task_id` только что созданного графа на терминальные события. Наследования подписки по `parents` после батча **нет** — подписывать каждую карточку отдельно, явно. Фиксированный контракт (личный DM Саши, Telegram):
+
+```bash
+hermes kanban notify-subscribe <task_id> \
+  --platform telegram --chat-id 400307920 --chat-type dm \
+  --delivery-mode notify+wake --notifier-profile default
+```
+
+Уведомитель шлёт в TG **только ключевые терминальные события** (по `TERMINAL_KINDS`: `completed`/`GATE:done`, `blocked`, `gave_up`, `crashed`, `timed_out`) — не каждую фазу графа (шум). Ядро канбана **не трогать**: ни `kanban_db.py`, ни `kanban_db_notify.py`, ни список `TERMINAL_KINDS`.
+
+- `PLAN-IMPL-TAIL` + `HF-TAIL` (после take-into-work): подписать корень **и** все созданные фазы хвоста.
+- Багфикс-батч (`DEV/<slug>` + `BUG:diagnose`, Блок 6В): подписать обе.
+- Ручной feed `IDEA/<slug>` + `IDEA:analyze`: подписать обе.
+
 ### Блок 6В (багфикс)
 
 При триггере «почини» — **до** TZ-ветки (кейс BUGFIX, GLOSSARY §2):
 
 ```none
 корень DEV/<slug> + BUG:diagnose   # в ОДНОМ kanban_create-батче (инвариант 9), до agent -p
+# сразу после батча — notify-subscribe ОБЕИХ (контракт «Подписка графа на уведомления» выше)
 GATE:diagnose-review  parents=[BUG:diagnose]   # review-required, HITL, never auto
 → далее TZ-WRITE(patch|light) → GATE:take-into-work → PLAN-IMPL-TAIL | PLAN-IMPL-TAIL-LIGHT
 ```

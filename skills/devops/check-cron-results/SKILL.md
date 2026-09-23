@@ -98,7 +98,6 @@ bash ~/.hermes/scripts/autosync_github.sh && bash ~/.hermes/scripts/cleanup_afte
 - **`execution_success: false` в ответе `action='run'` — НЕ надёжный индикатор провала.** Проверено дважды в одной сессии (Opus-план и Sonnet-билд оба вернули `execution_success: false`, при этом оба реально отработали успешно — файлы созданы, тесты прошли, боевая Confluence-страница реально изменена). Не делать выводов по одному этому полю — всегда проверять реальный результат: для агентного job (`no_agent=false`) — файл в `~/.hermes/cron/output/<job_id>/`; для `no_agent=true` script-job, доставляющего прямо в внешний канал без сохранения output-файла — `search_files` по `~/.hermes/cron/output/` вернёт `0` результатов даже при полном успехе (это ожидаемо, не признак сбоя) — спросить пользователя напрямую, дошло ли сообщение.
 
 ## ⚠️ Известные ложные тревоги (не считать PROBLEM)
-- `DialogBacklog` не имеет `.venv` — нормально, только stdlib
 - Нет юнита `hermes-cron.service` — нормально, кроны идут через `hermes-gateway`
 - Windows-пути в DEFAULT_DB / DEFAULT_FILE в старых скриптах — исправлено 03.06, не блокируют работу
 - `hermes-gateway.service` запущен — это и есть основной процесс, отдельный cron-юнит не нужен
@@ -124,39 +123,6 @@ cat ~/.hermes/logs/gateway.log | tail -60
 - `SIGTERM` + `drain timed out` → systemd убил gateway, drain 180s не завершился, exit code 1
 - `Restart=on-failure` должен поднять сам, но если не поднял — рестартовать вручную
 - `httpx.ReadError` / `RemoteProtocolError` → сетевая ошибка ТГ, gateway восстанавливается сам (attempt N/10)
-
-## Формат сводки vm_dialogbacklog
-См. `references/dialogbacklog-report-format.md` — актуальный шаблон отчёта с датами `updated::` (реализован 25.06.2026, bk-094).
-
-## Работа с dialog-backlog вручную
-
-### Пакетное закрытие нескольких bk-пунктов
-Когда Саша говорит «закрой bk-103, bk-104, bk-106» — не делать patch по одному. Использовать `execute_code` с циклом:
-```python
-from hermes_tools import patch
-
-path = "/home/tkachenkoav/WorkVault/Hermes-Backlog/dialog-backlog.md"
-changes = [
-    {"old": "- [ ] ...", "new": "- [x] ...\n  - 💬 Закрыто ДД.ММ.\n  - 📅 ... · `closed:: YYYY-MM-DD`"},
-    # ... остальные
-]
-for c in changes:
-    patch(path=path, old_string=c["old"], new_string=c["new"])
-```
-После каждого пакета — обновить `last_scan_at` в frontmatter.
-
-### Снятие задачи (не закрытие)
-Если Саша говорит «снимаем задачу» — это НЕ просто `[x]`. Добавить контекст почему снята:
-```
-- [x] Текст задачи ^bk-NNN
-  - 💬 Снято ДД.ММ: <причина>.
-  - 📅 `created:: ...` · `updated:: YYYY-MM-DD` · `closed:: YYYY-MM-DD`
-```
-
-### `[SILENT]` от vm_dialogbacklog — норма
-Если Саша вручную закрыл/снял пункты, а потом запустить крон — крон вернёт `[SILENT]`.
-Причина: агент сравнивает open-пункты с `last_scan_at`, новых нет → подавляет доставку.
-Это **не баг**, это ожидаемое поведение. Объяснять Саше при необходимости.
 
 ## Что сообщить Саше
 - Статус (OK / PROBLEM)

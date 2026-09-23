@@ -1,7 +1,7 @@
 ---
 name: tz-workflow
 description: "Use when: создание, доработка, архивация ТЗ и инфраструктурных планов. Triggers: ТЗ, техническое задание, спецификация, доработка ТЗ, дорабатываем ТЗ, правки в ТЗ, обнови ТЗ, архивация ТЗ, план установки, инфраструктурный план, добавь в ТЗ, секция в ТЗ, примечание в ТЗ."
-version: 2.3.0
+version: 2.3.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -155,6 +155,22 @@ DEV/<slug>                          корень (живёт до GATE:done)
 
 `workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на карточке: `tz-workflow`, `cursor-cli`, `cursor-task-context`. Idempotency: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
 
+#### Подписка графа на уведомления (notify-subscribe)
+
+Сразу после `kanban_create` (в том же ходе) подписать **ВСЕ** `task_id` только что созданного графа на терминальные события. Наследования подписки по `parents` после батча **нет** — подписка подписывается на каждую карточку отдельно, явно. Фиксированный контракт (личный DM Саши, Telegram):
+
+```bash
+hermes kanban notify-subscribe <task_id> \
+  --platform telegram --chat-id 400307920 --chat-type dm \
+  --delivery-mode notify+wake --notifier-profile default
+```
+
+Уведомитель шлёт в TG **только ключевые терминальные события** (по `TERMINAL_KINDS`: `completed`/`GATE:done`, `blocked`, `gave_up`, `crashed`, `timed_out`) — не каждую фазу графа (шум). Ядро канбана **не трогать**: ни `kanban_db.py`, ни `kanban_db_notify.py`, ни сам список `TERMINAL_KINDS`.
+
+- Триггер-батч корня `DEV/<slug>` + фаз: подписать корень **и** все созданные фазы, полученные из return `kanban_create`.
+- Багфикс-батч (`DEV/<slug>` + `BUG:diagnose`): аналогично — подписать обе.
+- Ручной feed `IDEA/<slug>` + `IDEA:analyze`: подписать обе.
+
 #### Быстрый путь CHANGE-LIGHT (опционально, ≤3 файла)
 
 Для малых доработок существующего инструмента (без новых сущностей/cron/.env),
@@ -260,7 +276,7 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto
 
 #### A) «Положить в бэклог» / «в triage» (passive-inbox)
 
-Триггеры: «положи в бэклог», «положить в triage», «сохрани идею в бэклог», миграция, «собери идеи в бэклог» (через `backlog-collector`). **Без** слова «разбери».
+Триггеры: «положи в бэклог», «положить в triage», «сохрани идею в бэклог», миграция. Показ triage («бэклог», «что в бэклоге») — скиллы `backlog-collector` / `backlog-analyst` (READ only). **Без** слова «разбери».
 
 1. Только `kanban_create` корня `IDEA/<slug>` с `--triage`, `assignee=default`.
 2. **Не** создавать child `IDEA:analyze`.

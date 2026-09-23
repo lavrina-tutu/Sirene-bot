@@ -320,6 +320,71 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
     **lenya_1on1** → page_id `508804891` (та же страница что и `ilya_1on1` — Лёня заменил Илью).
     Подробный рецепт переноса: `references/force-route-meeting-29072026.md`.
 
+## Пост-switch контур (§24, v1.17.0): PFS_POST_SWITCH — только ingest на площадку
+
+Флаг **`PFS_POST_SWITCH`** ∈ `{1,true,yes,on}` (без регистра, дефолт **off**; читается
+в момент вызова, не при импорте — `config.env_flag_on` / `config.post_switch_enabled` /
+`config.playground_ingest_off`). Это kill-switch прямой публикации прохода 1. Пока off —
+бит-в-бит старый контур (прямая публикация на `route.page_id` + тень-ingest). Включение —
+только по команде Саши «переключаем» (Q7 §22); в `.env`/`jobs.json` в коде НЕ писать.
+
+**При флаге on проход 1** (в `run_pilot` ветка `_post_switch_pass_one`):
+- НЕ вызывается `confluence.update_page(route.page_id, …)`, НЕ строится merge,
+  НЕ вызывается `DedupChecker` (дедуп §15 уезжает на проход 2).
+- Единственный Confluence-write — `ingest_after_publish` на `PLAYGROUND_PAGE_ID` `523032632`.
+- **Колонка «Цель» (td2), v1.18.0:** перед сборкой строки `hydrate_target_ref(confluence, target_page_id)` — `get_page(..., expand="space")` только space, без body. Успех → `render_target_cell(space_key=…, title=page["title"])` — канон `ri:space-key` + фактический title страницы; `ri:content-id` в ячейку **не** пишется (`content_id` в сигнатуре остался, в XML не сериализуется). Slug/display_name/route.entity в title **запрещены**. Hydrate-miss (404, ошибка, нет space/title) → `render_empty_target_cell()`, warn, ingest жив (fail-soft, K1). Вызов и при `dry_run=True` (read-only GET). Тень-ingest — та же гидратация.
+- `task_id_start=1` (republish — `min(old_row_task_ids)`), `duplicates_skipped=[]`,
+  `notified=False`, `page_id` в реестре остаётся **маршрутным** `route.page_id` (не площадка),
+  `last_action=published|republished` — новый подтип в enum НЕ вводить.
+- FAIL (ingest вернул `error` или исключение) = ошибка прохода 1: `action="error"`,
+  `published` в реестр не пишется, `_report_pfs_ingest_error` → ErrorBus (stage=ingest).
+- `PFS_POST_SWITCH=on` + `PFS_PLAYGROUND_INGEST_OFF=on` — несовместимо (некуда писать):
+  warning + `action="error"`, ни PUT цели, ни площадки.
+
+**Уведомления** (`notify_pending.py::build_text_for_entry` + `notifier.py`, флаг on):
+- Проход 1 (`published`/`republished` + `promoted_at is None`) → `format_ingest_notification`:
+  «🗓 дата, время\n📌 [title](URL) — протокол приехал, ждёт разбора», URL =
+  `build_protocol_url(PLAYGROUND_PAGE_ID)` (`523032632`), НЕ `entry.page_id`, без блока дублей.
+- Успешный promote → **молчит** (`format_promote_notification` не слать).
+  `promote_meeting` ставит `notified=True` при флаге on; `build_text_for_entry` для
+  `last_action=="promoted"` при флаге on возвращает `None` (двойная страховка).
+- `promote_invalid_target` → как раньше (`format_promote_invalid_target`, без изменений).
+
+**Дедуп — только на проходе 2** (`playground_promote._promote_dedup_minutes_against_target`, флаг on):
+- Внутри `promote_meeting` после td3 complete и GET цели, до replace/insert/PUT; вызывается
+  и на dry_run (read-only GET цели).
+- История **цели** за `meeting_date - 3 weeks`: сначала вырезать из ЛОКАЛЬНОЙ копии HTML свою
+  строку `row_anchor` (`find_row_by_anchor` + вырезание строки, НЕ `remove_row_by_anchor` на
+  живой странице) — иначе строка просеется сама в себя и на цель уедет пустое тело (отпечаток K1).
+- `parse_published_rows(minutes_row, обёрнутый в <table>)` → синтетические
+  `(MeetingTask, ResolvedParticipant, meeting_date)` → `DedupChecker.check_tasks/check_sections/check_risks`
+  (`_dedup_llm_fn` — ленивый import из pipeline). XML-дубли вычищаются из `minutes_row`.
+- Результат пишется в `entry.duplicates_skipped` (TG-блок всё равно не уйдёт — молчание успеха).
+- FAIL-soft DedupChecker → WARN, промоутить тело как есть, PUT жив (та же политика §15 на publish).
+- Флаг off — DedupChecker в promote НЕ вызывается (`test_promote_meeting_does_not_call_dedup_checker`),
+  `notified=False` как раньше.
+
+**Резолв цели при promote** (`_resolve_target_page_id_from_cell`, проход 2; `playground_promote.py` без изменений):
+иерархия (а) `ri:content-id`/`pageId=` → (б) `ri:space-key`+`ri:content-title` через
+`find_page_by_title(space, title)` exact → **(в) `ri:content-title` без space-key/content-id** →
+`find_page_by_title(DEFAULT_CONFLUENCE_SPACE="DPAN", title)` exact (та же ветка клиента) →
+(г) иначе `None` → `invalid_target`. Запрещено aliases/display_name/route_page_id_at_publish/substitution,
+fuzzy, перебор space. Прецедент promote: td2 `ri:content-title="kirill_1on1"` без id/space = slug, не title страницы → miss → `invalid_target` (корректно). Legacy-строки площадки со старым форматом `ri:content-title`+`ri:content-id` (до v1.18.0) остаются на странице; promote резолвит их шагом (а). **Проход 1** пишет td2 только в каноне space-key + гидратированный title (см. bullet выше), не content-id. `render_target_cell` — keyword-only `space_key`+`title`, escape через `xml.sax.saxutils.escape`. Вспомогательная чистая функция `playground_ingest.parse_target_title_from_cell(cell) -> str|None` (unescape, без I/O).
+
+**Snapshot first-pass при ingest-first:** порядок ingest→registry.put в `_post_switch_pass_one`;
+`_write_first_pass_snapshot` в `ingest_after_publish` теперь пишется даже если `entry is None`
+(иначе sidecar `-first-pass.td1.html` не появится и promote-журнал останется без left-части).
+
+**Тесты (флаг on/off, autouse `PFS_PLAYGROUND_INGEST_OFF=1` в conftest обязан `delenv`):**
+`tests/test_post_switch.py` (skips_direct_publish / flag_off_keeps / and_ingest_off_writes_nowhere /
+dedup_not_run_on_pass1_post_switch / env_flag_on truthy+falsy), `tests/test_promote_title_resolve.py`
+(without_space_key hit+miss, kirill_2209_target_resolves, entity_slug_is_invalid_target),
+`tests/test_promote_v2.py` (dedup_runs_on_pass2 / fail_soft_still_puts / anchor_already_on_target /
+notified_true_when_post_switch / does_not_call_dedup_checker), `tests/test_notify_pending.py`
+(ingest_points_to_playground / published_flag_off_still_uses_entry_page_id /
+promote_success_silent_when_post_switch / invalid_target_unchanged), `tests/test_notifier.py`
+(format_ingest_notification_layout). Полный оффлайн: `pytest -q -m "not live_confluence"` (389 passed).
+
 ## Проход 2 (Link-n-Dedup promote): площадка → чистовой target (§22–23, дельта v2)
 
 Проход 2 — дельта v2 (`DEV/protocol-from-summary-v2`, план §23). После обычной публикации
@@ -332,7 +397,7 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
 - **Ingest на площадку** — `pipeline.run_pilot` после `action ∈ {published, republished}` и
   `not dry_run` вызывает `ingest_after_publish` (kill-switch `PFS_PLAYGROUND_INGEST_OFF ∈
   {1,true,yes,on}` выключает; автозапрещён в conftest, поэтому e2e-тесты ingest не трогают).
-  `playground_ingest.py`.
+  `playground_ingest.py`. Внутри ingest td2 гидрируется через `hydrate_target_ref` (v1.18.0, см. пост-switch §24).
 - **Second pass (promote)** — `process_pending` **всегда** вызывает `second_pass_all` в try/except
   (fail-soft), даже если файлов summary нет (`pipeline.py:763–769`). Кандидат: реестровая запись
   с `row_anchor` и пустым `promoted_at`; на площадке строка 4col и td3 (флаг «обработано») complete.

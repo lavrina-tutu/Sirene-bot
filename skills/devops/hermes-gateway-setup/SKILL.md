@@ -605,12 +605,12 @@ Telegram Forum-группы создают отдельные топики (thre
 
 В logline `Flushing text batch` видно ключ сессии с thread ID:
 ```
-[Telegram] Flushing text batch agent:main:telegram:group:-1004300127777:**4** (16 chars)
+[Telegram] Flushing text batch agent:main:telegram:group:-1004300127777:**5** (16 chars)
 ```
 
 Или в строке `inbound message` поле `reply_to`:
 ```
-inbound message: ... msg='топик Hermes DEV' reply_to_id=**4** reply_to_text=''
+inbound message: ... msg='топик WorkVault' reply_to_id=**5** reply_to_text=''
 ```
 
 **Команда для быстрого извлечения всех топиков:**
@@ -618,7 +618,7 @@ inbound message: ... msg='топик Hermes DEV' reply_to_id=**4** reply_to_text
 grep "Flushing text batch" ~/.hermes/logs/gateway.log \
   | grep -oP "group:-\d+:(\d+)" \
   | sort -t: -k2 -n | uniq
-# Вывод: group:-1004300127777:1, :3, :4, ...
+# Вывод: group:-1004300127777:1, :3, :5, ...
 ```
 
 **Или парный резолв имя→ID (нужно знать что писали в каждый топик):**
@@ -634,13 +634,12 @@ grep -E "Flushing text batch|inbound message" ~/.hermes/logs/gateway.log \
 
 ### Топики группы «Сирень Workspace» (chat=-1004300127777)
 
-Канон топиков (ровно 8, включая Errors=`11112`) — скилл `tutu-telegram-delivery` / `references/sirene-workspace-topics.yaml`. Restore: `scripts/restore_telegram_topics.sh`. Эта таблица — историческое зеркало без Errors; не расширять.
+Канон топиков (ровно 7, без Hermes DEV :4 и без :6556; Errors=`11112` вне топ-группы) — скилл `tutu-telegram-delivery` / `references/sirene-workspace-topics.yaml`. Restore: `scripts/restore_telegram_topics.sh`. Таблица ниже — историческое зеркало канона (Hermes DEV :4 исключён из канона 16.09.2026, CHANGE telegram-topics-remove-hermesdev); не расширять.
 
 | Топик | Thread ID | Deliver target |
 |-------|-----------|----------------|
 | General | 1 | `telegram:-1004300127777:1` |
 | Tools | 3 | `telegram:-1004300127777:3` |
-| Hermes DEV | 4 | `telegram:-1004300127777:4` |
 | WorkVault | 5 | `telegram:-1004300127777:5` |
 | Backlog | 6 | `telegram:-1004300127777:6` |
 | Monitoring | 7 | `telegram:-1004300127777:7` |

@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.6.1
+version: 2.7.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -37,7 +37,7 @@ metadata:
 
 | Триггерные слова | Маршрут (ОБЯЗАТЕЛЬНО) |
 |---|---|
-| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | канбан-граф BUGFIX = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ tool-шаг — `kanban_create` корня `DEV/<slug>` И карточки BUG:diagnose в одном create-батче, ДО любого agent -p / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared) |
+| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | канбан-граф BUGFIX = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ tool-шаг — `kanban_create` корня `DEV/<slug>` И карточки BUG:diagnose в одном create-батче, ДО любого agent -p / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared). После **одобренного** `GATE:diagnose-review` + ТЗ-решения → `GATE:take-into-work` авто (one-pass), фраза не требуется (требование 4) |
 | «спроси», «проверь», «вычисли», «найди данные», «найди в архиве», «сколько», «покажи» | прямой ответ (без кода/процесса; нет карточки) |
 | «одношаговый ответ», RESEARCH-триггеры («проанализируй», «исследуй» без починки) | прямой ответ / RS-граф (по DPK-исключениям) |
 
@@ -55,6 +55,8 @@ metadata:
 
 - Любой HF `agent -p` без корня `DEV/<slug>` → **стоп** + оркестратор. Исключения DPK: `BRF:*` в TG; одношаговый ответ; RESEARCH.
 - Вход в HF-ветку только если корень `DEV/<slug>` существует **и** `GATE:take-into-work` снят (Саша **или** `auto-pass: one-pass mode`). Иначе стоп + текст «нет „берём в работу“ / нет one-pass».
+- **Все задачи по умолчанию ложатся в план** (канбан-граф `DEV/<slug>`) после триггера «разработай/доработай/почини» и далее проводятся по канону, без дополнительной команды Саши (требование 1).
+- **Slug-guard:** перед `kanban_create` корня `DEV/<slug>` (в т.ч. багфикс-батча) — проверка активного графа по слагу (`todo|ready|running|blocked`, не `done`/`archived`); дубли запрещены (кейс 1, прецедент pfs-notify-link-unprocessed). При совпадении — reuse существующего графа или `kanban_block` до разрешения.
 - `GATE:plan-approve` / `HF:backup` / `HF:impl`: если `HF:plan` не `done` → **стоп** (GLOSSARY инвариант 6). Не skip плана в one-pass.
 - Off-board: **предусловие** — сначала вывести граф из диспатча (comment корня `dispatch-paused: off-board`, снять/не диспатчить remaining), затем retro-create + comment `done off-board, session ids`. Без `dispatch-paused` прямой `agent -p` на живой граф запрещён (инвариант 8).
 
@@ -80,15 +82,17 @@ Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`
 
 #### Подписка графа на уведомления (notify-subscribe)
 
-Сразу после `kanban_create` (в том же ходе) подписать **ВСЕ** `task_id` только что созданного графа на терминальные события. Наследования подписки по `parents` после батча **нет** — подписывать каждую карточку отдельно, явно. Фиксированный контракт (личный DM Саши, Telegram):
+Сразу после `kanban_create` (в том же ходе) подписать **ВСЕ** `task_id` только что созданного графа на терминальные события. Наследования подписки по `parents` после батча **нет** — подписывать каждую карточку отдельно, явно. Фиксированный контракт (топик мониторинга Monitoring :7, группа, Telegram — по умолчанию, без дублей в личный DM):
 
 ```bash
 hermes kanban notify-subscribe <task_id> \
-  --platform telegram --chat-id 400307920 --chat-type dm \
+  --platform telegram --chat-id -1004300127777 --chat-type group \
   --delivery-mode notify+wake --notifier-profile default
 ```
 
 Уведомитель шлёт в TG **только ключевые терминальные события** (по `TERMINAL_KINDS`: `completed`/`GATE:done`, `blocked`, `gave_up`, `crashed`, `timed_out`) — не каждую фазу графа (шум). Ядро канбана **не трогать**: ни `kanban_db.py`, ни `kanban_db_notify.py`, ни список `TERMINAL_KINDS`.
+
+Репорты карточек — только в топик мониторинга (Monitoring :7), без дублей в личный DM, по умолчанию. Отдельное явное указание Саши может переопределить канал подписки конкретного графа.
 
 - `PLAN-IMPL-TAIL` + `HF-TAIL` (после take-into-work): подписать корень **и** все созданные фазы хвоста.
 - Багфикс-батч (`DEV/<slug>` + `BUG:diagnose`, Блок 6В): подписать обе.
@@ -114,6 +118,8 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # review-required, HITL, never au
 - skip: `HF:plan`, `GATE:plan-approve`, `HF:backup`, `REV:tz`/`REV:plan`, `HF:compress`, `ORCH:shared-state`;
 - план = `_fix_plan_*.md` **или** непустой body `BUG:diagnose` (утверждён уже на diagnose-review);
 - не генерировать пустые `auto-pass`-флаги (фальшивый audit).
+
+**Авто take-into-work после одобренного диагноза (требование 4):** для BUGFIX/BUGFIX-LIGHT после **одобренного** `GATE:diagnose-review` + наличия ТЗ-решения → `GATE:take-into-work` проходит **автоматически (one-pass)**, фраза Саши не требуется (решение уже в ТЗ/плане). Багфиксы берутся в работу как уже согласованные реализации по плану архитектора. `GATE:diagnose-review` остаётся **HITL (never auto)** — не обходится режимом «1 проход» (режим стартует от готового ТЗ).
 
 ### Воркер HF-фаз
 
@@ -257,6 +263,8 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 ---
 
 ## Блок 1: Анализ вариантов
+
+**Валидация и рекомендации по постановке — только от архитектора (требование 2).** Сирень (Hermes) НЕ предлагает собственное мнение, варианты решений или рекомендации по постановке/архитектуре задач — передаёт архитектору (`cursor-grok-4.6-high` через Cursor CLI), выполняет по его рекомендациям. Фактологические уточняющие вопросы Саше — текстом (процедура H / R3), без собственных вариантов по постановке (стыковка с Q2 бриф-фазы).
 
 **Шаг 0 (оркестратор, без Cursor):** компрессия master-ТЗ по `tz-compressor-prompt.md` на `deepseek-v4-flash-0731` — full-coverage 3–5 КБ, без кэша.
 
@@ -466,6 +474,10 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 
 Для обновления Hermes из upstream — загрузить `references/hermes-upgrade-pattern.md`.
 Там: стратегия MERGE, risk zones, питфоллы (venv/pytest, index.lock, config migration), бэкап-конвенция, upstream turbulence signals.
+
+### venv-операции в USERTOOLS-инструментах (прецедент 23.09, PFS)
+
+Любое пересоздание/пересборка `.venv` воркером (uv sync, recreate) может сломать боевой крон: shared-зависимости соседних пакетов пропадают. Правило: после ЛЮБОЙ venv-операции в инструменте — `uv sync --extra dev` и проверить импорты всего shared-стека (для PFS: `confluencesync`, `entityregistrycli`, `mofs_index`, `bs4`, `markobjectsfromsummary`), затем боевой импорт/сухой вызов. Smoke: `python -c "import markobjectsfromsummary"`. Sibling-зависимости объявлять в `pyproject.toml` инструмента (`pkg @ file:///${PROJECT_ROOT}/../<Tool>`), не ручным `uv pip install` — источник истины pyproject. Не ставить PyPI-пакет `bs4` (заглушка; нужен `beautifulsoup4`). `uv.lock` не коммитить, пока pyproject не описывает реальный runtime.
 
 **Утверждено:** правки ядра hermes-agent — ТОЛЬКО с ревизором (reviewer). Никогда не патчить ядро без REV.
 

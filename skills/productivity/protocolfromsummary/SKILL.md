@@ -1,7 +1,7 @@
 ---
 name: protocolfromsummary
 description: "Use when working with the ProtocolFromSummary (PFS) tool — publishes Fireflies meeting-summary .md files into Confluence protocol tables (~/USERTOOLS/ProtocolFromSummary). Триггеры: PFS, протокол встречи, опубликовать протокол, задача не резолвится/не мешенится, ROUTES, page_layout, republish, страница протокола поменялась, out_of_scope встречи, роутинг крона PFS."
-version: 1.1.0
+version: 1.2.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -353,12 +353,22 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
 **Дедуп — только на проходе 2** (`playground_promote._promote_dedup_minutes_against_target`, флаг on):
 - Внутри `promote_meeting` после td3 complete и GET цели, до replace/insert/PUT; вызывается
   и на dry_run (read-only GET цели).
-- История **цели** за `meeting_date - 3 weeks`: сначала вырезать из ЛОКАЛЬНОЙ копии HTML свою
-  строку `row_anchor` (`find_row_by_anchor` + вырезание строки, НЕ `remove_row_by_anchor` на
-  живой странице) — иначе строка просеется сама в себя и на цель уедет пустое тело (отпечаток K1).
-- `parse_published_rows(minutes_row, обёрнутый в <table>)` → синтетические
+- История **цели** за `meeting_date - 3 weeks`: из ЛОКАЛЬНОЙ копии HTML исключаются **все**
+  строки с той же датой встречи `meeting_date` (`_target_history_without_same_meeting_date`, НЕ
+  `remove_row_by_anchor` на живой странице) — K1-защита от самоматча всей встречи самой с собой
+  (§27 П.2; раньше вырезалась только своя `row_anchor`).
+- **§27 П.1 (правка Саши):** если td1 площадки отличается от sidecar прохода 1
+  (`playground_ingest.td1_differs_from_first_pass(meeting_id, td1_inner)` — сравнение через
+  `_normalize_td1_for_compare`; sidecar нет → False) → `DedupChecker` **не** вызывается, на цель
+  уходит td1 **verbatim** (строгий контракт «копия строки площадки»). Если td1 как в first-pass →
+  семантический дедуп прохода 2 допустим. Канон §24/§15 дедуп **не** отключается глобально — затронуты
+  только правки Саши.
+- При вызове дедупа: `parse_published_rows(minutes_row, обёрнутый в <table>)` → синтетические
   `(MeetingTask, ResolvedParticipant, meeting_date)` → `DedupChecker.check_tasks/check_sections/check_risks`
   (`_dedup_llm_fn` — ленивый import из pipeline). XML-дубли вычищаются из `minutes_row`.
+- **§27 П.3 fail-soft:** после дедуп-фильтра, если в строке нет содержащих секций (нет `<ac:task>` и
+  нет непустых `<li>` в секциях, `_minutes_row_has_content_sections`) → на цель пишется **полная**
+  verbatim td1 площадки (`original_minutes_row`), не пустая строка.
 - Результат пишется в `entry.duplicates_skipped` (TG-блок всё равно не уйдёт — молчание успеха).
 - FAIL-soft DedupChecker → WARN, промоутить тело как есть, PUT жив (та же политика §15 на publish).
 - Флаг off — DedupChecker в promote НЕ вызывается (`test_promote_meeting_does_not_call_dedup_checker`),
@@ -380,10 +390,13 @@ fuzzy, перебор space. Прецедент promote: td2 `ri:content-title="
 dedup_not_run_on_pass1_post_switch / env_flag_on truthy+falsy), `tests/test_promote_title_resolve.py`
 (without_space_key hit+miss, kirill_2209_target_resolves, entity_slug_is_invalid_target),
 `tests/test_promote_v2.py` (dedup_runs_on_pass2 / fail_soft_still_puts / anchor_already_on_target /
-notified_true_when_post_switch / does_not_call_dedup_checker), `tests/test_notify_pending.py`
+notified_true_when_post_switch / does_not_call_dedup_checker), `tests/test_promote_copy_source.py`
+(`test_promote_preserves_sasha_edits_after_dedup_pass2` / `test_promote_pass2_dedup_only_when_no_edit` /
+`test_promote_not_empty_body_on_single_edited_decision` /
+`test_promote_self_match_excluded_all_rows_same_meeting`), `tests/test_notify_pending.py`
 (ingest_points_to_playground / published_flag_off_still_uses_entry_page_id /
 promote_success_silent_when_post_switch / invalid_target_unchanged), `tests/test_notifier.py`
-(format_ingest_notification_layout). Полный оффлайн: `pytest -q -m "not live_confluence"` (389 passed).
+(format_ingest_notification_layout). Полный оффлайн: `pytest -q -m "not live_confluence"` (397 passed, 4 deselected).
 
 ## Проход 2 (Link-n-Dedup promote): площадка → чистовой target (§22–23, дельта v2)
 
@@ -436,8 +449,10 @@ exit 0 если `action == "promoted"`, иначе 1.
    после успешного PUT. `promote_target_diff` НЕ фолбэчится на `entry.page_id`, только
    `route_page_id_at_publish → target`.
 5. **Инвариант #12** — `entry.page_id == PLAYGROUND_PAGE_ID` → `action=error` (promote на площадку запрещён).
-6. **Запрещено в promote**: `DedupChecker` (проход 2 не дедуплицирует), `remove_row_by_anchor`,
-   `copy_meeting_to_page`, `update_page` на `PLAYGROUND_PAGE_ID`.
+6. **Запрещено в promote**: `remove_row_by_anchor`, `copy_meeting_to_page`, `update_page` на
+   `PLAYGROUND_PAGE_ID`. `DedupChecker` на проходе 2 при `PFS_POST_SWITCH=on` вызывается для td1,
+   совпадающего с first-pass (см. §24 «Дедуп — только на проходе 2»); для правленого td1 (§27 П.1,
+   `td1_differs_from_first_pass`) — не вызывается. При флаге off DedupChecker в promote не вызывается.
 
 ### Sidecar прохода 1
 

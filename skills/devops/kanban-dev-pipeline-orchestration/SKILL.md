@@ -1,7 +1,7 @@
 ---
 name: kanban-dev-pipeline-orchestration
 description: "Фазы TZ:/HF:/GATE: на канбане (диспатч, крэш воркера)."
-version: "1.1.1"
+version: "1.1.2"
 platforms: [linux, macos]
 triggers:
   - "разворачивание фаз TZ:/HF:/GATE: на канбане"
@@ -92,7 +92,7 @@ chain-enforcement, assignee default, worker вызывался на профил
 **Подтверждённый рабочий обход для МНОГОФАЗНОЙ работы (выполнено end-to-end):**
 Веди весь граф **через Cursor CLI по таблице ролей** (как в контуре A):
 - каждый `PREFIX:фаза` = отдельный `agent -p` с ролью-моделью по GLOSSARY §3
-  (компрессор/исполнитель = composer-2.5, архитектор = cursor-grok-4.6-high,
+  (компрессор = deepseek-v4-flash-0731 без Cursor; исполнитель = composer-2.5; архитектор = cursor-grok-4.6-high,
   ревизор = claude-sonnet-5-medium);
 - **один вызов = одна роль**, никогда не склеивай TZ-WRITE в один `agent -p`
   (это и есть интерпретация «делай в 1 проход» = авто-гейты, НЕ склейка фаз);
@@ -225,7 +225,7 @@ run'ом, а затем воркер саможалобно подтвержда
 
 ## Питфолл 11 — `--model` в карточку: worker-модель ≠ Cursor-модель
 
-При `hermes kanban create ... --model cursor-grok-4.6-medium` / `--model claude-sonnet-5-medium` воркер канбана крашится при спавне: шлюз отвергает «cursor-*»/«claude-sonnet-*» как модель воркера (`openrouter model ... must include upstream provider prefix`, HTTP 400). Cursor-/ревизор-модели живут ТОЛЬКО внутри `agent -p --model ...` (который воркер сам вызывает по таблице ролей), а НЕ как model-override карточки. Ставь карточки БЕЗ `--model` — воркер идёт на профильной модели профиля default и сам поднимает нужную Cursor-модель по фазе. Симптом в логах: `HTTP 400 ... must include upstream provider prefix` → очистить `kanban set-model <id>` + `kanban unblock`.
+При `hermes kanban create ... --model cursor-grok-4.6-medium` / `--model claude-sonnet-5-medium` воркер канбана крашится при спавне: шлюз отвергает «cursor-*»/«claude-sonnet-*» как модель воркера (`openrouter model ... must include upstream provider prefix`, HTTP 400). Cursor-/ревизор-модели живут ТОЛЬКО внутри `agent -p --model ...` (который воркер сам вызывает по таблице ролей), а НЕ как model-override карточки. Ставь карточки БЕЗ `--model` — воркер идёт на профильной модели профиля default и сам поднимает нужную Cursor-модель по фазе. Симптом в логах: `HTTP 400 ... must include upstream provider prefix` → сначала `set-model <id> none` на всех минах, потом `unblock`; `composer-*` — та же мина.
 - Не архивируй/`specify` карточку по одному лишь плоскому `kanban list` —
   сначала `kanban_show` с parents/children.
 - Не плоди второй гейт того же назначения вручную, если диспетчер уже создал

@@ -1,7 +1,7 @@
 ---
 name: tz-workflow
 description: "Use when: создание, доработка, архивация ТЗ и инфраструктурных планов. Triggers: ТЗ, техническое задание, спецификация, доработка ТЗ, дорабатываем ТЗ, правки в ТЗ, обнови ТЗ, архивация ТЗ, план установки, инфраструктурный план, добавь в ТЗ, секция в ТЗ, примечание в ТЗ."
-version: 2.4.0
+version: 2.5.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -42,9 +42,12 @@ metadata:
 
 **Запрет склейки TZ-WRITE:** промпты вида «напиши ТЗ целиком», «весь TZ-WRITE одним `agent -p`», склейка `TZ:compress`+`TZ:patch`+`TZ:finalize` (и тем более с ролью исполнителя) — **запрещены**. `TZ-WRITE(mode)` = отдельные карточки и отдельные `agent -p` по GLOSSARY §5.1. Один вызов закрывает **ровно одну** фазу из `{TZ:stabilize, TZ:compress, TZ:patch, REV:tz, TZ:finalize}`.
 
-| Шаг | Роль | Модель | Когда |
+> **Колонка «Модель»** — внутренний `agent -p --model`, **не** `kanban_create --model`. На карточках `TZ:*` / `REV:tz`: `model_override` = NULL (воркер = default Hermes).
+
+| Шаг | Роль | Модель (`agent -p`, не kanban) | Когда |
 |---|---|---|---|
-| BRF | оркестратор (Сирень) | `deepseek-v4-flash-0731` | Бриф в TG: `BRF:*` → `GATE:brief-closed` (не карточка) |
+| BRF | оркестратор | deepseek (TG, без Cursor) | диалог; варианты постановки — сначала agent -p cursor-grok-4.6-high, затем ответ Саше |
+| TZ:stabilize | воркер (диск) | — (без agent -p) | path, version, mtime в metadata |
 | Шаг 0 — Компрессия ТЗ | оркестратор (Сирень) | `deepseek-v4-flash-0731` (осн. Hermes) | `TZ:compress`: экстракт master-ТЗ 3–5 КБ, без Cursor |
 | TZ-WRITE | архитектор | `cursor-grok-4.6-high` | `TZ:patch` / `TZ:finalize`: анализ, архитектура, текст ТЗ |
 | REV | ревизор | `claude-sonnet-5-medium` | `REV:tz` — по умолчанию во всех dev-задачах; искл. лёгкие BUGFIX/SKILL-CHANGE ≤3 файла (08.09.2026) |
@@ -115,6 +118,8 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
   - [ ] Раздел "## Контракты экосистемы" заполнен по стандарту (references/contracts-standard.md), или явно "Нет внешних контрактов"
   - [ ] Открытые вопросы закрыты или зафиксированы в `## Открытые вопросы`
   - [ ] Краткость + полнота: ни одной лишней фразы, ни одной пропущенной детали
+  - [ ] В **новой** секции master-ТЗ пакета — маркеры I1 `current` / `target` (канон: DKP v0.3.2 + GLOSSARY §3 слой AC/IAC)
+  - [ ] Подраздел `### Критерии приёмки (AC)` с якорями `AC-001`… **только пакета**, не ретрофит корпуса; формулировка наблюдаема (команда/артефакт)
 
 ### Цикл разработки
 
@@ -144,6 +149,8 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 
 Бриф (`BRF:full` / `light` / `delta` / `scope` / `confirm`) — **только в TG** через оркестратора (Сирень), не карточка. После `GATE:brief-closed` — `kanban_create` корня `DEV/<slug>` + блок `TZ-WRITE(mode)` + `GATE:take-into-work` с `parents=[...]` **в том же create** (сначала родители, `task_id` из return, затем дети). Все карточки `assignee=default`. Режим `mode` — из кейса GLOSSARY §2 (`new` / `full` / `patch` / `freeze`).
 
+- **Запрет `model` на create:** на `TZ:*`, `REV:tz` и `IDEA:analyze` — **без** `--model` / `model=` (анти-пример: `kanban_create(..., model=cursor-grok-4.6-high)` на `TZ:patch` → HTTP 400 у Hermes-воркера, `protocol_violation`, прецедент `t_2c8ee3b2`). Архитектор = `agent -p --model cursor-grok-4.6-high` **внутри** воркера после dispatch.
+
 - **Все задачи по умолчанию** после триггера «разработай/доработай/почини» ложатся в план (канбан-граф `DEV/<slug>`) и далее проводятся по канону, без дополнительной команды Саши.
 - **Slug-guard (перед `kanban_create` графа `DEV/<slug>`) — проверка активного графа по слагу:** если уже есть незакрытый граф (карточки в `todo|ready|running|blocked`, не `done`/`archived`) на тот же `<slug>` — **НЕ создавать дубль**; reuse существующего графа или `kanban_block` на новый create-интент до разрешения. Дубликаты графа на один слаг запрещены (прецедент pfs-notify-link-unprocessed: 2 параллельных графа).
 - **Идеи `triage` (`IDEA:*`)** НЕ переводятся в DEV-работу без явного «разбери»/«берём в работу» — это не противоречит «все задачи в план»: идеи в бэклоге — до постановки, по команде Саши (ЖЦ разделён, неконфликтующая формулировка).
@@ -164,7 +171,7 @@ DEV/<slug>                          корень (живёт до GATE:done)
 
 #### Подписка графа на уведомления (notify-subscribe)
 
-Сразу после `kanban_create` (в том же ходе) подписать **ВСЕ** `task_id` только что созданного графа на терминальные события. Наследования подписки по `parents` после батча **нет** — подписка подписывается на каждую карточку отдельно, явно. Фиксированный контракт (топик мониторинга Monitoring :7, группа, Telegram — по умолчанию, без дублей в личный DM):
+Сразу после `kanban_create` (в том же ходе) подписать набор **R5** (наследования по `parents` **нет** — каждая карточка явно). Фиксированный контракт (топик мониторинга Monitoring :7, группа, Telegram — по умолчанию, без дублей в личный DM):
 
 ```bash
 hermes kanban notify-subscribe <task_id> \
@@ -176,9 +183,10 @@ hermes kanban notify-subscribe <task_id> \
 
 Репорты карточек — только в топик мониторинга (Monitoring :7), без дублей в личный DM, по умолчанию. Отдельное явное указание Саши может переопределить канал подписки конкретного графа.
 
-- Триггер-батч корня `DEV/<slug>` + фаз: подписать корень **и** все созданные фазы, полученные из return `kanban_create`.
-- Багфикс-батч (`DEV/<slug>` + `BUG:diagnose`): аналогично — подписать обе.
-- Ручной feed `IDEA/<slug>` + `IDEA:analyze`: подписать обе.
+- **Набор R5:** корень `DEV/<slug>` (или `IDEA/<slug>` при feed) + `GATE:take-into-work` / `GATE:done` + `GATE:go` / `GATE:block-accept` / `IDEA:analyze` → `notify+wake`.
+- **Не подписывать:** `TZ:*` / `HF:*` / `REV:*` / `BUG:diagnose` / `ORCH:*` / `RS:*` / `GATE:plan-approve` / `GATE:diagnose-review`.
+- Багфикс-батч (`DEV/<slug>` + `BUG:diagnose`): подписать **корень** `DEV/<slug>` (не промежуточные фазы).
+- Ручной feed `IDEA/<slug>` + `IDEA:analyze`: корень `IDEA/<slug>` + `IDEA:analyze`.
 
 #### Быстрый путь CHANGE-LIGHT (опционально, ≤3 файла)
 
@@ -188,7 +196,7 @@ hermes kanban notify-subscribe <task_id> \
 ```
 TZ:patch (секция + version bump + инвентарь в том же ходе, stabilize/compress skip)
   → HF:impl → HF:test → HF:docs-handoff (создаёт version-handoff)
-  → GATE:done (auto-pass one-pass: preflight → complete)
+  → GATE:done (HITL never auto; preflight exit 0 необходим, не достаточен)
 ```
 
 - `TZ:stabilize`/`TZ:compress` — **skip** (архитектор читает целевые §, не весь master-ТЗ).
@@ -210,7 +218,7 @@ TZ:patch (секция + version bump + инвентарь в том же ход
 
 ```
 корень DEV/<slug> + BUG:diagnose      # ОДИН create-батч, до agent -p
-GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto
+GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto; субъект = архитектор + REV:tz; kanban_complete — архитектор вручную (не скрипт, не цепочка фаз, не фраза Саши)
 → TZ-WRITE(patch) → GATE:take-into-work → ...
 ```
 
@@ -225,11 +233,7 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto
 `GATE:diagnose-review` **никогда** не auto-pass (DX не one-pass). LIGHT-карточка
 НЕ содержит склейку фаз одним `agent -p` — каждая фаза — отдельная карточка/вызов.
 
-**Авто take-into-work после одобренного диагноза (требование 4):** для BUGFIX/BUGFIX-LIGHT
-после **одобренного** `GATE:diagnose-review` + наличия ТЗ-решения → `GATE:take-into-work`
-проходит **автоматически (one-pass)**, фраза Саши не требуется — решение уже в ТЗ/плане.
-Багфиксы по плану архитектора — уже согласованные реализации. `GATE:diagnose-review`
-остаётся **HITL (never auto)** (см. «Гейты — оба канала»).
+`GATE:take-into-work` — HITL Саши, **never auto** (и для BUGFIX/BUGFIX-LIGHT).
 
 ### Чек-лист TZ-WRITE(full)
 
@@ -240,6 +244,7 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto
 - [ ] `TZ:patch` done (архитектор `cursor-grok-4.6-high`, `--resume` своей сессии)
 - [ ] `REV:tz` done **или** comment `flag-waived: Sasha` (default ON для CHANGE)
 - [ ] `TZ:finalize` done (запись `TZ/<Tool>/<Tool>_TZ.md` + инвентарь) — **только после** родителей ниже
+- [ ] на каждой карточке TZ-WRITE / `REV:tz` при create: `model_override` IS NULL (проверка `kanban_show`)
 - [ ] ни один из шагов не выполнен «тем же» `agent -p`, что соседний
 
 Для `TZ-WRITE(new)` / `(patch)` — тот же запрет склейки; набор карточек по §5.2 (stabilize/compress в скобках §5.1).
@@ -254,8 +259,11 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto
 4. По успеху — `kanban_complete` текущей фазы (metadata: `tz_path`, `tz_version`, `tz_mtime`, `extract_chars` для compress, `cursor_session_ids`).
 5. Следующая фаза станет `ready` автоматически (`auto_promote_children`).
 
-| Шаг | Фаза | Модель |
+D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 внутри `agent -p`. Канон GLOSSARY §3.
+
+| Шаг | Фаза | Модель (`agent -p`, не `kanban_create --model`) |
 |---|---|---|
+| stabilize | TZ:stabilize | — (без agent -p; stat/YAML) |
 | 0 | TZ:compress | deepseek-v4-flash-0731 (оркестратор) |
 | TZ-WRITE | TZ:patch | cursor-grok-4.6-high (`--resume`) |
 | REV | REV:tz | claude-sonnet-5-medium |
@@ -278,14 +286,16 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto
 
 ### После TZ:finalize
 
-- **Пошаговый ход** — не стартовать hermes-feature; `GATE:take-into-work` → `kanban_comment` (путь ТЗ) + `kanban_block(reason="review-required: ждать «берём в работу»")`.
-- **Режим «делай в 1 проход»** (ТЗ на диске, открытых вопросов нет, фраза Саши «делай в 1 проход»): `GATE:take-into-work` — comment `auto-pass: one-pass mode` + `kanban_complete` без block; переход к HF-ветке (создаёт hermes-feature).
+Порядок **одного хода** (не параллельно):
+
+1. **СНАЧАЛА** — нумерованный список `AC-001`…`AC-NNN` **дословно** из master-ТЗ в **диалоговый чат** (в Monitoring :7 список **не** дублировать).
+2. **ЗАТЕМ** — `kanban_comment` + `kanban_block` на `GATE:take-into-work` (payload гейта = тот же список AC).
+
+Не стартовать hermes-feature до снятия `GATE:take-into-work`. `GATE:take-into-work` — HITL Саши, **never auto** (фраза «берём в работу» или дашборд).
 
 ### Гейты — оба канала
 
-`GATE:take-into-work` снимается фразой «берём в работу» в Telegram **или** unblock/approve на дашборде канбана. Оба канала действуют одновременно; на конкретном гейте Саша выбирает один. `kanban_complete` на гейте — только после unblock: `approved by Sasha` (или `auto-pass: one-pass mode`).
-
-**Исключение (требование 4):** для кейсов BUGFIX/BUGFIX-LIGHT после **одобренного** `GATE:diagnose-review` + ТЗ-решения → `GATE:take-into-work` проходит **автоматически (one-pass)**, фраза Саши не требуется (решение уже в ТЗ). Без диагноза или при неодобренном `GATE:diagnose-review` авто-проход **не применяется**. `GATE:diagnose-review` остаётся **HITL (never auto)**.
+`GATE:take-into-work` снимается фразой «берём в работу» в Telegram **или** unblock/approve на дашборде канбана. Оба канала действуют одновременно; на конкретном гейте Саша выбирает один. `kanban_complete` на HITL-гейте (`GATE:take-into-work` / `GATE:done`) — только после unblock: `approved by Sasha`. `GATE:plan-approve` — always auto (`auto-pass: architect-plan`). `GATE:take-into-work` и `GATE:done` — HITL Саши, never auto (включая BUGFIX/BUGFIX-LIGHT).
 
 ### Ручной feed идеи (бэклог)
 

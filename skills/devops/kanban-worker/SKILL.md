@@ -1,7 +1,7 @@
 ---
 name: kanban-worker
 description: "Pitfalls, examples, and edge cases for Hermes Kanban workers. Не для DEV-пайплайна (tz-workflow/hermes-feature): lifecycle auto-injected as KANBAN_GUIDANCE; на DEV-карточки не грузить."
-version: 2.0.1
+version: 2.0.3
 platforms: [linux, macos, windows]
 metadata:
   hermes:
@@ -171,6 +171,8 @@ If you open the task and `kanban_show` returns `runs: [...]` with one or more cl
 **Workspace may have stale artifacts.** Especially `dir:` and `worktree` workspaces can have files from previous runs. Read the comment thread — it usually explains why you're running again and what state the workspace is in.
 
 **Don't rely on the CLI when the guidance is available.** The `kanban_*` tools work across all terminal backends (Docker, Modal, SSH). `hermes kanban <verb>` from your terminal tool will fail in containerized backends because the CLI isn't installed there. When in doubt, use the tool.
+
+**Cursor-slug в `--model` карточки (прецедент `t_2c8ee3b2`).** Не передавать `model=` / `--model` на `kanban_create` со slug без `/` (`cursor-*`, `composer-*`, `claude-sonnet-*`, `gemini-*`): это попадает в `hermes chat -m`, не во внутренний `agent -p`. Симптом: HTTP 400 `must include upstream provider prefix`, Messages: 1 (0 tool calls), `rc=0`, диспетчер — `protocol_violation`. Если в `kanban_show` виден такой `model_override` — не complete «успех»; `kanban_comment` + эскалация постановщику: `set-model <id> none` на всех минах, потом `unblock`. Это подмена **D1 (модель карточки)** Cursor-slug'ом. **D2 (модель работы внутри)** = `agent -p --model` после старта. Канон: GLOSSARY §3.
 
 ## CLI fallback (for scripting)
 

@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.8.0
+version: 2.9.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -123,11 +123,20 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # never auto; субъект = а
 
 **Требование 4 отменено (DKP v0.3.2):** после `TZ:finalize` `GATE:take-into-work` HITL never auto, payload=AC; `GATE:diagnose-review` не HITL Саши.
 
+**Перед любым `agent -p` по инструменту на `BUG:diagnose` (и далее по багфикс-ветке):** обязательный `emit-prompt` — exit 0, иначе **СТОП**, `agent -p` не вызывать. Легальный вызов только от файла `--out` (промпт: `$(cat /tmp/task.md)`):
+
+- `python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --tool <Name> --task-file <план> --out /tmp/task.md`
+- exit 0 → `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`
+- exit ≠ 0 → СТОП
+
+**Обхода context-bundle нет (решение Саши 26.09, без исключений):** ни `flag-waived`, ни `--force` / `--force-bypass-sasha-ok` как обход тройки digest+GLOSSARY+мастер-ТЗ; скрипт `emit-prompt`/`check` блокируют всегда.
+
 ### Воркер HF-фаз
 
 1. `kanban_show()` → сверка TZ version/mtime → `cd $HERMES_KANBAN_WORKSPACE`.
-2. `kanban_heartbeat` на длинных `agent -p`; `session_id` → `kanban_comment` после первого вызова.
-3. Промпт Cursor CLI — **одна роль, одна фаза:**
+2. **Перед любым `agent -p` по инструменту** (все HF-фазы: `HF:plan`, `HF:impl`, `HF:test`, `HF:docs-handoff`, `HF:backup`, `REV:plan`, …): вызвать `emit-prompt` — **exit 0 обязателен**, иначе **СТОП**, `agent -p` не вызывать. Легальный `agent -p` — только от файла `--out` (`$(cat /tmp/task.md)`): `python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --tool <Name> --task-file <план> --out /tmp/task.md`; при exit 0 → `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`. Обхода context-bundle нет: `flag-waived` и `--force` / `--force-bypass-sasha-ok` не отменяют `emit-prompt`/`check`.
+3. `kanban_heartbeat` на длинных `agent -p`; `session_id` → `kanban_comment` после первого вызова.
+4. Промпт Cursor CLI — **одна роль, одна фаза:**
 
 ```
 Одна роль: {role} ({model}). Только фаза {phase}. Чужие фазы не выполнять.
@@ -135,7 +144,7 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # never auto; субъект = а
 
 Роли/модели (PI B3): compress=оркестратор `deepseek-v4-flash-0731` (без Cursor; заключение t_645aa647); plan/patch/finalize=архитектор `cursor-grok-4.6-high` (CHANGE-LIGHT ≤3 файла: допустим `cursor-grok-4.6-medium`); REV=ревизор `claude-sonnet-5-medium`; impl/test/docs-handoff=исполнитель `composer-2.5`; backup=координатор `composer-2.5`; ORCH=оркестратор.
 
-4. `kanban_complete` с metadata:
+5. `kanban_complete` с metadata:
 
 ```json
 {
@@ -152,8 +161,8 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # never auto; субъект = а
 }
 ```
 
-5. **Свёртка по `changed_files`:** на фазах **исполнителя** `HF:impl` и `HF:test`: если `changed_files` содержит путь `*_TZ.md` **или** `HF-plan*` → не complete, а `kanban_block(reason="review-required: collapsed-chain")`. Не применять к `HF:plan` (план — его артефакт) и к `HF:docs-handoff` (ТЗ — его артефакт).
-6. **Машинный факт на диске для read-only фаз `HF:plan`/`REV:plan`** (контроль premature-impl, инвариант 8/Блок 1А). На фазе планирования целевой каталог скилла не должен получать impl-артефактов:
+6. **Свёртка по `changed_files`:** на фазах **исполнителя** `HF:impl` и `HF:test`: если `changed_files` содержит путь `*_TZ.md` **или** `HF-plan*` → не complete, а `kanban_block(reason="review-required: collapsed-chain")`. Не применять к `HF:plan` (план — его артефакт) и к `HF:docs-handoff` (ТЗ — его артефакт).
+7. **Машинный факт на диске для read-only фаз `HF:plan`/`REV:plan`** (контроль premature-impl, инвариант 8/Блок 1А). На фазе планирования целевой каталог скилла не должен получать impl-артефактов:
    - **до** `agent -p`: снимок `disk_before` целевого каталога скилла из ТЗ — `python3 ~/WorkVault/Registries/pipeline_hf_plan_diskfact.py snapshot --skill-dir <abs>` → `kanban_comment` (JSON).
    - после: `disk_after` + `diff --before --after`. Если `PREMATURE_IMPL` (появились `SKILL.md`/`scripts/`/`tests/`/`references`/`cli.py`, которых не было в before) → `kanban_block(reason="review-required: impl-before-plan-approve")`; self-report «каталог есть» при `disk_before.exists=false` = это же block.
    - Легальный черновик (каталог был в before, код в этой фазе не менялся) → complete ок; `HF:impl` затем сверяет с планом, не пишет второй раз.
@@ -455,7 +464,7 @@ composer-2.5 / claude-sonnet-* в cronjob(model=) / delegate_task(model=)
 
 Когда «что-то не работает» — **не чинить сразу**. Порядок:
 
-1. **Заведи карточку BUG:diagnose** (read-only: чтение, запрет правок). Воркер карточки вызывает `agent -p --model cursor-grok-4.6-high` (архитектор). Оркестратор **не** пишет `_fix_plan` сам. `kanban_create` **без** `--model`.
+1. **Заведи карточку BUG:diagnose** (read-only: чтение, запрет правок). Воркер карточки: **сначала** `emit-prompt` (exit 0 обязателен, иначе СТОП), **затем** `agent -p "$(cat /tmp/task.md)"` с `--model cursor-grok-4.6-high` (архитектор) — не сырой промпт вне `--out`. Оркестратор **не** пишет `_fix_plan` сам. `kanban_create` **без** `--model`.
 2. `GATE:diagnose-review` — не ждать фразу Саши; `kanban_complete` — **архитектор вручную** после `REV:tz` (не HITL Саши).
 3. Карточка-воркер/исполнитель реализует по плану (GLOSSARY §5.2)
 

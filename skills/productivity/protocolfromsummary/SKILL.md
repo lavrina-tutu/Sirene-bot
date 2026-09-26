@@ -1,7 +1,7 @@
 ---
 name: protocolfromsummary
 description: "Use when working with the ProtocolFromSummary (PFS) tool — publishes Fireflies meeting-summary .md files into Confluence protocol tables (~/USERTOOLS/ProtocolFromSummary). Триггеры: PFS, протокол встречи, опубликовать протокол, задача не резолвится/не мешенится, ROUTES, page_layout, republish, страница протокола поменялась, out_of_scope встречи, роутинг крона PFS."
-version: 1.2.0
+version: 1.3.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -453,6 +453,34 @@ exit 0 если `action == "promoted"`, иначе 1.
    `PLAYGROUND_PAGE_ID`. `DedupChecker` на проходе 2 при `PFS_POST_SWITCH=on` вызывается для td1,
    совпадающего с first-pass (см. §24 «Дедуп — только на проходе 2»); для правленого td1 (§27 П.1,
    `td1_differs_from_first_pass`) — не вызывается. При флаге off DedupChecker в promote не вызывается.
+
+### §28 promote sink_aid (v1.24.0, 26.09.2026, pfs-sync-meeting-not-promoted) — действующий канон
+
+Дельту вносит `playground_promote.py`. Для целевой sink_aid (`SINK_AID_PAGE_ID`, дефолт
+`331125844`, может переопределяться env `PFS_SINK_AID_PAGE_ID` — ТОЛЬКО в
+`playground_promote.py`, не в `config.py`/`.env`) применяется `5col_aid`-рендер (контент
+в «Результаты обсуждения», последняя ячейка), **а НЕ** универсальный 2col-append. Ключевой
+канон: **append только в полностью пустой слот даты; иначе своя 5col-строка.**
+
+- **Пустой слот даты** = td1–td4 без контента (td0 = дата, в проверку занятости НЕ входит) → `append_empty_slot`.
+- **Занятые «Вопросы к обсуждению» при пустых «Результатах обсуждения»** → НЕ append, новая `5col` (&rarr; `insert_fivecol_occupied`).
+- **Якорь уже в строке даты (в last td)** → cell-level `replace_block_by_anchor` (&rarr; `replace_block`).
+- **Dedicated 5col с якорем в td0** → `replace_row_by_anchor` ТОЛЬКО с полным `_sink_fivecol_row` (&rarr; `replace_fivecol_row`).
+- Диагностика: нет строки даты → `insert_fivecol_no_date`; контент уже на цели → `skip_content_duplicate`.
+
+`PromoteResult.sink_action_kind` — поле ровно из 6 значений (`append_empty_slot`,
+`insert_fivecol_occupied`, `replace_block`, `replace_fivecol_row`, `insert_fivecol_no_date`,
+`skip_content_duplicate`); отдаётся и в `dry_run` (JSON). Это флаг действия, по которому судим
+о ветке promote, и он жёстко проверяется тестами (`test_promote_v2.py::test_promote_*_sink_aid*`).
+
+Канон §24/§27 (пост-switch, дедуп прохода 2, защита правок Саши) — **не трогать**. Обычные
+2col-протоколы (не sink_aid) promote ровно как раньше. `_resolve_sink_aid_page_id()` читает
+`PFS_SINK_AID_PAGE_ID` в момент вызова (env-only, без записи в конфиг).
+
+**Канон ingest (V1, §28 pfs-sink-aid-route, v1.22.0) — без изменений:** на площадку
+`523032632` проход 1 (`_post_switch_pass_one`) рендерит battle-строку всегда в `2col`
+(контент в td1) независимо от `route.page_layout`; 5col/append — только на промоуте (целевая
+331125844). Полная дельта и AC — ТЗ §28 (`TZ/ProtocolFromSummary/ProtocolFromSummary_TZ.md`, v1.24.0).
 
 ### Sidecar прохода 1
 

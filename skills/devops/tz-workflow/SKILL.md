@@ -1,7 +1,7 @@
 ---
 name: tz-workflow
 description: "Use when: создание, доработка, архивация ТЗ и инфраструктурных планов. Triggers: ТЗ, техническое задание, спецификация, доработка ТЗ, дорабатываем ТЗ, правки в ТЗ, обнови ТЗ, архивация ТЗ, план установки, инфраструктурный план, добавь в ТЗ, секция в ТЗ, примечание в ТЗ."
-version: 2.5.0
+version: 2.6.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -255,9 +255,10 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto; субъек
 
 1. `kanban_show()` — статус мог смениться (blocked/archived → стоп).
 2. Сверка `version`/`mtime` мастер-ТЗ с диска (см. `cursor-task-context`).
-3. `kanban_heartbeat` на длинных `agent -p`.
-4. По успеху — `kanban_complete` текущей фазы (metadata: `tz_path`, `tz_version`, `tz_mtime`, `extract_chars` для compress, `cursor_session_ids`).
-5. Следующая фаза станет `ready` автоматически (`auto_promote_children`).
+3. На фазах с `agent -p` (`TZ:patch`, `TZ:finalize`, `REV:tz`, …) — сначала `emit-prompt` по контракту «TZ-WRITE: emit-prompt перед agent -p» (exit 0, иначе СТОП).
+4. `kanban_heartbeat` на длинных `agent -p`.
+5. По успеху — `kanban_complete` текущей фазы (metadata: `tz_path`, `tz_version`, `tz_mtime`, `extract_chars` для compress, `cursor_session_ids`).
+6. Следующая фаза станет `ready` автоматически (`auto_promote_children`).
 
 D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 внутри `agent -p`. Канон GLOSSARY §3.
 
@@ -268,6 +269,18 @@ D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 вну
 | TZ-WRITE | TZ:patch | cursor-grok-4.6-high (`--resume`) |
 | REV | REV:tz | claude-sonnet-5-medium |
 | finalize | TZ:finalize | cursor-grok-4.6-high — запись `TZ/<Tool>/<Tool>_TZ.md` + `MAIN_TZ_INVENTORY.md` |
+
+### TZ-WRITE (`TZ:patch`, `TZ:finalize`): emit-prompt перед `agent -p`
+
+Перед **любым** `agent -p` на фазах `TZ:patch` и `TZ:finalize` (по инструменту):
+
+- `python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --tool <Name> --task-file <план> --out /tmp/task.md`
+- exit 0 → `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`
+- exit ≠ 0 → **СТОП**, `agent -p` не вызывать
+
+Легальный `agent -p` — только от файла `--out` (`$(cat /tmp/task.md)`), не произвольная строка в `-p`.
+
+**Обхода context-bundle нет (решение Саши 26.09, без исключений):** ни `flag-waived`, ни `--force` / `--force-bypass-sasha-ok` как обход тройки digest+GLOSSARY+мастер-ТЗ; `emit-prompt`/`check` блокируют всегда. (`flag-waived: Sasha` для skip `REV:tz` — отдельный механизм, не context-bundle.)
 
 `TZ:finalize` — роль архитектора, не исполнителя HF. Перед записью master-ТЗ воркер `TZ:finalize`:
 

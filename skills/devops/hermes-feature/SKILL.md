@@ -179,6 +179,8 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # never auto; субъект = а
 
 - Исполнитель = `HF:docs-handoff`: текст скилла/ТЗ-секции **кроме** манифеста; `manifest_hints` в metadata.
 - Запись манифеста, digest/render, `restore-all-skills.sh`, `.env`/`jobs.json`/`entities.json` — **только** `ORCH:shared-state` (после `done` всех инструментных карточек).
+- **`ORCH:shared-state` (HF-TAIL и `DECOMM-TAIL`):** AC карточки — `python3 ~/WorkVault/Registries/render_manifest.py --check-drift` exit 0 **или** остаток дрейфа явно не про slug этого графа/DECOMM.
+- **После `DEC:exec` (`DECOMM-TAIL`):** в `tools{}` — `status=archived`, `path` = каталог архива; `tz_ref` можно оставить; исторические `links` допустимы — contract-check в `render_manifest.py` пропускает `archived`/`completed`.
 - `ORCH:shared-state` workspace: `dir:/home/tkachenkoav/WorkVault/Registries`.
 
 ### GATE:done — статус «готово»
@@ -361,7 +363,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 
 - ТЗ-файл в `TZ/<Tool>/<Tool>_TZ.md` пока инструмент используется. Архивация — только при выводе из эксплуатации.
 - Исполнитель (`HF:docs-handoff`): текст скилла/ТЗ-секции **кроме** манифеста; `manifest_hints` в `kanban_complete.metadata`.
-- **Манифест, digest/render, `restore-all-skills.sh`, `.env`/`jobs.json`/`entities.json` — только `ORCH:shared-state`** (оркестратор Сирень). Исполнитель не пишет в `EcosystemManifest.json`.
+- **Манифест, digest/render, `restore-all-skills.sh`, `.env`/`jobs.json`/`entities.json` — только `ORCH:shared-state`** (оркестратор Сирень). Исполнитель не пишет в `EcosystemManifest.json`. AC `ORCH:shared-state` / `DECOMM-TAIL` по `--check-drift` — см. «Блок 4 — владелец общего state» (канбан-шаг).
 - **Скилл:** мелкая правка → архитектор сам; новый раздел → предлагает Саше.
 - **MEMORY и скиллы:** см. `hermes-memory-hygiene`.
 
@@ -372,6 +374,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 - **Задачи архитектора:** бэкап всегда.
 - **Задачи исполнителя:** только если затронут `config.yaml` или `jobs.json`.
 - **Путь:** `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`.
+- **`DECOMM-TAIL`:** после `HF:backup` и `DEC:exec` — обновление манифеста в `ORCH:shared-state`; приёмка drift — тот же AC `--check-drift`, что у HF-TAIL (канбан «Блок 4 — владелец общего state»).
 - **Хранение:** 2 недели, 1 бэкап в день. Self-check чистит.
 - **Откат:** авария → архитектор немедленно; плановый → архитектор предлагает, ждёт ОК.
 

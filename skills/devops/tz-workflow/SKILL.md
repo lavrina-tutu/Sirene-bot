@@ -1,7 +1,7 @@
 ---
 name: tz-workflow
 description: "Use when: создание, доработка, архивация ТЗ и инфраструктурных планов. Triggers: ТЗ, техническое задание, спецификация, доработка ТЗ, дорабатываем ТЗ, правки в ТЗ, обнови ТЗ, архивация ТЗ, план установки, инфраструктурный план, добавь в ТЗ, секция в ТЗ, примечание в ТЗ."
-version: 2.6.0
+version: 2.7.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -30,7 +30,7 @@ metadata:
 
 Не применять: рабочие данные vault (`Projects/`, `People/`, `Meetings/`), git-репозитории конфига.
 
-**Связь с hermes-feature:** после финализации ТЗ и получения «берём в работу» — перейти к hermes-feature для реализации.
+**Связь с hermes-feature:** после `TZ:finalize` AC-список показывается в origin-топик (показ, не ожидание), `GATE:take-into-work` auto-pass, поезд идёт сам — hermes-feature стартует без фразы Саши (императив 28.09: старт→финиш).
 
 ## Workflow (Шаги 0–4)
 
@@ -128,13 +128,13 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
    **Постановка через открытый диалог («дослушай до конца, пока ничего не делай»):** требования собираются итеративно, по одному пункту за сообщение. Каждый новый пункт — **кратко пересказать и подтвердить понимание своими словами**, вплетая в накопительный контекст постановки. Технические/архитекторские side-effects (вызов Cursor, запись ТЗ, компрессия) — **не начинать**, пока не прозвучал явный закрывающий императив («зафиксируй все требования в ТЗ и передай архитектору»). Открытые развилки закрываются по одной вопросу с вариантами и рекомендацией, фиксируются в контекст, не в код/файл. При handoff архитектору — передать **все связанные упомянутые инструменты/ТЗ + общую схему экосистемы (digest)**, и явно предусмотреть ревизора (**REV:tz**, по умолчанию при крупной многосвязной постановке). Контекст остаётся read-only до закрытия открытых вопросов.
 2. **ТЗ** — Шаги 2-4 через Cursor CLI (`agent -p`), версионирование, регистрация в `MAIN_TZ_INVENTORY.md`.
 3. **Обновление ТЗ** — после каждого брифа исполнитель (composer-2.5) вносит правки; архитектурные изменения — архитектор (cursor-grok-4.6-high через Cursor CLI).
-4. **Реализация** — ждать явного «берём в работу». Реализация — отдельный процесс через hermes-feature.
+4. **Реализация** — после `TZ:finalize` AC показ в origin → `GATE:take-into-work` auto-pass → hermes-feature идёт сам (императив 28.09).
 
 ### Правила автономии
 
 - **Side-effect только по императиву** — никаких правок без явного «делай».
 - **Кроны НЕ создаются автоматически** — перечисляются в отчёте, создаются только по «ставь».
-- **НЕТ шорткатов даже для багфиксов с известным root cause.** Прецедент (MoveFromLoop v0.4.2, 07.08.2026): агент с готовой диагностикой от архитектора предложил «использовать диагностику как spec → сразу hermes-feature» или «короткий бриф вместо ТЗ» — пользователь отклонил. **Правило:** для ЛЮБОЙ задачи доработки ТЗ ИЛИ реализации — всегда tz-workflow (Шаги 1-4 → ТЗ-файл → MAIN_TZ_INVENTORY.md) → ждать «берём в работу» → hermes-feature. Нет исключений для багфиксов, хотфиксов, мелких правок. Если сомнения в правильном варианте — **спросить Сашу**, НЕ предлагать альтернативы.
+- **НЕТ шорткатов даже для багфиксов с известным root cause.** Прецедент (MoveFromLoop v0.4.2, 07.08.2026): агент с готовой диагностикой от архитектора предложил «использовать диагностику как spec → сразу hermes-feature» или «короткий бриф вместо ТЗ» — пользователь отклонил. **Правило:** для ЛЮБОЙ задачи доработки ТЗ ИЛИ реализации — всегда tz-workflow (Шаги 1-4 → ТЗ-файл → MAIN_TZ_INVENTORY.md) → `TZ:finalize` → AC показ в origin → `GATE:take-into-work` auto-pass → hermes-feature (без фразы «берём в работу»). Нет исключений для багфиксов, хотфиксов, мелких правок.
 - **Валидация и рекомендации по постановке — только от архитектора (требование 2).** Сирень (Hermes) НЕ предлагает собственное мнение, собственные варианты решений или рекомендации по постановке задач — передаёт архитектору (`cursor-grok-4.6-high` через Cursor CLI), выполняет по его рекомендациям. Фактологические уточняющие вопросы Саше — текстом (процедура H / R3), без собственных вариантов по постановке. (См. также «Модели (Cursor CLI)» и Q2 бриф-фазы.)
 
 ## Канбан-шаг
@@ -147,15 +147,18 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 
 ### Вход триггера (после BRIEF-CLOSE)
 
-Бриф (`BRF:full` / `light` / `delta` / `scope` / `confirm`) — **только в TG** через оркестратора (Сирень), не карточка. После `GATE:brief-closed` — `kanban_create` корня `DEV/<slug>` + блок `TZ-WRITE(mode)` + `GATE:take-into-work` с `parents=[...]` **в том же create** (сначала родители, `task_id` из return, затем дети). Все карточки `assignee=default`. Режим `mode` — из кейса GLOSSARY §2 (`new` / `full` / `patch` / `freeze`).
+Бриф (`BRF:full` / `light` / `delta` / `scope` / `confirm`) — **только в TG** через оркестратора (Сирень), не карточка. После `GATE:brief-closed` — **ОДИН `kanban_create`-батч полного графа кейса**: корень `DEV/<slug>` + `TZ-WRITE(mode)` + `GATE:take-into-work` + `PLAN-IMPL-TAIL` (или `-LIGHT` по кейсу GLOSSARY §2) **в том же create** (сначала родители, `task_id` из return, затем дети). Все карточки `assignee=default`. Режим `mode` — из кейса GLOSSARY §2 (`new` / `full` / `patch` / `freeze`).
 
-- **Запрет `model` на create:** на `TZ:*`, `REV:tz` и `IDEA:analyze` — **без** `--model` / `model=` (анти-пример: `kanban_create(..., model=cursor-grok-4.6-high)` на `TZ:patch` → HTTP 400 у Hermes-воркера, `protocol_violation`, прецедент `t_2c8ee3b2`). Архитектор = `agent -p --model cursor-grok-4.6-high` **внутри** воркера после dispatch.
+**Полный граф одним батчем сразу после брифа** (императив 28.09, доработка A плана process-rework): второй «разворот хвоста» после гейта NOT (дыра unfold, дети `children=[]`). Диспетчер сам промоутит по `parents`. Доработка A: весь кейсовый граф — руками одного батча, `GATE:take-into-work` входит в него и авто-проходится после `TZ:finalize`.
+
+- **Запрет `model` на create:** на `TZ:*`, `REV:tz`, `HF:*`, `BUG:*` и `IDEA:analyze` — **без** `--model` / `model=` (D1 = NULL, воркер default Hermes; анти-пример: `kanban_create(..., model=cursor-grok-4.6-high)` на `TZ:patch` → HTTP 400 у Hermes-воркера, `protocol_violation`, прецедент `t_2c8ee3b2`). Роли grok/composer — только D2 внутри `agent -p --model …`.
+- **Ключ на КАЖДУЮ фазу при create:** `devpipe:<slug>:<phase>:<tz_version_or_none>` (lookup до create, дубль = no-op; rework — суффикс `:rework:<n>:<tz_version>`).
 
 - **Все задачи по умолчанию** после триггера «разработай/доработай/почини» ложатся в план (канбан-граф `DEV/<slug>`) и далее проводятся по канону, без дополнительной команды Саши.
 - **Slug-guard (перед `kanban_create` графа `DEV/<slug>`) — проверка активного графа по слагу:** если уже есть незакрытый граф (карточки в `todo|ready|running|blocked`, не `done`/`archived`) на тот же `<slug>` — **НЕ создавать дубль**; reuse существующего графа или `kanban_block` на новый create-интент до разрешения. Дубликаты графа на один слаг запрещены (прецедент pfs-notify-link-unprocessed: 2 параллельных графа).
 - **Идеи `triage` (`IDEA:*`)** НЕ переводятся в DEV-работу без явного «разбери»/«берём в работу» — это не противоречит «все задачи в план»: идеи в бэклоге — до постановки, по команде Саши (ЖЦ разделён, неконфликтующая формулировка).
 
-Граф TZ-фаз — развёртка `TZ-WRITE(mode)` (parents обязательны):
+Граф кейса — ОДИН батч: TZ-WRITE(mode) + `GATE:take-into-work` + `PLAN-IMPL-TAIL` (parents обязательны). Для DEV/CHANGE (полный) граф:
 
 ```
 DEV/<slug>                          корень (живёт до GATE:done)
@@ -164,10 +167,13 @@ DEV/<slug>                          корень (живёт до GATE:done)
 ├─ TZ:patch             parents=[TZ:compress]     # архитектор, --resume
 ├─ REV:tz               parents=[TZ:patch]        # по умолчанию во всех dev-задачах
 ├─ TZ:finalize          parents=[REV:tz]          # + MAIN_TZ_INVENTORY.md
-└─ GATE:take-into-work  parents=[TZ:finalize]
+├─ GATE:take-into-work  parents=[TZ:finalize]     # auto-pass: ac-shown (показ AC ≠ ждать)
+└─ PLAN-IMPL-TAIL: HF:plan (parents=[GATE:take-into-work]) ─ [REV:plan] ─ GATE:plan-approve (auto) ─ HF-TAIL (HF:backup → HF:impl → HF:test → HF:docs-handoff → ORCH:shared-state → GATE:done)
 ```
 
-`workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на карточке: `tz-workflow`, `cursor-cli`, `cursor-task-context`. Idempotency: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
+LIGHT-кейсы (BUGFIX-LIGHT / CHANGE-LIGHT ≤3 файла) — короткий хвост в том же батче (GLOSSARY §5.2): `TZ:patch → TZ:finalize → GATE:take-into-work → HF:impl → HF:test → HF:docs-handoff → GATE:done`. Весь граф создаётся одним `kanban_create`-батчем после брифа; второго unfold нет.
+
+`workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на карточке: `tz-workflow`, `cursor-cli`, `cursor-task-context`. Idempotency каждой фазы: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
 
 #### Подписка графа на уведомления (notify-subscribe)
 
@@ -196,7 +202,7 @@ hermes kanban notify-subscribe <task_id> \
 ```
 TZ:patch (секция + version bump + инвентарь в том же ходе, stabilize/compress skip)
   → HF:impl → HF:test → HF:docs-handoff (создаёт version-handoff)
-  → GATE:done (HITL never auto; preflight exit 0 необходим, не достаточен)
+  → GATE:done (auto-pass после preflight exit 0)
 ```
 
 - `TZ:stabilize`/`TZ:compress` — **skip** (архитектор читает целевые §, не весь master-ТЗ).
@@ -218,22 +224,13 @@ TZ:patch (секция + version bump + инвентарь в том же ход
 
 ```
 корень DEV/<slug> + BUG:diagnose      # ОДИН create-батч, до agent -p
-GATE:diagnose-review    parents=[BUG:diagnose]   # HITL never auto; субъект = архитектор + REV:tz; kanban_complete — архитектор вручную (не скрипт, не цепочка фаз, не фраза Саши)
-→ TZ-WRITE(patch) → GATE:take-into-work → ...
+GATE:diagnose-review    parents=[BUG:diagnose]   # auto по артефакту _fix_plan_*.md / непустому body; не HITL Саши
+→ TZ-WRITE(patch) → GATE:take-into-work (auto-pass: ac-shown) → ...
 ```
 
-Графы:
-- **BUGFIX** (полный): после `GATE:diagnose-review` → `TZ:patch` → `TZ:finalize`
-  → `GATE:take-into-work` → `PLAN-IMPL-TAIL` (HF:plan/GATE:plan-approve/… полный ряд).
-- **BUGFIX-LIGHT** (≤3 файла кода+тесты, вне shared; классификация **после**
-  `GATE:diagnose-review`): `TZ:patch` → `TZ:finalize` → `GATE:take-into-work`
-  → `HF:impl` → `HF:test` → `HF:docs-handoff` → `GATE:done`
-  (preflight `--case BUGFIX-LIGHT`; план = `_fix_plan_*.md` или body `BUG:diagnose`).
+`GATE:diagnose-review` — **auto** (доработка B плана process-rework): воркер гейта complete сам, когда `BUG:diagnose` done и на диске есть `_fix_plan_*.md` **или** непустой body. Классификация LIGHT — в том же ходе, без ожидания Саши. REV качества ТЗ остаётся `REV:tz` в `TZ-WRITE`, не на этом гейте.
 
-`GATE:diagnose-review` **никогда** не auto-pass (DX не one-pass). LIGHT-карточка
-НЕ содержит склейку фаз одним `agent -p` — каждая фаза — отдельная карточка/вызов.
-
-`GATE:take-into-work` — HITL Саши, **never auto** (и для BUGFIX/BUGFIX-LIGHT).
+`GATE:take-into-work` — **always auto** (`auto-pass: ac-shown` после показа AC в origin), включая BUGFIX/BUGFIX-LIGHT (императив 28.09).
 
 ### Чек-лист TZ-WRITE(full)
 
@@ -301,15 +298,16 @@ D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 вну
 
 Порядок **одного хода** (не параллельно):
 
-1. **СНАЧАЛА** — нумерованный список `AC-001`…`AC-NNN` **дословно** из master-ТЗ в **диалоговый чат** (в Monitoring :7 список **не** дублировать).
-2. **ЗАТЕМ** — `kanban_comment` + `kanban_block` на `GATE:take-into-work` (payload гейта = тот же список AC).
-3. **Манифест vs диск (не ждать HF-хвоста):** если master-ТЗ/`tz_ref` уже на диске и в `MAIN_TZ_INVENTORY.md`, но пути нет в `EcosystemManifest.json` `tools{}` → stub-запись `tools{}` (`status` из инвентаря, не из frontmatter ТЗ) **или** явная карточка `ORCH:shared-state` с AC «`tools.<tz_ref>` зарегистрирован». Полные `links`/контракты — после «берём в работу» / ORCH хвоста.
+1. **СНАЧАЛА** — нумерованный список `AC-001`…`AC-NNN` **дословно** из master-ТЗ в **origin-топик** (в Monitoring :7 список дублировать). Показ AC ≠ ожидание: это доставка артефакта, не стоп Саши.
+2. **ЗАТЕМ** — `kanban_comment` payload на `GATE:take-into-work` = тот же список AC (маркер `auto-pass: ac-shown`).
+3. `GATE:take-into-work` — **auto-pass** (`auto-pass: ac-shown`), `kanban_complete`, **не** `kanban_block` (императив 28.09: старт→финиш, фраза «берём в работу» не стоп). Хвост сам становится `ready` по `parents`.
+4. **Манифест vs диск (не ждать HF-хвоста):** если master-ТЗ/`tz_ref` уже на диске и в `MAIN_TZ_INVENTORY.md`, но пути нет в `EcosystemManifest.json` `tools{}` → stub-запись `tools{}` (`status` из инвентаря, не из frontmatter ТЗ) **или** явная карточка `ORCH:shared-state` с AC «`tools.<tz_ref>` зарегистрирован». Полные `links`/контракты — после auto take-into-work / ORCH хвоста.
 
-Не стартовать hermes-feature до снятия `GATE:take-into-work`. `GATE:take-into-work` — HITL Саши, **never auto** (фраза «берём в работу» или дашборд).
+Hermes-feature стартует без снятия гейта Сашей: хвост уже в графе и авто-промоушен запускает его после `GATE:take-into-work` done.
 
 ### Гейты — оба канала
 
-`GATE:take-into-work` снимается фразой «берём в работу» в Telegram **или** unblock/approve на дашборде канбана. Оба канала действуют одновременно; на конкретном гейте Саша выбирает один. `kanban_complete` на HITL-гейте (`GATE:take-into-work` / `GATE:done`) — только после unblock: `approved by Sasha`. `GATE:plan-approve` — always auto (`auto-pass: architect-plan`). `GATE:take-into-work` и `GATE:done` — HITL Саши, never auto (включая BUGFIX/BUGFIX-LIGHT).
+`GATE:take-into-work` и `GATE:done` — **always auto** (auto-pass по канону: `ac-shown` / preflight exit 0). Снятие Сашей / фраза «готово» на них — идемпотентный no-op (гейт уже done). `GATE:plan-approve` — always auto (`auto-pass: architect-plan`). **Не auto** (кризисный HITL): `GATE:go`, `GATE:block-accept`, IDEA `blocked`, crisis-block корня (`review-required: crisis`). Повторное снятие — no-op.
 
 ### Ручной feed идеи (бэклог)
 
@@ -347,7 +345,7 @@ Idempotency analyze: `devpipe:idea:<slug>:analyze`.
 1. **Один master-файл на инструмент:** `TZ/<Tool>/<Tool>_TZ.md`. Доработка = секция внутри, не новый файл.
 2. **Латиница-only** для новых имён файлов/папок. Версия — только во frontmatter.
 3. **Содержательный текст ТЗ пишет только архитектор (cursor-grok-4.6-high через Cursor).** Исполнитель (composer-2.5) / координатор (composer-2.5) — механика (переносы, frontmatter, инвентарь).
-4. **Согласование ТЗ ≠ команда на реализацию.** Ждать отдельного «берём в работу».
+4. **Согласование ТЗ ≠ команда на реализацию.** После `TZ:finalize` AC показ в origin, `GATE:take-into-work` auto-pass, поезд идёт сам — отдельной фразы «берём в работу» не ждём (императив 28.09).
 5. **`TZ/<Tool>/` содержит ТОЛЬКО ТЗ-документы.** Брифы, research, runtime-json — в папке инструмента.
 6. **Reuse-first: новые сущности — только на согласование (см. references/reuse-first-rule.md).**
 
@@ -371,7 +369,7 @@ Idempotency analyze: `devpipe:idea:<slug>:analyze`.
 - [ ] Новое ТЗ по пути `TZ/<Tool>/<Tool>_TZ.md` (латиница, без v-суффикса)
 - [ ] `MAIN_TZ_INVENTORY.md` обновлён в той же операции
 - [ ] Содержательный текст писал архитектор (cursor-grok-4.6-high через Cursor); механика — исполнитель (composer-2.5) / координатор (composer-2.5)
-- [ ] Согласование ≠ реализация (ждём «берём в работу»)
+- [ ] Согласование ≠ реализация (после `TZ:finalize` AC показ в origin → `GATE:take-into-work` auto-pass, фразу «берём в работу» не ждём)
 - [ ] После записи ТЗ — `mofs-index index docs` (инкрементально)
 - [ ] В цепочке ТЗ→бриф→обновление каждый Cursor CLI вызов явно помечен «правка ТЗ» / «начинаю реализацию»
 - [ ] Приложения к ТЗ — в `appendix_*.md`, таблица в master-ТЗ обновлена

@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.9.0
+version: 2.10.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -37,13 +37,13 @@ metadata:
 
 | Триггерные слова | Маршрут (ОБЯЗАТЕЛЬНО) |
 |---|---|
-| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | канбан-граф BUGFIX = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ tool-шаг — `kanban_create` корня `DEV/<slug>` И карточки BUG:diagnose в одном create-батче, ДО любого agent -p / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared). После `TZ:finalize` (багфикс-ТЗ) `GATE:take-into-work` HITL never auto, payload=AC; `GATE:diagnose-review` не ждёт фразу Саши (не HITL Саши). Требование 4 отменено (DKP v0.3.2, HITL вариант 1) |
+| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | канбан-граф BUGFIX = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ tool-шаг — `kanban_create` корня `DEV/<slug>` И карточки BUG:diagnose в одном create-батче, ДО любого agent -p / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared). После `TZ:finalize` (багфикс-ТЗ) `GATE:take-into-work` **auto-pass** (`auto-pass: ac-shown`), payload=AC; `GATE:diagnose-review` **auto** по артефакту `_fix_plan_*.md`/непустому body (императив 28.09, старт→финиш) |
 | «спроси», «проверь», «вычисли», «найди данные», «найди в архиве», «сколько», «покажи» | прямой ответ (без кода/процесса; нет карточки) |
 | «одношаговый ответ», RESEARCH-триггеры («проанализируй», «исследуй» без починки) | прямой ответ / RS-граф (по DPK-исключениям) |
 
 Правило сверху: «Работа с кодом/процессом (любое изменение) по баг-триггеру — ТОЛЬКО через канбан-граф. Прямой ответ — только когда НЕТ кода/процесса. Сомнение — всегда в сторону карточки BUG:diagnose.»
 
-**Связь с tz-workflow:** после согласования ТЗ и получения «берём в работу» — перейти к этому скиллу для реализации.
+**Связь с tz-workflow:** после `TZ:finalize` AC показ в origin → `GATE:take-into-work` auto-pass, поезд идёт сам — этот скилл для реализации, без фразы «берём в работу».
 
 ---
 
@@ -54,7 +54,7 @@ metadata:
 ### Вход
 
 - Любой HF `agent -p` без корня `DEV/<slug>` → **стоп** + оркестратор. Исключения DPK: `BRF:*` в TG; одношаговый ответ; RESEARCH.
-- Вход в HF-ветку только если корень `DEV/<slug>` существует **и** `GATE:take-into-work` снят **Сашей** (фраза/дашборд). Иначе стоп + текст «нет „берём в работу“».
+- Вход в HF-ветку: корень `DEV/<slug>` существует **и** `GATE:take-into-work` **done/auto-pass** (`auto-pass: ac-shown`) — не фраза Саши (императив 28.09). Постановщик завёл полный граф одним батчем, гейт авто-прошёлся после `TZ:finalize`.
 - **Все задачи по умолчанию ложатся в план** (канбан-граф `DEV/<slug>`) после триггера «разработай/доработай/почини» и далее проводятся по канону, без дополнительной команды Саши (требование 1).
 - **Slug-guard:** перед `kanban_create` корня `DEV/<slug>` (в т.ч. багфикс-батча) — проверка активного графа по слагу (`todo|ready|running|blocked`, не `done`/`archived`); дубли запрещены (кейс 1, прецедент pfs-notify-link-unprocessed). При совпадении — reuse существующего графа или `kanban_block` до разрешения.
 - `GATE:plan-approve` / `HF:backup` / `HF:impl`: если `HF:plan` не `done` → **стоп** (GLOSSARY инвариант 6). Не skip плана в one-pass.
@@ -77,7 +77,7 @@ GATE:take-into-work  (уже снят)
 └─ GATE:done            parents=[ORCH:shared-state]
 ```
 
-Граф выше — **пошаговый** режим (после снятия `GATE:take-into-work` оркестратор разворачивает `PLAN-IMPL-TAIL` + `HF-TAIL` через `kanban_create`). В **корневом** one-pass (корень сам делает работу) этот хвост **не создавать** — см. «One-pass не плодит хвост».
+Граф выше — **полный граф кейса, создан одним батчем после брифа** (tz-workflow «Вход триггера»): `GATE:take-into-work` + `PLAN-IMPL-TAIL` + `HF-TAIL` уже в графе с parents и ключами `devpipe:<slug>:<phase>`. **Unfold хвоста после гейта НЕТ** (дыра: второй ход → `children=[]`, фазы complete без детей). В **корневом** one-pass (корень сам делает работу) дочерний хвост **не создавать** вообще — см. «One-pass не плодит хвост».
 
 Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`, `cursor-task-context`. ORCH:shared-state — только `hermes-feature`.
 
@@ -107,11 +107,11 @@ hermes kanban notify-subscribe <task_id> \
 ```none
 корень DEV/<slug> + BUG:diagnose   # в ОДНОМ kanban_create-батче (инвариант 9), до agent -p
 # сразу после батча — notify-subscribe R5 (контракт «Подписка графа на уведомления» выше)
-GATE:diagnose-review  parents=[BUG:diagnose]   # never auto; субъект = архитектор+REV:tz; complete вручную архитектором
-→ далее TZ-WRITE(patch|light) → GATE:take-into-work → PLAN-IMPL-TAIL | PLAN-IMPL-TAIL-LIGHT
+GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _fix_plan_*.md / непустому body
+→ далее TZ-WRITE(patch|light) → GATE:take-into-work (auto-pass: ac-shown) → PLAN-IMPL-TAIL | PLAN-IMPL-TAIL-LIGHT
 ```
 
-`BUG:diagnose` — read-only, план П.1…П.N → `_fix_plan_YYYYMMDD.md`. Диагноз → `BUG:diagnose`; реализация → `HF:impl`. **`HF:fix` запрещён** (GLOSSARY §7). Инвариант: даже с известным root cause — нет перехода в hermes-feature без ТЗ-файла. Режим «1 проход» **не** обходит `GATE:diagnose-review`. Режим «1 проход» НЕ обходит GATE:diagnose-review И не отменяет создание карточки BUG:diagnose. DX всегда идёт как карточки на канбане, даже в one-pass. `GATE:plan-approve` — always auto; `GATE:take-into-work` / `GATE:done` — HITL never auto. Баг-триггер всегда начинает с карточки BUG:diagnose.
+`BUG:diagnose` — read-only, план П.1…П.N → `_fix_plan_YYYYMMDD.md`. Диагноз → `BUG:diagnose`; реализация → `HF:impl`. **`HF:fix` запрещён** (GLOSSARY §7). Инвариант: даже с известным root cause — нет перехода в hermes-feature без ТЗ-файла. `GATE:diagnose-review` — **auto** (доработка B): воркер гейта complete сам, когда `BUG:diagnose` done и на диске есть `_fix_plan_*.md` **или** непустой body; классификация LIGHT — в том же ходе. `GATE:plan-approve` — always auto; `GATE:take-into-work` / `GATE:done` — **always auto**. Баг-триггер всегда начинает с карточки BUG:diagnose.
 
 **Корень `DEV/<slug>` создаётся СРАЗУ, в том же create-батче, что и `BUG:diagnose`** (не ретро, инвариант 9). Ретро-корень = нарушение (прецедент pfs-promote-bugfix 22.09: preflight GATE:done красный). Первый tool-шаг при баг-триггере — `kanban_create` корня `DEV/<slug>` **И** DX в одном батче, **до** любого agent -p / cronjob(repeat=1) / delegate / cronjob-аутсорсинга диагностики.
 
@@ -121,7 +121,7 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # never auto; субъект = а
 - план = `_fix_plan_*.md` **или** непустой body `BUG:diagnose` (утверждён уже на diagnose-review);
 - не генерировать пустые `auto-pass`-флаги (фальшивый audit).
 
-**Требование 4 отменено (DKP v0.3.2):** после `TZ:finalize` `GATE:take-into-work` HITL never auto, payload=AC; `GATE:diagnose-review` не HITL Саши.
+**Auto-гейт (DKP 0.4.0, императив 28.09):** после `TZ:finalize` `GATE:take-into-work` **auto-pass** (`auto-pass: ac-shown`), payload=AC; `GATE:diagnose-review` — **auto** по `_fix_plan_*.md` (доработка B). Leftover «never auto» на `take-into-work`/`done` — устранён.
 
 **Перед любым `agent -p` по инструменту на `BUG:diagnose` (и далее по багфикс-ветке):** обязательный `emit-prompt` — exit 0, иначе **СТОП**, `agent -p` не вызывать. Легальный вызов только от файла `--out` (промпт: `$(cat /tmp/task.md)`):
 
@@ -189,29 +189,29 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # never auto; субъект = а
 
 1. `kanban_show()`.
 2. Собрать отчёт AC-### → как тестировали (команда, лог/артефакт, результат).
-3. Опубликовать отчёт в ДИАЛОГ Саши (не топик Monitoring :7, не личный DM оркестратору).
-4. kanban_comment на карточку GATE:done: маркер `AC-delivered: dialog` + тело отчёта:
+3. Опубликовать отчёт в **origin-топик Саши** (диалог, откуда пришёл запрос; не топик Monitoring :7, не личный DM оркестратору).
+4. kanban_comment на карточку GATE:done: маркер `AC-delivered: origin` + тело отчёта:
    ```
-   AC-delivered: dialog
+   AC-delivered: origin
    ## Отчёт AC
    AC-001 → команда / лог / результат
    ```
-   Маркер — ТОЛЬКО после реального поста в диалог. Не считать комментарий GATE:take-into-work
+   Маркер — ТОЛЬКО после реального поста в origin. Не считать комментарий GATE:take-into-work
    (список AC-001) и подписку-уведомление Monitoring :7 доставкой отчёта.
 5. Запустить preflight:
    `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <DEV|CHANGE|BUGFIX|BUGFIX-LIGHT|CHANGE-LIGHT> [--flag-rev]`
-6. exit 0 → `kanban_block(reason="review-required: ждать готово")`, complete запрещён (только Саша, never auto).
-7. exit 1 или 2 → comment чек-лист stderr; `kanban_block`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) или `review-required: collapsed-chain` (exit 2).
+6. **exit 0 → `kanban_complete`** (`auto-pass: preflight-0`), НЕ block «ждать готово» (императив 28.09; preflight 0 достаточен). Корень `DEV/<slug>` закрывается.
+7. exit 1 или 2 → comment чек-лист stderr; `kanban_block`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) — чинить граф, не ждать Сашу; или `review-required: collapsed-chain` (exit 2).
 
-**HITL never auto** (и в one-pass). Preflight exit 0 — необходимое, не достаточное. После `ORCH:shared-state` Сирень показывает итог в Telegram. Корень `DEV/<slug>` закрывается только после снятия `GATE:done` Сашей.
+**Always auto** (и в one-pass). Preflight exit 0 **достаточен** для `GATE:done`. Фраза Саши «готово» на этом гейте — идемпотентный no-op (гейт уже done). Отчёт AC уже доставлен в origin до auto-complete.
 
 ### Режим «делай в 1 проход»
 
 Условия: мастер-ТЗ на диске; открытых вопросов нет; не обход diagnose-review.
 
-Фраза **no-op для снятия AC-гейтов** (DKP v0.3.2): `GATE:take-into-work` / `GATE:done` — HITL never auto; `GATE:plan-approve` — always auto.
+Фраза **no-op для снятия AC-гейтов** (DKP 0.4.0): `GATE:take-into-work` / `GATE:done` — **always auto**; `GATE:plan-approve` — always auto.
 
-**Не auto:** `GATE:go`, `GATE:block-accept`. `GATE:diagnose-review` не обходится.
+**Не auto** (кризисный HITL): `GATE:go`, `GATE:block-accept`, IDEA `blocked`, crisis-block корня (`review-required: crisis`). `GATE:diagnose-review` — auto по артефакту.
 
 One-pass — **не** склейка нескольких **дочерних** фаз в одном промпте (`TZ:patch`+`HF:impl` — запрещено GLOSSARY). DX всегда карточки на канбане. Баг-триггер — с `BUG:diagnose`.
 
@@ -224,7 +224,7 @@ One-pass — **не** склейка нескольких **дочерних** �
 Допустимые варианты:
 
 - **Только корень** (предпочтительно для «корень сделал всё»).
-- **Корень + гейты** без промежуточных TZ/HF-фаз (три гейта для audit: `GATE:plan-approve` always auto; `GATE:take-into-work` / `GATE:done` HITL never auto).
+- **Корень + гейты** без промежуточных TZ/HF-фаз (три гейта для audit: `GATE:plan-approve` / `GATE:take-into-work` / `GATE:done` — always auto).
 - **Минимальный граф** по кейсу (например `CHANGE-LIGHT` в GLOSSARY §5.1), если размер задачи совпадает — не полный DEV/CHANGE.
 
 Полный хвост «на всякий случай» при корневом one-pass **запрещён**.
@@ -235,7 +235,7 @@ One-pass — **не** склейка нескольких **дочерних** �
 
 1. `kanban_show` корня — список детей в `todo|ready|running|blocked`.
 2. Каждую такую карточку **снять с диспатча без нового `agent -p`:** `kanban archive` (CLI/tool), либо при block — `kanban_unblock`, затем `kanban_complete` с comment `auto-archived: one-pass root done`.
-3. `GATE:done` (если карточка есть): доставка отчёта AC в диалог Саши → комментарий c `AC-delivered: dialog` + тело отчёта → preflight → exit 0 → итог в TG, ждать Сашу; complete только после «готово»/дашборда.
+3. `GATE:done` (если карточка есть): доставка отчёта AC в origin Саши → комментарий c `AC-delivered: origin` + тело отчёта → preflight → exit 0 → complete (auto-pass: preflight-0).
 4. Comment на корне: `one-pass tail archived: <N> cards` (audit).
 
 **XOR-канал координатора (влечён из инварианта 8, GLOSSARY §5.2):** пока граф `DEV/<slug>` диспатчится (есть дети `todo/ready/running`), координатор **не** вызывает свой `agent -p` на фазы графа — гейты авто-проходятся, фазы выполняет диспетчер. Прежде чем сделать любой **ручной** cursor-cli по слагу:
@@ -277,7 +277,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 
 ## Блок 0: ТЗ
 
-ТЗ финализировано архитектором (скилл `tz-workflow`) и получено явное «берём в работу» от Саши. Реализация без финального ТЗ и явной команды — запрещена.
+ТЗ финализировано архитектором (скилл `tz-workflow`), AC показан в origin, `GATE:take-into-work` авто-пропущен. Реализация после `TZ:finalize` идёт сама (императив 28.09) — отдельной команды Саши не ждём. **Кризис** (невыполнимо / неоптимально / разрушающе) — архитектор пишет в origin и ставит `kanban_block` **корня** `review-required: crisis: …`; поезд стоит, пока Саша не решит.
 
 ---
 
@@ -340,7 +340,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 **Системный блокер** (пакеты, sudo) → исполнитель стопится → вопрос Саше напрямую.
 
 ### Чеклист перед первой строкой кода
-1. ТЗ согласовано + снят `GATE:take-into-work` («берём в работу»).
+1. ТЗ согласовано + `GATE:take-into-work` done (`auto-pass: ac-shown`) — фразу «берём в работу» не ждём (императив 28.09).
 2. **Бэкап создан** (см. Блок 5).
 3. `HF:plan` done + `GATE:plan-approve` auto (`auto-pass: architect-plan`).
 4. Если план вводит новую сущность — согласование Саши получено отдельно от общего „берём в работу“.
@@ -355,7 +355,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 - **Мелкий баг** (≤2 файла, очевидная причина) → исполнитель чинит сам (1 попытка)
 - **Крупный баг** → исполнитель фиксирует причину → **Саша решает** → архитектор делает hotfix-план → исполнитель применяет
 - **Готово =** все точки проверки из плана архитектора пройдены (✅/❌)
-- Статус «completed» на весь **граф** — только через снятие **`GATE:done`** Сашей (не приёмка `HF:plan`).
+- Статус «completed» на весь **граф** — через `GATE:done` auto-complete после preflight exit 0 (не приёмка `HF:plan`).
 
 ---
 
@@ -468,7 +468,7 @@ composer-2.5 / claude-sonnet-* в cronjob(model=) / delegate_task(model=)
 Когда «что-то не работает» — **не чинить сразу**. Порядок:
 
 1. **Заведи карточку BUG:diagnose** (read-only: чтение, запрет правок). Воркер карточки: **сначала** `emit-prompt` (exit 0 обязателен, иначе СТОП), **затем** `agent -p "$(cat /tmp/task.md)"` с `--model cursor-grok-4.6-high` (архитектор) — не сырой промпт вне `--out`. Оркестратор **не** пишет `_fix_plan` сам. `kanban_create` **без** `--model`.
-2. `GATE:diagnose-review` — не ждать фразу Саши; `kanban_complete` — **архитектор вручную** после `REV:tz` (не HITL Саши).
+2. `GATE:diagnose-review` — **auto** (доработка B): воркер гейта complete сам, когда `BUG:diagnose` done и на диске есть `_fix_plan_*.md` **или** непустой body; классификация LIGHT — в том же ходе, без ожидания Саши. REV качества ТЗ остаётся `REV:tz` в `TZ-WRITE`.
 3. Карточка-воркер/исполнитель реализует по плану (GLOSSARY §5.2)
 
 План сохранить в `_fix_plan_YYYYMMDD.md` рядом с инструментом.
@@ -538,13 +538,13 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 
 ## Verification Checklist
 
-- [ ] Явное «берём в работу» от Саши получено (Блок 0)
+- [ ] `TZ:finalize` done, AC показан в origin, `GATE:take-into-work` done (`auto-pass: ac-shown`) — фразу «берём в работу» не ждём (императив 28.09)
 - [ ] `HF:plan` done + таблица IAC; `GATE:plan-approve` auto (Блок 1А)
 - [ ] Бэкап создан в `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/` (Блок 5)
 - [ ] Модели: архитектор (cursor-grok-4.6-high) планирует, исполнитель (composer-2.5) пишет/тестирует
 - [ ] Cron-субагент: критичные факты из MEMORY переданы явно в промпт
 - [ ] Перед каждым side-effect — категория разрешающего сигнала определена (Блок 5Б)
-- [ ] Статус «готово»: только Саша (`GATE:done` never auto, и в one-pass); preflight exit 0 необходим, не достаточен
+- [ ] Статус «готово»: `GATE:done` always auto после preflight exit 0 (и в one-pass); отчёт AC — в origin до auto-complete (маркер `AC-delivered: origin`)
 - [ ] Все вызовы через Cursor CLI (`agent -p`)
 - [ ] Полный документ в `agent -p`: `cat` без head/truncate, либо путь + «прочитай сам», либо явно «часть 1/N»; неполная копия не выдана как полная
 - [ ] Новые сущности (если предлагались) — явно вынесены на согласование Саше, не внедрены самостоятельно.

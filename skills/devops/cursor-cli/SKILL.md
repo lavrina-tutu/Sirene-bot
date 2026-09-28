@@ -169,6 +169,7 @@ agent -p "$(cat /tmp/task.md)" -f --model <MODEL> --workspace <ABS_DIR> --resume
 | `--resume` | Продолжение **конкретной** сессии; `session_id` писать в `kanban_comment` сразу после первого вызова |
 | `--continue` | **Запрещён** в пайплайне — берёт «последнюю сессию каталога», ломается при двух workspace |
 | Параллель | Макс. 2 фоновых `agent -p`; `--workspace` на **непересекающиеся** деревья |
+| Heartbeat | **≤10 мин** на длинном `agent -p` (фазы DEV с Cursor); `kanban_heartbeat` каждый вызов. ДКП раньше «раз в час» — мало для поезда; сторож reclaim `running` без heartbeat >20 мин. Если emit-prompt / запрет `--continue` уже на месте — heartbeat не обязателен сам по себе, но на долгих `agent -p` (часы) держи ≤10 мин |
 | IDEA:analyze | Модель фиксирована: `cursor-grok-4.6-high` |
 
 Промпт — **файлом** (`-p "$(cat /tmp/task.md)"`), не инлайн (pitfall gateway-guard).

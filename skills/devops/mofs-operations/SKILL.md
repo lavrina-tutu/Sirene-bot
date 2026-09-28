@@ -1,7 +1,7 @@
 ---
 name: mofs-operations
 description: "Use when: работа с инструментом MarkObjectsFromSummary (MOFS) — запуск прогонов, диагностика, bootstrap архива, управление entities.json, contacts из тела summary. Триггеры: mofs run, mofs rematch, entities.json, словарь тегов, тегирование встреч, wiki-ссылки Obsidian, contacts, ФИО участников, mofs index."
-version: 1.3.1
+version: 1.3.2
 author: Sirene
 license: MIT
 platforms: [linux]
@@ -29,6 +29,8 @@ wiki-ссылками Obsidian по 4 корзинам: projects, tools, rooms, 
   - `mofs_index_rebuild` (job_id: 7e013cd5c6f9) — `0 23 * * *`, no_agent, deliver=local. Ежедневный full-rebuild как страховка.
   - Цепочка: MoveFromFF XX:05 → PFS-batch XX:10 → PFS-notify XX:15 → MOFS XX:16.
   - **Ошибка крона MOFS → канбан, не самому (21.09.2026).** При ошибке `mofs_run_cron` (job aeeccba37e4a) или `mofs_index_rebuild` (job 7e013cd5c6f9) НЕ чинить самому и НЕ звать архитектора напрямую через `agent -p`. Постановка на канбан: `BUG:diagnose` (root cause + план П.1…П.N) → `GATE:diagnose-review` → `HF:impl`/`HF:test` (по hermes-feature Блок 6В). План починки — `_fix_plan_YYYYMMDD.md` рядом с инструментом (`~/USERTOOLS/MarkObjectsFromSummary/`). Локальный обход средствами скилла (rematch/entity-registry) — только как одношаговый ответ, не как реализация фикса кода `pipeline.py`. Прецедент: NameError parse_rooms 19.09.2026 — починено через BUG:diagnose-граф, не напрямую.
+
+**LLM-конфиг (MOFS v0.10.1):** источник = `~/.hermes/config.yaml` (`model.default` + `model.provider` + `custom_providers`); OpenAI-совместимый клиент к `llm-gateway.tutu.ru`; env-override `MOFS_LLM_MODEL` / `_BASE_URL` / `_API_KEY` / `_ROUTING_PROVIDER` (default) / `_REASONING_EFFORT` (high); CLI `--llm-model` (только `backfill-contacts`, перекрывает только модель); last-resort `LLM_FALLBACK_MODEL` / `LLM_FALLBACK_BASE_URL` / `LLM_FALLBACK_PROVIDER`. `ANTHROPIC_API_KEY` не читается; нет ключа → warning → skip (fail-soft). Смена модели — правка `config.yaml`, не код.
 
 ## Запуск прогонов — обязательный порядок
 
@@ -265,8 +267,8 @@ for tool, cnt in counts.most_common():
 
 Массовый NER-прогон по архиву 563 самари → кандидаты на новые сущности.
 
-**Рекомендуемая LLM:** Haiku (внешние провайдеры недоступны, только Anthropic).
-~3.3М токенов на весь архив → оценка ~$3-4 суммарно.
+**LLM для NER-прогона:** конфиг из `~/.hermes/config.yaml` (OpenAI-клиент к `llm-gateway.tutu.ru`), last-resort `LLM_FALLBACK_*`; `ANTHROPIC_API_KEY` не используется.
+~3.3М токенов на весь архив → оценка ~$3-4 суммарно (зависит от выбранной модели в конфиге).
 
 ## date: во frontmatter (реализовано 21.07.2026)
 
@@ -368,7 +370,7 @@ print(f"obsidian://open?vault={vault}&file={encoded}")
 
 | Решение | Статус | Детали |
 |---|---|---|
-| LLM-фолбэк при projects=[] | ✅ | Haiku при `entity_hits==[]`, threshold=0.90, ~$0.008/день |
+| LLM-фолбэк при projects=[] | ✅ | LLM из `~/.hermes/config.yaml` при `entity_hits==[]`, threshold=0.90; last-resort `LLM_FALLBACK_*` |
 | Low-confidence очередь | ✅ | `mofs_unmatched.md` автоматически, бриф по запросу |
 | Убрать дубль reindex из bash | ✅ | Hook в pipeline достаточен; отдельный крон `mofs_index_rebuild` 23:00 |
 | Частота MOFS крона | ✅ | Оставить ежечасно XX:16 |
@@ -443,7 +445,7 @@ print(f"obsidian://open?vault={vault}&file={encoded}")
 - **Fallback `vstrechi_nerazobrannoe` обязан присутствовать в entities.json.** Если запись отсутствует — при любом fallback в PFS будет `KeyError: 'vstrechi_nerazobrannoe'`. Симптом в отчёте PFS: `error: 'vstrechi_nerazobrannoe'`. Прецедент 28.07.2026.
 - **⚠️ Расширение aliases → PFS публикует старый архив (22.07.2026).** При добавлении новых aliases к PFS-сущностям в entities.json — старые встречи (до CUTOVER_DATE) начинают матчиться на ROUTES PFS. Если их нет в реестре PFS — `process_pending` публикует как новые. Перед масштабным добавлением aliases: `grep -rl "<новый alias>" ~/WorkVault/Meetings/NewMeetings/*summary* | wc -l`. При наличии CUTOVER_DATE guard в PFS pipeline.py (с 22.07.2026) — встречи до 2026-07-10 защищены автоматически.
 
-- **MOFS v1.0.0 (22.07.2026): LLM-фолбэк + авто-rematch реализованы.** При `projects=[]` после regex → Haiku классифицирует по entities.json (threshold=0.90). Low-confidence → `mofs_unmatched.md`. При изменении entities.json → авто-rematch по SHA-256 хэшу файла. Ежедневный full-reindex — крон `mofs_index_rebuild` (23:00, job: 7e013cd5c6f9). Скрипт: `~/.hermes/scripts/mofs_index_rebuild.sh`.
+- **MOFS v1.0.0 (22.07.2026): LLM-фолбэк + авто-rematch реализованы.** При `projects=[]` после regex → LLM (конфиг `~/.hermes/config.yaml`, OpenAI-клиент к шлюзу; last-resort `LLM_FALLBACK_*`) классифицирует по entities.json (threshold=0.90). Low-confidence → `mofs_unmatched.md`. При изменении entities.json → авто-rematch по SHA-256 хэшу файла. Ежедневный full-reindex — крон `mofs_index_rebuild` (23:00, job: 7e013cd5c6f9). Скрипт: `~/.hermes/scripts/mofs_index_rebuild.sh`.
 
 - **idempotency при contacts rematch:** `run` пропускает уже обработанные встречи.
   Для перепрогона только contacts — `mofs rematch --bucket contacts --from X --to Y --dry-run`.

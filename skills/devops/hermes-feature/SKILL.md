@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.10.0
+version: 2.11.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -83,22 +83,63 @@ Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`
 
 #### Подписка графа на уведомления (notify-subscribe)
 
-Сразу после `kanban_create` (в том же ходе) подписать набор **R5** (наследования по `parents` **нет** — каждая карточка явно). Фиксированный контракт (топик мониторинга Monitoring :7, группа, Telegram — по умолчанию, без дублей в личный DM):
+Сразу после `kanban_create` (в том же ходе) подписать набор **R5** (наследования по `parents` **нет** — каждая карточка явно). Канал = **origin-топик инициатора** (диалог/топик, откуда пришёл запрос; не ops-канал Monitoring `:7`, не Errors `:11112`). `--thread-id <ORIGIN>` обязателен. Отдельное явное указание Саши («пиши в :N» / «канал = …») переопределяет канал подписки конкретного графа.
 
 ```bash
 hermes kanban notify-subscribe <task_id> \
-  --platform telegram --chat-id -1004300127777 --chat-type group \
+  --platform telegram --chat-id -1004300127777 --thread-id <ORIGIN> \
+  --chat-type group \
   --delivery-mode notify+wake --notifier-profile default
 ```
 
+Команда **без** `--thread-id` **запрещена** (0 блоков суб без `--thread-id` на `-1004300127777`).
+
 Уведомитель шлёт в TG **только ключевые терминальные события** (по `TERMINAL_KINDS`: `completed`/`GATE:done`, `blocked`, `gave_up`, `crashed`, `timed_out`) — не каждую фазу графа (шум). Ядро канбана **не трогать**: ни `kanban_db.py`, ни `kanban_db_notify.py`, ни список `TERMINAL_KINDS`.
 
-Репорты карточек — только в топик мониторинга (Monitoring :7), без дублей в личный DM, по умолчанию. Отдельное явное указание Саши может переопределить канал подписки конкретного графа.
+**Рабочий канал wake/notify = колонка `kanban_notify_subs.thread_id`, не body/metadata карточки. Второе поле «канал origin» в metadata **не** заводить.**
 
-- **Набор R5:** корень `DEV/<slug>` + `GATE:take-into-work` / `GATE:done` + `GATE:go` / `GATE:block-accept` / `IDEA:analyze` → `notify+wake`.
+- **Набор R5:** корень `DEV/<slug>` + `GATE:take-into-work` / `GATE:done` + `GATE:go` / `GATE:block-accept` / `IDEA:analyze` → `notify+wake`. **Набор R5 не расширять**; leftover «подписать все фазы / багфикс обе карточки» запрещён.
 - **Не подписывать:** `TZ:*` / `HF:*` / `REV:*` / `BUG:diagnose` / `ORCH:*` / `RS:*` / `GATE:plan-approve` / `GATE:diagnose-review`.
-- Багфикс-батч (`DEV/<slug>` + `BUG:diagnose`, Блок 6В): подписать **корень** `DEV/<slug>`.
-- Ручной feed `IDEA/<slug>` + `IDEA:analyze`: корень `IDEA/<slug>` + `IDEA:analyze`.
+- Багфикс-батч (`DEV/<slug>` + `BUG:diagnose`, Блок 6В): подписать **корень** `DEV/<slug>` (не `BUG:diagnose`, не «обе карточки»).
+- Ручной feed `IDEA/<slug>` + `IDEA:analyze`: тот же `resolve_origin` + R5-subscribe/unsubscribe; пассивный inbox (`IDEA/<slug>` без analyze) — подписать **только корень** `IDEA/<slug>`.
+
+##### resolve_origin
+
+Канал подписки каждой R5-карточки определяется алгоритмом `resolve_origin(kind=root|child, root_id)` (дословно из DKP v0.3.9):
+
+```
+resolve_origin(kind=root|child, root_id):
+  1. Явный override Саши («пиши в :N» / «канал = …») → N.
+  2. kind=child: notify-list(root_id) → единственная telegram-подписка
+     на -1004300127777 с непустым thread_id ∉ {11112}. Нет такой → SILENCE.
+  3. kind=root: env HERMES_SESSION_PLATFORM=telegram
+     AND HERMES_SESSION_CHAT_ID=-1004300127777
+     AND HERMES_SESSION_THREAD_ID непустой
+     (пустая строка thread_id = отсутствие origin → не шаг 3, а SILENCE)
+     AND thread_id ≠ 11112
+     AND chat_type ∉ {dm, direct, private}
+     AND chat_id ≠ 400307920
+     → thread_id.
+  4. DM / неизвестно / CLI / Cursor без TG-env / Errors :11112 → SILENCE.
+  5. SILENCE: notify-subscribe НЕ вызывать; :7 НЕ подставлять.
+```
+
+`HERMES_SESSION_CHAT_TYPE=thread` на корне **нормализовать в `group`** в команде (колонка `chat_type`), не копировать `thread` в sub.
+
+Для детей хвоста после `GATE:take-into-work` (`GATE:done`, `GATE:go`, `GATE:block-accept`): `kind=child`, origin = **копия** `thread_id` с корня (не env воркера). `GATE:plan-approve` **не** подписывать. Исторических dual-sub (`''` + `7/thread`) **не** массово UPDATE.
+
+##### SILENCE-unsubscribe
+
+После каждого create R5-карточки:
+
+1. `hermes kanban notify-list <task_id>` (лучше `--json`).
+2. SILENCE → `notify-unsubscribe` **все** telegram-подписки этой задачи (в т.ч. auto-sub DM `400307920` и `--thread-id ''`). Пинга в `:7` нет.
+3. Origin есть → оставить **ровно одну** строку `(chat_id=-1004300127777, thread_id=ORIGIN, chat_type=group, mode=notify+wake)`; снять прочие (пустой thread, другой thread, DM, `:11112`).
+4. Не снимать ORIGIN. Не подписывать DM «на всякий случай». Не слать кейс в `:11112`. Запрет массового UPDATE исторических dual-sub.
+
+##### Wake: terminal-blocked будит ORIGIN
+
+terminal `blocked` корня будит `group:-1004300127777:<ORIGIN>`; копий в General `:1` / Monitoring `:7` нет, если ORIGIN другой. Сам рестарт gateway — **не** этот скилл (только по фразе Саши «поднимай», AC-010).
 
 ### Блок 6В (багфикс)
 
@@ -123,23 +164,27 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _f
 
 **Auto-гейт (DKP 0.4.0, императив 28.09):** после `TZ:finalize` `GATE:take-into-work` **auto-pass** (`auto-pass: ac-shown`), payload=AC; `GATE:diagnose-review` — **auto** по `_fix_plan_*.md` (доработка B). Leftover «never auto» на `take-into-work`/`done` — устранён.
 
+**G5 (AC-H03/H09/H10):** воркер HF/BUG **не** `kanban_create` кейсовый граф и **не** skip фаз. `kanban_create` корня+DX / LIGHT-хвоста / смена `--case` — **только оркестратор (Сирень) на триггере в чате**, ДО любой карточки архитектора. Классификация BUGFIX→BUGFIX-LIGHT — **после** `GATE:diagnose-review` оркестратором (перепись хвоста / `--case`); архитектор в `_fix_plan` может написать оценку числа файлов, `kanban_create` LIGHT-хвоста ему **запрещён**.
+
 **Перед любым `agent -p` по инструменту на `BUG:diagnose` (и далее по багфикс-ветке):** обязательный `emit-prompt` — exit 0, иначе **СТОП**, `agent -p` не вызывать. Легальный вызов только от файла `--out` (промпт: `$(cat /tmp/task.md)`):
 
-- `python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --tool <Name> --task-file <план> --out /tmp/task.md`
-- exit 0 → `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`
+- `python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --card $HERMES_KANBAN_TASK --tool <Name> --task-file <план> --out /tmp/task.md`
+- exit 0 → **скопировать блок `context-used:` из `/tmp/task.md` в `kanban_comment`** (G2/AC-H06), затем `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`
 - exit ≠ 0 → СТОП
+- перед `kanban_complete` HF/BUG/REV: `pipeline_context_bundle.py check --card $HERMES_KANBAN_TASK` — exit 0 обязателен (G2)
 
 **Обхода context-bundle нет (решение Саши 26.09, без исключений):** ни `flag-waived`, ни `--force` / `--force-bypass-sasha-ok` как обход тройки digest+GLOSSARY+мастер-ТЗ; скрипт `emit-prompt`/`check` блокируют всегда.
 
 ### Воркер HF-фаз
 
 1. `kanban_show()` → сверка TZ version/mtime → `cd $HERMES_KANBAN_WORKSPACE`.
-2. **Перед любым `agent -p` по инструменту** (все HF-фазы: `HF:plan`, `HF:impl`, `HF:test`, `HF:docs-handoff`, `HF:backup`, `REV:plan`, …): вызвать `emit-prompt` — **exit 0 обязателен**, иначе **СТОП**, `agent -p` не вызывать. Легальный `agent -p` — только от файла `--out` (`$(cat /tmp/task.md)`): `python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --tool <Name> --task-file <план> --out /tmp/task.md`; при exit 0 → `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`. Обхода context-bundle нет: `flag-waived` и `--force` / `--force-bypass-sasha-ok` не отменяют `emit-prompt`/`check`.
+2. **Перед любым `agent -p` по инструменту** (все HF-фазы: `HF:plan`, `HF:impl`, `HF:test`, `HF:docs-handoff`, `HF:backup`, `REV:plan`, …): вызвать `emit-prompt` — **exit 0 обязателен**, иначе **СТОП**, `agent -p` не вызывать. Легальный `agent -p` — только от файла `--out` (`$(cat /tmp/task.md)`): `python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --card $HERMES_KANBAN_TASK --tool <Name> --task-file <план> --out /tmp/task.md`; при exit 0 → **скопировать блок `context-used:` из `/tmp/task.md` в `kanban_comment`** (G2/AC-H06), затем `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`. Перед `kanban_complete` HF/BUG/REV: `check --card` exit 0 обязателен (G2). Обхода context-bundle нет: `flag-waived` и `--force` / `--force-bypass-sasha-ok` не отменяют `emit-prompt`/`check`.
 3. `kanban_heartbeat` на длинных `agent -p`; `session_id` → `kanban_comment` после первого вызова.
 4. Промпт Cursor CLI — **одна роль, одна фаза:**
 
 ```
 Одна роль: {role} ({model}). Только фаза {phase}. Чужие фазы не выполнять.
+G5: не строй кейсовый граф / не меняй --case / не skip фаз / не выбирай LIGHT — это оркестратор.
 ```
 
 Роли/модели (PI B3): compress=оркестратор `deepseek-v4-flash-0731` (без Cursor; заключение t_645aa647); plan/patch/finalize=архитектор `cursor-grok-4.6-high` (CHANGE-LIGHT ≤3 файла: допустим `cursor-grok-4.6-medium`); REV=ревизор `claude-sonnet-5-medium`; impl/test/docs-handoff=исполнитель `composer-2.5`; backup=координатор `composer-2.5`; ORCH=оркестратор.
@@ -189,7 +234,7 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _f
 
 1. `kanban_show()`.
 2. Собрать отчёт AC-### → как тестировали (команда, лог/артефакт, результат).
-3. Опубликовать отчёт в **origin-топик Саши** (диалог, откуда пришёл запрос; не топик Monitoring :7, не личный DM оркестратору).
+3. Опубликовать отчёт AC в **диалог = origin-топик** графа (откуда пришёл запрос; не ops-канал Monitoring `:7`, не Errors `:11112`, не личный DM оркестратору; если origin сам `:7` — дубля в другой топик нет).
 4. kanban_comment на карточку GATE:done: маркер `AC-delivered: origin` + тело отчёта:
    ```
    AC-delivered: origin
@@ -197,11 +242,13 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _f
    AC-001 → команда / лог / результат
    ```
    Маркер — ТОЛЬКО после реального поста в origin. Не считать комментарий GATE:take-into-work
-   (список AC-001) и подписку-уведомление Monitoring :7 доставкой отчёта.
+   (список AC-001) и подписку-уведомление Monitoring `:7` доставкой отчёта, **если origin другой**.
 5. Запустить preflight:
-   `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <DEV|CHANGE|BUGFIX|BUGFIX-LIGHT|CHANGE-LIGHT> [--flag-rev]`
+   `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <DEV|CHANGE|CHANGE-LIGHT|BUGFIX|BUGFIX-LIGHT|RESEARCH|MIGRATION|DECOMM|SKILL-DEV|SKILL-CHANGE> --mode done [--flag-rev]` (`--case` ∈ 10 имён AC-H02, `--mode done` явно)
 6. **exit 0 → `kanban_complete`** (`auto-pass: preflight-0`), НЕ block «ждать готово» (императив 28.09; preflight 0 достаточен). Корень `DEV/<slug>` закрывается.
 7. exit 1 или 2 → comment чек-лист stderr; `kanban_block`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) — чинить граф, не ждать Сашу; или `review-required: collapsed-chain` (exit 2).
+
+**G3 git-proof (AC-H07):** перед `kanban_complete` фаз `HF:test` и перед вызовом preflight `GATE:done` — impl-пути из `changed_files` HF:impl, лежащие в git-worktree, **должны быть закоммичены** (`git status --porcelain -- <path>` пуст). Untracked / modified → не complete. Если `emit-prompt` на `HF:test`/`HF:docs-handoff` дал exit 1 из-за untracked — `agent -p` **не** звать (AC-H05b).
 
 **Always auto** (и в one-pass). Preflight exit 0 **достаточен** для `GATE:done`. Фраза Саши «готово» на этом гейте — идемпотентный no-op (гейт уже done). Отчёт AC уже доставлен в origin до auto-complete.
 
@@ -226,6 +273,8 @@ One-pass — **не** склейка нескольких **дочерних** �
 - **Только корень** (предпочтительно для «корень сделал всё»).
 - **Корень + гейты** без промежуточных TZ/HF-фаз (три гейта для audit: `GATE:plan-approve` / `GATE:take-into-work` / `GATE:done` — always auto).
 - **Минимальный граф** по кейсу (например `CHANGE-LIGHT` в GLOSSARY §5.1), если размер задачи совпадает — не полный DEV/CHANGE.
+
+> **Ограничение G4/one-pass (AC-H08/H09):** укорочение графа / выбор «минимального» / корневой one-pass — решение **оркестратора + Саши** на постановке; архитектор на `TZ:patch`/`REV:tz` **не** решает сократить граф по собственной инициативе.
 
 Полный хвост «на всякий случай» при корневом one-pass **запрещён**.
 
@@ -346,12 +395,20 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 4. Если план вводит новую сущность — согласование Саши получено отдельно от общего „берём в работу“.
 5. **Канбан:** `GATE:plan-approve` = done/unblocked **или** auto-pass one-pass (режим «делай в 1 проход»).
 6. **Auto-pass гейта ≠ «можно код сейчас».** Auto-complete `GATE:plan-approve` (one-pass) разрешает **диспетчеру** запустить `HF:impl`; координатору он не даёт права писать код вне очереди графа (XOR-канал, инвариант 8). Прямой impl координатора — только после `dispatch-paused` + off-board.
+7. **Стоп-кран identity (DKP «Прекондиция identity») — для HF:impl **origin-routing**: перед этим `HF:impl` воркер **стоп**, если любой из 4 пунктов ложен** → `kanban_block(kind=dependency, reason="wait DEV/tg-topic-duplicate identity + поднимай")`, файлы не писать. В `kanban_comment` карточки `HF:impl` — блок `identity-checklist:` с **выводом** 4 фактов (не пересказом). Канон 4 пункта:
+
+   1. `build_session_key(TELEGRAM, chat_type='thread', thread_id=N)` → слот `:group:`, не `:thread:`.
+   2. Wake: TELEGRAM + `thread_id` → `SessionSource.chat_type=='group'`.
+   3. SQL: `SELECT COUNT(*) FROM kanban_notify_subs WHERE chat_id='-1004300127777' AND chat_type='thread'` = 0.
+   4. Нет живой вилки `telegram:thread:-1004300127777:*` в `state.db`.
+
+   (Live-wake смоук `AC-010` — только после фразы Саши **«поднимай»**: рестарт gateway этим графом **запрещён**; `kanban_block(kind=dependency, reason="wait поднимай for AC-010")`, не skip).
 
 ---
 
 ## Блок 3: Тестирование
 
-- **Исполнитель** тестирует по плану архитектора
+- `HF:test` выполняет **исполнитель** (`composer-2.5`): гоняет `verify` из таблицы IAC плана архитектора, молча (AC-H04). **Отдельной роли «тестировщик» нет** (решение Саши 29.09; см. Блок 3 в GLOSSARY).
 - **Мелкий баг** (≤2 файла, очевидная причина) → исполнитель чинит сам (1 попытка)
 - **Крупный баг** → исполнитель фиксирует причину → **Саша решает** → архитектор делает hotfix-план → исполнитель применяет
 - **Готово =** все точки проверки из плана архитектора пройдены (✅/❌)

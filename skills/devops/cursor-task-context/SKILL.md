@@ -1,7 +1,7 @@
 ---
 name: cursor-task-context
 description: "Use when: сборка контекста задачи разработки в Cursor."
-version: 1.2.0
+version: 1.3.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -33,7 +33,7 @@ metadata:
 
 ## 3-слойная подача контекста в Cursor
 
-Контекст подаётся через **`emit-prompt`** (тройка **abs-путей** digest+GLOSSARY+ТЗ в `/tmp/task.md`), **не копированием** файлов digest/GLOSSARY/ТЗ в промпт и не созданием `*.extract.md` рядом с `--out`. Перед любым `agent -p` по инструменту: `pipeline_context_bundle.py check` (маркер `context-bundle:` на карточке) → `emit-prompt` (exit 0) → только then `agent -p "$(cat /tmp/task.md)"`. Обхода context-bundle нет — скрипт `check`/`emit-prompt` блокируют старт всегда; `flag-waived` и `--force` не являются обходом тройки (решение Саши 26.09).
+Контекст подаётся через **`emit-prompt`** (тройка **abs-путей** digest+GLOSSARY+ТЗ в `/tmp/task.md`), **не копированием** файлов digest/GLOSSARY/ТЗ в промпт и не созданием `*.extract.md` рядом с `--out`. Канон DKP v0.4.2: **`emit-prompt --card` (G1) → скопировать блок `context-used:` на карточку → `agent -p "$(cat /tmp/task.md)"` → `check --card` (G2) перед complete**. Обхода context-bundle нет — скрипт `check`/`emit-prompt` блокируют старт всегда; `flag-waived` и `--force` не являются обходом тройки (решение Саши 26.09).
 
 0. **digest** экосистемы + **GLOSSARY** (`~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md`) — всегда первым слоем (в промпте — abs-пути из `emit-prompt`, агент читает с диска).
 1. **сжатый экстракт** ТЗ своего + зависимых (не весь ТЗ; текст экстракта из comment `TZ:compress` вставляет `emit-prompt`, не отдельный файл-копия).
@@ -70,6 +70,9 @@ metadata:
 4. Расхождение → `kanban_comment` «TZ drift: disk version=… mtime=… card version=… mtime=…» + `kanban_block(kind=dependency, reason="TZ master changed on disk")`.
 5. Экстракты компрессора — **без кэша на диск**; каждый воркер сжимает заново (tz-compressor-prompt.md).
 6. Только после сверки — `cd $HERMES_KANBAN_WORKSPACE` и работа шага.
+
+> Сверка drift (п.2–4) — freshness воркера; скрипт `emit-prompt` **дублирует** её (G1.2: version/mtime на карточке vs диск). Двойной барьер, не конфликт: воркер всё равно `kanban_block` при расхождении.
+> **AC-H05b:** на `HF:test` / `HF:docs-handoff` ненулевой exit `emit-prompt` (напр., `changed_files` HF:impl незакоммичены в git-worktree) → `agent -p` **не** звать, тест по виртуальному коду не стартовать.
 
 ## Промпт-компрессор ТЗ (full-coverage)
 Файл `WorkVault/Registries/tz-compressor-prompt.md`, модель **`composer-2.5`** (канон GLOSSARY §3). Превращает полное ТЗ → «актуальную спецификацию» (~3–5КБ) с гарантией полноты.

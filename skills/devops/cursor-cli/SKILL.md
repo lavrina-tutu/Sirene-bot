@@ -1,7 +1,7 @@
 ---
 name: cursor-cli
 description: "Use when: установка, настройка и использование Cursor CLI на ВМ Hermes. Triggers: Cursor CLI, cursor-agent, agent install, CURSOR_API_KEY, курсор кли."
-version: 1.2.0
+version: 1.3.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -104,10 +104,13 @@ which agent         # ~/.local/bin/agent
 Перед **любым** `agent -p` по инструменту DevKanban — сначала `emit-prompt` (обязательная тройка путей digest+GLOSSARY+ТЗ); при ненулевом exit — стоп. **`agent -p` легален только от файла `--out` скрипта `emit-prompt`**, не инлайн и не самосборная копия тройки. Обхода context-bundle нет: `flag-waived` и CLI `--force` / `--force-bypass-sasha-ok` не отменяют требование тройки; `pipeline_context_bundle.py` (`emit-prompt` / `check`) блокируют старт всегда (решение Саши 26.09).
 
 ```bash
-python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py check --card <id> [--tool <Name>]
-python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --tool <Name> --task-file <план> --out /tmp/task.md
-# только при exit 0 emit-prompt — единственный легальный вызов:
+# G1/G2 (DKP v0.4.2): emit-prompt (--card) → скопировать context-used: в comment → agent -p → check перед complete
+python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt \
+  --tool <Name> --card <id> --task-file <план> --out /tmp/task.md
+# exit 0 → скопировать блок context-used: из /tmp/task.md в kanban_comment, затем единственный легальный вызов:
 agent -p "$(cat /tmp/task.md)" -f --model <MODEL> --workspace <ABS_DIR> --output-format json
+# перед complete TZ/HF/BUG/REV:
+python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py check --card <id>
 ```
 
 ### Базовый

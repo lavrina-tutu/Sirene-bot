@@ -1,7 +1,7 @@
 ---
 name: tz-workflow
 description: "Use when: создание, доработка, архивация ТЗ и инфраструктурных планов. Triggers: ТЗ, техническое задание, спецификация, доработка ТЗ, дорабатываем ТЗ, правки в ТЗ, обнови ТЗ, архивация ТЗ, план установки, инфраструктурный план, добавь в ТЗ, секция в ТЗ, примечание в ТЗ."
-version: 2.8.0
+version: 2.9.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -147,7 +147,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 
 ### Вход триггера (после BRIEF-CLOSE)
 
-Бриф (`BRF:full` / `light` / `delta` / `scope` / `confirm`) — **только в TG** через оркестратора (Сирень), не карточка. **Батч `kanban_create` кейсового графа делает ТОЛЬКО оркестратор (Сирень) после `GATE:brief-closed`** — не архитектор на `TZ:patch`/`TZ:finalize`/`REV:tz` (AC-H03/H09). `kanban_create` фаз кейса / смена `--case` / skip §5.2 из карточки архитектора = `protocol_violation` (текст скилла). После `GATE:brief-closed` — **ОДИН `kanban_create`-батч полного графа кейса**: корень `DEV/<slug>` + `TZ-WRITE(mode)` + `GATE:take-into-work` + `PLAN-IMPL-TAIL` (или `-LIGHT` по кейсу GLOSSARY §2) **в том же create** (сначала родители, `task_id` из return, затем дети). Все карточки `assignee=default`. Режим `mode` — из кейса GLOSSARY §2 (`new` / `full` / `patch` / `freeze`).
+Бриф (`BRF:full` / `light` / `delta` / `scope` / `confirm`) — **только в TG** через оркестратора (Сирень), не карточка. **Не вызывать `kanban_create` полного графа**, если на корне (или в сессии брифа до корня — пока корня нет, create не делать) есть durable-блок `open-questions:` с любым `Q-n` в `status=open` — сначала закрыть вопрос (`status=closed` + цитата ответа). Батч `kanban_create` кейсового графа делает **ТОЛЬКО оркестратор (Сирень) после `GATE:brief-closed`** — не архитектор на `TZ:patch`/`TZ:finalize`/`REV:tz` (AC-H03/H09). `kanban_create` фаз кейса / смена `--case` / skip §5.2 из карточки архитектора = `protocol_violation` (текст скилла). После `GATE:brief-closed` — **ОДИН `kanban_create`-батч полного графа кейса**: корень `DEV/<slug>` + `TZ-WRITE(mode)` + `GATE:take-into-work` + `PLAN-IMPL-TAIL` (или `-LIGHT` по кейсу GLOSSARY §2) **в том же create** (сначала родители, `task_id` из return, затем дети). Все карточки `assignee=default`. Режим `mode` — из кейса GLOSSARY §2 (`new` / `full` / `patch` / `freeze`).
 
 После батча — **структурный preflight G4** (AC-H08): `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <CASE> --mode create`. Fail → `kanban_block` **корня** `kind=dependency`, воркеров не стартовать.
 
@@ -337,7 +337,7 @@ D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 вну
 
 ### HITL-вопросы (процедура H / R3)
 
-**Запрет** `kanban_block(kind=needs_input)` на TZ-фазах: бриф и вопросы — **только в TG** через оркестратора (`BRF:*`). Воркер TZ-фаз не блокирует карточку вопросом.
+**Запрет** `kanban_block(kind=needs_input)` на TZ-фазах и HF-фазах: бриф и вопросы — **в TG** через оркестратора (`BRF:*`) **и** durable на корне. Любой вопрос архитектора/воркера → на корне `open-questions: Q-n: … status=open` + пост в origin (один вопрос, варианты, рекомендация); `kanban_block` **корня** `review-required: operator-action: answer:Q-n`. Не `needs_input` на TZ/HF. Не додумывать бриф за Сашу.
 
 Гейты Саши — только `$GATE:*` через `kanban_comment` + `kanban_block(reason="review-required: …")`. Снятие: ответ/фраза в Telegram **или** unblock на дашборде — равнозначны; Сирень: `kanban_comment` + `kanban_unblock`. Повторное снятие — no-op.
 
@@ -345,8 +345,8 @@ D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 вну
 
 Порядок **одного хода** (не параллельно):
 
-1. **СНАЧАЛА** — нумерованный список `AC-001`…`AC-NNN` **дословно** из master-ТЗ в **диалог = origin-топик** графа (не ops-канал Monitoring `:7`, не Errors `:11112`; если origin сам `:7` — дубля в другой топик нет). Показ AC ≠ ожидание: это доставка артефакта, не стоп Саши.
-2. **ЗАТЕМ** — `kanban_comment` payload на `GATE:take-into-work` = тот же список AC (маркер `auto-pass: ac-shown`).
+1. **СНАЧАЛА** — нумерованный список `AC-001`…`AC-NNN` **дословно** из master-ТЗ в **диалог = origin-топик** графа (не ops-канал Monitoring `:7`, не Errors `:11112`; если origin сам `:7` — дубля в другой топик нет). Показ AC ≠ ожидание **(класс S)**: доставка артефакта, не стоп Саши. Для AC с `depends: operator:<verb>` — в origin явно: «эти AC закрываются только после вашего `<verb>`; граф не станет done без operator-done + evidence».
+2. **ЗАТЕМ** — на корень и `GATE:take-into-work` машинный блок `operator-holds:` (все O-AC из пакета, `status=open` на finalize) для строк `depends: operator:<verb>` в master-ТЗ; плюс `kanban_comment` payload на `GATE:take-into-work` = тот же список AC (маркер `auto-pass: ac-shown`). Hold на take-into-work **не** ставить — это показ (S) + предупреждение.
 3. `GATE:take-into-work` — **auto-pass** (`auto-pass: ac-shown`), `kanban_complete`, **не** `kanban_block` (императив 28.09: старт→финиш, фраза «берём в работу» не стоп). Хвост сам становится `ready` по `parents`.
 4. **Манифест vs диск (не ждать HF-хвоста):** если master-ТЗ/`tz_ref` уже на диске и в `MAIN_TZ_INVENTORY.md`, но пути нет в `EcosystemManifest.json` `tools{}` → stub-запись `tools{}` (`status` из инвентаря, не из frontmatter ТЗ) **или** явная карточка `ORCH:shared-state` с AC «`tools.<tz_ref>` зарегистрирован». Полные `links`/контракты — после auto take-into-work / ORCH хвоста.
 
@@ -354,7 +354,7 @@ Hermes-feature стартует без снятия гейта Сашей: хв�
 
 ### Гейты — оба канала
 
-`GATE:take-into-work` и `GATE:done` — **always auto** (auto-pass по канону: `ac-shown` / preflight exit 0). Снятие Сашей / фраза «готово» на них — идемпотентный no-op (гейт уже done). `GATE:plan-approve` — always auto (`auto-pass: architect-plan`). **Не auto** (кризисный HITL): `GATE:go`, `GATE:block-accept`, IDEA `blocked`, crisis-block корня (`review-required: crisis`). Повторное снятие — no-op.
+`GATE:take-into-work` и `GATE:done` — **always auto** (auto-pass по канону: `ac-shown` / preflight exit 0 **после снятия operator-holds и пустых open-questions**). Снятие Сашей / фраза «готово» на них — идемпотентный no-op (гейт уже done). Hold класса O = fail preflight (`review-required: operator-action:<verb>`), не never-auto гейт. `GATE:plan-approve` — always auto (`auto-pass: architect-plan`). **Не auto** (кризисный HITL): `GATE:go`, `GATE:block-accept`, IDEA `blocked`, crisis-block корня (`review-required: crisis`). Повторное снятие — no-op.
 
 ### Ручной feed идеи (бэклог)
 

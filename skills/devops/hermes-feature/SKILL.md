@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.11.0
+version: 2.12.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -245,12 +245,16 @@ G5: не строй кейсовый граф / не меняй --case / не sk
    (список AC-001) и подписку-уведомление Monitoring `:7` доставкой отчёта, **если origin другой**.
 5. Запустить preflight:
    `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <DEV|CHANGE|CHANGE-LIGHT|BUGFIX|BUGFIX-LIGHT|RESEARCH|MIGRATION|DECOMM|SKILL-DEV|SKILL-CHANGE> --mode done [--flag-rev]` (`--case` ∈ 10 имён AC-H02, `--mode done` явно)
-6. **exit 0 → `kanban_complete`** (`auto-pass: preflight-0`), НЕ block «ждать готово» (императив 28.09; preflight 0 достаточен). Корень `DEV/<slug>` закрывается.
-7. exit 1 или 2 → comment чек-лист stderr; `kanban_block`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) — чинить граф, не ждать Сашу; или `review-required: collapsed-chain` (exit 2).
+6. **exit 0 → `kanban_complete`** (`auto-pass: preflight-0`), НЕ block «ждать готово» (императив 28.09; preflight 0 достаточен **после снятия operator-holds `operator-done`+evidence и пустых open-questions**). **Нельзя** ✅ на operator-AC со `status=open` в отчёте — честно ⏳; при O open preflight → exit 1 → `kanban_block` `review-required: operator-action: <verb>`, complete запрещён. Корень `DEV/<slug>` закрывается **только** после `GATE:done` done (запрет `kanban_complete` корня, пока `GATE:done` не done).
+7. exit 1 или 2 → comment чек-лист stderr; `kanban_block`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) — чинить граф, не ждать Сашу; operator-hold → `review-required: operator-action: <verb>`; или `review-required: collapsed-chain` (exit 2).
 
 **G3 git-proof (AC-H07):** перед `kanban_complete` фаз `HF:test` и перед вызовом preflight `GATE:done` — impl-пути из `changed_files` HF:impl, лежащие в git-worktree, **должны быть закоммичены** (`git status --porcelain -- <path>` пуст). Untracked / modified → не complete. Если `emit-prompt` на `HF:test`/`HF:docs-handoff` дал exit 1 из-за untracked — `agent -p` **не** звать (AC-H05b).
 
-**Always auto** (и в one-pass). Preflight exit 0 **достаточен** для `GATE:done`. Фраза Саши «готово» на этом гейте — идемпотентный no-op (гейт уже done). Отчёт AC уже доставлен в origin до auto-complete.
+**Always auto** (и в one-pass). Preflight exit 0 **достаточен** для `GATE:done` **после снятия holds и пустых Q**. Фраза Саши «готово» на этом гейте — идемпотентный no-op (гейт уже done). Отчёт AC уже доставлен в origin до auto-complete.
+
+**Воркер `HF:plan`:** после `kanban_complete` плана проверить `kanban_show` — если `children=[]` у карточки плана (legacy unfold), `kanban_block` `review-required: broken-tail: HF:plan без детей`, **не** complete «план готов». На каноне v0.4.0+ дети хвоста уже в create-батче.
+
+**Процедура H на `HF:plan`:** недосказанный бриф → стоп, `open-questions: Q-n` на корне, block корня `review-required: operator-action: answer:Q-n`, не `needs_input` на HF.
 
 ### Режим «делай в 1 проход»
 
@@ -601,7 +605,7 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 - [ ] Модели: архитектор (cursor-grok-4.6-high) планирует, исполнитель (composer-2.5) пишет/тестирует
 - [ ] Cron-субагент: критичные факты из MEMORY переданы явно в промпт
 - [ ] Перед каждым side-effect — категория разрешающего сигнала определена (Блок 5Б)
-- [ ] Статус «готово»: `GATE:done` always auto после preflight exit 0 (и в one-pass); отчёт AC — в origin до auto-complete (маркер `AC-delivered: origin`)
+- [ ] Статус «готово»: `GATE:done` always auto после preflight exit 0 (**holds сняты, Q пусты**); отчёт AC — в origin до auto-complete (маркер `AC-delivered: origin`); operator-AC без ✅ при open hold; корень не complete до `GATE:done` done; `HF:plan` + `children=[]` → broken-tail block
 - [ ] Все вызовы через Cursor CLI (`agent -p`)
 - [ ] Полный документ в `agent -p`: `cat` без head/truncate, либо путь + «прочитай сам», либо явно «часть 1/N»; неполная копия не выдана как полная
 - [ ] Новые сущности (если предлагались) — явно вынесены на согласование Саше, не внедрены самостоятельно.

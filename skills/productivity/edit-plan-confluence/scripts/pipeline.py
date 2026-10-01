@@ -173,7 +173,7 @@ def apply_plan(
 
     fresh = client.get_page(page_id, expand="version")
     version = int(fresh["version"]["number"])
-    client.put_page(page_id, page["title"], storage, version)
+    client.put_page(page_id, page["title"], storage, version + 1)
     itogo_html = build_itogo_html(d1, d2, n, m)
     return ApplyResult(page_id, page["title"], page_url(page_id), new_ver, itogo_html)
 

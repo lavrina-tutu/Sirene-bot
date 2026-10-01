@@ -70,7 +70,19 @@ def test_apply_plan_confirm_order_upload_then_put(mpp_fixture, monkeypatch):
     apply_plan(client, "519501810", mpp_fixture, "лей")
     assert calls == ["upload", "put"]
     client.put_page.assert_called_once()
-    assert client.put_page.call_args[0][3] == 5
+    assert client.put_page.call_args[0][3] == 6
+
+
+def test_apply_plan_put_version_is_incremented(mpp_fixture, monkeypatch):
+    client = MagicMock()
+    client.get_page.side_effect = [
+        _mock_page_no_macro(),
+        {"version": {"number": 18}},
+    ]
+    client.list_attachments.return_value = []
+    monkeypatch.setattr("pipeline.upload_gantt_json", lambda *a, **k: 1)
+    apply_plan(client, "519501810", mpp_fixture, "лей")
+    assert client.put_page.call_args[0][3] == 19
 
 
 def test_apply_plan_itogo_above_new_macro(mpp_fixture, monkeypatch):

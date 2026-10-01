@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.12.0
+version: 2.13.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -611,3 +611,4 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 - [ ] Новые сущности (если предлагались) — явно вынесены на согласование Саше, не внедрены самостоятельно.
 - [ ] На любой баг-триггер первым tool-шагом было **kanban_create корня DEV/<slug> + BUG:diagnose в одном create-батче** (до agent -p), ретро-корень нет (инвариант 9)
 - [ ] Если готовился вызвать agent -p / cronjob(repeat=1) / delegate_task на диагностику/план/реализацию бага — предварительно сделан kanban_show БУГ-карточки; карточка существует, иначе стоп
+- [ ] Новый несекретный конфиг-ключ инструмента — только в `~/WorkVault/Registries/EcosystemConfig.yaml` + `EcosystemConfig.schema.json`; литерал пути/модели/токена в коде и новый per-tool `.env` = дефект; dual-read (`config.overlay.yaml`) запрещён для **новых** tools (сразу `unified_only` через `~/.hermes/lib/usertools_config.py`)

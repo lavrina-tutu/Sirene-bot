@@ -61,12 +61,26 @@ def _leaf_template(tmpl: dict[str, Any]) -> dict[str, Any]:
     return root
 
 
+def _parse_outline_level(raw: str | None) -> int:
+    """Пустое / мусор / нечисло → 0. '1.0' → 1. Не бросать ValueError."""
+    s = str(raw).strip() if raw is not None else ""
+    if not s:
+        return 0
+    try:
+        return int(float(s))
+    except (ValueError, TypeError):
+        return 0
+
+
 def build_event_tree(tasks: list[dict[str, str]], leaf_template: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, str]]]:
-    rows = [r for r in tasks if r.get("id") and r["id"] != "0"]
+    rows = [
+        r for r in tasks
+        if r.get("id") and r["id"] != "0" and _parse_outline_level(r.get("outline_level")) > 0
+    ]
     root: dict[str, Any] | None = None
     stack: list[tuple[int, dict[str, Any]]] = []
     for r in rows:
-        lvl = int(r["outline_level"])
+        lvl = _parse_outline_level(r.get("outline_level"))
         node = _base_event(leaf_template)
         node["name"] = r["name"]
         node["duration"] = _parse_duration_days(r.get("duration", ""), r.get("milestone", "False"))

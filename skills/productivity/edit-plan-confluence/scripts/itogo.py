@@ -7,14 +7,19 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from macro import macro_span
 from mpp_convert import read_csv_rows
 
 ITOGO_LINE1_RE = re.compile(
     r"(Итого:\s*с\s*)(\d{2}\.\d{2}\.\d{2})(\s*по\s*)(\d{2}\.\d{2}\.\d{2})(\s*-\s*)(\d[\d\s]*)(\s*рабочих дней)",
     re.IGNORECASE,
 )
+_TRUDOZATRATY_CORE = (
+    r"Трудозатраты:\s*\d[\d\s\xa0]*\s*"
+    r"(?:человеко?-часов?|человек-часа|человек-часов|человеко-часов)"
+)
 ITOGO_LINE2_RE = re.compile(
-    r"(Трудозатраты:\s*)(\d[\d\s]*)(\s*человек-часа)",
+    rf"(?:<p>(?:<strong>)?{_TRUDOZATRATY_CORE}(?:</strong>)?</p>|{_TRUDOZATRATY_CORE})",
     re.IGNORECASE,
 )
 
@@ -70,22 +75,27 @@ def compute_itogo_from_gantt(gantt: dict[str, Any]) -> tuple[str, str, int, int]
 
 
 def build_itogo_html(d1: str, d2: str, n_days: int, m_hours: int) -> str:
-    line1 = f"Итого: с {d1} по {d2} - {format_thousands(n_days)} рабочих дней"
-    line2 = f"Трудозатраты: {format_thousands(m_hours)} человек-часа"
-    return f"<p><strong>{line1}</strong></p><p><strong>{line2}</strong></p>"
+    return (
+        f"<p><strong>Итого: с {d1} по {d2} - {format_thousands(n_days)} рабочих дней</strong></p>"
+    )
+
+
+def strip_trudozatraty(storage: str) -> str:
+    """Удалить абзац/текст «Трудозатраты: …» целиком. Идемпотентно."""
+    prev = None
+    out = storage
+    while out != prev:
+        prev = out
+        out = ITOGO_LINE2_RE.sub("", out)
+    return out
 
 
 def patch_itogo(storage: str, d1: str, d2: str, n_days: int, m_hours: int) -> str:
+    storage = strip_trudozatraty(storage)
     n_fmt = format_thousands(n_days)
-    m_fmt = format_thousands(m_hours)
-    if ITOGO_LINE1_RE.search(storage) and ITOGO_LINE2_RE.search(storage):
+    if ITOGO_LINE1_RE.search(storage):
         storage = ITOGO_LINE1_RE.sub(
             lambda m: f"{m.group(1)}{d1}{m.group(3)}{d2}{m.group(5)}{n_fmt}{m.group(7)}",
-            storage,
-            count=1,
-        )
-        storage = ITOGO_LINE2_RE.sub(
-            lambda m: f"{m.group(1)}{m_fmt}{m.group(3)}",
             storage,
             count=1,
         )
@@ -100,7 +110,10 @@ def insert_itogo_above_macro(storage: str, macro_start: int, itogo_html: str) ->
 def apply_itogo(storage: str, d1: str, d2: str, n_days: int, m_hours: int, macro_start: int | None = None) -> str:
     if ITOGO_LINE1_RE.search(storage):
         return patch_itogo(storage, d1, d2, n_days, m_hours)
+    storage = strip_trudozatraty(storage)
     html = build_itogo_html(d1, d2, n_days, m_hours)
     if macro_start is not None:
-        return insert_itogo_above_macro(storage, macro_start, html)
+        span = macro_span(storage)
+        start = span[0] if span is not None else macro_start
+        return insert_itogo_above_macro(storage, start, html)
     return html + storage

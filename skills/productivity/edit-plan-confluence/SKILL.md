@@ -74,6 +74,7 @@ $PY $CLI convert --mpp /path/plan.mpp --out /tmp/out.json
 - `idCounter` = max(все id)+1, **не** 300000.
 - Активные ресурсы = max id на имя; мёртвые копии не включать.
 - На существующем макросе `macro-id`/`id`/`hash` не менять.
+- PUT страницы плана уходит с `version+1` (re-read версии перед PUT + инкремент, optimistic lock Confluence): не слать текущую версию as-is — иначе HTTP 409 `Version must be incremented`. `conflictPolicy=override` для страницы НЕ использовать (потеряет защиту от перезаписи чужой правки).
 - Календарь MPP: обед 12–13, ночь 18–09, сб/вс; исключения `endDate = toDate+1`.
 - M «Итого» = ceil(sum work назначений), не summary-задачи.
 - Живая AB `519492935` — только `--allow-live-ab` + явный pageId.

@@ -15,7 +15,8 @@ python3 /home/tkachenkoav/USERTOOLS/MppReader/read_mpp.py /tmp/plan.mpp --format
 
 ### eventsData (дерево)
 - Читать `__tasks.csv`: `id, outline_level, name, duration, start, finish, percent_complete, milestone, summary, predecessors`.
-- Построить дерево из `outline_level` (стек, как в MS Project). 
+- **Фильтр строк перед деревом:** в обработку попадают только строки с непустым `id`, `id != "0"` и `outline_level`, распарсенным как число **> 0** (пустое / `"0"` / `"0.0"` / мусор → 0 → отброс). Служебная **шапка** MS Project (`outline_level=0`, иногда с ненулевым `id`, напр. 217) в дерево и в `dependenciesData` не входит — иначе `eventsData[0]` становится шапкой и плагин показывает «No records to display» или неверный корень.
+- Построить дерево из отфильтрованных строк по `outline_level` (стек, как в MS Project). 
 - Каждое событие — объект с полями (шаблон из любого существующего вложения):
   ```
   {baselines:[], calendar:None, constraintType:'', duration:d, durationUnit:'day',
@@ -26,7 +27,7 @@ python3 /home/tkachenkoav/USERTOOLS/MppReader/read_mpp.py /tmp/plan.mpp --format
   ```
 - `rollup` = `summary` MPP (сводная). `duration` = `duration` MPP (0 у вех). `startDate`/`endDate` = `start`/`finish` MPP.
 - Веха (milestone=True) → `duration:0`, `effort:0`.
-- КОРЕНЬ дерева (`eventsData[0]`) — сводная-корень всего плана (в MPP это строка outline_level=1, в тесте «Доработки АБ-платформы ТУТУ до Trisigma - оценка»).
+- КОРЕНЬ дерева (`eventsData[0]`) — первый узел с `outline_level >= 1` после фильтра (сводная-корень плана; в тесте 080926 — `id=1`, «Доработки АБ-платформы ТУТУ до Trisigma - оценка»). Строки с `outline_level=0` не рассматривать как корень.
 
 ### resourcesData (активная группа + новые)
 - Читать `__resources.csv`: `id, name, max_units`.
@@ -91,6 +92,7 @@ Receipt: для каждого нерабочего исключения `{start
 3. Визуально на странице: план отрисовался, связи-стрелки, ресурсы на барах, праздники/выходные как неработающие дни.
 
 ## Ключевые питфоллы конвертера
+- **Шапка `outline_level=0`:** не полагаться только на `id == "0"` — шапка может иметь реальный id; отсекать по уровню до сборки стека.
 - **id типов:** события с `id` из MPP (1..N) могут конфликтовать с существующими id наследуемого плагина. При точечных вставках после заливки — пересчитывать idCounter, не хардкодить (тестовый конвертер ставил 300000 — сломан, см. вероятность коллизии).
 - **predecessors парс:** строка `[2]` → приводить к int и сверять с int-ключами flat-мапы (сравнение str vs int молча даёт 0 связей).
 - **несколько людей на задаче** (тестирование): в assignments несколько записей на один `event` с разными `resource`/`units`, effort = сумма work.

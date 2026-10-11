@@ -169,9 +169,11 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _f
 **Перед любым `agent -p` по инструменту на `BUG:diagnose` (и далее по багфикс-ветке):** обязательный `emit-prompt` — exit 0, иначе **СТОП**, `agent -p` не вызывать. Легальный вызов только от файла `--out` (промпт: `$(cat /tmp/task.md)`):
 
 - `python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --card $HERMES_KANBAN_TASK --tool <Name> --task-file <план> --out /tmp/task.md`
-- exit 0 → **скопировать блок `context-used:` из `/tmp/task.md` в `kanban_comment`** (G2/AC-H06), затем `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`
+- exit 0 → **скопировать в `kanban_comment` ОБА блока из `/tmp/task.md`: `context-bundle:` (абс-пути digest/glossary/master TZ) И `context-used:`** (G2/AC-H06), затем `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`
 - exit ≠ 0 → СТОП
 - перед `kanban_complete` HF/BUG/REV: `pipeline_context_bundle.py check --card $HERMES_KANBAN_TASK` — exit 0 обязателен (G2)
+
+**Питфолл `check`:** `check --card` читает **body+comments** карточки и ищет маркер `context-bundle:` с абс-тройкой (строки `key = /abs/path` для digest/glossary/master TZ) И отдельный блок `context-used:` с `card: <id>` + `tz_version`. Копирования одного `context-used:` (где всего card/root/phase/tz_version, без абс-путей) **недостаточно** — `check` упадёт «нет пути: digest» и `check` exit 1. Поэтому в комментарий кладёшь оба блока одним постом, и `check` проходит. Если `check` после копирования дал «нет пути» — дописать `context-bundle:` с тройкой, пере-прогнать `check`, потом `kanban_complete`.
 
 **Обхода context-bundle нет (решение Саши 26.09, без исключений):** ни `flag-waived`, ни `--force` / `--force-bypass-sasha-ok` как обход тройки digest+GLOSSARY+мастер-ТЗ; скрипт `emit-prompt`/`check` блокируют всегда.
 

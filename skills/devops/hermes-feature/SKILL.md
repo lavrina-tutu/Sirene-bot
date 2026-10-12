@@ -156,6 +156,11 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _f
 
 **Корень `DEV/<slug>` создаётся СРАЗУ, в том же create-батче, что и `BUG:diagnose`** (не ретро, инвариант 9). Ретро-корень = нарушение (прецедент pfs-promote-bugfix 22.09: preflight GATE:done красный). Первый tool-шаг при баг-триггере — `kanban_create` корня `DEV/<slug>` **И** DX в одном батче, **до** любого agent -p / cronjob(repeat=1) / delegate / cronjob-аутсорсинга диагностики.
 
+**Багфикс-батч создаёт ПОЛНЫЙ хвост сразу, не корень+DX на потом (прецедент 11.10: digest/pfs-notify стоят на DX done).** Развёл только
+`корень DEV/<slug>` + `BUG:diagnose` (по букве инварианта 9) — когда DX выполнилась, граф встал: `GATE:diagnose-review` и LIGHT/полный хвост
+ещё не существовали, диспетчеру нечего промоутить после DX done, пришлось добирать гейт и хвост вторым ходом. Правило: в том же оркестраторском
+ходе, что корень+DX, создавать и `GATE:diagnose-review` (parents=[DX]) и (после классификации) LIGHT-хвост `TZ:patch→TZ:finalize→GATE:take-into-work→HF:impl→HF:test→HF:docs-handoff→GATE:done` — **целиком**, чтобы поезд от корня шёл до GATE:done без добивания. DX при этом выполняется первой (родитель корня done → ready), гейт и хвост ждут своей очереди по parents.
+
 **Классификация LIGHT (кейс BUGFIX-LIGHT, GLOSSARY §2/§5.2)** — **после** `GATE:diagnose-review`, а не на холодном старте. Критерий: ≤3 файла кода+тесты, вне shared-модулей, без новых сущностей/cron/.env/манифеста. Тогда:
 - корень `DEV/<slug>` + `BUG:diagnose` → `GATE:diagnose-review` → `TZ:patch` → `TZ:finalize` → `GATE:take-into-work` → `HF:impl` → `HF:test` → `HF:docs-handoff` → `GATE:done` (preflight `--case BUGFIX-LIGHT`);
 - skip: `HF:plan`, `GATE:plan-approve`, `HF:backup`, `REV:tz`/`REV:plan`, `HF:compress`, `ORCH:shared-state`;

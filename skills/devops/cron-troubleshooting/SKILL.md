@@ -99,14 +99,46 @@ cronjob(action='create', name='test-<x>', repeat=1, schedule='1m',
 ### sys.path / venv mismatch (ExchangeMonitor)
 
 **Проблема:** Крон `no_agent=true` использует `hermes-agent/.venv/bin/python`, где нет `exchangelib`.
-Скрипт падает на импорте, ошибка ловится в `try/except` → exit 0 → stdout пустой → тишина.
+Скрипт падает на импорте, ошибка ловится в `try/except` → поэтому `ModuleNotFoundError`, а не тишина.
 
-**Фикс:** Добавить project venv site-packages в `sys.path` перед импортом:
-```python
-_VENV = Path("/home/tkachenkoav/USERTOOLS/MoveFromLoop/venv_linux/lib/python3.11/site-packages")
-if _VENV.exists():
-    sys.path.insert(0, str(_VENV))
+**Фикс — venv САМОГО инструмента, не хардкод чужого site-packages:** обёртка, которую зовёт крон:
+```bash
+#!/bin/bash
+exec /home/tkachenkoav/USERTOOLS/<Tool>/venv_linux/bin/python3 /home/tkachenkoav/.hermes/scripts/<script>.py "$@"
 ```
+(обёртку класть в `~/.hermes/scripts/` — no_agent резолвит только этот каталог и блокирует симлинк-вызов).
+
+**НЕ хардкодить `.../lib/pythonX.Y/site-packages` в `sys.path`** — см. ниже ABI-разрыв.
+
+### venv ABI против интерпретатора крона (`No module named 'lxml.etree'`, 11.10.2026)
+
+**Проблема:** `no_agent` `.py`-крон исполняется НЕ по shebang, а раннером через
+`cron/scheduler_script.py::project_python` = `sys.executable` управляемого venv Hermes
+(может быть ДРУГОЙ major-версии Python, чем venv инструмента). Если скрипт хардкодит в
+`sys.path` site-packages конкретной версии (напр. `MoveFromLoop/venv_linux/lib/python3.11/site-packages`),
+а раннер крутится на 3.14 — бинарные `.so`-модули (`lxml.etree`, собранные под `.cp311`) не грузятся →
+`No module named 'lxml.etree'`, хотя пакет на диске есть (lxml 6.1.1 в venv_linux). Триггер — апстрим-апдейт,
+пересоздавший управляемый venv Hermes на новую версию Python.
+
+**Диагностика (отличить ABI от отсутствия пакета):** сухой импорт под САМОМ интерпретаторе крона,
+не инструмента. `python3.14 -c "from lxml import etree"` падает, а `venv_linux/bin/python3 -c "..." ` проходит
+→ ABI-разрыв, пакет цел.
+
+**Фикс — интерпретатор к venv инструмента, НЕ site-packages в sys.path:**
+- bash-обёртка в `~/.hermes/scripts/`, зовёт `exec <venv>/bin/python3 <script> "$@"`;
+- либо резолвить site-packages через `venv`/`sysconfig.get_paths()['purelib']` — никогда не `lib/pythonX.Y/`.
+- каждый entry-скрипт крона нуждается в своей обёртке (см. «закрывай класс целиком»).
+
+### Закрывай класс целиком — несколько entry-скриптов на один root cause (11.10.2026)
+
+Ошибка одного типа (`No module named 'lxml.etree'`) поочерёдно всплыла в ДВУХ entry-скриптах
+инструмента (`mfl_urgent_check.py`, `mfl_digest.py`) — оба хардкодили один python3.11-путь;
+фикс первого оставил второй упавшим (пользователь вернул «ошибка не ушла после починки»).
+
+**Правило:** устраняя root cause крон-ошибки, grep **все** соседние entry-скрипты/обёртки того же
+инструмента (`<tool>_*.py`, `*_check*`, `*_digest*`, общий `sys.path`-хелпер), а не только зарепорченный
+вход. План фикса обязан перечислить ВСЕ затронутые entry или общий механизм-обёртку — точечный фикс
+одного входа оставляет класс открытым, и следующий тик другого крона вернёт ту же ошибку.
 
 ### «Claim job» — фантомные кроны с prompt='x'
 

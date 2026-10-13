@@ -320,6 +320,20 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
     **lenya_1on1** → page_id `508804891` (та же страница что и `ilya_1on1` — Лёня заменил Илью).
     Подробный рецепт переноса: `references/force-route-meeting-29072026.md`.
 
+17. **`ErrorBus "task_slug LLM empty response"` на чистой 1-1 — это НЕ аномалия** (HF:impl
+    pfs-llm-empty-1on1, 13.10.2026) — picker `apply_task_slugs` (task_slug.py) в `one_on_one`/
+    `unknown` гоняет LLM со списком закрытых проектов (`closed_list` = kind=project), но если у
+    батча задач НЕТ проектного сигнала (все задачи без known_prefix И исполнители — люди вне
+    закрытых проектов, напр. «Кирилл 1-1»: Криворотов/Артур/Ткаченко) — LLM по контракту честно
+    возвращает пусто. Раньше это слало `warn("task_slug LLM empty response")` на каждый проход.
+    **Фикс:** пустой ответ теперь классифицируется как **тихий fail-soft** (`warn` НЕ шлётся),
+    только если `batch_has_project_signal(batch, closed)` вернул False (т.е. у ни одного assignee
+    нет входа в идентичность закрытого проекта: slug/task_slug/display_name/aliases). Если проектный
+    сигнал был, а LLM всё равно вернул пусто — это реальная аномалия, empty-warn остаётся.
+    LLM по-прежнему вызывается (стратегия B: проектная привязка 1-1 по контенту сохранена,
+    test_onescope_1on1_task_body_slug_no_space_after_dot не сломан); fail-soft применяет только
+    tag_prefix встречи. Признак «проектного сигнала» — чистый матч assignee к закрытому проекту.
+
 ## Пост-switch контур (§24, v1.17.0): PFS_POST_SWITCH — только ingest на площадку
 
 Флаг **`PFS_POST_SWITCH`** ∈ `{1,true,yes,on}` (без регистра, дефолт **off**; читается

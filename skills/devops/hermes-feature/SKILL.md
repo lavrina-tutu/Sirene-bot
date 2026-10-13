@@ -423,6 +423,7 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 - **Мелкий баг** (≤2 файла, очевидная причина) → исполнитель чинит сам (1 попытка)
 - **Крупный баг** → исполнитель фиксирует причину → **Саша решает** → архитектор делает hotfix-план → исполнитель применяет
 - **Готово =** все точки проверки из плана архитектора пройдены (✅/❌)
+- **Волна eco-config (w1–w4):** обязательный AC `HF:test` = `probe_battle_venv.py` PASS на боевом python **каждого** ключа волны; pytest PFS/hermes этот AC **не** закрывает (§10.12 EcologyIntegration)
 - Статус «completed» на весь **граф** — через `GATE:done` auto-complete после preflight exit 0 (не приёмка `HF:plan`).
 
 ---
@@ -619,3 +620,4 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 - [ ] На любой баг-триггер первым tool-шагом было **kanban_create корня DEV/<slug> + BUG:diagnose в одном create-батче** (до agent -p), ретро-корень нет (инвариант 9)
 - [ ] Если готовился вызвать agent -p / cronjob(repeat=1) / delegate_task на диагностику/план/реализацию бага — предварительно сделан kanban_show БУГ-карточки; карточка существует, иначе стоп
 - [ ] Новый несекретный конфиг-ключ инструмента — только в `~/WorkVault/Registries/EcosystemConfig.yaml` + `EcosystemConfig.schema.json`; литерал пути/модели/токена в коде и новый per-tool `.env` = дефект; dual-read (`config.overlay.yaml`) запрещён для **новых** tools (сразу `unified_only` через `~/.hermes/lib/usertools_config.py`)
+- [ ] Волна eco-config (w1–w4): `probe_battle_venv.py` PASS на боевом python каждого ключа волны; pytest PFS/hermes этот AC не закрывает

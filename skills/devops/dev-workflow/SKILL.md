@@ -1,6 +1,6 @@
 ---
 name: dev-workflow
-version: 0.3.2
+version: 0.4.2
 description: Оркестрация разработки Hermes (файловое состояние, 10 кейсов)
 ---
 
@@ -15,11 +15,11 @@ description: Оркестрация разработки Hermes (файлово�
 
 Подробности: `references/rollback.md`, текст баннера для чужих скиллов — `references/dual_path_banner.md`.
 
-**Баннер в чужие SKILL.md брать ТОЛЬКО дословно из фикстуры канона** `Registries/pipeline/tests/fixtures/dual_path_banner.md` (10–15 непустых строк, покрывается `test_dual_path_banner.py`). Не переписывать «по памяти»/своими словами — отклонение от фикстуры ломает AC-043/IAC-32 (норма «только баннер, 10–15 строк»), а шаблон пишется в оба файла одинаково. `git diff --numstat` должен быть только ±баннер в двух SKILL.md.
+**Баннер в чужие SKILL.md брать ТОЛЬКО дословно из фикстуры канона** `Registries/pipeline/tests/fixtures/dual_path_banner.md` (**12–19** непустых строк = dual-path + файрвол, покрывается `test_dual_path_banner.py`). Не переписывать «по памяти»/своими словами — отклонение от фикстуры ломает AC-050/IAC-32. `git diff --numstat` должен быть только ±баннер в двух SKILL.md (живая вставка W2 — отдельная фаза).
 
 # dev-workflow — процедура оркестратора
 
-Единый процесс разработки вместо связки «канбан + несколько скиллов». Норматив смысла (кейсы, фазы, гейты, роли) — в `references/canon.md`. Мастер-ТЗ инструмента: `~/WorkVault/Hermes-Backlog/TZ/DevWorkflow/DevWorkflow_TZ.md` **v0.3.2**.
+Единый процесс разработки вместо связки «канбан + несколько скиллов». Норматив смысла (кейсы, фазы, гейты, роли) — в `references/canon.md`. Мастер-ТЗ инструмента: `~/WorkVault/Hermes-Backlog/TZ/DevWorkflow/DevWorkflow_TZ.md` (актуальная версия — из `version:` в шапке файла, не парь по тексту скилла).
 
 **Кто ты:** Сирень (профиль default). Ты ведёшь фазы, зовёшь роли через Python, не пишешь ТЗ и код сама.
 
@@ -33,11 +33,21 @@ description: Оркестрация разработки Hermes (файлово�
 | слаг в `pilot_slugs` (W2+) | только `dev-workflow`, канбан для этого слага на паузе |
 | после `hermes update` | `restore-all-skills.sh`, затем `pipeline status --check` (exit 0 обязателен) |
 
+## Файрвол ролей (Б16.2 / Б37, AC-044…045)
+
+Оркестратор **собирает факты** (что сломалось, пути, имя встречи) и ведёт поезд; **не** пишет ТЗ и код. **Не предлагай слаги / технические варианты** (`dev/<slug>/`, `entities.task_slug`, варианты починки) — только факты, `suggest-slug` или `sasha-verbatim`, затем архитектор.
+
+- **Слаг поезда** — только `pipeline suggest-slug --title …` (один кандидат в JSON, не список Саше) или `--slug-source sasha-verbatim` (дословно из фразы Саши). `entities.task_slug` и префиксы задач — зона архитектора **другого** инструмента (PFS), не меню оркестратора.
+- **«Баг / не работает / почини»** (в т.ч. рядом с именами встреч или task_slug) → кейс **BUGFIX сразу**: собери факты → `pipeline init --case BUGFIX` → пакет `BUG:diagnose`. Не меню из шести префиксов и не нумерованный выбор слагов до `invoke_role --role architect`.
+- **R3** (нумерованные варианты + рекомендация) **запрещён** для слагов и технических развилок. R3 остаётся для `Q-n` архитектора (после его формулировки) и operator-глаголов (`references/canon.md`).
+
+Кейс по смыслу запроса — таблица триггеров в `references/cases-guide.md`, не меню слагов.
+
 ## Старт задачи
 
-1. **Бриф в Telegram** — уточни кейс со Сашей (один вопрос, если неясно). Бриф не пишется в рецепт на диске.
-2. **Закрытие брифа** — зафиксируй кейс, периметр, решения. Пока бриф открыт — `init` не делай.
-3. **`pipeline init`** — обязательные поля: `--case`, `--slug`, `--title`, `--origin-chat`, `--origin-thread`. Пример и пути — `references/install.md`.
+1. **Бриф в Telegram** — факты и один уточняющий вопрос по кейсу, если неясно (не технические варианты). Бриф не пишется в рецепт на диске.
+2. **Закрытие брифа** — зафиксируй кейс (таблица триггеров), периметр. Пока бриф открыт — `init` не делай.
+3. **`pipeline init`** — `--case`, `--title`, `--origin-chat`, `--origin-thread`; `--slug` и `--slug-source` (`suggest-cli` | `sasha-verbatim` | `reuse`, default `suggest-cli`). Пример — `references/install.md`.
 4. **Preflight create (G4)** — в `recipe[]` должны быть все фазы выбранного кейса. Ошибка → init не считается завершённым.
 
 ## Основной цикл (без cron и «тиков»)
@@ -73,9 +83,15 @@ pipeline next
 
 1. `complete-phase` архитектора с evidence.
 2. `next` → `REV:*` → emit-prompt → `invoke-role --role reviewer`.
-3. Вердикт в `dev/<slug>/REV-tz.md` или `REV-plan.md`: `APPROVE` или `REQUEST-CHANGES`.
-4. **APPROVE** → `complete-phase` REV → следующая фаза.
-5. **REQUEST-CHANGES** → **не** закрывать REV; вернуть архитектору; повтор REV до APPROVE (или явный waive Саши).
+3. Ревизор пишет вердикт **только** в канон `dev/<slug>/REV-tz.md` или `REV-plan.md` (`APPROVE` | `REQUEST-CHANGES` в блоке `## Вердикт` и/или `verdict=`). Иное имя (`REV-tz-2.md` …) → `invoke_role` exit ≠ 0 (G6/канон артефакта); не плодить суффиксы — один файл на фазу. Архив прошлых итераций — отдельное имя (`REV-tz-1-REQUEST.md`), гейт его не читает.
+4. **APPROVE** → `complete-phase` REV → следующая фаза. `rev_verdict()` смотрит **только** блок `## Вердикт` / `verdict=` (цитата истории в теле не блокирует APPROVE — это Python, не обязанность оркестратора).
+5. **REQUEST-CHANGES** → `complete-phase` REV запрещён; возврат архитектору через `pipeline_state.write_state` (см. ниже), повтор REV до APPROVE или waive Саши.
+
+**rc=0 ≠ артефакт записан:** `invoke-role` возвращает единицу, а роль фактически записывает файл(ы) на диск (extract.md, REV-*.md, ТЗ) и НЕ завершает фазу — она остаётся `doing`, журнал без дописи. Оркестратор обязан после фона проверить артефакт по пути на диске (существование + mtime), сам дописать `journal.md` evidence/`context-used:` (если гейт G2 требует маркер) и вызвать `complete-phase`. Не доверяй DONE_EXIT=0 как «фаза закрыта».
+
+**Никогда не редактируй `_state.json` hardcode-сбросом вне `pipeline_state`.** Прямой `json.dump`/`write_text` в `_state.json` ломает `state_sha256`: следующий `read_state` умирает с `CRISIS: state_sha256 mismatch` (exit 1), и весь CLI (включая `repair`/`next`) встаёт до исправления хэша. Все изменения состояния — только через `pipeline_state.write_state(state, event={...})` (и `read_state` для чтения): он пересчитывает `state_sha256` и пишет атомарно. Если `read_state` уже не проходит (хэш испорчен), собери объект `PipelineState(...)` напрямую из сырого dict (`raw = json.loads(path.read_text()); PipelineState(schema=..., slug=..., phases=raw.get('phases'), ...)`), проигнорировав `state_sha256`, поправь поля, и запиши через `write_state` — он пересчитает хэш и восстановит согласованность; после этого `read_state`/`next` снова живы. Симптом «CRISIS state_sha256» всегда = обошёл `write_state` и писал состояние руками.
+
+**Возврат фазы в `doing` после REQUEST-CHANGES:** `repair` НЕ переводит фазу назад (он только переиндексирует `queue.json`), а `next` на `interrupted` фазу даёт `INTERRUPTED`. Ручной возврат архитектору — через `write_state`: `status='idle'` (НЕ `in_phase` — `in_phase`+`doing` с мёртвым pid заставляет `next` снова ставить `interrupted`), `phase=None`, `phases['TZ:patch']={'status':'doing'}`, `phases['REV:tz']={'status':'todo'}`, `pid=None`. Затем `next` даёт `WORK`/`TZ:patch`. Событию нужен ключ `event` (+ `actor`) — иначе `Incomplete log event: missing event/actor`, мутация молча теряется.
 
 Детали: `references/canon.md` (роли), `references/invoke.md`.
 

@@ -1,6 +1,6 @@
 # Канон процесса (операционная копия)
 
-Зеркало `TZ/GLOSSARY.md` для работы без vault. Сверка с vault: `pipeline status --check`. Мастер-нормы также в `DevWorkflow_TZ.md` v0.3.2, блок Б6.
+Зеркало `TZ/GLOSSARY.md` для работы без vault. Сверка с vault: `pipeline status --check`. Мастер-нормы — `DevWorkflow_TZ.md` (актуальная `version:` в шапке), блок **Б6** (роли Б6.4, guard-ы Б6.5 включая **G6**).
 
 ## Десять кейсов (закрытый список)
 
@@ -17,19 +17,19 @@
 | **SKILL-DEV** | новый скилл (workspace = hermes-workspace/skills) |
 | **SKILL-CHANGE** | правка или удаление скилла |
 
-Новый тип работы — только строка в этой таблице **и** согласование Саши. Кейс и сужение до LIGHT выбирают **Саша и оркестратор**; архитектор кейс не выбирает и фазы не укорачивает.
+Новый тип работы — только строка в этой таблице **и** согласование Саши. Кейс и сужение до LIGHT — **таблица триггеров** (`cases-guide.md`), не меню слагов; архитектор кейс не выбирает и фазы не укорачивает.
 
-## Роли
+## Роли (Б6.4)
 
-| Роль | invoke `--role` | По умолчанию (этот контур) | Делает | Не делает |
+| Роль | Кто | Модель (default этого контура) | Делает | Не делает |
 |---|---|---|---|---|
-| Оркестратор | — (ты) | родная Hermes | бриф, init/next, HITL, ORCH | ТЗ, код |
-| Архитектор | `architect` | cursor-grok-4.6-high | ТЗ, план+тесты (IAC), риски | ход процесса |
-| Ревизор | `reviewer` | claude-sonnet-5-medium | REV ТЗ/плана | ход процесса |
-| Исполнитель | `executor` | composer-2.5 | код и `HF:test` | ТЗ, план |
-| Компрессор | (Сирень, без Cursor) | родная Hermes | текст для `TZ:compress` / `HF:compress` | файл пишет Python |
+| Оркестратор | Сирень | родная модель Hermes | бриф (факты, не решения), `init`/`next`, HITL по закрытому словарю, ORCH, показ статуса | **не** пишет ТЗ и код; **не предлагай слаги / технические варианты** (`dev/<slug>/`, `entities.task_slug`); **не** подменяет архитектора (Б37, AC-044) |
+| Архитектор | `invoke --role architect` | `cursor-grok-4.6-high` (LIGHT допустим medium) | ТЗ, план+IAC, диагноз, риски, вопросы Саше (`Q-n`); предположения слагов **по ТЗ инструмента** | не выбирает кейс, не skip фаз, **не** финальный боевой код, **не** ведёт `HF:test` |
+| Ревизор | `invoke --role reviewer` | `claude-sonnet-5-medium` | слабые места ТЗ/плана; вердикт APPROVE / REQUEST-CHANGES в канон `REV-tz.md` / `REV-plan.md` | не ход процесса; не пишет ТЗ и код |
+| Исполнитель | `invoke --role executor` | `composer-2.5` | код и прогон тестов **только по плану архитектора**; мелкие локальные отклонения допустимы | не ТЗ, не план; глобальное отклонение / неясно → **возврат архитектору** |
+| Компрессор | Сирень | родная модель Hermes | выжимка-индекс 3–5 КБ; файл пишет Python после валидации | без Cursor; не SoT смысла |
 
-Один вызов `invoke-role` = одна модель = одна роль. Модели на другом хосте — из `tools.dev_workflow.roles` в YAML.
+Один `invoke-role` = одна модель = одна роль. Модели на другом хосте — из `tools.dev_workflow.roles` в YAML.
 
 ## Префиксы фаз
 
@@ -69,7 +69,7 @@
 
 Снятие: `pipeline operator-done --verb <глагол> --evidence …`. Новый глагол — только через `TZ:patch` DevWorkflow/DKP.
 
-## Guard-ы G1–G5
+## Guard-ы G1–G6
 
 | Guard | Смысл |
 |---|---|
@@ -78,8 +78,21 @@
 | **G3** | перед `HF:test` и `GATE:done` — изменения из `HF:impl` закоммичены (git-proof) |
 | **G4** | при init и при закрытии — рецепт полон для кейса |
 | **G5** | архитектор/исполнитель не меняют кейс и не skip обязательные фазы |
+| **G6** | `--role` совпадает с таблицей фаза→роль; `slug_source` ∈ {`suggest-cli`,`sasha-verbatim`,`reuse`}; не отдавать stdout `suggest-slug` Саше нумерованным списком; канонические имена REV-артефактов |
 
-Закрытие слага: только после `GATE:done`. `abort` папку не удаляет.
+### G6 — фаза → роль (исчерпывающая для `recipe[]` десяти кейсов)
+
+| Фазы | `--role` / кто |
+|---|---|
+| `TZ:patch`, `TZ:finalize`, `HF:plan`, `BUG:diagnose`, `RS:collect`, `RS:analyze`, `MIG:plan`, `MIG:block-k`, `DEC:inventory`, `IDEA:analyze` | `architect` |
+| `REV:tz`, `REV:plan`, `REV:report` | `reviewer` |
+| `HF:impl`, `HF:test`, `DEC:exec` | `executor` |
+| `TZ:compress`, `HF:compress` | `compressor` |
+| `TZ:stabilize`, `SK:preflight`, `HF:backup`, `HF:docs-handoff`, `ORCH:shared-state`, гейты | оркестратор (Сирень); Cursor-роль не звать |
+
+Нет строки для фазы из рецепта = G6 fail. `pipeline recipe-add` (`MIG:block-k` и динамические блоки) наследует роль `MIG:block-k` = `architect`. Нормы покрытия: `RS:collect` — architect (read-only как диагноз); `SK:preflight` — оркестратор (механика как `TZ:stabilize`); `MIG:block-k` — architect по умолчанию.
+
+Несовпадение → emit-prompt / `invoke-role` / `complete-phase` **exit 1** (журнал `g6_role_mismatch`).
 
 ## Запрет склейки
 

@@ -15,6 +15,8 @@ description: Оркестрация разработки Hermes (файлово�
 
 Подробности: `references/rollback.md`, текст баннера для чужих скиллов — `references/dual_path_banner.md`.
 
+**Баннер в чужие SKILL.md брать ТОЛЬКО дословно из фикстуры канона** `Registries/pipeline/tests/fixtures/dual_path_banner.md` (10–15 непустых строк, покрывается `test_dual_path_banner.py`). Не переписывать «по памяти»/своими словами — отклонение от фикстуры ломает AC-043/IAC-32 (норма «только баннер, 10–15 строк»), а шаблон пишется в оба файла одинаково. `git diff --numstat` должен быть только ±баннер в двух SKILL.md.
+
 # dev-workflow — процедура оркестратора
 
 Единый процесс разработки вместо связки «канбан + несколько скиллов». Норматив смысла (кейсы, фазы, гейты, роли) — в `references/canon.md`. Мастер-ТЗ инструмента: `~/WorkVault/Hermes-Backlog/TZ/DevWorkflow/DevWorkflow_TZ.md` **v0.3.2**.
@@ -60,6 +62,8 @@ pipeline next
 | **BLOCKED** | техника → ErrorBus; кейс → origin |
 
 Перед каждой содержательной фазой (TZ/HF/BUG/REV): только цепочка **emit-prompt → invoke-role**. Обход и `--force` запрещены. Пакет контекста: `references/context.md`.
+
+**`invoke-role` запускать только в фоне** (`terminal background=true, notify=true, persist_on_release=true`). Роль (cursor-grok/claude/composer) отвечает минуты — foreground-терминал с таймаутом 180с убивает вызов до ответа: фаза остаётся `doing` с пустыми `pid/started_at` в `_state.json` и без дописи в `journal.md`, результат теряется. После запуска фона `next`/`complete-phase` делай только на момент завершения роли, прекращай ход; не перезапускай фазу молча.
 
 **LIGHT:** после известного объёма — `pipeline set-case --case CHANGE-LIGHT` или `BUGFIX-LIGHT` (не решает архитектор).
 

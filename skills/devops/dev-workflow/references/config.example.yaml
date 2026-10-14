@@ -1,13 +1,48 @@
+# Шаблон tools.dev_workflow для EcosystemConfig.yaml
+# Скопировать в свой конфиг; подставить пути ЭТОГО хоста. Секреты — только в ~/.hermes/.env
+
 tools:
   dev_workflow:
     enabled: true
     migration_status: unified_only
+
     DEV_STATE_ROOT: <DEV_STATE_ROOT>
     TZ_ROOT: <TZ_ROOT>
     PIPELINE_ROOT: <PIPELINE_ROOT>
     SKILL_ROOT: <SKILL_ROOT>
     DIGEST_PATH: <DIGEST_PATH>
+
+    invoke:
+      default_backend: cursor-cli
+      backends:
+        cursor-cli:
+          bin: agent
+        codex:
+          bin: codex
+        hermes-internal:
+          via: call_llm
+
+    roles:
+      architect:
+        model: cursor-grok-4.6-high
+      reviewer:
+        model: claude-sonnet-5-medium
+      executor:
+        model: composer-2.5
+      compressor:
+        model: null
+
+    notify:
+      default_chat_id: "<TELEGRAM_CHAT_ID>"
+
+    errorbus:
+      tool_name: dev_workflow
+      thread_id: "11112"
+
     orchestration:
-      mode: workflow-only
+      # W1: kanban-primary + pilot_slugs: []
+      # W2-W3: dual-path + список пилотных слагов
+      # W4 / голая установка: workflow-only
+      mode: kanban-primary
       pilot_slugs: []
-      status_banner: DEVWORKFLOW-СТАТУС
+      status_banner: КАНБАН-СТАТУС

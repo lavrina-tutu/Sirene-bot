@@ -54,11 +54,11 @@ W1: `pilot_slugs: []`, `mode: kanban-primary`.
 
 **Валидация и рекомендации по постановке — только от архитектора (требование 2).** Сирень не предлагает своё мнение/варианты по постановке и архитектуре задач — передаёт архитектору (`cursor-grok-4.6-high` через Cursor CLI), выполняет по его рекомендациям. Фактологические вопросы Саше — текстом (процедура H / R3).
 
-**Запрет склейки TZ-WRITE:** промпты вида «напиши ТЗ целиком», «весь TZ-WRITE одним `agent -p`», склейка `TZ:compress`+`TZ:patch`+`TZ:finalize` (и тем более с ролью исполнителя) — **запрещены**. `TZ-WRITE(mode)` = отдельные карточки и отдельные `agent -p` по GLOSSARY §5.1. Один вызов закрывает **ровно одну** фазу из `{TZ:stabilize, TZ:compress, TZ:patch, REV:tz, TZ:finalize}`.
+**Запрет склейки TZ-WRITE:** промпты вида «напиши ТЗ целиком», «весь TZ-WRITE одним `agent -p`», склейка `TZ:compress`+`TZ:patch`+`TZ:finalize` (и тем более с ролью исполнителя) — **запрещены**. `TZ-WRITE(mode)` = отдельные фазы и отдельные invoke-role по GLOSSARY §5.1. Один вызов закрывает **ровно одну** фазу из `{TZ:stabilize, TZ:compress, TZ:patch, REV:tz, TZ:finalize}`.
 
-> **Колонка «Модель»** — внутренний `agent -p --model`, **не** `kanban_create --model`. На карточках `TZ:*` / `REV:tz`: `model_override` = NULL (воркер = default Hermes).
+> **Колонка «Модель»** — D2 внутри `invoke-role` / `agent -p`, **не** override на `pipeline init`. На фазах `TZ:*` / `REV:tz` модель задаёт роль, не init.
 
-| Шаг | Роль | Модель (`agent -p`, не kanban) | Когда |
+| Шаг | Роль | Модель (`agent -p`, D2; не model override на init) | Когда |
 |---|---|---|---|
 | BRF | оркестратор | deepseek (TG, без Cursor) | диалог; варианты постановки — сначала agent -p cursor-grok-4.6-high, затем ответ Саше |
 | TZ:stabilize | воркер (диск) | — (без agent -p) | path, version, mtime в metadata |
@@ -151,9 +151,9 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 - **НЕТ шорткатов даже для багфиксов с известным root cause.** Прецедент (MoveFromLoop v0.4.2, 07.08.2026): агент с готовой диагностикой от архитектора предложил «использовать диагностику как spec → сразу hermes-feature» или «короткий бриф вместо ТЗ» — пользователь отклонил. **Правило:** для ЛЮБОЙ задачи доработки ТЗ ИЛИ реализации — всегда tz-workflow (Шаги 1-4 → ТЗ-файл → MAIN_TZ_INVENTORY.md) → `TZ:finalize` → AC показ в origin → `GATE:take-into-work` auto-pass → hermes-feature (без фразы «берём в работу»). Нет исключений для багфиксов, хотфиксов, мелких правок.
 - **Валидация и рекомендации по постановке — только от архитектора (требование 2).** Сирень (Hermes) НЕ предлагает собственное мнение, собственные варианты решений или рекомендации по постановке задач — передаёт архитектору (`cursor-grok-4.6-high` через Cursor CLI), выполняет по его рекомендациям. Фактологические уточняющие вопросы Саше — текстом (процедура H / R3), без собственных вариантов по постановке. (См. также «Модели (Cursor CLI)» и Q2 бриф-фазы.)
 
-## Канбан-шаг
+## DevWorkflow-шаг
 
-> DevKanbanPipeline (`TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md`). Все карточки `assignee=default`. Граф задаёт скилл, не decomposer (`auto_decompose: false`).
+> DevWorkflow (`skills/devops/dev-workflow`). Рецепт в `dev/<slug>/_state.json` после `pipeline init`.
 
 ### Когда создавать граф
 
@@ -161,17 +161,17 @@ cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-gr
 
 ### Вход триггера (после BRIEF-CLOSE)
 
-Бриф (`BRF:full` / `light` / `delta` / `scope` / `confirm`) — **только в TG** через оркестратора (Сирень), не карточка. **Не вызывать `kanban_create` полного графа**, если на корне (или в сессии брифа до корня — пока корня нет, create не делать) есть durable-блок `open-questions:` с любым `Q-n` в `status=open` — сначала закрыть вопрос (`status=closed` + цитата ответа). Батч `kanban_create` кейсового графа делает **ТОЛЬКО оркестратор (Сирень) после `GATE:brief-closed`** — не архитектор на `TZ:patch`/`TZ:finalize`/`REV:tz` (AC-H03/H09). `kanban_create` фаз кейса / смена `--case` / skip §5.2 из карточки архитектора = `protocol_violation` (текст скилла). После `GATE:brief-closed` — **ОДИН `kanban_create`-батч полного графа кейса**: корень `DEV/<slug>` + `TZ-WRITE(mode)` + `GATE:take-into-work` + `PLAN-IMPL-TAIL` (или `-LIGHT` по кейсу GLOSSARY §2) **в том же create** (сначала родители, `task_id` из return, затем дети). Все карточки `assignee=default`. Режим `mode` — из кейса GLOSSARY §2 (`new` / `full` / `patch` / `freeze`).
+Бриф (`BRF:full` / `light` / `delta` / `scope` / `confirm`) — **только в TG** через оркестратора (Сирень), не фаза на диске. **Не вызывать `pipeline init`**, пока на slug (или в сессии брифа до init) есть `open-questions:` с `Q-n` в `status=open` — сначала закрыть вопрос. `pipeline init` / смена `--case` / skip §5.2 делает **ТОЛЬКО оркестратор после `GATE:brief-closed`** — не архитектор на `TZ:patch`/`TZ:finalize`/`REV:tz` (AC-H03/H09). После `GATE:brief-closed` — **один** `pipeline init` с полным рецептом кейса: `TZ-WRITE(mode)` + `GATE:take-into-work` + `PLAN-IMPL-TAIL` (или `-LIGHT` по GLOSSARY §2). `--case`/`mode` — из GLOSSARY §2 (`new` / `full` / `patch` / `freeze`).
 
-После батча — **структурный preflight G4** (AC-H08): `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <CASE> --mode create`. Fail → `kanban_block` **корня** `kind=dependency`, воркеров не стартовать.
+После батча — **структурный preflight G4** (AC-H08): `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <CASE> --mode create`. Fail → `interrupt` **корня** `kind=dependency`, воркеров не стартовать.
 
-**Полный граф одним батчем сразу после брифа** (императив 28.09, доработка A плана process-rework): второй «разворот хвоста» после гейта NOT (дыра unfold, дети `children=[]`). Диспетчер сам промоутит по `parents`. Доработка A: весь кейсовый граф — руками одного батча, `GATE:take-into-work` входит в него и авто-проходится после `TZ:finalize`.
+**Полный рецепт сразу после брифа** (императив 28.09): второй «разворот хвоста» после гейта запрещён (legacy unfold). Оркестратор ведёт фазы через `pipeline next`. `GATE:take-into-work` в рецепте и auto-pass после `TZ:finalize`.
 
-- **Запрет `model` на create:** на `TZ:*`, `REV:tz`, `HF:*`, `BUG:*` и `IDEA:analyze` — **без** `--model` / `model=` (D1 = NULL, воркер default Hermes; анти-пример: `kanban_create(..., model=cursor-grok-4.6-high)` на `TZ:patch` → HTTP 400 у Hermes-воркера, `protocol_violation`, прецедент `t_2c8ee3b2`). Роли grok/composer — только D2 внутри `agent -p --model …`.
+- **Запрет `model` на create:** на `TZ:*`, `REV:tz`, `HF:*`, `BUG:*` и `IDEA:analyze` — **без** `--model` / `model=` (D1 = NULL, воркер default Hermes; анти-пример: `invoke-role` с model override (запрещено) на `TZ:patch` → HTTP 400 у Hermes-воркера, `protocol_violation`, прецедент `t_2c8ee3b2`). Роли grok/composer — только D2 внутри `agent -p --model …`.
 - **Ключ на КАЖДУЮ фазу при create:** `devpipe:<slug>:<phase>:<tz_version_or_none>` (lookup до create, дубль = no-op; rework — суффикс `:rework:<n>:<tz_version>`).
 
-- **Все задачи по умолчанию** после триггера «разработай/доработай/почини» ложатся в план (канбан-граф `DEV/<slug>`) и далее проводятся по канону, без дополнительной команды Саши.
-- **Slug-guard (перед `kanban_create` графа `DEV/<slug>`) — проверка активного графа по слагу:** если уже есть незакрытый граф (карточки в `todo|ready|running|blocked`, не `done`/`archived`) на тот же `<slug>` — **НЕ создавать дубль**; reuse существующего графа или `kanban_block` на новый create-интент до разрешения. Дубликаты графа на один слаг запрещены (прецедент pfs-notify-link-unprocessed: 2 параллельных графа).
+- **Все задачи по умолчанию** после триггера «разработай/доработай/почини» ложатся в план (кейс DevWorkflow `DEV/<slug>`) и далее проводятся по канону, без дополнительной команды Саши.
+- **Slug-guard (перед `pipeline init` для `<slug>`):** если `dev/<slug>/_state.json` уже живой (не `done`) — **не** второй init; reuse или `interrupt` до разрешения. Два поезда на slug запрещены (прецедент pfs-notify-link-unprocessed).
 - **Идеи `triage` (`IDEA:*`)** НЕ переводятся в DEV-работу без явного «разбери»/«берём в работу» — это не противоречит «все задачи в план»: идеи в бэклоге — до постановки, по команде Саши (ЖЦ разделён, неконфликтующая формулировка).
 
 Граф кейса — ОДИН батч: TZ-WRITE(mode) + `GATE:take-into-work` + `PLAN-IMPL-TAIL` (parents обязательны). Для DEV/CHANGE (полный) граф:
@@ -187,65 +187,15 @@ DEV/<slug>                          корень (живёт до GATE:done)
 └─ PLAN-IMPL-TAIL: HF:plan (parents=[GATE:take-into-work]) ─ [REV:plan] ─ GATE:plan-approve (auto) ─ HF-TAIL (HF:backup → HF:impl → HF:test → HF:docs-handoff → ORCH:shared-state → GATE:done)
 ```
 
-LIGHT-кейсы (BUGFIX-LIGHT / CHANGE-LIGHT ≤3 файла) — короткий хвост в том же батче (GLOSSARY §5.2): `TZ:patch → TZ:finalize → GATE:take-into-work → HF:impl → HF:test → HF:docs-handoff → GATE:done`. Весь граф создаётся одним `kanban_create`-батчем после брифа; второго unfold нет.
+LIGHT-кейсы (BUGFIX-LIGHT / CHANGE-LIGHT ≤3 файла) — короткий хвост в том же батче (GLOSSARY §5.2): `TZ:patch → TZ:finalize → GATE:take-into-work → HF:impl → HF:test → HF:docs-handoff → GATE:done`. Весь граф создаётся одним ``pipeline init` после брифа после брифа; второго unfold нет.
 
-`workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на карточке: `tz-workflow`, `cursor-cli`, `cursor-task-context`. Idempotency каждой фазы: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
+`workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на фазах: `tz-workflow`, `cursor-cli`, `cursor-task-context`. Idempotency каждой фазы: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
 
-#### Подписка графа на уведомления (notify-subscribe)
+#### Origin и уведомления (DevWorkflow)
 
-Сразу после `kanban_create` (в том же ходе) подписать набор **R5** (наследования по `parents` **нет** — каждая карточка явно). Канал = **origin-топик инициатора** (диалог/топик, откуда пришёл запрос; не ops-канал Monitoring `:7`, не Errors `:11112`). `--thread-id <ORIGIN>` обязателен. Отдельное явное указание Саши («пиши в :N» / «канал = …») переопределяет канал подписки конкретного графа.
+При `pipeline init` зафиксировать `--origin-chat` и `--origin-thread` (диалог/топик инициатора; не Monitoring `:7`, не Errors `:11112`). Ход кейса, AC и паузы на Сашу — в **origin**; техника CLI/инвариантов — ErrorBus. Норматив: скилл `dev-workflow` («HITL и уведомления», `references/invoke.md`). Команды `hermes kanban notify-*` и таблица `kanban_notify_subs` — **legacy**, не использовать (диспетчер снят с W4).
 
-```bash
-hermes kanban notify-subscribe <task_id> \
-  --platform telegram --chat-id -1004300127777 --thread-id <ORIGIN> \
-  --chat-type group \
-  --delivery-mode notify+wake --notifier-profile default
-```
-
-Команда **без** `--thread-id` **запрещена** (0 блоков суб без `--thread-id` на `-1004300127777`).
-
-Уведомитель шлёт в TG **только ключевые терминальные события** (по `TERMINAL_KINDS`: `completed`/`GATE:done`, `blocked`, `gave_up`, `crashed`, `timed_out`) — не каждую фазу графа (шум). Ядро канбана **не трогать**: ни `kanban_db.py`, ни `kanban_db_notify.py`, ни сам список `TERMINAL_KINDS`.
-
-**Рабочий канал wake/notify = колонка `kanban_notify_subs.thread_id`, не body/metadata карточки. Второе поле «канал origin» в metadata **не** заводить.**
-
-- **Набор R5:** корень `DEV/<slug>` (или `IDEA/<slug>` при feed) + `GATE:take-into-work` / `GATE:done` + `GATE:go` / `GATE:block-accept` / `IDEA:analyze` → `notify+wake`. **Набор R5 не расширять**; leftover «подписать все фазы / багфикс обе карточки» запрещён.
-- **Не подписывать:** `TZ:*` / `HF:*` / `REV:*` / `BUG:diagnose` / `ORCH:*` / `RS:*` / `GATE:plan-approve` / `GATE:diagnose-review`.
-- Багфикс-батч (`DEV/<slug>` + `BUG:diagnose`): подписать **корень** `DEV/<slug>` (не промежуточные фазы).
-- Ручной feed `IDEA/<slug>` + `IDEA:analyze`: тот же `resolve_origin` + R5-subscribe/unsubscribe; пассивный inbox (`IDEA/<slug>` без analyze) — подписать **только корень** `IDEA/<slug>`.
-
-##### resolve_origin
-
-Канал подписки каждой R5-карточки определяется алгоритмом `resolve_origin(kind=root|child, root_id)` (дословно из DKP v0.3.9):
-
-```
-resolve_origin(kind=root|child, root_id):
-  1. Явный override Саши («пиши в :N» / «канал = …») → N.
-  2. kind=child: notify-list(root_id) → единственная telegram-подписка
-     на -1004300127777 с непустым thread_id ∉ {11112}. Нет такой → SILENCE.
-  3. kind=root: env HERMES_SESSION_PLATFORM=telegram
-     AND HERMES_SESSION_CHAT_ID=-1004300127777
-     AND HERMES_SESSION_THREAD_ID непустой
-     (пустая строка thread_id = отсутствие origin → не шаг 3, а SILENCE)
-     AND thread_id ≠ 11112
-     AND chat_type ∉ {dm, direct, private}
-     AND chat_id ≠ 400307920
-     → thread_id.
-  4. DM / неизвестно / CLI / Cursor без TG-env / Errors :11112 → SILENCE.
-  5. SILENCE: notify-subscribe НЕ вызывать; :7 НЕ подставлять.
-```
-
-`HERMES_SESSION_CHAT_TYPE=thread` на корне **нормализовать в `group`** в команде (колонка `chat_type`), не копировать `thread` в sub.
-
-Для `GATE:take-into-work` и детей TZ-графа: `kind=child`, origin = **копия** с `notify-list` корня (не env воркера). Исторических dual-sub (`''` + `7/thread`) **не** массово UPDATE.
-
-##### SILENCE-unsubscribe
-
-После каждого create R5-карточки:
-
-1. `hermes kanban notify-list <task_id>` (лучше `--json`).
-2. SILENCE → `notify-unsubscribe` **все** telegram-подписки этой задачи (в т.ч. auto-sub DM `400307920` и `--thread-id ''`). Пинга в `:7` нет.
-3. Origin есть → оставить **ровно одну** строку `(chat_id=-1004300127777, thread_id=ORIGIN, chat_type=group, mode=notify+wake)`; снять прочие (пустой thread, другой thread, DM, `:11112`).
-4. Не снимать ORIGIN. Не подписывать DM «на всякий случай». Не слать кейс в `:11112`. Запрет массового UPDATE исторических dual-sub.
+Terminal `blocked` / `waiting_operator` трактовать как «ждёт Сашу» в origin, не как зависание фонового dispatch. Рестарт gateway — только по фразе Саши «поднимай» (AC-010), не из этого скилла.
 
 #### Быстрый путь CHANGE-LIGHT (опционально, ≤3 файла)
 
@@ -276,7 +226,7 @@ TZ:patch (секция + version bump + инвентарь в том же ход
 #### Багфикс (кейс BUGFIX / BUGFIX-LIGHT)
 
 Триггер «баг/ошибка/не работает/почини/разберись/cron run failed» — **первый tool-шаг**:
-`kanban_create` корня `DEV/<slug>` **И** `BUG:diagnose` в одном create-батче
+`pipeline init` корня `DEV/<slug>` **И** `BUG:diagnose` в одном create-батче
 (инвариант 9, GLOSSARY §2/§5.2), **до** любого agent -p / cronjob / delegate.
 Ретро-корень запрещён (прецедент pfs-promote-bugfix 22.09 → preflight красный).
 
@@ -299,7 +249,7 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # auto по артефакту 
 - [ ] `TZ:patch` done (архитектор `cursor-grok-4.6-high`, `--resume` своей сессии)
 - [ ] `REV:tz` done **или** comment `flag-waived: Sasha` (default ON для CHANGE)
 - [ ] `TZ:finalize` done (запись `TZ/<Tool>/<Tool>_TZ.md` + инвентарь) — **только после** родителей ниже
-- [ ] на каждой карточке TZ-WRITE / `REV:tz` при create: `model_override` IS NULL (проверка `kanban_show`)
+- [ ] на каждой фазе TZ-WRITE / `REV:tz` при create: `model_override` IS NULL (проверка `pipeline status --slug <slug>`)
 - [ ] ни один из шагов не выполнен «тем же» `agent -p`, что соседний
 
 Для `TZ-WRITE(new)` / `(patch)` — тот же запрет склейки; набор карточек по §5.2 (stabilize/compress в скобках §5.1).
@@ -308,16 +258,16 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # auto по артефакту 
 
 На каждом Шаге 0–4:
 
-1. `kanban_show()` — статус мог смениться (blocked/archived → стоп).
+1. `pipeline status --slug <slug>` — статус мог смениться (blocked/archived → стоп).
 2. Сверка `version`/`mtime` мастер-ТЗ с диска (см. `cursor-task-context`).
 3. На фазах с `agent -p` (`TZ:patch`, `TZ:finalize`, `REV:tz`, …) — сначала `emit-prompt` по контракту «TZ-WRITE: emit-prompt перед agent -p» (exit 0, иначе СТОП).
-4. `kanban_heartbeat` на длинных `agent -p`.
-5. По успеху — `kanban_complete` текущей фазы (metadata: `tz_path`, `tz_version`, `tz_mtime`, `extract_chars` для compress, `cursor_session_ids`).
+4. `фоновый invoke-role` на длинных `agent -p`.
+5. По успеху — `complete-phase` текущей фазы (metadata: `tz_path`, `tz_version`, `tz_mtime`, `extract_chars` для compress, `cursor_session_ids`).
 6. Следующая фаза станет `ready` автоматически (`auto_promote_children`).
 
 D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 внутри `agent -p`. Канон GLOSSARY §3.
 
-| Шаг | Фаза | Модель (`agent -p`, не `kanban_create --model`) |
+| Шаг | Фаза | Модель (`agent -p`, не `pipeline init --model`) |
 |---|---|---|
 | stabilize | TZ:stabilize | — (без agent -p; stat/YAML) |
 | 0 | TZ:compress | deepseek-v4-flash-0731 (оркестратор) |
@@ -329,10 +279,10 @@ D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 вну
 
 Перед **любым** `agent -p` на фазах `TZ:patch` и `TZ:finalize` (по инструменту):
 
-- `python3 /home/tkachenkoav/WorkVault/Registries/pipeline_context_bundle.py emit-prompt --card $HERMES_KANBAN_TASK --tool <Name> --task-file <план> --out /tmp/task.md`
-- exit 0 → **скопировать блок `context-used:` из `/tmp/task.md` в `kanban_comment`** (G2/AC-H06), затем `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`
+- `pipeline emit-prompt --slug <slug> --phase <PHASE> --out /tmp/task.md
+- exit 0 → **скопировать блок `context-used:` из `/tmp/task.md` в `journal.md`** (G2/AC-H06), затем `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`
 - exit ≠ 0 → **СТОП**, `agent -p` не вызывать
-- перед `kanban_complete` фазы TZ-WRITE / `REV:tz`: `pipeline_context_bundle.py check --card $HERMES_KANBAN_TASK` — exit 0 обязателен, иначе complete запрещён (G2)
+- перед `complete-phase` фазы TZ-WRITE / `REV:tz`: `pipeline_context_bundle.py pipeline check --slug <slug> --phase <PHASE> <slug>` — exit 0 обязателен, иначе complete запрещён (G2)
 
 Легальный `agent -p` — только от файла `--out` (`$(cat /tmp/task.md)`), не произвольная строка в `-p`.
 
@@ -340,7 +290,7 @@ D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 вну
 
 `TZ:finalize` — роль архитектора, не исполнителя HF. Перед записью master-ТЗ воркер `TZ:finalize`:
 
-1. `kanban_show` текущей и родителей.
+1. `pipeline status --slug <slug>` текущей и родителей.
 2. Parents: `TZ:compress` done, `TZ:patch` done, и (`REV:tz` done **или** waive `flag-waived: Sasha`). Если REV-карточки нет и кейс DEV с opt REV — parent = `TZ:patch` (как DPK граф `parents=[REV:tz|TZ:patch]`).
 3. Любой parent не done → **стоп**, не писать ТЗ (карточка не complete).
 4. Metadata complete: `role=архитектор`, `model=cursor-grok-4.6-high`, `cursor_session_ids`, `tz_path`/`tz_version`/`tz_mtime` (PI B3).
@@ -351,22 +301,22 @@ D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 вну
 
 ### HITL-вопросы (процедура H / R3)
 
-**Запрет** `kanban_block(kind=needs_input)` на TZ-фазах и HF-фазах: бриф и вопросы — **в TG** через оркестратора (`BRF:*`) **и** durable на корне. Любой вопрос архитектора/воркера → на корне `open-questions: Q-n: … status=open` + пост в origin (один вопрос, варианты, рекомендация); `kanban_block` **корня** `review-required: operator-action: answer:Q-n`. Не `needs_input` на TZ/HF. Не додумывать бриф за Сашу.
+**Запрет** `interrupt(kind=needs_input)` на TZ-фазах и HF-фазах: бриф и вопросы — **в TG** через оркестратора (`BRF:*`) **и** durable на корне. Любой вопрос архитектора/воркера → на корне `open-questions: Q-n: … status=open` + пост в origin (один вопрос, варианты, рекомендация); `interrupt` **корня** `review-required: operator-action: answer:Q-n`. Не `needs_input` на TZ/HF. Не додумывать бриф за Сашу.
 
-Гейты Саши — только `$GATE:*` через `kanban_comment` + `kanban_block(reason="review-required: …")`. Снятие: ответ/фраза в Telegram **или** unblock на дашборде — равнозначны; Сирень: `kanban_comment` + `kanban_unblock`. Повторное снятие — no-op.
+Гейты Саши — только `$GATE:*` через `journal.md` + `interrupt(reason="review-required: …")`. Снятие: ответ/фраза в Telegram **или** unblock на дашборде — равнозначны; Сирень: `journal.md` + `operator-done`. Повторное снятие — no-op.
 
-**HITL-приёмка (AC-009-класс) — легальная пауза, не блок-цикл:** на HITL-гейте после успешного ревью воркер/ревизор **блокирует** карточку `kind=needs_input` и ждёт Сашу (например «по 12 инструментам нужна твоя реплика „принят"»). Это НЕ зависание и НЕ воркер-цикл: ядро канбана НЕ рутит нативный `needs_input` в triage и НЕ накапливает `block_recurrences` (genuine HITL = свежая пауза, рекурренс=1, счётчик не копит чужие причины). Сторож и `kanban_status_report.py` трактуют `blocked(needs_input)` как **«ждёт Сашу»**, а не «подвисла». Не путать с техническим `needs_input`-rekind (`dependency` без живого родителя) — тот по-прежнему эскалируется в triage как невозможный wait.
+**HITL-приёмка (AC-009-класс) — легальная пауза, не блок-цикл:** на HITL-гейте после успешного ревью воркер/ревизор **блокирует** фазу `kind=needs_input` и ждёт Сашу (например «по 12 инструментам нужна твоя реплика „принят"»). Это НЕ зависание и НЕ воркер-цикл: на HITL оркестратор ставит `waiting_operator` (см. `dev-workflow`). Сторож и `pipeline status` трактуют `blocked(needs_input)` как **«ждёт Сашу»**, а не «подвисла». Не путать с техническим `needs_input`-rekind (`dependency` без живого родителя) — тот по-прежнему эскалируется в triage как невозможный wait.
 
 ### После TZ:finalize
 
 Порядок **одного хода** (не параллельно):
 
 1. **СНАЧАЛА** — нумерованный список `AC-001`…`AC-NNN` **дословно** из master-ТЗ в **диалог = origin-топик** графа (не ops-канал Monitoring `:7`, не Errors `:11112`; если origin сам `:7` — дубля в другой топик нет). Показ AC ≠ ожидание **(класс S)**: доставка артефакта, не стоп Саши. Для AC с `depends: operator:<verb>` — в origin явно: «эти AC закрываются только после вашего `<verb>`; граф не станет done без operator-done + evidence».
-2. **ЗАТЕМ** — на корень и `GATE:take-into-work` машинный блок `operator-holds:` (все O-AC из пакета, `status=open` на finalize) для строк `depends: operator:<verb>` в master-ТЗ; плюс `kanban_comment` payload на `GATE:take-into-work` = тот же список AC (маркер `auto-pass: ac-shown`). Hold на take-into-work **не** ставить — это показ (S) + предупреждение.
-3. `GATE:take-into-work` — **auto-pass** (`auto-pass: ac-shown`), `kanban_complete`, **не** `kanban_block` (императив 28.09: старт→финиш, фраза «берём в работу» не стоп). Хвост сам становится `ready` по `parents`.
+2. **ЗАТЕМ** — на корень и `GATE:take-into-work` машинный блок `operator-holds:` (все O-AC из пакета, `status=open` на finalize) для строк `depends: operator:<verb>` в master-ТЗ; плюс `journal.md` payload на `GATE:take-into-work` = тот же список AC (маркер `auto-pass: ac-shown`). Hold на take-into-work **не** ставить — это показ (S) + предупреждение.
+3. `GATE:take-into-work` — **auto-pass** (`auto-pass: ac-shown`), `complete-phase`, **не** `interrupt` (императив 28.09: старт→финиш, фраза «берём в работу» не стоп). Хвост сам становится `ready` по `parents`.
 4. **Манифест vs диск (не ждать HF-хвоста):** если master-ТЗ/`tz_ref` уже на диске и в `MAIN_TZ_INVENTORY.md`, но пути нет в `EcosystemManifest.json` `tools{}` → stub-запись `tools{}` (`status` из инвентаря, не из frontmatter ТЗ) **или** явная карточка `ORCH:shared-state` с AC «`tools.<tz_ref>` зарегистрирован». Полные `links`/контракты — после auto take-into-work / ORCH хвоста.
 
-Hermes-feature стартует без снятия гейта Сашей: хвост уже в графе и авто-промоушен запускает его после `GATE:take-into-work` done.
+Hermes-feature стартует без снятия гейта Сашей: хвост уже в рецепте; `pipeline next` после `GATE:take-into-work` done.
 
 ### Гейты — оба канала
 
@@ -380,28 +330,28 @@ Hermes-feature стартует без снятия гейта Сашей: хв�
 
 Триггеры: «положи в бэклог», «положить в triage», «сохрани идею в бэклог», миграция. Показ triage («бэклог», «что в бэклоге») — скиллы `backlog-collector` / `backlog-analyst` (READ only). **Без** слова «разбери».
 
-1. Только `kanban_create` корня `IDEA/<slug>` с `--triage`, `assignee=default`.
+1. Passive-запись в IDEA-triage (Б28 DevWorkflow_TZ) для `IDEA/<slug>` — без DEV-`pipeline init`.
 2. **Не** создавать child `IDEA:analyze`.
-3. **Не** вызывать `kanban_specify` / `promote` — карточка остаётся в `triage`, воркер не берёт.
+3. **Не** запускать `IDEA:analyze` — запись остаётся в triage.
 4. Body при ручном feed: без `migrate:passive` (это маркер миграции); idempotency: `dialogbacklog-feed:<iso-timestamp>:<short-hash>`.
 
 #### B) «Разбери идею» (analyze)
 
 Триггеры: «разбери идею», «разбери bk-NNN», «разбери <slug>`. **Не** запускать DEV-граф до «берём в работу» по заключению.
 
-1. Если корня `IDEA/<slug>` нет — создать с `--triage`.
-2. Создать child `IDEA:analyze` с `parents=[корень]`.
-3. Сразу в том же ходе: `kanban_specify` / `hermes kanban specify <analyze_id>` (triage→todo→ready); **не** `promote` с triage.
-4. Silent-воркер `default` → `agent -p --model cursor-grok-4.6-high` → заключение в `kanban_comment` → `kanban_block(reason="review-required: заключение по идее, ждать Сашу")`.
-5. «Берём в работу» по заключению (Telegram **или** дашборд) → `IDEA:analyze` complete → оркестратор создаёт граф `DEV/<slug>` обычного цикла; корень `IDEA/<slug>` → `done`/`archived`.
+1. Если записи `IDEA/<slug>` нет — создать в triage (Б28).
+2. Оркестратор: рецепт с фазой `IDEA:analyze` (RESEARCH/IDEA, Б28).
+3. `pipeline next` → `IDEA:analyze` → emit-prompt → invoke-role; без автопромоута без оркестратора.
+4. Заключение в `journal.md` и origin; `WAIT_SASHA` до решения Саши.
+5. «Берём в работу» → `complete-phase` `IDEA:analyze` → `pipeline init` DEV/CHANGE; IDEA → `done`.
 
 Idempotency analyze: `devpipe:idea:<slug>:analyze`.
 
-**Запрет:** на карточках с `migrate:passive` в body или passive-inbox без явного «разбери» — **не** specify, **не** создавать `IDEA:analyze`.
+**Запрет:** на passive-inbox с `migrate:passive` без явного «разбери» — **не** создавать `IDEA:analyze`.
 
 ### TZ drift / reclaim
 
-Расхождение disk vs card → comment `TZ drift: …` + `kanban_block(kind=dependency, reason="TZ master changed on disk")`. Mid-flight bump → `hermes kanban reclaim` + comment «не retry этой карточки, TZ bumped» + **новая** child той же phase с обновлёнными parents; старую — `archived` с summary `superseded`.
+Расхождение disk vs `_state.json` → `journal.md`: `TZ drift: …` + `interrupt(kind=dependency, reason="TZ master changed on disk")`. Mid-flight bump → пересборка той же фазы с новым `tz_version` в рецепте; старый прогон — `superseded` в journal.
 
 ## Ключевые инварианты (топ-5)
 

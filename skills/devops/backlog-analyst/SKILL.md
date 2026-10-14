@@ -1,6 +1,6 @@
 ---
 name: backlog-analyst
-description: "Показывает backlog — READ-запрос карточек IDEA/* в статусе triage (kanban)."
+description: "Показывает backlog — READ-запрос IDEA/* в triage (DevWorkflow, колонка pipeline status)."
 version: 2.0.0
 author: agent
 license: MIT
@@ -16,11 +16,11 @@ triggers:
 
 ## Назначение
 
-Тот же **READ-контракт**, что у `backlog-collector`: показать открытый backlog — карточки `IDEA/*` в `triage`, SoT `~/.hermes/kanban.db`. Имя скилла не менять (исторический алиас для тех же триггеров).
+Тот же **READ-контракт**, что у `backlog-collector`: показать открытый backlog — `IDEA/*` в triage (`pipeline status`). Имя скилла не менять (исторический алиас).
 
 ## Алгоритм
 
-1. `hermes kanban list --status triage` (или `kanban_*` tools) → карточки `IDEA/*`.
+1. `pipeline status` → колонка **triage** (IDEA/*).
 2. Показать title, статус, краткое body-превью.
 3. Не показывать закрытые/архивные и md-историю.
 4. Отчёт — в чат источника команды.

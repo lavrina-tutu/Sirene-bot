@@ -31,8 +31,11 @@ Hermes блокирует файлы .mpp. Пользователь должен
 ## Что есть на машине
 
 - **Java**: OpenJDK 17 (`/usr/bin/java`) — установлено через `dnf install java-17-openjdk-headless`.
-- **Python пакеты**: `mpxj==16.4.x`, `jpype1` — в venv `/home/tkachenkoav/hermes-agent/.venv`.
+- **Python пакеты**: `mpxj==16.4.x`, `jpype1` — есть в системном `/usr/bin/python3`. ⚠️ venv `~/hermes-agent/.venv` может НЕ иметь mpxj (`ModuleNotFoundError: No module named 'mpxj'`) — тогда запускать скрипт через `/usr/bin/python3` (в нём стоят mpxj+jpype), а не искать пакет по venv'ам.
 - **Скрипт**: `/home/tkachenkoav/USERTOOLS/MppReader/read_mpp.py`.
+
+### Питфолл: Log4j-предупреждение в stdout ломает JSON
+`read_mpp.py --format json > file` печатает `main ERROR Log4j API could not find a logging provider.` в **stdout** (не stderr), поэтому строка попадает в начало файла и `json.load()` падает с `Extra data: line 1 column 5`. Фикс: перед `json.load` срезать первую строку — `tail -n +2 file > clean.json`
 
 Поддерживаются форматы: **.mpp** (Project 98–2019/365), **.mpx**, **.xml/MSPDI**,
 **.xer** (Primavera), **.pp** (ProjectLibre), и др. — всё, что умеет mpxj.

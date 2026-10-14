@@ -125,6 +125,8 @@ Grok получает уже резолвнутую таблицу; REST не д
 
 ## Confluence: скачать страницу в WorkVault
 
+### Инструмент: ConfluenceSync CLI
+
 ```bash
 cd ~/USERTOOLS/ConfluenceSync
 

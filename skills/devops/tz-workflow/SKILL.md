@@ -13,6 +13,15 @@ metadata:
 
 # tz-workflow
 
+# Dual-path (DevWorkflow W2)
+
+Пока `tools.dev_workflow.orchestration.mode` ≠ `workflow-only`:
+- не начинай новый поезд через канбан/hermes-feature/tz-workflow для slug ∈ `orchestration.pilot_slugs`;
+- если slug в списке и нет живого kanban-running на нём — стоп, отдай управление скиллу `dev-workflow`;
+- иначе работай по этому скиллу как раньше;
+- два поезда на одном slug запрещены.
+
+Конфиг: `EcosystemConfig.yaml` → `tools.dev_workflow.orchestration`.
 ## Термины
 Перед первым `PREFIX:фаза` читать `~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md`.
 Имена фаз/ролей/скиллов только из канона. Голые TZ/HF/ORCH/DEV без двоеточия запрещены.

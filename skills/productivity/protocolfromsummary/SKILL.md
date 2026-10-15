@@ -1,7 +1,7 @@
 ---
 name: protocolfromsummary
 description: "Use when working with the ProtocolFromSummary (PFS) tool — publishes Fireflies meeting-summary .md files into Confluence protocol tables (~/USERTOOLS/ProtocolFromSummary). Триггеры: PFS, протокол встречи, опубликовать протокол, задача не резолвится/не мешенится, ROUTES, page_layout, republish, страница протокола поменялась, out_of_scope встречи, роутинг крона PFS."
-version: 1.3.0
+version: 1.3.1
 author: agent
 license: MIT
 platforms: [linux]
@@ -333,6 +333,28 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
     после точки; empty-warn при этом **не** шлётся. При ≥2 текстовых хитах или assignee-сигнале без
     спасения fallback — empty-warn остаётся. Fail-soft без уникального хита — только `tag_prefix`
     встречи или текст as-is.
+
+18. **Источник слага задачи — контекст задачи + MOFS, а НЕ «средняя тема» протокола**
+    (§34 pfs-slug-prebuild, v1.29.0+, 15.10.2026) — слаги задач на этапе необработанных (до promote)
+    вычисляются **из контекста каждой отдельной задачи**, а не из общей темы/названия встречи,
+    участников или notes. Канон `_task_union_slugs(task, resolved, closed, bind)`:
+    **hits(assignee) ∪ hits(task.text) ∪ hits(discussion) ∪ {MOFS eligible-bind}.slug**.
+    Конкретнее:
+    - **assignee** — проекта из `closed_list`, чья identity матчится с исполнителем (`_project_hits_assignee`).
+    - **task.text** — уникальная identity из `task.text` (`_project_matches_identity`); удаление дублей
+      через `task_slug_project_matches` в pipeline, ровно один хит на задачу.
+    - **discussion** — тема/обсуждение задачи из структуры summary (`_project_hits_discussion`).
+    - **MOFS eligible-bind** — `_eligible_bind_slug` (копия `markobjectsfromsummary.project_bind.task_key`):
+      проектный биндинг задачи из MOFS-реестра, когда задача привязана к проекту через
+      `project_bind`. Он **не** подменяет контекстные хиты — это отдельный, четвёртый источник
+      слага для задач, которые размечены в MOFS.
+    **Не являются источниками слага**: `meeting_name`, `summary.notes`, YAML `projects:` frontmatter,
+    общий список участников встречи (если задачи в протоколе именно об этом — слага по этим полям
+    брать нельзя; uniqueness строится только по assignee ∪ task.text ∪ discussion ∪ eligible-bind).
+    Итоговый слага: если один уникальный проект в union — клеится `canonical_task_slug + orig_text`
+    (префикс), при >1 — решение отдаётся LLM-picker (`apply_task_slugs`), пустой LLM → fail-soft
+    (Питфолл 17). При диагностике «почему у задачи нет/другой слаг» — смотреть именно эти 4 контекстных
+    источника, не общую тему протокола.
 
 ## Пост-switch контур (§24, v1.17.0): PFS_POST_SWITCH — только ingest на площадку
 

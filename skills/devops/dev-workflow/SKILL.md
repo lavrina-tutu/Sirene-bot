@@ -1,6 +1,6 @@
 ---
 name: dev-workflow
-version: 0.4.2
+version: 0.4.3
 description: Оркестрация разработки Hermes (файловое состояние, 10 кейсов)
 ---
 
@@ -109,6 +109,7 @@ pipeline next
 
 ## Запреты (кратко)
 
+- Хранение ТЗ и три контура архивации — `references/storage-and-archival.md` (не дублировать полный Б15 в этом файле).
 - Не склеивать фазы (`HF:impl` и `HF:test` — разные вызовы).
 - Не вызывать `agent -p` в обход `invoke-role`.
 - Не использовать `--continue` у cursor-cli.
@@ -137,6 +138,7 @@ pipeline next
 | `references/onboarding.md` | для специалиста без разработки |
 | `references/config.example.yaml` | ключи `tools.dev_workflow` |
 | `references/kanban-mechanics.md` | что сохранили из канбана без диспетчера |
+| `references/storage-and-archival.md` | хранение ТЗ, снапшот/DECOMM, три контура бэкапа (A/B/C), откат |
 | `references/dual_path_banner.md` | баннер W2 в hermes-feature/tz-workflow |
 
 Комплект для нового хоста: `README.md` → `install.md` → `onboarding.md`.

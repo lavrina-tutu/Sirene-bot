@@ -530,7 +530,7 @@ PYTHONPATH=/home/tkachenkoav/USERTOOLS /home/tkachenkoav/USERTOOLS/AnywhereConta
 
 **Обязательный вопрос перед create и reschedule:** «уведомление в Loop? (да/нет)». Без ответа CLI не вызывать. `--no-notify-loop` → 0 постов в Loop. Add/remove/cancel — Loop без переспроса (add — только новому; cancel — всем Required кроме организатора).
 
-«Привет!» в Loop — по переписке **за сегодня** (00:00 МСК), не по дню встречи. Ссылка в Loop — PMI `https://tutu-ru.zoom.us/my/tkachenkoav.meet`.
+«Привет!» в Loop — по переписке **за сегодня** (00:00 МСК), не по дню встречи. Ссылка в Loop — личная Ktalk-комната `https://tutu.ktalk.ru/tkachenkoav` (v1.11.0 MeetingScheduler: `KTALK_LINK`).
 
 **«Направил встречу» (отдельная ветка, не смешивать с «Привет!»):** Loop-notify on **meeting date**, not message activity: if the meeting is **TODAY** → auto-send «Направил встречу»; otherwise (future date) → **ASK Sasha** before notifying. SEPARATE branch from the «Привет!» greeting-on-today's-correspondence rule — do NOT merge them.
 

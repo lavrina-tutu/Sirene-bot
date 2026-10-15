@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EntityRegistry",
+  "type": "object",
+  "required": ["schema_version", "entities"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "entities": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "object",
+          "required": ["kind", "parent", "display_name", "aliases"],
+          "properties": {
+            "kind": {"enum": ["project", "one_on_one", "multisync", "sync_aid", "unknown", "tool", "person_1on1", "person", "misc"]},
+            "parent": {"type": ["string", "null"]},
+            "display_name": {"type": "string"},
+            "aliases": {"type": "array", "items": {"type": "string"}},
+            "task_slug": {
+              "type": ["string", "null"],
+              "description": "человекочитаемый префикс задачи с хвостовой '.' без пробела"
+            },
+            "folder": {"type": ["string", "null"]},
+            "pfs": {
+              "type": "object",
+              "required": ["page_id", "tag"],
+              "properties": {
+                "page_id": {"type": "string", "pattern": "^[0-9]+$"},
+                "tag": {"type": ["string", "null"]},
+                "page_layout": {"type": "string"},
+                "content_column_index": {"type": "integer"}
+              },
+              "additionalProperties": false
+            },
+            "charter": {
+              "type": "object",
+              "required": ["confluence_id"],
+              "properties": {
+                "confluence_id": {"type": "string", "pattern": "^[0-9]+$"}
+              },
+              "additionalProperties": false
+            },
+            "tags": {
+              "type": "array",
+              "items": {"type": "string"},
+              "uniqueItems": true
+            },
+            "related_pages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["page_id", "role"],
+                "properties": {
+                  "page_id": {"type": "string", "pattern": "^[0-9]+$"},
+                  "role": {"enum": ["charter", "brief", "tasks", "report", "other"]},
+                  "primary": {"type": "boolean"},
+                  "title": {"type": "string"}
+                },
+                "additionalProperties": false
+              }
+            },
+            "people": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["login"],
+                "properties": {
+                  "login": {"type": "string", "pattern": "^[a-z][a-z0-9._-]*$"},
+                  "role": {"enum": ["customer", "pm", "sponsor", "team", "other"]}
+                },
+                "additionalProperties": false
+              }
+            },
+            "loop_channels": {
+              "type": "array",
+              "items": {"type": "string", "pattern": "^[a-z0-9_-]+$"},
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,805 @@
+{
+  "schema_version": "1.2",
+  "entities": {
+    "trisigma": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "Trisigma",
+      "aliases": [
+        "trisigma"
+      ],
+      "pfs": {
+        "page_id": "490170597",
+        "tag": "Trisigma."
+      },
+      "folder": "Entities/trisigma",
+      "related_pages": [
+        {
+          "page_id": "480923430",
+          "role": "other",
+          "primary": true
+        },
+        {
+          "page_id": "523010358",
+          "role": "report",
+          "primary": false
+        }
+      ],
+      "task_slug": "Trisigma."
+    },
+    "ab_platforma": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "AB-платформа",
+      "aliases": [
+        "ab-платформа",
+        "ab платформа",
+        "улучшение ab",
+        "ab-тест",
+        "конструктор отчетов",
+        "конструктор отчётов"
+      ],
+      "pfs": {
+        "page_id": "490170597",
+        "tag": "AB-платформа."
+      },
+      "folder": "Entities/ab_platforma",
+      "task_slug": "AB-платформа."
+    },
+    "ai_ready": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "AI-ready",
+      "aliases": [
+        "ai-ready",
+        "ai ready",
+        "ai-трансформация",
+        "ai трансформация",
+        "ии-зация",
+        "ai-зация",
+        "иизация",
+        "цифровой управленец",
+        "discovery delivery",
+        "дискавери деливери",
+        "d-d",
+        "ai-агент по агрегации",
+        "тренинг ии",
+        "тренинг ии 2часть",
+        "ai-transformaciya"
+      ],
+      "pfs": {
+        "page_id": "499570832",
+        "tag": "AI-ready."
+      },
+      "folder": "Entities/ai_ready",
+      "related_pages": [
+        {
+          "page_id": "490149042",
+          "role": "other",
+          "primary": true
+        }
+      ],
+      "task_slug": "AI-ready."
+    },
+    "ai_analitik": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "AI-аналитик",
+      "aliases": [
+        "ai-аналитик",
+        "ai аналитик",
+        "ai-mas",
+        "ai-мультиагентная",
+        "мультиагентная система",
+        "чат-бот",
+        "чатбот",
+        "chatbot"
+      ],
+      "pfs": {
+        "page_id": "477061038",
+        "tag": "AI-аналитик."
+      },
+      "folder": "Entities/ai_analitik",
+      "related_pages": [
+        {
+          "page_id": "480905784",
+          "role": "other",
+          "primary": true
+        }
+      ],
+      "task_slug": "AI-аналитик."
+    },
+    "ml_platforma": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "ML-платформа",
+      "aliases": [
+        "ml-платформа",
+        "ml платформа"
+      ],
+      "pfs": {
+        "page_id": "490169504",
+        "tag": "ML-платформа."
+      },
+      "folder": "Entities/ml_platforma",
+      "related_pages": [
+        {
+          "page_id": "487934086",
+          "role": "other",
+          "primary": true
+        }
+      ],
+      "task_slug": "ML-платформа."
+    },
+    "metroteka": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "Метротека",
+      "aliases": [
+        "метротека",
+        "metrotek",
+        "процметрики",
+        "дашборд с процметриками"
+      ],
+      "pfs": {
+        "page_id": "444141522",
+        "tag": "Метротека."
+      },
+      "folder": "Entities/metroteka",
+      "related_pages": [
+        {
+          "page_id": "418568780",
+          "role": "other",
+          "primary": true
+        }
+      ],
+      "task_slug": "Метротека."
+    },
+    "parsing": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "Парсинг",
+      "aliases": [
+        "парсинг",
+        "мониторинг конкурентов",
+        "мониторинг цен",
+        "ретроспектива артамонов",
+        "мониториг конкурентов",
+        "помощь аид в сборе требований",
+        "ретроспектива",
+        "parsery",
+        "parsing-zhd",
+        "страт. трек: парсеры",
+        "страт трек парсеры",
+        "🔺 страт. трек: парсеры"
+      ],
+      "pfs": {
+        "page_id": "439235748",
+        "tag": "Парсинг."
+      },
+      "folder": "Entities/parsing",
+      "related_pages": [
+        {
+          "page_id": "439235729",
+          "role": "other",
+          "primary": true
+        },
+        {
+          "page_id": "477048493",
+          "role": "report",
+          "primary": false
+        },
+        {
+          "page_id": "446995783",
+          "role": "report",
+          "primary": false
+        }
+      ],
+      "task_slug": "Парсинг."
+    },
+    "datatalks": {
+      "kind": "multisync",
+      "parent": null,
+      "display_name": "DataTalks",
+      "aliases": [
+        "datatalks",
+        "аид-datatalks",
+        "аид datatalks",
+        "daily"
+      ],
+      "pfs": {
+        "page_id": "508804905",
+        "tag": "DataTalks."
+      },
+      "folder": "Entities/datatalks"
+    },
+    "vstrechi_pro": {
+      "kind": "multisync",
+      "parent": null,
+      "display_name": "ПРО (гильдия РП)",
+      "aliases": [
+        "про.",
+        "гильдия про",
+        "гильдия рп",
+        "адм.",
+        "pmo"
+      ],
+      "pfs": {
+        "page_id": "508804842",
+        "tag": "ПРО."
+      },
+      "folder": "Entities/vstrechi_pro"
+    },
+    "ilya_1on1": {
+      "kind": "one_on_one",
+      "parent": null,
+      "display_name": "Илья 1-1",
+      "aliases": [
+        "илья 1-1",
+        "илья - саша",
+        "илья — саша",
+        "саша - илья",
+        "середа",
+        "синк илья"
+      ],
+      "pfs": {
+        "page_id": "508804891",
+        "tag": null
+      },
+      "folder": "Entities/ilya_1on1"
+    },
+    "lenya_1on1": {
+      "kind": "person_1on1",
+      "display_name": "Лёня 1-1",
+      "aliases": [
+        "леня 1-1",
+        "лёня 1-1",
+        "lenya 1-1",
+        "цыба 1-1",
+        "леонид цыба",
+        "цыба леонид",
+        "леонид",
+        "lenya",
+        "цыба"
+      ],
+      "pfs": {
+        "page_id": "508804891",
+        "tag": "Лёня 1-1."
+      },
+      "parent": null,
+      "folder": null
+    },
+    "aralov_1on1": {
+      "kind": "one_on_one",
+      "parent": null,
+      "display_name": "Аралов 1-1",
+      "aliases": [
+        "аралов 1-1",
+        "аралов - саша",
+        "аралов — саша",
+        "саша - аралов",
+        "саша а. 1-1",
+        "аралов",
+        "саша - саша",
+        "синк 1-1 саша",
+        "custom agent aralov",
+        "alexander aralov"
+      ],
+      "pfs": {
+        "page_id": "508804897",
+        "tag": null
+      },
+      "folder": "Entities/aralov_1on1"
+    },
+    "kirill_1on1": {
+      "kind": "one_on_one",
+      "parent": null,
+      "display_name": "Кирилл 1-1",
+      "aliases": [
+        "кирилл 1-1",
+        "кирилл - саша",
+        "кирилл — саша",
+        "саша - кирилл",
+        "криворотов"
+      ],
+      "pfs": {
+        "page_id": "508804979",
+        "tag": null
+      },
+      "folder": "Entities/kirill_1on1"
+    },
+    "zhirov_1on1": {
+      "kind": "one_on_one",
+      "parent": null,
+      "display_name": "Жиров 1-1",
+      "aliases": [
+        "жиров 1-1",
+        "жиров - саша",
+        "жиров — саша",
+        "саша - жиров",
+        "саша ж. 1-1",
+        "жиров",
+        "апр 17"
+      ],
+      "pfs": {
+        "page_id": "508804894",
+        "tag": null
+      },
+      "folder": "Entities/zhirov_1on1"
+    },
+    "sink_aid": {
+      "kind": "sync_aid",
+      "parent": null,
+      "display_name": "Синк АиД",
+      "aliases": [
+        "синк аид",
+        "синк аид департамента",
+        "синк департамента аид"
+      ],
+      "pfs": {
+        "page_id": "331125844",
+        "tag": null
+      },
+      "folder": "Entities/sink_aid"
+    },
+    "devrel": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "DevRel",
+      "aliases": [
+        "devrel",
+        "дев-рел",
+        "девелопер релейшнс"
+      ],
+      "folder": "Entities/devrel",
+      "pfs": {
+        "page_id": "519474160",
+        "tag": "DevRel."
+      },
+      "related_pages": [
+        {
+          "page_id": "480930821",
+          "role": "other",
+          "primary": true
+        }
+      ],
+      "task_slug": "DevRel."
+    },
+    "cu": {
+      "kind": "project",
+      "parent": "devrel",
+      "display_name": "ЦУ (Central University)",
+      "aliases": [
+        "central university",
+        "централ юниверсити",
+        "цу",
+        "подключение студентов"
+      ],
+      "folder": "Entities/cu",
+      "pfs": {
+        "page_id": "519474213",
+        "tag": "ЦУ."
+      },
+      "related_pages": [
+        {
+          "page_id": "469658375",
+          "role": "other",
+          "primary": true
+        },
+        {
+          "page_id": "480922695",
+          "role": "report",
+          "primary": false
+        }
+      ],
+      "task_slug": "ЦУ."
+    },
+    "omd": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "OMD (OpenMetaData)",
+      "aliases": [
+        "omd",
+        "openmetadata",
+        "кумд"
+      ],
+      "folder": null
+    },
+    "jira": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "Jira",
+      "aliases": [
+        "jira",
+        "джира"
+      ],
+      "folder": null
+    },
+    "confluence": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "Confluence",
+      "aliases": [
+        "confluence",
+        "конфлюенс"
+      ],
+      "folder": null
+    },
+    "metabase": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "Metabase",
+      "aliases": [
+        "metabase",
+        "метабейс"
+      ],
+      "folder": null
+    },
+    "clickhouse": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "ClickHouse",
+      "aliases": [
+        "clickhouse",
+        "кликхаус"
+      ],
+      "folder": null
+    },
+    "loop": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "Loop (Mattermost)",
+      "aliases": [
+        "loop",
+        "луп",
+        "лупп",
+        "zulip",
+        "зулип",
+        "mattermost",
+        "матермост"
+      ],
+      "folder": null
+    },
+    "dwh": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "DWH",
+      "aliases": [
+        "dwh",
+        "дата-вархаус",
+        "хранилище данных"
+      ],
+      "folder": null
+    },
+    "cursor": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "Cursor",
+      "aliases": [
+        "cursor",
+        "курсор"
+      ],
+      "folder": null
+    },
+    "airflow": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "Apache Airflow",
+      "aliases": [
+        "airflow",
+        "эйрфлоу"
+      ],
+      "folder": null
+    },
+    "kubernetes": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "Kubernetes",
+      "aliases": [
+        "kubernetes",
+        "k8s",
+        "кубер"
+      ],
+      "folder": null
+    },
+    "s3": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "S3 / MinIO",
+      "aliases": [
+        "s3",
+        "minio",
+        "минио"
+      ],
+      "folder": null
+    },
+    "kafka": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "Apache Kafka",
+      "aliases": [
+        "kafka",
+        "кафка"
+      ],
+      "folder": null
+    },
+    "grafana": {
+      "kind": "tool",
+      "parent": null,
+      "display_name": "Grafana",
+      "aliases": [
+        "grafana",
+        "графана"
+      ],
+      "folder": null
+    },
+    "atribuciya": {
+      "kind": "project",
+      "display_name": "Атрибуция",
+      "aliases": [
+        "атрибуция",
+        "атрибуция внешнего трафика",
+        "внутренняя атрибуция",
+        "реатрибуция"
+      ],
+      "parent": null,
+      "folder": "Entities/atribuciya",
+      "pfs": {
+        "page_id": "519474257",
+        "tag": "Атрибуция."
+      },
+      "related_pages": [
+        {
+          "page_id": "347445612",
+          "role": "other",
+          "primary": true
+        },
+        {
+          "page_id": "449571537",
+          "role": "brief",
+          "primary": false
+        },
+        {
+          "page_id": "487924720",
+          "role": "tasks",
+          "primary": false
+        }
+      ],
+      "task_slug": "Атрибуция."
+    },
+    "antibot": {
+      "kind": "project",
+      "display_name": "Антибот",
+      "aliases": [
+        "антибот",
+        "antibot"
+      ],
+      "parent": null,
+      "folder": "Entities/antibot",
+      "pfs": {
+        "page_id": "439235653",
+        "tag": "Антибот."
+      },
+      "related_pages": [
+        {
+          "page_id": "410783702",
+          "role": "other",
+          "primary": true
+        },
+        {
+          "page_id": "449567776",
+          "role": "report",
+          "primary": false
+        },
+        {
+          "page_id": "441304017",
+          "role": "report",
+          "primary": false
+        }
+      ],
+      "task_slug": "Антибот."
+    },
+    "dayana_1on1": {
+      "kind": "one_on_one",
+      "display_name": "Даяна 1-1",
+      "aliases": [
+        "даяна 1-1",
+        "даяна - саша",
+        "саша - даяна",
+        "даяна",
+        "1-1 даяна"
+      ],
+      "parent": null,
+      "folder": "Entities/dayana_1on1"
+    },
+    "alfa": {
+      "kind": "project",
+      "display_name": "Альфа",
+      "aliases": [
+        "альфа",
+        "синк альфа",
+        "проект альфа"
+      ],
+      "parent": null,
+      "folder": "Entities/alfa",
+      "pfs": {
+        "page_id": "439235672",
+        "tag": "Альфа."
+      },
+      "task_slug": "Альфа."
+    },
+    "vestnik": {
+      "kind": "project",
+      "display_name": "Вестник аналитики",
+      "aliases": [
+        "вестник",
+        "вестник аналитики",
+        "vestnik-aid"
+      ],
+      "tags": [],
+      "parent": null,
+      "folder": "Entities/vestnik",
+      "pfs": {
+        "page_id": "519474299",
+        "tag": "Вестник."
+      },
+      "related_pages": [
+        {
+          "page_id": "324382467",
+          "role": "other",
+          "primary": true
+        }
+      ],
+      "task_slug": "Вестник."
+    },
+    "okr": {
+      "kind": "project",
+      "display_name": "OKR",
+      "aliases": [
+        "окр",
+        "okr",
+        "цели и ключевые результаты",
+        "заполняем джиру",
+        "собираем q2",
+        "собираем q1",
+        "выравнивание по целям",
+        "okr-tool"
+      ],
+      "pfs": {
+        "page_id": "508804852",
+        "tag": "OKR."
+      },
+      "parent": null,
+      "folder": "Entities/okr"
+    },
+    "sr": {
+      "kind": "project",
+      "display_name": "Self-Review",
+      "aliases": [
+        "sr",
+        "self-review",
+        "селф ревью",
+        "правила заполнения sr"
+      ],
+      "parent": null,
+      "folder": "Entities/sr",
+      "pfs": {
+        "page_id": "519474318",
+        "tag": "SR."
+      }
+    },
+    "adm": {
+      "kind": "project",
+      "display_name": "АДМ (административное)",
+      "aliases": [
+        "адм",
+        "каскад коммуникаций",
+        "информированность",
+        "административное"
+      ],
+      "parent": null,
+      "folder": "Entities/adm",
+      "pfs": {
+        "page_id": "519474318",
+        "tag": "АДМ."
+      },
+      "task_slug": "АДМ."
+    },
+    "alekseeva": {
+      "kind": "person",
+      "parent": null,
+      "display_name": "Алексеева Юлия",
+      "aliases": [
+        "alekseeva"
+      ],
+      "folder": "Entities/alekseeva"
+    },
+    "kotelnikova": {
+      "kind": "person",
+      "parent": null,
+      "display_name": "Котельникова Ольга",
+      "aliases": [
+        "kotelnikova"
+      ],
+      "folder": "Entities/kotelnikova"
+    },
+    "maly": {
+      "kind": "person",
+      "parent": null,
+      "display_name": "Малый Денис",
+      "aliases": [
+        "maly"
+      ],
+      "folder": "Entities/maly"
+    },
+    "peretyatkova": {
+      "kind": "person",
+      "parent": null,
+      "display_name": "Перетяткова Екатерина",
+      "aliases": [
+        "peretyatkova"
+      ],
+      "folder": "Entities/peretyatkova"
+    },
+    "pmo": {
+      "kind": "misc",
+      "parent": null,
+      "display_name": "PMO — методология",
+      "aliases": [
+        "pmo"
+      ],
+      "folder": "Entities/pmo"
+    },
+    "vstrechi_nerazobrannoe": {
+      "kind": "unknown",
+      "display_name": "Встречи неразобранное",
+      "aliases": [],
+      "pfs": {
+        "page_id": "508804852",
+        "tag": null
+      },
+      "parent": null,
+      "folder": null
+    },
+    "Contracts": {
+      "kind": "project",
+      "display_name": "Договоры и закупочная деятельность",
+      "aliases": [
+        "договоры",
+        "contracts"
+      ],
+      "parent": null
+    },
+    "platforma_analitiki": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "Демо команды платформы аналитики",
+      "aliases": [
+        "платформы аналитики",
+        "платформа аналитики",
+        "демо команды платформы аналитики",
+        "datateam",
+        "data team",
+        "datakit"
+      ],
+      "pfs": {
+        "page_id": "523016218",
+        "tag": "Платформа аналитики."
+      },
+      "folder": "Entities/platforma_analitiki"
+    },
+    "stendap_tutu": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "Стендап Туту",
+      "aliases": [
+        "стендап туту"
+      ],
+      "pfs": {
+        "page_id": "523016292",
+        "tag": "Стендап Туту."
+      },
+      "folder": "Entities/stendap_tutu"
+    }
+  }
+}

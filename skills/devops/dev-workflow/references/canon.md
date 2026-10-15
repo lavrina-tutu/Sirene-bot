@@ -56,6 +56,8 @@
 - `GATE:diagnose-review` — план фикса или тело диагноза.
 - `GATE:done` — preflight 0 и отчёт AC в origin.
 
+**`GATE:done` на workflow-only — закрывать через `pipeline next` → `AUTO_GATE` → `complete-phase`** (AC-отчёт доставлен в origin, journal-маркер `AC-delivered: origin`). Legacy-скрипт `pipeline_gate_done_preflight.py` читает `kanban.db` и требует корень `DEV/<slug>` в канбан-БД — на чисто файловом слаге (fresh-init на workflow-only, канбан выключен) он упадёт с «корень DEV/<slug> не найден» вне зависимости от готовности файлов. Это не сигнал чинить граф: префлайт-скрипт не учитывает файловую модель, а GATE:done корректно закрывается auto-gate pipeline. Исключение — слаги с живой канбан-записью корня (миграционные): там префлайт применим.
+
 **Never auto** (ждут фразу/действие в origin):
 
 - `GATE:go` (DECOMM и аналоги).

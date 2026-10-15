@@ -23,6 +23,10 @@ pipeline invoke-role --role executor \
   [--backend cursor-cli] [--model composer-2.5] [--resume <session_id>]
 ```
 
+**Всегда передавай `--slug <slug> --phase <PHASE>` в `invoke-role`.** Без них g6/canonical-трэкинг фазы не выполняется, и вызов может падать мгновенным `rc=1` с пустым stdout — фаза остаётся `doing` без живого pid, результат роли теряется. Для фазы из рецепта это те же `--slug/--phase`, что и в `complete-phase`.
+
+**Транзиентный сбой Cursor ≠ «провайдер мёртв».** Если `agent -p` отвечает `Failed to reach the Cursor API`, но `curl -I https://api2.cursor.sh` даёт HTTP 200 и токен в `~/.config/cursor/auth.json` на месте — это временный сбой сессии, не обрыв бэкенда. Смоук: `timeout 60 agent -p "Ответь ровно одним словом: ок" -f --model <модель-роли> --workspace <ws> --output-format json`; если вернул `"result":"ок"` rc=0 — Cursor жив, повторяем тот же `invoke-role` (не `interrupt`, не авто-цикл). Диагноз «бэкенд недоступен» ставь только после того, как и curl 200, и смоук-агент упали.
+
 ## Запреты
 
 - **`--continue`** у cursor-cli — запрещён (берёт «последнюю сессию каталога»).

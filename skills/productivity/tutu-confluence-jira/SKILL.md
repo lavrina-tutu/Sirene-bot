@@ -225,6 +225,43 @@ curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" \
 
 ---
 
+## JSM: создать запрос в сервисдеске (servicedeskapi)
+
+Запрос в портал сервисдеска (напр. `https://hq.tutu.ru/servicedesk/customer/portal/8/...`) создаётся **не** через `/rest/api/2/issue`, а через `POST /rest/servicedeskapi/request`:
+
+```bash
+source ~/.hermes/profiles/default/.env
+curl -s -X POST -H "Authorization: Bearer $JIRA_TOKEN" -H "Content-Type: application/json" \
+  "https://hq.tutu.ru/rest/servicedeskapi/request" -d '{
+    "serviceDeskId": "8",
+    "requestTypeId": "125",
+    "requestFieldValues": {
+      "summary": "...",
+      "customfield_25356": {"id": "20577"},
+      "description": "..."
+    }
+  }'
+```
+Ответ — `issueKey` (напр. `ADD-...`).
+
+### Найти правильный request type
+
+1. `GET /rest/servicedeskapi/servicedesk/{id}/requesttype?limit=100&start=N` — список типов (пагинация через `isLastPage`/`start`).
+2. `GET /rest/servicedeskapi/servicedesk/{id}/requesttype/{rtId}/field` — поля типа + `validValues` (опции) + `required`.
+
+**Питфолл — ссылка на группу портала, которую даёт Саша, может НЕ содержать нужный тип.** Группа 65 «Доступы» в ADD содержит только специфичные типы (Директ Кредит, ПШ, Госуслуги, безопасность, веб-аналитика, SolarStaff, мобильные, BotHub) и «Выдать доступ (NEW)», который не принимает `summary`/`description` (только выбор групп). Для Metabase/BI правильный тип — «Инструменты аналитики» (125) с опцией «Инструменты BI (MetaBase, CH, Exasol)» в поле «С чем нужна помощь». **Искать по всем request types совпадение по теме, а не только в указанной группе.**
+
+### Формат значения option-поля
+
+Работают оба: `{"id":"<optionId>"}` и `{"value":"<label>"}`. **`{"value":"<optionId>"}` (числовой id в `value`) НЕ работает** — ошибка «Идентификатор функции "null" недействителен». `optionId` брать из `validValues[].value`.
+
+### Питфоллы
+
+- **НЕ тестировать несколько форматов значения живым POST** — каждый успешный POST создаёт реальный запрос, а права на удаление запросов через API НЕТ (`DELETE /rest/api/2/issue/{key}` → 403, `DELETE /rest/servicedeskapi/request/{key}` → 500). Дубликаты придётся удалять вручную. Определять формат по схеме поля заранее; если всё же тестируешь — ожидай дубли и сразу предупреди Сашу.
+- **`description` может получить шаблонные заголовки типа** (Контекст, Польза от вашей задачи...) — отправленный текст ложится в конец под «Дополнительное описание». Отдельные поля-ссылки (напр. `customfield_27053` «Полезные ссылки») могут не заполниться — URL надёжнее класть прямо в текст `description`.
+
+---
+
 ## Важные правила процесса (регламент ТУТУ)
 
 1. **Новый договор** → задача через АДД «Нужна помощь аккаунт-менеджеров», поле «Договор (расходный/доходный)». АДД автоматически создаёт задачу MIX.

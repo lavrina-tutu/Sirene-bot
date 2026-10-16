@@ -26,6 +26,8 @@ metadata:
 
 ⚠️ **`~/.config/hermes/.env` сломан** — содержит спецсимволы в `TUTU_DOMAIN_PASSWORD`, bash падает с syntax error при `source`. Для JIRA: канон `~/.hermes/profiles/default/.env`, fallback `~/.hermes/profiles/anthropic/.env`.
 
+⚠️ **Массовый 404 на Confluence = сперва проверь токен, а не «страницы удалены».** Если ВСЕ страницы разом дают 404 (и даже заведомо живая контрольная), а тело ответа содержит `"authorized":false,"valid":true` — это **отказ авторизации, замаскированный под `No content found` (404)**, а не отсутствие страниц. Единичный 404 одного pageId (обычно SSO/private/space-rights) — другая история; правило ниже «404 = единственный выход вручную» про неё. Массовый 404 с `authorized:false` — проверь `load_confluence_env` и целостность скопированного токена: **повреждённый CONFLUENCE_TOKEN (валидные байты + мусорные хвостовые) в более-приоритетном env перекрывает рабочий** из `~/USERTOOLS/ConfluenceSync/.env`. Загрузка env идёт по порядку (`load_usertools_env()` центральный первый, фоллбек на tool-local только `if key not in os.environ`) — попавший в центральный `~/.config/hermes/.env` мусорный токен глушит валидный, ничего не бросая. Проверка: `curl -s -o /dev/null -w "%{http_code}"` на известный pageId валидным токеном (ожидай 200) — расхождение = сломан загруженный токен.
+
 Загрузить Confluence (только нужные переменные, БЕЗ распыления generic-переменных):
 ```bash
 # Загружает из ConfluenceSync/.env ТОЛЬКО токен и при необходимости WORKVAULT_PATH,

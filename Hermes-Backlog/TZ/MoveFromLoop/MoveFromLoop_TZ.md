@@ -1,9 +1,9 @@
 ---
 name: MoveFromLoop
-version: 0.4.8
+version: 0.4.9
 status: draft
 date: 2026-07-23
-last-section-added: 2026-10-12 — TZ:finalize v0.4.8 digest-lxml (ABI cron digest vs venv_linux)
+last-section-added: 2026-10-16 — TZ:patch v0.4.9 urgent_channels (DEV/mfl-urgent-channels)
 ---
 
 # MoveFromLoop — ТЗ
@@ -196,6 +196,7 @@ USERTOOLS/MoveFromLoop/
 - **2026-09-18** — v0.4.6. Чёрный список Loop: `blacklist_users` + `blacklist_channels` в `loop_rules.yaml`; дайджест режется всегда; срочный allowlist сильнее blacklist (вариант 3). ТЗ зафиксировано, реализация ждёт «берём в работу». См. §14.
 - **2026-10-11** — v0.4.7 (BUGFIX-LIGHT, `DEV/mfl-exchange-lxml`). Крон `f61b26cbbdf5` исполнял `mfl_urgent_check.py` на Python 3.14.7 управляемого venv Hermes, а Exchange-блок хардкодил `site-packages` python3.11 → `No module named 'lxml.etree'` (ErrorBus id 1825). Канон фикса — §15. Код этой фазой не пишется (`HF:impl`).
 - **2026-10-12** — v0.4.8 (`DEV/mfl-digest-lxml`). Тот же ABI-разрыв на дайджесте: крон `2865cc674493` гоняет `mfl_digest.py` напрямую на Python 3.14.5, хардкод `python3.11` на строке 73 → ErrorBus id **1828**. Leftover §15 закрывается §16 (паритет urgent: обёртка + `sysconfig.purelib` + правка reference, который учил гибрид). Код этой фазой не пишется (`HF:impl`). `TZ:finalize` 12.10: §16 зафиксирована, версия не бампилась.
+- **2026-10-16** — v0.4.9 (`DEV/mfl-urgent-channels`). Секция `urgent_channels` в `loop_rules.yaml`: все посты указанных каналов и их подтопиков доставляются срочными в `mfl_urgent_check` независимо от автора. Дедуп — общий `seen_ids`. См. §17. `TZ:finalize` 16.10: §17 зафиксирована, версия не бампилась.
 
 ---
 
@@ -1232,6 +1233,238 @@ AC-001…007 (класс S) уже в §16; показ в origin на `GATE:take
 Reuse-first: паритет канона §15 (urgent-обёртка уже в проде), тот же `venv_linux`, тот же job id, ErrorBus `resolve` / `auto_resolve_recovered`. Новых сущностей, кронов, `.env`-ключей, записей манифеста нет.
 
 Объём runtime = 3 файла вне shared-модулей USERTOOLS — **факт для оркестратора**, не команда skip / LIGHT / смены кейса (G5). Состав хвоста графа — оркестратор.
+
+Открытых вопросов Саше нет. Реализация не начинается этой фазой — ждёт `GATE:take-into-work` и хвост графа (`HF:impl`).
+
+---
+
+## §17. Доработка 16.10.2026 — срочные каналы (urgent_channels)
+
+Пакет `DEV/mfl-urgent-channels` (CHANGE, аддитивная секция). Карточка `TZ:patch`. Код на этой фазе **не** меняется — реализация `HF:impl`. Версия корпуса бампнута 0.4.8→0.4.9 во frontmatter этим `TZ:patch`; `TZ:finalize` пакета повторно не повышает, если frontmatter уже 0.4.9.
+
+Требование Саши: отслеживать новости канала
+`https://loop.tutu.ru/tutu/channels/ai-analitik-multiagentnaya-sistema-aid`
+во всех его подтопиках как срочные. Объект (факт): канал `ai-analitik-multiagentnaya-sistema-aid`, `id=jqhs9np3i3nj7qxh3e4hm6ox1r`, type=OPEN; `GET /api/v4/channels/{id}/topics` → 15 подтопиков, у всех `parent_id` = этот канал.
+
+Расширяет §C (`loop_rules.yaml`) и оркестратор срочного режима (`urgent.py` / `mfl_urgent_check`). Дайджест, синк контактов v1, Exchange-контур и кроны не входят.
+
+### Цель
+
+Доставлять **все** новые посты указанных каналов Loop и всех их подтопиков в топик Messages как срочные (`mfl_urgent_check`), независимо от автора.
+
+### I1 / I2 (current → target)
+
+**I1 (критический).** `current`: срочный путь (`urgent.py`) тянет только mentions (`fetch_mentions`, `mention_count > 0`) и оставляет пост, если `user_id ∈ urgent_user_ids` (`is_urgent`). Канал AID и его 15 подтопиков без меншна Саши и без автора из `urgent_contacts` в 🔴 не попадают. `watch_channels` кормит только дайджест.  
+`target`: ключ `urgent_channels` в `loop_rules.yaml` (имя или 26-символьный id, как `watch_channels` / §14). На каждом тике срочного крона: резолв каждого элемента в `channel_id` + все подтопики `GET /api/v4/channels/{id}/topics`; `posts_since` по **всем** резолвленным id (включая сам канал); все полученные посты — 🔴, без фильтра автора.
+
+**I2.** `current`: пустой `urgent_contacts` → `run_urgent` сразу двигает `urgent_last_ts` и SILENT (ранний выход до fetch).  
+`target`: этот shortcut **только** если пусты оба списка (`urgent_contacts` и `urgent_channels`). Непустой `urgent_channels` при пустых контактах — штатный прогон channel-пути.
+
+### 17.1 Модель данных
+
+Секция в `~/USERTOOLS/MoveFromLoop/loop_rules.yaml` (единственный источник правды правил мониторинга):
+
+```yaml
+# Срочные каналы: имя без # либо channel_id 26 символов. Как watch_channels (§C / §14).
+# Резолв → channel_id + все подтопики GET /api/v4/channels/{id}/topics.
+# Все посты этих id уходят 🔴 независимо от автора (отдельный allowlist, не urgent_contacts).
+urgent_channels:
+  - ai-analitik-multiagentnaya-sistema-aid  # id=jqhs9np3i3nj7qxh3e4hm6ox1r OPEN
+```
+
+| Что хранить | Почему |
+|---|---|
+| **Имя канала или 26-символьный id** | Как `watch_channels` + существующий `ChannelResolver.resolve_id()`. Display-name («AI-АналИтик…») — не ключ. |
+| **Не список подтопиков** | Подтопики резолвятся на рантайме; YAML не дублирует 15 id и не устаревает при появлении нового topic. |
+| **Пустой список / ключ отсутствует** | Поведение как до фичи. |
+
+В датаклассе `Rules` (`movefromloop/rules.py`): поле `urgent_channels: List[str]` (default `[]`). `load_rules` / `save_rules` пишут ключ **явно** (иначе round-trip ruamel его потеряет — урок §14). Чужие ключи (exchange-поля) не затираются.
+
+Мутаторы (идемпотентны, как `add_channel` / `add_blacklist_channel`): `add_urgent_channel(path, channel)` / `remove_urgent_channel(path, channel)`. Новый CLI / новые команды Сирени **не** в минимальный контур: seed пишет `HF:impl` в YAML; «покажи правила» (§C) уже показывает файл. `user_id` / `mattermost_id` в YAML и в `contacts.enc` не писать (инвариант §4 / §9).
+
+Новых сущностей, кронов, `.env`-ключей нет.
+
+### 17.2 Алгоритм (срочный путь)
+
+Дополнение `run_urgent` (`movefromloop/urgent.py`). Контакт-путь (`fetch_mentions` + `is_urgent` + `should_drop(..., mode="urgent")`) **не переписывается**. Channel-путь — отдельное ведро, merge по `post.id`.
+
+```
+load rules + state (watermark.json, prune как сейчас)
+if urgent_contacts пуст AND urgent_channels пуст:
+    watermark → now; SILENT                    # бывший shortcut, сужен
+# контакт-путь — как сейчас (если urgent_contacts непуст)
+# ★ channel-путь (если urgent_channels непуст):
+★ для каждого name_or_id в urgent_channels:
+    cid = ChannelResolver.resolve_id(name_or_id)   # имя или 26-char id
+    если не резолвится → stderr, этот элемент YAML skip в этом прогоне
+    parent_ids += {cid}
+    GET /api/v4/channels/{cid}/topics → взять id каждого элемента
+    (наблюдаемо: 15 штук, parent_id = cid; рекурсию topics-of-topics не делать)
+    ошибка topics → stderr, ведро = {cid} (fail-open на детях, родитель остаётся)
+★ resolved = parent ∪ topic ids
+★ для каждого id: LoopClient.posts_since(id, urgent_watermark)   # reuse fetcher
+    ошибка одного id → stderr, skip этот id (паттерн fetch_watched / mentions_fetcher)
+★ channel_posts = все посты; фильтр автора НЕТ
+★ drop if state.is_seen(id)                                    # общий seen_ids
+★ merge с контакт-путём по post.id (один пост — один раз)
+★ my_username на этапе format — как сейчас (свои посты не алертим)
+format_urgent → mark_seen(ids) → urgent_last_ts как сейчас
+```
+
+Дедуп: существующий `State.is_seen` / `mark_seen` (ключ `seen_ids` в `state/watermark.json`, TTL 48 ч). Отдельного `seen_urgent_ids` / нового state-файла нет (исторический `urgent_watermark.json` из §D давно сведён в общий watermark; новый ключ не вводить). Дайджест уже проверяет `is_seen` — пост, ушедший 🔴, в часовой дайджест не дублируется.
+
+Reuse-first: `posts_since` уже в `LoopClient`; `fetch_watched` умеет тянуть список id. Новый код — резолв topics + merge ведра. Метод `channel_topics(channel_id)` в `loop_api.py` (тот же endpoint, что LoopChannelDigest; curl-клиент LCD **не** импортировать). Расширение `ChannelResolver` — `resolve_id` + topics → `set[str]` id.
+
+Первый прогон: окно = текущий `get_urgent_watermark()` (default lookback 10 мин). Отдельного backfill истории канала нет.
+
+### 17.3 Приоритет относительно чёрного списка (§14) и urgent_contacts
+
+`urgent_channels` — **отдельный channel-allowlist**, ортогональный `urgent_contacts` (user-allowlist). Доставляет **все** посты резолвленных id независимо от автора: и бот `ai-assistant` (уже в `blacklist_users`), и человек не из `urgent_contacts`. Срочность канала первостепенна, как вариант 3 для контактов.
+
+Контакт-путь по-прежнему вызывает `should_drop(..., mode="urgent")` без изменения предиката §14. Channel-ведро **не** пропускать через `should_drop_by_blacklist` (bucket isolation): иначе blacklist-user / blacklist-channel съест новости AID. Предикат §14 не переписывать.
+
+| Кто / где | Дайджест | Срочный 🔴 |
+|---|---|---|
+| Автор ∈ `urgent_contacts`, канал обычный | как §14 | **уходит** (контакт-путь) |
+| Автор ∉ `urgent_contacts`, канал ∈ `urgent_channels` (или его topic) | как сейчас (keywords/mentions/blacklist) | **уходит** (channel-путь) |
+| Автор ∈ `blacklist_users` (напр. `ai-assistant`), канал ∈ `urgent_channels` | вырезан (§14) | **уходит** |
+| Канал одновременно в `blacklist_channels` и `urgent_channels` | вырезан (§14) | **уходит** (channel-allowlist сильнее) |
+| Автор ∈ `urgent_contacts` ∩ пост в `urgent_channels` | как §14 | **уходит** один раз (merge по id) |
+| `urgent_channels` пуст | без изменений | без изменений (только контакт-путь) |
+| Только `my_username` | как сейчас | как сейчас (format skip) |
+
+Формула срочного:
+
+- контакт-ведро: `is_urgent ∧ ¬seen ∧ ¬should_drop(..., mode="urgent")` — канон §14;
+- channel-ведро: `channel_id ∈ resolved(urgent_channels ∪ topics) ∧ ¬seen` — автор и blacklist **не** фильтр;
+- union по `post.id`.
+
+Списки ортогональны: канал в `urgent_channels` **не** удалять из `watch_channels` / `blacklist_*` автоматически.
+
+### 17.4 Изменяемые файлы (план реализации)
+
+| Файл | Что |
+|---|---|
+| `loop_rules.yaml` | ключ `urgent_channels` + seed `ai-analitik-multiagentnaya-sistema-aid` (комментарий с id) |
+| `movefromloop/rules.py` | поле, load/save явно, 2 мутатора |
+| `movefromloop/loop_api.py` | `channel_topics(channel_id)` → `GET /api/v4/channels/{id}/topics` |
+| `movefromloop/channel_resolver.py` | expand: `resolve_id` + topics → set id (родитель ∪ дети, без рекурсии) |
+| `movefromloop/urgent.py` | сузить empty-contacts shortcut; channel-ведро; merge; `mark_seen` общий |
+| `tests/test_rules.py` | load/save/add/remove, default `[]`, round-trip ruamel |
+| `tests/test_urgent.py` | посты без urgent-автора из канала/topic → 🔴; blacklist-user в urgent-канале → 🔴; `is_seen` глушит повтор; пустой ключ = старое поведение; пустые contacts + непустые channels ≠ ранний SILENT |
+| `tests/test_channel_resolver.py` или `test_loop_api.py` | topics → 15+1 id; 404/ошибка topics → только родитель |
+
+`mentions_fetcher.fetch_watched` можно reuse после expand (список уже id). `blacklist.py` / предикат §14 **не** трогать при bucket isolation. `digest.py` не менять: дедуп через уже существующий `is_seen`. `mfl_urgent_check.py` и job `f61b26cbbdf5` не менять (вход — тот же `run_urgent`).
+
+Объём runtime > 3 файлов USERTOOLS — **факт для оркестратора**, не команда skip / LIGHT / смены кейса (G5).
+
+### 17.5 Что НЕ трогать
+
+- Синк контактов v1 (`sync.py`, `filters.py`, `mapper.py`, `__main__.py`, крон вс 03:30).
+- Инвариант «не писать `mattermost_id`» (§4, §9).
+- `digest.py` и job `2865cc674493` (дайджест не становится каналом доставки этой фичи).
+- Exchange-контур (`movefromloop/exchange_*.py`, пакет `~/USERTOOLS/ExchangeMonitor`).
+- Расписание, `job_id`, `script`, `deliver`, `no_agent` кронов `f61b26cbbdf5` / `2865cc674493`. Новый крон / «ставь кроны» / рестарт Gateway — нет.
+- Предикат `should_drop_by_blacklist` и канон варианта 3 (§14) — не переписывать; channel-ведро его просто не вызывает.
+- `formatter.py` (формат карточки / `🔴 СРОЧНО`), `urgency_checker.is_urgent` (остаётся user-allowlist).
+- LoopChannelDigest (on-demand, свой curl-клиент; Q2 LCD: не импортировать его клиент в крон MFL).
+- Архивация §AA–§AI; ContractAssistant в `mfl_*` (Границы v0.4.5).
+- Схема `watermark.json` (новых ключей seen/watermark нет). Содержимое `.env` / `contacts.enc`.
+- §15 / §16 runtime (venv-обёртки).
+
+### 17.6 Связи с экосистемой
+
+- **Читает:** `loop_rules.yaml` (новый ключ), Loop API v4 (`/teams/{team}/channels/name/{name}`, `/channels/{id}`, `/channels/{id}/topics`, `/channels/{id}/posts?since=`), `state/watermark.json` (`urgent_last_ts`, `seen_ids`, кэши).
+- **Пишет:** `loop_rules.yaml` (seed + мутаторы); `seen_ids` / `urgent_last_ts` — существующее поведение urgent. `contacts.enc` не читает и не пишет (в отличие от `urgent_contacts`).
+- **Зависит от:** итерация 1 мониторинга (уже в проде), `ChannelResolver`, `LoopClient.posts_since`, общий `State`. Endpoint topics — тот же, что LoopChannelDigest; реализация — в `LoopClient` этого пакета.
+- **Параллельно:** дайджест (дедуп через `seen_ids`); ExchangeMonitor / `exchange_*` — **не** применяют `urgent_channels`; LCD — не крон.
+- **Не зависит от:** манифеста, `EcosystemConfig.yaml`, новых сущностей, новых `.env`-ключей.
+- **Новых внешних контрактов нет.** Потребитель по-прежнему `api_telegram` (топик Messages, `deliver=telegram:-1004300127777:6556`). Поле `text` без изменения схемы. `GET /topics` — тот же `api_loop`, не новый контракт.
+
+### 17.7 IAC / AC и тест-кейсы
+
+Нет `depends: operator:` (класс S). Seed канала в YAML пишет `HF:impl`, не глагол Саши.
+
+| IAC | path | verify | depends | covers |
+|---|---|---|---|---|
+| **IAC-01** | `loop_rules.yaml` + `movefromloop/rules.py` | `load_rules` видит `urgent_channels`; seed содержит `ai-analitik-multiagentnaya-sistema-aid` или id `jqhs9np3i3nj7qxh3e4hm6ox1r`; default без ключа = `[]`; `save_rules` ключ не теряет; add/remove идемпотентны. `cd ~/USERTOOLS/MoveFromLoop && python3 -m pytest -q tests/test_rules.py` | — | 17.1, AC-001 |
+| **IAC-02** | `loop_api.py` + `channel_resolver.py` + `urgent.py` (channel-ведро) | mock `GET .../topics` → 15 объектов с `parent_id`=родитель; resolved = 16 id; `posts_since` вызван по каждому; пост автора ∉ `urgent_contacts` из родителя и из topic попадает в результат `run_urgent`; ошибка topics → fetch только родителя. pytest `test_urgent` / resolver | IAC-01 | 17.2, AC-002 |
+| **IAC-03** | `urgent.py` + `state.seen_ids` | blacklist-user (`ai-assistant`) в urgent-канале → 🔴 есть; повторный прогон того же `post.id` → SILENT (`is_seen`); пустой `urgent_channels` + непустой `urgent_contacts` = поведение до фичи; пустой contacts + непустой channels ≠ ранний SILENT; job `f61b26cbbdf5` `id`/`schedule`/`script`/`deliver` без diff. `python3 -m pytest -q tests/test_urgent.py` | IAC-01, IAC-02 | 17.3, AC-003 |
+
+### Критерии приёмки (AC)
+
+Только этот пакет. Наблюдаемое поведение / артефакт. Класс S (поезд не ждёт Сашу).
+
+### AC-001 — ключ YAML и seed канала AID
+
+В `loop_rules.yaml` есть `urgent_channels` со значением имени `ai-analitik-multiagentnaya-sistema-aid` и/или id `jqhs9np3i3nj7qxh3e4hm6ox1r`. `Rules.urgent_channels` читается и пишется явно. Пустой список = фича выключена. Новых `.env`-ключей и job нет.
+
+### AC-002 — все посты канала и подтопиков, независимо от автора
+
+Один прогон `run_urgent`: резолв seed-канала даёт родитель + подтопики из `/topics`; `posts_since` по всем id с `urgent_last_ts`. Пост в родителе и пост в подтопике от автора, которого нет в `urgent_contacts`, оба дают 🔴 (формат `format_urgent` как сейчас). Авторский фильтр `is_urgent` на это ведро не действует.
+
+### AC-003 — доставка, дедуп, blacklist, границы
+
+Выход по-прежнему stdout `run_urgent` → существующий `mfl_urgent_check` → `deliver :6556`. Доставленный `post.id` в `seen_ids`; второй тик его не повторяет; дайджест с тем же state его не берёт (`is_seen`). Пост blacklist-user в urgent-канале уходит 🔴. Diff не трогает кроны, `digest.py`, Exchange, `contacts.enc`, предикат §14, схему watermark. Gateway не рестартован.
+
+Тест-кейсы (инварианты, pytest):
+
+1. Пост в seed-канале от неизвестного автора → 🔴.
+2. Пост в подтопике (`parent_id` = seed) от того же неизвестного → 🔴.
+3. Пост от `ai-assistant` (blacklist) в seed-канале → 🔴.
+4. Тот же `post.id` на втором прогоне → нет 🔴.
+5. `urgent_channels: []` → `run_urgent` совпадает с контуром до фичи (только contacts/mentions).
+6. `urgent_contacts: []` + непустой `urgent_channels` → нет раннего SILENT, channel-ведро работает.
+7. Нерезолвнутое имя в YAML → stderr, остальные элементы списка живы.
+8. `/topics` 5xx после retry → родитель всё равно fetch, дети skip.
+9. `add_urgent_channel` дважды не дублирует строку.
+10. Контакт-путь §14 не регрессирует (`test_urgent` / `test_blacklist` зелёные).
+
+Верификация после реализации:
+
+```
+cd /home/tkachenkoav/USERTOOLS/MoveFromLoop
+python3 -m pytest -q
+```
+
+### 17.8 Риски
+
+| Риск | Mitigation |
+|---|---|
+| Ранний SILENT при пустых contacts съест channel-ведро | I2 + тест 6 обязательны. |
+| Вызвать `should_drop` на channel-ведре | Съест бота AID. Только bucket isolation. Тест 3. |
+| Рекурсия topics-of-topics | Не делать: факт = 1 уровень, 15 детей. |
+| 16× `posts_since` каждые 3 мин | Reuse клиента с retry/pause; ошибка одного id не валит прогон. |
+| LCD curl-клиент в крон | Запрещено §AH/LCD Q2. Только `LoopClient`. |
+| Backfill всей истории канала | Нет: окно = текущий urgent watermark. |
+| Дайджест как страховка | Не цель пакета. Дедуп `seen_ids` как сейчас. |
+
+Открытых вопросов Саше нет. Реализация не начинается этой фазой.
+
+---
+
+## TZ:finalize 2026-10-16 — urgent-channels
+
+Версия корпуса **не** бампится повторно: frontmatter уже **0.4.9** с `TZ:patch` 2026-10-16 (`DEV/mfl-urgent-channels`, REV:tz APPROVE). Пакет: секция `urgent_channels` в `loop_rules.yaml` — все посты указанных каналов и их подтопиков (`GET /api/v4/channels/{id}/topics`) доставляются 🔴 срочно независимо от автора; отдельный channel-ведро, bucket isolation от §14, общий `seen_ids`, merge по `post.id`. Seed `ai-analitik-multiagentnaya-sistema-aid` (id `jqhs9np3i3nj7qxh3e4hm6ox1r`, 15 подтопиков). Дельта `TZ:patch` (§17) включена без правок канона.
+
+Чеклист качества (Шаг 4 `tz-workflow`):
+
+- [x] Цель одним предложением (§17 Цель: все посты указанных каналов и подтопиков → Messages как срочные, независимо от автора)
+- [x] Входы и выходы явны (`loop_rules.yaml`, Loop API topics/posts_since, `run_urgent` → `deliver :6556`; контракты без новых внешних полей)
+- [x] Шаги impl атомарны (§17.2 алгоритм + таблица 17.4)
+- [x] Критерии успеха проверяемы (IAC-01…03, AC-001…003)
+- [x] «Что НЕ трогать» заполнено (§17.5)
+- [x] Связи с экосистемой (§17.6 + контракты: api_loop, api_telegram `:6556`, ErrorBus Mode A без смены схемы)
+- [x] Контракты по стандарту (раздел «Контракты экосистемы»; новых внешних контрактов нет)
+- [x] Открытые вопросы закрыты
+- [x] I1 / I2 `current` / `target` в §17
+- [x] AC только пакета, класс S, нет `depends: operator:`
+
+AC-001…003 (класс S) уже в §17; показ в origin на `GATE:take-into-work` (auto-pass `ac-shown`). Operator-hold нет.
+
+Reuse-first: `ChannelResolver`, `LoopClient.posts_since`, общий `State.seen_ids`; endpoint topics — тот же, что LoopChannelDigest, реализация в `LoopClient` этого пакета (curl-клиент LCD не импортировать). Новых сущностей, кронов, `.env`-ключей, записей манифеста нет.
+
+Объём runtime > 3 файлов USERTOOLS — **факт для оркестратора**, не команда skip / LIGHT / смены кейса (G5). Состав хвоста графа — оркестратор.
 
 Открытых вопросов Саше нет. Реализация не начинается этой фазой — ждёт `GATE:take-into-work` и хвост графа (`HF:impl`).
 

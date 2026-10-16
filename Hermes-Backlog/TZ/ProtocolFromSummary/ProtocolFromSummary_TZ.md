@@ -1,9 +1,9 @@
 ---
 tool: ProtocolFromSummary
-version: "1.28.1"
-date: 2026-10-14
+version: "1.29.0"
+date: 2026-10-15
 status: active
-last-section-added: "§33 Сигнал проекта = assignee ∪ текст задачи (TZ:finalize 14.10.2026, DEV/zadacham-vstrechi-kirill-1-1-14-10-ne-prostavlya, master 1.28.1, REV:tz APPROVE)"
+last-section-added: "§34 Слаг задач на площадке «необработанных» ДО promote (pfs-slug-prebuild, 2026-10-15, v1.29.0, DEV/pfs-slug-prebuild, REV:tz APPROVE)"
 ---
 
 <!--
@@ -7767,3 +7767,450 @@ notes/`project_bind` — контекст, не uniqueness. Решение Са�
 не меняются; не 1.28.0 повторно).
 Шапка master и `MAIN_TZ_INVENTORY.md`: **1.28.0 → 1.28.1**
 (`TZ:finalize` 14.10.2026 после REV:tz APPROVE).
+
+## §34. Слаг задач на площадке «необработанных» ДО promote (pfs-slug-prebuild, 2026-10-15, v1.29.0)
+
+**TZ:finalize 15.10.2026 (master 1.29.0).** Текст §34 зафиксирован.
+REV:tz APPROVE (DEV/pfs-slug-prebuild). Замечание REV (не блокер,
+REQUIRED на finalize): формула `task_key` копируется из
+`markobjectsfromsummary.project_bind.task_key` **включая `.strip()`**
+на обоих полях. Открытый Q-1 не блокер (класс S). Код picker /
+парсер / ingest **не** пишутся на этой фазе (запись = `HF:impl`
+после `HF:plan` / `GATE:take-into-work`). Pre-impl маркеры
+«инвентарь / version bump — не этот ход» сняты.
+
+Накопительная дельта CHANGE `DEV/pfs-slug-prebuild`. Не ретрофитит
+§1–§33; §29 остаётся каноном picker / формата / AC-001…015;
+§33 остаётся каноном `assignee ∪ task.text`, notes вне uniqueness,
+fallback 1/0/≥2, питфолл Q, allowlist 14. Этот § **усиливает** момент
+постановки (ingest площадки, не promote / не PUT цели) и **расширяет**
+uniqueness на блок обсуждения **этой** задачи и eligible-наводку
+MOFS `project_bind`. Закрывает §33 Q-2 **вариантом 2** (наводка bind
+входит в uniqueness этой задачи). Текст §33 не переписывается.
+
+**Маркер I1.** `current` = прод v1.28.1 (`ed7878a`): picker in-scope
+живёт в `protocol_publish` / `_post_switch_pass_one` **перед**
+`render_row`; uniqueness = `assignee ∪ task.text`; `MeetingSummary.notes`
+и YAML `projects:` вне uniqueness; MOFS `project_bind` **не** входит
+в детектор (Q-2 §33, рекомендация 1); встреча
+`2026-10-15 07-30-00 Кирилл 1-1` на площадке `523032632` — задача
+«Создать аналитику по использованию тест-бота…» без `task_slug`, хотя
+MOFS hypothesizes `ai_analitik`; promote = 0 picker (AC-012); td1
+площадки несёт префикс **только если** pass 1 уже склеил его.
+`target` = эта работа: постановка слага канонически завершена **до
+PUT площадки** (проход 1 / ingest «необработанных»); td1 уже
+префиксован **до** promote; uniqueness этой задачи =
+`assignee ∪ task.text ∪ блок обсуждения задачи ∪ eligible project_bind`;
+не «средняя тема встречи»; 1-1 с несколькими проектами — **per-task**,
+не majority встречи; promote по-прежнему 0 picker; MOFS **не** пишет
+`task_slug` (читает только PFS).
+
+---
+
+### Цель
+
+На in-scope встречах (1-1 / неразобранное / синк АиД / Лёня) каждая
+задача получает `task_slug` **на площадке необработанных**
+(`523032632`) **до** переноса в чистовые минутки. Источник сигнала —
+смысл **этой** задачи (исполнитель, текст, её обсуждение, наводка
+MOFS), не общая тема 1-1.
+
+---
+
+### Момент постановки (ingest, не публикация цели)
+
+Единая точка picker **не переезжает** в `playground_ingest.py` и
+**не** появляется на проходе 2. Ingest копирует уже собранный XML
+(канон §23: `render_playground_row_from_battle` = td0+td1 из боевой
+строки). Picker работает по `MeetingTask`, не по storage-html.
+
+Канон момента:
+
+```
+parse summary → mention/deadline
+  → [in-scope] apply_task_slugs   # uniqueness этого §
+  → render_row (tag_prefix=None, text уже с префиксом)
+  → [PFS_POST_SWITCH] PUT только площадки 523032632
+      (ingest_after_publish / _post_switch_pass_one)
+  → td1 площадки УЖЕ содержит task_slug
+  → Саша ставит td3 «обработано»
+  → promote_meeting: strip/copy td1, picker = 0 (AC-012)
+```
+
+| Событие | Picker | Префикс в `MeetingTask.text` / td1 |
+|---|---|---|
+| Проход 1 in-scope (`protocol_publish` / `_post_switch_pass_one`) **до** `render_row` и **до** PUT площадки | **да**, один batch | ставится здесь |
+| `ingest_after_publish` | **нет** (копирует префиксованный XML) | сохраняется |
+| `promote_meeting` / `second_pass_all` | **нет** (AC-012, assert 0) | копируется verbatim |
+| PUT `route.page_id` (флаг off, прямой контур) | как §29: до `render_row` боевой строки | этот пакет **не** выключает флаг и **не** требует post-switch |
+| Republish той же встречи | фильтр входа as-is (§29 AC-004) | второй префикс не клеится |
+
+Инвариант пакета (наблюдаемый): после успешного ingest
+(`action=published` при пост-switch **или** `playground_ingested_at`
+set) td1 площадки для in-scope задач, у которых uniqueness дала
+ровно один closed_list-slug, **startswith** канонического
+`task_slug`. Promote это не пересчитывает.
+
+Не делать: звать picker внутри `playground_ingest.py` (нет
+`MeetingTask`); звать picker на promote «на всякий случай»;
+пересчитывать слаг в момент PUT цели.
+
+---
+
+### Норматив сигнала (per-task, не тема встречи)
+
+`batch_has_project_signal` = True, если **хотя бы у одной** задачи
+batch есть сигнал. Uniqueness и fallback считаются **по каждой
+задаче отдельно**.
+
+| Источник | Входит в uniqueness этой задачи? |
+|---|---|
+| `task.assignee` ∩ identities(closed_list) | да (§33) |
+| `task.text` as-is ∩ identities(closed_list) | да (§33) |
+| **Блок обсуждения этой задачи** ∩ identities(closed_list) | **да** (этот §) |
+| Eligible MOFS `project_bind` этой задачи (`slug` ∈ closed_list) | **да** (этот §; закрывает Q-2 §33 вариантом 2) |
+| `MeetingSummary.notes` / секция «Обсудили:» / YAML `projects:` / `meeting_name` / «средняя тема 1-1» | **нет** (§33 AC-002 жив) |
+| `project_bind` **другой** задачи той же встречи | **нет** |
+| bind `status ∈ {unbound, rejected}` / пустой `slug` / slug ∉ closed_list | **нет** (игнор, не голос) |
+
+Идентичности — `_project_identities(closed)` / `_norm_cell` как §33.
+Closed_list = 14 (§31 handover). `known_prefixes()` — фильтр **входа**
+batch, не uniqueness.
+
+Notes остаются в **контексте** batch-промпта (§29: модель слышит
+«Обсудили:»). В детектор и в fallback их **не** класть.
+
+---
+
+### Блок обсуждения задачи
+
+Не секция «Обсудили:» и не YAML встречи.
+
+**Определение (наблюдаемое).** В секции «Задачи» у позиции задачи:
+продолжение того же bullet после канонического `assignee: text /deadline`
+(хвост строки за основным текстом, кроме дедлайна) **плюс** вложенные
+indented-строки до следующего top-level bullet с `assignee:`. Пусто →
+источник не голосует (не fail).
+
+Реализация: аддитивное optional-поле `MeetingTask.discussion: str = ""`
+(дефолт пусто — существующие конструкторы/тесты без поля не ломаются).
+Парсер заполняет; `_SECTION_NAMES` **не** менять. Поле **не** выносить
+в шапку CONTRACTS (внутреннее uniqueness, не drift-check).
+
+---
+
+### Наводка MOFS `project_bind` (читать, не писать)
+
+PFS **читает** frontmatter summary (`project_bind` map, ключ =
+MOFS `task_key(assignee_raw, text)`). **Скопировать точную формулу**
+из `markobjectsfromsummary.project_bind.task_key`, включая `.strip()`
+на обоих полях (`assignee_raw`, `text`) до склейки:
+
+```python
+raw = f"{assignee_raw.strip()}|{text.strip()}".lower()
+digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+return f"task-{digest}"
+```
+
+HF:impl повторяет ключ вплоть до пробелов (на фактических данных
+расхождение не возникает — assignee/text уже очищены парсером, —
+но формулировка критична для детерминированного match PFS↔MOFS).
+Пакет MOFS **не** импортировать и **не** патчить (AC-009 §29).
+
+Eligible, если **все** истинны:
+
+1. запись нашлась по ключу этой задачи;
+2. `status ∈ {hypothesized, confirmed}`;
+3. `slug` непустой **и** `slug ∈ closed_list` (14).
+
+`unbound` / `rejected` / `sr` вне 14 / пустой slug → игнор.
+`provenance` (`mofs_auto` / `mofs_llm_fallback` / `manual_via_mofs`)
+на eligibility **не** влияет: ручная наводка Саши через `mofs edit`
+равна авто, если status confirmed/hypothesized.
+
+PFS **не** пишет `project_bind`, **не** меняет `status`, **не** ставит
+префикс во frontmatter. Владелец `<ac:task-body>` — по-прежнему только
+PFS picker на проходе 1.
+
+Эталон 15.10 (не AC «все задачи встречи»): задача «Создать аналитику
+по использованию тест-бота продуктами и соответствию задач Jira» —
+в `task.text` нет identity closed_list, MOFS hypothesizes
+`ai_analitik` ∈ 14 → uniqueness = 1 → fallback/`AI-аналитик.` на
+td1 площадки **до** promote.
+
+---
+
+### Правило 1-1 с несколькими проектами
+
+Встреча `kind=one_on_one` / `person_1on1` **может** нести задачи
+разных проектов. Запрещено: один `task_slug` на всю встречу;
+majority / «о чём в целом говорили»; перенос bind задачи A на
+задачу B; intersection notes.
+
+| Задача | Сигнал только её источников | Выдача |
+|---|---|---|
+| A | unique `ai_analitik` (текст или bind или обсуждение) | `AI-аналитик.` |
+| B | unique `adm` | `АДМ.` (или фактический `task_slug`) |
+| C | 0 входов | fail-soft, без проектного слага |
+| D | ≥2 разных slug в **её** union | fail-soft, не угадывать |
+
+LLM по-прежнему **один** batch на встречу (§29 AC-007); ответ —
+per `task_index`. Валидная строка модели побеждает fallback
+(§29 AC-005 / §33).
+
+---
+
+### Fallback 1 / 0 / ≥2 на union
+
+После разбора LLM, для каждой задачи batch без валидной строки
+модели. Множество slug = hits(`assignee`) ∪ hits(`text`) ∪
+hits(`discussion`) ∪ `{bind.slug если eligible}`.
+
+| `len(slug set)` | Действие |
+|---|---|
+| ровно 1 | `new_text = canonical_task_slug + orig_text` (точка слага = разделитель, без пробела, как §29) |
+| 0 | `_fail_soft_text` (as-is; meeting-level `pfs.tag` если есть) |
+| ≥2 | fail-soft, **не** угадывать, **не** брать bind «как тай-брейк», **не** majority встречи |
+
+Bind vs текст: bind=`ai_analitik`, text матчит другой closed_list-slug
+→ ≥2 → fail-soft. Bind unique + text без identity → 1 → префикс
+(кейс 15.10).
+
+Empty-warn `"task_slug LLM empty response"` — только если сигнал
+(union) был, валидного выбора модели нет **и** fallback не склеил
+уникальный матч. Чистая 1-1 без union-сигнала — штатный fail-soft,
+empty-warn нет (питфолл Q §33 жив).
+
+---
+
+### Scope
+
+Входит (нормы; код = `HF:impl`):
+
+1. Канон момента: picker до PUT площадки; ingest копирует
+   префиксованное; promote = 0 picker.
+2. Uniqueness += discussion этой задачи + eligible bind.
+3. Per-task правило 1-1 с несколькими проектами.
+4. Fallback 1/0/≥2 на union.
+5. Optional `MeetingTask.discussion` (дефолт `""`).
+6. Аддитивные тесты (таблица IAC).
+
+Не входит: реализация в этом ходе; пересмотр allowlist 14;
+picker на проходе 2; запись `task_slug` / `project_bind` из MOFS;
+новые поля шапки CONTRACTS; `[NEW-ENTITY]`; выключение
+`PFS_POST_SWITCH`.
+
+---
+
+### Non-goals
+
+- Звать picker в `playground_ingest.py` / `promote_meeting`.
+- Писать `task_slug` или `project_bind` из MOFS / OFC / TaskRefresh.
+- Класть notes / YAML `projects:` / `meeting_name` в uniqueness.
+- Открывать allowlist 14 / добавлять `sr` (Q-1 §33 в полёте).
+- Менять сигнатуры `protocol_publish` / `process_pending` /
+  `row_anchor_for` / `page_merger.*` / `summary_parser._SECTION_NAMES`.
+- Бамп `schema_version` `entities.json` / `_registry.json`.
+- Gateway, `jobs.json`, `.env`, `EcosystemManifest.json`.
+- Dual-render чекбокса на минутках проекта (§22 post-switch target).
+
+---
+
+### Объём (факт для оркестратора, не skip фаз)
+
+Ожидаемые файлы `HF:impl` (оценка, не команда LIGHT):
+`task_slug.py` + `summary_parser.py` (`MeetingTask.discussion`) +
+`tests/test_task_slug.py` (+ точечный тест ingest: td1 префикс до
+promote). Файлы вне одного модуля → **не LIGHT**. `set-case
+CHANGE-LIGHT` с этой карточки **не** предлагать (G5).
+
+---
+
+### Что НЕ трогать
+
+- Канон §29 AC-001 (формат `{mention} {task_slug}{текст}`),
+  AC-004 (идемпотентность входа), AC-005 (лучший кандидат),
+  AC-006 (не выдумывать), AC-007 (один batch), AC-008 (LLM_CONFIG),
+  AC-009 (MOFS не **пишет** `task_slug`), AC-012 (проход 2 = 0 picker),
+  AC-013 (дедуп без префиксов).
+- Канон §33: notes вне uniqueness; питфолл Q; fallback 1/0/≥2
+  (этот § расширяет **входы** fallback, не отменяет таблицу).
+- Канон §24/§27/§28 (пост-switch, verbatim, sink_aid).
+- Канон §31 handover: allowlist 14; П.4a Кирилл 30.09.
+- Канон §32 (`skipped_empty`).
+- §30 `LLM_FALLBACK_*` / `_dedup_llm_fn`.
+- Ядро: `route.py`, формула `row_anchor`, N-3, `523032632` не в
+  `pfs.page_id`.
+- `jobs.json`, `.env`, Gateway, `EcosystemManifest.json`.
+- ТЗ ErrorBus / AnywhereContacts (mention as-is; display PII).
+
+---
+
+### Связи с экосистемой
+
+| Инструмент | Связь |
+|---|---|
+| EntityRegistry | closed_list 14 as-is; writer `task_slug` — CLI, не PFS |
+| MarkObjectsFromSummary | **не** ставит `task_slug`; PFS **читает** per-task `project_bind` как наводку uniqueness; код MOFS не патчить |
+| TaskRefresh F2 | после фикса in-scope чекбоксы на цели несут префикс (цель §29 AC-011); площадка не дом задачи |
+| ErrorBus | empty-warn только при неспасённом union-сигнале; `--tool ProtocolFromSummary`; три литерала skip §31 не склеивать |
+| AnywhereContacts | резолв mention as-is; display PII не трогать |
+| площадка `523032632` | td1 несёт префикс **до** processed/promote |
+
+---
+
+### Контракты экосистемы
+
+Новых полей шапки нет. Coverage-поверхность drift-check — шапка
+(`entities.task_slug` / `MeetingTask.text` / `ac:task-body` уже
+там). Этот h3 парсер `render_manifest.py` не читает (как §29/§33).
+
+**Источник истины (уточнение).** Владелец префикса в
+`<ac:task-body>` — ProtocolFromSummary picker на проходе 1 **до
+PUT площадки**. Uniqueness — union этой задачи, не notes и не
+тема встречи. MOFS владеет тенью `project_bind`; PFS — только
+читатель eligible-наводки.
+
+**Границы.** Не писать `task_slug` из MOFS. Не звать picker на
+promote. Не класть notes в uniqueness. Не открывать allowlist 14.
+
+---
+
+### Критерии приёмки (AC)
+
+Только пакет `pfs-slug-prebuild`. AC-001…015 §29, AC §31–§33
+**не** перенумеровать и **не** ослаблять. Все строки класса S
+(поезд не ждёт Сашу; `depends: operator:*` нет). Нормативный
+язык — наблюдаемое поведение.
+
+### AC-001 — td1 площадки несёт префикс ДО promote
+
+In-scope 1-1, uniqueness задачи даёт ровно один closed_list-slug.
+После `_post_switch_pass_one` / ingest (мок PUT площадки) td1
+содержит канонический `task_slug` сразу после mention, без пробела
+после точки. `promote_meeting` ещё не вызывался. Юнит без live API.
+
+### AC-002 — promote не пересчитывает (регресс AC-012 §29)
+
+`promote_meeting` не вызывает `apply_task_slugs` / picker;
+счётчик LLM picker на promote = 0. Strip/copy сохраняет префикс
+td1. Мок.
+
+### AC-003 — обсуждение задачи в uniqueness, notes нет
+
+`task.text` без identity; `MeetingTask.discussion` содержит
+уникальный alias `ai_analitik`; `summary.notes` полны других
+проектов closed_list. Empty LLM → префикс `AI-аналитик.`
+(discussion), не слаг из notes.
+
+### AC-004 — eligible bind закрывает кейс 15.10
+
+In-scope 1-1, assignee = человек, `task.text` = «Создать аналитику
+по использованию тест-бота продуктами и соответствию задач Jira»
+(нет identity closed_list), frontmatter `project_bind[task_key]` =
+`{slug: ai_analitik, status: hypothesized}` и `ai_analitik` ∈
+closed_list. Empty LLM → тело с `AI-аналитик.` без пробела после
+точки. Empty-warn нет.
+
+### AC-005 — unbound / rejected / slug ∉ 14 не голосуют
+
+Bind `status=unbound` или `rejected` или `slug=sr` (вне 14) при
+тексте без identity → префикса нет; это не unique-1. Кандидат
+не из closed_list отбрасывается (дух AC-006 §29).
+
+### AC-006 — 1-1 с несколькими проектами: per-task
+
+Одна встреча `kind=one_on_one`, две задачи: (1) unique
+`ai_analitik`, (2) unique `adm`. После picker: задача 1 —
+`AI-аналитик.`, задача 2 — фактический `task_slug` `adm`;
+meeting-level `pfs.tag` 1-1 в тело не дублируется
+(`tag_prefix=None`). Третья задача без сигнала — без проектного
+слага. Нет общего префикса «на всю встречу».
+
+### AC-007 — конфликт bind vs текст → ≥2, не тай-брейк
+
+Bind eligible `ai_analitik`, `task.text` уникально матчит другой
+slug closed_list. Empty LLM → fail-soft, **не** брать bind как
+победу, **не** брать текст как победу.
+
+### AC-008 — notes по-прежнему вне uniqueness (регресс §33 AC-002)
+
+`MeetingSummary.notes` и YAML `projects:` полны сущностей
+closed_list; `task.text` / discussion / bind без eligible.
+Empty LLM → префикса нет. LLM вызван (стратегия B).
+
+### AC-009 — MOFS не пишет слаг (регресс §29 AC-009)
+
+Diff пакета не содержит `USERTOOLS/MarkObjectsFromSummary` и не
+пишет `task_slug` / `project_bind.status` в summary. Grep MOFS
+по `task_slug` пуст. PFS читает frontmatter read-only.
+
+### AC-010 — allowlist 14 / `sr` не этот пакет
+
+Diff не меняет `TASK_SLUG_BACKFILL_DEFAULT_ALLOWLIST` и не
+добавляет `sr`/`okr`/пробельные теги в closed_list.
+`closed_list()==14` на live не пересматривается.
+
+### AC-011 — формат и идемпотентность (регресс §29 AC-001/004)
+
+Выбранный слаг: `{mention} {task_slug}{текст}` без пробела после
+точки; `tag_prefix=None`. `task.text` as-is уже с известным
+префиксом → не в batch, второй префикс не клеится.
+
+### AC-012 — fallback union 1 / 0 / ≥2
+
+Ровно один slug в union → canonical prefix. Ноль → без проектного
+слага, empty-warn нет если сигнала не было. Два+ → fail-soft.
+Валидный JSON модели побеждает fallback (регресс §29 AC-005).
+
+### AC-013 — регресс offline + границы
+
+`cd ~/USERTOOLS/ProtocolFromSummary && pytest -q -m "not live_confluence"`
+зелёный; новые тесты аддитивны. Нет правок `jobs.json` / `.env` /
+манифеста / `route.py` сигнатур / ERC allowlist / ТЗ ErrorBus /
+AnywhereContacts. Сигнатуры боевого пути без смены
+(§29 AC-014 дух).
+
+---
+
+### IAC (эскиз; полный `HF:plan` после TZ:finalize)
+
+| IAC | path | verify | covers |
+|---|---|---|---|
+| IAC-01 | `task_slug.py` + ingest-мок | td1 с префиксом до вызова promote | AC-001 |
+| IAC-02 | `playground_promote.py` | picker не зовётся | AC-002 |
+| IAC-03 | `task_slug.py` | discussion unique → prefix; notes не bind | AC-003, AC-008 |
+| IAC-04 | `task_slug.py` | bind hypothesized `ai_analitik` + text без identity → `AI-аналитик.` | AC-004 |
+| IAC-05 | `task_slug.py` | unbound/rejected/`sr` не голосуют | AC-005, AC-010 |
+| IAC-06 | `task_slug.py` | две задачи разных проектов на одной 1-1 | AC-006 |
+| IAC-07 | `task_slug.py` | bind≠text → fail-soft | AC-007, AC-012 |
+| IAC-08 | diff / pytest offline | MOFS не в diff; `-m "not live_confluence"` зелёный | AC-009, AC-011, AC-013 |
+
+---
+
+### Открытые вопросы
+
+Нет блокирующих. Q-1 §33 (`sr` в allowlist) **не** этот пакет.
+
+**Q-1 (не блокер, класс S).** Блок обсуждения задачи канонизирован
+как хвост/вложенные строки **той же** позиции в секции «Задачи».
+Секция «Обсудили:» остаётся notes (вне uniqueness). Если на живых
+summary обсуждение задачи лежит только в «Обсудили:», bind+текст
+несут uniqueness (кейс 15.10 закрывает bind).
+
+1. Оставить как в этом § (рекомендация).
+2. Расширить discussion на matching-строки «Обсудили:» про эту
+   задачу — **отклонить** (это notes, ломает §33 AC-002).
+3. Другое — напиши.
+
+Рекомендация: **1.** Поезд не ждёт ответа.
+
+---
+
+### Version bump
+
+Секция пакета: **v1.29.0** (новый § после финализированного §33;
+не 1.28.2 — момент ingest + bind-наводка, не patch прозы §33;
+не 1.28.1 повторно; не 1.30.0 — шапка CONTRACTS без новых полей).
+Шапка master и `MAIN_TZ_INVENTORY.md`: **1.28.1 → 1.29.0**
+(`TZ:finalize` 15.10.2026 после REV:tz APPROVE).

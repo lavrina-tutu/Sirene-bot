@@ -118,6 +118,17 @@ pipeline next
 - Снятие hold: `pipeline operator-done --verb … --evidence …` после **факта**, не после одной фразы.
 - Ход кейса → origin; сбои CLI/инвариантов → ErrorBus (`references/invoke.md`).
 
+## Канон синка WorkVault ↔ hermes-workspace (AC-5)
+
+Единственная точка синка WorkVault ↔ hermes-workspace — `~/.hermes/scripts/autosync_github.sh` (крон 5d16b96a9ed5, 02:00).
+Направление **строго WorkVault → git** (`rsync -a --delete` для `Hermes-Backlog/TZ`, `cp` для `Registries/entities.*` → `Hermes-Backlog/Registries-entities`): WorkVault = источник правды, git-зеркало = бэкап.
+- ТЗ/данные-граф суткой пишутся прямо в WorkVault (TZ:patch / Z:finalize / ERC / ORCH) — источник правды.
+- `restore-all-skills.sh` никогда **не** копирует зеркало в WorkVault (это откат свежих правок старым зеркалом). Его единственная функция — симлинки скиллов.
+- Восстановление WorkVault из git — **только вручную/аварийно**, никогда автоматом; при записи делать `.bak` и не перезаписывать более свежий файл WorkVault.
+- Обратное направление (git → WorkVault) не добавлять ни в один крон.
+
+Прецедент 16.10.2026 (BUG tz-mirror-overwrite): коммит 2889345 добавил в restore-all-skills.sh `cp` зеркало→WorkVault, чем откатил master-ТЗ ProtocolFromSummary с v1.29.0 до v1.28.1. Блоки удалены.
+
 ## Запреты (кратко)
 
 - Хранение ТЗ и три контура архивации — `references/storage-and-archival.md` (не дублировать полный Б15 в этом файле).

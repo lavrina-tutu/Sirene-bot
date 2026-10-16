@@ -11,37 +11,15 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 echo "=== Skill symlink restoration $(date) ==="
 echo ""
 
-# Sync custom skills from hermes-workspace → default
+# Sync custom skills from hermes-workspace → default (skill symlinks only)
 echo "--- Syncing custom skills to default ---"
 "$SCRIPT_DIR/sync-to-hermes.sh" default
 
-echo ""
-echo "--- Restoring TZ mirror (hermes-workspace → WorkVault) ---"
-TZ_SRC="$SCRIPT_DIR/Hermes-Backlog/TZ"
-TZ_DST="$HOME/WorkVault/Hermes-Backlog/TZ"
-if [ -d "$TZ_SRC" ]; then
-  mkdir -p "$TZ_DST"
-  cp -a "$TZ_SRC/." "$TZ_DST/"
-  echo "  TZ restored: $TZ_DST"
-else
-  echo "  SKIP: no mirror at $TZ_SRC"
-fi
+# NOTE: WorkVault is the single source of truth for TZ / data graph entities.
+# The ONLY legitimate sync is autosync_github.sh (WorkVault → git mirror).
+# Restore does NOT copy anything into WorkVault — that would roll back daytime
+# TZ:patch / Z:finalize / ERC edits with an old mirror. See canon in
+# hermes-multi-profile-skills skill.
 
 echo ""
-echo "--- Restoring data graph entities (hermes-workspace → WorkVault/Registries) ---"
-REG_SRC="$SCRIPT_DIR/Hermes-Backlog/Registries-entities"
-REG_DST="$HOME/WorkVault/Registries"
-if [ -d "$REG_SRC" ]; then
-  mkdir -p "$REG_DST"
-  for ent in entities.schema.json entities.json; do
-    if [ -f "$REG_SRC/$ent" ]; then
-      cp -a "$REG_SRC/$ent" "$REG_DST/"
-      echo "  restored $REG_DST/$ent"
-    fi
-  done
-else
-  echo "  SKIP: no mirror at $REG_SRC"
-fi
-
-echo ""
-echo "=== Restoration complete ==="
+echo "=== Skill symlink restoration complete ==="

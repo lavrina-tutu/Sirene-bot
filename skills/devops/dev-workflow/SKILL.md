@@ -1,6 +1,6 @@
 ---
 name: dev-workflow
-version: 0.4.4
+version: 0.4.5
 description: Оркестрация разработки Hermes (файловое состояние, 10 кейсов)
 ---
 
@@ -69,7 +69,7 @@ pipeline next
 
 | action | Что делать |
 |---|---|
-| **WORK** | `emit-prompt` → при exit 0 → `invoke-role` (не `agent -p` напрямую) → проверить артефакт на диске → `complete-phase` |
+| **WORK** | sirene-фаза (G6: `TZ:stabilize`, `SK:preflight`, `HF:backup`, `HF:docs-handoff`, `ORCH:shared-state`, гейты) — работа фазы самой Сиренью в том же ходе, **без** `emit-prompt`/`invoke-role` (emit forbidden), затем `complete-phase`. Invoke-роль (architect/reviewer/executor) — `emit-prompt` → при exit 0 → `invoke-role` (не `agent -p` напрямую) → проверить артефакт на диске → `complete-phase`. |
 | **AUTO_GATE** | показать/проверить улику (AC-список, план, отчёт…) → `complete-phase` с reason+evidence |
 | **WAIT_SASHA** | сообщить в **origin**-топик (не Errors), `waiting_operator`, **остановиться** (нет фонового опроса) |
 | **DONE** | preflight закрытия → отчёт AC в origin |
@@ -81,6 +81,8 @@ pipeline next
 **`invoke-role` запускать только в фоне** (`terminal background=true, notify=true, persist_on_release=true`). Роль (cursor-grok/claude/composer) отвечает минуты — foreground-терминал с таймаутом 180с убивает вызов до ответа: фаза остаётся `doing` с пустыми `pid/started_at` в `_state.json` и без дописи в `journal.md`, результат теряется. После запуска фона `next`/`complete-phase` делай только на момент завершения роли, прекращай ход; не перезапускай фазу молча.
 
 **LIGHT:** после известного объёма — `pipeline set-case --case CHANGE-LIGHT` или `BUGFIX-LIGHT` (не решает архитектор).
+
+**Occupancy-правило (П.5):** после `next` → WORK на sirene-фазе (G6, оркестратор) — закрыть фазу **в том же ходе**: `complete-phase` с уликой либо `interrupt`. Не оставлять `in_phase` + `doing` + `pid=None` до следующего дня (занятый воркер держит очередь, 13.10-инцидент). Это **не** минутный сторож и не скрытый тик: движение только когда ты сознательно в этом ходе, без фонового опроса.
 
 ## Согласование ТЗ и плана (REV)
 

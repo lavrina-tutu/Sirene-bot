@@ -2,11 +2,11 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Машина исполнения разработки Hermes без канбана (единый скилл + файловое состояние)"
-version: 0.4.2
-date: 2026-10-14
+version: 0.4.5
+date: 2026-10-17
 status: draft
 author: архитектор (cursor-grok-4.6-high, Cursor CLI)
-last-section-added: 2026-10-14 — v0.4.2 TZ:finalize: AC-047 канон имени артефакта роли + парсинг вердикта только из «## Вердикт» / verdict=; FINDING-PyContr-2
+last-section-added: 2026-10-17 — v0.4.5 TZ:finalize eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid после REV:tz APPROVE: occupancy-дедлок sirene-doing, abort сжигает каноническое имя пилота, PID-probe ≠ sirene без pid; AC-058…060
 case: CHANGE
 slug: devworkflow-task-slug
 previous_slug: rs-refuse-kanban
@@ -51,26 +51,27 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б7** | Карта «код / скилл» (T3) | Б3, Б4 | границы Б8, Б9 |
 | **Б8** | Файлы `pipeline/` | Б7, T1, T4 | CLI Б16, инварианты Б17 |
 | **Б9** | Структура скилла; процедура REV в `SKILL.md`; MUST-read в `references/context.md`; docs комплекта (README, onboarding, cases-guide, config.example) | Б1, Б6, Б7, Б12, Б13.5, Б16.1 | установка Б13.3, продукт Б13.5, миграция Б31 |
-| **Б10** | Очередь и состояние (T1); ключ выжимки в `_state.json` | Б3, Б8, Б12 | complete-phase Б16, журнал T5, reuse compress Б18.4 |
-| **Б11** | Формат статуса (T2) | Б5 слой 2 | CLI `status`, HITL |
+| **Б10** | Очередь и состояние (T1); ключ выжимки в `_state.json`; **v0.4.5:** occupancy ≠ CLI-mutex; abort сжигает имя | Б3, Б8, Б12, Б40 | complete-phase Б16, журнал T5, reuse compress Б18.4; AC-058/059 |
+| **Б11** | Формат статуса (T2); **v0.4.5:** running только при живом PID | Б5 слой 2, Б40 | CLI `status`, HITL; AC-060 |
 | **Б12** | Точечный контекст: три слоя хранения, доктрина двух источников, MUST-read, ключ выжимки | Б1 вопрос 3, Б4 Q-Archi-02/04/05 | emit-prompt в Б18–Б27; G1 в Б6.5 |
-| **Б13** | Переносимость и `invoke_role` (T4); **Б13.3** установка; **Б13.4** handoff слага; **Б13.5** продукт/платформа; **v0.4.2:** post-invoke проверка канонического имени артефакта | Б1.4, Б1.9, Q-Archi-03/04/06 | конфиг Б14, комплект поставки, AC-025/040/042/047 |
+| **Б13** | Переносимость и `invoke_role` (T4); **Б13.3** установка; **Б13.4** handoff слага; **Б13.5** продукт/платформа; **v0.4.2:** post-invoke проверка канонического имени артефакта; **v0.4.5:** PID-probe ≠ sirene без pid | Б1.4, Б1.9, Q-Archi-03/04/06, Б40 | конфиг Б14, комплект поставки, AC-025/040/042/047/060 |
 | **Б14** | Единый конфиг; **v0.3.2:** `orchestration.mode` / `orchestration.pilot_slugs` | eco-config §10, Блок F | ключи YAML, запрет `.env`, dual-path |
 | **Б15** | Хранение ТЗ и архивация | TZ-storage-system, инвентарь | `TZ:finalize`, DECOMM |
-| **Б16** | Цикл оркестратора; **Б16.1** согласование архитектор↔ревизор (REV сверяет выжимку с master); **v0.4.2:** канон `REV-tz.md`/`REV-plan.md`, `rev_verdict()` только блок «## Вердикт» | Б3, Б6.4, Б8, Б10, Б12 | complete-phase/next всех кейсов; протокол REV для Б9, Б18; AC-037/047 |
+| **Б16** | Цикл оркестратора; **Б16.1** согласование архитектор↔ревизор (REV сверяет выжимку с master); **v0.4.2:** канон `REV-tz.md`/`REV-plan.md`, `rev_verdict()` только блок «## Вердикт»; **Б16.4 v0.4.5:** occupancy leftover + PID-probe sirene | Б3, Б6.4, Б8, Б10, Б12, Б40 | complete-phase/next всех кейсов; протокол REV для Б9, Б18; AC-037/047/058/060 |
 | **Б17** | Обязательные поля между фазами (в т.ч. extract_sha256 в context-used) | Б6, Б10, Б12, Б16 | чеклисты Б18–Б27, preflight |
 | **Б18** | Кейс CHANGE — полный цикл; норматив compress/reuse | Б6, Б12, Б16, Б16.1, Б17 | эталон для Б19–Б27 |
 | **Б19–Б27** | Остальные 9 кейсов | Б18 как эталон | отличия рецепта и артефактов |
 | **Б28** | Бэклог идей | Б5 слой 2 | статус triage |
-| **Б29** | Закрытие ошибок A1–C15 | Б2, question1 | риски в AC |
+| **Б29** | Закрытие ошибок A1–C15; **v0.4.5:** A3 PID-probe не равен «sirene без pid» | Б2, question1, Б40 | риски в AC; AC-060 |
 | **Б30** | Перенос истории канбана (T5) | Б1 В1 | W4, журнал |
-| **Б31** | Миграция W0–W4 и откат | Б1 В2, вопрос 5 | AC миграции |
+| **Б31** | Миграция W0–W4 и откат; **v0.4.5:** abort сжигает каноническое имя пилота (`eco-config-w4`) | Б1 В2, вопрос 5, Б40 | AC миграции; AC-059 |
 | **Б32** | Ошибки инструмента → ErrorBus | Б1 вопрос 2 | `--tool dev_workflow` |
-| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены | Б3 вердикт, Б12, Б13.4, Б13.5 | неприемлемость |
-| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1 | GATE:done этого слага = конец W1; AC-017/018 не здесь |
+| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены; **v0.4.5:** п.39–41 occupancy leftover / abort канона / dead-pid на sirene | Б3 вердикт, Б12, Б13.4, Б13.5, Б40 | неприемлемость |
+| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта; **v0.4.5:** AC-058…060 класс S | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1, Б40 | GATE:done этого слага = конец W1; AC-017/018 не здесь |
 | **Б35** | Контракты экосистемы (contracts-standard.md); **v0.3.2:** входные `orchestration.mode` / `pilot_slugs` | Б10, Б12, Б14, Б32 | SoT = `_state.json`; `extract.md` производный; migrate_vN своей схемы; dual-path-ключи только через эту таблицу |
 | **Б36** | Что показать Саше | Q-Archi-01..06, DRY-отклонение, продукт Б13.5, **v0.4.0:** Q-Archi-07/08 | не блокирует TZ:finalize |
 | **Б37** | Пакет `devworkflow-task-slug`: файрвол ролей, поезд сам, `suggest-slug`, G6, контроль Саши, изоляция origin; **v0.4.2:** Python-контроль канона артефакта и вердикта (норма 4) | Б6.4, Б7, Б11, Б16, Б21, факт сбоя 14.10, FINDING-PyContr-2 | AC-044…051; GATE:done этого слага |
+| **Б40** | Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`: occupancy-дедлок «первый next + брошенный sirene-doing»; abort сжигает каноническое имя пилота; PID-probe ≠ sirene без pid | инцидент 14.10 w4, `_fix_plan_20261017.md`, Б10, Б11, Б13.2, Б16.4, Б18.4–5, Б29 A3, Б31 | AC-058…060 класс S; GATE:done этого BUGFIX |
 | **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд | Б13.1, Б13.5, Б31.2, Б33, Б37 | чеклист Шаг 4 tz-workflow |
 | **Связи с экосистемой** | Кто с кем (не поля) | Б14, Б32, манифест | отдельно от Б35 |
 | **Открытые вопросы** | Явный h2 (пусто / «нет») | Б36, AC-018 на W4 | чеклист Шаг 4 |
@@ -115,9 +116,9 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 Пишется только текст ТЗ (`TZ:patch` / `TZ:finalize` + инвентарь). **Не** писать код `pipeline/`, **не** создавать скилл на диске, **не** строить граф канбана, **не** создавать карточки, **не** выключать канбан, **не** рестартовать gateway, **не** ставить кроны.
 
-Этот ход — `TZ:finalize` **v0.4.2** пакета `devworkflow-task-slug` (вход: REV:tz APPROVE на v0.4.1 + FINDING-PyContr-2 с живого цикла REV). Код `pipeline/` и скилла **не** пишется (ждёт `GATE:take-into-work` / `HF:impl` **этого** слага). Не чинить `ProtocolFromSummary` / picker `task_slug` в этом TZ-WRITE. Повторный `REV:tz` на аддитив AC-047 не в рецепте: норма зафиксирована как Python-контроль (запрошенный Сашей), не пересмотр архитектуры v0.4.1.
+Этот ход — `TZ:finalize` **v0.4.5** пакета `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid` после REV:tz APPROVE (BUGFIX; вход: `_fix_plan_20261017.md` П.4 + `REV-tz.md`). Корпус норм (а)(б)(в) / AC-058…060 **без правок смысла**. Код `pipeline/` и скилла **не** пишется (ждёт `HF:impl` / `HF:docs-handoff` **этого** слага). Не чинить `ProtocolFromSummary` / picker `task_slug`. Не откатывать `dispatch_in_gateway` / `workflow-only` (слаг `kanban-decommission`, AC-018). Не восстанавливать корпус v0.4.3/v0.4.4 (чужие поезда; дрейф — показ Б40.5). `[NEW-ENTITY]` нет.
 
-Предыдущий пакет `rs-refuse-kanban` (v0.3.2, W0 dual-path) остаётся в корпусе; этот CHANGE его не переписывает, а **ужесточает роли оркестратора**.
+Предыдущий пакет `devworkflow-task-slug` (v0.4.2) остаётся в корпусе; этот BUGFIX его не переписывает, а **закрывает дыру occupancy/PID-probe**.
 
 ### Б0.4 Связь с живыми документами
 
@@ -647,7 +648,9 @@ dev/
 | В индексе есть, папки нет | **CRISIS** | не молчать: ErrorBus critical + `status=blocked` синтетической записи нельзя (папки нет) → строка CRISIS в `status --check`, Саше в origin если известен. Восстановление из `_Archives` / git, не из воздуха |
 | sha256 не сходится | CRISIS | не писать поверх; journal `hash_mismatch`; ErrorBus |
 
-`abort` переводит `status=aborted`, папку **не** удаляет. Удаление — только DECOMM с гейтом Саши.
+`abort` переводит `status=aborted`, папку **не** удаляет. Удаление — только DECOMM с гейтом Саши. Повторный `init` того же слага после `aborted`/`done` — exit 1 «слаг занят»: **имя слага сгорело**. Канонические имена пилота Б31 (`eco-config-w3`, `eco-config-w4`) снимать с occupancy **через `interrupt`**, не `abort` (Б40, AC-059). Смоук-abort одноразового слага (`install-smoke`, Б13.3 п.6) — штатен.
+
+**Occupancy воркера (v0.4.5, конвенция скилла, не mutex CLI).** `status=in_phase` занимает воркер для скилла `dev-workflow` (один `invoke-role` / один ход оркестратора). CLI **не** блокирует `pipeline next --slug <другой>` и `init` чужого слага. Очередь idle ждёт, пока текущий `in_phase` не станет `idle` / `interrupted` / `done` / `aborted` / `waiting_operator` / `blocked`. Брошенный `in_phase`+`doing` на sirene-фазе без pid — occupancy-дедлок (Б16.4, AC-058).
 
 ### Б10.1 Эскиз `_state.json`
 
@@ -687,8 +690,8 @@ dev/
 | Значение | Смысл |
 |---|---|
 | `idle` | рецепт есть, сейчас никто не работает (бывш. ready) |
-| `in_phase` | идёт фаза, PID жив |
-| `interrupted` | PID мёртв или вызов роли оборван; **без** reaper и авто-рестарта |
+| `in_phase` | идёт фаза (occupancy воркера по конвенции скилла). Живой PID **обязателен** для invoke-ролей (architect/reviewer/executor/compressor). Для sirene-фаз G6 (`TZ:stabilize`, `SK:preflight`, `HF:backup`, `HF:docs-handoff`, `ORCH:shared-state`, гейты) `pid=None` **штатен** |
+| `interrupted` | PID мёртв у invoke-роли или вызов роли оборван **или** явный `pipeline interrupt`; **без** reaper и авто-рестарта. `pid=None` на sirene-фазе **сам по себе** не interrupted |
 | `waiting_operator` | ждёт Сашу (HITL / класс O / never-auto гейт) |
 | `blocked` | технический блок (зависимость, CRISIS, preflight fail не-HITL) |
 | `done` | `GATE:done` пройден |
@@ -769,7 +772,7 @@ Skip compress **запрещён**, пока эти поля `null` или кл�
 | Колонка отчёта (как привык Саша) | Внутренний status |
 |---|---|
 | blocked / «Блокеров» | `waiting_operator` **или** `blocked` |
-| scheduled (подвисшие) | `interrupted` (без reaper) |
+| scheduled (подвисшие) | `interrupted` (без reaper); **v0.4.5:** также `in_phase` без живого PID (включая `pid is None`) — **без** мутации state |
 | ready | `idle` |
 | running | `in_phase` **и** PID жив |
 | todo | слаги в `idle` без стартованной первой фазы / IDEA не разобранная |
@@ -790,7 +793,7 @@ HITL-секция 🟡: **только** `status=waiting_operator` (поле, н
 
 Отчёт **по запросу** (фраза Саши / `pipeline status`). Регулярный крон отчёта **не** ставится («если всё работает — отчётность почти не нужна»).
 
-`pipeline status --check`: sanity контура (T4). Exit 1, если апдейт Hermes задел контур: нет `pipeline/` , нет скилла, drift канон-скилл vs vault GLOSSARY, glob vs index, нечитаемый YAML конфиг, импорт `kanban_*` в `pipeline/` (запрещён). Не systemd-хук — процедура скилла после `hermes update`.
+`pipeline status --check`: sanity контура (T4). Exit 1, если апдейт Hermes задел контур: нет `pipeline/` , нет скилла, drift канон-скилл vs vault GLOSSARY, glob vs index, нечитаемый YAML конфиг, импорт `kanban_*` в `pipeline/` (запрещён). **v0.4.5 (A3 дописать, AC-060):** `in_phase` + `doing` + не `pid_alive` (включая `pid is None` на invoke-роли **и** leftover sirene) → exit 1 / строка аномалии. **Без** авто-interrupt (нет скрытого тика). Сирень видит красный check → `complete-phase` (работа фазы) **или** явный `interrupt` (П.0). Не systemd-хук — процедура скилла после `hermes update`.
 
 ---
 
@@ -940,7 +943,8 @@ Default `--backend` и модели ролей — из `EcosystemConfig.yaml`. 
 |---|---|
 | HTTP 5xx / timeout / нет API key / billing / payment / credits | rc ≠ 0, `interrupt`, reason=`provider_fatal:…`, ErrorBus, **без** авто-ретрая |
 | `Iteration budget exhausted` / `(90/90)` / max_turns | rc ≠ 0, `interrupt`, reason=`budget_exhausted:90-90`, ErrorBus, без авто-ретрая |
-| Процесс умер, PID не жив | на следующем `next`/`status`: `interrupted`, без reaper и без spawn |
+| Процесс умер, PID не жив (**invoke-роль**) | на следующем `next`/`status`: `interrupted`, без reaper и без spawn. AC-008 |
+| `pid is None` на **sirene-фазе** G6 | **не** этот сигнал. `next_action` / `cmd_next` → `WORK` (оркестратор доделывает), не `interrupt` `reason=dead pid`. AC-060 |
 | rc=0, но фаза не вернула **канонический** артефакт (не то имя файла) | `invoke_role` **exit ≠ 0**, hint с каноническим basename; `complete-phase` запрещён; state не менять (кроме journal). Не полагаться на оркестратора «не вызвать complete» |
 
 Авто-ретрай **запрещён** (закрывает streak protocol_violation). Повтор — только фраза Саши или сознательный `pipeline next` Сирени после разбора.
@@ -1162,7 +1166,7 @@ tools:
 | `AUTO_GATE` | гейт auto, улика уже есть или нужно показать AC | показать/проверить, complete-phase |
 | `WAIT_SASHA` | never-auto или класс O | сообщить Саше, остановиться |
 | `DONE` | рецепт исчерпан | preflight done, закрыть слаг |
-| `INTERRUPTED` | мёртвый PID / фатал провайдера | сообщить, не рестартить |
+| `INTERRUPTED` | мёртвый PID **invoke-роли** / фатал провайдера / явный `interrupt` | сообщить, не рестартить. **Не** маппить sirene-фазу с `pid=None` в этот action |
 | `BLOCKED` | preflight/CRISIS | ErrorBus если инструмент; origin если кейс |
 
 Запрещено: цикл «раз в минуту смотри state»; скилл, который сам себя будит; heartbeat-тред.
@@ -1210,6 +1214,16 @@ LIGHT: после улики объёма Сирень вызывает `pipelin
 3. Профиль default R3 (вопрос с нумерованными вариантами) **на работе DevWorkflow запрещён** для слагов и технических развилок. R3 остаётся для `Q-n` **после** того, как архитектор сформулировал вопрос, и для operator-глаголов.
 4. stdout роли **не** копировать в origin. Origin = вход требований + выход отчётности (AC-показан / WAIT_SASHA / DONE / INTERRUPTED). Оркестрация фаз — файлы `dev/<slug>/` + subprocess `invoke_role` (AC-049).
 5. `[NEW-ENTITY, требует согласования Саши]` отдельный невидимый Telegram-топик/канал оркестрации — **не заводится** в этом пакете (Q-Archi-08). Файловый слой ≠ эта сущность и не сглаживает маркер.
+
+### Б16.4 Occupancy leftover и PID-probe (v0.4.5)
+
+Норматив пакета `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid` — **Б40**. Кратко для цикла:
+
+1. **Первый `next`** на sirene-фазу G6 законно ставит `status=in_phase`, `phases[PHASE]=doing`, `pid=None`. Это `WORK` оркестратора, не Cursor.
+2. **В том же ходе** — `complete-phase` (есть улика) **или** `interrupt` (работы нет / поезд брошен). Оставить `in_phase` без pid до следующего дня = occupancy-дедлок: скилл считает воркер занятым, idle ждут; CLI чужой `next --slug` не mutex. AC-058.
+3. **`cmd_next` = `next_action` для sirene.** `in_phase`+`doing`+`pid is None`+фаза G6 sirene → **не** писать `interrupt reason=dead pid`; вернуть `WORK`. Invoke-роль (`architect`/`reviewer`/`executor`/`compressor`): нет живого pid при `in_phase`+`doing` → `interrupt` (AC-008). Дыра 14.10: `next_action()` при `pid is None` уже давал `WORK`; `cmd_next` перебивал в `dead pid`.
+4. **`status` не equals PID-probe.** Колонка running = `in_phase` **и** PID жив (Б11 уже так). `in_phase` без живого pid → scheduled (подвисшие), state не трогать. `--check` красный на leftover, без авто-interrupt. AC-060.
+5. **Abort ≠ разблокировка канона.** `abort` сжигает имя (Б10). Пилот `eco-config-w4` — второй пассажир после успешного w3 (Б31); overlay волны 4 жив. Occupancy снимать `interrupt`. AC-059.
 
 ---
 
@@ -1346,11 +1360,12 @@ G4 create: все обязательные фазы есть в recipe. Fail →
 
 | | |
 |---|---|
-| Кто | Сирень (чтение диска) или архитектор по скиллу; модель Cursor не обязательна |
+| Кто | Сирень (чтение диска); Cursor-роль не звать (G6). `pid=None` штатен |
 | Вход | init; известен инструмент |
 | Работа | зафиксировать path master-ТЗ, `version`, `mtime` |
 | Выход | `tz_path`, `tz_version` в `_state.json`; journal |
 | Evidence | `path=… version=… mtime=…` |
+| Запрет leftover (v0.4.5) | после `next` → `WORK` на этой фазе — **в том же ходе** `complete-phase` или `interrupt`. Не оставлять `in_phase`+`doing`+`pid=None` до следующего дня (AC-058). `complete-phase` без улики = A1 |
 
 Для **нового** файла (как этот DevWorkflow) `tz_version` до finalize может быть `null` → stabilize пишет «файла нет, будет создан path=…».
 
@@ -1558,7 +1573,8 @@ Auto после `HF:plan` done (и REV.plan done или waive). Улика: пл
 - Не звать исполнителя до auto take-into-work (улика AC-list).
 - Не коммитить vault ТЗ «ради G3» — G3 только git-worktree кода.
 - Origin = топик, откуда пришла задача.
-- После interrupt — разбор в чате, не авто-next в цикле.
+- После interrupt — разбор в чате, не авто-next **этого** слага в цикле (Б18.5). Occupancy после interrupt снята — следующий idle по конвенции очереди можно `next`.
+- Occupancy leftover sirene-doing: `interrupt` или работа фазы, **не** `abort` канонического имени, **не** `complete-phase` без улики, **не** `json.dump` в `_state.json`.
 
 ### Б18.6 Артефакты CHANGE на диске к концу
 
@@ -1792,7 +1808,7 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 |---|---|---|---|
 | A1 | protocol_violation (rc=0 без complete) | **закрывается** | complete только с proof; invoke_role не маппит фатал в 0; нет диспетчера, который ретраит |
 | A2 | timed_out 90/90 | **закрывается** | детект budget в invoke_role → interrupted + ErrorBus; нет авто-ретрая |
-| A3 | crashed pid not alive | **закрывается** | PID-probe на status/next → interrupted; без reaper |
+| A3 | crashed pid not alive | **закрывается** | PID-probe на status/next → interrupted **для invoke-роли**; без reaper. **v0.4.5:** `pid=None` на sirene-фазе G6 ≠ crashed pid; `next` → WORK, не `dead pid`. Колонка running требует живой PID. `--check` флажит leftover без авто-interrupt (AC-058/060) |
 | A4 | reclaimed (ручной re-claim) | **закрывается** | нет claim_lock; Сирень продолжает `next` с диска |
 | A5 | gave_up (streak) | **закрывается** | нет failure_limit/ретраев диспетчера |
 | B6 | block_loop_detected / stalled-train | **закрывается** | нет возраста от started_at, нет rule4, нет минутного тика |
@@ -1811,7 +1827,7 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 | Риск | Митигация в ТЗ |
 |---|---|
 | Сирень предложит слаги/технические варианты вместо `init`→архитектор | G6 + файрвол Б6.4/Б16.2/Б37; AC-044…047; CLI `suggest-slug` один кандидат |
-| Сирень забудет `complete-phase` | скилл: после возврата роли — обязательный complete или interrupt; next не прыгает через doing без pid |
+| Сирень забудет `complete-phase` | скилл: после возврата роли **и** после `next`→WORK на sirene — обязательный complete или interrupt **в том же ходе**; next не прыгает через doing (не skip фазы). Occupancy leftover = именованный дефект AC-058, не «подождёт до завтра» |
 | Сирень склеит фазы | G4 + запрет в скилле; preflight |
 | emit-prompt соберёт не тот слаг | G1: phase ∈ recipe этого слага |
 | git-proof обманут списком не тех файлов | changed_files пишет исполнитель, G3 проверяет worktree |
@@ -1868,7 +1884,7 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 | **W3** | Остальные кейсы по одному; статус-репорт по запросу; кроны отчёта **не** ставить (только по «ставь кроны», и не минутный dispatch) | живой запасной | dual-path: `operator:rollback-to-kanban` (Сирень по `references/rollback.md`; разговорная «катись канбаном» = этот глагол, в словарь не входит) |
 | **W4** | Перестать create на доске; T5 импорт истории; SQLite в _Archives; `dispatch_in_gateway: false` **только после** явного согласования Саши; старые скиллы из активного набора → git + `_Archives` | выключен по плану | tarball старых скиллов + включить dispatch + вернуть симлинки |
 
-`eco-config-w4` — второй пассажир после успешного w3.
+`eco-config-w4` — второй пассажир после успешного w3. Имя **канонично** в этом абзаце: `abort` его сжигает (повторный `init` того же слага → exit 1, папка остаётся). Occupancy leftover на w4 снимать `pipeline interrupt`, не abort и не `complete-phase` без `tz_path`/`tz_version` (A1). Содержание волны 4 (вырез fallback, triage в импорте канбана) **живо** в карточке/журнале; сгоревшее имя = потеря пассажира Б31. Возобновление w4 — только после `GATE:done` w3 (или явной фразы Саши, что пилот больше не ждут), через `write_state` (`idle` + `TZ:stabilize=todo`), не `json.dump`. AC-059.
 
 Заморозить: `DEV/kanban-stalled-train-age`.
 
@@ -1945,6 +1961,11 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 34. Копировать stdout роли в origin-топик Саши; вести оркестрацию фаз перепиской в пользовательском топике.
 35. Заводить `[NEW-ENTITY]` Telegram-топик/канал оркестрации без реплики Саши; сглаживать маркер словами «просто origin».
 36. Патчить тело `hermes-feature` / `tz-workflow` «чтобы прописать роли в трёх скиллах»; чинить PFS `task_slug` в пакете `devworkflow-task-slug`.
+37. *(номер занят пакетом `v-dev-workflow-zakrepit-avtomaticheskuyu-ochered` v0.4.4; корпус на текущем диске отсутствует — Б40.5.)*
+38. *(номер занят тем же пакетом v0.4.4; см. п.37.)*
+39. Оставлять `in_phase`+`doing`+`pid=None` на sirene-фазе G6 до следующего дня / до чужого поезда (occupancy-дедлок).
+40. Снимать occupancy канонического пилота Б31 (`eco-config-w3` / `eco-config-w4`) через `abort`.
+41. Маппить `pid=None` на sirene-фазе в `interrupt reason=dead pid`; считать PID-probe равным «sirene без pid».
 
 ---
 
@@ -2007,12 +2028,17 @@ I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` 
 | AC-049 | S | Origin = вход требований + выход отчётности; stdout роли в origin не копируется; оркестрация = файлы + subprocess. `[NEW-ENTITY]` канал не создаётся | Б16.2, Б32, Б37 |
 | AC-050 | S | Dual-path: баннер чужих SKILL.md +2–4 строки файрвола (коридор **12–19** = (10–15)+(2–4), без round-up до 20); тело процедуры не переписано; pytest фикстуры; откат `git checkout` | Б31 W2, «Что НЕ трогать», Б37 |
 | AC-051 | S | `TZ:finalize` / `ORCH:shared-state` этого слага: аддитив GLOSSARY §3 «Не делает» оркестратора (не слаги, не технические варианты). Кейсы/фазы/классы AC не переписаны | Б37, Б31.2 |
+| AC-058 | S | Occupancy-дедлок: после `next`→WORK на sirene-фазе G6 — в том же ходе `complete-phase` или `interrupt`; leftover `in_phase`+`doing`+`pid=None` — дефект; CLI чужой слаг не mutex | Б10, Б16.4, Б18.4, Б40 |
+| AC-059 | S | `abort` сжигает каноническое имя пилота Б31 (`eco-config-w4`); повторный `init` того же слага → exit 1; occupancy снимать `interrupt`; папка на месте | Б10, Б31, Б40 |
+| AC-060 | S | PID-probe ≠ «sirene без pid»: `cmd_next`=`next_action` для sirene+`pid=None` → WORK, не `dead pid`; invoke-роль без живого pid → interrupt (AC-008); колонка running требует живой PID; `--check` флажит leftover без авто-interrupt | Б11, Б13.2, Б16.4, Б29 A3, Б40 |
 
 **Область `GATE:done` этого пакета (`rs-refuse-kanban`, CHANGE).** Финальный и равен концу **W1** (постройка `pipeline/` + скилл: `HF:impl` / `HF:test` / `ORCH:shared-state`). Согласовано с Б17.7 и Б18.6. Волны W2–W4 — отдельные хода, не один долгий `in_phase`. В таблице выше нет класса O: этот слаг не остаётся `waiting_operator` до W4.
 
 AC-016 / AC-019 / AC-035 — класс S про поздние волны: показ в AC-list, не hold; на момент W1 `GATE:done` в AC-report допустима ссылка `W4 pending`. AC-036 — класс S, evidence на пилотном слаге W2; на W1 допустима ссылка `W2 pending`. AC-037 — класс S: инвариант state-машины закрывается pytest-фикстурой W1; живой прогон на пилоте W2 (если ревизор запросил правки) — доп. evidence, на W1 допустима ссылка `W2 pending` только для живого слага. AC-038…041 — класс S, закрываются pytest-фикстурой W1 (ключ выжимки, drift G1, handoff без sqlite, покрытие имён). AC-042 — класс S: комплект поставки на чистом контуре (фикстура чужого `DEV_STATE_ROOT` + docs Б13.5); на W1 — pytest/чеклист по шагам `onboarding.md`/`install.md` (публичный CLI, без вызова внутренних python-API); живой чужой Hermes — показ W2+ (на W1 допустима ссылка `W2 pending`, как у AC-036). AC-043 — класс S: pytest контракта баннера на W1; живой патч двух чужих `SKILL.md` — W2; на W1 `GATE:done` допустима ссылка `W2 pending` (как у AC-036).
 
 **Область `GATE:done` пакета `devworkflow-task-slug` (этот CHANGE, v0.4.2).** Финальный после хвоста **этого** слага (`HF:impl` / `HF:test` / `ORCH:shared-state` правок `dev-workflow` + `pipeline/` под AC-044…051, включая AC-047 v0.4.2). Не ждёт второй поезд PFS `task_slug`. Не ждёт создание `[NEW-ENTITY]` Telegram-канала (Q-Archi-08, показ Б36). Не держит `rs-refuse-kanban`. AC-044…051 — класс S; pytest на W1 этого слага; живой dual-path баннер AC-050 — как AC-043 (`W2 pending` допустим, если пилот ещё не ставит баннер).
+
+**Область `GATE:done` пакета `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid` (BUGFIX, v0.4.5).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` правок `cli.py` `cmd_next` + `pipeline_status._column_for` + `--check` leftover + тесты PID/status; `HF:docs-handoff` абзац скилла «после next→WORK на sirene — в том же ходе complete или interrupt». Не ждёт `GATE:done` w3 и возобновление пассажира w4 (П.6 плана фикса — другой ход). Не откатывает `dispatch_in_gateway` / `kanban-decommission`. AC-058…060 — класс S. Номера AC-052…057 заняты пакетами v0.4.3/v0.4.4 (корпус на текущем диске отсутствует — Б40.5, показ).
 
 Номера AC-017 и AC-018 **зарезервированы** за будущим MIGRATION-слагом (таблица ниже). В этом пакете их нет, чтобы не путать `GATE:done`.
 
@@ -2179,6 +2205,32 @@ Evidence `TZ:finalize` / `ORCH:shared-state` слага `devworkflow-task-slug` 
 
 **I1.** `current`: §3 «выбор кейса со Сашей» читается как меню. `target`: зеркало файрвола, без пересмотра канона кейсов/фаз.
 
+#### AC-058 — occupancy-дедлок sirene-doing
+
+Фикстура как `eco-config-w4` 14.10: `status=in_phase`, `phase=TZ:stabilize`, `phases['TZ:stabilize'].status=doing`, `pid=started_at=role=None`, артефактов фазы нет. Наблюдаемо после `HF:impl`:
+
+1. Скилл / процедура: после `pipeline next` → `WORK` на фазе G6=sirene — **в том же ходе** `complete-phase` или `interrupt`. Текст в `SKILL.md` (docs-handoff этого слага). Не минутный сторож (Б33 п.1/7).
+2. CLI **не** блокирует `next --slug <другой>` (не mutex). Occupancy — конвенция скилла: второй `invoke-role` параллельно не запускать.
+3. `complete-phase TZ:stabilize` без `tz_path`+`tz_version`+evidence `path=… version=… mtime=…` → exit ≠ 0 (A1). `abort` на фикстуре канонического имени — fail AC-059, не путь разблокировки.
+
+**I1.** `current`: первый `next` ставит doing без pid; работу фазы никто не делает; скилл держит очередь. `target`: leftover именован; тот же ход закрывает фазу или снимает occupancy.
+
+#### AC-059 — abort сжигает каноническое имя пилота
+
+Фикстура: слаг с именем из Б31 (`eco-config-w4` или тестовый двойник). `pipeline abort --slug … --reason …` → `status=aborted`, папка на месте, journal `abort`. Повторный `pipeline init --slug <то же имя>` → exit 1 «слаг занят». `pipeline interrupt` на той же фикстуре **до** abort → `status=interrupted`, папка на месте, имя **не** в TERMINAL: повторный ход через `write_state` idle+todo дозволен (не `json.dump`). Смоук `install-smoke` abort (Б13.3 п.6) — другой слаг, не пилот Б31.
+
+**I1.** `current`: abort и interrupt оба снимают occupancy; abort делает имя неготовым к `init`. `target`: канон Б31 не abort-ить ради очереди.
+
+#### AC-060 — PID-probe ≠ sirene без pid
+
+Три фикстуры (pytest, не живой Cursor):
+
+1. `TZ:stabilize` + `in_phase`+`doing`+`pid=None` → `pipeline next` **не** пишет `interrupt reason=dead pid`; stdout `action=WORK`. `next_action()` и `cmd_next` согласованы.
+2. Invoke-роль (`RS:collect` / `HF:impl`) + `in_phase`+`doing`+`pid=999999999` (заведомо мёртвый) → `next` пишет `interrupted`, `action=INTERRUPTED` (AC-008).
+3. Колонка: `in_phase` без живого pid → **не** `running`, а scheduled (подвисшие); state bit-identical после `status` без `--check`. `status --check` на фикстуре п.1 → exit 1 / строка аномалии, **без** записи `interrupt` в journal.
+
+**I1.** `current`: `next_action` при `pid is None` даёт WORK; `cmd_next` перебивает в `dead pid`; `_column_for(in_phase)=running` без PID-probe. `target`: sirene без pid = доделать; мёртвый pid invoke-роли = interrupt; running = живой PID.
+
 #### AC-037 — цикл архитектор↔ревизор в новом движке
 
 Наблюдаемо (W1: pytest на файловой фикстуре `_state.json`; W2: пилот `eco-config-w3`, если был `REQUEST-CHANGES`):
@@ -2319,6 +2371,7 @@ Digest манифеста видит: `enabled` + `default_backend` + факт �
 14. **TZ:patch v0.3.2 (W0 пакета `rs-refuse-kanban`).** Поля `orchestration.mode` / `orchestration.pilot_slugs` формально в Б14 и Б35. W2-баннер в чужих `SKILL.md` — исключение в «Что НЕ трогать» + AC-043, не отдельный SKILL-CHANGE. Норма HF:impl: два дерева, одна фаза, два последовательных `invoke_role` (Б17.8). Показ, **не** блокер повторного `TZ:finalize`.
 15. **Q-Archi-07 (v0.4.0, пакет `devworkflow-task-slug`).** Требование «прописать роли в трёх скиллах» vs AC-043 «тело чужих SKILL.md не трогать». **Решение:** норма файрвола живёт в `dev-workflow` (Б6.4, Б16.2, Б37, `SKILL.md`/`canon.md`). Старые скиллы — только аддитив баннера +2–4 строки маршрута (AC-050). Отдельный SKILL-CHANGE тел — вне пакета (W4 архивирует). Не сглажено: конфликт назван, выбран вариант «маршрут, не перепись».
 16. **Q-Archi-08 (v0.4.0).** `[NEW-ENTITY, требует согласования Саши]` невидимый Telegram-топик/канал оркестрации. **Решение до реплики:** сущность **не** создавать. Изоляция AC-049 = уже существующий слой файлов `dev/<slug>/` + subprocess `invoke_role`; origin = вход/выход. Это **не** замена сущности словом «просто origin»: маркер остаётся; заводить второй `thread_id` запрещено (Б33 п.35). Показ, **не** hold `GATE:done` и **не** блокер `TZ:finalize`.
+17. **TZ:finalize v0.4.5 (пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`).** Occupancy leftover / abort канона Б31 / PID-probe ≠ sirene без pid — Б40, AC-058…060. Дрейф корпуса 0.4.3/0.4.4 — показ Б40.5, не hold. `[NEW-ENTITY]` нет. REV:tz APPROVE; этот `TZ:finalize` штампует корпус без правок смысла.
 
 Открытые вопросы этого пакета — в разделе `## Открытые вопросы` (явный h2). Бриф закрыт.
 
@@ -2369,13 +2422,68 @@ AC пакета: **AC-044…051** (класс S). `GATE:done` слага — п�
 
 ---
 
+## Б40. Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid` (v0.4.5) — occupancy leftover, abort канона, PID-probe
+
+**I1 этого пакета.** `current` (факт диска 14.10 16:56 + диагноз 17.10): `pipeline init`+`next` на `eco-config-w4` поставил `in_phase` / `TZ:stabilize=doing` / все pid-поля `None`; работу фазы никто не сделал; journal оборван на `next`; скилл счёл воркер занятым — idle ждали. `abort` сжёг бы каноническое имя пассажира Б31. `cmd_next` при `pid is None` писал `dead pid`, хотя `next_action()` давал `WORK`. `status` мапил любое `in_phase` в running. `target`: leftover sirene-doing — именованный дефект, закрывается в том же ходе; канон Б31 снимать `interrupt`; PID-probe не равен «sirene без pid».
+
+Кейс записи — **BUGFIX**. Слаг поезда: `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`. SoT входа: `_fix_plan_20261017.md` (П.4). Исследуемый слаг `eco-config-w4` — CHANGE dual-path, пассажир №2. `[NEW-ENTITY, требует согласования Саши]` **нет**.
+
+### Б40.1 Три нормы (а)(б)(в)
+
+| # | Норма | Куда | AC |
+|---|---|---|---|
+| (а) | Occupancy-дедлок «первый next + брошенный sirene-doing»: фаза оркестратора без pid остаётся `doing` и держит очередь по конвенции скилла, не по mutex CLI | Б10 occupancy, Б16.4 п.1–2, Б18.4 stabilize, Б33 п.39 | AC-058 |
+| (б) | `abort` сжигает каноническое имя пилота. `eco-config-w4` каноничен в Б31; overlay волны 4 не сделан; abort = потеря пассажира. Occupancy → `interrupt` | Б10 abort, Б31, Б33 п.40 | AC-059 |
+| (в) | PID-probe ≠ «sirene без pid». `next_action` для sirene-фаз с `pid=None` = WORK (доделать). `cmd_next` не перебивает в `dead pid`. Invoke-роль без живого pid → interrupt (AC-008). Running = живой PID. `--check` флажит leftover без авто-interrupt | Б11, Б13.2, Б16.4 п.3–4, Б29 A3, Б33 п.41 | AC-060 |
+
+Sirene-фазы G6 (исчерпывающе для этого пункта): `TZ:stabilize`, `SK:preflight`, `HF:backup`, `HF:docs-handoff`, `ORCH:shared-state`, гейты. Cursor-роль не звать; `pid=None` штатен.
+
+### Б40.2 Что не путь разблокировки (вердикт диагноза, уже исполнен П.0)
+
+| Вариант | Норма |
+|---|---|
+| `pipeline interrupt --slug eco-config-w4` | **брать** для leftover. Occupancy снимается, имя сохраняется. После interrupt — разбор, не авто-next этого слага (Б18.5) |
+| `pipeline abort` | **не брать** на каноне Б31 |
+| `complete-phase TZ:stabilize` без `tz_path`/`tz_version`/артефактов | **не брать** (A1) |
+| `json.dump` / `write_text` в `_state.json` | **не брать** (ломает `state_sha256`) |
+| Перемотка `write_state` w4 до `GATE:done` w3 | **не брать сейчас** (Б31: w4 после успешного w3) |
+
+П.0 оркестратора (interrupt w4) — **не** этот TZ-WRITE; evidence в journal диагноза.
+
+### Б40.3 Код и скилл (не этот ход)
+
+| П плана | Где | Когда |
+|---|---|---|
+| П.1 | `pipeline_status._column_for`: `in_phase` → running только если pid жив; иначе scheduled. Без мутации на `status` | `HF:impl` |
+| П.2 | `cmd_next` = `next_action` для sirene+`pid=None` → WORK; invoke-роль + не `pid_alive` → interrupt | `HF:impl` |
+| П.3 | `status --check` leftover → exit 1, без авто-interrupt | `HF:impl` |
+| П.5 | `SKILL.md`: после `next`→WORK на фазе оркестратора — в том же ходе complete или interrupt | `HF:docs-handoff` |
+
+П.4 = этот TZ-WRITE (нет отдельной строки в таблице — ожидаемо). П.0 и П.6 вне периметра кода.
+
+≤3 файла кода+теста вне shared/ядра (`cli.py`, `pipeline_status.py`, тест PID/status) + абзац скилла. Классификация LIGHT — оркестратор таблицей после diagnose-review, не архитектор (G5).
+
+### Б40.4 Что не в этом пакете
+
+Откат `dispatch_in_gateway` / `orchestration.mode=workflow-only` / tarball `skills-W4-kanban-*` (слаг `kanban-decommission`, AC-018). Ядро `hermes-agent`. `kanban.db`. PFS `task_slug`. `config.yaml` (этот поезд его не писал). Промоут канбан-карточек w3/w4 (Б33 п.17). Возобновление пассажира w4 (П.6 — после `GATE:done` w3). Восстановление корпуса v0.4.3/v0.4.4. Новый operator-глагол. `[NEW-ENTITY]`. Кроны. Gateway restart.
+
+AC пакета: **AC-058…060** (класс S). `GATE:done` слага — Б34.
+
+### Б40.5 Дрейф номеров 0.4.3 / 0.4.4 (показ, не hold)
+
+На диске до этого патча frontmatter master был **v0.4.2**. Инвентарь писал 0.4.4 — **проигрывает** (выжимка/инвентарь ≠ SoT). Номер **0.4.3** занят `dev-workflow-storage-archive` (Б38 / AC-052…054). Номер **0.4.4** занят `v-dev-workflow-zakrepit-avtomaticheskuyu-ochered` (Б16.3 / Б39 / AC-055…057, REV:tz APPROVE 16.10). Корпус этих блоков **на текущем диске отсутствует** (дрейф чужих поездов, прецедент tz-mirror-overwrite). Этот TZ-WRITE **не** восстанавливает их. Свободный номер — **0.4.5**. Свободные AC — **AC-058…**. Свободные пункты Б33 — **п.39…** (п.37–38 зарезервированы за v0.4.4).
+
+---
+
 ## Открытые вопросы
 
-Блокирующих открытых вопросов **нет**. Бриф `rs-refuse-kanban` закрыт 2026-10-13. Риски 14.10 закрыты Q-Archi-04/05. Блок E закрыт Q-Archi-06. Пакет `devworkflow-task-slug`: Q-Archi-07/08 решены в Б36 п.15–16 (не ждут реплики, чтобы закрыть `TZ:finalize`).
+Блокирующих открытых вопросов **нет**. Бриф `rs-refuse-kanban` закрыт 2026-10-13. Риски 14.10 закрыты Q-Archi-04/05. Блок E закрыт Q-Archi-06. Пакет `devworkflow-task-slug`: Q-Archi-07/08 решены в Б36 п.15–16 (не ждут реплики, чтобы закрыть `TZ:finalize`). Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`: Q нет; `[NEW-ENTITY]` нет.
 
 Вопрос `Q-1` «утвердить план выключения dispatch» **не** открыт: его заведёт `MIG:plan` будущего MIGRATION-слага (W4), см. AC-018 в Б34.
 
 **Показ, не hold (не в `open_questions[]` state).** `[NEW-ENTITY, требует согласования Саши]` — отдельный невидимый Telegram-топик или канал оркестрации (имя не утверждено). Пока нет реплики Саши: не создавать; AC-049 закрывается файлами + subprocess. Смена решения = реплика Саши, затем `TZ:patch`, не молчаливый `pipeline_notify` во второй тред.
+
+**Показ, не hold.** Дрейф корпуса v0.4.3 (Б38/AC-052…054) и v0.4.4 (Б16.3/Б39/AC-055…057): инвентарь и скилл знают номера, master до v0.4.5 их не содержал. Восстановление — чужие поезда, не этот BUGFIX (Б40.5).
 
 ---
 
@@ -2397,11 +2505,15 @@ AC пакета: **AC-044…051** (класс S). `GATE:done` слага — п�
 - Пакет v0.4.0: `dev/devworkflow-task-slug/TZ-stabilize.md`; фраза Саши 14.10 (оркестратор → stabilize, req 1–6); `SKILL.md` `dev-workflow` v0.3.2 (дыра входа)
 - Rework v0.4.1: `dev/devworkflow-task-slug/REV-tz.md` (REQUEST-CHANGES: пробел G6 на `RS:collect`/`MIG:block-k`/`SK:preflight`; арифметика баннера 12–19)
 - TZ:finalize v0.4.2: `dev/devworkflow-task-slug/journal.md` FINDING-PyContr-2 (канон `REV-tz.md` vs `REV-tz-2.md`; ложный матч `REQUEST-CHANGES` в теле APPROVE); пакет emit-prompt фазы `TZ:finalize`
+- TZ:patch v0.4.5: `dev/eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid/_fix_plan_20261017.md` (П.4); факты `_state.json`/`journal.md` слага `eco-config-w4` 2026-10-14 16:56:52; `cli.py` `cmd_next`; `pipeline_gates.next_action`; `pipeline_status._column_for`
+- TZ:finalize v0.4.5: `dev/eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid/REV-tz.md` verdict=APPROVE; `TZ-patch.md`
 
 ---
 
 ## Changelog
 
+- **2026-10-17 v0.4.5** — TZ:finalize пакета `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid` после REV:tz APPROVE. Корпус П.4 (AC-058…060 класс S) без правок смысла. Инвентарь. Код не писался (HF:impl). `[NEW-ENTITY]` нет.
+- **2026-10-17 v0.4.5** — TZ:patch пакета `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid` (BUGFIX) по `_fix_plan_20261017.md` П.4. Occupancy-дедлок «первый next + брошенный sirene-doing» (Б10, Б16.4, Б18.4, AC-058). Abort сжигает каноническое имя пилота Б31 (AC-059). PID-probe ≠ sirene без pid: `cmd_next`=`next_action` для G6-sirene+`pid=None` → WORK; running требует живой PID; `--check` leftover без авто-interrupt (AC-060). Б40. Номер 0.4.3/0.4.4 не переиспользован (чужие поезда; корпус на диске отсутствовал — Б40.5). Код не писался (HF:impl). `[NEW-ENTITY]` нет.
 - **2026-10-14 v0.4.2** — TZ:finalize пакета `devworkflow-task-slug` после REV:tz APPROVE на v0.4.1. FINDING-PyContr-2 (живой цикл REV): (1) `invoke_role` проверяет канонический basename артефакта (`REV-tz.md` / `REV-plan.md` / `extract.md` / `HF-plan.md`), иначе fail с подсказкой; (2) `rev_verdict()` парсит только блок `## Вердикт` и/или `verdict=`, не весь файл (цитата REQUEST-CHANGES в теле APPROVE не блокирует). Якоря Б13.2, Б16.1, AC-047. GLOSSARY §3 аддитив «Не делает» оркестратора (AC-051). Код не писался (HF:impl).
 - **2026-10-14 v0.4.1** — TZ:patch rework после REV:tz REQUEST-CHANGES на v0.4.0. Б6.5: таблица G6 исчерпывающая — добавлены `RS:collect` (architect), `MIG:block-k` (architect, recipe-add не invents роль), `SK:preflight` (оркестратор); complete-phase G6 без сужения префикса TZ\|HF\|BUG\|REV; нет строки = fail. Б23/Б24/Б27: колонка «Кто (G6)». AC-050: коридор баннера **12–19** = (10–15)+(2–4), round-up до 20 запрещён. Код не писался.
 - **2026-10-14 v0.4.0** — TZ:patch пакета `devworkflow-task-slug` (CHANGE полный). Файрвол ролей: оркестратор не предлагает слаги и технические варианты; поезд сам (`init` → архитектор); `pipeline suggest-slug`; G6 фаза→роль / `slug_source`; статус «стадия / кто / ход Саши»; изоляция origin. Б37, Б16.2, AC-044…051. Dual-path: баннер +файрвол без переписи тел (Q-Archi-07, AC-050). `[NEW-ENTITY]` канал оркестрации не создаётся (Q-Archi-08). PFS `task_slug` — второй поезд. Код не писался.

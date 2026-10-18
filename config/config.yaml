@@ -328,6 +328,64 @@ skills:
   inline_shell_timeout: 10
   guard_agent_created: false
   creation_nudge_interval: 15
+  disabled:
+    - airtable
+    - apple-notes
+    - apple-reminders
+    - architecture-diagram
+    - arxiv
+    - ascii-art
+    - ascii-video
+    - baoyu-infographic
+    - blogwatcher
+    - claude-design
+    - codebase-inspection
+    - comfyui
+    - computer-use
+    - confluence-people-resolve
+    - design-md
+    - docx
+    - dogfood
+    - evaluating-llms-harness
+    - excalidraw
+    - findmy
+    - github-auth
+    - github-code-review
+    - github-issues
+    - github-pr-workflow
+    - github-repo-management
+    - grounded-citations
+    - hermes-docker-pitfalls
+    - himalaya
+    - huggingface-hub
+    - humanizer
+    - imessage
+    - inspecting-hermes-desktop-dom
+    - llama-cpp
+    - llm-wiki
+    - manim-video
+    - maps
+    - nano-pdf
+    - node-inspect-debugger
+    - notion
+    - openhue
+    - p5js
+    - popular-web-designs
+    - powerpoint
+    - pretext
+    - python-debugpy
+    - requesting-code-review
+    - serving-llms-vllm
+    - simplify-code
+    - sketch
+    - songwriting-and-ai-music
+    - systematic-debugging
+    - teams-meeting-pipeline
+    - test-driven-development
+    - touchdesigner-mcp
+    - weights-and-biases
+    - xurl
+    - youtube-content
 curator:
   enabled: true
   interval_hours: 168

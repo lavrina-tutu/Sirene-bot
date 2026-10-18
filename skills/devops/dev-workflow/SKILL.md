@@ -1,6 +1,6 @@
 ---
 name: dev-workflow
-version: 0.4.5
+version: 0.4.6
 description: Оркестрация разработки Hermes (файловое состояние, 10 кейсов)
 ---
 
@@ -78,7 +78,9 @@ pipeline next
 
 Перед каждой содержательной фазой (TZ/HF/BUG/REV): только цепочка **emit-prompt → invoke-role**. Обход и `--force` запрещены. Пакет контекста: `references/context.md`.
 
-**`invoke-role` запускать только в фоне** (`terminal background=true, notify=true, persist_on_release=true`). Роль (cursor-grok/claude/composer) отвечает минуты — foreground-терминал с таймаутом 180с убивает вызов до ответа: фаза остаётся `doing` с пустыми `pid/started_at` в `_state.json` и без дописи в `journal.md`, результат теряется. После запуска фона `next`/`complete-phase` делай только на момент завершения роли, прекращай ход; не перезапускай фазу молча.
+**`invoke-role` запускать только в фоне** (`terminal background=true, notify=true, persist_on_release=true`). Роль (cursor-grok/claude/composer) отвечает минуты — foreground-терминал с таймаутом 180с убивает вызов до ответа: фаза остаётся `doing` с пустыми `pid/started_at` в `_state.json` и без дописи в `journal.md`, результат теряется. После запуска фона `next`/`complete-phase` делай только на момент завершения роли, прекращай ход; не перезапускай фазу молча. **Запрещено** оборачивать `invoke-role` в `| head` / `| tail` / любой отсекатель stdout (SIGPIPE убьёт wrapper, роль станет сиротой, state останется `doing` без pid) — AC-064. Запускай в фоне без пайпа.
+
+**`pid=None` на invoke-роли ≠ leftover (Б16.5, AC-061/063).** Фаза `architect`/`reviewer`/`executor`/`compressor` с `doing` и `pid=None` после `invoke_prepare` **не значит** «брошенный поезд»: `pid` мог просто не записаться (старый код) или процесс жив. Порядок: (1) `pid_alive` по полю `pid` (новый код пишет его при `invoke_prepare`); (2) fallback — `ps`/`pgrep` по argv-токену `--slug` **точно равен** этому слагу (не substring соседа) + `invoke-role`/`pipeline.cli`; несколько совпадений — считать живым, если хотя бы один жив, предпочесть того, у кого `--phase` = текущая фаза; (3) если процесс жив — **не** `interrupt`, **не** `next` этого слага, **не** второй `init`+`invoke-role` «очередь зависла» (это второй поезд поверх живого — запрещено Б16.5/AC-063). Живой invoke правильно выглядит как running после AC-061.
 
 **LIGHT:** после известного объёма — `pipeline set-case --case CHANGE-LIGHT` или `BUGFIX-LIGHT` (не решает архитектор).
 

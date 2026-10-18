@@ -1,7 +1,7 @@
 ---
 name: epic-development
-description: "Правила разработки Epic: модульное ТЗ, бриф по одному вопросу, MVP-порядок модулей. Не для DEV-пайплайна (tz-workflow/hermes-feature/GLOSSARY §2). Использовать при работе с любым Epic в топике Tools."
-version: 1.1.1
+description: "Правила разработки Epic: модульное ТЗ, бриф по одному вопрос"
+version: 1.1.2
 author: agent
 tags: [epic, briefing, tz, planning, tools]
 platforms: [linux, macos, windows]

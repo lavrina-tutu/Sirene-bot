@@ -1,7 +1,7 @@
 ---
 name: workvault-sync-infra
-description: "Use when diagnosing or configuring WorkVault↔ownCloud sync on the VM — systemd timers for bidirectional sync and one-way Inbox pull, rclone exclude lists, or 'why did my file not show up / get overwritten'. Триггеры: Inbox, синк WorkVault, owncloud-sync, rclone exclude, файл не появился на ВМ, два Inbox, sync timer."
-version: 1.0.0
+description: "Inbox: итоги и решения из стенограммы"
+version: 1.0.1
 author: agent
 license: MIT
 platforms: [linux]

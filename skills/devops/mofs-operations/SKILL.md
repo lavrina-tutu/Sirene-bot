@@ -1,7 +1,7 @@
 ---
 name: mofs-operations
-description: "Use when: работа с инструментом MarkObjectsFromSummary (MOFS) — запуск прогонов, диагностика, bootstrap архива, управление entities.json, contacts из тела summary. Триггеры: mofs run, mofs rematch, entities.json, словарь тегов, тегирование встреч, wiki-ссылки Obsidian, contacts, ФИО участников, mofs index."
-version: 1.3.2
+description: "Use when: работа с инструментом MarkObjectsFromSummary (MOFS"
+version: 1.3.3
 author: Sirene
 license: MIT
 platforms: [linux]

@@ -1,6 +1,6 @@
 ---
 name: exchange-meeting
-description: "Exchange calendar operations via EWS: create meetings, check free/busy, find slots, invite attendees. Integrates with AnywhereContacts for email lookup and Zoom API for meeting links."
+description: "Exchange calendar operations via EWS: create meetings, check"
 version: "1.1.0"
 platforms: [linux, macos, windows]
 tools: [terminal]

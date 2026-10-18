@@ -1,7 +1,7 @@
 ---
 name: hermes-prompt-architecture
-description: "System prompt stack. SOUL.md, AGENTS.md, profile isolation. Triggers: проверь промпт."
-version: 1.7.1
+description: "проверь промпт: стек SOUL, AGENTS, profile"
+version: 1.7.2
 author: agent
 license: MIT
 platforms: [linux, macos, windows]

@@ -1,7 +1,7 @@
 ---
 name: about_usr_skills
-description: "Use when: (1) Саша спрашивает «что ты умеешь / расскажи о себе / какие у тебя инструменты / что автоматизировано» — точка входа с алгоритмом опроса всех источников; (2) разработка/эксплуатация пользовательских инструментов USERTOOLS (MoveFrom*, MOFS, PFS, TaskRefresh, EntityRegistryCLI, OrgLookup, ConfluenceSync, SRTool, MofsIndex, workvault-rag и др.) — общая архитектура, принципы, статусы, ссылки на ТЗ."
-version: 3.0.0
+description: "Use when: (1) Саша спрашивает «что ты умеешь / расскажи о се"
+version: 3.0.1
 author: agent
 license: MIT
 platforms: [windows, linux, macos]

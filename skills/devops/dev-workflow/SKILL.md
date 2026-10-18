@@ -1,7 +1,7 @@
 ---
 name: dev-workflow
-version: 0.4.6
-description: Оркестрация разработки Hermes (файловое состояние, 10 кейсов)
+version: 0.4.7
+description: "Оркестрация разработки Hermes (10 кейсов, файлы)"
 ---
 
 # Dual-path (переход W0–W4)
@@ -86,6 +86,17 @@ pipeline next
 
 **Occupancy-правило (П.5):** после `next` → WORK на sirene-фазе (G6, оркестратор) — закрыть фазу **в том же ходе**: `complete-phase` с уликой либо `interrupt`. Не оставлять `in_phase` + `doing` + `pid=None` до следующего дня (занятый воркер держит очередь, 13.10-инцидент). Это **не** минутный сторож и не скрытый тик: движение только когда ты сознательно в этом ходе, без фонового опроса.
 
+## complete-phase evidence и write_state (питфоллы CLI)
+
+- `pipeline complete-phase --evidence` обязан содержать токен `path=` | `sha256=` | `session_id=` — голый reason-текст в evidence возвращает «evidence must include path= or sha256= or session_id=» и фаза не закрывается. Для `TZ:stabilize` evidence обязан дать тройку `path=/version=/mtime=` (либо state уже несёт `tz_path+tz_version`) — без неё complete падает тем же guard.
+- **Канонный артефакт фазы — фиксированное имя, не слаг.** `complete-phase` (и preflight) смотрит `CANONICAL_ARTIFACT[phase]`: `REV:tz`→`REV-tz.md`, `REV:plan`→`REV-plan.md`, `TZ:compress`/`HF:compress`→`extract.md`, `HF:plan`→**`HF-plan.md`** (не `HF-plan_<slug>.md`). Если роль (или постановка в промпте) пишет слагованное имя — `complete-phase` падает «canonical artifact HF-plan.md missing». Задавай в постановке роли точное канонное имя файла и, если роль всё же создала слагованную копию, скопируй её в канонное имя перед `complete-phase` (duplicate в явном виде; синка не ждать).
+- `pipeline_state.write_state(st, event={...})` требует в event ключ **`phase`** вместе с `event`/`actor`: без `phase` — «Incomplete log event: missing phase», мутация молча не записывается. В любом ручном return/reclassify (см. REQUEST-CHANGES и перемотку выше) всегда неси `event`+`actor`+`phase`.
+- `pipeline set-case` на обужденном графе (фазы уже started/filled, мастер на state) может упасть `CRISIS: state_sha256 mismatch` (аддитив схемы) и не примениться — кейс остаётся старым. Реклассификацию живой постановки делай через `write_state` (переписать `case`+`recipe`+`tz_path/tz_version`, завести недостающие фазы пустой `_empty_phase()`, сбросить `status='idle'`, `phase=None`), а не через `set-case`.
+
+## RESEARCH → реализация (классификация и мастер)
+
+Когда RESEARCH-отчёт закрыт и Саша выбирает один из вариантов вердикта, реализация по сути — правка скиллов/AGENTS.md → кейс **SKILL-CHANGE** (`SK:preflight` первой), НЕ CHANGE. Мастер-ТЗ такого кейса — сам RESEARCH-отчёт (отчёт + extract как постановка, `tz_version = research-<дата>`), а не существующий tool-ТЗ другой области: stabilize на чужой мастер (напр. SkillsImprovement про Trisigma, когда вердикт про гигиену скиллов) = ложная классификация, тянет за собой перемотку.
+
 ## Согласование ТЗ и плана (REV)
 
 После `TZ:patch` и `HF:plan`:
@@ -105,6 +116,8 @@ pipeline next
 Хэш ломается не только прямым сбросом: **аддитив новой схемы** (например, добавление поля `slug_source` в `to_dict`) тоже даёт CRISIS-рассинхрон на старом файле — `from_dict`→`to_dict` добавляет новое поле в имёжное содержимое, пересчитанный hash разъезжается со stored даже без правок «руками» (raw-sha по файлу матчится, а из объекта — нет). Симптом: ручной sha по сырому dict совпадает, а `read_state` всё равно падает. Лечится тем же: собрать объект из raw, `write_state` — он запишет файл уже с новым полем и пересчитает хэш консистентно.
 
 **После rebuild/migration объекта верни `phases[PHASE]['role']` (и `started_at` при необходимости).** Сборка `PipelineState` напрямую из старого dict теряет `role`, который `invoke_role` записал ранее (`role: None`). `complete-phase` на фазе с ожидаемой Cursor-ролью упадёт по G6 «role None != executor» — упрёшься и фаза не закроется. Проставляй поле роли заново в этом же `write_state` (например, `phases['HF:impl']['role']='executor'`), иначе после «починки хэша» застрянешь на следующем гейте.
+
+**`role: None` на фазе после обычного invoke-role — то же лечение, не только после rebuild.** Нормальный фоновый `invoke-role` (rc=0, артефакт записан, фаза `doing`) может не персистить `phases[PHASE]['role']` в `_state.json` — тогда `complete-phase --phase X` падает `g6: phase X role None != architect|reviewer|executor`. Это НЕ признак того, что роль не отработала (артефакт на диске есть): проставь `phases[X]['role']` (+ `model`, `evidence= path=…`) через `write_state` и повтори `complete-phase`. Проверяй `role` в state до вызова complete, а не только после «починки хэша».
 
 **Возврат фазы в `doing` после REQUEST-CHANGES:** `repair` НЕ переводит фазу назад (он только переиндексирует `queue.json`), а `next` на `interrupted` фазу даёт `INTERRUPTED`. Ручной возврат архитектору — через `write_state`: `status='idle'` (НЕ `in_phase` — `in_phase`+`doing` с мёртвым pid заставляет `next` снова ставить `interrupted`), `phase=None`, `phases['TZ:patch']={'status':'doing'}`, `phases['REV:tz']={'status':'todo'}`, `pid=None`. Затем `next` даёт `WORK`/`TZ:patch`. Событию нужен ключ `event` (+ `actor`) — иначе `Incomplete log event: missing event/actor`, мутация молча теряется.
 

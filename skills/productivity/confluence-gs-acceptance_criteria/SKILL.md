@@ -1,7 +1,7 @@
 ---
 name: confluence-gs-acceptance_criteria
-description: "Use when переносим критерии/шкалы приёмочного пилота (PoC) из Confluence в Google Sheets для сбора баллов от респондентов. Формат: строки-критерии с описанием в примечании, столбцы-респонденты под баллы, средние по блокам формулой. Pitfall: оценки записывать числами, не текстом."
-version: 1.0.0
+description: "Use when переносим критерии/шкалы приёмочного пилота (PoC) и"
+version: 1.0.1
 author: agent
 license: MIT
 platforms: [linux]

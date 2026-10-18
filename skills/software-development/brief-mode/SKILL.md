@@ -1,6 +1,6 @@
 ---
 name: brief-mode
-description: Правила ведения брифа с PM — поштучные вопросы с рекомендациями и обоснованием
+description: "Правила ведения брифа с PM — поштучные вопросы с рекомендаци"
 version: "1.0.0"
 platforms: [linux, macos, windows]
 triggers:

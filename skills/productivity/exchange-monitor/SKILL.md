@@ -1,7 +1,7 @@
 ---
 name: exchange-monitor
-description: "Мониторинг входящей почты Exchange (EWS) — фильтрация реальных людей, срочные уведомления и часовой дайджест в Telegram Messages. Интегрируется в кроны MoveFromLoop. Триггеры: Exchange мониторинг, входящие письма, ExchangeMeeting, email дайджест, письма от реальных людей, allowlist поддеревьев Confluence, Confluence уведомления."
-version: 0.3.0
+description: "Exchange мониторинг: итоги и решения из стенограммы"
+version: 0.3.1
 author: Sirene
 license: MIT
 platforms: [linux]

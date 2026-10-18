@@ -1,6 +1,6 @@
 ---
 name: cleanup-after-sync
-description: "Чистка мусора после GitHub-синка. no_agent скрипт, 0 токенов. Запускается автоматически после autosync_github.sh."
+description: "Чистка мусора после GitHub-синка"
 triggers:
   - "чистка мусора"
   - "cleanup after sync"

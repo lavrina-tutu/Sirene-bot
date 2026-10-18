@@ -1,7 +1,7 @@
 ---
 name: media-utilities
-description: "Small media utility tools: GIF search via Tenor API (curl/jq), audio spectrogram/feature visualization (songsee CLI)."
-version: 1.0.0
+description: "Small media utility tools: GIF search via Tenor API (curl/jq"
+version: 1.0.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]

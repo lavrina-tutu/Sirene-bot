@@ -1,7 +1,7 @@
 ---
 name: cloud-storage-webdav
-description: "Монтирование облачных дисков через WebDAV на Linux: Яндекс.Диск, Nextcloud, ownCloud. davfs2, credentials, fstab, диагностика 401."
-version: 1.0.0
+description: "Монтирование облачных дисков через WebDAV на Linux: Яндекс"
+version: 1.0.1
 author: agent
 tags: [linux, webdav, yandex-disk, davfs2, storage, mount]
 platforms: [linux]

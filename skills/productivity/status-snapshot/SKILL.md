@@ -1,6 +1,6 @@
 ---
 name: status-snapshot
-description: Генерация «среза проекта» (status_snapshot) по итогам FF-встречи. Активируется на фразы «создай срез», «обнови срез», «срез по встрече». Применяет prompt-шаблон, сверяет с card.md/context.md, генерирует PM Warnings и кладёт файл в Projects/{slug}/snapshots/.
+description: "Генерация «среза проекта» (status_snapshot) по итогам FF-вст"
 version: "1.0.0"
 platforms: [linux, macos, windows]
 tools: [read_file, write_file, patch, search_files]

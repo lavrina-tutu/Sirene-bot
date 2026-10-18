@@ -1,7 +1,7 @@
 ---
 name: confluence-doc-edit-cursor
-description: "REDIRECT → use pmo-charter-fill (устав) or tutu-confluence-jira B0 (прочие правки). Triggers: правим Confluence устав/бриф, заполни устав, доработай устав."
-version: 0.1.1
+description: "правим Confluence устав: REDIRECT pmo-charter-fill"
+version: 0.1.2
 status: redirect
 redirect: pmo-charter-fill
 platforms: [linux]

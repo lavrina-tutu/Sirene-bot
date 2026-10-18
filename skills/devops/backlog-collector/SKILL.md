@@ -1,7 +1,7 @@
 ---
 name: backlog-collector
-description: "Показывает backlog — READ-запрос IDEA/* в triage (DevWorkflow, колонка pipeline status)."
-version: 3.0.0
+description: "backlog: collect IDEA/* triage DevWorkflow pipeline"
+version: 3.0.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]

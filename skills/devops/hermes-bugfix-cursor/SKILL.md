@@ -1,7 +1,7 @@
 ---
 name: hermes-bugfix-cursor
-description: "Нештатная починка Hermes через Cursor (SSH remote): диагностика, правка кода, рестарт gateway. Триггеры: Hermes сломался после обновления, ошибка в gateway, ImportError, нужно пофиксить баг в коде."
-version: 1.0.0
+description: "Нештатная починка Hermes через Cursor (SSH remote): диагност"
+version: 1.0.1
 author: agent
 tags: [hermes, bugfix, cursor, ssh, emergency]
 platforms: [linux]

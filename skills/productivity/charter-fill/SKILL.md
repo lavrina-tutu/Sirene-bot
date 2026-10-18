@@ -1,7 +1,7 @@
 ---
 name: charter-fill
-description: "REDIRECT → use pmo-charter-fill. Triggers: заполни устав, доработай устав, доработай документ по шаблону, проектные документы полного внедрения."
-version: 1.0.1
+description: "заполни устав: REDIRECT pmo-charter-fill"
+version: 1.0.2
 status: redirect
 redirect: pmo-charter-fill
 platforms: [linux]

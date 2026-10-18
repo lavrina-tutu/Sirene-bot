@@ -1,7 +1,7 @@
 ---
 name: backlog-analyst
-description: "Показывает backlog — READ-запрос IDEA/* в triage (DevWorkflow, колонка pipeline status)."
-version: 2.0.0
+description: "backlog: READ IDEA/* triage DevWorkflow pipeline status"
+version: 2.0.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]

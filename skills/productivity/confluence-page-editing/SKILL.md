@@ -1,7 +1,7 @@
 ---
 name: confluence-page-editing
-description: "REDIRECT → page-edit: tutu-confluence-jira B0; план-график: page-to-schedule. Triggers: правка Confluence, план-график из страницы, залей фичи в GS."
-version: 1.0.2
+description: "правка Confluence: tutu-confluence-jira+page-to-schedule"
+version: 1.0.3
 status: redirect
 platforms: [linux]
 metadata:

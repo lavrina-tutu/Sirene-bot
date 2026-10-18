@@ -1,7 +1,7 @@
 ---
 name: research-tools
-description: "Research discovery tools umbrella: arXiv paper search (REST API), RSS/blog monitoring (blogwatcher-cli), and LLM Wiki (persistent interlinked knowledge base)."
-version: 1.0.0
+description: "Research discovery tools umbrella: arXiv paper search (REST"
+version: 1.0.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]

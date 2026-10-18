@@ -1,7 +1,7 @@
 ---
 name: upstream-dependency-monitor
-description: "Мониторинг upstream репозиториев (git fetch + diff changelog). no_agent watchdog: 0 токенов если нет изменений, уведомление в TG при новых коммитах/breaking changes. Триггеры: отслеживай upstream, мониторинг обновлений, следи за репо."
-version: 1.0.0
+description: "отслеживай upstream: итоги и решения из стенограммы"
+version: 1.0.1
 author: agent
 tags: [monitoring, upstream, git, no-agent, watchdog]
 platforms: [linux, macos]

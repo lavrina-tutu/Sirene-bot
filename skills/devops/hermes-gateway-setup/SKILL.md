@@ -1,7 +1,7 @@
 ---
 name: hermes-gateway-setup
-description: "Set up, configure, and operate Hermes Gateway: platform integrations (Telegram, Discord, Slack), display/notification config, Windows service install, crash diagnosis, and delegate_task vs cronjob routing patterns."
-version: 1.2.0
+description: "Set up, configure, and operate Hermes Gateway: platform inte"
+version: 1.2.1
 author: agent
 tags: [hermes, gateway, telegram, discord, slack, messaging, setup, windows]
 platforms: [linux, macos, windows]

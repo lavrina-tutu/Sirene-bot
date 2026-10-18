@@ -1,7 +1,7 @@
 ---
 name: movefromff
-description: "Запуск инструмента MoveFromFF: синхронизация встреч из Fireflies.ai в Obsidian WorkVault."
-version: 1.0.0
+description: "Запуск инструмента MoveFromFF: синхронизация встреч из Firef"
+version: 1.0.1
 author: Hermes Agent
 platforms: [telegram, cli]
 ---

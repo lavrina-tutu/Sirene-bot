@@ -1,6 +1,6 @@
 ---
 name: sirene-chat-friends
-description: "Личность и поведение Сирени — личного помощника Саши Ткаченко: идентичность, характер, три воплощения (Opus/Sonnet/Haiku), поведение в Telegram, модели по задачам, backlog = kanban triage."
+description: "Личность и поведение Сирени — личного помощника Саши Ткаченк"
 version: "1.0.0"
 platforms: [linux, macos, windows]
 triggers:

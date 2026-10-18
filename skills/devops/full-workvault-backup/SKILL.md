@@ -1,7 +1,7 @@
 ---
 name: full-workvault-backup
-description: "Полный tgz-бэкап ~/WorkVault → ~/WorkVault_backup/_full-WorkVault-backup/. Запускается ежедневно в 23:30 (кроном) или по прямой команде: 'сделай бэкап хранилища', 'сделай бэкап WorkVault', 'сделай полный бэкап'."
-version: 1.0.0
+description: "Полный tgz-бэкап ~/WorkVault → ~/WorkVault_backup/_full-Work"
+version: 1.0.1
 author: agent
 license: MIT
 platforms: [linux]

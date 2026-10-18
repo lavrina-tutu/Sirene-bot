@@ -1,7 +1,7 @@
 ---
 name: hermes-cost-optimization
-description: "Reduce Hermes token costs: route delegation/auxiliary tasks to cheaper models, configure context compression, connect local/corporate LLM endpoints."
-version: 1.0.0
+description: "Reduce Hermes token costs: route delegation/auxiliary tasks"
+version: 1.0.1
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]

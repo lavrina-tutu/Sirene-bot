@@ -1,7 +1,7 @@
 ---
 name: cursor-cli
-description: "Use when: установка, настройка и использование Cursor CLI на ВМ Hermes. Triggers: Cursor CLI, cursor-agent, agent install, CURSOR_API_KEY, курсор кли."
-version: 1.3.0
+description: "Use when: установка, настройка и использование Cursor CLI на"
+version: 1.3.1
 author: agent
 license: MIT
 platforms: [linux]

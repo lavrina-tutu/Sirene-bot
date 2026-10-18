@@ -1,7 +1,7 @@
 ---
 name: get-obsidian-link
-description: Use when Саша просит ссылку/линк на файл(ы) в Obsidian vault (WorkVault) для отправки в Telegram — например "вышли ссылку на самари", "дай линк на встречу", "дам ссылку на SR", "ссылка на план SR". Формирует obsidian:// ссылку в формате, кликабельном/копируемым в Telegram.
-version: 1.0.0
+description: "Use when Саша просит ссылку/линк на файл(ы) в Obsidian vault"
+version: 1.0.1
 author: agent
 license: MIT
 tags: [obsidian, workvault, telegram, links]

@@ -1,7 +1,7 @@
 ---
 name: workvault-entities
-description: "Структура WorkVault/Entities/<slug>/ — единое хранилище всех сущностей (проекты, 1-1, люди, мультисинки). Миграция из Projects/+People/. Правила именования, создания новых сущностей через Сирень, связь с entities.json. Триггеры: создай сущность, добавь проект в vault, структура WorkVault, Entities, папка проекта, 1-1 папка."
-version: 1.0.0
+description: "создай сущность: итоги и решения из стенограммы"
+version: 1.0.1
 author: Sirene
 license: MIT
 platforms: [linux]

@@ -1,7 +1,7 @@
 ---
 name: hermes-ops
-description: "Проверять docs.hermes-agent.nousresearch.com как источник истины перед любой настройкой/расширением/диагностикой Hermes: конфиги, скиллы, MCP, память, cron, оптимизация. Triggers: настройка Hermes, MCP, скиллы, оптимизация Hermes, память Hermes, memory, config.yaml, hermes update, hooks, cron, gateway, профили Hermes, plugins."
-version: 0.2.0
+description: "настройка Hermes: Проверять docs"
+version: 0.2.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]

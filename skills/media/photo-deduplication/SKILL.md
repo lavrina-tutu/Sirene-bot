@@ -1,7 +1,7 @@
 ---
 name: photo-deduplication
-description: "Дедупликация фото: удаление дублей из burst/motion серий Samsung, выбор резкого кадра через Laplacian variance (OpenCV). Работает с WebDAV и локальными папками."
-version: 1.0.0
+description: "Дедупликация фото: удаление дублей из burst/motion серий Sam"
+version: 1.0.1
 author: agent
 tags: [photos, deduplication, opencv, samsung, burst, sharpness, webdav]
 platforms: [linux]

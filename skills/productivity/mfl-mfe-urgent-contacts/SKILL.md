@@ -1,7 +1,7 @@
 ---
 name: mfl-mfe-urgent-contacts
-description: "Управление списком срочных получателей для MoveFromLoop (MFL) и ExchangeMonitor (MFE). Единый конфиг loop_rules.yaml."
-version: 1.0.0
+description: "Управление списком срочных получателей для MoveFromLoop (MFL"
+version: 1.0.1
 author: Sirene
 license: MIT
 platforms: [linux]

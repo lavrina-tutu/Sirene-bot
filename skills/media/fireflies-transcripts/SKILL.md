@@ -1,6 +1,6 @@
 ---
 name: fireflies-transcripts
-description: "Fireflies.ai: fetch transcripts via GraphQL API, filter, chronologize, and integrate into narrative writing."
+description: "Fireflies: транскрипты GraphQL API, фильтр, интеграция"
 version: "1.0.0"
 platforms: [linux, macos, windows]
 tools: [terminal]

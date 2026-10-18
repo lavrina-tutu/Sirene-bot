@@ -1,7 +1,7 @@
 ---
 name: deep-mine-project
-description: "Use when: глубокий анализ проекта, глубокое бурение, собери/обнови архив проекта, deep-mine refresh, charter-context, architecture-context, проектная документация полного внедрения. Полуавтоматический сбор контекста (Confluence+Gantt JSON+встречи+сущность) в 3-слойный overlay (GRAPH/facts/contexts). Не для точечного RAG (workvault-rag), не sync одной страницы (ConfluenceSync), не компрессия ТЗ (tz-compressor-prompt)."
-version: 1.0.1
+description: "Use when: глубокий анализ проекта, глубокое бурение, собери/"
+version: 1.0.2
 platforms: [linux]
 metadata:
   hermes:

@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
-description: "Use when: полный цикл разработки фич/инструментов Hermes (ТЗ → код → тесты → документация) + диагностика багов + процедура починки питфоллов (pitfall-remediation-workflow). Triggers: разработай, новый инструмент, сделай, напиши код, реализуй, реализация, почини, починка, баг, ошибка, не работает, упало, разберись, исследуй, проанализируй, доработка, дорабатываем, MoveFrom*, обновить гермес, обновление гермес, hermes update, апгрейд, merge upstream, upstream merge, обновление версии."
-version: 2.13.0
+description: "Use when: цикл ТЗ→код Hermes, баг, исследование, доработка"
+version: 2.13.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]

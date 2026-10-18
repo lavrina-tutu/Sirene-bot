@@ -1,7 +1,7 @@
 ---
 name: moscow-suburban-trains
-description: "Lookup Moscow suburban train (электричка) schedules, platform numbers, and stop times via Yandex Rasp. Use when: Саша спрашивает с какого пути электричка, во сколько прибывает на промежуточную станцию, номер поезда."
-version: 1.0.0
+description: "Use when: Саша спрашивает с какого пути электричка, во сколь"
+version: 1.0.1
 author: agent
 tags: [trains, schedule, moscow, rasp, yandex, электричка]
 platforms: [linux, macos]

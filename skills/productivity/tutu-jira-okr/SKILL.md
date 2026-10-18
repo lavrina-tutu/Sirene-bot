@@ -1,7 +1,7 @@
 ---
 name: tutu-jira-okr
-description: "OKR в Jira ТУТУ (OKRS/OKRAID): чекин, план периода, иерархия Objective/KR, выгрузка в Obsidian. Триггеры: OKR, цели департамента, Key Result, квартальный чекин, закрытие периода OKR, что у нас по OKR, прогресс по целям, OKR АИД, OKRAID."
-version: 2.3.1
+description: "OKR: итоги и решения из стенограммы"
+version: 2.3.2
 author: agent
 license: MIT
 platforms: [linux]

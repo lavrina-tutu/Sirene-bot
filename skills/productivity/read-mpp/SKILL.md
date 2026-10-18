@@ -1,6 +1,6 @@
 ---
 name: read-mpp
-description: "Конвертация планов проектов в Google Sheets по шаблону Саши. Три входа: (1) .mpp — присылать как .zip; (2) Gantt CSV (gantt-chart-export_*.csv); (3) GS-роадмап (URL) → план MS Project. Каждый прогон — новый GS. Форматирование как в MS Project: Calibri 11, суммарные жирные, верхний уровень Calibri 16, заголовок Arial 9. Права только на tkachenkoav@tutu.ru и i.alex.tkachenko@gmail.com (writer), без anyone. Триггер: «прочитай mpp», «конвертируй mpp в gs», «залей csv в gs», «план из роадмапа», «план MS Project в GS из роадмапа». Для deep-mine-project этот скилл НЕ вызывать (нужен CSV через read_mpp.py)."
+description: "прочитай mpp: итоги и решения из стенограммы"
 version: "1.1.0"
 platforms: [linux, macos, windows]
 tools: [terminal, read_file, write_file]

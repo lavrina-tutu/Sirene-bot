@@ -1,7 +1,7 @@
 ---
 name: tutu-jira-sr
-description: "Self-Review (SR) в Jira ТУТУ: план периода (plan), заполнение плана (fill), сверка чужого SR (check), итоги своего SR (selfcheck). Триггеры: self-review, SR, мой SR, заполнить SR, проверить SR, план на период, итоги периода, оценка по SR, перенести открытые пункты."
-version: 1.14.0
+description: "self-review: итоги и решения из стенограммы"
+version: 1.14.1
 author: agent
 license: MIT
 platforms: [linux]

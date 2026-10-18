@@ -1,7 +1,7 @@
 ---
 name: zoom-api-integration
-description: "Создание Zoom-конференций программно через Server-to-Server OAuth API. Триггеры: zoom api, создать zoom встречу, zoom ссылка, zoom credentials, marketplace.zoom.us."
-version: 1.0.0
+description: "zoom api: итоги и решения из стенограммы"
+version: 1.0.1
 author: agent
 license: MIT
 platforms: [linux]

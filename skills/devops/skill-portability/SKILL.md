@@ -1,7 +1,7 @@
 ---
 name: skill-portability
-description: "Use when packaging one or more Hermes skills to share with another Hermes agent/instance/user — depersonalize, bundle, write install instructions, and deliver. Триггеры: поделись скиллом, выгрузи скилл, упакуй скилл для другого агента, передай скилл другому Hermes, share this skill, export skill, package skill for another instance."
-version: 1.0.0
+description: "поделись скиллом: итоги и решения из стенограммы"
+version: 1.0.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]

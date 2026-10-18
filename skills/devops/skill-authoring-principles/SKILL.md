@@ -1,7 +1,7 @@
 ---
 name: skill-authoring-principles
-description: "Load when: creating a new skill, updating/patching any existing skill, reviewing skill quality. Triggers: создай скилл, обнови скилл, добавь в скилл, патч скилла, напиши скилл, skill_manage, skill authoring, проверь скилл, skill hygiene."
-version: 2.2.1
+description: "создай скилл / патч скилла: нормы authoring"
+version: 2.2.3
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -44,7 +44,8 @@ A skill loads **independently**. Referenced skills are NOT loaded automatically 
   - minor (x.**Y**.0): new section, workflow change, new trigger in description
   - major (**X**.0.0): rename, breaking restructure, broken references
 - **Related skills alive:** every name in `related_skills` must resolve via `skills_list()` or grep.
-- **description ≤ 1024 chars** — exceeded → skill silently fails to load.
+- **description ≤ 60 chars for the skills index** (`SKILL_PROMPT_DESC_LIMIT`; put the trigger in the first 57) — longer descriptions are truncated in the prompt as `[:57]+"..."`.
+- **description ≤ 1024 chars for file load** (`MAX_DESCRIPTION_LENGTH`) — exceeded → skill silently fails to load.
 - **Growth gate:** if file grew >10% from pre-flight size → compression pass **required** before saving.
 - **Cache:** after rename/section deletion → verify in a new session.
 
@@ -79,7 +80,8 @@ Precedent: `vm_dialogbacklog` mixed collection + analysis. Split into `backlog-c
 
 - **Append instead of merge** → skill bloats invisibly over months.
 - **Wrong owner:** pitfall added to discovery skill, not application skill → duplication, drift on updates.
-- **description >1024 chars** → skill silently fails to load.
+- **description >60 chars** → index truncates the prompt (`[:57]+"..."`); rewrite the source so the trigger fits the first 57.
+- **description >1024 chars at load** → skill silently fails to load.
 - **`platforms: [all]`** → invalid syntax, skill fails to load; use `[linux, macos, windows]`.
 - **New skill without checking trigger conflicts** → two skills load simultaneously; check `skills_list()` + grep descriptions first. Решения 26.07.2026: «исследуй»/«проанализируй» убраны из `hermes-feature` → перенесены в `tz-workflow` (исследование → ТЗ, не код); «почисти перед новым инструментом» убрано из `hermes-memory-hygiene` (слово «инструмент» пересекалось с `hermes-feature` и `tz-workflow`). Принцип: каждый триггер должен однозначно указывать на один скилл — если слово есть у двух скиллов, оно бесполезно как триггер.
 - **Skill created in wrong profile** → cron can't find it. When Opus-cron creates skills, it may write to `~/.hermes/profiles/default/skills/` while the active profile is `tz-dev`. Fix: `cp -r ~/.hermes/profiles/default/skills/devops/<skill> ~/.hermes/profiles/tz-dev/skills/devops/`. After creating a skill via cron, verify with `ls ~/.hermes/profiles/tz-dev/skills/devops/<skill>/`. Precedent 27.07.2026: `backlog-collector` and `backlog-analyst` created in `default`, crons in `tz-dev` could not find them (`⚠️ Skill not found and skipped`).
@@ -95,8 +97,10 @@ When deciding whether to add a skill to a cronjob's `skills=[...]`:
 
 For `vm_selfcheck` (weekly audit, read-only): embed specific audit commands in the prompt directly:
 ```bash
-# description >1024 chars
+# description >1024 chars (load failure)
 find ~/.hermes/skills -name "SKILL.md" | xargs awk '/^description:/{print length($0), FILENAME}' | awk '$1>1024'
+# description >60 chars (index truncation — fix frontmatter, not the loader)
+python3 -c "import sys; from pathlib import Path; sys.path.insert(0,'/home/tkachenkoav/hermes-agent'); from agent.skill_utils import iter_skill_index_files,parse_frontmatter,_normalize_skill_description as n; r=Path.home()/'.hermes/skills'; [print(len(n(fm)),p) for p in iter_skill_index_files(r,'SKILL.md') for fm,_ in [parse_frontmatter(p.read_text(encoding='utf-8'))] if len(n(fm))>60]"
 # platforms: [all] (invalid)
 grep -r "platforms: \[all\]" ~/.hermes/skills --include="SKILL.md"
 # size >15k (compression candidates)
@@ -135,5 +139,5 @@ When renaming a skill (`movefrom-instruments` → `about_usr_skills`):
 - [ ] Correct owner for new pitfall
 - [ ] Version bumped (patch / minor / major)
 - [ ] `related_skills` all resolve
-- [ ] `description` ≤ 1024 chars
+- [ ] `description` ≤ 60 chars for index (trigger in first 57); ≤ 1024 chars for load
 - [ ] Growth >10% → compression pass done

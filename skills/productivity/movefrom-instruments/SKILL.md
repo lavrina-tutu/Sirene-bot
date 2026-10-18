@@ -1,7 +1,7 @@
 ---
 name: movefrom-instruments
-description: "MoveFrom* umbrella: WorkVault sync pipeline for Fireflies (MoveFromFF), Confluence (ConfluenceSync), Exchange, Zulip, Jira. Architecture principles and per-tool quickref."
-version: 1.0.1
+description: "MoveFrom* umbrella: WorkVault sync pipeline for Fireflies (M"
+version: 1.0.2
 author: agent
 tags: [workvault, obsidian, sync, pipeline, jira, confluence, exchange, zulip, fireflies]
 platforms: [windows]

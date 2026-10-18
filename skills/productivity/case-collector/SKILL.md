@@ -1,11 +1,11 @@
 ---
 name: case-collector
-description: >-
+description: "Use when: собери кейсы, выгрузи темы за N дней, case-collect"
   Use when: собери кейсы, выгрузи темы за N дней, case-collector,
   таблица пользователь × тема × период + вердикт решённости по диалогу
   из логов сессий Hermes state.db.
   Read-only sqlite; LLM-split по смыслу; выход xlsx в Inbox.
-version: 0.2.0
+version: 0.2.1
 author: agent
 license: MIT
 platforms: [linux, macos, windows]

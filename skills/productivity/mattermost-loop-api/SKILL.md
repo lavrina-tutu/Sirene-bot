@@ -1,7 +1,7 @@
 ---
 name: mattermost-loop-api
-description: "Работа с Loop (Mattermost ТУТУ, loop.tutu.ru) через API v4 — аутентификация, получение пользователей, паттерн синка контактов. Триггеры: loop api, mattermost api, MoveFromLoop, синк Loop контактов."
-version: 1.0.0
+description: "loop api / mattermost api: Loop ТУТУ REST v4"
+version: 1.0.1
 author: agent
 license: MIT
 platforms: [linux]

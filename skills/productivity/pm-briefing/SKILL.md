@@ -1,6 +1,6 @@
 ---
 name: pm-briefing
-description: "PM-брифование в Telegram: пошаговое закрытие открытых вопросов с записью ответов в WorkVault pm/ файлы."
+description: "PM-брифование в Telegram: пошаговое закрытие открытых вопрос"
 triggers:
   - брифование
   - бриф

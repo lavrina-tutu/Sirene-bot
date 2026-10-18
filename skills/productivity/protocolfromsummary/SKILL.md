@@ -1,7 +1,7 @@
 ---
 name: protocolfromsummary
-description: "Use when working with the ProtocolFromSummary (PFS) tool — publishes Fireflies meeting-summary .md files into Confluence protocol tables (~/USERTOOLS/ProtocolFromSummary). Триггеры: PFS, протокол встречи, опубликовать протокол, задача не резолвится/не мешенится, ROUTES, page_layout, republish, страница протокола поменялась, out_of_scope встречи, роутинг крона PFS."
-version: 1.3.1
+description: "Use when: ProtocolFromSummary (PFS) — протокол из FF"
+version: 1.3.2
 author: agent
 license: MIT
 platforms: [linux]

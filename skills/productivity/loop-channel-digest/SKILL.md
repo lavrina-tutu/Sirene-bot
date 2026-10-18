@@ -1,7 +1,7 @@
 ---
 name: loop-channel-digest
-description: "Use when: дайджест канала Loop, новости канала, новости в чате руководителей АИД, синк АИД, руководители аид, общий чат, чат компании, Trisigma, внутренний Trisigma, Внешний Trisigma, AI-аналитик, что в парсинге, новости по парсингу, LLM (БЯМ)."
-version: 1.1.0
+description: "Use when: дайджест канала Loop, новости канала, новости в ча"
+version: 1.1.1
 author: agent
 license: MIT
 platforms: [linux]

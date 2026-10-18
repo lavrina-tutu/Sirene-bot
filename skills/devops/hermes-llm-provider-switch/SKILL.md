@@ -1,7 +1,7 @@
 ---
 name: hermes-llm-provider-switch
-description: "Switch Hermes between LLM providers (Anthropic ↔ corporate proxy). Covers custom_providers, delegation model patching, backup/rollback scripts."
-version: 1.0.0
+description: "Switch Hermes between LLM providers (Anthropic ↔ corporate p"
+version: 1.0.1
 tags: [hermes, llm, anthropic, proxy, config, migration]
 platforms: [linux]
 ---

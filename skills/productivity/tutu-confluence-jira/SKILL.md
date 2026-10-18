@@ -1,7 +1,7 @@
 ---
 name: tutu-confluence-jira
-description: "ТУТУ корп. системы: Confluence + JIRA. Загружать при: скачать/открыть страницу Confluence, создать/найти задачу в Jira, кто такой X (оргструктура: Аралов→Ткаченко→Криворотов), согласование договора, резолв участника по ФИО/userkey, публикация протокола встречи, экспорт Jira-задач в Obsidian. URL: dom.tutu.ru / hq.tutu.ru. Auth: ConfluenceSync .env."
-version: 1.8.1
+description: "Confluence/JIRA ТУТУ: страницы, задачи, dom.tutu.ru"
+version: 1.8.2
 author: agent
 license: MIT
 platforms: [linux]

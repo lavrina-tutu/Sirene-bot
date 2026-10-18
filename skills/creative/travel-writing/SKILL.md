@@ -1,7 +1,7 @@
 ---
 name: travel-writing
-description: "Написание красивых отчётов о путешествиях: сбор материала из транскриптов (Fireflies/фф), бриф с автором, хронологизация, литературный стиль."
-version: 1.1.0
+description: "Написание красивых отчётов о путешествиях: сбор материала из"
+version: 1.1.1
 author: agent
 tags: [creative, travel, writing, fireflies, brief]
 platforms: [linux, macos, windows]

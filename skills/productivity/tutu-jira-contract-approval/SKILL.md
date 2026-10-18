@@ -1,7 +1,7 @@
 ---
 name: tutu-jira-contract-approval
-description: "Use when надо создать задачу в JIRA ТУТУ на согласование договора/ДС/Приложения через АДД (Service Desk id=8, requestType=232) → TOMAKE. Покрывает КБК, участников, вложения, поля Service Desk."
-version: 1.1.0
+description: "Use when надо создать задачу в JIRA ТУТУ на согласование дог"
+version: 1.1.1
 author: agent
 license: MIT
 platforms: [linux]

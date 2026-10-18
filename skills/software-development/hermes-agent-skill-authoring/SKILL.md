@@ -1,7 +1,7 @@
 ---
 name: hermes-agent-skill-authoring
-description: "Author in-repo SKILL.md: frontmatter, validator, structure, and writing-quality principles."
-version: 1.1.0
+description: "создай скилл: frontmatter, validator, нормы authoring"
+version: 1.1.2
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -34,7 +34,9 @@ Source of truth: `tools/skill_manager_tool.py::_validate_frontmatter`. Hard requ
 - Closes with `\n---\n` before the body.
 - Parses as a YAML mapping.
 - `name` field present.
-- `description` field present, ≤ **1024 chars** (`MAX_DESCRIPTION_LENGTH`).
+- `description` field present.
+- **Index limit:** ≤ **60 chars** (`SKILL_PROMPT_DESC_LIMIT` in `agent/skill_utils.py`); put the trigger in the first 57 or the index shows `[:57]+"..."`.
+- **Load limit:** ≤ **1024 chars** (`MAX_DESCRIPTION_LENGTH` in `skill_manager_tool.py`) — exceeded → skill fails to load.
 - Non-empty body after the closing `---`.
 
 Peer-matched shape used by every skill under `skills/software-development/`:
@@ -57,7 +59,8 @@ metadata:
 
 ## Size Limits
 
-- Description: ≤ 1024 chars (enforced).
+- Description for the **skills index**: ≤ 60 chars (`SKILL_PROMPT_DESC_LIMIT`); trigger in the first 57.
+- Description for **file load**: ≤ 1024 chars (`MAX_DESCRIPTION_LENGTH`, enforced by validator).
 - Full SKILL.md: ≤ 100,000 chars (enforced as `MAX_SKILL_CONTENT_CHARS`, ~36k tokens).
 - Peer skills in `software-development/` sit at **8-14k chars**. Aim for that range. If you're pushing past 20k, split into `references/*.md` and reference them from SKILL.md.
 
@@ -142,7 +145,7 @@ Pick the closest existing category. Don't invent new top-level categories casual
    m = re.search(r'\n---\s*\n', content[3:])
    fm = yaml.safe_load(content[3:m.start()+3])
    assert "name" in fm and "description" in fm
-   assert len(fm["description"]) <= 1024
+   assert len(fm["description"]) <= 1024  # load limit; also keep len <= 60 for index
    assert len(content) <= 100_000
    ```
 5. **Git add + commit** on the active branch.
@@ -185,7 +188,7 @@ Pick the closest existing category. Don't invent new top-level categories casual
 - [ ] Frontmatter starts at byte 0 with `---`, closes with `\n---\n`
 - [ ] `name`, `description`, `version`, `author`, `license`, `metadata.hermes.{tags, related_skills}` all present
 - [ ] Name ≤ 64 chars, lowercase + hyphens
-- [ ] Description ≤ 1024 chars and starts with "Use when ..."
+- [ ] Description ≤ 60 chars for index (trigger in first 57); ≤ 1024 chars for load; starts with "Use when ..." when possible
 - [ ] Total file ≤ 100,000 chars (aim for 8-15k)
 - [ ] Structure: `# Title` → `## Overview` → `## When to Use` → body → `## Common Pitfalls` → `## Verification Checklist`
 - [ ] Each ordered step has a checkable completion criterion

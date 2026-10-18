@@ -1,7 +1,7 @@
 ---
 name: project-charter-authoring
-description: "REDIRECT → use pmo-charter-fill. Triggers: заполни устав, доработай устав, заполни бриф, проектные документы полного внедрения."
-version: 0.1.1
+description: "устав/бриф: REDIRECT pmo-charter-fill"
+version: 0.1.2
 status: redirect
 redirect: pmo-charter-fill
 platforms: [linux]

@@ -1,7 +1,7 @@
 ---
 name: workvault-rag
-description: "Use when: 'найди в архиве', 'архив', 'найди в базе', 'найди во встречах' — или любой вопрос по прошедшим встречам, задачам, решениям, рискам, блокерам ('кто что обещал', 'что решили по Y', 'что обсуждали с X'). Поиск через mofs index (SQLite+FTS5) + три режима: список встреч / детали summary / цитаты из transcript. Также покрывает вопросы по ТЗ (Hermes-Backlog/TZ)."
-version: 2.7.0
+description: "Use when: 'найди в архиве', 'архив', 'найди в базе', 'найди"
+version: 2.7.1
 author: Sirene
 license: MIT
 platforms: [linux]

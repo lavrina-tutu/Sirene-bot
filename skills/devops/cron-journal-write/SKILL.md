@@ -1,6 +1,6 @@
 ---
 name: cron-journal-write
-description: "Записать итог крон-задачи в ~/.hermes/cron-journal.md. Загружать в конце каждого Opus- или Sonnet-крона."
+description: "Записать итог крон-задачи в ~/"
 triggers:
   - "завершение крон-задачи"
   - "записать в журнал"

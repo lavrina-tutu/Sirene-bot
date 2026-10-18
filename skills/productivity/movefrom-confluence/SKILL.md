@@ -1,7 +1,7 @@
 ---
 name: movefrom-confluence
-description: "ConfluenceSync — двусторонняя синхронизация страниц Confluence dom.tutu.ru ↔ Obsidian WorkVault. Используй когда пользователь даёт ссылку на dom.tutu.ru и просит изучить/настроить/применить инструкцию, или когда другой инструмент встречает ссылку на Confluence и её нужно обогатить контентом."
-version: 1.0.0
+description: "ConfluenceSync — двусторонняя синхронизация страниц Confluen"
+version: 1.0.1
 author: Сирень
 tags: [confluence, tutu, workvault, obsidian, sync, dom.tutu.ru]
 platforms: [windows, telegram, cli]

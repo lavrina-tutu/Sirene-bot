@@ -1,7 +1,7 @@
 ---
 name: apple-macos
-description: "macOS-native automation: Apple Notes (memo), Reminders (remindctl), iMessage (imsg), Find My (AirTags), and desktop computer-use (cua-driver)."
-version: 1.0.0
+description: "macOS-native automation: Apple Notes (memo), Reminders (remi"
+version: 1.0.1
 author: Hermes Agent
 license: MIT
 platforms: [macos]

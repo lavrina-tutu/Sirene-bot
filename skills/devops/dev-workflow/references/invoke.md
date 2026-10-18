@@ -34,17 +34,24 @@ pipeline invoke-role --role executor \
 - Два живых PID с одним `--workspace` — не запускать параллельно.
 - **Авто-ретрай** после фатала — запрещён; повтор только по решению Саши или осознанный `next` после разбора.
 
-## Фаталы провайдера (не маппить в «успех»)
+## Фаталы провайдера (структурно-осознанный классификатор, Б42 / AC-065…068)
 
-Обёртка обязана вернуть **rc ≠ 0**, вызвать `interrupt`, отправить в **ErrorBus** (`--tool dev_workflow`), **без** авто-ретрая.
+Обёртка обязана вернуть **rc ≠ 0**, вызвать `interrupt`, отправить в **ErrorBus** (`--tool dev_workflow`), **без** авто-ретрая. Классификатор (`invoke_role.py`) структурный, **не** regex по всему stdout+stderr:
 
-| Сигнал в stdout/stderr | reason (пример) |
+1. Вывод `--output-format json` парсится как JSON: `is_error=true` / `type==\"error\"` → fatal; легитимный JSON (rc=0) с бытовой лексикой `timeout`/`credits`/`billing`/`payment` → **НЕ** fatal (это текст роли/подсказки).
+2. Не-JSON → fallback на **строгие** сигнатуры провайдера (без голых бытовых слов): `Iteration budget exhausted`, `(90/90)`, `No API key`, `HTTP 5xx/429`, `request timed out`.
+3. **rc ≠ 0 ≠ мгновенный fatal.** Киллы терминала `124/137` («вызов не завершён», retry) и rc=1 (usage/argv, контракт-ошибка) — **не** провайдер-fatal и **не** ErrorBus critical. Провайдер-fatal — только rc ∈ {2,3} (LLM-провайдер).
+
+| Сигнал | Вердикт |
 |---|---|
-| HTTP 5xx, timeout | `provider_fatal:…` |
-| No API key, billing, payment, credits | `provider_fatal:…` |
-| `Iteration budget exhausted`, `(90/90)`, max_turns | `budget_exhausted:90-90` |
-| rc ≠ 0 при любом выводе | фатал |
-| rc = 0, но в выводе паттерн фатала | тоже фатал (не доверять «чистому нулю») |
+| JSON `is_error=true` / `type=\"error\"` | fatal (detail: `json is_error=true: …`) |
+| `Iteration budget exhausted`, `(90/90)`, `No API key`, `HTTP 5xx/429`, `request timed out` | fatal (detail: паттерн) |
+| rc ∈ {2,3} (LLM-провайдер) | fatal |
+| rc ∈ {124,137} (килл терминала) | **не** fatal — retry («вызов не завершён») |
+| rc=1 (usage/argv) | **не** fatal — контракт-ошибка, не провайдер |
+| rc=0 + легитимный JSON / бытовая лексика timeout·credits·billing | **не** fatal |
+
+Событие ErrorBus самодиагностируемо: `--source-kind` (дефис), `--severity critical`, `--exit-code`, `--stage`, `--cmdline` (redacted), `--llm-model`, `--detail=<why>`. Флаг — именно `--source-kind` (дефис), парсер `report_error.sh` другую форму молча теряет (AC-067).
 
 После фатала: статус слага `interrupted` при мёртвом PID; оркестратор сообщает Саше, не перезапускает фазу молча.
 

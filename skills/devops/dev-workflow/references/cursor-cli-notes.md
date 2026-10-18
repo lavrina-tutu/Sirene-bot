@@ -28,7 +28,7 @@ agent -p "<prompt>" -f --model <slug> --workspace <ABS> --output-format json
 
 ## Выход
 
-JSON stdout парсится для `session_id` и диагностики. Фаталы (billing, 90/90, 5xx) — см. таблицу в `invoke.md`; rc=0 с фатальным текстом не считать успехом.
+JSON stdout парсится для `session_id` и диагностики. Фаталы провайдера — структурный классификатор (`is_error`/`type=="error"` в JSON, строгие сигнатуры: `Iteration budget exhausted`, `(90/90)`, `No API key`, `HTTP 5xx/429`, `request timed out`; rc ∈ {2,3}), полная таблица — в `invoke.md`. Голые `timeout`/`credits`/`billing` в тексте роли — **не** фатал; rc=0 с фатальным текстом — только если это валидный JSON с `is_error=true` или строгий паттерн.
 
 ## Workspace
 

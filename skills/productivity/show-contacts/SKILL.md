@@ -1,6 +1,6 @@
 ---
 name: show-contacts
-description: "найди контакт: итоги и решения из стенограммы"
+description: "покажи контакты: AnywhereContacts (contacts.enc)"
   Безопасный показ контактов из AnywhereContacts (contacts.enc).
   Триггеры: «найди контакт», «email», «телефон», «тег», «кто на связи»,
   «расписание», «кто работает», «контакт по имени», «login сотрудника».

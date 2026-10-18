@@ -1,6 +1,6 @@
 ---
 name: tutu-jira-okr
-description: "OKR: итоги и решения из стенограммы"
+description: "OKR: OKRS/OKRAID Jira ТУТУ, чекин, план"
 version: 2.3.2
 author: agent
 license: MIT

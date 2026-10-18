@@ -1,6 +1,6 @@
 ---
 name: workvault-sync-infra
-description: "Inbox: итоги и решения из стенограммы"
+description: "настройка синка WorkVault↔ownCloud"
 version: 1.0.1
 author: agent
 license: MIT

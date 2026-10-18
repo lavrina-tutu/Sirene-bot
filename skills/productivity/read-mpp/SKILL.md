@@ -1,6 +1,6 @@
 ---
 name: read-mpp
-description: "прочитай mpp: итоги и решения из стенограммы"
+description: "прочитай mpp: конвертация плана в Google Sheets"
 version: "1.1.0"
 platforms: [linux, macos, windows]
 tools: [terminal, read_file, write_file]

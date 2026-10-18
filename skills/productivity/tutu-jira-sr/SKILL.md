@@ -1,6 +1,6 @@
 ---
 name: tutu-jira-sr
-description: "self-review: итоги и решения из стенограммы"
+description: "SR: Self-Review Jira ТУТУ, план периода"
 version: 1.14.1
 author: agent
 license: MIT

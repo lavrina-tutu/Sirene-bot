@@ -1,6 +1,6 @@
 ---
 name: skill-portability
-description: "поделись скиллом: итоги и решения из стенограммы"
+description: "поделись/упакуй скилл: упаковка Hermes skills для обмена"
 version: 1.0.1
 author: agent
 license: MIT

@@ -1,6 +1,6 @@
 ---
 name: exchange-monitor
-description: "Exchange мониторинг: итоги и решения из стенограммы"
+description: "Exchange мониторинг почты: EWS фильтрация"
 version: 0.3.1
 author: Sirene
 license: MIT

@@ -1,6 +1,6 @@
 ---
 name: upstream-dependency-monitor
-description: "отслеживай upstream: итоги и решения из стенограммы"
+description: "upstream: мониторинг git fetch + diff"
 version: 1.0.1
 author: agent
 tags: [monitoring, upstream, git, no-agent, watchdog]

@@ -1,6 +1,6 @@
 ---
 name: hermes-memory-hygiene
-description: "почисти память: итоги и решения из стенограммы"
+description: "почисти память/дефрагментация MEMORY"
 version: 2.1.1
 author: Sirene+Opus
 license: MIT

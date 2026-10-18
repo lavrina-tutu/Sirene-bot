@@ -1,6 +1,6 @@
 ---
 name: zoom-api-integration
-description: "zoom api: итоги и решения из стенограммы"
+description: "zoom: создание конференции Server-to-Server API"
 version: 1.0.1
 author: agent
 license: MIT

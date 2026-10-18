@@ -1,6 +1,6 @@
 ---
 name: workvault-entities
-description: "создай сущность: итоги и решения из стенограммы"
+description: "сущности: WorkVault/Entities/<slug>/ карточка"
 version: 1.0.1
 author: Sirene
 license: MIT

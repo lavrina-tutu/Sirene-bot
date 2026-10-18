@@ -1,6 +1,6 @@
 ---
 name: find-proxy-task
-description: "proxy поставщики: итоги и решения из стенограммы"
+description: "proxy: поиск/оценка proxy-сервисов"
 version: 2.0.1
 author: agent
 license: MIT

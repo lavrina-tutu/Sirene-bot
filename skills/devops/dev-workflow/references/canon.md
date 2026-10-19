@@ -96,6 +96,11 @@
 
 Несовпадение → emit-prompt / `invoke-role` / `complete-phase` **exit 1** (журнал `g6_role_mismatch`).
 
+## Doorbell и occupancy (AC-079, Б44.3–44.4)
+
+- **Occupancy:** пока жив wrapper `invoke-role` этого слага — `complete-phase` / `next` (старт новой фазы) / `invoke-role` / `recover` → exit 1 «wrapper alive». Второй invoke-роль того же слага поверх живого — запрещён (Б16.5/AC-063). `exclude_pid` исключает self **и цепочку предков** (pgrep ловит родительскую bash-обёртку терминала — это не чужой wrapper).
+- **Doorbell (страж-«звонок в дверь»):** 0-токенный `pipeline doorbell`/`doorbell_tick.sh` — детектор смены отпечатка состояния, будит Сирень, она одна делает `pipeline next`. **Не** reaper: сам не спавнит/не кидает recover, не убивает. Ставится **только** по глаголу «ставь кроны» (Б33 п.22/55). `dwka_guard.sh` — не канон стража (Б33 п.47 называет его запрещённым).
+
 ## Запрет склейки
 
 `HF:impl` и `HF:test` — **разные** фазы и разные вызовы роли. Один промпт на весь хвост запрещён.

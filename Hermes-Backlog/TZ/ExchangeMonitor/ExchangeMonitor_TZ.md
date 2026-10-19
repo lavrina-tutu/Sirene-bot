@@ -1,9 +1,9 @@
 ---
 name: ExchangeMonitor
-version: 0.3.0
+version: 0.3.1
 status: draft
 created: 2026-07-24
-updated: 2026-10-01
+updated: 2026-10-19
 author: Opus
 depends_on: [MoveFromLoop, AnywhereContacts, ExchangeMeeting]
 ---
@@ -718,3 +718,64 @@ python3 -m pytest tests/test_confluence_filter.py tests/test_confluence_tree.py 
 - Корни watch и CQL `(id OR ancestor)` — не менять, только expand.
 
 Объём (факт, не команда skip): 3 файла кода вне shared-модулей, без новых сущностей/cron/.env.
+
+## §20. Доработка 19.10.2026 — info@tutu.ru в чёрном списке отправителей MFE
+
+Пакет `DEV/exchange-monitor-blacklist-info-tutu`. CHANGE-LIGHT. Код реализован (commit b489c41), эта секция — аддитивная фиксация в ТЗ.
+
+**I1.** `current`: маркетинговая рассылка `info@tutu.ru` («Туту») не входит в `EXTERNAL_SENDER_EMAILS` — проходит contacts-hit (§6 шаг 2) как реальный адрес и доставляется в часовой дайджест MFE (письма-рассылки в дайджесте).  
+`target`: `info@tutu.ru` добавлен в кортеж `EXTERNAL_SENDER_EMAILS` в `person_checker.py` — проверяется **до** contacts-hit (детерминированный `False`, тот же порядок, что в bk-170 для external, §15) и не доставляется в дайджест MFE. Срочный канал и `urgent_contacts` не меняются (в списке его нет).
+
+### Изменяемые файлы
+
+| Файл | Что |
+|---|---|
+| `exchangemonitor/person_checker.py` | `info@tutu.ru` в кортеж `EXTERNAL_SENDER_EMAILS` (exact-match, не substring) |
+| `tests/test_person_checker.py` | 2 теста: blacklist + overrides-contacts/name |
+
+Не трогать: `urgent.py`, `digest.py`, `confluence_*`, `collapse.py`, `formatter.py`, `ex_state.py`, `loop_rules.yaml`, `.env`, манифест. Константа `EXTERNAL_SENDER_EMAILS` уже в модуле (§6/bk-170) — только пополняется кортеж.
+
+### IAC (LIGHT: 1–3 строки; план = эта секция)
+
+| IAC | path | verify | depends | covers |
+|---|---|---|---|---|
+| **IAC-01** | `person_checker.py` (info@tutu.ru в blacklist, до contacts) | `python3 -m pytest tests/test_person_checker.py -q` | — | AC-001…002 |
+
+Нет `depends: operator:` (класс S).
+
+### Критерии приёмки (AC)
+
+Только этот пакет. Класс S.
+
+### AC-001 — info@tutu.ru не проходит person-check
+
+`is_real_person("info@tutu.ru", "Туту", store=None)` → `False`; в stdout `run_digest_exchange` карточка рассылки «от Туту» не появляется.
+
+### AC-002 — external бьёт contacts/name (до contacts-hit)
+
+`info@tutu.ru`, добавленный в contacts (`store` содержит его), с реальным DisplayName → всё равно `False` (порядок bk-170: external до contacts и кеша).
+
+### Тесты (инварианты)
+
+- `info@tutu.ru` + «Туту» → `False` (blacklist).
+- `info@tutu.ru` в contacts + реальный name → `False` (external бьёт).
+- Exact-match, не substring: адрес вида `*info-tutu*` не затрагивается.
+- Регресс: `user@tutu.ru` по-прежнему `True`.
+
+### Верификация
+
+```
+cd /home/tkachenkoav/USERTOOLS/ExchangeMonitor
+python3 -m pytest -q
+```
+
+Итог реализации: **186 passed** (было 184, +2 новых теста).
+
+### Риски
+
+| Риск | Митигация |
+|---|---|
+| Рассылка идёт от `info@tutu.ru` с DisplayName «Туту» | exact-match адреса, не domain; сам `info@tutu.ru` — только этот кортеж |
+| Substring-ложные срабатывания | `is_external_sender` — точное совпадение адреса/домена (§6, bk-170), не подстрока |
+| Urgent / keyword-пути | `info@tutu.ru` в `urgent_contacts` нет; urgent не трогаем (канон) |
+| `hq@tutu.ru` | НЕ добавлять (bk-170 §15: Confluence-письма должны проходить `is_real_person`) |

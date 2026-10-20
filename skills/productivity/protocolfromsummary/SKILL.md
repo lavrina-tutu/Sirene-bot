@@ -1,7 +1,7 @@
 ---
 name: protocolfromsummary
 description: "Use when: ProtocolFromSummary (PFS) — протокол из FF"
-version: 1.3.2
+version: 1.3.3
 author: agent
 license: MIT
 platforms: [linux]
@@ -355,6 +355,34 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
     (префикс), при >1 — решение отдаётся LLM-picker (`apply_task_slugs`), пустой LLM → fail-soft
     (Питфолл 17). При диагностике «почему у задачи нет/другой слаг» — смотреть именно эти 4 контекстных
     источника, не общую тему протокола.
+
+19. **Fireflies сменил формат имён на «Имя Фамилия» (с 19.10) — substring-резолв падал, чинит
+    token-set Pass 2 в shared `find_contacts` (§35 pfs-name-resolve-fail, v1.30.0)** —
+    Fireflies Custom AI Skill с 19.10 отдаёт имена участников/исполнителей перевёрнуто —
+    «Имя Фамилия» («Александр Ткаченко»), а не канон «Фамилия И.О.»/«Фамилия Имя». Substring
+    Pass 1 в `ContactStore.find_contacts` такой raw не матчил («Александр Ткаченко» не
+    подстрока «Ткаченко Александр Владимирович») → имя уходило на площадку голым текстом без
+    тега `<ac:link><ri:user/>`. **Фикс — аддитивный token-set Pass 2** в `find_contacts`
+    (владелец метода — AnywhereContacts): при ПУСТОМ Pass 1 и ≥2 целых словах в query ищет
+    контакты, где каждый токен query ⊆ токены(`fio ∪ display_name ∪ aliases`) (lowercase,
+    `split()`), возвращает 0/1/N без скоринга. PFS/`_resolve_one`/`task_slug` **не** патчили —
+    тот же вызов, больше хитов; оба контура (участники + исполнители) резолвятся через единый
+    `_resolve_one`. При успехе Pass 2 **`find_user_by_fullname` (Confluence-fallback) НЕ
+    вызывается** — резолв целиком через contacts.enc (AC-002).
+    **Канон поведения (не сломать):** Pass 1 побеждает и возвращается первым (AC-003),
+    не union-ится с Pass 2; однословный query — только Pass 1 (AC-005); неоднозначность N>1 →
+    вернуть ВСЕХ, выбор у §11.3 (AC-004); лишний токен → 0; «Фамилия И.О.» (`Ткаченко А.В.`)
+    Pass 2 НЕ обязан матчить (токен `а.в.` ≠ `александр`) — это §12 `_split_surname_initials`
+    в PFS ДО `find_contacts(raw)` (AC-006). Диагностика: удали тег, проверь
+    `store.find_contacts("Имя Фамилия")` — пусто → либо нет контакта в contacts.enc, либо токен
+    опечатка.
+    **Про промпт самари:** правка промпта самари Fireflies / `ff_summary.json` (Путь 1 — чтобы
+    имена шли каноном ещё на входе) — **отдельный пакет, НЕ этот HF:impl** (Q-1 §35, рекомендация
+    архитектора). Текущий пакет чинит резолв на приёмной стороне — не трогать контур
+    TaskRefresh/MOFS/`route.py` (AC-008) и НЕ править промпт-источник в рамках этого фикса.
+    Тесты: `tests/test_find_contacts_pass2.py` (AnywhereContacts, AC-001..005) +
+    `tests/test_contacts_resolver.py::test_meeting_19_10_new_format_names_resolve_to_tag`
+    (E2E фикстура встречи 19.10, AC-002/009).
 
 ## Пост-switch контур (§24, v1.17.0): PFS_POST_SWITCH — только ingest на площадку
 

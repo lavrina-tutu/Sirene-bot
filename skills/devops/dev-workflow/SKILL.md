@@ -1,6 +1,6 @@
 ---
 name: dev-workflow
-version: 0.4.9
+version: 0.6.0
 description: "Оркестрация разработки Hermes (10 кейсов, файлы)"
 ---
 
@@ -88,6 +88,8 @@ pipeline next
 
 **Occupancy-правило (П.5):** после `next` → WORK на sirene-фазе (G6, оркестратор) — закрыть фазу **в том же ходе**: `complete-phase` с уликой либо `interrupt`. Не оставлять `in_phase` + `doing` + `pid=None` до следующего дня (занятый воркер держит очередь, 13.10-инцидент). Это **не** минутный сторож и не скрытый тик: движение только когда ты сознательно в этом ходе, без фонового опроса.
 
+**Страж-doorbell (правило стража, Б44.4 / Б46 П.6, AC-079/109/116).** Страж очереди — детерминированный 0-токенный `pipeline doorbell`/`doorbell_tick.sh`, **не** reaper: не recover, не spawn, не kill, **не** `pipeline next` из tick. Wake Сирень — только по **смене fingerprint**, существующим каналом (gateway notify / origin); она одна делает `next`. Fingerprint сегмента (v0.6.0): `slug|status|phase|role|pid_alive|wrapper_alive[|canon_mtime=…]`, SHA одной строки, **включает `queue=<n>`**; `canon_mtime` опускается, если `pid_alive=1` **или** `wrapper_alive=1` (иначе запись канона живой роли = ложный wake), оба `0` — включается. Тот же fp → tick печатает `queue=<n>`, не `WAKE`. Крон doorbell — **только** по глаголу «ставь кроны»; hardcoded slug `dwka` в tick запрещён; `dwka_guard.sh` не канонизировать (П.8). Детали — `references/canon.md`.
+
 ## complete-phase evidence и write_state (питфоллы CLI)
 
 - `pipeline complete-phase --evidence` обязан содержать токен `path=` | `sha256=` | `session_id=` — голый reason-текст в evidence возвращает «evidence must include path= or sha256= or session_id=» и фаза не закрывается. Для `TZ:stabilize` evidence обязан дать тройку `path=/version=/mtime=` (либо state уже несёт `tz_path+tz_version`) — без неё complete падает тем же guard.
@@ -149,6 +151,12 @@ pipeline next
 - Обратное направление (git → WorkVault) не добавлять ни в один крон.
 
 Прецедент 16.10.2026 (BUG tz-mirror-overwrite): коммит 2889345 добавил в restore-all-skills.sh `cp` зеркало→WorkVault, чем откатил master-ТЗ ProtocolFromSummary с v1.29.0 до v1.28.1. Блоки удалены.
+
+## Роли → Cursor и окно будни (Б46 П.3)
+
+Тяжёлые Cursor-роли (architect/reviewer/executor, `invoke-role` → `agent -p --model …`) переносятся на **ночной трафик**: окно **будни 19:00–09:00 MSK**. Внутри окна роли запускать как обычно; вне окна тяжёлая роль не стартует до окна (или по явной команде Саши).
+
+**503/429 — БЕЗ авто-ретрая:** `invoke_role.classify_provider_fatal` мапит `HTTP 50[0-3]|429` → `provider_fatal` → interrupt без recover. Новую ретрай-логику не добавлять.
 
 ## Запреты (кратко)
 

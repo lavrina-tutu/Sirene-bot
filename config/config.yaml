@@ -91,7 +91,7 @@ tool_output:
   max_line_length: 2000
 tool_loop_guardrails:
   warnings_enabled: true
-  hard_stop_enabled: false
+  hard_stop_enabled: true
   warn_after:
     exact_failure: 2
     same_tool_failure: 3
@@ -102,10 +102,10 @@ tool_loop_guardrails:
     idempotent_no_progress: 5
 compression:
   enabled: true
-  threshold: 0.5
+  threshold: 0.3
   target_ratio: 0.2
   protect_last_n: 20
-  hygiene_hard_message_limit: 400
+  hygiene_hard_message_limit: 180
   protect_first_n: 3
   abort_on_summary_failure: false
 prompt_caching:
@@ -316,7 +316,7 @@ delegation:
   reasoning_effort: medium
   max_concurrent_children: 3
   max_spawn_depth: 1
-  orchestrator_enabled: true
+  orchestrator_enabled: false
   subagent_auto_approve: false
 prefill_messages_file: ''
 goals:
@@ -443,6 +443,7 @@ quick_commands:
     target: /model z-ai/glm-5.3-flash --once
 plugins:
   enabled:
+    - hermes-session-reset-policy
     - homeassistant
     - honcho
     - telegram-analyst
@@ -528,7 +529,7 @@ x_search:
 _config_version: 50
 session_reset:
   mode: both
-  idle_minutes: 1440
+  idle_minutes: 180
   at_hour: 4
 group_sessions_per_user: true
 platform_toolsets:

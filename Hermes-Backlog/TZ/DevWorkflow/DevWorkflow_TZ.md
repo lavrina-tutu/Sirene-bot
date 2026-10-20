@@ -2,16 +2,16 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Машина исполнения разработки Hermes без канбана (единый скилл + файловое состояние)"
-version: 0.4.9
-date: 2026-10-19
+version: 0.6.0
+date: 2026-10-20
 status: draft
 author: архитектор (cursor-grok-4.6-high, Cursor CLI)
-last-section-added: 2026-10-19 — v0.4.9 TZ:finalize pochinka-payplayna-dev-workflow-konets-hoda-po-k после REV:tz APPROVE: штамп корпуса без правок смысла; AC-076…079 класс S; крон не ставим
+last-section-added: 2026-10-20 — v0.6.0 TZ:finalize llm-cost-optimization: Б46; MUST-read секции; doorbell fingerprint; AC-094…116; operator-hold ставь кроны + удаляй
 case: CHANGE
-slug: devworkflow-task-slug
-previous_slug: rs-refuse-kanban
+slug: llm-cost-optimization
+previous_slug: migrate-dev-roles-cursor-to-codex
 depends_on:
-  - TZ/GLOSSARY.md >= 0.2.14
+  - TZ/GLOSSARY.md >= 0.2.15
   - TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md >= 0.4.4
   - TZ/TZ-Workflow/TZ-storage-system.md >= 1.1
   - TZ/EcosystemIntegration/EcosystemIntegration_TZ.md >= 0.7.0
@@ -47,18 +47,18 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б3** | Вердикт и три слоя | Б1, Б2 | архитектура Б8–Б16 |
 | **Б4** | Развилки архитектора Q-Archi-01..06 | Б1 вопрос 3–4, риски 14.10, Блок E | контракт Python vs скилл (Б7), invoke (Б13), слои хранения (Б12), handoff (Б13.4), продукт (Б13.5) |
 | **Б5** | Что сохранить из канбана | Б1 вопрос 2 | слой статусов Б11, бэклог Б28 |
-| **Б6** | Канон внутри скилла; G1 ещё drift выжимки; **v0.4.1:** G6 таблица исчерпывающая (RS:collect / MIG:block-k / SK:preflight) | GLOSSARY 0.2.13, Б1 вопрос 1, Б12 | рецепты Б18–Б27 |
+| **Б6** | Канон внутри скилла; G1 ещё drift выжимки; **v0.4.1:** G6 таблица исчерпывающая (RS:collect / MIG:block-k / SK:preflight); **v0.5.0:** модели ролей = Codex (Б45), G6 «invoke-роль не звать» | GLOSSARY 0.2.15, Б1 вопрос 1, Б12, Б45 | рецепты Б18–Б27 |
 | **Б7** | Карта «код / скилл» (T3) | Б3, Б4 | границы Б8, Б9 |
 | **Б8** | Файлы `pipeline/` | Б7, T1, T4 | CLI Б16, инварианты Б17 |
 | **Б9** | Структура скилла; процедура REV в `SKILL.md`; MUST-read в `references/context.md`; docs комплекта (README, onboarding, cases-guide, config.example) | Б1, Б6, Б7, Б12, Б13.5, Б16.1 | установка Б13.3, продукт Б13.5, миграция Б31 |
 | **Б10** | Очередь и состояние (T1); ключ выжимки в `_state.json`; **v0.4.5:** occupancy ≠ CLI-mutex; abort сжигает имя; **v0.4.6:** живой invoke с `pid=None` ≠ leftover, второй поезд поверх запрещён; **v0.4.8:** окно pre-invoke (`awaiting_invoke`) + `recover_counts` + journal `recover`; **v0.4.9:** occupancy `complete-phase`/`next`/`invoke` пока жив wrapper этого слага | Б3, Б8, Б12, Б40, Б41, Б43, Б44 | complete-phase Б16, журнал T5, reuse compress Б18.4; AC-058/059/063/071/076/078 |
 | **Б11** | Формат статуса (T2); **v0.4.5:** running только при живом PID; **v0.4.6:** leftover `--check` не включает окно post-invoke | Б5 слой 2, Б40, Б41 | CLI `status`, HITL; AC-060/062/063 |
-| **Б12** | Точечный контекст: три слоя хранения, доктрина двух источников, MUST-read, ключ выжимки | Б1 вопрос 3, Б4 Q-Archi-02/04/05 | emit-prompt в Б18–Б27; G1 в Б6.5 |
-| **Б13** | Переносимость и `invoke_role` (T4); **Б13.3** установка; **Б13.4** handoff слага; **Б13.5** продукт/платформа; **v0.4.2:** post-invoke проверка канонического имени артефакта; **v0.4.5:** PID-probe ≠ sirene без pid; **v0.4.6:** pid до spawn; окно post-invoke; запрет пайпа stdout; **v0.4.8:** model на `invoke_prepare`; канон артефакта расширен (TZ:patch / diagnose / RS / MIG); пустой JSON `result` ≠ proof; **v0.4.9:** `session_id` из JSON агента; конец хода ≠ notify | Б1.4, Б1.9, Q-Archi-03/04/06, Б40, Б41, Б43, Б44 | конфиг Б14, комплект поставки, AC-025/040/042/047/060/061/062/064/073/075/076/077 |
-| **Б14** | Единый конфиг; **v0.3.2:** `orchestration.mode` / `orchestration.pilot_slugs` | eco-config §10, Блок F | ключи YAML, запрет `.env`, dual-path |
+| **Б12** | Точечный контекст: три слоя хранения, доктрина двух источников, MUST-read, ключ выжимки; **v0.6.0:** MUST-read TZ/REV = секции (не весь master по умолчанию) | Б1 вопрос 3, Б4 Q-Archi-02/04/05, Б46 П.2 | emit-prompt в Б18–Б27; G1 в Б6.5; AC-097…099 |
+| **Б13** | Переносимость и `invoke_role` (T4); **Б13.3** установка; **Б13.4** handoff слага; **Б13.5** продукт/платформа; **v0.4.2:** post-invoke проверка канонического имени артефакта; **v0.4.5:** PID-probe ≠ sirene без pid; **v0.4.6:** pid до spawn; окно post-invoke; запрет пайпа stdout; **v0.4.8:** model на `invoke_prepare`; канон артефакта расширен (TZ:patch / diagnose / RS / MIG); пустой JSON `result` ≠ proof; **v0.4.9:** `session_id` из JSON агента; конец хода ≠ notify; **v0.5.0:** default backend = `codex exec` (Б45); cursor-cli = откат | Б1.4, Б1.9, Q-Archi-03/04/06, Б40, Б41, Б43, Б44, Б45 | конфиг Б14, комплект поставки, AC-025/040/042/047/060/061/062/064/073/075/076/077/081/082 |
+| **Б14** | Единый конфиг; **v0.3.2:** `orchestration.mode` / `orchestration.pilot_slugs`; **v0.5.0:** `invoke.default_backend: codex`, effort/LIGHT/escalate в `roles.*` (Б45) | eco-config §10, Блок F, Б45 | ключи YAML, запрет `.env`, dual-path |
 | **Б15** | Хранение ТЗ и архивация | TZ-storage-system, инвентарь | `TZ:finalize`, DECOMM |
-| **Б16** | Цикл оркестратора; **Б16.1** согласование архитектор↔ревизор (REV сверяет выжимку с master); **v0.4.2:** канон `REV-tz.md`/`REV-plan.md`, `rev_verdict()` только блок «## Вердикт»; **Б16.4 v0.4.5:** occupancy leftover + PID-probe sirene; **Б16.5 v0.4.6:** слепота PID invoke + второй поезд; **Б16.6 v0.4.8:** action `RECOVER` + тот же ход recover/warn/next; **Б16.7 v0.4.9:** граница хода = journal/канон/ps, не notify Cursor; doorbell-спека | Б3, Б6.4, Б8, Б10, Б12, Б40, Б41, Б43, Б44 | complete-phase/next всех кейсов; протокол REV для Б9, Б18; AC-037/047/058/060/061…064/071…079 |
-| **Б17** | Обязательные поля между фазами (в т.ч. extract_sha256 в context-used) | Б6, Б10, Б12, Б16 | чеклисты Б18–Б27, preflight |
+| **Б16** | Цикл оркестратора; **Б16.1** согласование архитектор↔ревизор (REV сверяет выжимку с master); **v0.4.2:** канон `REV-tz.md`/`REV-plan.md`, `rev_verdict()` только блок «## Вердикт»; **Б16.4 v0.4.5:** occupancy leftover + PID-probe sirene; **Б16.5 v0.4.6:** слепота PID invoke + второй поезд; **Б16.6 v0.4.8:** action `RECOVER` + тот же ход recover/warn/next; **Б16.7 v0.4.9:** граница хода = journal/канон/ps, не notify Cursor; doorbell-спека; **v0.6.0:** fingerprint без `canon_mtime` при живом pid; `queue=<n>` | Б3, Б6.4, Б8, Б10, Б12, Б40, Б41, Б43, Б44, Б46 | complete-phase/next всех кейсов; протокол REV для Б9, Б18; AC-037/047/058/060/061…064/071…079/109 |
+| **Б17** | Обязательные поля между фазами (в т.ч. extract_sha256 в context-used); **v0.6.0:** auto-гейт = воркер без LLM (улики без изменений) | Б6, Б10, Б12, Б16, Б46 П.4 | чеклисты Б18–Б27, preflight; AC-104…106 |
 | **Б18** | Кейс CHANGE — полный цикл; норматив compress/reuse | Б6, Б12, Б16, Б16.1, Б17 | эталон для Б19–Б27 |
 | **Б19–Б27** | Остальные 9 кейсов | Б18 как эталон | отличия рецепта и артефактов |
 | **Б28** | Бэклог идей | Б5 слой 2 | статус triage |
@@ -66,8 +66,8 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б30** | Перенос истории канбана (T5) | Б1 В1 | W4, журнал |
 | **Б31** | Миграция W0–W4 и откат; **v0.4.5:** abort сжигает каноническое имя пилота (`eco-config-w4`) | Б1 В2, вопрос 5, Б40 | AC миграции; AC-059 |
 | **Б32** | Ошибки инструмента → ErrorBus | Б1 вопрос 2 | `--tool dev_workflow` |
-| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены; **v0.4.5:** п.39–41 occupancy leftover / abort канона / dead-pid на sirene; **v0.4.6:** п.42–45 слепота PID invoke / второй поезд / post-invoke dead-pid / пайп stdout; **v0.4.8:** п.46–50 recoverable INTERRUPTED ждать Сашу / крон-reaper как recover / второй recover-pass / json.dump recover / complete без model; **v0.4.9:** п.51–55 notify как конец хода / complete поверх живого wrapper / канон dwka_guard / замена pid / крон doorbell без глагола | Б3 вердикт, Б12, Б13.4, Б13.5, Б40, Б41, Б43, Б44 | неприемлемость |
-| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта; **v0.4.5:** AC-058…060 класс S; **v0.4.6:** AC-061…064 класс S; **v0.4.7:** AC-065…070; **v0.4.8:** AC-071…075 класс S; **v0.4.9:** AC-076…079 класс S | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1, Б40, Б41, Б43, Б44 | GATE:done этого слага = конец W1; AC-017/018 не здесь |
+| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены; **v0.4.5:** п.39–41 occupancy leftover / abort канона / dead-pid на sirene; **v0.4.6:** п.42–45 слепота PID invoke / второй поезд / post-invoke dead-pid / пайп stdout; **v0.4.8:** п.46–50 recoverable INTERRUPTED ждать Сашу / крон-reaper как recover / второй recover-pass / json.dump recover / complete без model; **v0.4.9:** п.51–55 notify как конец хода / complete поверх живого wrapper / канон dwka_guard / замена pid / крон doorbell без глагола; **v0.6.0:** п.63–65 лимиты ходов фазы не ядром / auto-close без патча gateway / SQL telemetry ro допустим | Б3 вердикт, Б12, Б13.4, Б13.5, Б40, Б41, Б43, Б44, Б46 | неприемлемость |
+| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта; **v0.4.5:** AC-058…060 класс S; **v0.4.6:** AC-061…064 класс S; **v0.4.7:** AC-065…070; **v0.4.8:** AC-071…075 класс S; **v0.4.9:** AC-076…079 класс S; **v0.5.0:** AC-080…093 (Codex); **v0.6.0:** AC-094…116 (`llm-cost-optimization`; O: ставь кроны / удаляй) | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1, Б40, Б41, Б43, Б44, Б45, Б46 | GATE:done этого слага = конец W1; AC-017/018 не здесь |
 | **Б35** | Контракты экосистемы (contracts-standard.md); **v0.3.2:** входные `orchestration.mode` / `pilot_slugs` | Б10, Б12, Б14, Б32 | SoT = `_state.json`; `extract.md` производный; migrate_vN своей схемы; dual-path-ключи только через эту таблицу |
 | **Б36** | Что показать Саше | Q-Archi-01..06, DRY-отклонение, продукт Б13.5, **v0.4.0:** Q-Archi-07/08 | не блокирует TZ:finalize |
 | **Б37** | Пакет `devworkflow-task-slug`: файрвол ролей, поезд сам, `suggest-slug`, G6, контроль Саши, изоляция origin; **v0.4.2:** Python-контроль канона артефакта и вердикта (норма 4) | Б6.4, Б7, Б11, Б16, Б21, факт сбоя 14.10, FINDING-PyContr-2 | AC-044…051; GATE:done этого слага |
@@ -76,7 +76,9 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б42** | Пакет `dev-workflow-cursor-cli`: invoke_role FATAL_PATTERNS сужен (JSON-структурный, без голых timeout/credits/billing — только ошибки без легитимного завершения); `--source_kind`→`--source-kind` | инцидент 15.10 ErrorBus 1832/1834, `_fix_plan_20261015.md`, Б13.2, Б29 A1–A2, Б32 | AC-065…070 класс S; GATE:done этого BUGFIX |
 | **Б43** | Пакет `dev-workflow-avtovosstanovlenie`: автовосстановление recoverable-сбоев (dead-pid / G6 wrong-role / empty result / rc=0 без complete / model=None) + warn Саше класс S; без reaper/крона/авто-ретрая | инциденты 19.10 (ktalk + этот слаг), правило Саши 19.10, cursor-cli-resilience 1/5, Б10, Б13.2, Б16 | AC-071…075 класс S; GATE:done этого SKILL-CHANGE; корпуса Б40–Б42 не откатывать |
 | **Б44** | Пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`: конец хода ≠ notify Cursor; occupancy `complete`/`next`/`invoke` пока жив wrapper; `session_id` писать; recover one-shot оставить; страж-doorbell по `ставь кроны` (крон в этом поезде не ставим); AC-061 pid=wrapper не трогать | RS:analyze 19.10 APPROVE `intent-arhitektor-pochemu-teryaem-pidy`, collect §8, Б1.2, Б10, Б13.2, Б16.5–6, Б33 п.47, Б40–Б43 | AC-076…079 класс S; GATE:done этого CHANGE; корпуса Б40–Б43 / AC-058…075 не откатывать |
-| **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд | Б13.1, Б13.5, Б31.2, Б33, Б37 | чеклист Шаг 4 tz-workflow |
+| **Б45** | Пакет `migrate-dev-roles-cursor-to-codex`: штатный бэкенд ролей = Codex exec; таблица моделей Саши; починка `run_codex`; sandbox; skip-git; auth; пилот; откат на cursor-cli | решение Саши 20.10, Q-Archi-03, Б6.4, Б13.2, Б14, факт `codex run --cwd` / 401 token_expired | AC-080…093; GATE:done этого CHANGE; корпуса Б40–Б44 / AC-058…079 не откатывать |
+| **Б46** | Пакет `llm-cost-optimization`: экономия ключа tutu; П.1–П.8; MUST-read TZ/REV = секции; doorbell fingerprint без `canon_mtime` при живом pid + `queue=<n>`; auto-GATE без LLM; operator-hold `ставь кроны` / `удаляй` | аудит 20.10 $12.49/24ч, корпус TZ:patch, REV:tz APPROVE, Б12.3, Б16.7, Б17.4, Б33, Б44.4 / AC-079 | AC-094…116; GATE:done этого CHANGE (holds O); корпуса Б40–Б45 / AC-058…093 не откатывать; код П.1 / П.5.б / П.7.4 — отдельные цепочки |
+| **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд; **v0.5.0:** исключение allowlist скиллов Б45.5 (тела таблиц моделей/вызова, не баннер dual-path); **v0.6.0:** `dwka_guard` hold `удаляй`; `jobs.json` hold `ставь кроны` | Б13.1, Б13.5, Б31.2, Б33, Б37, Б45, Б46 | чеклист Шаг 4 tz-workflow |
 | **Связи с экосистемой** | Кто с кем (не поля) | Б14, Б32, манифест | отдельно от Б35 |
 | **Открытые вопросы** | Явный h2 (пусто / «нет») | Б36, AC-018 на W4 | чеклист Шаг 4 |
 
@@ -120,9 +122,13 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 Пишется только текст ТЗ (`TZ:patch` / `TZ:finalize` + инвентарь). **Не** писать код `pipeline/`, **не** создавать скилл на диске, **не** строить граф канбана, **не** создавать карточки, **не** выключать канбан, **не** рестартовать gateway, **не** ставить кроны.
 
-Этот ход — `TZ:finalize` **v0.4.9** пакета `pochinka-payplayna-dev-workflow-konets-hoda-po-k` (CHANGE) после `REV:tz` **APPROVE**. Штампует корпус TZ:patch v0.4.9 **без правок смысла**. Вход: RESEARCH-отчёт `research/20261019_intent-arhitektor-pochemu-teryaem-pidy-analyze.md` (RS:analyze APPROVE 19.10) + `dev/pochinka-payplayna-dev-workflow-konets-hoda-po-k/REV-tz.md`. Нормы: конец хода ≠ notify Cursor; occupancy `complete-phase`/`next`/`invoke` пока жив wrapper; `session_id` писать; recover one-shot оставить; страж = doorbell (крон **не** ставим). AC-061 pid=wrapper **не** переписывать. Корпуса Б40–Б43 / AC-058…075 **без правок смысла** (не откатывать). Решение 13.10 (Б1.2, heartbeat/reaper) **не** пересматривать. Код `pipeline/` и скилла **не** пишется (ждёт `HF:impl` / `HF:test` **раздельно** / `HF:docs-handoff`). Не ставить кроны, не канонизировать `dwka_guard.sh`, не reaper, не авто-ретрай billing/90-90, не заменять pid на агента. Не вторгаться в чужие поезда / канбан / ядро hermes-agent. Не чинить PFS `task_slug`. `[NEW-ENTITY, требует согласования Саши]` **нет** (канал стража не предлагать, AC-049 / Q-Archi-08). Замечания ревизора (не блокируют APPROVE) — `HF:plan` / compress / `HF:docs-handoff`, не этот штамп.
+Этот ход — `TZ:finalize` **v0.6.0** пакета `llm-cost-optimization`. Пишется только текст ТЗ (+ строка инвентаря + AC-list). **Не** писать код `pipeline/`, **не** менять скиллы/YAML Hermes/`jobs.json` на диске, **не** звать `codex login`, **не** рестартовать gateway, **не** ставить кроны, **не** коммитить в `~/hermes-agent`.
 
-Предыдущий пакет `dev-workflow-avtovosstanovlenie` (v0.4.8) остаётся в корпусе; этот CHANGE его не переписывает, а **чинит ложную границу хода**, из-за которой пять симптомов Б43 вообще возникают.
+Нормы пакета — Б46: экономия ключа tutu (DeepSeek flash); аудит 20.10 **$12.49/24ч**. П.1–П.8. Штат ролей Codex (Б45) **не** откатывать на Cursor. Корпуса Б40–Б45 / AC-058…093 / AC-061 **без правок смысла** (не откатывать). Решение 13.10 (Б1.2) **не** пересматривать. Канон 10 кейсов / фазы / G6 / классы S/O/C **не** пересматривать. `[NEW-ENTITY, требует согласования Саши]` **нет**. Q-n этого пакета **нет** (Q-2 auth Codex — чужой поезд `migrate-dev-roles-cursor-to-codex`, не занимать). Q-1 W4 (выключение dispatch) **не** заводится.
+
+Поезд init как `DEV`; содержание пакета = CHANGE существующего DevWorkflow. Архитектор кейс **не** меняет (G5). Semver **0.6.0**.
+
+Предыдущий пакет `migrate-dev-roles-cursor-to-codex` (v0.5.0) остаётся в корпусе; этот CHANGE его не переписывает, а **режет расход tutu** конфигом, 0-токенными детекторами и MUST-read секций.
 
 ### Б0.4 Связь с живыми документами
 
@@ -150,13 +156,13 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | `TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md` | текст корпуса не править до DECOMM канбана; W0 — пометка superseded-runtime в шапке, не перепись | Б15, Б31.2 |
 | Ядро gateway (`gateway/session.py` и родственное) | не патчить; не рестартовать из этого плана | Б0.3, Б33 п.21 |
 | `~/.hermes/kanban.db` | не rm; не делать SoT новой машины | Б30, Б31.1 |
-| `jobs.json` / кроны | не создавать без «ставь кроны»; doorbell этого пакета — спека+код, **не** запись в `jobs.json` в этом поезде | Б33 п.22/55, Б44 |
-| `~/.hermes/scripts/dwka_guard.sh` | не канонизировать; не копировать в `pipeline/` как SoT стража; не механизм recover. Судьба уже поставленного прототипа — глагол `удаляй` | Б33 п.47/53, Б43.2, Б44 |
+| `jobs.json` / кроны | не создавать без «ставь кроны»; **v0.6.0:** hold `ставь кроны` на (1) doorbell tick 1 мин no_agent; (2) алерт кэша П.1; (3) flip `pfs_batch`. Этот поезд **не** пишет `jobs.json` | Б33 п.22/55, Б44, Б46, AC-096/110/111 |
+| `~/.hermes/scripts/dwka_guard.sh` | не канонизировать; не копировать в `pipeline/` как SoT стража; не механизм recover. **v0.6.0:** судьба — operator-hold `удаляй` (AC-114/115); не `rm` до глагола | Б33 п.47/53, Б43.2, Б44, Б46 П.8 |
 | `EcosystemManifest.json` / `entities.json` / per-tool `.env` / секреты в YAML | исполнитель не пишет; per-tool `.env` запрещён | Б14, Б33 п.14 |
-| sqlite / SQL как SoT, кэш выжимок или транспорт контекста | не заводить; `kanban.db` — только read-only архив после W4 | Б12, Б13.4, Б33 п.6/25 |
+| sqlite / SQL как SoT, кэш выжимок или транспорт контекста | не заводить; `kanban.db` — только read-only архив после W4. **v0.6.0:** П.1 читает `state.db` **ro telemetry**, не кладёт выжимки в SQL (дух п.25; Б33 п.65) | Б12, Б13.4, Б33 п.6/25/65, Б46 П.1 |
 | `USERTOOLS/DevWorkflow/` | не заводить: это продукт процесса, не USERTOOL | Б13.5, Б14 |
 | профильные USERTOOLS (встречи, протоколы, контакты, Confluence) | не патчить «ради онбординга» DevWorkflow; не подменять комплектом | Б13.5, Б33 п.31 |
-| `hermes-feature/SKILL.md`, `tz-workflow/SKILL.md` (чужие скиллы) | **исключение W2, не локальный форк:** только баннер dual-path **сверху**. Тело процедуры, блоки 0–8, триггеры, `references/` — не трогать. **v0.3.2:** 10–15 строк allowlist (AC-043). **v0.4.0:** те же два файла, **аддитив +2–4 строки файрвола** («не предлагай слаги / технические варианты; стоп, отдай `dev-workflow`»). **v0.4.1:** коридор длины баннера **12–19** непустых строк = (10–15) + (2–4); round-up до 20 запрещён (иначе pytest AC-050 п.1 false-pass на 20-строчный баннер). Тело по-прежнему не переписывать (Q-Archi-07, AC-050). Отдельный SKILL-CHANGE тел старых скиллов — **вне этого пакета** (W4 архивирует скиллы). Откат = `git checkout` двух `SKILL.md`. Почему не три полных переписи: AC-043 запрещает тело; требование «прописать в трёх скиллах» закрывается маршрутом (баннер → `dev-workflow`, где живёт норма Б6.4/Б37) | Б13.5, Б31 W2, Б37, AC-043, AC-050 |
+| `hermes-feature/SKILL.md`, `tz-workflow/SKILL.md` (чужие скиллы) | **исключение W2, не локальный форк:** только баннер dual-path **сверху**. Тело процедуры, блоки 0–8, триггеры, `references/` — не трогать. **v0.3.2:** 10–15 строк allowlist (AC-043). **v0.4.0:** те же два файла, **аддитив +2–4 строки файрвола** («не предлагай слаги / технические варианты; стоп, отдай `dev-workflow`»). **v0.4.1:** коридор длины баннера **12–19** непустых строк = (10–15) + (2–4); round-up до 20 запрещён (иначе pytest AC-050 п.1 false-pass на 20-строчный баннер). **v0.5.0 пакет `migrate-dev-roles-cursor-to-codex`:** **второе исключение — allowlist Б45.5.** В тех же двух файлах (и в `cursor-cli`, `cursor-task-context`, `codex`, `dev-workflow`, `deep-mine-project`) **разрешено** заменить таблицу ролей/моделей и паттерн вызова `agent -p` → `invoke_role` / Codex exec. Баннер dual-path **не** расширять и не сносить. Тело процедуры кейсов/блоков 0–8 / файрвол оркестратора — не переписывать ради «раз уж открыли файл». Откат штата = YAML `default_backend: cursor-cli` + git checkout allowlist. Скиллы **вне** Б45.5 (в т.ч. leftover `agent -p` в чужих SKILL.md) — **не этот поезд** | Б13.5, Б31 W2, Б37, Б45.5, AC-043, AC-050, AC-086 |
 | `TZ/ProtocolFromSummary/ProtocolFromSummary_TZ.md`, код PFS, picker §29, `entities.<slug>.task_slug` | **второй поезд.** Баг «задачам встречи не проставляется `task_slug`» (встреча «Кирилл 1-1 2026-10-14», канбан `pfs-task-slug-regress`) — **заказчик-пример**, не владелец слага `devworkflow-task-slug`. Чинить PFS в этом TZ-WRITE **запрещено** | Б0.3, Б37 |
 
 ---
@@ -311,7 +317,9 @@ Python — **помощь**, не диспетчер: файловое сост�
 
 ### Q-Archi-03 — провайдер-агностичный вызов роли?
 
-**Решение: один адаптер `invoke_role` с тремя бэкендами** (Б13). Конфиг выбирает бэкенд. Жёсткая привязка к Cursor CLI в скилле запрещена. На этом контуре default = `cursor-cli`; на другом Hermes допустимы `codex` или внутренняя модель.
+**Решение: один адаптер `invoke_role` с тремя бэкендами** (Б13). Конфиг выбирает бэкенд. Жёсткая привязка к Cursor CLI в скилле запрещена.
+
+**v0.5.0 (пакет `migrate-dev-roles-cursor-to-codex`, смена решения = этот `TZ:patch`):** на **этом** контуре default = `codex` (`codex exec`, Б45). `cursor-cli` остаётся вторым бэкендом **для отката**, не штат. `hermes-internal` без изменений (координатор/компрессор — родная Hermes, не этот адаптер). На другом Hermes по-прежнему выбирается YAML, не правка `SKILL.md`.
 
 ### Q-Archi-04 — класть ли контекст / ТЗ / выжимки в SQL?
 
@@ -396,17 +404,24 @@ D1/D2 снимается: есть только вызов роли `invoke_role
 
 `rollback-to-kanban` добавлен этим `TZ:patch` (v0.2.0): dual-path волн W2–W3 — вернуть слаг на канбан, не выключая доску. Разговорная «катись канбаном» = тот же глагол, **в словарь не входит**. Снятие hold: `pipeline operator-done --verb rollback-to-kanban --evidence`. W0 зеркала: аддитив той же строки в `GLOSSARY.md` §3 (не пересмотр остальных глаголов; Б0.1, Б31.2).
 
-### Б6.4 Роли (без изменений содержания)
+### Б6.4 Роли (содержание ролей без изменений; модели — v0.5.0 Codex)
 
-| Роль | Кто | Модель (default этого контура) | Делает | Не делает |
-|---|---|---|---|---|
-| Оркестратор | Сирень | родная модель Hermes | бриф (факты, не решения), `init`/`next`, HITL по закрытому словарю, ORCH, показ статуса | **не** пишет ТЗ и код; **не** предлагает слаги (`dev/<slug>/` и `entities.task_slug`); **не** даёт технические варианты/решения; **не** подменяет архитектора (Б37, AC-044) |
-| Архитектор | вызов роли | `cursor-grok-4.6-high` (LIGHT допустим medium) | ТЗ, план+IAC, диагноз, риски, вопросы Саше (`Q-n`); предположения слагов **по ТЗ инструмента** | не выбирает кейс, не skip фаз, **не** финальный боевой код, **не** ведёт `HF:test` |
-| Ревизор | вызов роли | `claude-sonnet-5-medium` | слабые места ТЗ/плана; прожарка; вердикт APPROVE / REQUEST-CHANGES | не ход процесса; не пишет ТЗ и код |
-| Исполнитель | вызов роли | `composer-2.5` | код и прогон тестов **только по плану архитектора**; мелкие локальные отклонения (опечатка, import) допустимы | не ТЗ, не план; глобальное отклонение / неясно → **возврат архитектору**, не выдумывать |
-| Компрессор | Сирень | родная модель Hermes | выжимка-индекс 3–5 КБ (или части 1/N); файл пишет Python после валидации | без Cursor; не SoT смысла |
+Содержание колонок «Делает / Не делает» **не** пересматривается. Меняется только D2: бэкенд + slug модели этого контура (Б45). Координатор (sirene-фазы G6) и компрессор **не** переезжают на Codex.
 
-Один `invoke_role` = одна модель = одна роль. На другом Hermes модели берутся из конфига `tools.dev_workflow.roles`.
+| Роль | Кто | Бэкенд (этот контур, v0.5.0) | Модель / effort | Делает | Не делает |
+|---|---|---|---|---|---|
+| Оркестратор | Сирень | Hermes default | `deepseek-v4-flash-0731` (как сейчас) | бриф (факты, не решения), `init`/`next`, HITL по закрытому словарю, ORCH, показ статуса | **не** пишет ТЗ и код; **не** предлагает слаги (`dev/<slug>/` и `entities.task_slug`); **не** даёт технические варианты/решения; **не** подменяет архитектора (Б37, AC-044); **не** на Codex |
+| Архитектор | вызов роли | Codex exec | `gpt-6.1-sol`, effort `high`; толстый TZ/IAC (`TZ:patch` / `TZ:finalize` / `HF:plan`) — `xhigh` | ТЗ, план+IAC, диагноз, риски, вопросы Саше (`Q-n`); предположения слагов **по ТЗ инструмента** | не выбирает кейс, не skip фаз, **не** финальный боевой код, **не** ведёт `HF:test` |
+| Архитектор, эскалация | вызов роли, тот же `--role architect` | Codex exec | `gpt-6-astra`, effort `high` (**форсировать**; default модели = low). Триггер — Б45.3 | то же, что архитектор | не отдельная G6-роль; не штат |
+| Ревизор | вызов роли | Codex exec | `gpt-6-astra`, effort `high`; толстый master (`REV:tz` / `REV:plan` на DEV/CHANGE полном) — `xhigh`. Medium **не** штат; pesky CHANGE-LIGHT допустим | слабые места ТЗ/плана; прожарка; вердикт APPROVE / REQUEST-CHANGES | не ход процесса; не пишет ТЗ и код |
+| Исполнитель | вызов роли | Codex exec | `gpt-5.6-terra`, effort `medium`; многофайл / live test (`HF:test` не-LIGHT) — `high` | код и прогон тестов **только по плану архитектора**; мелкие локальные отклонения (опечатка, import) допустимы | не ТЗ, не план; глобальное отклонение / неясно → **возврат архитектору**, не выдумывать |
+| Исполнитель LIGHT | вызов `--role executor` на кейсе CHANGE-LIGHT / BUGFIX-LIGHT | Codex exec | `gpt-6-luna`, effort `high` | то же, что исполнитель, на ≤3 файлах | не новая G6-роль; YAML-ключ `roles.executor_light` |
+| Компрессор | Сирень | Hermes default | `deepseek-v4-flash-0731` (как сейчас) | выжимка-индекс 3–5 КБ (или части 1/N); файл пишет Python после валидации | без Codex и без Cursor; не SoT смысла |
+| Координатор | Сирень (sirene-фазы G6) | Hermes default | `deepseek-v4-flash-0731` (как сейчас) | бэкап, инвентарь, операторка на фазах оркестратора | **не** на Codex; устаревшая строка GLOSSARY «координатор = Cursor composer-2.5» снимается на `TZ:finalize` / `ORCH` (AC-083) |
+
+`gpt-6-terra` через ChatGPT-аккаунт **не поддерживается** (проверено API) → в allowlist **не** включать; исполнитель = `gpt-5.6-terra`.
+
+Один `invoke_role` = одна модель = одна роль. На другом Hermes модели берутся из конфига `tools.dev_workflow.roles`. Fallback `composer-2.5` в `invoke_role._resolve_model_backend` **снять** на `HF:impl` (иначе YAML-дыра вернёт Cursor-модель).
 
 Ревизор в новом движке — **та же роль**, не канбан-карточка: вызов `invoke_role --role reviewer`, протокол APPROVE / REQUEST-CHANGES — **Б16.1**. Содержание роли (слабые места ТЗ/плана; не ход процесса) не меняется.
 
@@ -433,7 +448,7 @@ D1/D2 снимается: есть только вызов роли `invoke_role
 | `REV:tz`, `REV:plan`, `REV:report` | `reviewer` |
 | `HF:impl`, `HF:test`, `DEC:exec` | `executor` |
 | `TZ:compress`, `HF:compress` | `compressor` |
-| `TZ:stabilize`, `SK:preflight`, `HF:backup`, `HF:docs-handoff`, `ORCH:shared-state`, гейты | оркестратор (Сирень); Cursor-роль не звать |
+| `TZ:stabilize`, `SK:preflight`, `HF:backup`, `HF:docs-handoff`, `ORCH:shared-state`, гейты | оркестратор (Сирень); invoke-роль не звать |
 
 Таблица **исчерпывающая** для фаз, которые попадают в `recipe[]` десяти кейсов (Б18–Б27). Нет строки = G6 fail (не «фаза не в таблице → не проверять»). `pipeline recipe-add` (`MIG:block-k` и динамические блоки) наследует роль строки `MIG:block-k` = `architect`; иной `--role` на блоке — только будущий `TZ:patch` этой таблицы, не ad-hoc оркестратора.
 
@@ -858,7 +873,7 @@ HITL-секция 🟡: **только** `status=waiting_operator` (поле, н
 
 | Фаза | Роль обязана открыть полный файл | Выжимки достаточно как индекса |
 |---|---|---|
-| `TZ:patch` / `TZ:finalize` / `REV:tz` | **всегда** master-ТЗ (пишут или судят текст) | нет |
+| `TZ:patch` / `TZ:finalize` / `REV:tz` | **не** весь master по умолчанию (v0.6.0, Б46 П.2). Обязательные секции: frontmatter + Б0.3 (границы хода); «Что НЕ трогать»; Б33; Б34 сводка AC (таблица); секция **текущего** пакета (последний БNN) + changelog **последние 3** записи. Полный файл — если роль **пишет или судит** норму вне этого набора, есть `[NEW-ENTITY]`, выжимка расходится с путём, или путь короче 5 КБ | как индекс; формулировки норм — с диска открытых секций |
 | `HF:plan` | минимум секция AC + «не трогать» + контракты | ориентация; формулировки AC — с диска |
 | `HF:impl` | план + IAC (`path` / `verify`); полное ТЗ — при расхождении IAC с выжимкой или при запретах | да, если IAC покрывает AC |
 | `HF:test` | IAC.verify, не пересказ ТЗ | да |
@@ -866,7 +881,7 @@ HITL-секция 🟡: **только** `status=waiting_operator` (поле, н
 | `BUG:diagnose` | факты на диске (логи, код); ТЗ — при контракте бага | да как карта |
 | **Всегда** | если выжимка и путь расходятся; путь короче 5 КБ «не влезло»; есть `[NEW-ENTITY]`; роль собирается обобщить имя | нет |
 
-Чтение master **без обрезки**. Если файл не влезает в один Read — offset/продолжение, не «пропусти середину». Инструкция «без обрезки» в промпте не техническая; скилл обязан сказать роли: читать блоками, не опускать секции «не трогать» / AC / контракты.
+Чтение **без обрезки внутри выбранных секций** (блоками offset, не «пропусти середину секции»). Если роль открывает полный файл (исключения строки TZ/REV или другие фазы таблицы) — без обрезки файла. Доктрина двух источников (Б12.2) **не** отменяется: конфликт → диск. Священные имена Б12.6 компрессор по-прежнему не выбрасывает. Инструкция «без обрезки» в промпте не техническая; скилл обязан сказать роли: читать блоками, не опускать секции «не трогать» / AC / контракты / границы хода.
 
 G2 доказывает, что `emit-prompt` **вызвали**, не что LLM **прочитала** файлы. Понимание ловят артефакт (IAC, REV по диску) и MUST-read, не маркер.
 
@@ -947,15 +962,15 @@ invoke_role \
   [--backend cursor-cli|codex|hermes-internal]
 ```
 
-Default `--backend` и модели ролей — из `EcosystemConfig.yaml`. Жёсткой привязки к Cursor в `SKILL.md` нет: скилл зовёт `invoke_role`, не `agent -p`.
+Default `--backend` и модели ролей — из `EcosystemConfig.yaml`. Жёсткой привязки к Cursor **или** к бинарю `codex` в `SKILL.md` нет: скилл зовёт `invoke_role`, не `agent -p` и не `codex exec` в обход адаптера.
 
 | Бэкенд | Как | Когда |
 |---|---|---|
-| `cursor-cli` | `agent -p "$(cat prompt)" -f --model … --workspace … --output-format json` | default этого контура |
-| `codex` | внешний CLI Codex по тем же ролям | другой Hermes / смена провайдера |
-| `hermes-internal` | прямая внутренняя модель Hermes (`call_llm` / `hermes chat -m`), без внешнего бинаря | как раньше sonnet/opus внутри |
+| `codex` | `codex exec -C <ABS> -m <id> -c model_reasoning_effort='"<effort>"' --skip-git-repo-check --json --sandbox danger-full-access` + тело `--prompt-file` как operand exec (не `codex run`, не `--cwd`, не `--full-auto`). Канон флагов — Б45.2 | **default этого контура (v0.5.0)** |
+| `cursor-cli` | `agent -p "$(cat prompt)" -f --model … --workspace … --output-format json` | **откат** (YAML `default_backend: cursor-cli` + старые модели); не штат |
+| `hermes-internal` | прямая внутренняя модель Hermes (`call_llm` / `hermes chat -m`), без внешнего бинаря | компрессор/служебное; не роли architect/reviewer/executor этого контура |
 
-Запрет `--continue` (берёт «последнюю сессию каталога»). `--resume` — только явный `session_id` фазы. Параллель: не пересекать `--workspace` двух живых PID.
+Диск сейчас: `run_codex()` = `[bin, "run", "--cwd", workspace, prompt_file]` — **дефект**, чинить на `HF:impl` (AC-081). `--continue` cursor-cli по-прежнему запрещён. `--resume` — только явный `session_id` фазы; для Codex — нативный resume **если** CLI это умеет, иначе correction-pass AC-073 = чистый вызов. Параллель: не пересекать `--workspace` / `-C` двух живых PID.
 
 Обёртка **обязана** распознать и **не** маппить в clean-exit 0:
 
@@ -975,7 +990,7 @@ Default `--backend` и модели ролей — из `EcosystemConfig.yaml`. 
 
 **Запись PID (v0.4.6, AC-061).** `cmd_invoke_role` на том же `write_state`, что `invoke_prepare` (**до** `run_cursor_cli` / spawn адаптера): `st.pid = os.getpid()` и `phases[phase].pid` того же процесса обёртки CLI. Пока обёртка жива — `pid_alive` истинен. Не ждать rc адаптера, чтобы заполнить pid. **v0.4.9:** SoT pid **не** менять на агента / pgid / session_id (ломает окно до spawn и/или post-invoke AC-062 / occupancy-дедлок сироты). Код `invoke_role.py` ~254–256 не переписывать.
 
-**Запись `session_id` (v0.4.9, AC-077).** Поле `phases[phase].session_id` в схеме есть (`_empty_phase`). После rc=0 (и на correction-invoke AC-073) адаптер **обязан** распарсить JSON stdout агента (`--output-format json`: объект / NDJSON / последний объект с `session_id` или `sessionId`) и записать поле на том же `write_state`, что `role` (~331–344). `--resume` correction-pass берёт это поле, когда wrapper уже мёртв. Пустой parse → оставить `null`, не fail успеха канона. `session_id` **не** SoT живости и **не** замена pid. Справочник `cursor-cli-notes.md` («JSON парсится для session_id») обязан совпасть с кодом.
+**Запись `session_id` (v0.4.9, AC-077; v0.5.0 Codex, AC-089).** Поле `phases[phase].session_id` в схеме есть (`_empty_phase`). После rc=0 (и на correction-invoke AC-073) адаптер **обязан** распарсить JSON stdout бэкенда и записать поле на том же `write_state`, что `role` (~331–344). Cursor: `--output-format json` (объект / NDJSON / последний объект с `session_id` или `sessionId`). Codex: `--json` (event stream; взять id сессии из канонического поля событий Codex, не выдумывать ключ). `--resume` correction-pass берёт это поле, когда wrapper уже мёртв. Пустой parse → оставить `null`, не fail успеха канона. `session_id` **не** SoT живости и **не** замена pid. AC-061 pid=wrapper **не** переписывать.
 
 **Запись model / снятие awaiting_invoke (v0.4.8, AC-075).** На том же `write_state` `invoke_prepare`: `phases[phase].model` = `--model` или `tools.dev_workflow.roles.<role>.model` (resolved, не `None` для architect/reviewer/executor); `phases[phase].backend`; `awaiting_invoke=false`. Поле `role` на prepare **не** писать: маркер post-invoke AC-062 остаётся «`role` после rc=0». Иначе true-crash выглядит как успешный выход.
 
@@ -1121,16 +1136,30 @@ tools:
     SKILL_ROOT: /home/tkachenkoav/hermes-workspace/skills/devops/dev-workflow
     DIGEST_PATH: /home/tkachenkoav/WorkVault/Registries/EcosystemManifest.digest.md
     invoke:
-      default_backend: cursor-cli
+      default_backend: codex          # v0.5.0 штат; откат = cursor-cli
       backends:
-        cursor-cli: { bin: agent }
+        cursor-cli: { bin: agent }    # откат, не удалять
         codex: { bin: codex }
         hermes-internal: { via: call_llm }
     roles:
-      architect: { model: cursor-grok-4.6-high }
-      reviewer: { model: claude-sonnet-5-medium }
-      executor: { model: composer-2.5 }
-      compressor: { model: null }   # родная модель Hermes
+      architect:
+        model: gpt-6.1-sol
+        effort: high
+        effort_thick: xhigh
+        escalate_model: gpt-6-astra
+        escalate_effort: high
+      reviewer:
+        model: gpt-6-astra
+        effort: high
+        effort_thick: xhigh
+      executor:
+        model: gpt-5.6-terra
+        effort: medium
+        effort_multifile: high
+      executor_light:
+        model: gpt-6-luna
+        effort: high
+      compressor: { model: null }   # родная модель Hermes; не Codex
     notify:
       default_chat_id: "-1004300127777"
     errorbus:
@@ -1317,7 +1346,18 @@ LIGHT: после улики объёма Сирень вызывает `pipelin
 
 Сирень **не** верит notify сессии, которая сделала nohup. `rc=0` адаптера ≠ фаза закрыта (уже AC-074); notify «completed» ещё слабее: оно приходит **до** rc обёртки.
 
-**Страж-doorbell (спека, не ход recover).** 0-токенный детектор очереди: fingerprint = `status|phase|role|pid_alive|wrapper_alive|mtime канона` по всем живым слагам. Тот же отпечаток → молчание. Смена → будит Сирень существующим wake/origin; **она одна** делает `pipeline next`. Не `recover`, не spawn, не kill. Не копия `dwka_guard.sh`. Установка в `jobs.json` — только глагол `ставь кроны` (Б33 п.22). Этот цикл оркестратора крон **не** ставит. Если платформа крона каждый интервал зовёт LLM — страж не ставить (проверка `HF:plan`).
+**Страж-doorbell (спека, не ход recover).** 0-токенный детектор очереди. **v0.6.0 формула сегмента** (mini-TZ AC-079, Б46 П.6.2–3; корпус «0-токен / не recover / не spawn» не откатывать):
+
+```
+slug|status|phase|role|pid_alive|wrapper_alive[|canon_mtime=…]
+```
+
+- Если `pid_alive=1` **или** `wrapper_alive=1` → поле `canon_mtime` **опустить** (не писать `0` как сентинел смены).
+- Если оба 0 → `canon_mtime` включить (детект «канон появился» для post-invoke / complete).
+- Нет state: `canon_mtime=0` допустим (нет живого pid).
+- Fingerprint **включает** `queue=<n>` (`n` = длина `dev/queue.json`; если файла нет — число `glob */_state.json` со `status` ∉ {`done`,`aborted`}). Tick при том же fp печатает `queue=<n>`, не WAKE, не `next`/`recover`. Смена `n` = смена fp → WAKE. Режим WAKE: `WAKE <fp>` **и** строка `queue=<n>`.
+
+Тот же отпечаток → молчание. Смена `phase` / `pid_alive` / `wrapper_alive` / (`canon_mtime` **только если pid и wrapper мертвы**) / `queue=<n>` → будит Сирень существующим wake/origin; **она одна** делает `pipeline next`. Не `recover`, не spawn, не kill. Не копия `dwka_guard.sh`. Установка в `jobs.json` — только глагол `ставь кроны` (Б33 п.22). Этот цикл оркестратора крон **не** ставит. Если платформа крона каждый интервал зовёт LLM — страж не ставить (проверка `HF:plan`).
 
 ---
 
@@ -1353,6 +1393,8 @@ LIGHT: после улики объёма Сирень вызывает `pipelin
 | `GATE:plan-approve` | план на диске / в `dev/<slug>/` (`HF:plan` done) | S |
 | `GATE:diagnose-review` | `_fix_plan_YYYYMMDD.md` или непустое тело диагноза в journal | S |
 | `GATE:done` | preflight 0: фазы done, AC-report доставлен, G3, G2, holds сняты, Q пуст | S, если нет O |
+
+**v0.6.0 (П.4, Б46).** Auto-гейт complete по улике, **воркер без LLM**: `pipeline next` → `AUTO_GATE` → `complete-phase` без `invoke_role` / без `agent -p` / без tutu-сессии. Улики **без изменений**. Дыра канбан-пути (карточка `GATE:*` как LLM-воркер) — `HF:impl` этого поезда только если проверка красная. Auto ≠ skip карточки гейта. Never-auto без изменений.
 
 ### Б17.5 Operator-hold (класс O)
 
@@ -1493,7 +1535,7 @@ G4 create: все обязательные фазы есть в recipe. Fail →
 | | |
 |---|---|
 | Кто | архитектор через `invoke_role` |
-| Вход | emit-prompt (digest + canon + выжимка + пути master; MUST-read = полный файл), закрытый бриф, VERDICT, факт-база ошибок |
+| Вход | emit-prompt (digest + canon + выжимка + пути master; MUST-read = секции Б12.3, не весь master по умолчанию), закрытый бриф, VERDICT, факт-база ошибок |
 | Работа | reuse-first, архитектура, драфт секций ТЗ; **не** реализация; **не** граф канбана |
 | Выход | драфт master-ТЗ на диске (ещё можно `status: draft`) |
 | Evidence | `path=TZ/…_TZ.md` (файл существует, непустой) |
@@ -1510,7 +1552,7 @@ G4 create: все обязательные фазы есть в recipe. Fail →
 | | |
 |---|---|
 | Кто | ревизор через `invoke_role --role reviewer` (default этого контура: `claude-sonnet-5-medium`) |
-| Вход | тот же emit-prompt + путь драфта; вводная Outbox + бриф (явно в пакете); MUST-read = полный master |
+| Вход | тот же emit-prompt + путь драфта; вводная Outbox + бриф (явно в пакете); MUST-read = секции Б12.3 (не весь master по умолчанию) |
 | Работа | слабые места, противоречия канону, дыры AC, пропущенные A1–C15; **сверка выжимки с текущим master** (не противоречит, не теряет нормы священного класса Б12.6) |
 | Выход | comment/файл **канон** `dev/<slug>/REV-tz.md` (не `REV-tz-2.md`): APPROVE / REQUEST-CHANGES в блоке `## Вердикт`; в теле — явный пункт «выжимка ↔ master» |
 | Evidence | `path=…/REV-tz.md verdict=APPROVE` — **только** при APPROVE; `verdict=` читает гейт, не весь файл |
@@ -2076,6 +2118,16 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 53. Канонизировать `~/.hermes/scripts/dwka_guard.sh` как механизм автовосстановления / стража очереди (имя файла явно; дух п.47).
 54. Заменить SoT `st.pid` / `phases[phase].pid` обёртки на pid агента, pgid или `session_id`.
 55. Ставить крон doorbell / стража без глагола `ставь кроны`; doorbell, который каждый интервал зовёт LLM (это не (а) change-detector).
+56. Звать `codex run` / `--cwd` вместо канона `codex exec -C` (Б45.2, AC-081).
+57. Передавать `--full-auto` / `--yolo` в Codex (флаг снят / опасен; sandbox = `--sandbox danger-full-access`, Б45.2).
+58. Опускать `--skip-git-repo-check` на вызове роли (Backlog / USERTOOLS / vault ТЗ — не git; AC-085).
+59. Оставлять default sandbox read-only на вызове из gateway (роль не запишет файлы; AC-084).
+60. Переносить координатора или компрессор на Codex (Б6.4, AC-083).
+61. Включать `gpt-6-terra` в allowlist / YAML (недоступен через ChatGPT-аккаунт; исполнитель = `gpt-5.6-terra`; AC-091).
+62. Удалять бэкенд `cursor-cli` из адаптера / `backends{}` «раз штат Codex» (ломает откат AC-088).
+63. Лимиты ходов фазы (GATE≤4 / TZ·REV≤20 / HF≤25) класть в ядро `hermes-agent`. Overlay воркера канбана / `invoke_role` (max turns на фазу) — отдельная TZ→HF П.5.б, не этот пакет как код ядра (Б46).
+64. Патчить `gateway/session.py` / ядро ради auto-close telegram по 80 api. Цепочка П.7.4 — вне ядра, fail-closed без summary (Б46).
+65. Класть выжимки / ход DevWorkflow в SQL; **писать** в `state.db`. **Допустимо:** SQL telemetry read-only (`~/.hermes/state.db` `mode=ro`) для алерта промаха кэша П.1 — не SoT, не кэш выжимок, не транспорт (дух п.25, Б46 П.1).
 
 ---
 
@@ -2083,7 +2135,7 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 
 Класс по умолчанию **S** (показ ≠ ожидание). Класс O — только со строкой `depends: operator:<verb>`.
 
-I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` = этот документ.
+I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` = этот документ. **v0.6.0 пакет `llm-cost-optimization`:** I1 — Б46.
 
 ### Сводка AC
 
@@ -2160,6 +2212,43 @@ I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` 
 | AC-077 | S | `invoke_role` после rc=0 / correction пишет `phases[phase].session_id` из JSON агента. `--resume` AC-073 берёт поле, когда wrapper мёртв. Не SoT pid (AC-061 не переписывать) | Б13.2, Б16.6, Б44 |
 | AC-078 | S | Occupancy CLI: `complete-phase` / `next` (старт новой invoke-фазы / `st.pid=None`) / повторный `invoke-role` / `recover` → exit 1, пока `invoke_wrapper_alive(slug)`. Обнуление pid на `next` новой фазы (cli.py:83–85) остаётся для pre-invoke, **не** поверх живого предыдущего wrapper | Б10, Б16.5, Б16.7, Б44 |
 | AC-079 | S | Doorbell: 0-токенный `pipeline doorbell` считает fingerprint очереди; тот же отпечаток → молчание; смена → wake Сирень (существующий канал), она одна `pipeline next`. Не копия `dwka_guard.sh`. Не recover/spawn/kill. `jobs.json` в этом поезде не пишется; GATE:done **не** ждёт крона | Б16.7, Б33 п.22/47/55, Б44 |
+| AC-080 | O `depends: operator:answer:Q-2` | Codex auth жив: smoke `codex exec` этого контура **не** 401 `token_expired`; `~/.codex/auth.json` обновлён (device-auth). Без evidence — бой `HF:impl` ролей Codex не стартовать | Б45.1 |
+| AC-081 | S | `run_codex` собирает `codex exec -C <ABS> -m <id> -c model_reasoning_effort='"<effort>"' --skip-git-repo-check --json --sandbox danger-full-access` + operand = тело prompt-file. Нет `run`, нет `--cwd`, нет `--full-auto`. Юнит: argv фикстуры | Б13.2, Б45.2, Б33 п.56–57 |
+| AC-082 | S | `EcosystemConfig.yaml` `invoke.default_backend: codex`; `roles.architect/reviewer/executor/executor_light` = таблица Б6.4; `cursor-cli` остаётся в `backends{}`. Fallback `composer-2.5` в `_resolve_model_backend` снят | Б14, Б45.3 |
+| AC-083 | S | Б6.4 / `canon.md` / GLOSSARY §3: D2 = Codex-slug; координатор и компрессор = `deepseek-v4-flash-0731`, без Codex. Строка «координатор = Cursor composer-2.5» снята | Б6.4, Б45.4 |
+| AC-084 | S | Вызов из gateway несёт `--sandbox danger-full-access`. Смоук: роль **записывает** канонический файл (read-only sandbox → fail) | Б45.2, Б33 п.59 |
+| AC-085 | S | Каждый `codex exec` роли несёт `--skip-git-repo-check`. Смоук на workspace без `.git` (TZ / USERTOOLS) → rc не «not a git repo» | Б45.2, Б33 п.58 |
+| AC-086 | S | Allowlist скиллов Б45.5: таблицы моделей и паттерн вызова приведены к Codex / `invoke_role`. Баннер dual-path не снесён. Скиллы вне allowlist не патчились | Б45.5 |
+| AC-087 | S | Пилот: этот поезд после YAML-flip **или** следующий CHANGE прошёл хотя бы одну invoke-роль на Codex (journal `backend=codex`, канон на диске) **до** перевода остальных живых поездов | Б45.6 |
+| AC-088 | S | Откат: YAML `default_backend: cursor-cli` + модели cursor-grok / claude-sonnet / composer → `invoke_role --role architect` снова зовёт `agent -p`. Адаптер `run_cursor_cli` на месте. Не `rm` бэкенда | Б45.7, Б33 п.62 |
+| AC-089 | S | `parse_agent_session_id` (или сосед) принимает Codex `--json` stream; `phases[phase].session_id` пишется. AC-061 pid=wrapper не менять | Б13.2, Б45.2 |
+| AC-090 | S | Кейс CHANGE-LIGHT / BUGFIX-LIGHT + `--role executor` → модель `gpt-6-luna` effort high (`roles.executor_light`). Иначе executor = `gpt-5.6-terra`. Ревизор medium не штат (pesky LIGHT допустим) | Б6.4, Б45.3 |
+| AC-091 | S | `rg gpt-6-terra` по `pipeline/` + YAML `tools.dev_workflow.roles` + allowlist скиллов Б45.5 — пусто (кроме явного запрета в этом ТЗ) | Б45.3, Б33 п.61 |
+| AC-092 | S | Скилл `dev-workflow` не вызывает `agent -p` и не вызывает `codex exec` в обход `invoke_role`. Три бэкенда адаптера на месте (AC-013 не откатывать) | Б13.2, Б45.5 |
+| AC-093 | S | 401 / `token_expired` в stdout/stderr Codex → `classify_provider_fatal` True, rc≠0, ErrorBus, **без** авто-ретрая (корпус AC-009). Не clean-exit 0 | Б13.2, Б45.1 |
+| AC-094 | S | П.1 скрипт `mode=ro`; фикстура ratio<0.50 + api=10 + cost=0.50 → одно ErrorBus; иначе тишина. *Не валит GATE:done этого поезда* | Б46 П.1 |
+| AC-095 | S | Повтор того же `id` в окне 24ч → второе событие нет. *Не валит GATE:done этого поезда* | Б46 П.1 |
+| AC-096 | O `depends: operator:ставь кроны` | `jobs.json` цепочки П.1 не появляется до `operator-done: ставь кроны` | Б46 П.1 |
+| AC-097 | S | `rg` в `references/context.md`: для `TZ:patch` нет «всегда master-ТЗ» как единственной обязанности; есть перечень секций П.2 | Б12.3, Б46 П.2 |
+| AC-098 | S | Пакет `emit-prompt` на фикстуре TZ:patch содержит перечень секций П.2 | Б12.3, Б46 П.2 |
+| AC-099 | S | Смоук: архитектор в журнале фазы открыл секции, не обязан логировать полный 380 КБ файл | Б12.3, Б46 П.2 |
+| AC-100 | S | После HF: `rg orchestrator_enabled ~/.hermes/config.yaml` → `false` | Б46 П.3.3 |
+| AC-101 | S | Скилл содержит окно 19:00–09:00 MSK будни | Б46 П.3.2 |
+| AC-102 | S | `pytest` `test_http_429_fatal` / `http 503` зелёные; нет нового модуля retry | Б46 П.3.4 |
+| AC-103 | S | `git -C ~/hermes-agent diff` по П.3 пуст | Б46 П.3 |
+| AC-104 | S | Pytest: `next` на фазе из `AUTO_GATES` при улике → `complete-phase`, `invoke_role` не звался | Б17.4, Б46 П.4 |
+| AC-105 | S | Живой канбан: GATE auto в journal без `session_id` tutu и без usage>0 | Б46 П.4 |
+| AC-106 | S | Если проверка зелёная с первого раза — impl-дифф по гейтам пуст | Б46 П.4 |
+| AC-107 | S | `rg hard_stop_enabled ~/.hermes/config.yaml` → `true`; ключи `exact_failure` на месте | Б46 П.5.а |
+| AC-108 | S | Цепочка П.5.б: HF 26-й ход / GATE 5-й → interrupt. **Не** валит GATE:done этого поезда | Б33 п.63, Б46 П.5.б |
+| AC-109 | S | Pytest doorbell: тот же fp; живой pid+mtime канона → fp тот же; смерть pid+mtime → fp другой; tick `queue=<n>` без WAKE/next/recover; смена n → fp другой; нет копии `dwka_guard.sh` | Б16.7, Б44.4, Б46 П.6 |
+| AC-110 | O `depends: operator:ставь кроны` | `jobs.json` vs baseline пуст до `operator-done: ставь кроны` | Б46 П.6 |
+| AC-111 | O `depends: operator:ставь кроны` | После глагола: `pfs_batch.no_agent==true` и `script` непустой; `pfs_notify` bit-identical | Б46 П.6.4 |
+| AC-112 | S | `threshold: 0.3`, `hygiene_hard_message_limit: 180`; плагин `hermes-session-reset-policy` 0.3.0; `idle_minutes: 180` | Б46 П.7 |
+| AC-113 | S | Цепочка П.7.4: 80 api без summary → сессия жива; с summary → закрыта; `git hermes-agent` пуст. **Не** валит GATE:done этого поезда | Б33 п.64, Б46 П.7.4 |
+| AC-114 | S | AC-list пакета содержит operator-hold `удаляй` на `dwka_guard.sh` | Б46 П.8 |
+| AC-115 | O `depends: operator:удаляй` | После `operator-done: удаляй` + evidence: файла нет, `rg dwka_guard` в `jobs.json` пуст | Б46 П.8 |
+| AC-116 | S | `pipeline doorbell` / tick не импортирует и не exec `dwka_guard.sh` | Б46 П.8 |
 
 **Область `GATE:done` этого пакета (`rs-refuse-kanban`, CHANGE).** Финальный и равен концу **W1** (постройка `pipeline/` + скилл: `HF:impl` / `HF:test` / `ORCH:shared-state`). Согласовано с Б17.7 и Б18.6. Волны W2–W4 — отдельные хода, не один долгий `in_phase`. В таблице выше нет класса O: этот слаг не остаётся `waiting_operator` до W4.
 
@@ -2176,6 +2265,10 @@ AC-016 / AC-019 / AC-035 — класс S про поздние волны: по
 **Область `GATE:done` пакета `dev-workflow-avtovosstanovlenie` (SKILL-CHANGE, v0.4.8).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` правок `cli.py` (`cmd_next` action `RECOVER` / окно pre-invoke / `pipeline recover`) + `invoke_role.py` (model на prepare, канон TZ-patch/diagnose/RS/MIG) + `pipeline_gates.py` / `pipeline_status.py` + тесты пяти классов; `HF:docs-handoff` абзац скилла: INTERRUPTED recoverable → recover+warn+next в том же ходе, не «сообщить и не рестартить»; запрет крон-reaper. Не ставит кроны. Не откатывает Б40–Б42. AC-071…075 — класс S.
 
 **Область `GATE:done` пакета `pochinka-payplayna-dev-workflow-konets-hoda-po-k` (CHANGE, v0.4.9).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` **раздельно** правок `cli.py` (occupancy complete/next/invoke) + `invoke_role.py` (`session_id` из JSON; pid 254–256 без правок) + `pipeline_gates.py` + `pipeline doorbell` + pytest turn-end; `HF:docs-handoff` абзац скилла: граница хода = journal/канон/ps, не notify Cursor. Не ставит кроны (AC-079 код детектора, не `jobs.json`). Не откатывает Б40–Б43 / AC-058…075 / AC-061. Не канонизирует `dwka_guard.sh`. Не заменяет pid на агента. `[NEW-ENTITY]` канала стража нет. AC-076…079 — класс S. GATE:done **не** класс O на `ставь кроны`.
+
+**Область `GATE:done` пакета `migrate-dev-roles-cursor-to-codex` (CHANGE, v0.5.0).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` **раздельно** правок `invoke_role.py` (`run_codex` канон exec; parser session_id Codex; снят fallback composer-2.5; 401=fatal) + pytest argv/sandbox/skip-git; `ORCH:shared-state` пишет YAML `default_backend` + `roles.*` (не executor); `HF:docs-handoff` allowlist скиллов Б45.5 + GLOSSARY §3. AC-080 класс O блокирует `GATE:done` до `operator-done: answer:Q-2` + evidence живого smoke. Не удаляет `run_cursor_cli`. Не переносит координатора/компрессор. Не ставит кроны. Не откатывает Б40–Б44 / AC-058…079 / AC-061. `[NEW-ENTITY]` нет. AC-081…093 — класс S.
+
+**Область `GATE:done` пакета `llm-cost-optimization` (CHANGE, v0.6.0).** Финальный после хвоста **этого** слага: конфиг Hermes (П.3.3 / П.5.а / П.7.1–3) + fingerprint doorbell (П.6.2–3, тесты AC-109) + docs MUST-read/окно/503 (П.2 / П.3.2 / П.3.4) + проверка auto-GATE без LLM (П.4) + hold-список П.8. `HF:impl` / `HF:test` **раздельно**. Не реализует П.1 / П.5.б / П.7.4 (отдельные цепочки; AC-094/095/108/113 **не** валят этот `GATE:done`). Не пишет `jobs.json` (AC-096/110/111 класс O: `depends: operator:ставь кроны`). Не `rm` `dwka_guard.sh` (AC-115 класс O: `depends: operator:удаляй`). Не патчит ядро / gateway. Не откатывает Б40–Б45 / AC-058…093 / AC-061. Штат Codex не возвращать на Cursor. `[NEW-ENTITY]` нет. Q-n нет. AC-097…107, AC-109, AC-112, AC-114, AC-116 — класс S. Preflight красный, пока holds open.
 
 Номера AC-017 и AC-018 **зарезервированы** за будущим MIGRATION-слагом (таблица ниже). В этом пакете их нет, чтобы не путать `GATE:done`.
 
@@ -2454,9 +2547,9 @@ Evidence `TZ:finalize` / `ORCH:shared-state` слага `devworkflow-task-slug` 
 
 1. `pipeline doorbell` (без slug — очередь; с slug — один слаг) печатает стабильный fingerprint, exit 0, **не** зовёт `recover`/`next`/`invoke-role`.
 2. Два вызова на неизменном state → stdout идентичен.
-3. Смена `phase`/`pid_alive`/mtime канона → fingerprint другой; wake-хук (если вызван tick) **не** spawn роли.
+3. Смена `phase`/`pid_alive`/mtime канона → fingerprint другой; wake-хук (если вызван tick) **не** spawn роли. **v0.6.0 (mini-TZ AC-079, Б46 П.6.2–3, не откат корпуса v0.4.9):** сегмент `slug|status|phase|role|pid_alive|wrapper_alive[|canon_mtime=…]`. `canon_mtime` **опускать**, если `pid_alive=1` или `wrapper_alive=1` (не писать `0` как сентинел). Если оба 0 — `canon_mtime` включить. Fingerprint **включает** `queue=<n>`. Живой pid + запись канона (mtime сменился) → fp **не** меняется. Смерть pid + смена mtime → fp меняется. Tick тот же fp → stdout содержит `queue=<n>`, нет `WAKE`, нет `next`/`recover`. Смена `n` → fp другой.
 4. В дереве пакета **нет** копии `dwka_guard.sh` как канона; hardcoded slug dwka в новом детекторе запрещён.
-5. `jobs.json` / крон этого слага **не** созданы (evidence: diff jobs.json пуст vs baseline). GATE:done не ждёт «ставь кроны».
+5. `jobs.json` / крон **поезда v0.4.9** **не** созданы (evidence: diff jobs.json пуст vs baseline). GATE:done **того** CHANGE не ждёт «ставь кроны». Крон пакета `llm-cost-optimization` — AC-110 класс O, не этот AC.
 
 **I1.** `current`: ложный notify + глухой звонок, когда Сирень не в ходе; прототип dwka_guard на один слаг. `target`: очередь-детектор готов; установка — отдельный глагол Саши.
 
@@ -2496,9 +2589,9 @@ Evidence `TZ:finalize` / `ORCH:shared-state` слага `devworkflow-task-slug` 
 Поля и форматы — в Б35. Здесь — кто с кем.
 
 - **tz-workflow / TZ-storage-system / `_TZ-WORKFLOW-RULES.md`** — канон master-файла, инвентарь, фазы TZ-WRITE. DevWorkflow исполняет тот же канон файловой машиной; схему хранения ТЗ не меняет (Б15).
-- **hermes-feature / tz-workflow** — канон блоков 0–8 и TZ-WRITE; после W4 вливаются в `dev-workflow`, отдельные скиллы уходят из активного набора (Б9, Б31). **W2:** исключение — баннер dual-path (AC-043: 10–15 строк allowlist; **v0.4.0 AC-050:** +2–4 строки файрвола; **v0.4.1:** коридор 12–19); тело процедуры не патчить. Коллизия имени «Архитектор default (Сирень)» в Overview `hermes-feature` **телом не чинится** — баннер отдаёт поезд `dev-workflow`.
+- **hermes-feature / tz-workflow** — канон блоков 0–8 и TZ-WRITE; после W4 вливаются в `dev-workflow`, отдельные скиллы уходят из активного набора (Б9, Б31). **W2:** исключение — баннер dual-path (AC-043: 10–15 строк allowlist; **v0.4.0 AC-050:** +2–4 строки файрвола; **v0.4.1:** коридор 12–19); тело процедуры кейсов не патчить. **v0.5.0:** второе исключение — таблицы моделей и паттерн вызова (allowlist Б45.5). Коллизия имени «Архитектор default (Сирень)» в Overview `hermes-feature` **телом не чинится** — баннер отдаёт поезд `dev-workflow`.
+- **codex / cursor-cli / cursor-task-context / deep-mine-project** — вызовы ролей через `invoke_role` (штат = Codex exec; cursor-cli = откат, не прямой `agent -p`). Скилл `codex` актуализирует флаги (`exec`, `-C`, `--skip-git-repo-check`, `--sandbox danger-full-access`; `--full-auto` снят). Контуры G/H `deep-mine-project` — та же таблица ролей (Б45.5).
 - **DevKanbanPipeline** — runtime superseded этим ТЗ после W4; файл-история до DECOMM (Б31.2). Живой `kanban.db` до W4 не SoT новой машины.
-- **cursor-cli / cursor-task-context** — вызовы ролей через `invoke_role`, не в обход адаптера (Б13).
 - **EcosystemIntegration §10** — единый YAML `tools.dev_workflow`, `unified_only`, без per-tool `.env` (Б14). `ORCH:shared-state` регистрирует ключ и digest.
 - **ErrorBus** — технические сбои `--tool dev_workflow`, топик `:11112` (Б32). Кейсовый HITL — origin, не Errors.
 - **ProcessImprovement / GLOSSARY** — канон содержания; операционная копия в скилле; W0 этого пакета правит §0.1 и добавляет глагол в словарь §3 (Б6, Б31.2).
@@ -2529,11 +2622,18 @@ Evidence `TZ:finalize` / `ORCH:shared-state` слага `devworkflow-task-slug` 
 | PIPELINE_ROOT | str | required | EcosystemConfig.yaml | абсолютный путь |
 | SKILL_ROOT | str | required | EcosystemConfig.yaml | абсолютный путь |
 | DIGEST_PATH | str | required | EcosystemConfig.yaml | абсолютный путь к `EcosystemManifest.digest.md` |
-| invoke.default_backend | enum[cursor-cli, codex, hermes-internal] | required | EcosystemConfig.yaml | один из трёх бэкендов |
-| roles.architect.model | str | optional | EcosystemConfig.yaml | slug модели; пусто = default адаптера |
-| roles.reviewer.model | str | optional | EcosystemConfig.yaml | slug модели |
-| roles.executor.model | str | optional | EcosystemConfig.yaml | slug модели |
-| roles.compressor.model | str | optional | EcosystemConfig.yaml | пусто = родная модель Hermes |
+| invoke.default_backend | enum[cursor-cli, codex, hermes-internal] | required | EcosystemConfig.yaml | v0.5.0 штат=`codex`; откат=`cursor-cli` |
+| roles.architect.model | str | required | EcosystemConfig.yaml | v0.5.0 = `gpt-6.1-sol` |
+| roles.architect.effort | enum[low, medium, high, xhigh] | required | EcosystemConfig.yaml | штат `high`; толстый TZ/IAC = `xhigh` |
+| roles.architect.escalate_model | str | optional | EcosystemConfig.yaml | `gpt-6-astra`; не отдельная G6-роль |
+| roles.architect.escalate_effort | enum[low, medium, high, xhigh] | optional | EcosystemConfig.yaml | `high` (форсировать; default модели = low) |
+| roles.reviewer.model | str | required | EcosystemConfig.yaml | v0.5.0 = `gpt-6-astra` |
+| roles.reviewer.effort | enum[low, medium, high, xhigh] | required | EcosystemConfig.yaml | штат `high`; толстый master = `xhigh` |
+| roles.executor.model | str | required | EcosystemConfig.yaml | v0.5.0 = `gpt-5.6-terra` (не `gpt-6-terra`) |
+| roles.executor.effort | enum[low, medium, high, xhigh] | required | EcosystemConfig.yaml | штат `medium`; многофайл/live test = `high` |
+| roles.executor_light.model | str | required | EcosystemConfig.yaml | v0.5.0 = `gpt-6-luna`; кейс LIGHT |
+| roles.executor_light.effort | enum[low, medium, high, xhigh] | required | EcosystemConfig.yaml | `high` |
+| roles.compressor.model | str | optional | EcosystemConfig.yaml | пусто = родная модель Hermes; не Codex |
 | digest_body | str | required | EcosystemManifest.digest.md | markdown; не секреты |
 | tz_path | str | optional | master-ТЗ на диске / TZ:stabilize | абсолютный путь; required после finalize |
 | tz_version | str | optional | YAML-frontmatter master-ТЗ | semver X.Y.Z |
@@ -2577,7 +2677,7 @@ Digest манифеста видит: `enabled` + `default_backend` + факт �
 
 ### Breaking changes policy
 
-- Версионирование формата: поле `schema` внутри `dev/<slug>/_state.json` (старт `"devworkflow-state/1.0"`). Версия ТЗ ≠ версия схемы состояния. Поля выжимки (`extract_path`, `extract_key`, `extract_sha256`, `extract_of_tz_version`, `extract_chars`) — аддитив схемы 1.0, без bump. Поля `slug_source`, `phases.<PHASE>.role` — аддитив v0.4.0 той же схемы 1.0, без bump. Поля `recover_counts`, `phases.<PHASE>.awaiting_invoke`, обязательность `phases.<PHASE>.model` на complete Cursor-ролей — аддитив v0.4.8 той же схемы 1.0, без bump. Живые старые слага без этих полей `status --check` не валить; G6 требует `slug_source` на **новом** `init`. `recover` / model-complete — только на слагах после включения этого пакета (HF:impl).
+- Версионирование формата: поле `schema` внутри `dev/<slug>/_state.json` (старт `"devworkflow-state/1.0"`). Версия ТЗ ≠ версия схемы состояния. Поля выжимки (`extract_path`, `extract_key`, `extract_sha256`, `extract_of_tz_version`, `extract_chars`) — аддитив схемы 1.0, без bump. Поля `slug_source`, `phases.<PHASE>.role` — аддитив v0.4.0 той же схемы 1.0, без bump. Поля `recover_counts`, `phases.<PHASE>.awaiting_invoke`, обязательность `phases.<PHASE>.model` на complete Cursor-ролей — аддитив v0.4.8 той же схемы 1.0, без bump. Ключи YAML `roles.*.effort` / `escalate_*` / `executor_light` — аддитив конфига v0.5.0, схема `_state.json` без bump. Живые старые слага без этих полей `status --check` не валить; G6 требует `slug_source` на **новом** `init`. `recover` / model-complete — только на слагах после включения этого пакета (HF:impl).
 - При breaking change: бамп `schema` до `devworkflow-state/N+1`, добавить `migrate_vN_to_vN+1()` в `pipeline_state.py` (тот же паттерн, что `migrate_kanban_history.py` в Б30, но **для собственной** схемы, не для kanban.db). Старые `_state.json` без миграции → `status --check` exit 1, поезд не стартует.
 - Потребителей USERTOOLS у содержимого state нет — уведомить EcosystemIntegration (ключ YAML) и ErrorBus info «schema bump».
 - Схему SQLite канбана этим инструментом не мигрировать (Б30 — read-only импорт истории).
@@ -2590,10 +2690,10 @@ Digest манифеста видит: `enabled` + `default_backend` + факт �
 - Не патчить `~/hermes-agent`, `kanban_db*.py`, ядро gateway.
 - Не класть содержимое `_state.json` в манифест/digest.
 - Не заводить per-tool `.env` и секреты в YAML.
-- Не менять текст корпуса `DevKanbanPipeline_TZ.md` и содержание канона GLOSSARY (кроме W0: §0.1 + аддитив глагола §3).
+- Не менять текст корпуса `DevKanbanPipeline_TZ.md` и содержание канона GLOSSARY (кроме W0: §0.1 + аддитив глагола §3; **v0.5.0:** аддитив §3 таблица моделей D2 = Codex, координатор/компрессор = Hermes — AC-083, не пересмотр кейсов/фаз/S/O/C).
 - Не делать SQL SoT / кэшем выжимок / транспортом; `extract.md` не отдавать другим USERTOOLS как спецификацию.
 - Не заводить `USERTOOLS/DevWorkflow/` и не подменять профильные инструменты комплектом Б13.5.
-- Не патчить тело `hermes-feature` / `tz-workflow`. **Исключение W2:** баннер dual-path (AC-043: 10–15; AC-050 v0.4.0: +файрвол; v0.4.1: коридор 12–19) в двух `SKILL.md`; откат = `git checkout`.
+- Не патчить тело `hermes-feature` / `tz-workflow`. **Исключение W2:** баннер dual-path (AC-043: 10–15; AC-050 v0.4.0: +файрвол; v0.4.1: коридор 12–19) в двух `SKILL.md`; откат = `git checkout`. **Исключение v0.5.0:** allowlist Б45.5 — таблицы моделей и паттерн вызова.
 - Не чинить PFS/`entities.task_slug` из слага `devworkflow-task-slug`.
 - Не заводить `[NEW-ENTITY]` Telegram-канал оркестрации без реплики Саши.
 
@@ -2605,7 +2705,7 @@ Digest манифеста видит: `enabled` + `default_backend` + факт �
 
 1. **Q-Archi-01:** Python-слой нужен, но тонкий (инварианты), оркестратор — Сирень.
 2. **Q-Archi-02:** SoT на диске + emit-prompt + complete только с уликой; без авто-ретрая.
-3. **Q-Archi-03:** `invoke_role` с тремя бэкендами, default cursor-cli на этом контуре.
+3. **Q-Archi-03:** `invoke_role` с тремя бэкендами. **v0.5.0:** default этого контура = `codex`; `cursor-cli` = откат, не штат.
 4. **Q-Archi-04:** контекст/ТЗ/выжимки **не** в SQL. Файловый SoT + per-slug `extract.md` по ключу + bundle handoff (Б12, Б13.4).
 5. **Q-Archi-05:** полную мысль в 5 КБ не передаём. Выжимка = индекс, master на диске = смысл, конфликт → диск; MUST-read, 1/N, покрытие имён.
 6. Имя: инструмент `DevWorkflow`, скилл `dev-workflow` (не отдельный `dev-orchestrator`). Источник имени — вводная Outbox, не закрытый бриф (Б15).
@@ -2625,6 +2725,8 @@ Digest манифеста видит: `enabled` + `default_backend` + факт �
 20. **TZ:patch v0.4.8 (пакет `dev-workflow-avtovosstanovlenie`).** Автовосстановление пяти recoverable-классов + warn Саше класс S — Б43, Б16.6, AC-071…075. Не крон, не reaper, не авто-ретрай provider_fatal. `[NEW-ENTITY]` канала нет (warn в существующий origin). Показ, не hold.
 21. **TZ:finalize v0.4.8 (пакет `dev-workflow-avtovosstanovlenie`).** Автовосстановление recoverable-сбоев — Б43, Б16.6, AC-071…075. REV:tz APPROVE; этот `TZ:finalize` штампует корпус без правок смысла. Замечания ревизора (не блокируют APPROVE): время жизни `recover_counts` — `HF:plan`; судьба временного крона `actor=orchestrator-cron` — `HF:docs-handoff` / глагол `удаляй`. `[NEW-ENTITY]` нет. Показ, не hold.
 22. **TZ:finalize v0.4.9 (пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`).** Конец хода ≠ notify Cursor — Б44, Б16.7, AC-076…079 класс S. REV:tz APPROVE; этот `TZ:finalize` штампует корпус без правок смысла. Замечания ревизора (не блокируют APPROVE): U+FFFD в `extract.md` — ближайший compress; occupancy-gate не трогает `recover_counts` — `HF:plan`; IAC-09 паттерн `rg` — `HF:plan` / `HF:docs-handoff`. `[NEW-ENTITY]` нет. 13.10 не пересматриваем. Показ, не hold.
+23. **TZ:patch v0.5.0 (пакет `migrate-dev-roles-cursor-to-codex`).** Штат ролей = Codex exec, таблица Б6.4; Cursor снят со штата, адаптер остаётся для отката; координатор/компрессор не переносятся. `run_codex` чинить на `HF:impl`. Auth — AC-080 O / Q-2 (не путать с Q-1 W4). Бриф «версия 0.1.0 / новый файл» закрыт: канон = секция мастера 0.5.0. `[NEW-ENTITY]` нет. Показ, не hold (кроме Q-2).
+24. **TZ:finalize v0.6.0 (пакет `llm-cost-optimization`).** Экономия ключа tutu — Б46, AC-094…116. REV:tz APPROVE; этот `TZ:finalize` штампует корпус без правок смысла. Operator-hold `ставь кроны` + `удаляй`. Код не писался. `[NEW-ENTITY]` нет. Q-n нет. Показ, не hold (кроме O-AC).
 
 Открытые вопросы этого пакета — в разделе `## Открытые вопросы` (явный h2). Бриф закрыт.
 
@@ -2904,7 +3006,18 @@ Needle `pgrep`: `--slug <slug>` **точно равен** этому слагу 
 
 ### Б44.4 Страж-doorbell (спека; крон не этот ход)
 
-Отпечаток очереди (все `in_phase` + слаги с живым wrapper): `status|phase|role|pid_alive|wrapper_alive|mtime канона текущей фазы`. SHA одной строки.
+Отпечаток очереди (все `in_phase` + слаги с живым wrapper). **v0.6.0 формула сегмента** (Б46 П.6.2–3; корпус «0-токен / не recover / не крон в том поезде» не откатывать):
+
+```
+slug|status|phase|role|pid_alive|wrapper_alive[|canon_mtime=…]
+```
+
+- `pid_alive=1` **или** `wrapper_alive=1` → `canon_mtime` **опустить**.
+- Оба 0 → `canon_mtime` включить.
+- Нет state: `canon_mtime=0` допустим.
+- Fingerprint **включает** `queue=<n>`. Tick при том же fp печатает `queue=<n>`, не WAKE.
+
+SHA одной строки.
 
 | Можно | Нельзя |
 |---|---|
@@ -2959,9 +3072,630 @@ AC пакета: **AC-076…079** (класс S). `GATE:done` слага — Б3
 
 ---
 
+## Б45. Пакет `migrate-dev-roles-cursor-to-codex` (v0.5.0) — штат ролей = Codex exec
+
+**I1 этого пакета.** `current`: D2 ролей architect/reviewer/executor идёт через Cursor CLI (`agent -p`; модели `cursor-grok-4.6-high` / `claude-sonnet-5-medium` / `composer-2.5`); YAML `invoke.default_backend: cursor-cli`; адаптер `run_codex()` зовёт неканон `codex run --cwd`; Codex auth на контуре истёк (401 `token_expired`); default sandbox Codex = read-only (роль не запишет файл); `--skip-git-repo-check` нет (Backlog/USERTOOLS не git). `target`: штат = `codex exec` по утверждённой таблице Б6.4; Cursor CLI снят со штата; адаптер `cursor-cli` сохранён как откат; координатор и компрессор остаются на Hermes `deepseek-v4-flash-0731`; `gpt-6-terra` в allowlist нет.
+
+**Цель одним предложением.** Схема ролей разработки Hermes работает через Codex CLI (`codex exec`) с утверждёнными моделями, без штатного Cursor.
+
+Кейс записи — **CHANGE** существующего процесса. Слаг поезда: `migrate-dev-roles-cursor-to-codex` (init как `DEV` — G5, архитектор кейс не меняет). SoT входа: бриф фазы `TZ:patch` 20.10 (таблица ролей Саши + вердикт архитектора; риски auth / `run_codex` / sandbox / skip-git). Выжимка ≠ SoT. `[NEW-ENTITY, требует согласования Саши]` **нет**. Корпуса Б40–Б44 / AC-058…079 **не откатывать**. Q-Archi-03 меняется этим `TZ:patch` (Б4). Бриф «версия 0.1.0 / отдельный файл перехода» закрыт: канон = эта секция мастера, semver **0.5.0**.
+
+### Б45.0 Scope / Non-goals
+
+| В скоупе | Вне скоупа |
+|---|---|
+| Адаптер `invoke_role.run_codex` → канон `codex exec` | Ядро `hermes-agent`, gateway restart |
+| YAML `tools.dev_workflow.invoke` + `roles.*` | Per-tool `.env`, секреты в YAML |
+| Канон Б6.4 / GLOSSARY §3 D2 / `canon.md` | 10 кейсов, набор фаз, G6 фаза→роль, классы S/O/C |
+| Allowlist скиллов Б45.5 (таблицы моделей + паттерн вызова) | Тела скиллов вне allowlist; leftover `agent -p` в чужих SKILL.md |
+| Пилот одной invoke-роли на Codex до перевода всех поездов | Перевод всех живых поездов в этом же `HF:impl` |
+| Откат YAML на `cursor-cli` | Удаление адаптера `run_cursor_cli` |
+| Auth как шаг перед боем (AC-080 O) | Сам `codex login` из этого TZ-WRITE |
+
+### Б45.1 Аутентификация (до боя)
+
+Факт брифа: токен Codex истёк, 401 `token_expired` (проверено). Без живой сессии `HF:impl` ролей Codex не стартует.
+
+Процедура (делает Саша, не исполнитель и не оркестратор сам по себе):
+
+1. Device-auth Codex CLI (`codex login` / штатный login-flow аккаунта).
+2. Обновить `~/.codex/auth.json` (не класть токен в YAML / `EcosystemConfig` / git).
+3. Смоук: `codex exec -C <ABS_не_git> -m gpt-5.6-terra -c model_reasoning_effort='"medium"' --skip-git-repo-check --json --sandbox danger-full-access 'reply with ok'`.
+4. Улика: rc=0 и **нет** `token_expired` / HTTP 401. Journal: `operator-done: answer:Q-2` + evidence (ISO + rc/цитата).
+
+Класс O: AC-080 `depends: operator:answer:Q-2`. Новый operator-глагол **не** заводить. Не занимать номер `Q-1` (зарезервирован AC-018 W4). 401 после боя → provider_fatal (AC-093 / корпус AC-009), без авто-ретрая.
+
+Секреты: shared `.env` / `~/.codex/auth.json`, не YAML (Б14).
+
+### Б45.2 Канон вызова `codex exec`
+
+Диск `invoke_role.run_codex` (факт): `[bin, "run", "--cwd", workspace, prompt_file]` + опционально `--model`. Это **не** канон.
+
+Канон argv (ASCII-кавычки, не U+201C):
+
+```text
+codex exec \
+  -C <ABS_WORKSPACE> \
+  -m <model_id> \
+  -c model_reasoning_effort='"<effort>"' \
+  --skip-git-repo-check \
+  --json \
+  --sandbox danger-full-access \
+  -- <prompt_from_file>
+```
+
+| Флаг | Норма | Запрет |
+|---|---|---|
+| подкоманда | `exec` | `run` |
+| workspace | `-C <ABS>` | `--cwd`, относительный путь |
+| модель | `-m <id>` из YAML роли | голый default CLI |
+| effort | `-c model_reasoning_effort='"<effort>"'` | надеяться на default модели (у astra default=low) |
+| git | `--skip-git-repo-check` **всегда** | полагаться на git init во workspace |
+| JSON | `--json` (stream событий) | `--output-format json` Cursor |
+| sandbox | `--sandbox danger-full-access` (gateway/bubblewrap) | default read-only; `--full-auto`; `--yolo` |
+| prompt | тело `--prompt-file` как operand exec | путь файла как «проект Codex» |
+
+`--full-auto` снят — не использовать (скилл `codex` на `HF:docs-handoff` это фиксирует). PTY: `exec --json` — one-shot; адаптер = `subprocess.run` как сейчас. Если смоук повиснет без PTY — `HF:plan` добавляет pty-обёртку, не этот TZ-WRITE как Q.
+
+`--resume` Cursor: если Codex CLI даёт resume по session id — пробросить; иначе AC-073 fallback = чистый вызов. Не выдумывать флаг.
+
+`session_id`: парсить Codex `--json` stream (AC-089). AC-061 pid=wrapper **не** трогать. Occupancy / doorbell / recover (Б44) не пересматривать.
+
+Классификатор fatal: добавить сигнатуры `token_expired` / HTTP 401 Codex (AC-093) **без** голых бытовых `timeout`/`credits` (корпус Б42).
+
+### Б45.3 Таблица моделей и YAML
+
+Утверждено Сашей + вердикт архитектора. Не включать недоступное.
+
+| Роль | YAML-ключ | model | effort штат | effort толстый / особый |
+|---|---|---|---|---|
+| Архитектор | `roles.architect` | `gpt-6.1-sol` | high | TZ:patch / TZ:finalize / HF:plan → xhigh |
+| Архитектор, эскалация | те же ключи `escalate_*` | `gpt-6-astra` | high (форсировать) | не штат |
+| Ревизор | `roles.reviewer` | `gpt-6-astra` | high | REV:tz / REV:plan на DEV/CHANGE полном → xhigh. Medium не штат; pesky CHANGE-LIGHT допустим |
+| Исполнитель | `roles.executor` | `gpt-5.6-terra` | medium | многофайл / HF:test не-LIGHT → high |
+| Исполнитель LIGHT | `roles.executor_light` | `gpt-6-luna` | high | кейс ∈ {CHANGE-LIGHT, BUGFIX-LIGHT} |
+| Координатор | нет (sirene) | `deepseek-v4-flash-0731` | как сейчас | не Codex |
+| Компрессор | `roles.compressor.model: null` | `deepseek-v4-flash-0731` | как сейчас | не Codex |
+
+**Эскалация архитектора** (не новая G6-роль): оркестратор передаёт `--model gpt-6-astra` (effort high) **только** после `REV:tz` / `REV:plan` = REQUEST-CHANGES на rework той же фазы, либо по явной фразе Саши. Самовольно на каждом TZ:patch — запрещено.
+
+**LIGHT:** `cmd_invoke_role` при `--role executor` читает `st.case`; если LIGHT — берёт `roles.executor_light`, иначе `roles.executor`. `--role executor_light` в CLI **не** заводить (G6 не знает такого).
+
+**Запрет:** `gpt-6-terra` в YAML, скиллах allowlist, fallback-ах кода.
+
+**Снять hardcoded fallback** `composer-2.5` в `_resolve_model_backend` (иначе дыра YAML вернёт Cursor-модель). Нет модели в YAML для architect/reviewer/executor → prepare exit 2, как сейчас для architect без YAML.
+
+YAML пишет **`ORCH:shared-state`**, не исполнитель (Б14). `HF:impl` пишет код адаптера и тесты.
+
+### Б45.4 GLOSSARY / canon / AGENTS.md
+
+На `TZ:finalize` / `ORCH:shared-state` этого слага (как AC-051):
+
+- `TZ/GLOSSARY.md` §3 таблица ролей: колонка «Модель» = Б6.4 v0.5.0; «Кто» архитектора/ревизора/исполнителя = Codex CLI через `invoke_role`, не «Cursor»; координатор = Сирень (снять «Cursor composer-2.5»); компрессор без Codex/Cursor. Кейсы §2, фазы §5, классы S/O/C **не** трогать. D1/D2: D2 больше не «Cursor-slug через `agent -p`», а «slug роли через `invoke_role`» (Codex на этом контуре). bump 0.2.15 → 0.2.16.
+- `dev-workflow/references/canon.md` — зеркало той же таблицы.
+- `~/WorkVault/AGENTS.md` и `~/AGENTS.md`: маршрутизация «Архитектор Cursor / исполнитель composer» → Codex-таблица; вызов = `pipeline invoke-role`, не сырой `agent -p`.
+
+### Б45.5 Allowlist скиллов (HF:docs-handoff; код вызова — HF:impl адаптера)
+
+Правятся **только** таблицы ролей/моделей и паттерн вызова. Баннер dual-path (коридор 12–19) **не** сносить. Файрвол оркестратора / 10 кейсов / запрет склейки — не переписывать.
+
+| Скилл | Что править |
+|---|---|
+| `devops/hermes-feature` | Overview, таблица ролей/моделей всех Блоков, паттерн `agent -p` → `invoke-role` |
+| `devops/tz-workflow` | секция «Модели Cursor CLI», паттерн вызова |
+| `devops/cursor-cli` | текст: Codex = штат этого контура, Cursor = откат; прецеденты namespace |
+| `devops/cursor-task-context` | пакет роли собирает `invoke_role`, не «контекст для agent -p» |
+| `autonomous-ai-agents/codex` | флаги: `exec`, `-C`, `--skip-git-repo-check`, `--json`, `--sandbox danger-full-access`; `--full-auto` снят; git-repo **не** обязателен при skip-git |
+| `devops/dev-workflow` | бэкенд invoke, таблица Б6.4, «invoke-роль не звать» на sirene |
+| `research/deep-mine-project` | контуры G (architect) / H (executor) — те же модели |
+
+После правок скиллов — `restore-all-skills.sh` на `ORCH:shared-state`. Leftover `agent -p` / `cursor-grok` вне allowlist — `rg`-отчёт в docs-handoff, чистка = чужой SKILL-CHANGE, не этот поезд.
+
+### Б45.6 Пилот
+
+Switch проверяется пилотом **до** перевода всех поездов.
+
+Порядок боя:
+
+1. Auth (AC-080) + `HF:impl` адаптера (ещё можно на текущем бэкенде, пока YAML не flip).
+2. `ORCH:shared-state` flip YAML `default_backend: codex`.
+3. Пилот: `HF:test` **этого** слага гоняет pytest argv **и** один живой `codex exec` (канон файл на диске, journal `backend=codex`). Если живой exec нельзя в pytest — отдельный smoke в `HF:test` IAC, не второй поезд.
+4. Только после зелёного пилота остальные поезда получают Codex (документы allowlist). Не flip YAML «для всех» до пилота.
+
+Альтернатива того же AC-087: следующий CHANGE после этого слага. Evidence — journal того слага. Этот поезд тогда оставляет YAML rollback до evidence.
+
+### Б45.7 Откат
+
+Возврат на Cursor без удаления кода:
+
+1. YAML `invoke.default_backend: cursor-cli`.
+2. YAML `roles.*` → `cursor-grok-4.6-high` / `claude-sonnet-5-medium` / `composer-2.5` (убрать effort/LIGHT ключи или игнорировать их в `run_cursor_cli`).
+3. `run_cursor_cli` и бэкенд `cursor-cli` **на месте** (Б33 п.62).
+4. Скиллы: `git checkout` allowlist **или** оставить «штат Codex / откат Cursor» как текст — оркестратор смотрит YAML, не SKILL.
+
+Откат не требует DECOMM Codex CLI с хоста.
+
+### Б45.8 Код и скилл (не этот ход)
+
+| П | Где | Когда |
+|---|---|---|
+| П.0 auth | `~/.codex/auth.json` / device-auth | Саша, до боя; AC-080 |
+| П.1 argv | `invoke_role.run_codex` канон Б45.2; снять fallback composer-2.5; LIGHT → executor_light; 401=fatal | `HF:impl` |
+| П.2 session_id | parser Codex `--json` (не трогать pid ~254–256) | `HF:impl` |
+| П.3 тесты | argv / skip-git / sandbox flag / LIGHT case / 401 fatal / нет gpt-6-terra | `HF:test` (**отдельный** invoke) |
+| П.4 YAML | `EcosystemConfig.yaml` + `config.example.yaml` | `ORCH:shared-state` |
+| П.5 скиллы | allowlist Б45.5 + GLOSSARY §3 + AGENTS.md | `HF:docs-handoff` + `ORCH` restore |
+| П.6 пилот | живой `codex exec` после YAML-flip | `HF:test` / следующий CHANGE (AC-087) |
+| П.7 IAC | таблица ниже; baseline соседей до impl | `HF:plan` пишет; `HF:test` гоняет |
+
+Файлы: `invoke_role.py`, тесты, YAML, 7 скиллов, GLOSSARY, AGENTS.md — **больше 3**. Полный CHANGE + REV уместен (G5: LIGHT не выбирает архитектор).
+
+### Б45.9 Что не в этом пакете
+
+Ядро `hermes-agent`. Gateway restart. `kanban_*`. SQL-SoT. Кроны/`jobs.json`. Авто-ретрай billing/90-90. Bypass `emit-prompt`. PFS `task_slug`. Замена pid на агента. Склейка `HF:impl`+`HF:test`. Перенос координатора/компрессора. `gpt-6-terra` в списке моделей. Удаление `run_cursor_cli`. Патч скиллов вне allowlist. `[NEW-ENTITY]`. Откат Б40–Б44 / AC-058…079. Пересмотр 10 кейсов / G6 фаза→роль.
+
+### Б45.10 IAC-ориентир (черновик для `HF:plan`; формулировки AC — с диска)
+
+| IAC | path | verify | depends | covers |
+|---|---|---|---|---|
+| IAC-01 | `Registries/pipeline/invoke_role.py` `run_codex` | pytest: argv содержит `exec`, `-C`, `-m`, `model_reasoning_effort`, `--skip-git-repo-check`, `--json`, `--sandbox`, `danger-full-access`; не содержит `run`, `--cwd`, `--full-auto` | — | AC-081, AC-084, AC-085 |
+| IAC-02 | `invoke_role._resolve_model_backend` | pytest: нет модели YAML → exit 2; нет fallback `composer-2.5`; LIGHT case + executor → `gpt-6-luna`; иначе `gpt-5.6-terra` | IAC-01 | AC-082, AC-090 |
+| IAC-03 | parser session_id | pytest: фикстура Codex `--json` stream → `phases[phase].session_id`; после prepare `st.pid == os.getpid()` | IAC-01 | AC-089, AC-061 |
+| IAC-04 | fatal 401 | pytest: stdout/stderr `token_expired` / HTTP 401 → `classify_provider_fatal` True | IAC-01 | AC-093 |
+| IAC-05 | YAML / example | `rg` `default_backend: codex`; roles = таблица Б6.4; `backends.cursor-cli` на месте; `gpt-6-terra` нет | П.4 | AC-082, AC-088, AC-091 |
+| IAC-06 | `pipeline/tests` | `cd Registries && PYTHONPATH=. pytest -q pipeline/tests`; корпус AC-061…079 не красный | IAC-01…05 | AC-081…093 |
+| IAC-07 | allowlist скиллов | `rg` в Б45.5: таблицы содержат Codex-slug; нет штатного `agent -p` оркестратора; баннер dual-path на месте | П.5 | AC-083, AC-086, AC-092 |
+| IAC-08 | соседи | прирост vs baseline: `Registries/pipeline/` + YAML `tools.dev_workflow` + allowlist Б45.5 + GLOSSARY §3 + AGENTS.md. Ядро / `kanban_*` / USERTOOLS / `jobs.json` — нулевой прирост | IAC-06 | «не трогать» |
+| IAC-09 | пилот | journal: `backend=codex` + канон фазы mtime ≥ started_at **или** evidence следующего CHANGE | IAC-06, AC-080 | AC-087 |
+| IAC-10 | откат-док | чеклист Б45.7 в `dev-workflow` docs: YAML flip без `rm` адаптера | П.5 | AC-088 |
+
+Откат кода: git скилла + `_Archives` YAML/pipeline. Схема `_state.json` не меняется.
+
+### Критерии приёмки (AC)
+
+AC-080…093 — Б34. Класс O только AC-080. Остальные класс S.
+
+AC пакета: **AC-080…093**. `GATE:done` слага — Б34 (ждёт Q-2).
+
+---
+
+## Б46. Пакет `llm-cost-optimization` (v0.6.0) — экономия ключа tutu
+
+**I1 этого пакета.** `current` (аудит 20.10, `$12.49/24ч`): ключ tutu (DeepSeek flash) ест (а) telegram-монстры с промахом кэша, (б) LLM на гейтах и агентных кронах, (в) оркестрационные суб-агенты, (г) ложные wake стража из-за `canon_mtime` на каждый тик записи канона, (д) длинный MUST-read master (~380 КБ) на каждую TZ/REV, (е) гигиена/reset слишком поздние, (ж) `dwka_guard.sh` не канон. `target`: расход tutu режется конфигом и 0-токенными детекторами; монстры ловятся рано (алерт / hard_stop / auto-close fail-closed); гейты без LLM; страж doorbell без ложных wake; MUST-read TZ/REV — секции, не весь master.
+
+**Цель одним предложением.** Расход ключа tutu режется конфигом, 0-токенными детекторами и MUST-read секций, без патча ядра Hermes и без отката штата Codex.
+
+Кейс записи — **CHANGE** существующего процесса (инфраструктурный план DevWorkflow; слаг вне `pilot_slugs` — канбан-путь). Слаг поезда: `llm-cost-optimization` (init как `DEV` — G5, архитектор кейс не меняет). SoT входа: `_fix_plan_20261020.md` (П.1–П.7 + карта 8 замечаний ревизора) и корпус TZ:patch `_tz_patch_20261020_llm-cost-optimization_1.md`. Решение Саши из контейнера: реализуем всё по канону, замечания ревизора обязательны. Выжимка ≠ SoT. `[NEW-ENTITY, требует согласования Саши]` **нет**. Корпуса Б40–Б45 / AC-058…093 / AC-061 **не откатывать**. Q-n этого пакета **нет** (Q-2 auth Codex — чужой поезд `migrate-dev-roles-cursor-to-codex`, не занимать). Semver **0.6.0**.
+
+**Не откатывать:** Б40–Б45 / AC-058…093 / AC-061 pid=wrapper. **Не возвращать** штат ролей на Cursor: Б45 v0.5.0 (Codex exec) остаётся штатом; формулировка плана «роли → Cursor, уже канон» **устарела относительно диска**. Тяжёлые роли = `invoke_role` (штат Codex, откат `cursor-cli`). Ключ **tutu** экономит `orchestrator_enabled: false` и no_agent-кроны, не смена Cursor↔Codex.
+
+**Не кризис:** 10 кейсов / фазы / G6 / классы S/O/C не пересматриваются. Ядро `hermes-agent` / gateway restart / `fallback_providers` — вне скоупа.
+
+### Б46.0 Scope / Non-goals
+
+**Что ложится в этот пакет как норма и затем в HF *этого* поезда** (после `TZ:finalize` + `GATE:take-into-work`):
+
+| П | Норма | Кто после finalize |
+|---|---|---|
+| П.2 | MUST-read TZ/REV режется до секций | `HF:docs-handoff` (`references/context.md`, зеркало Б12.3 / Б18.4) |
+| П.3 | `delegation.orchestrator_enabled: false`; окно тяжёлых ролей; 503/429 без ретрая | config Hermes + скилл; **кода ретрая нет** (уже AC-009 / AC-065) |
+| П.4 | auto-GATE без LLM | проверка; дыра канбан-воркера — `HF:impl` того же поезда, не новый механизм |
+| П.6.1–3 | смена спеки AC-079 (fingerprint без `canon_mtime` при живом pid; `queue=<n>`) | `HF:impl` / `HF:test` **этого** поезда — это и есть mini-TZ AC-079, отдельный TZ-файл **не** плодить |
+| П.6.5 | правило стража в `dev-workflow` | `HF:docs-handoff` |
+| П.7.1–2 | `compression.threshold 0.5→0.3`, `hygiene_hard_message_limit 400→180` | `~/.hermes/config.yaml` (`ORCH` / координатор; не EcosystemConfig) |
+| П.7.3 | плагин `hermes-session-reset-policy` v0.3.0 + `idle_minutes 1440→180` | установка каталога + YAML; свой код **не** писать |
+| П.8 | `dwka_guard.sh` на удаление | operator-hold `удаляй` (не дублировать логику) |
+
+**Отдельные последующие цепочки TZ→HF** (норма уже здесь; код **не** в `HF:impl` этого поезда):
+
+| П | Почему отдельная цепочка | Куда код |
+|---|---|---|
+| **П.1** | новый no_agent-скрипт + SQL по `state.db` + ErrorBus | `~/.hermes/scripts/` (+ крон по `ставь кроны`) |
+| **П.5** | нормы ходов GATE≤4 / TZ·REV≤20 / HF≤25 — **не** ключи нынешнего `tool_loop_guardrails.warn_after` (там `exact_failure` / `same_tool_failure` / `idempotent_no_progress`). Флаг `hard_stop_enabled: true` = конфиг **этого** поезда; **лимиты ходов фазы** = новый код | отдельный TZ→HF (воркер / `invoke_role` overlay, не ядро `hermes-agent`) |
+| **П.7.4** | auto-close telegram по 80 api, fail-closed | отдельный TZ→HF; **не** патч `gateway/session.py` |
+
+**Кроны / `jobs.json`:** этот поезд **не** пишет `jobs.json`. П.6.4 (`pfs_batch` → no_agent), крон стража 1 мин, крон алерта кэша — `depends: operator:ставь кроны` (один hold на все три мутации). П.8 — `depends: operator:удаляй`. GATE:done **ждёт** эти holds.
+
+### Б46.1 Карта замечаний ревизора (норматив, не опция)
+
+| # | Замечание | Куда в нормах |
+|---|---|---|
+| 1 | 503/429 → interrupt без ретрая (И33 / AC-009) | П.3: новой ретрай-логики **нет**; `classify_provider_fatal` уже мапит `50[0-3]\|429` |
+| 2 | `canon_mtime` = смена спеки AC-079 → mini-TZ + тесты | П.6.2: этот патч **и есть** mini-TZ AC-079 |
+| 3 | `orchestrator_enabled=false` только после закрытия pfs-name | П.3: условие выполнено (`GATE:done` 20.10 13:57, `t_e18afcc6`) |
+| 4 | WAIT_WINDOW видит очередь | П.6.3: `queue=<n>` |
+| 5 | auto-close 80 api fail-closed | П.7.4 |
+| 6 | session_reset = каталогный плагин, не свой код | П.7.3: `hermes-session-reset-policy` v0.3.0, hook `pre_gateway_dispatch` |
+| 7 | `hard_stop true` — новый код, не Шаг 0 | П.5: флаг = конфиг этого поезда; лимиты ходов фазы = отдельная TZ→HF |
+| 8 | `dwka_guard.sh` — operator-hold `удаляй` | П.8 |
+
+### Б46.2 П.1 — Алерт промаха кэша (SQL no_agent → ErrorBus :11112)
+
+**Цель.** Поймать класс Trisigma ($6.12, 222 api, промах кэша) до сотен вызовов.
+
+**Где меняется (не этот ход — отдельная TZ→HF).** Новый no_agent-скрипт (паттерн `~/.hermes/scripts/` + `report_error.sh`). Источник: `~/.hermes/state.db`, **только** `mode=ro` (URI `file:…?mode=ro`). Таблица `sessions` (колонки канона hermes-cost-audit): `input_tokens`, `cache_read_tokens`, `api_call_count`, `estimated_cost_usd`, `source`, `title`, `id`.
+
+**Правило срабатывания** (все три):
+
+1. `api_call_count ≥ 10`;
+2. знаменатель `input_tokens + cache_read_tokens > 0` и `cache_read_tokens / (input_tokens + cache_read_tokens) < 0.50`;
+3. `estimated_cost_usd ≥ 0.50`.
+
+Класс события: `cache miss on agent loop`. Доставка: ErrorBus `:11112`, `--tool hermes_cost` (или `dev_workflow`, если скрипт живёт в `pipeline/` — выбрать **один** ключ на `HF:plan` цепочки П.1, не оба). Молчание, если строк нет. Дедуп: не чаще 1 события на `session.id` за 24ч.
+
+**Крон:** только глагол `ставь кроны` (тот же hold, что П.6.4 / страж). Интервал — `HF:plan` цепочки П.1 (ориентир 15–30 мин, не каждую минуту).
+
+**Что НЕ трогать.** Ядро `hermes-agent`, схема `state.db`, запись в `state.db`, SQL как SoT DevWorkflow (Б33 п.25: telemetry read-only ≠ SoT/кэш выжимок). Gateway. `fallback_providers`. Чужие поезда.
+
+### Б46.3 П.2 — Резать MUST-read TZ:patch / TZ:finalize / REV:tz
+
+**Цель.** Меньше входных токенов на архитектора/ревизора (сейчас «всегда полный master», файл ~380 КБ).
+
+**Где меняется.** Норма Б12.3 + `dev-workflow/references/context.md` + входы Б18.4 (`TZ:patch` / `REV:tz`). `HF:docs-handoff` **этого** поезда. `emit-prompt` кладёт **новую** таблицу в пакет (не надеяться, что роль «сама знает»).
+
+**Новая таблица MUST-read (замена строки TZ/REV в Б12.3):**
+
+| Фаза | Роль обязана открыть | Выжимки достаточно |
+|---|---|---|
+| `TZ:patch` / `TZ:finalize` / `REV:tz` | **не** весь master по умолчанию. Обязательные секции: frontmatter + Б0.3 (границы хода); «Что НЕ трогать»; Б33; Б34 сводка AC (таблица); секция **текущего** пакета (последний БNN) + changelog **последние 3** записи. Полный файл — если роль **пишет или судит** норму вне этого набора, есть `[NEW-ENTITY]`, выжимка расходится с путём, или путь короче 5 КБ | как индекс; формулировки норм — с диска открытых секций |
+| `HF:plan` | без изменений: AC + «не трогать» + контракты | ориентация |
+| остальные | без изменений Б12.3 | как сейчас |
+
+Чтение **без обрезки внутри выбранных секций** (блоками offset, не «пропусти середину секции»). Доктрина двух источников (Б12.2) **не** отменяется: конфликт → диск. Священные имена Б12.6 компрессор по-прежнему не выбрасывает.
+
+**Что НЕ трогать.** G2 `context-used:`. Запрет `--force`. Тела master в промпт по-прежнему **не** вклеивать. HF:impl / HF:test MUST-read. Канон 10 кейсов.
+
+### Б46.4 П.3 — Роли через `invoke_role`; окно; `orchestrator_enabled`; 503/429
+
+**Цель.** Убрать оркестрационные суб-агентные расходы tutu (kanban 30% аудита) и не жечь дорогие роли днём.
+
+#### П.3.1 Роли — уже канон, штат = Codex (Б45)
+
+Архитектор / ревизор / исполнитель идут через `invoke_role`, не сырой `agent -p` и не `codex exec` в обход адаптера (Б13.2, AC-013 / AC-092). **Штат этого контура = Codex exec (Б45 v0.5.0).** Cursor CLI — откат YAML, не цель этого пакета. Этот патч **не** переписывает Б6.4 / Б45.
+
+Tutu-ключ эти роли **не** тратят. Экономия tutu здесь — П.3.3.
+
+#### П.3.2 Окно тяжёлых ролей: будни 19:00–09:00 MSK
+
+**Норма процедуры скилла** (`dev-workflow` `SKILL.md` / `invoke.md`), не systemd-таймер.
+
+- **Тяжёлые** invoke-роли (`architect` / `reviewer` / `executor`, включая LIGHT) на **буднях** стартуют только в окне **19:00–09:00 MSK** (с 19:00 до 09:00 следующего календарного дня).
+- Днём будни (09:00–19:00 MSK): только sirene-фазы G6, auto-гейты, HITL, compress, `ORCH:shared-state`.
+- Выходные (сб–вс) окно **не** режет (нет офисного пика).
+- Вне окна оркестратор **не** зовёт `invoke_role` на тяжёлую роль: `pipeline next` → WORK фиксируется, вызов откладывается до 19:00; не interrupt, не skip фазы.
+- Telegram / cron / doorbell — не это окно.
+
+**Что НЕ трогать.** Таблица моделей Б45. Координатор и компрессор остаются на Hermes `deepseek-v4-flash-0731`.
+
+#### П.3.3 `delegation.orchestrator_enabled: false`
+
+Файл: `~/.hermes/config.yaml` ключ `delegation.orchestrator_enabled` (сейчас `true`, около строки 319). **Не** `EcosystemConfig.yaml` / `tools.dev_workflow`.
+
+Условие ревизора: pfs-name закрыт — **факт есть** (`GATE:done` 20.10 13:57). Внедрение на HF/ORCH этого поезда **разрешено**.
+
+#### П.3.4 503/429 без авто-ретрая — уже канон
+
+`invoke_role.classify_provider_fatal` мапит `HTTP 50[0-3]|429` → fatal → interrupt, **без** recover (AC-009, AC-065, Б33 п.11, корпус Б42). **Нового кода ретрая не добавлять.** README/скилл: одна фраза «503/429 = provider_fatal, не ретрай».
+
+### Б46.5 П.4 — auto-GATE без LLM
+
+**Цель.** Убрать расход вида GATE:diagnose-review **$0.75/запуск** (20.10).
+
+**Норма уже в каноне:** Б6.3 / Б6.5 G6 (гейты = оркестратор, `invoke-роль не звать`) / Б17.4 улики / `pipeline_gates.AUTO_GATES`. `pipeline next` → `AUTO_GATE` complete по улике, без `invoke_role`.
+
+**Дыра (проверяет этот поезд):** на **канбан-пути** карточка `GATE:*` ещё может крутиться как LLM-воркер (D1 не NULL / скилл воркера зовёт модель). Это и есть $0.75.
+
+**Где меняется.** `HF:impl` этого поезда **только если** проверка красная: воркер GATE complete по улике Б17.4, без `agent -p` / без `invoke_role` / без tutu-сессии. Не новый тип гейта, не skip карточки гейта (auto ≠ skip).
+
+Улики без изменений:
+
+| Гейт | Улика |
+|---|---|
+| `GATE:take-into-work` | непустой `AC-list.md` + `AC-shown:` в origin |
+| `GATE:plan-approve` | план на диске, `HF:plan` done |
+| `GATE:diagnose-review` | `_fix_plan_YYYYMMDD.md` или непустое тело DX |
+| `GATE:done` | preflight 0 (holds сняты, Q пуст, AC-report) |
+
+**Что НЕ трогать.** Never-auto `GATE:go` / `GATE:block-accept`. Набор auto. `dwka_guard` — не гейт (П.8).
+
+### Б46.6 П.5 — `hard_stop_enabled` + нормы ходов
+
+**Цель.** Резать session-monster (222 / 838 / 1218 api, $6.12 / $16.00 / $5.30 за 7д) на пороге 80–100 api / лимите ходов фазы.
+
+**Два разных механизма — не смешивать.**
+
+#### П.5.а Флаг tool-loop (конфиг этого поезда)
+
+`~/.hermes/config.yaml`:
+
+```yaml
+tool_loop_guardrails:
+  hard_stop_enabled: true   # сейчас false
+```
+
+Ключи `warn_after` / `hard_stop_after` (`exact_failure` / `same_tool_failure` / `idempotent_no_progress`) **не** переименовывать и **не** подставлять в них GATE/TZ/HF. Это стоп по зацикленному инструменту, не бюджет ходов фазы.
+
+#### П.5.б Лимиты ходов фазы (новый код, отдельная TZ→HF)
+
+| Класс фазы | hard_stop ходов (ориентир) |
+|---|---|
+| `GATE:*` | ≤ 4 |
+| `TZ:*` / `REV:*` | ≤ 20 |
+| `HF:*` | ≤ 25 |
+
+Сверх лимита → `interrupt` `reason=budget_exhausted:phase-turns`, ErrorBus, **без** авто-ретрая (дух AC-009). Не reaper. Не ядро `hermes-agent`: overlay воркера канбана / `invoke_role` (max turns на фазу), решение файла — `HF:plan` цепочки П.5.
+
+Тест цепочки: монстр-сессия (фикстура 80–100 api / ходов сверх таблицы) останавливается; корпус AC-009 / 90-90 не красный.
+
+**Что НЕ трогать.** Ядро gateway. AC-061. Recover one-shot (Б43). Billing/90-90 mapping.
+
+### Б46.7 П.6 — Страж doorbell AC-079 (смена спеки) + `pfs_batch` + скилл
+
+**Цель.** 0-токенный страж очереди вместо LLM-сессий $0.06–0.20/тик; убрать agent-mode у `pfs_batch`.
+
+#### П.6.1 Поведение стража (корпус AC-079, смысл не откатывать)
+
+`pipeline doorbell` считает fingerprint очереди. Тот же отпечаток → молчание (не WAKE). Смена → wake Сирень существующим каналом; **она одна** делает `pipeline next`. Не `recover`, не spawn, не kill. Не копия `dwka_guard.sh`. Tick: `Registries/pipeline/scripts/doorbell_tick.sh` (уже на диске).
+
+Крон 1 мин — **только** `ставь кроны`. Если платформа крона каждый интервал зовёт LLM — страж **не** ставить (Б33 п.55). GATE:done **этого** поезда код детектора может закрыть; крон — hold.
+
+#### П.6.2 `canon_mtime` при живом pid — смена спеки AC-079
+
+**Баг текущей формулы** (`pipeline_gates._doorbell_slug_segment`): `canon_mtime` всегда в сегменте. Пока pid/wrapper жив, роль пишет канон → mtime на каждый тик → ложный WAKE → LLM.
+
+**Новая формула сегмента:**
+
+```
+slug|status|phase|role|pid_alive|wrapper_alive[|canon_mtime=…]
+```
+
+- Если `pid_alive=1` **или** `wrapper_alive=1` → поле `canon_mtime` **опустить** (не писать `0` как сентинел смены).
+- Если оба 0 → `canon_mtime` включить (детект «канон появился» для post-invoke / complete).
+- Нет state: как сейчас `canon_mtime=0` допустим (нет живого pid).
+
+Текст Б16.7 / Б44.4 / развёртка AC-079 п.3: «смена `phase` / `pid_alive` / mtime канона» → «смена `phase` / `pid_alive` / `wrapper_alive` / (`canon_mtime` **только если pid и wrapper мертвы**)».
+
+Это **этот** пакет (mini-TZ AC-079). Код+тесты — `HF:impl` / `HF:test` этого поезда, не «правка скрипта без ТЗ».
+
+#### П.6.3 WAIT_WINDOW: `queue=<n>`
+
+Даже при том же fingerprint tick **не** абсолютно нем. Stdout режима ожидания:
+
+```
+queue=<n>
+```
+
+`n` = число элементов индекса `dev/queue.json` (пересобираемый индекс, не SoT; если файла нет — `n` = число `glob */_state.json` со `status` ∉ {`done`,`aborted`}).
+
+Fingerprint **включает** `queue=<n>` (изменение длины очереди = смена → WAKE). Режим WAKE: `WAKE <fp>` **и** строка `queue=<n>`.
+
+Не молчать о длине. Не делать `pipeline next` из tick.
+
+#### П.6.4 `pfs_batch` → no_agent
+
+Крон `a6e62d06249f` (`pfs_batch`): сейчас `no_agent=false`, `script=null`, есть prompt (LLM). **Перевести** на паттерн `pfs_notify` (`21255143c523`): `script=<обёртка>`, `no_agent=true`, `prompt=""`.
+
+Команда внутри обёртки — та же, что в prompt сейчас:
+
+`cd …/ProtocolFromSummary && source .venv/bin/activate && export PFS_POST_SWITCH=1 && python -m protocolfromsummary run-pending`
+
+Ошибки → ErrorBus / существующий канал ошибок PFS; успех с `published=0` — тишина (как в prompt). Расписание `10 8-19 * * 1-5` не менять, пока Саша не скажет иначе.
+
+**Пишет `jobs.json` → hold `ставь кроны`.** Обёртку можно положить в `~/.hermes/scripts/` на HF, включение крона — после глагола.
+
+**Что НЕ трогать.** `pfs_notify` (уже no_agent). Код PFS / `MoveFromFF` / OFC. `ff_summary.json`.
+
+#### П.6.5 Правило стража в скилле
+
+`dev-workflow` `SKILL.md` / `references/` (якорь Б16.7): страж = детерминированный doorbell, не reaper, не recover/spawn/kill, wake только по смене fingerprint. Hardcoded slug `dwka` запрещён.
+
+### Б46.8 П.7 — Компрессия / гигиена / session_reset / auto-close fail-closed
+
+**Цель.** Меньше входных токенов длинных сессий; раньше чистить память; свежие сессии; резать telegram-монстров на 80 api без потери handoff.
+
+#### П.7.1–2 Конфиг (этот поезд)
+
+`~/.hermes/config.yaml`:
+
+```yaml
+compression:
+  threshold: 0.3          # было 0.5
+  target_ratio: 0.2       # НЕ менять
+  hygiene_hard_message_limit: 180  # было 400
+```
+
+Модель compression = DeepSeek flash (уже). `protect_last_n` / `protect_first_n` не трогать, пока нет отдельной улики.
+
+#### П.7.3 session_reset = плагин, не свой код
+
+Каталог: `hermes-session-reset-policy` **v0.3.0** (tier community, `plugin-catalog/hermes-session-reset-policy.yaml`, hook **`pre_gateway_dispatch`**, repo `fastfinge/hermes-session-reset-policy`). Установка: `hermes plugins install hermes-session-reset-policy` (координатор на HF). Свой хук / форк **запрещён**.
+
+Беглая ревизия (обязательна до боя, не глубокий аудит): README + что hook = `pre_gateway_dispatch` + читает блок `session_reset` (`mode` / `idle_minutes` / `at_hour`). Несовпадение версии / точки hook → стоп, не молчаливый install.
+
+Конфиг (тот же файл, строки ~529–532):
+
+```yaml
+session_reset:
+  mode: both          # уже both
+  idle_minutes: 180   # было 1440
+  at_hour: 4          # уже 4
+```
+
+Плагин **без таймеров и фоновых записей** (описание каталога). Рестарт gateway **не** из этого поезда (AC-010). Если hook не подхватился без рестарта — hold `поднимай`, не самовольный restart.
+
+#### П.7.4 Auto-close telegram по 80 api — fail-closed (отдельная TZ→HF)
+
+Правило: при `api_call_count ≥ 80` и исчерпании/простое **закрывать сессию только если есть валидный handoff-summary**. Нет summary → **не закрывать** (fail-closed), сессия живая. Это **новый** механизм.
+
+**Нельзя:** патч `gateway/session.py` / ядра (Б13.1, «Что НЕ трогать»). Предпочтительный путь цепочки: no_agent-watcher по `state.db` `mode=ro` **или** каталогный/свой plugin-hook **вне** ядра; выбор — `HF:plan` той цепочки.
+
+Валидный handoff-summary: непустой файл/поле сессии с маркером handoff (канон имени — `HF:plan` цепочки; пустой JSON / thinking-only = невалиден, дух AC-073).
+
+### Б46.9 П.8 — `dwka_guard.sh` пометить на удаление
+
+**Цель.** Не канонизировать прототип; замена = doorbell AC-079 (П.6).
+
+**Где.** Уже запрет Б33 п.47/53, «Что НЕ трогать», Б44.4. Этот пакет **закрывает судьбу**: AC с `depends: operator:удаляй` на файл `~/.hermes/scripts/dwka_guard.sh` (+ крон/job, если ещё ссылается на него). Не копировать логику в `pipeline/`. Не `rm` до глагола Саши.
+
+Зависимость: удалять **после** того, как doorbell tick на диске зелёный (П.6.1–3 тесты). Крон doorbell может ещё ждать `ставь кроны` — скрипт-прототип всё равно hold `удаляй`.
+
+### Б46.10 Что НЕ трогать (сводка пакета)
+
+| Объект | Запрет |
+|---|---|
+| `~/hermes-agent`, `gateway/session.py` | ноль патчей; ноль restart из этого плана (AC-010) |
+| Б40–Б45 / AC-058…093 / AC-061 | не откатывать смысл; штат Codex не возвращать на Cursor |
+| `kanban_*` / `kanban.db` как SoT | не патчить |
+| `fallback_providers` (config.yaml:4) | известный quoted-string дефект — **чужая** карточка |
+| `pfs_notify` | уже no_agent |
+| `MoveFromFF/**`, PFS/** (кроме перевода крона `pfs_batch`), MOFS, MofsIndex, FirefliesAutojoin, `ff_summary.json` | чужие контуры |
+| Чужие поезда (`ktalk-*`, `pfs-name-resolve-fail`, `migrate-dev-roles-cursor-to-codex`) | не откатывать, не закрывать их Q-2 |
+| `jobs.json` | не писать без `ставь кроны` |
+| SQL как SoT/кэш выжимок/транспорт DevWorkflow | П.1 читает `state.db` **ro telemetry**, не кладёт выжимки в SQL |
+| Авто-ретрай 503/429 / billing / 90-90 | не добавлять |
+| `[NEW-ENTITY]` канал стража / ErrorBus | нет |
+| Склейка `HF:impl`+`HF:test` | запрещена |
+| Обход `emit-prompt` | запрещён |
+
+### Б46.11 Operator-hold (класс O)
+
+Закрытый словарь, новые глаголы **не** заводить.
+
+| verb | На что | Когда снимать |
+|---|---|---|
+| `ставь кроны` | (1) doorbell tick 1 мин no_agent; (2) алерт кэша П.1; (3) flip `pfs_batch` `a6e62d06249f` → `no_agent=true` | факт в `jobs.json` + evidence ISO/rc |
+| `удаляй` | `~/.hermes/scripts/dwka_guard.sh` и ссылки в кроне | файла нет, `rg` пуст |
+| `поднимай` | **только если** плагин П.7.3 не живёт без рестарта gateway | фраза Саши + smoke hook; иначе hold **не** заводить |
+
+Показ AC ≠ ожидание (класс S) на остальные нормы.
+
+### Б46.12 Реализация (норма для HF:plan / HF:impl)
+
+Порядок из плана §2, **без склейки фаз** в один `agent -p`. HF:impl ≠ HF:test.
+
+#### Этот поезд (после `TZ:finalize` / auto `GATE:take-into-work`)
+
+Шаги **0a–0d, 2, 3, 7, 8** плана — здесь. **Не** реализовывать П.1 / П.5.б / П.7.4.
+
+| Шаг | П | Работа | Фаза |
+|---|---|---|---|
+| 0a | П.3.3 | `delegation.orchestrator_enabled: false` | `HF:impl` или `ORCH` (файл Hermes config, не манифест) |
+| 0b | П.7.1 | `compression.threshold: 0.3` | то же |
+| 0c | П.7.2 | `hygiene_hard_message_limit: 180` | то же |
+| 0d | П.7.3 | install плагина v0.3.0 + `idle_minutes: 180`; беглая ревизия README/hook | `HF:impl` + docs |
+| 0e | П.5.а | `hard_stop_enabled: true` (только флаг) | config |
+| 2 | П.6.2–3 | fingerprint без `canon_mtime` при живом pid; `queue=<n>` в tick и fp | `HF:impl` `pipeline_gates.py` / `doorbell_tick.sh` |
+| 2t | П.6 | тесты AC-079 delta | `HF:test` **отдельный** invoke |
+| 3 | П.6.5 | правило стража в скилле | `HF:docs-handoff` |
+| 7 | П.2 | MUST-read секции | `HF:docs-handoff` |
+| 8 | П.4 | проверка auto-GATE без LLM; патч воркера только если красная | `HF:impl` / `HF:test` |
+| — | П.3.2 | окно 19:00–09:00 MSK будни | `HF:docs-handoff` |
+| — | П.3.4 | фраза «503/429 без ретрая» в docs; **ноль** нового кода | docs |
+| — | П.8 | hold `удаляй` в AC-list | `TZ:finalize` (список AC) |
+
+IAC-ориентир (черновик для `HF:plan`; формулировки AC — с диска):
+
+| IAC | path | verify | covers |
+|---|---|---|---|
+| IAC-01 | `~/.hermes/config.yaml` | `rg` orchestrator_enabled false; threshold 0.3; hygiene 180; idle_minutes 180; hard_stop_enabled true; `target_ratio: 0.2` на месте | П.3.3, П.5.а, П.7.1–3 |
+| IAC-02 | plugin | `hermes plugins list` = session-reset-policy 0.3.0; hook `pre_gateway_dispatch` | П.7.3 |
+| IAC-03 | `pipeline_gates.py` | pytest: живой pid + смена mtime канона → fp тот же; мёртвый pid + смена mtime → fp другой | П.6.2 / AC-079 |
+| IAC-04 | `doorbell_tick.sh` | тот же fp → `queue=<n>`, нет WAKE, нет next/recover; смена n → WAKE | П.6.3 |
+| IAC-05 | `pipeline/tests` | `pytest -q pipeline/tests` ; корпус AC-061…079 не красный | регресс Б44 |
+| IAC-06 | `references/context.md` | MUST-read TZ/REV = секции П.2, нет «всегда master» | П.2 |
+| IAC-07 | GATE | next AUTO_GATE при улике без invoke_role | П.4 |
+| IAC-08 | соседи | прирост: `pipeline/` (doorbell) + `dev-workflow` docs + Hermes `config.yaml` + plugin. Ядро / `kanban_*` / PFS python / `jobs.json` / `pfs_notify` — нулевой смысл-дифф | «не трогать» |
+| IAC-09 | `dwka_guard` | AC-list hold `удаляй`; код pipeline не exec этот файл | П.8 |
+
+`jobs.json` / кроны / удаление скрипта — **не** IAC исполнителя; preflight GATE:done красный, пока holds open.
+
+#### Отдельные цепочки (не этот HF:impl)
+
+Заводит оркестратор **после** штампа норм (не архитектор, G5). Каждая — свой slug, полный канон кейса, не skip фаз.
+
+1. **П.1** cache-miss alert — новый no_agent-скрипт + ErrorBus; крон в hold `ставь кроны` (можно тот же hold, если ещё open, иначе новый).
+2. **П.5.б** лимиты ходов фазы GATE≤4 / TZ·REV≤20 / HF≤25 + тест монстра 80–100 api. Не путать с П.5.а.
+3. **П.7.4** auto-close 80 api fail-closed, вне ядра gateway.
+
+П.6.4 (`pfs_batch` script+no_agent) может ехать в этом поезде как **заготовка скрипта** на диске; **включение** в `jobs.json` — только после `ставь кроны`. Не смешивать с правкой Python PFS.
+
+#### Оценка экономии (контекст, не AC)
+
+План §3, база $12.49/24ч: прямая **$3.3–6.5/день** + защита монстров **$2.5–7.0/день**; консервативно **~$5–8/день**. GATE:done не требует измерить $/день — достаточно норм и IAC.
+
+#### Запрет исполнителю
+
+Не патчить `hermes-agent`. Не `codex login`. Не restart gateway. Не `jobs.json` без evidence глагола. Не канонизировать `dwka_guard.sh`. Не добавлять retry 503/429. Не закрывать Q-2 чужого поезда. Не выбирать LIGHT / не строить граф.
+
+### Критерии приёмки (AC)
+
+Формулировки — **дословно** из корпуса TZ:patch. Класс по умолчанию **S**. Класс O — только со строкой `depends: operator:<verb>`.
+
+**AC-094** · S · П.1. Скрипт: `sqlite3`/python `mode=ro`; фикстура сессии с ratio < 0.50, `api_call_count=10`, `estimated_cost_usd=0.50` → одно событие ErrorBus; ratio ≥ 0.50 или `api_call_count=9` или cost 0.49 → тишина. *Не валит GATE:done этого поезда (цепочка П.1).*
+
+**AC-095** · S · П.1. Повтор того же `id` в окне 24ч → второе событие нет. *Не валит GATE:done этого поезда (цепочка П.1).*
+
+**AC-096** · O `depends: operator:ставь кроны` · П.1. `jobs.json` этой цепочки не появляется до `operator-done: ставь кроны`.
+
+**AC-097** · S · П.2. `rg` в `references/context.md`: для `TZ:patch` **нет** строки «всегда master-ТЗ» как единственной обязанности; есть перечень секций выше.
+
+**AC-098** · S · П.2. Пакет `emit-prompt` на фикстуре TZ:patch содержит этот перечень.
+
+**AC-099** · S · П.2. Смоук (после docs-handoff): архитектор в журнале фазы открыл секции, не обязан логировать полный 380 КБ файл.
+
+**AC-100** · S · П.3. После HF: `rg orchestrator_enabled ~/.hermes/config.yaml` → `false`.
+
+**AC-101** · S · П.3. Скилл содержит окно 19:00–09:00 MSK будни.
+
+**AC-102** · S · П.3. `pytest` `test_http_429_fatal` / `http 503` остаются зелёными; **нет** нового модуля retry.
+
+**AC-103** · S · П.3. `git -C ~/hermes-agent diff` по этому пункту пуст.
+
+**AC-104** · S · П.4. Pytest: `next` на фазе из `AUTO_GATES` при наличии улики → `complete-phase`, `invoke_role` не звался.
+
+**AC-105** · S · П.4. Живой канбан: карточка `GATE:diagnose-review` / `take-into-work` / `plan-approve` / `done` в journal **без** `session_id` модели tutu и без usage>0.
+
+**AC-106** · S · П.4. Если проверка зелёная с первого раза — impl-дифф по гейтам **пуст** (норма уже держится).
+
+**AC-107** · S · П.5.а. Этот поезд: `rg hard_stop_enabled ~/.hermes/config.yaml` → `true`; ключи `exact_failure` на месте.
+
+**AC-108** · S · П.5.б. Цепочка П.5: pytest «фаза HF, 26-й ход → interrupt, state bit-identical except interrupt»; GATE 5-й ход → то же. До цепочки П.5 этот критерий **не** валит GATE:done **этого** поезда.
+
+**AC-109** · S · П.6. Pytest (этот поезд, расширение `test_turn_end.py`):
+1. Два вызова на неизменном state → stdout fp идентичен.
+2. Живой pid + запись канона (mtime сменился) → fp **не** меняется.
+3. Смерть pid + смена mtime канона → fp меняется.
+4. Tick тот же fp → stdout содержит `queue=<n>`, нет `WAKE`, нет вызова `next`/`recover`.
+5. Смена `n` очереди → fp другой.
+6. В дереве нет копии `dwka_guard.sh`; tick не содержит `dwka` как hardcoded slug.
+
+**AC-110** · O `depends: operator:ставь кроны` · П.6. `jobs.json` vs baseline пуст до `operator-done: ставь кроны`.
+
+**AC-111** · O `depends: operator:ставь кроны` · П.6. После глагола: `pfs_batch.no_agent==true` и `script` непустой; `pfs_notify` bit-identical по смыслу.
+
+**AC-112** · S · П.7. Этот поезд: `threshold: 0.3`, `hygiene_hard_message_limit: 180`; `hermes plugins list` содержит `hermes-session-reset-policy` 0.3.0; `idle_minutes: 180`.
+
+**AC-113** · S · П.7.4. Цепочка П.7.4: фикстура 80 api **без** summary → сессия жива; **с** валидным summary → закрыта. `git -C ~/hermes-agent diff` пуст. До цепочки критерий **не** валит GATE:done этого поезда.
+
+**AC-114** · S · П.8. AC-list этого пакета содержит operator-hold `удаляй` на `dwka_guard.sh`.
+
+**AC-115** · O `depends: operator:удаляй` · П.8. После `operator-done: удаляй` + evidence: файла нет, `rg dwka_guard ~/.hermes/cron/jobs.json` пуст.
+
+**AC-116** · S · П.8. `pipeline doorbell` / tick **не** импортирует и не exec этот скрипт.
+
+O-AC: **AC-096, AC-110, AC-111** (`ставь кроны`); **AC-115** (`удаляй`). Hold `поднимай` **не** заводится, пока плагин П.7.3 живёт без рестарта gateway.
+
+AC пакета: **AC-094…116**. `GATE:done` слага — Б34 (ждёт holds `ставь кроны` + `удаляй`; не ждёт цепочки П.1 / П.5.б / П.7.4).
+
+---
+
 ## Открытые вопросы
 
-Блокирующих открытых вопросов **нет**. Бриф `rs-refuse-kanban` закрыт 2026-10-13. Риски 14.10 закрыты Q-Archi-04/05. Блок E закрыт Q-Archi-06. Пакет `devworkflow-task-slug`: Q-Archi-07/08 решены в Б36 п.15–16 (не ждут реплики, чтобы закрыть `TZ:finalize`). Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`: Q нет; `[NEW-ENTITY]` нет. Пакет `sravnit-skills-vs-tree-docs-zavis-v-rs-collect-d`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-cursor-cli`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-avtovosstanovlenie`: Q нет; `[NEW-ENTITY]` нет. Пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`: Q нет; 13.10 не пересматриваем; `[NEW-ENTITY]` канала стража нет.
+Блокирующих открытых вопросов пакетов до v0.4.9 **нет**. Бриф `rs-refuse-kanban` закрыт 2026-10-13. Риски 14.10 закрыты Q-Archi-04/05. Блок E закрыт Q-Archi-06. Пакет `devworkflow-task-slug`: Q-Archi-07/08 решены в Б36 п.15–16 (не ждут реплики, чтобы закрыть `TZ:finalize`). Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`: Q нет; `[NEW-ENTITY]` нет. Пакет `sravnit-skills-vs-tree-docs-zavis-v-rs-collect-d`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-cursor-cli`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-avtovosstanovlenie`: Q нет; `[NEW-ENTITY]` нет. Пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`: Q нет; 13.10 не пересматриваем; `[NEW-ENTITY]` канала стража нет.
+
+**Пакет `migrate-dev-roles-cursor-to-codex` (v0.5.0).** Открыт **Q-2** (класс O, AC-080): Саша прошёл device-auth Codex; evidence = smoke `codex exec` rc=0 без 401 `token_expired`. Закрытие: `operator-done: answer:Q-2` + evidence. Без закрытия `GATE:done` **того** слага не complete. Номер `Q-1` не занимать (W4 / AC-018). `[NEW-ENTITY]` нет.
+
+**Пакет `llm-cost-optimization` (v0.6.0).** Q-n этого пакета **нет**. Q-2 (auth Codex) — чужой поезд, не занимать. `[NEW-ENTITY]` нет.
 
 Вопрос `Q-1` «утвердить план выключения dispatch» **не** открыт: его заведёт `MIG:plan` будущего MIGRATION-слага (W4), см. AC-018 в Б34.
 
@@ -2999,11 +3733,15 @@ AC пакета: **AC-076…079** (класс S). `GATE:done` слага — Б3
 - TZ:finalize v0.4.8: `dev/dev-workflow-avtovosstanovlenie/REV-tz.md` verdict=APPROVE; `TZ-patch.md`
 - TZ:patch v0.4.9: `research/20261019_intent-arhitektor-pochemu-teryaem-pidy-analyze.md` (RS:analyze APPROVE); collect `20261019_intent-arhitektor-pochemu-teryaem-pidy-collect.md`; `dev/pochinka-payplayna-dev-workflow-konets-hoda-po-k/` journal/extract; `invoke_role.py` (pid 254–256, role 331–344); `cli.py` (next pid=None 83–85; complete без occupancy); `pipeline_gates.py` (`invoke_wrapper_alive`, `classify_doing`); `~/.hermes/scripts/dwka_guard.sh` (не канон)
 - TZ:finalize v0.4.9: `dev/pochinka-payplayna-dev-workflow-konets-hoda-po-k/REV-tz.md` verdict=APPROVE; `TZ-patch.md`
+- TZ:patch v0.5.0: бриф `TZ:patch` слага `migrate-dev-roles-cursor-to-codex` 20.10 (таблица ролей Саши; риски auth 401, `codex run --cwd`, sandbox, skip-git); диск `invoke_role.run_codex`; `EcosystemConfig.yaml` `default_backend: cursor-cli`; скилл `codex` (флаг `--full-auto` устарел)
+- TZ:finalize v0.6.0: корпус `~/.hermes/kanban/attachments/t_07a2d903/_tz_patch_20261020_llm-cost-optimization_1.md`; REV:tz APPROVE (claude-sonnet-5-medium); аудит 20.10 $12.49/24ч; `_fix_plan_20261020.md`
 
 ---
 
 ## Changelog
 
+- **2026-10-20 v0.6.0** — TZ:finalize пакета llm-cost-optimization после REV:tz APPROVE (CHANGE процесса). Штамп корпуса TZ:patch без правок смысла: Б46 / Б12.3 / Б16.7 / Б17.4 / Б33 / Б34 / AC-094…. оператор-hold `ставь кроны` + `удаляй`. Код не писался (HF:impl). [NEW-ENTITY] нет.
+- **2026-10-20 v0.5.0** — TZ:patch пакета `migrate-dev-roles-cursor-to-codex` (CHANGE процесса; поезд init как DEV). Штат ролей = Codex exec по таблице Б6.4 (`gpt-6.1-sol` / `gpt-6-astra` / `gpt-5.6-terra` / `gpt-6-luna`); Cursor CLI снят со штата, адаптер оставлен для отката. Канон `codex exec -C -m -c effort --skip-git-repo-check --json --sandbox danger-full-access`; не `run --cwd`; не `--full-auto`. Auth 401 = AC-080 O / Q-2 (не Q-1 W4). Координатор и компрессор не на Codex. `gpt-6-terra` запрещён. Allowlist скиллов Б45.5. Пилот до перевода всех поездов. Б45, Б4 Q-Archi-03, Б13.2, Б14, Б33 п.56–62, AC-080…093. Код не писался (HF:impl). `[NEW-ENTITY]` нет.
 - **2026-10-19 v0.4.9** — TZ:finalize пакета `pochinka-payplayna-dev-workflow-konets-hoda-po-k` после REV:tz APPROVE. Штампует корпус TZ:patch v0.4.9 без правок смысла: Б44 / Б16.7 / AC-076…079 класс S. Инвентарь. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Замечания ревизора (U+FFFD в extract; occupancy-gate не трогает `recover_counts`; IAC-09 паттерн `rg`) — `HF:plan` / compress / `HF:docs-handoff`, не этот штамп.
 - **2026-10-19 v0.4.9** — TZ:patch пакета `pochinka-payplayna-dev-workflow-konets-hoda-po-k` (CHANGE) по RESEARCH RS:analyze APPROVE. Конец хода ≠ notify Cursor: датчик = journal `invoke_role` / канон mtime / живой wrapper; occupancy `complete-phase`/`next`/`invoke` пока wrapper жив (AC-076/078). `session_id` писать из JSON агента (AC-077). Recover one-shot не расширять. Страж = doorbell 0-токен, крон только по «ставь кроны» — в этом поезде не ставим (AC-079). AC-061 pid=wrapper не трогать. Б44, Б16.7, Б33 п.51–55, AC-076…079 класс S. Корпуса Б40–Б43 не откатывались. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет.
 - **2026-10-19 v0.4.8** — TZ:finalize пакета `dev-workflow-avtovosstanovlenie` после REV:tz APPROVE. Штампует корпус TZ:patch v0.4.8 без правок смысла: Б43 / Б16.6 / AC-071…075 класс S. Инвентарь. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Замечания ревизора (время жизни `recover_counts`; судьба временного крона) — `HF:plan` / `HF:docs-handoff`, не этот штамп.

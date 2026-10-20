@@ -1,7 +1,7 @@
 ---
 tool: AnywhereContacts
-version: "0.3.0"
-date: 2026-09-08
+version: "0.3.1"
+date: 2026-10-20
 status: active
 ---
 
@@ -414,3 +414,25 @@ def upsert_from_source(
 
 **Реализация на диске:** реализовано (08.09.2026, контур A) — `upsert_from_source` в `store.py`, реэкспорт в `__init__.py`, тесты 46 passed. Черновик теневой ветки заменён.
 
+---
+
+## find_contacts: token-set fallback «Имя Фамилия» (v0.3.1, 20.10.2026)
+
+Пакет BUGFIX DEV/pfs-name-resolve-fail. Канон поведения и AC —
+§35 ProtocolFromSummary_TZ.md v1.30.0. Здесь — контракт метода.
+
+`ContactStore.find_contacts(query)`:
+
+1. Pass 1 — substring login / fio / email / aliases (без изменений).
+   Непустой результат возвращается сразу.
+2. Pass 2 — только если Pass 1 пуст и в query ≥2 токенов:
+   все токены query ⊆ токены(fio ∪ display_name ∪ aliases),
+   сравнение lowercase, токен = целое слово. 0/1/N без скоринга.
+
+Сигнатура, schema_version 2.0, ключ `login`, PII display,
+`upsert_from_source`, `ContactMerger` — без изменений.
+Гипокористики и «Фамилия И.О.» — не этот метод (MOFS /
+PFS §12 соответственно).
+
+Потребители (PFS, MOFS, TaskRefresh через PFS, display)
+патчить не обязаны: тот же вызов, больше хитов на reverse ФИО.

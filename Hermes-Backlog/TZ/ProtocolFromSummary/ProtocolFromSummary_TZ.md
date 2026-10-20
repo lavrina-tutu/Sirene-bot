@@ -1,9 +1,9 @@
 ---
 tool: ProtocolFromSummary
-version: "1.29.0"
-date: 2026-10-15
+version: "1.30.0"
+date: 2026-10-20
 status: active
-last-section-added: "§34 Слаг задач на площадке «необработанных» ДО promote (pfs-slug-prebuild, 2026-10-15, v1.29.0, DEV/pfs-slug-prebuild, REV:tz APPROVE)"
+last-section-added: "§35 Резолв имён формата «Имя Фамилия» (pfs-name-resolve-fail, 2026-10-20, v1.30.0, DEV/pfs-name-resolve-fail, REV:tz APPROVE)"
 ---
 
 <!--
@@ -8214,3 +8214,372 @@ summary обсуждение задачи лежит только в «Обсу�
 не 1.28.1 повторно; не 1.30.0 — шапка CONTRACTS без новых полей).
 Шапка master и `MAIN_TZ_INVENTORY.md`: **1.28.1 → 1.29.0**
 (`TZ:finalize` 15.10.2026 после REV:tz APPROVE).
+
+## §35. Резолв имён формата «Имя Фамилия» (pfs-name-resolve-fail, 2026-10-20, v1.30.0)
+
+**TZ:patch 20.10.2026.** Текст ниже — норма пакета. Запись в
+master — `TZ:finalize` после `REV:tz`. `REV:tz` обязателен
+(shared-модуль `anywhere_contacts`). Код / republish — `HF:impl`
+после `GATE:take-into-work`. Pre-impl маркеры «инвентарь /
+version bump — не этот ход» действуют до finalize.
+
+Накопительная дельта BUGFIX `DEV/pfs-name-resolve-fail`. Не
+ретрофитит §1–§34. §1.4 остаётся каноном цепочки резолва
+(substring → userkey → Confluence fallback → fail-soft текст);
+этот § **усиливает** шаг 1 (`ContactStore.find_contacts`)
+аддитивным token-set Pass 2, не отменяет substring и не
+включает LLM-fuzzy шаги 4–5 §1.4 (Q16.4 по-прежнему открыт,
+не этот пакет). §12 (инициалы «Фамилия И.О.») жив. §17
+(strip `**`) жив. §29 / §33 / §34 — канон слага и uniqueness,
+**не** этот баг.
+
+**Маркер I1.** `current` = прод v1.29.0: `find_contacts` =
+substring `query in login|fio|email|aliases`; форма
+«Имя Фамилия» (Fireflies Custom AI Skill с 19.10) даёт 0
+кандидатов → голый текст участников и исполнителей на
+площадке `523032632`; `_split_surname_initials` покрывает
+только «Фамилия И.О.»; MOFS `_candidates` уже пробует reverse
+2-словных, PFS/TaskRefresh — нет. Канон слага
+`{mention} {task_slug}{текст}` без пробела после точки (§34
+AC-001) на диске, «слипание» — не регрессия.
+`target` = эта работа: тот же `find_contacts` матчит обратный
+порядок и перестановки токенов ФИО при пустом substring;
+один корень чинит участников при публикации/ingest **и**
+исполнителей в `task_slug` (`_assignee_texts` ← `_resolve_one`);
+неоднозначность по-прежнему fail-soft / §11.3, не «первый
+кандидат»; промпт Fireflies и канон §34 **не** трогать.
+
+---
+
+### Цель
+
+Имена из summary в форме «Имя Фамилия» (и иные перестановки
+тех же токенов канонического ФИО) резолвятся в тот же login /
+`confluence_userkey`, что канон «Фамилия Имя [Отчество]».
+Публикация не падает; при 0 или >1 кандидате имя остаётся
+текстом (fail-soft §1.4). Один фикс — оба контура (участники
+и исполнители).
+
+---
+
+### Момент (какой контур)
+
+Единая точка резолва человека — `contacts_resolver._resolve_one`
+→ `store.find_contacts`. Её зовут:
+
+| Контур | Когда | Что резолвится | Куда попадает |
+|---|---|---|---|
+| Участники | проход 1, после `parse_summary` / §17 strip, **до** `render_row` / ingest площадки | `MeetingSummary.participants` | `<ac:link>` в td1 / блок «Участники» (проектные; на 1-1 блок не пишется, §1.1) |
+| Исполнители задач | тот же `_resolve_one` до picker / `render_row`; `_assignee_texts` читает raw/fio/login уже срезолвленного | `MeetingTask.assignee_raw` | mention в `<ac:task-body>` `{mention} {task_slug}{текст}` |
+| TaskRefresh | обёртка над тем же `_resolve_one` | assignee при refresh | без патча TaskRefresh |
+| Promote (проход 2) | **не** резолвит заново | копирует td1 verbatim | AC-012 §29 жив |
+
+Не делать: второй резолвер «только для задач»; звать
+`find_contacts` из `task_slug.py`; picker на promote;
+пересчёт mention на проходе 2.
+
+---
+
+### Канон поведения `find_contacts`
+
+Владелец метода — AnywhereContacts (`ContactStore`). PFS не
+дублирует алгоритм. Семантика аддитивна.
+
+```
+q = query.strip().lower()
+Pass 1: substring по login / fio / email / aliases   # как сейчас
+if Pass 1:
+    return Pass 1          # канон / login / email / алиас побеждает
+if число токенов(q) < 2:
+    return {}
+Pass 2: все токены query ⊆ токены(fio ∪ display_name ∪ aliases)
+return Pass 2              # 0 / 1 / N, без скоринга
+```
+
+- Токен = целое слово после `split()` (whitespace), lowercase.
+  «ан» не матчит «Александр».
+- ≥2 токенов — порог Pass 2. Однословные («Ткаченко»,
+  «Александр», login) остаются чистым substring.
+- Перестановка 2 и 3 слов: «Александр Ткаченко» и
+  «Александр Владимирович Ткаченко» матчат
+  `fio="Ткаченко Александр Владимирович"`, если все токены
+  query есть в сено.
+- Лишний токен, которого нет в ФИО/алиасах → 0.
+- «Фамилия И.О.» (`Ткаченко А.В.`) Pass 2 **не** обязан
+  матчить (токен `а.в.` ≠ `александр`); это §12 в PFS
+  **до** `find_contacts(raw)`.
+- Неоднозначность N>1: вернуть всех; PFS не выбирает
+  произвольного; §11.3 только если в множестве есть
+  `DEFAULT_ASSIGNEE_LOGIN`.
+- Пустой query → `{}` как сейчас.
+
+Эталон DX (не live-AC; живая среда уже подтверждена, не
+перепроверять на TZ:patch):
+
+| raw | current | target |
+|---|---|---|
+| `Александр Ткаченко` | resolved=False | True (tkachenkoav), если уникален |
+| `Кирилл Криворотов` | False | True (krivorotov) |
+| `Владислав Галашов` | False | True (уникальный login) |
+| `Александр Жиров` | False | True (уникальный login) |
+| `Ткаченко Александр Владимирович` | True | True (Pass 1, без регресса) |
+| `Криворотов Кирилл` | True | True |
+| `Набиева Даяна` | True | True |
+
+---
+
+### Scope
+
+Входит (нормы; код = `HF:impl`):
+
+1. Pass 2 token-set в `ContactStore.find_contacts`.
+2. Аддитивные тесты AnywhereContacts (живой store, не FakeStore).
+3. Аддитивные тесты PFS `resolve_participants` на живом
+   `ContactStore`: reverse-имена → mention; неоднозначность
+   → текст; регресс §12 / §11.3 на FakeStore не переписывать.
+4. Документирование семантики в ТЗ AnywhereContacts
+   (аддитив на `TZ:finalize`, bump 0.3.0 → 0.3.1).
+
+Не входит: реализация в этом `TZ:patch`; правка промпта
+Fireflies / `ff_summary.json`; пробел после точки слага;
+LLM-fuzzy §1.4.4–5; гипокористики MOFS в shared-модуле;
+ё/е; формат «И.О. Фамилия»; republish площадки как operator-hold.
+
+---
+
+### Non-goals
+
+- Путь 1: менять Fireflies Custom AI Skill / реестр
+  `Registries/prompts/ff_summary.json` (Q-1, не этот HF:impl).
+- Менять канон §34 (добавлять пробел после `task_slug.`).
+- Открывать allowlist 14 / добавлять `sr` (Q-1 §33).
+- Звать picker на `promote_meeting` (AC-012 §29).
+- Писать `task_slug` / `project_bind` из MOFS (AC-009 §29).
+- Включать fuzzy-LLM резолв участников (Q16.4).
+- Копировать MOFS `HYPOCORISTICS` / `_candidates` в
+  `find_contacts` или в PFS `contacts_resolver`.
+- Новая публичная функция вместо `find_contacts`.
+- Бамп `schema_version` `contacts.enc` / `entities.json` /
+  `_registry.json`.
+- Патч MOFS, TaskRefresh, OrgLookup, MeetingScheduler,
+  ExchangeMonitor, `route.py` сигнатур.
+- Gateway, `jobs.json`, `.env`, `EcosystemManifest.json`.
+- `[NEW-ENTITY]`.
+
+---
+
+### Что НЕ трогать
+
+- Канон §29 AC-001 (формат `{mention} {task_slug}{текст}`),
+  AC-004 (идемпотентность входа), AC-005 (лучший кандидат
+  **слага**, не человека), AC-006 (не выдумывать слаг),
+  AC-009 (MOFS не пишет `task_slug`), AC-012 (проход 2 =
+  0 picker), AC-013 (дедуп без префиксов).
+- Канон §33: notes вне uniqueness; питфолл Q; fallback
+  1/0/≥2; allowlist 14.
+- Канон §34: точка = разделитель, **без пробела** после
+  точки; момент ingest; bind-наводка.
+- §12 `_split_surname_initials` / `_initials_match`.
+- §17 `_strip_bold`.
+- §11.3 DEFAULT_ASSIGNEE_LOGIN — не «бери первого».
+- §1.4 шаги 2–5 (userkey cache, Confluence, fuzzy LLM stub,
+  fail-soft текст, переговорки).
+- Канон §24/§27/§28 (пост-switch, verbatim, sink_aid).
+- §30 `LLM_FALLBACK_*` / `_dedup_llm_fn`.
+- Ядро: `route.py` сигнатуры, формула `row_anchor`, N-3,
+  `523032632` не в `pfs.page_id`.
+- `jobs.json`, `.env`, Gateway, `EcosystemManifest.json`.
+- ТЗ ErrorBus. PII `render_contact` / `*_for_display`.
+- Схема контакта v2, ключ `login`, `ContactMerger`,
+  `upsert_from_source`.
+
+---
+
+### Связи с экосистемой
+
+| Инструмент | Связь |
+|---|---|
+| AnywhereContacts | **владелец** `find_contacts`; этот пакет меняет семантику пустого substring на 2+ токенах; PII/display не трогать; на finalize — аддитив в ТЗ AC 0.3.1 |
+| ProtocolFromSummary | потребитель: участники + исполнители через `_resolve_one`; кода резолвера не дублировать |
+| TaskRefresh | наследует `_resolve_one`; F2 / match_by_text не этот пакет |
+| MarkObjectsFromSummary | свой reverse 2-словных + `find_contacts`; код MOFS не патчить; Pass 2 идемпотентен |
+| OrgLookup / MeetingScheduler / ExchangeMonitor | потребители store; прямого поиска ФИО в OrgLookup нет; регресс pytest без патча |
+| EntityRegistry | closed_list 14 as-is |
+| Fireflies / `ff_summary.json` | источник дрейфа формата; **не** этот пакет (Q-1) |
+| площадка `523032632` | после impl новые ingest несут `<ac:link>`; republish 19–20.10 — операционка после HF:impl, не hold `GATE:done` |
+| ErrorBus | fail-soft warning при нерезолве as-is (`--tool ProtocolFromSummary`) |
+
+`REV:tz` обязателен (shared-модуль). Ревизор проверяет: Pass 1
+не сломан; неоднозначность не «первый»; MOFS/TaskRefresh не
+патчатся без нужды; §34 пробел не протащен; operator-hold на
+Fireflies UI нет.
+
+---
+
+### Контракты экосистемы
+
+Новых полей шапки PFS нет. Этот h3 парсер `render_manifest.py`
+не читает (как §29/§33/§34). Coverage — существующий
+`contact.sources` / `json:contact_v2`.
+
+**Источник истины (уточнение).** Поиск человека по строке
+имени — `ContactStore.find_contacts` (AnywhereContacts).
+PFS решает только: 1 кандидат → mention; 0/N → текст
+(§11.3 как исключение). Формат имени в summary — не контракт
+PFS; резолв обязан принимать канон и обратный порядок.
+
+**Границы.** Не менять сигнатуру `find_contacts`. Не писать
+промпт Fireflies этим пакетом. Не менять формат
+`ac:task-body` слага.
+
+**Breaking.** Семантика аддитивна (новые хиты при старом
+нуле). Старые хиты Pass 1 идентичны. Не breaking schema.
+
+---
+
+### Критерии приёмки (AC)
+
+Только пакет `pfs-name-resolve-fail`. AC-001…015 §29 и AC
+§31–§34 **не** перенумеровать и **не** ослаблять. Все строки
+класса S (поезд не ждёт Сашу; `depends: operator:*` нет).
+Нормативный язык — наблюдаемое поведение. Live `contacts.enc`
+на TZ/HF **не** обязателен: фикстура tmp store.
+
+### AC-001 — обратный порядок, уникальный контакт
+
+Фикстура: один контакт `login=tkachenkoav`,
+`fio="Ткаченко Александр Владимирович"`, userkey задан.
+`ContactStore.find_contacts("Александр Ткаченко")` → ровно
+один ключ `tkachenkoav`. То же для пар
+(`"Кирилл Криворотов"` / `fio="Криворотов Кирилл"`),
+(`"Владислав Галашов"` / каноническое ФИО с этой фамилией
+первым словом), (`"Александр Жиров"` / канон с Жиров первым).
+Юнит AnywhereContacts, без live API.
+
+### AC-002 — оба контура PFS через один резолвер
+
+На живом `ContactStore` (не FakeStore)
+`resolve_participants(["Александр Ткаченко"], ...)` →
+`resolved=True`, `login=tkachenkoav`, `userkey` из фикстуры.
+Тот же raw как исполнитель: `_resolve_one` возвращает тот же
+login (отдельный вызов, не второй алгоритм). Diff пакета не
+добавляет резолв в `task_slug.py`.
+
+### AC-003 — Pass 1 / канон / login / email / алиас без регресса
+
+`find_contacts("Ткаченко Александр Владимирович")`,
+`"Криворотов Кирилл"`, `"Набиева Даяна"` — ровно 1, как
+сейчас (Pass 2 не подменяет). `find_contacts("tkachenkoav")`
+и substring email / alias — Pass 1 nonempty, состав хитов
+как до пакета (не добавлять token-set к nonempty Pass 1).
+Существующие тесты substring / roundtrip / upsert зелёные.
+
+### AC-004 — неоднозначность: не угадывать первого
+
+Два контакта `fio="Иванов Иван Петрович"` и
+`"Иванов Иван Сергеевич"`. `find_contacts("Иван Иванов")`
+→ **2** логина. `resolve_participants(["Иван Иванов"], ...)`
+→ `resolved=False` (ни один не `DEFAULT_ASSIGNEE_LOGIN`).
+Не брать `next(iter(...))`.
+
+### AC-005 — однословный запрос не идёт в Pass 2 как «новый» матч
+
+Запрос `"Александр"` при нескольких ФИО, содержащих это
+слово: поведение = текущий substring Pass 1 (N≥1), не
+ужесточать до exact-token и не сужать до 1 «наугад».
+Запрос `"Ткаченко"` при двух Ткаченко — регресс §11.3 на
+FakeStore: Саша, если он в множестве; иначе текст.
+
+### AC-006 — §12 инициалы живы
+
+`"Ткаченко А.В."` на фикстуре двух Ткаченко (Владимирович /
+Сергеевич) → `tkachenkoav` через `_split_surname_initials`,
+не через Pass 2. Существующие тесты
+`test_surname_with_*` зелёные без переписи FakeStore.
+`find_contacts("Ткаченко А.В.")` **не** обязан находить
+контакт (токен с точками); это не fail AC-001.
+
+### AC-007 — §29 / §33 / §34 и allowlist не трогать
+
+Diff не меняет формат `{mention} {task_slug}{текст}` (нет
+пробела после точки), не правит `task_slug.py` uniqueness /
+allowlist / `TASK_SLUG_BACKFILL_DEFAULT_ALLOWLIST`, не
+добавляет `sr`. `promote_meeting` по-прежнему 0 picker
+(регресс AC-012 §29). Канон §34 «точка = разделитель»
+не пересматривать.
+
+### AC-008 — потребители shared-модуля без патча их кода
+
+Diff пакета **не** содержит
+`USERTOOLS/MarkObjectsFromSummary`,
+`USERTOOLS/TaskRefresh` (кроме возможного зелёного прогона
+тестов), `OrgLookup`, `MeetingScheduler`, `route.py`
+сигнатур. MOFS `HYPOCORISTICS` / `_candidates` на месте.
+TaskRefresh по-прежнему импортирует `_resolve_one`.
+
+### AC-009 — fail-soft публикации
+
+Неизвестный raw (`"Незнамов Иван"`) → `resolved=False`,
+исключения нет, публикация не валится (дух §1.4 / §25).
+ErrorBus-контракт не менять.
+
+### AC-010 — регресс offline + границы
+
+```
+cd ~/USERTOOLS/AnywhereContacts && pytest -q
+cd ~/USERTOOLS/ProtocolFromSummary && pytest -q -m "not live_confluence"
+```
+
+Зелёные; новые тесты аддитивны. Нет правок `jobs.json` /
+`.env` / манифеста / ERC allowlist / `ff_summary.json` /
+сигнатур боевого пути PFS (§29 AC-014 дух).
+
+---
+
+### IAC (эскиз; полный `HF:plan` после TZ:finalize)
+
+| IAC | path | verify | covers |
+|---|---|---|---|
+| IAC-01 | `anywhere_contacts/store.py` | reverse 2-словных → 1 login; канон Pass 1 тот же | AC-001, AC-003 |
+| IAC-02 | `store.py` | два Иванова + «Иван Иванов» → 2; лишний токен → 0; 3-словная перестановка → 1 | AC-001, AC-004 |
+| IAC-03 | `store.py` | 1-слово / login / email / alias = Pass 1; nonempty Pass 1 не union-ит Pass 2 | AC-003, AC-005 |
+| IAC-04 | `tests/test_contacts_resolver.py` + живой store | `resolve_participants` reverse → userkey; неизвестный → текст | AC-002, AC-009 |
+| IAC-05 | тот же файл (FakeStore) | §12 / §11.3 без изменений | AC-005, AC-006 |
+| IAC-06 | diff | нет MOFS/TaskRefresh/route/ff_summary/task_slug uniqueness | AC-007, AC-008 |
+| IAC-07 | pytest AC + PFS offline | обе пачки зелёные | AC-010 |
+
+---
+
+### Открытые вопросы
+
+Нет блокирующих. Q-1 §33 (`sr` в allowlist) **не** этот пакет.
+Q16.4 (LLM-fuzzy участников) **не** этот пакет.
+
+**Q-1 (не блокер, класс S).** Гигиена источника: в
+`ff_summary.json` и Fireflies Custom AI Skill явно указать
+канон «Фамилия Имя [Отчество]» вместо голого «ФИО».
+
+1. Не в этом поезде — отдельный пакет после стабильного
+   резолва *(рекомендация)*.
+2. Сделать сейчас (потребует правки облачного skill +
+   синк реестра; не заменяет AC-001…010).
+3. Другое — напиши.
+
+Рекомендация: **1.** Путь 1 не гарантия; поезд не ждёт
+ответа. `depends: operator:*` нет.
+
+---
+
+### Version bump
+
+Секция пакета: **v1.30.0** (новый § после финализированного
+§34; не 1.29.1 — меняется наблюдаемый резолв mention на
+проде, не проза §34; не 1.31.0 — шапка CONTRACTS без новых
+полей).
+Шапка master и `MAIN_TZ_INVENTORY.md`: **1.29.0 → 1.30.0**
+(`TZ:finalize` после REV:tz APPROVE).
+
+Параллельно на том же finalize: AnywhereContacts
+**0.3.0 → 0.3.1** (аддитив семантики `find_contacts`, схема
+enc 2.0 без bump). Текст аддитива — ниже; в master AC
+писать на finalize, не в этом ходе архитектора.

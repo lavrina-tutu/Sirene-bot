@@ -1,9 +1,9 @@
 ---
 tool: MoveFromKeyTalk
-version: 0.2.5
-date: 2026-10-20
+version: 0.2.7
+date: 2026-10-21
 status: approved
-last-section-added: "v0.2.5 TZ:finalize CHANGE-LIGHT/ktalk-kontur-schedule-10min-timeout-540: штамп корпуса §11/§15/§24 без правок смысла; крон */10 + timeout 540с; AC-027/028; [NEW-ENTITY] entities.api_ktalk не заводить"
+last-section-added: "v0.2.7 TZ:finalize BUGFIX/vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah: штамп §7 Шаг 3b / §26 / AC-030; [NEW-ENTITY] entities.api_ktalk не заводить"
 ---
 
 # MoveFromKeyTalk — ТЗ
@@ -90,6 +90,8 @@ DECOMM кода/ТЗ MoveFromFF — **не** этот пакет (чужой п�
 Боевой origin (Q-1 закрыт Сашей 15.10): `KTALK_BASE_URL=https://tutu.ktalk.ru`. YAML 2026-10-19 содержит `https://tutu.ktalk.ru/` (хвостовой `/` клиент `rstrip("/")`). Смена origin — новый `TZ:patch`.
 
 ## §5 Scope / Non-goals
+
+**v0.2.7** (пакет `vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah`) не расширяет продукт: тот же ingest KTalk → `NewMeetings/`; добавляет **Шаг 3b** — backfill ключей реестра `status=pending` вне окна Шага 2 (§7/§26, AC-030). Окно Шага 2 и `last_synced_at` для новых записей **без смены**. Cron `--force` запрещён (§25). Новый cron / `.env` / манифест / `[NEW-ENTITY]` **не** заводить. Корпус AC-001…029 без пересмотра.
 
 **v0.2.5** (пакет `ktalk-kontur-schedule-10min-timeout-540`) не расширяет продукт: тот же ingest KTalk → `NewMeetings/`; конфигурация существующего job `4e689c13ae01` (`5 8-19 * * 1-5` → `*/10 8-19 * * 1-5`) и клиентский timeout LLM 600→**540с** (§11/§15/§24). Новый cron / `.env` / манифест / `[NEW-ENTITY]` **не** заводить. `CHUNK_CHAR_LIMIT=30000` без смены. `ff_summary.json` read-only. Форматы §8 и корпус AC-001…026 без пересмотра.
 
@@ -178,13 +180,34 @@ flock; `usertools_config.load_tool_config("move_from_keytalk", keys=_MFKT_CONFIG
 
 Встроенное саммари KTalk **не** источник и **не** fallback. Fallback «FF bullet_points» **не** использовать: FF-контур ingest не живой, у KTalk нет FF-overview.
 
+### Шаг 3b. Backfill pending вне окна (v0.2.7)
+
+Образец — MoveFromFF v2.1 «ШАГ 3b» (`movefromff/__main__.py`): после списка окна объединить targets с ключами **своего** реестра, которых list Шага 2 **не** вернул. `import movefromff` **запрещён** (§18): скопировать константу и условие, не пакет.
+
+Когда **не** крутить 3b: задан `--recording-key` (точечный staff уже в Шаге 3). Cron без ключа — 3b **обязан** работать. `--force` на cron по-прежнему запрещён (§25 / AC-029); 3b **не** форсит `completed`.
+
+Кандидаты (все условия одновременно):
+
+1. `status=pending`;
+2. `attempts < MAX_PENDING_ATTEMPTS` (12);
+3. `now >= next_retry_at` **или** `next_retry_at` пуст / непарсабелен;
+4. `recording_key` не в множестве ключей, уже взятых из list окна этого прогона.
+
+Сортировка: по возрастанию `meeting_date` (как MFF: старые pending первыми), затем ключ. Батч: первые `BACKFILL_MAX_PER_RUN` (скопировать число **50** из MFF, имя константы то же). На каждый ключ батча — тот же `process_recording` / GET metadata+transcript, что Шаг 3 (не отдельный пайплайн, не кусочный скрипт, не `json.dump` реестра).
+
+Пустой транскрипт / timeout LLM / 429 → штатный pending backoff Шага 3, файлов нет. `attempts >= 12` → `error` + stale TG (AC-005), в 3b не брать.
+
+Лог: событие `backfill_started` (`total_pending`, `batch_size`, `limit`); per-key — существующие `meeting_pending` / `summarize_error` / `download_ok`. Поле `last_error` в `_registry.json` **не** добавлять этим пакетом (схема §9; причина — jsonl).
+
+Окно Шага 2 и `last_synced_at` для **новых** записей — **без смены**: Шаг 4 по-прежнему пишет `last_synced_at = to` только при успешном полном прогоне без `--recording-key`. Backfill старых pending **не** двигает окно назад и **не** пропускает новые `createdDate` в окне.
+
 ### Шаг 4. Финализация
 
 При `not dry_run` и `errors==0` и не точечный `--recording-key`: `last_synced_at = to`. Атомарный save реестра. Лог `run_summary`.
 
-Константы backoff — массив выше (копия MFF §5, не import `movefromff`).
+Константы backoff — массив выше (копия MFF §5, не import `movefromff`). `BACKFILL_MAX_PER_RUN=50` — копия числа MFF, не import.
 
-Коды лога: `meeting_skipped`, `meeting_backoff`, `meeting_pending`, `meeting_stale`, `meeting_ff_exists`, `download_ok`, `download_error`, `summarize_error`.
+Коды лога: `meeting_skipped`, `meeting_backoff`, `meeting_pending`, `meeting_stale`, `meeting_ff_exists`, `download_ok`, `download_error`, `summarize_error`, `backfill_started`.
 
 Exit: 0 успех; 1 частичный; 2 lock/preflight; 3 API недоступен; 4 фатально.
 
@@ -354,11 +377,12 @@ Per-tool `.env` **не** создавать. Dual-read **запрещён**. В 
 python -m movefromkeytalk --mode cron|manual|test
     [--from ISO] [--to ISO]
     [--recording-key KEY]
+    [--force]
     [--dry-run]
     [--no-tg]
 ```
 
-`--mode cron` игнорирует from/to (умное окно). `--recording-key` — точечная догрузка, `last_synced_at` не двигать.
+`--mode cron` игнорирует from/to (умное окно) и **игнорирует `--force`** (нельзя массово пересобрать саммари из тика). `--recording-key` — точечная догрузка, `last_synced_at` не двигать. `--force` — staff пересборка `completed` (§25); без `--recording-key` → CLI exit 2.
 
 ## §14 Дерево и тесты
 
@@ -766,7 +790,7 @@ Master §18 целиком, плюс:
 
 ## Критерии приёмки (AC)
 
-Класс S по умолчанию. Показ AC ≠ ожидание. AC-014…018 — пакет CHANGE (§19); AC-019…023 — пакет BUGFIX-LIGHT (§21); AC-024 — пакет BUGFIX-LIGHT (§22); AC-025/026 — пакет BUGFIX-LIGHT (§23); AC-027/028 — пакет CHANGE-LIGHT (§24); AC-001…013 — корпус (AC-011 больше не O). Операционный default timeout — §11 (**540с**, AC-027); AC-024/026 — история порогов 300/600. Операционный expr крона — §15 (`*/10 8-19 * * 1-5`, AC-028); AC-011 — история постановки job 15.10.
+Класс S по умолчанию. Показ AC ≠ ожидание. AC-014…018 — пакет CHANGE (§19); AC-019…023 — пакет BUGFIX-LIGHT (§21); AC-024 — пакет BUGFIX-LIGHT (§22); AC-025/026 — пакет BUGFIX-LIGHT (§23); AC-027/028 — пакет CHANGE-LIGHT (§24); AC-029 — пакет BUGFIX (§25); AC-030 — пакет BUGFIX (§26); AC-001…013 — корпус (AC-011 больше не O). Операционный default timeout — §11 (**540с**, AC-027); AC-024/026 — история порогов 300/600. Операционный expr крона — §15 (`*/10 8-19 * * 1-5`, AC-028); AC-011 — история постановки job 15.10.
 
 | ID | Класс | Формулировка |
 |---|---|---|
@@ -798,6 +822,8 @@ Master §18 целиком, плюс:
 | AC-026 | S | §23: LLM timeout default **600с**, `MFKT_LLM_TIMEOUT` override, `max_retries=0`; `CHUNK_CHAR_LIMIT=30000` без смены; YAML/cron/.env/манифест/`ktalk_client.py`/`registry.py` без diff. |
 | AC-027 | S | §24: LLM timeout default **540с**, `MFKT_LLM_TIMEOUT` override, `max_retries=0`; `CHUNK_CHAR_LIMIT=30000` без смены; YAML/.env/манифест/`ktalk_client.py`/`registry.py`/`lock.py` без diff. |
 | AC-028 | S | §24: job `4e689c13ae01` expr `*/10 8-19 * * 1-5`; `no_agent` и ErrorBus wrap без смены; новый job не создавать; другие jobs / `vm_movefromff` без diff. |
+| AC-029 | S | §25: `--force` + `--recording-key` на записи `status=completed` пересобирает `summary.md` из транскрипта на диске (или повторного GET transcript); cron без `--force` по-прежнему skip completed; `--force` без ключа → exit 2; `--mode cron` не принимает `--force`. `ff_summary.json` / PFS / MOFS без diff этого пакета. |
+| AC-030 | S | §7 Шаг 3b / §26: cron/manual без `--recording-key` после list окна обрабатывает pending реестра вне окна (`status=pending`, `attempts<12`, `now>=next_retry_at` или пуст), не дублируя ключи окна; тот же `process_recording`; батч ≤ `BACKFILL_MAX_PER_RUN` (50, копия числа, не `import movefromff`); jsonl `backfill_started`; `last_synced_at` = конец окна как Шаг 4, не rewind. `--recording-key` 3b не крутит. `--mode cron` + `--force` по-прежнему exit 2 (AC-029). Пустой транскрипт после GET → pending, не completed. `ff_summary.json` / cron expr / `.env` / манифест без diff. |
 
 ## Открытые вопросы
 
@@ -823,6 +849,18 @@ Master §18 целиком, плюс:
 6. Пока `vm_movefromff` enabled, dual-ingest жив; leftover-skip не заменяет выключение крона (AC-018). DECOMM кода MFF — чужой поезд.
 7. Интеграторский `GET /api/Domain/recordings/v2` недоступен персональному `X-Auth-Token` (403). Норма §4: только `/api/recordings`. Domain/v2 не fallback.
 8. `createdBy.login` в живом JSON — UUID, не `talkusr…`. Жёсткий матч `user_key in {author_key, organizer_key}` обнуляет список — норма фильтра §7.
+
+## TZ:finalize v0.2.7 (2026-10-21)
+
+Каноническая фиксация v0.2.7 + строка инвентаря (Б15 п.6 / Б18 / Б22 BUGFIX полный). Корпус `TZ:patch` §7 Шаг 3b / §26 / AC-030 без правок смысла. `REV:tz` APPROVE (`dev/vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah/REV-tz.md`). `status: approved` — Q-1…Q-5 корпуса закрыты; Q пакета нет (кросс PFS Q-1/Q-2/Q-3 закрыты 21.10, не этот master). Окно Шага 2 / `last_synced_at` для новых без смены. Cron `--force` запрещён. Код / YAML / schema / `jobs.json` / манифест / крон / `ff_summary.json` — не этот ход (`HF:impl` — Шаг 3b).
+
+`[NEW-ENTITY, требует согласования Саши]` `entities.api_ktalk` — **отклонено Q-5 (15.10)**, этим пакетом **не** заводить. Уже лежащие `applications.kontur_talk` / `tools.move_from_keytalk` не удалять.
+
+## TZ:finalize v0.2.6 (2026-10-21)
+
+Каноническая фиксация v0.2.6 + строка инвентаря (Б15 п.6 / Б18 / Б22 BUGFIX полный). Корпус `TZ:patch` §25 / AC-029 без правок смысла CLI. `REV:tz` APPROVE кросс-пакета (`dev/vstrechi-19-10-20-10-prishli-v-neobrabotannye-be/REV-tz.md`). `status: approved` — Q-1…Q-5 корпуса закрыты; Q-2 пакета закрыт Сашей 21.10: встреча 11:28-57 (`AL93XPV3K6cbzyNXbcSy`) — staff `--mode manual --force --recording-key` **после `HF:impl` в replay** (PFS §36 шаг 0), затем MOFS+PFS. Cron `--force` запрещён. Код / YAML / schema / `jobs.json` / манифест / крон / `ff_summary.json` — не этот ход (`HF:impl` — CLI `--force` в пакете; скилл — `HF:docs-handoff`).
+
+`[NEW-ENTITY, требует согласования Саши]` `entities.api_ktalk` — **отклонено Q-5 (15.10)**, этим пакетом **не** заводить. Уже лежащие `applications.kontur_talk` / `tools.move_from_keytalk` не удалять.
 
 ## TZ:finalize v0.2.5 (2026-10-20)
 
@@ -874,6 +912,10 @@ AC-018 (`depends: operator:ставь кроны`, выключить `vm_movefr
 
 ## Changelog
 
+- **2026-10-21 v0.2.7 TZ:finalize** (BUGFIX/`vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah`, REV:tz APPROVE). Текст §7 Шаг 3b, §26, AC-030 зафиксирован без bump версии. Строка `MAIN_TZ_INVENTORY.md`. `status: approved`. Код / YAML / cron / `jobs.json` / манифест / `ff_summary.json` / `[NEW-ENTITY]` — не этот ход. Кросс: PFS 1.32.0 §35/§37.
+- **2026-10-21 v0.2.7 TZ:patch** (BUGFIX/`vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah`). §7 Шаг 3b: backfill pending вне окна (MFF-образец, константа 50 без `import movefromff`); AC-030 S. Окно Шага 2 / `last_synced_at` для новых без смены. Cron `--force` запрещён. Корпус AC-001…029 / Q-1…Q-5 / §18 / §25 без пересмотра продукта. `[NEW-ENTITY]` `entities.api_ktalk` не заводить. `status: draft` до `TZ:finalize`. Код / YAML / cron / `jobs.json` / `ff_summary.json` не этот ход. Кросс: PFS §35/§37.
+- **2026-10-21 v0.2.6 TZ:finalize** (BUGFIX/`vstrechi-19-10-20-10-prishli-v-neobrabotannye-be`, REV:tz APPROVE). Текст §25, AC-029 зафиксирован без bump версии. Q-2 пакета закрыт: 11:28-57 staff `--force` после `HF:impl` в replay. Строка `MAIN_TZ_INVENTORY.md`. `status: approved`. Код / YAML / cron / `jobs.json` / манифест / `ff_summary.json` / `[NEW-ENTITY]` — не этот ход.
+- **2026-10-21 v0.2.6 TZ:patch** (BUGFIX/`vstrechi-19-10-20-10-prishli-v-neobrabotannye-be`). Staff `--force` + `--recording-key` пересобирает `completed` саммари; cron `--force` игнорирует/exit 2; leftover §10 не блокирует свои файлы; `skipped_ff` не форсить. AC-029 S. Корпус AC-001…028 / Q-1…Q-5 / §18 без пересмотра продукта. `[NEW-ENTITY]` `entities.api_ktalk` не заводить. `status: draft` до `TZ:finalize`. Код / YAML / cron / `jobs.json` / `ff_summary.json` не этот ход. Кросс: PFS §36, MOFS v0.11.0.
 - **2026-10-20 v0.2.5 TZ:finalize** (CHANGE-LIGHT/`ktalk-kontur-schedule-10min-timeout-540`). Текст §11/§15/§24, AC-027/028, Q-1…Q-5 закрыты — зафиксирован без bump версии. `REV:tz` skip (LIGHT). Строка `MAIN_TZ_INVENTORY.md`. `status: approved`. Код / YAML / cron / `jobs.json` / манифест / `ff_summary.json` / `[NEW-ENTITY]` — не этот ход.
 - **2026-10-20 v0.2.5 TZ:patch** (CHANGE-LIGHT/`ktalk-kontur-schedule-10min-timeout-540`). Крон существующего job `4e689c13ae01`: expr `5 8-19 * * 1-5` → `*/10 8-19 * * 1-5` (каждые 10 мин, раб. дни 08:00–19:50); wrap/`no_agent` без смены; новый job не создавать. LLM timeout default **540с** (было 600; ≈5.3× типичных 101с, < интервала 600с), env `MFKT_LLM_TIMEOUT`, `max_retries=0` без смены. `CHUNK_CHAR_LIMIT=30000` **без смены**. AC-027/028 S. Корпус AC-001…026 / Q-1…Q-5 / §18 без пересмотра продукта. Шум `lock_held` в ErrorBus принимаем. `[NEW-ENTITY]` `entities.api_ktalk` не заводить. `status: draft` до `TZ:finalize`. Код / YAML / cron / `jobs.json` не этот ход.
 - **2026-10-20 v0.2.4 TZ:finalize** (BUGFIX-LIGHT/`ktalk-kontur-samari-dlinnye-transkripty-taimaut`). Текст §8/§11/§23, AC-025/026, Q-1…Q-5 закрыты — зафиксирован без bump версии. `REV:tz` skip (LIGHT). Строка `MAIN_TZ_INVENTORY.md`. `status: approved`. Код / YAML / cron / `jobs.json` / манифест / `ff_summary.json` / `[NEW-ENTITY]` — не этот ход.
@@ -887,3 +929,181 @@ AC-018 (`depends: operator:ставь кроны`, выключить `vm_movefr
 - **2026-10-19 v0.2.0 TZ:finalize** (CHANGE/`ktalk-kontur-v-protsess`, REV:tz APPROVE). Текст §1–§19, AC-001…018, Q-1…Q-5 закрыты — зафиксирован без bump версии. Строка `MAIN_TZ_INVENTORY.md`. `status: approved`. Код / YAML / schema / `jobs.json` / манифест / `[NEW-ENTITY]` — не этот ход. Замечания REV (IAC KeyError; §10 дедуп до/после AC-018) — в `HF:plan` / IAC.
 - **2026-10-19 v0.2.0 TZ:patch** (CHANGE/`ktalk-kontur-v-protsess`). Единственный ingest новых встреч = KTalk. Саммари first-class локально. PFS / MOFS / OFC / MofsIndex без правок. YAML-канон §12: дописать `LOGS_PATH`/`PROMPT_PATH`/`KTALK_USER_KEY` (Q-2 значение 15.10) — пишет ORCH. Q-1…Q-5 закрыты Сашей 15.10 (в master v0.1 оставались «открытыми» — исправлено). AC-011 больше не O: крон MFKT уже стоит. AC-014…017 S; AC-018 O выключить `vm_movefromff`. `entities.api_ktalk` не заводить. Код / YAML / schema / `jobs.json` на этой фазе не пишутся. Повторный ход той же фазы: снято противоречие §3 («выключение крона MFF не этот пакет») vs AC-018; снято «HF:impl только если IAC» — дыра KeyError→exit 1→wrap→ok подтверждена диском, `HF:impl` обязан закрыть.
 - **2026-10-15 v0.1.0 TZ:finalize** (DEV/movefromkeytalk, REV:tz APPROVE). Текст §1–§18, AC-001…013, Q-1…Q-5 зафиксирован без bump версии. Строка `MAIN_TZ_INVENTORY.md`. `status: draft` — открытые Q блокируют `HF:impl`, не эту фазу. Код / манифест / `entities.json` / `jobs.json` / `[NEW-ENTITY]` — не этот ход (регистрация `applications.kontur_talk` / optional `entities.api_ktalk` / `tools.move_from_keytalk` — ORCH после ответа Саши). Замечания REV (точный массив `PENDING_BACKOFF_MINUTES`, порог чанкинга) — в `HF:plan` / IAC, не перепись канона.
+
+
+## §25 BUGFIX `vstrechi-19-10-20-10-prishli-v-neobrabotannye-be` — staff `--force` пересборки саммари (2026-10-21)
+
+Пакет BUGFIX (полный поезд; LIGHT не этот ход — кросс PFS/MOFS).
+Код / YAML / `jobs.json` / `ff_summary.json` на `TZ:patch` **не**
+пишутся. `[NEW-ENTITY, требует согласования Саши]`
+`entities.api_ktalk` **не** заводить (Q-5 отклонено 15.10).
+
+выжимка ≠ SoT; при расхождении — открыть master.
+
+**Маркер I1.** `current` = v0.2.5: `process_recording` при
+`status=completed` → `meeting_skipped`, файлы не трогает. CLI
+`--recording-key` точечно догружает **не**-completed. Повторный
+крон completed скип. Пустая самари (секции Решения/Блокеры/Задачи/Риски
+пусты; Участники+Обсудили есть) — PFS §32 `skipped_empty` **правильный**;
+CUTOVER 2026-07-10 ни при чём. Встреча 19.10 11:28-57
+(`AL93XPV3K6cbzyNXbcSy`, 30 мин, 8 участников) ≠ дубль 12:00-42
+(`WrNZeBXcin0Hztkdmrif`). Реестр MFKT 19–20.10 **не пуст**
+(`state/_registry.json`, SoT не ложный снимок `meetings={}`).
+`target` = staff-флаг `--force` вместе с `--recording-key`:
+сбросить skip completed, пересобрать `summary.md` из транскрипта
+штатным `summarizer.py` + `ff_summary.json`, атомарно перезаписать
+пару файлов, статус снова `completed`. Cron **никогда** не форсит.
+Пустую самари на площадку PFS по-прежнему не класть (§32).
+
+Это дефект **качества саммаризации** (LLM/промпт), не «PFS потерял
+файл». Промпт `ff_summary.json` **не** этот пакет (Q-1 §35 PFS).
+
+---
+
+### Норма CLI
+
+`--force` допустим только с `--recording-key` и `--mode` ∈
+`{manual, test}` (не `cron`). Иначе CLI exit 2, файлы/реестр
+не трогать.
+
+На записи `status=completed` своего реестра:
+
+1. Не применять leftover §10 как `skipped_ff` к **своим** же
+   файлам этой `recording_key` (иначе force нечем перезаписать).
+   Чужие leftover (исторический FF, другой id) — §10 жив.
+2. Транскрипт: если `*-transcript.md` этой записи на диске и
+   непустой — **не** обязателен повторный GET; если файла нет /
+   пуст — GET transcript как Шаг 3. KTalk `/summary` не звать.
+3. `summarizer.py` + `PROMPT_PATH` как обычно (timeout 540с,
+   канон заголовков, `CHUNK_CHAR_LIMIT=30000`).
+4. Атомарная перезапись пары (rollback при ошибке второго).
+   Имена файлов **те же** (контракт §8).
+5. Реестр: остаётся `completed`, `summary_format=custom`;
+   не двигать `last_synced_at`. Лог `meeting_resummarized`
+   (новый код события допустим) или reuse `download_ok` + явный
+   reason=`force` — зафиксировать в IAC, не два разных смысла.
+
+`status=skipped_ff` / `pending` / `error`: `--force` **не**
+превращает leftover FF в нашу перезапись и **не** обходит
+backoff. Force только `completed`. Иной статус → exit 2 + лог,
+файлы чужие не трогать.
+
+`--dry-run`: показать, что было бы пересобрано, без записи.
+
+После успешного force потребители (MOFS, PFS) видят новый
+mtime summary штатным тактом / staff rematch+run. PFS реестра
+на 11:28 нет → следующий ingest не duplicate.
+
+---
+
+### Что НЕ трогать (этот пакет)
+
+Master §18 целиком, плюс:
+
+- `ff_summary.json` (read-only);
+- cron job `4e689c13ae01` expr (чужой пакет §24);
+- `CHUNK_CHAR_LIMIT`, `max_retries=0`, timeout 540с;
+- PFS §32 (не публиковать пустую самари «чтобы строка была»);
+- MOFS / OFC / AnywhereContacts;
+- `entities.api_ktalk`; дерево `USERTOOLS/ObsidianFromConfluence/`;
+- прямой `json.dump` реестра руками / кусочные скрипты по файлу.
+
+---
+
+### Критерии приёмки (AC) пакета
+
+См. сводную таблицу AC-029. Класс S. Наличие CLI `--force` —
+этот пакет (`HF:impl`). Использование на 11:28-57 —
+**Q-2 закрыт Сашей 21.10:** staff `--force` **после `HF:impl` в
+replay** (PFS §36 шаг 0), затем MOFS+PFS; не cron; не этот ход.
+
+### IAC LIGHT-эскиз (полный план — `HF:plan`)
+
+1. Pytest: `--force` без `--recording-key` → exit 2; `--mode cron`
+   + `--force` → exit 2; completed + force + мок LLM → файл
+   перезаписан, leftover §10 не skip; skipped_ff + force → exit 2,
+   файл не тронут.
+2. Соседи: прирост vs baseline 0 (PFS/MOFS деревья). `ff_summary.json`
+   sha без изменений.
+
+---
+
+### Version bump
+
+Патч: **0.2.5 → 0.2.6**. Шапка уже **0.2.6** с `TZ:patch`;
+`TZ:finalize` ставит `status: approved` (Q-1…Q-5 корпуса закрыты;
+Q-1/Q-2 пакета закрыты 21.10) и пишет `MAIN_TZ_INVENTORY.md`.
+Q-1…Q-5 корпуса **не** переоткрывать. Новых entity нет.
+
+## §26 BUGFIX `vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah` — backfill pending вне окна (2026-10-21)
+
+Пакет BUGFIX (полный поезд; LIGHT не этот ход — кросс PFS).
+Код / YAML / `jobs.json` / `ff_summary.json` на `TZ:patch` **не**
+пишутся. `[NEW-ENTITY, требует согласования Саши]`
+`entities.api_ktalk` **не** заводить (Q-5 отклонено 15.10).
+
+выжимка ≠ SoT; при расхождении — открыть master. Выжимка
+`extract.md` в слаге отсутствует.
+
+Диагноз: `dev/vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah/_fix_plan_20261021.md`
+(RC-1, П.1). Норма алгоритма — **§7 Шаг 3b**. Этот § — пакет,
+AC и границы. Кросс: PFS §35/§37 (П.2/П.4). П.3 (NER текста задач)
+**вне** пакета (Q-2 закрыт: достаточно mention исполнителя).
+
+**Маркер I1.** `current` = v0.2.6: Шаг 3 обрабатывает только
+`list_recordings` в окне `[max(last_synced_at, now−24ч), now]`.
+После успеха `last_synced_at = window_end`. Запись с
+`createdDate < last_synced_at` и `status=pending` на следующем
+тике **не** в списке; `next_retry_at` в прошлом, `attempts`
+заморожены, файлов нет → PFS не видит summary. У MFF Шаг 3b есть;
+у MFKT скопированы только `PENDING_BACKOFF_MINUTES` / `MAX_PENDING_ATTEMPTS=12`.
+`target` = после list окна объединить с pending реестра
+(`attempts<12`, retry due), тот же `process_recording`, лимит 50.
+Окно и `last_synced_at` для новых — без смены. Cron `--force` нет.
+
+---
+
+### Что НЕ трогать (этот пакет)
+
+Master §18 целиком, плюс:
+
+- окно Шага 2 и формула `last_synced_at` для записей из list;
+- `--force` / AC-029 (§25): cron `--force` запрещён; без
+  `--recording-key` не срабатывать;
+- `import movefromff` из venv MFKT;
+- `ff_summary.json`; cron expr job `4e689c13ae01`;
+- `CHUNK_CHAR_LIMIT`, timeout 540с, `max_retries=0`;
+- поле `last_error` в схеме §9 (не обязательно);
+- PFS / MOFS / OFC / AnywhereContacts **кодом этого инструмента**;
+- `entities.api_ktalk`; дерево `USERTOOLS/ObsidianFromConfluence/`;
+- прямой `json.dump` реестра / кусочные скрипты в обход пайплайна.
+
+---
+
+### Критерии приёмки (AC) пакета
+
+См. сводную таблицу **AC-030**. Класс S. Показ AC ≠ ожидание.
+
+Эталон диагноза (не live-AC на TZ:patch): ключи `ypyG8qTPywThK14lgoyn`
+(Кирилл 1-1) и `BytXVx2BdieHbY54rD9T` после штатного cron с 3b
+снова входят в `process_recording`, если `next_retry_at` due.
+
+### IAC-эскиз (полный план — `HF:plan`)
+
+1. Pytest `tests/test_pending_backfill.py`: pending вне окна +
+   retry due → `process_recording` вызван; ключ уже в list окна
+   не дублируется; `attempts>=12` не в батче; `next_retry_at`
+   в будущем не в батче; батч обрезан `BACKFILL_MAX_PER_RUN`;
+   `--recording-key` → 3b skip; `--mode cron --force` → exit 2
+   (регресс AC-029); `import movefromff` в пакете нет.
+2. Соседи: прирост vs baseline 0 на деревьях PFS/MOFS/MFF.
+   `jobs.json` / `ff_summary.json` sha без изменений.
+
+---
+
+### Version bump
+
+Патч: **0.2.6 → 0.2.7**. Шапка уже **0.2.7** с `TZ:patch`;
+`TZ:finalize` ставит `status: approved` и пишет
+`MAIN_TZ_INVENTORY.md`. Q-1…Q-5 корпуса **не** переоткрывать.
+Новых entity нет.

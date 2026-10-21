@@ -21,6 +21,15 @@
               "description": "человекочитаемый префикс задачи с хвостовой '.' без пробела"
             },
             "folder": {"type": ["string", "null"]},
+            "open": {
+              "type": "boolean",
+              "description": "lifecycle: проект жив. Только kind=project; у прочих поле отсутствует."
+            },
+            "closed_at": {
+              "type": ["string", "null"],
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+              "description": "дата закрытия YYYY-MM-DD; null/нет поля если open=true или неизвестно"
+            },
             "pfs": {
               "type": "object",
               "required": ["page_id", "tag"],

@@ -1,9 +1,9 @@
 ---
 tool: ProtocolFromSummary
-version: "1.30.0"
-date: 2026-10-20
+version: "1.35.1"
+date: 2026-10-21
 status: active
-last-section-added: "§35 Резолв имён формата «Имя Фамилия» (pfs-name-resolve-fail, 2026-10-20, v1.30.0, DEV/pfs-name-resolve-fail, REV:tz APPROVE)"
+last-section-added: "§40 drain silent-promoted в notify_pending: promoted+PFS_POST_SWITCH → нет stdout и notified=True даже если promote оставил False; stale_warn только ждущие текст (pfs-stale-notifications, TZ:finalize 2026-10-21, v1.35.1)"
 ---
 
 <!--
@@ -35,6 +35,10 @@ last-section-added: "§35 Резолв имён формата «Имя Фами
 не второй h2 §21 и не h3 внутри §29/§30. Runtime
 `PublishResult.action` / `BatchResult.action` += `skipped_empty` (§32)
 — не поле шапки; `RegistryEntry.last_action` не расширять.
+Ingest площадки §36: `skipped_present` = якорь есть и
+`protocol_publish.action != republished` (крон / первый ingest);
+`--confirm-republish` + якорь = `replace_row_by_anchor` (не skip,
+не вторая строка). Не поле шапки.
 
 ### Источник истины
 - Владелец записи: ProtocolFromSummary (`_registry.json`, `row_anchor` в Confluence storage-html)
@@ -61,7 +65,9 @@ last-section-added: "§35 Резолв имён формата «Имя Фами
 | PFS_PLAYGROUND_INGEST_OFF | str | optional | env | enum[1,true,yes,on] без регистра; дефолт unset=ingest on |
 | PFS_POST_SWITCH | str | optional | env | enum[1,true,yes,on] без регистра; дефолт unset=старый контур (прямая публикация) |
 | entities.task_slug | str | optional | EntityRegistryCLI | префикс с хвостовой `.`, без пробела; absent/null = не в закрытом списке |
-| MeetingTask.text | str | required | summary_parser / PFS picker | as-is; после picker может начинаться с task_slug; фильтр входа batch читает as-is |
+| entities.open | bool | optional | EntityRegistry | lifecycle проекта; absent = неизвестно; только kind=project (§39 H) |
+| entities.closed_at | str | optional | EntityRegistry | YYYY-MM-DD или null; дата закрытия (§39 H) |
+| MeetingTask.text | str | required | summary_parser / PFS picker | as-is; после picker in-scope: канон из {adm} ∪ проекты с непустым task_slug (§39 H); 1:1-home запрещён; фильтр входа: проектный skip, home strip |
 | model.default | str | required для LLM-ступени | Hermes yaml | OpenRouter-id |
 | DEDUP_LLM_MODEL / _BASE_URL / _API_KEY | str | optional | env | overlay §18 |
 | DEDUP_LLM_ROUTING_PROVIDER | str | optional | env | `"default"` = без extra_body.provider.order |
@@ -81,14 +87,14 @@ last-section-added: "§35 Резолв имён формата «Имя Фами
 | RegistryEntry.target_override | str | notify_pending, диагностика | json:{from,to,at} либо null |
 | RegistryEntry.promote_body_diff | str | learner Контура А | unified_diff, truncate 8000 |
 | RegistryEntry.promote_target_diff | str | learner Контура А | пусто или route_page_id_at_publish=… -> target=… |
-| RegistryEntry.last_action | enum[published, republished, copied, exported, promoted, promote_invalid_target] | notify_pending | published = проход 1 (и при PFS_POST_SWITCH: ingest на площадку, без нового подтипа); promoted / promote_invalid_target — проход 2 |
-| RegistryEntry.notified | bool | notify_pending | после published = false до отправки; после promote успеха при PFS_POST_SWITCH = true (молчит); после invalid_target = false |
+| RegistryEntry.last_action | enum[published, republished, copied, exported, promoted, promote_invalid_target] | notify_pending | published = проход 1 (и при PFS_POST_SWITCH: ingest на площадку, без нового подтипа); republished = `--confirm-republish` прохода 1, ingest **replace** якоря площадки (§36); promoted / promote_invalid_target — проход 2 |
+| RegistryEntry.notified | bool | notify_pending | после published = false до отправки; после republished = false (§36, шлёт notify); после promote успеха при PFS_POST_SWITCH = true (молчит); после invalid_target = false |
 | RegistryEntry.duplicates_skipped | str | learner Контура А, notify_pending | json-список DuplicateInfo §15; при PFS_POST_SWITCH на проходе 1 = [] и пишется на проходе 2; при флаге off — как §15 (проход 1, проход 2 не пересчитывает) |
 | proposal_promote_path | str | learner Контура А | Registries/prompts/_proposals/link-n-dedup-promote-<meeting_id>-<ts>.json |
 | first_pass_snapshot | str | журнал промоута | Meetings/GoldProtocols/<meeting_id>-first-pass.md |
 | entities.task_slug | str | ProtocolFromSummary (закрытый список picker), TaskRefresh F2 | префикс с хвостовой `.`, без пробела |
 | MeetingTask.text | str | storage_xml.render_row, playground ingest/promote | после picker: may startswith task_slug; promote копирует уже префиксованное |
-| ac:task-body | str | TaskRefresh F2, OpenTasks | in-scope: `{mention} {task_slug}{текст}` без пробела после точки |
+| ac:task-body | str | TaskRefresh F2, OpenTasks | in-scope: `{mention} {task_slug}{текст}` без пробела после точки; `task_slug` = канон кандидата H (§39); meeting-home §38 отменён |
 | duplicates_skipped[].reason | str | learner Контура А, notify_pending | `"llm"` на новых; старые `"haiku"` не мигрируются (§16/§30) |
 
 ### Зависимости
@@ -288,6 +294,10 @@ Exchange/Zulip): `confluence_login`, `confluence_userkey`.
 5. Если LLM не даёт уверенного совпадения — не резолвим автоматически. Имя остаётся простым
    текстом без `@mention`, помечается в отчёте/уведомлении Саше для ручной проверки. Не блокирует
    публикацию всей встречи.
+   **Уточнение v1.32.0 (§35 / §37, Q-3):** при N>1 кандидатах store/Confluence (однофамильцы)
+   fail-soft **не** применяется, если участники этой встречи однозначно выбирают человека;
+   несколько однофамильцев среди участников → первый полный. Глобально «бери первого» по-прежнему
+   запрещено (§11.3 ≠ этот путь).
 
 **Переговорки:** если строка из списка участников резолвится не в человека, а совпадает с записью
 в `meeting-rooms.md` — исключается из списка участников протокола. Если на неё была навешана
@@ -1664,6 +1674,10 @@ MoveFromFF стабильны после byte-limit фикса от 13.07). Во
    - **`--stale-warn-minutes` (default 15)** — если найдена pending-запись старше 15 минут от
      `published_at`, в stderr печатается WARN (попадает в логи Hermes cron). Это единственный
      механизм обнаружения «notify-крон снова сломался» без активного мониторинга.
+     **Уточнение §40 (2026-10-21):** stale считать по записям, которые ещё
+     **ждут доставки текста**. `last_action=promoted` при `PFS_POST_SWITCH`
+     on в набор stale **не входят** (иначе ErrorBus продолжает по уже
+     дренированным). `historical_no_reload` по-прежнему вне выборки.
    - **`--include-historical`** — ручной override для отладки, не для крона (эксплицитно
      задокументировано в docstring).
    - **`--dry-run`** — показать что было бы отправлено, не помечая `notified`.
@@ -4848,6 +4862,18 @@ TG. Ошибка цели — как сейчас, `format_promote_invalid_targe
 | Ошибка цели | `last_action=promote_invalid_target` | TG | `format_promote_invalid_target` без изменений |
 | Иная ошибка прохода 2 / ingest при флаге on | fail-soft | ErrorBus | warning, как §15/§23; batch не валить |
 
+**Путь notify (уточнение §40, 2026-10-21).** Критерий «молчит **и**
+`notified=True`» выполняется **явно на пути `notify_pending`**, не
+только на процессе promote. `last_action=promoted` + флаг
+`PFS_POST_SWITCH` on → **нет stdout и `notified=True`**, даже если
+promote на своём процессе оставил `False` (смешение env двух
+процессов: CLI / `run-pending` / `second_pass_all` без экспорта
+флага vs крон `pfs_notify`, который всегда on). Drain — в
+`notify_pending.main` после `build_text_for_entry is None`.
+Присвоение `entry.notified` в `playground_promote.py` **не** менять
+(канон off: без флага notify **должен** слать
+`format_promote_notification`).
+
 При флаге off уведомления прохода 1/2 — как §15/§23 (ссылка на
 `entry.page_id`, блок дублей если непустой, `format_promote_notification`
 после promote).
@@ -4857,7 +4883,10 @@ TG. Ошибка цели — как сейчас, `format_promote_invalid_targe
 1. `test_notify_ingest_points_to_playground`: published + пост-switch +
    `promoted_at is None` → URL содержит `523032632`, не целевой page_id.
 2. Успешный promote при флаге on → `notify_pending` не шлёт текст
-   успеха; `notified=True`.
+   успеха **и** `notified=True`. Контракт на пути notify:
+   `promoted` + флаг on → нет stdout **и** `notified=True`, даже
+   если promote оставил `False` (смешение env). Drain — в
+   `notify_pending.py`, не смена канона off/on в promote (§40).
 3. `format_promote_invalid_target` по-прежнему уходит при
    `promote_invalid_target`.
 
@@ -5037,7 +5066,7 @@ DO-свитча / K1, **не** промоут) и на площадке `5230326
 | §22 Q6/Q7, post-switch target | флаг — механика «переключаем»; площадка = очередь |
 | §23 promote / ingest / журнал | точки входа и журнал без изменений; дедуп и notified скорректированы |
 | §15–§18 DedupChecker | алгоритм и fail-soft; вызов при пост-switch = проход 2 |
-| `notify_pending` / ErrorBus | ветка published + молчание успеха promote; ошибки — ErrorBus |
+| `notify_pending` / ErrorBus | ветка published + молчание успеха promote; silent-promoted drain `notified=True` на пути notify (§40); stale_warn не по дренированным; ошибки — ErrorBus |
 | EntityRegistry ROUTES | `523032632` по-прежнему не `pfs.page_id` |
 | N-3 / §1.10 | source не удалять; `432316254` не цель |
 
@@ -5195,7 +5224,7 @@ exec .venv/bin/python3 scripts/notify_pending.py "$@"
 | Событие | После фикса |
 |---|---|
 | ingest (`promoted_at` пуст) | ссылка на площадку `523032632` (`PLAYGROUND_PAGE_ID`) |
-| промоут (`last_action=promoted`) | молчит (`return None`) |
+| промоут (`last_action=promoted`) | молчит (`return None`); при флаге on notify **дренирует** `notified=True` (§40) |
 
 Проверка: ручной прогон `notify_pending.py --dry-run` на pending-записи
 → ссылка на `523032632`.
@@ -5206,7 +5235,12 @@ exec .venv/bin/python3 scripts/notify_pending.py "$@"
 
 - Логика `notify_pending.py` (ветки `build_text_for_entry`,
   `post_switch_enabled()`, `format_ingest_notification` /
-  `format_promote_notification`).
+  `format_promote_notification`) — **скоуп пакета §26**
+  (`pfs-notify-link-unprocessed`). Пакет §40
+  (`pfs-stale-notifications`) этот запрет **снимает точечно**:
+  drain `notified=True` для silent-promoted в `main()`. Форматы
+  `format_*_notification` и ingest-ветка площадки **не**
+  открываются.
 - `jobs.json` (в т.ч. команда `pfs_batch` `a6e62d06249f` и запись
   `pfs_notify` `21255143c523`).
 - `.env`, Gateway.
@@ -5222,6 +5256,7 @@ exec .venv/bin/python3 scripts/notify_pending.py "$@"
 | крон `pfs_batch` `a6e62d06249f` | уже `export PFS_POST_SWITCH=1`; эта дельта зеркалит флаг в обёртку `pfs_notify` |
 | крон `pfs_notify` `21255143c523` | `no_agent`, script=`protocolfromsummary_notify_pending.sh` |
 | §24 пост-switch контур | флаг `PFS_POST_SWITCH`; ingest-ссылка = `build_protocol_url(PLAYGROUND_PAGE_ID)` → `523032632`; успех promote молчит |
+| §40 drain silent-promoted | запрет «не трогать `notify_pending.py`» — скоуп **этого** пакета; §40 снимает точечно drain `notified=True` |
 | площадка `523032632` | `PLAYGROUND_PAGE_ID`, «Необработанные встречи»; не писать в `entry.page_id` |
 
 Открытых вопросов секция не добавляет.
@@ -5715,15 +5750,17 @@ commit `2021bf2`; `HF:test` — все offline-проверки зелёные).
    = человекочитаемый дедлайн).
 5. **Идемпотентность (на ВХОДЕ batch, не только на выходе).** Прежде чем
    включить задачу в batch-запрос picker, проверяй
-   `startswith(известный task_slug | известный pfs.tag)` по всем непустым
-   значениям реестра, читая `MeetingTask.text` **as-is** (актуальный текст
-   с префиксом, если он уже стоит — на republish это и есть вход). Если
-   совпало — задача **не** идёт в LLM-запрос вообще, префикс не
-   дописывается, и это **не** считается LLM-выбором. Второй префикс на
-   выходе тоже не дописывать. Иначе republish даёт лишний вызов picker.
-6. **Неоднозначность.** Всегда ставить **лучший кандидат** из закрытого
-   списка реестра (вариант 3 брифа), даже при низкой уверенности. Не
-   оставлять задачу без слага «потому что неуверен».
+   `startswith` известных **проектных** `task_slug` / `pfs.tag`
+   kind=project по всем непустым значениям реестра, читая
+   `MeetingTask.text` **as-is**. Meeting-home / `{display_name}.` 1:1
+   (§38) **не** known prefix: ведущий 1:1-тег **снимается**, задача
+   **идёт в batch** (§39). Если совпал проектный — задача **не** идёт
+   в LLM, префикс не дописывается, и это **не** считается LLM-выбором.
+   Второй префикс на выходе тоже не дописывать.
+6. **Неоднозначность.** Не оставлять задачу без слага. **Уточнение
+   §39:** кандидат нового слага — только overlay 4; неуверенный
+   проект из тройки и любой «лучший из 14» вне 4 → **ADM**, не
+   угадывание из полного closed_list.
 7. **TaskRefresh F2** — в этом же графе: адаптер матчит проект по
    (a) `source_page_id` как сейчас, (b) префиксу `pfs.tag` в тексте,
    (c) префиксу `task_slug` в тексте. OR, как нынешние (a)|(b).
@@ -5813,12 +5850,16 @@ picker **не** вызывается (AC-012) — batch не строится, �
 
 **In-scope + fail-soft LLM** (нет ключа / сеть / невалидный JSON /
 пустой закрытый список / `PFS_PROMPT_REGISTRY_OFF`): задачу
-опубликовать без нового слага; если у маршрута есть
-`route.tag_prefix` / `pfs.tag` (Лёня, транспортный `ЦУ.`) — оставить
-его как сейчас; иначе без префикса. ErrorBus warning
+опубликовать без **нового** слага из overlay 4 — технический as-is
+(§39 последняя строка); 1:1 `tag_prefix` / `{display_name}.` **не**
+клеить (отмена §38). Если у маршрута есть проектный `pfs.tag`
+kind=project — поведение out-of-scope как сейчас. ErrorBus warning
 (`--tool ProtocolFromSummary`), batch не валить (§15 дух, §25
 fail-soft). Kill-switch on → picker **не** вызывать (0 LLM), не
-подставлять константу-промпт «чтобы всё равно сходить в модель».
+подставлять константу-промпт «чтобы всё равно сходить в модель»;
+meeting-home при skip **не** ставится (§39). В проде (registry on,
+nonempty closed_list, есть llm_fn) слаг обязателен: overlay 4, иначе
+`АДМ.`.
 
 **Уточнение v1.28.1 (§33).** Пустой *ответ* LLM при живом вызове ≠
 автоматически «чистая 1-1». Сигнал проекта = assignee ∪ `task.text`
@@ -6087,7 +6128,7 @@ auto-apply. Backfill `task_slug` — EntityRegistryCLI `-y`, не PFS.
 | Поле | Тип | Обязательность | Источник (кто отдаёт) | Формат/enum |
 |---|---|---|---|---|
 | entities.task_slug | str | optional | EntityRegistryCLI | префикс с хвостовой `.`, без пробела; absent/null = не в закрытом списке |
-| MeetingTask.text | str | required | summary_parser / PFS picker | as-is; после picker может начинаться с task_slug; фильтр входа batch читает as-is |
+| MeetingTask.text | str | required | summary_parser / PFS picker | as-is; после picker in-scope: канон из {adm} ∪ проекты с непустым task_slug (§39 H); 1:1-home запрещён; фильтр входа: проектный skip, home strip |
 | pfs.tag | str | optional | EntityRegistry | meeting-level префикс или JSON null; фильтр входа и F2 матчат независимо от task_slug |
 
 ### Выходные контракты
@@ -6095,7 +6136,7 @@ auto-apply. Backfill `task_slug` — EntityRegistryCLI `-y`, не PFS.
 |---|---|---|---|
 | entities.task_slug | str | ProtocolFromSummary (закрытый список picker), TaskRefresh F2 | префикс с хвостовой `.`, без пробела |
 | MeetingTask.text | str | storage_xml.render_row, playground ingest/promote | после picker: may startswith task_slug; promote копирует уже префиксованное |
-| ac:task-body | str | TaskRefresh F2, OpenTasks | in-scope: `{mention} {task_slug}{текст}` без пробела после точки |
+| ac:task-body | str | TaskRefresh F2, OpenTasks | in-scope: `{mention} {task_slug}{текст}` без пробела после точки; `task_slug` = канон кандидата H (§39); meeting-home §38 отменён |
 | pfs.tag | str | TaskRefresh F2, PFS out-of-scope render | meeting-level, формат без изменений этим CHANGE |
 
 ### Зависимости
@@ -6143,10 +6184,12 @@ meeting-level `pfs.tag` (`Trisigma.`) как на диске v1.24.0.
 
 ### AC-004 — идемпотентность (вход batch + выход)
 
-Если `task.text` **as-is** уже начинается с любого известного
-`task_slug` или `pfs.tag`, задача **не** идёт в batch LLM, повторный
-прогон / republish не дописывает второй префикс (`count` вхождений
-префикса в начале текста = 1). Это **не** считается LLM-выбором.
+Если `task.text` **as-is** уже начинается с известного **проектного**
+`task_slug` или `pfs.tag` kind=project, задача **не** идёт в batch LLM,
+повторный прогон / republish не дописывает второй префикс (`count`
+вхождений префикса в начале текста = 1). Это **не** считается
+LLM-выбором. Ведущий meeting-home / `{display_name}.` 1:1 (§38) —
+**не** skip: префикс снимается, задача в batch (§39 AC-004).
 
 ### AC-005 — всегда лучший кандидат
 
@@ -6223,8 +6266,9 @@ strip/copy. DedupChecker прохода 2 сравнивает после сня
 Нет API-ключа / `llm_fn` бросает / пустой список `task_slug` в
 реестре / `PFS_PROMPT_REGISTRY_OFF` → встреча публикуется без
 падения пайплайна; picker не зовётся (kill-switch) или fail-soft
-без нового слага; fallback `pfs.tag` если есть, иначе без префикса;
-ErrorBus warning, batch не валить. Offline pytest PFS (маркер
+без нового слага overlay 4 — технический as-is (§39), **не**
+meeting-home `{display_name}.` (отмена §38); ErrorBus warning, batch
+не валить. Offline pytest PFS (маркер
 `not live_confluence`) зелёный; новые тесты AC-001…013 аддитивны.
 
 ---
@@ -7454,8 +7498,13 @@ LLM по-прежнему вызывать (стратегия B / §29 AC-007).
 | Матчей `task.text` ∩ closed_list | Действие |
 |---|---|
 | ровно 1 | `new_text = canonical_task_slug + orig_text` (точка слага = разделитель, без пробела после точки, как §29) |
-| 0 | `_fail_soft_text` (as-is; meeting-level `pfs.tag` если есть — как §29 fail-soft) |
-| ≥2 | fail-soft, **не** угадывать (как MOFS unbound при `len != 1`) |
+| 0 | **§39:** канон `АДМ.` (не meeting-home, не as-is в проде). Empty-warn нет. Технический as-is — только skip registry / empty closed / нет llm_fn. |
+| ≥2 | **§39:** среди overlay 4 → `АДМ.`, не угадывать (как MOFS unbound при `len != 1`) |
+
+**Уточнение §39.** Для **присвоения** нового слага пересечение считается
+только с overlay `{ai_analitik, trisigma, parsing, adm}`; уникальный
+матч «AB-платформа» в тексте **не** ставит этот слаг (→ `АДМ.`).
+Закрытый список 14 жив для skip/идемпотентности уже стоящего префикса.
 
 Валидная строка модели **побеждает** fallback (AC-005: лучший
 кандидат даже при низкой `confidence` ставится; это не пустой
@@ -7525,8 +7574,11 @@ Person-1-1 (в т.ч. `kirill_1on1` / `kind=one_on_one`) с **текстом
 | 5 | self-review | **пусто в этом поезде** | `sr` вне 14; Q-1 |
 | 6 | бэкапы | **пусто** | нет сигнала |
 
-Гарантированно префикс только у задачи 1. 3–6 без префикса —
-норма, не «все шесть должны получить слаг».
+Гарантированно **проектный** префикс только у задачи 1. 3–6 без
+проектного слага на 14.10 — тогдашняя норма этого §. **§39 снимает**
+«пусто = норма» и **отменяет §38 home**: in-scope union=0 → `АДМ.`
+(эталон 21.10: Codex/Metabase не «Кирилл 1-1.»). Историческую строку
+14.10 этим пакетом не republish'ить без команды Саши (§27 / §31 П.4a).
 
 Операционка **после** `HF:impl` (не этот `TZ:finalize`, не diagnose):
 `run --confirm-republish` этой встречи, якорь
@@ -7652,15 +7704,16 @@ closed_list), `task.text` содержит уникальный вход в clos
 
 `MeetingSummary.notes` (и YAML `projects:` встречи) полны
 сущностей closed_list; `task.text` без alias / без identity.
-Empty LLM → fallback **не** клеит слаг с notes. Префикса нет.
+Empty LLM → fallback **не** клеит слаг с notes (детектор).
+В проде префикс = `АДМ.` (§39), не home и не слаг из notes.
 
 ### AC-003 — fallback 1 / 0 / ≥2
 
 Ровно один проект closed_list в `task.text` → canonical prefix
-(как AC-001). Ноль входов → текст без проектного слага; LLM
-вызван; empty-warn нет, если assignee тоже без сигнала.
-Два+ проекта closed_list в одном `task.text` → fail-soft, не
-угадывать (ни «лучший по порядку», ни intersection notes).
+(как AC-001). Ноль входов в overlay 4 → **`АДМ.`** (§39), не home
+и не as-is в проде; LLM вызван; empty-warn нет. Два+ проекта
+overlay 4 в одном `task.text` → **`АДМ.`**, не угадывать
+(ни «лучший по порядку», ни intersection notes, ни home).
 
 ### AC-004 — питфолл Q: не «чистая 1-1»
 
@@ -7951,7 +8004,7 @@ majority / «о чём в целом говорили»; перенос bind з�
 |---|---|---|
 | A | unique `ai_analitik` (текст или bind или обсуждение) | `AI-аналитик.` |
 | B | unique `adm` | `АДМ.` (или фактический `task_slug`) |
-| C | 0 входов | fail-soft, без проектного слага |
+| C | 0 входов | **§39:** `АДМ.`; не имя встречи |
 | D | ≥2 разных slug в **её** union | fail-soft, не угадывать |
 
 LLM по-прежнему **один** batch на встречу (§29 AC-007); ответ —
@@ -7965,12 +8018,15 @@ per `task_index`. Валидная строка модели побеждает 
 После разбора LLM, для каждой задачи batch без валидной строки
 модели. Множество slug = hits(`assignee`) ∪ hits(`text`) ∪
 hits(`discussion`) ∪ `{bind.slug если eligible}`.
+**Уточнение §39:** для присвоения нового слага множество режется
+overlay 4; bind eligible по-прежнему `slug ∈ closed_list` 14, но
+голос в union-присвоении — только если slug ∈ 4.
 
 | `len(slug set)` | Действие |
 |---|---|
 | ровно 1 | `new_text = canonical_task_slug + orig_text` (точка слага = разделитель, без пробела, как §29) |
-| 0 | `_fail_soft_text` (as-is; meeting-level `pfs.tag` если есть) |
-| ≥2 | fail-soft, **не** угадывать, **не** брать bind «как тай-брейк», **не** majority встречи |
+| 0 | **§39:** канон `АДМ.` (не meeting-home, не as-is в проде). Empty-warn нет. Технический as-is — только skip registry / empty closed / нет llm_fn. |
+| ≥2 | **§39:** среди overlay 4 → `АДМ.`, **не** угадывать, **не** брать bind «как тай-брейк», **не** majority встречи |
 
 Bind vs текст: bind=`ai_analitik`, text матчит другой closed_list-slug
 → ≥2 → fail-soft. Bind unique + text без identity → 1 → префикс
@@ -7978,8 +8034,10 @@ Bind vs текст: bind=`ai_analitik`, text матчит другой closed_li
 
 Empty-warn `"task_slug LLM empty response"` — только если сигнал
 (union) был, валидного выбора модели нет **и** fallback не склеил
-уникальный матч. Чистая 1-1 без union-сигнала — штатный fail-soft,
-empty-warn нет (питфолл Q §33 жив).
+уникальный матч. **Уточнение §39:** empty-warn в проде не шлётся:
+union=0 и union≥2 среди overlay 4 получают `АДМ.`. Empty-warn
+допустим на технической строке skip registry / empty closed / нет
+llm_fn. «Чистая 1-1» = ADM, не пустой префикс и не имя сущности.
 
 ---
 
@@ -8124,20 +8182,21 @@ Bind `status=unbound` или `rejected` или `slug=sr` (вне 14) при
 `ai_analitik`, (2) unique `adm`. После picker: задача 1 —
 `AI-аналитик.`, задача 2 — фактический `task_slug` `adm`;
 meeting-level `pfs.tag` 1-1 в тело не дублируется
-(`tag_prefix=None`). Третья задача без сигнала — без проектного
-слага. Нет общего префикса «на всю встречу».
+(`tag_prefix=None`). Третья задача без сигнала тройки — **`АДМ.`**
+(§39), не meeting-home. Нет общего префикса «на всю встречу».
 
 ### AC-007 — конфликт bind vs текст → ≥2, не тай-брейк
 
 Bind eligible `ai_analitik`, `task.text` уникально матчит другой
-slug closed_list. Empty LLM → fail-soft, **не** брать bind как
-победу, **не** брать текст как победу.
+slug overlay 4. Empty LLM → **`АДМ.`** (§39), **не** брать bind как
+победу, **не** брать текст как победу, **не** home.
 
 ### AC-008 — notes по-прежнему вне uniqueness (регресс §33 AC-002)
 
 `MeetingSummary.notes` и YAML `projects:` полны сущностей
 closed_list; `task.text` / discussion / bind без eligible.
-Empty LLM → префикса нет. LLM вызван (стратегия B).
+Empty LLM → детектор notes **не** клеит (регресс); в проде префикс
+=`АДМ.` (§39), не home. LLM вызван (стратегия B).
 
 ### AC-009 — MOFS не пишет слаг (регресс §29 AC-009)
 
@@ -8159,9 +8218,10 @@ Diff не меняет `TASK_SLUG_BACKFILL_DEFAULT_ALLOWLIST` и не
 
 ### AC-012 — fallback union 1 / 0 / ≥2
 
-Ровно один slug в union → canonical prefix. Ноль → без проектного
-слага, empty-warn нет если сигнала не было. Два+ → fail-soft.
-Валидный JSON модели побеждает fallback (регресс §29 AC-005).
+Ровно один slug overlay 4 в union → canonical prefix. Ноль или
+два+ среди 4 → **`АДМ.`** (§39), empty-warn нет, **без** home.
+Валидный JSON модели из 4 побеждает fallback (регресс §29 AC-005;
+вне 4 — отброс).
 
 ### AC-013 — регресс offline + границы
 
@@ -8256,9 +8316,13 @@ AC-001) на диске, «слипание» — не регрессия.
 Имена из summary в форме «Имя Фамилия» (и иные перестановки
 тех же токенов канонического ФИО) резолвятся в тот же login /
 `confluence_userkey`, что канон «Фамилия Имя [Отчество]».
-Публикация не падает; при 0 или >1 кандидате имя остаётся
-текстом (fail-soft §1.4). Один фикс — оба контура (участники
-и исполнители).
+Публикация не падает; при 0 кандидатах имя остаётся текстом
+(fail-soft §1.4). При N>1 кандидатах store/Confluence — **не**
+угадывать глобально: приоритет участников этой встречи
+(§35 таблица + пакет §37, Q-3 21.10); иначе fail-soft.
+Однословный assignee — meeting-local fallback (§35 / §37, Q-1 21.10).
+Один фикс Pass 2 — оба контура (участники и исполнители);
+meeting-local **не** Pass 2.
 
 ---
 
@@ -8273,10 +8337,12 @@ AC-001) на диске, «слипание» — не регрессия.
 | Исполнители задач | тот же `_resolve_one` до picker / `render_row`; `_assignee_texts` читает raw/fio/login уже срезолвленного | `MeetingTask.assignee_raw` | mention в `<ac:task-body>` `{mention} {task_slug}{текст}` |
 | TaskRefresh | обёртка над тем же `_resolve_one` | assignee при refresh | без патча TaskRefresh |
 | Promote (проход 2) | **не** резолвит заново | копирует td1 verbatim | AC-012 §29 жив |
+| Meeting-local fallback исполнителя (v1.32.0, §37) | после `resolve_participants`, тот же `_resolve_one` контур, **до** `_task_body` / picker | однословный `assignee_raw`, если `_resolve_one` дал `resolved=False` | mention с `userkey` участника **или** текст как сейчас |
 
 Не делать: второй резолвер «только для задач»; звать
 `find_contacts` из `task_slug.py`; picker на promote;
-пересчёт mention на проходе 2.
+пересчёт mention на проходе 2; Pass 2 на 1 токене;
+NER по тексту задачи / блокерам / рискам (П.3 вне пакета).
 
 ---
 
@@ -8308,10 +8374,43 @@ return Pass 2              # 0 / 1 / N, без скоринга
 - «Фамилия И.О.» (`Ткаченко А.В.`) Pass 2 **не** обязан
   матчить (токен `а.в.` ≠ `александр`); это §12 в PFS
   **до** `find_contacts(raw)`.
-- Неоднозначность N>1: вернуть всех; PFS не выбирает
-  произвольного; §11.3 только если в множестве есть
-  `DEFAULT_ASSIGNEE_LOGIN`.
+- Неоднозначность N>1: `find_contacts` по-прежнему
+  возвращает всех (без скоринга). PFS **не** берёт
+  `next(iter(...))` глобально. §11.3 — только если в
+  множестве есть `DEFAULT_ASSIGNEE_LOGIN`.
+- **Приоритет участников встречи (v1.32.0, Q-3, §37):**
+  если после store/Confluence N>1 и среди **участников
+  этой встречи** однозначен человек с этой фамилией /
+  полным именем — резолвить в него (эталон «Александр Белов»
+  11:28), **не** fail-soft. Если среди участников несколько
+  однофамильцев — **первый полный** (порядок summary,
+  ≥2 токена ФИО). Если 0 совпадений с участниками —
+  fail-soft текст как раньше (AC-004 §35 для случая без
+  пересечения с участниками **жив**).
 - Пустой query → `{}` как сейчас.
+
+### Meeting-local fallback однословного assignee (v1.32.0)
+
+AnywhereContacts Pass 2, MOFS matcher, гипокористики —
+**не** трогать. Не копировать `HYPOCORISTICS` в
+`find_contacts`. Не Pass 2 на 1 токене (AC-005 §35 жив).
+
+Правило (исполнители задач, после `resolve_participants`):
+
+1. `assignee_raw` — **ровно 1 токен** (whitespace `split`).
+2. Штатный `_resolve_one` дал `resolved=False`.
+3. Среди **уже срезолвленных** участников этой встречи
+   (`resolved=True` + непустой `userkey`) посчитать матчи:
+   первое слово `fio` / `raw` / `display` (lowercase) == токен
+   assignee.
+4. Ровно **1** матч → тот же `userkey` в задаче.
+5. 0 или ≥2 матча → текст как сейчас.
+6. Однословный assignee **без** участников встречи (или
+   никто не resolved) → текст (регресс AC-005 §35).
+
+Не угадывать глобально по `contacts.enc`. Не §11.3
+«первый Кирилл в store». Эталон: встреча «ИИ-стратег 1»,
+участник «Кирилл Криворотов», задача `Кирилл: …` → mention.
 
 Эталон DX (не live-AC; живая среда уже подтверждена, не
 перепроверять на TZ:patch):
@@ -8358,6 +8457,10 @@ LLM-fuzzy §1.4.4–5; гипокористики MOFS в shared-модуле;
 - Включать fuzzy-LLM резолв участников (Q16.4).
 - Копировать MOFS `HYPOCORISTICS` / `_candidates` в
   `find_contacts` или в PFS `contacts_resolver`.
+- Pass 2 на 1 токене; второй резолвер в `task_slug.py`.
+- NER / `<ac:link>` по именам **внутри** `task.text` /
+  блокеров / рисков (пакет §37 П.3 **вне** scope; Q-2:
+  достаточно mention исполнителя).
 - Новая публичная функция вместо `find_contacts`.
 - Бамп `schema_version` `contacts.enc` / `entities.json` /
   `_registry.json`.
@@ -8480,7 +8583,9 @@ login (отдельный вызов, не второй алгоритм). Diff 
 `"Иванов Иван Сергеевич"`. `find_contacts("Иван Иванов")`
 → **2** логина. `resolve_participants(["Иван Иванов"], ...)`
 → `resolved=False` (ни один не `DEFAULT_ASSIGNEE_LOGIN`).
-Не брать `next(iter(...))`.
+Не брать `next(iter(...))`. Если **один** из двух — участник
+этой встречи, действует приоритет §37 (не этот AC: фикстура
+AC-004 **без** пересечения с участниками).
 
 ### AC-005 — однословный запрос не идёт в Pass 2 как «новый» матч
 
@@ -8583,3 +8688,1581 @@ Q16.4 (LLM-fuzzy участников) **не** этот пакет.
 **0.3.0 → 0.3.1** (аддитив семантики `find_contacts`, схема
 enc 2.0 без bump). Текст аддитива — ниже; в master AC
 писать на finalize, не в этом ходе архитектора.
+
+
+## §36. Republish площадки + mention участников (vstrechi-19-10-20-10-prishli-v-neobrabotannye-be, BUGFIX, 2026-10-21, v1.31.0)
+
+**TZ:finalize 21.10.2026 (master 1.31.0).** Текст §36 зафиксирован.
+`REV:tz` APPROVE (`dev/vstrechi-19-10-20-10-prishli-v-neobrabotannye-be/REV-tz.md`).
+Q-1 и Q-2 закрыты Сашей 21.10 (journal `sasha-decisions`).
+Кросс-инструмент: PFS + MOFS + MFKT; shared AnywhereContacts
+**не** патчится. Код — `HF:impl` после `GATE:take-into-work`.
+Код / `jobs.json` / `.env` / live PUT на этой фазе **не** пишутся.
+
+выжимка ≠ SoT; при расхождении — открыть master. Выжимка
+`extract.md` в слаге отсутствует. `[NEW-ENTITY]` **нет**.
+
+Диагноз: `dev/vstrechi-19-10-20-10-prishli-v-neobrabotannye-be/_fix_plan_20261021.md`
+(RC-A…E, П.1…П.8). Этот § — нормы **PFS** (П.1, П.3, П.4-операторка,
+П.5-канон, П.7). MOFS — master MOFS v0.11.0. MFKT — master MFKT §25.
+AnywhereContacts v0.3.1 (Pass 2) **не** переписывать.
+
+Не ретрофитит §1–§35. §1.7 (republish = заменить `<tr>`) жив на
+боевых минутках; этот § закрывает **дыру ingest площадки**.
+§32 `skipped_empty` жив: пустую самари на площадку **не** класть.
+§34 uniqueness / allowlist 14 **не** ломать (**Q-1 закрыт:** оставить §34, без CHANGE).
+§35 Pass 2 / `_resolve_one` исполнителей жив.
+
+**Маркер I1.** `current` = прод v1.30.0: `ingest_after_publish` при
+`find_row_by_anchor` → `skipped_present`, PUT нет (канон §23 шаг 2);
+`run --confirm-republish` пересобирает battle-XML и упирается в
+этот early-return — 5 строк 19–20.10 на `523032632` не обновляются.
+`storage_xml._participants_line` рендерит `p.raw` даже при
+`resolved=True` + userkey (исполнители через `_mention`, участники —
+нет). Крон `pfs_batch` `10 8-19 * * 1-5` раньше `mofs_run_cron`
+`16 8-19 * * 1-5` — тень bind/contacts после picker.
+`target` = эта работа: при `action=republished` (явный
+`--confirm-republish`) ingest **заменяет** 4col-строку площадки
+(`replace_row_by_anchor`, дух §1.7), не `skipped_present`; блок
+«Участники» на проектных маршрутах — тот же `_mention`, что у
+исполнителей; порядок крона MOFS→PFS — operator-hold, не код
+`HF:impl`. Cron-ingest **без** republish остаётся `skipped_present`
+(не затирать правки Саши на площадке тихим тиком).
+
+---
+
+### Цель
+
+Штатный `python -m protocolfromsummary run "<abs summary.md>" --confirm-republish`
+при `PFS_POST_SWITCH=1` **обновляет** уже стоящую строку площадки
+`523032632` (td1: mentions исполнителей после Pass 2; mentions
+участников на проектных; picker/bind как §34). Без кусочных скриптов,
+без `page move` как «удалить с площадки», без ручного JSON реестра.
+
+---
+
+### П.1 — ingest: replace на republish (блокер replay)
+
+Владелец: `playground_ingest.py` / вызов `ingest_after_publish`
+после успешного `protocol_publish`.
+
+| Условие | Поведение |
+|---|---|
+| якоря нет | insert как §23 (без смены) |
+| якорь есть **и** `protocol_publish.action != republished` (крон / первый ingest) | `skipped_present`, PUT нет (§23 шаг 2 **жив**) |
+| якорь есть **и** `action == republished` (`--confirm-republish`) | `replace_row_by_anchor` (или эквивалент §1.7 / `page_merger.replace_row_by_anchor`): одна 4col-строка, тот же `row_anchor`, **не** вторая строка, **не** `skipped_present` |
+| `PFS_PLAYGROUND_INGEST_OFF` | ingest не звать (без смены) |
+| `skipped_empty` (§32) | ingest не звать (без смены) |
+
+Детали replace:
+
+1. GET площадки → найти `<tr>` по якорю. Нет якоря после GET → insert
+   (graceful, дух §1.2 «утрачено»), не молчаливый skip.
+2. Новый 4col из свежего battle `render_row` + hydrate цели td2 как
+   §23/v1.18.0 (`ri:space-key` + фактический title, без `ri:content-id`).
+3. Служебный чекбокс td3: **сохранить** complete/incomplete исходной
+   строки (не сбрасывать «обработано» у уже проверенных; не
+   промоутить молча). Протоколные `<ac:task>` в td1 перенумеровать
+   **не** надо, если replace сохраняет task-id копии; если реализация
+   пересобирает td1 с нуля — переиспользовать id протоколных задач
+   исходной playground-строки (как §1.7 `row_task_ids` на бою).
+   Служебный id чекбокса td3 не менять.
+4. PUT. 409 → один retry со свежим GET (§1.7 N-2).
+5. Реестр: `first_pass_hash` = sha256 новой td1; snapshot
+   `GoldProtocols/<meeting_id>-first-pass.md` перезаписать текстом
+   новой td1 (это republish прохода 1, не «первый ingest»).
+   `playground_ingested_at` обновить. `route_page_id_at_publish`
+   **не** перетирать (иммутабельность §23 п.6 жива для id цели).
+6. `RegistryEntry.last_action = republished`; `notified = false`
+   (канон §5 / §11.6: republish шлёт notify). Не обходить
+   `hermes send`. Не руками JSON `notified`.
+7. Promote / picker на ingest / писать `523032632` в `pfs.page_id`
+   — **не** трогать (AC-012 §29).
+
+`page move --confirm-move` — не путь «drop playground row».
+Отдельной staff-команды drop якоря **не** заводить, если replace
+закрывает replay.
+
+Тесты (ориентир): `test_playground_ingest.py` / `test_post_switch.py`.
+Существующий `test_skip_overwrite_playground_on_duplicate_anchor`
+остаётся для **не**-republish. Новый тест: republish + якорь есть →
+`update_page` вызван, в PUT ровно один якорь, td1 отличается от
+старой, `action != skipped_present`.
+
+---
+
+### П.3 — блок «Участники» на проектных маршрутах
+
+Владелец: `storage_xml._participants_line`.
+
+Канон §35 таблица «контур Участники → `<ac:link>` в td1 (проектные)».
+На 1-1 блок **не** пишется (§1.1) — без изменения.
+
+Норма: для каждого `ResolvedParticipant` с `not is_room`:
+
+- `resolved=True` и непустой `userkey` → тот же `_mention(userkey)`,
+  что у исполнителей;
+- иначе fail-soft: escaped `raw` (как сейчас весь список).
+
+Разделитель — запятая+пробел, как сейчас. Комнаты по-прежнему
+исключены. Не второй резолвер. Не звать `find_contacts` из
+`storage_xml`. Pass 2 / `_resolve_one` — без смены (уже §35).
+
+Однословный «Кирилл» при неоднозначном Pass 1 **остаётся текстом**
+(§35 AC-005 / §11.3). Это не регресс этого пакета.
+
+---
+
+### П.5 — слаги 1-1 / unbound (канон, не hotfix)
+
+Код uniqueness §34 / allowlist 14 / `task_slug.py` **не** менять
+в этом пакете. Отсутствие слага у задач с bind
+`kirill_1on1` / `zhirov_1on1` (`kind=one_on_one`, slug ∉ closed_list)
+и у unbound — **соответствие канону**. YAML `projects:` / notes /
+`meeting_name` в uniqueness **запрещены** (§33/§34). Не выдавать
+1-1 entity `task_slug` без ERC / `примени`.
+
+Эталон «как должно» на replay: задача с eligible bind `adm` ∈ 14
+несёт префикс `АДМ.`. Задача «Выдать доступ…» без проектного слага,
+пока unbound.
+
+**Q-1 закрыт Сашей 21.10 (journal):** оставить слаги 1-1 по канону
+§34, **без** CHANGE uniqueness/allowlist. Replay **не** обещает
+префикс задачам с bind `kirill_1on1` / `zhirov_1on1` и unbound.
+Новый CHANGE этого пакета **не** открывать.
+
+---
+
+### П.4 — порядок такта MOFS → PFS (операторка)
+
+Факт диска 21.10: `pfs_batch` id `a6e62d06249f` expr `10 8-19 * * 1-5`;
+`mofs_run_cron` id `aeeccba37e4a` expr `16 8-19 * * 1-5`.
+Проход 1 всегда раньше тени `project_bind` / contacts YAML.
+
+Норма: тень MOFS (contacts + eligible `project_bind`) существует
+**до** picker PFS того же часа. Вариант: сдвинуть **только**
+`mofs_run_cron` на минуту до `pfs_batch` (например `5 8-19` при
+PFS `10 8-19`). Новый job не создавать. `pfs_batch` expr **не**
+менять этим пакетом, если сдвиг MOFS достаточен.
+
+`depends: operator:ставь кроны`. До глагола `jobs.json` не менять
+(`HF:impl` кроны не пишет). Replay 19–20.10 от порядка крона
+**не** зависит, если П.1+MOFS store закрыты и republish идёт
+после `mofs rematch`.
+
+---
+
+### П.7 — уведомления
+
+После replace штатный `notify_pending` / крон notify. Канон §5/§11.6.
+Не обходить `hermes send`. Сброс `notified` — только контуром
+republish, не руками JSON.
+
+### П.8 — OFC
+
+Код OFC (`ProtocolFromSummary/scripts/ofc_sync.py`) **не** патчить,
+пока replay не покажет 404/расхождение `protocol.md`. После ingest —
+штатный `ofc_sync` / крон `*/30`.
+
+---
+
+### Replay 19–20.10 (операционка после HF:impl, не hold GATE:done)
+
+Класс S: поезд не ждёт live PUT для закрытия AC pytest.
+Пять якорей площадки (не удалять руками, если П.1 = replace):
+
+1. `pfsrow-d893ceaa405d` — 2026-10-20 07-37-40 Кирилл 1-1
+2. `pfsrow-dacac5517a70` — 2026-10-19 14-00-36 фреймворк…
+3. `pfsrow-e154b4fedbb6` — 2026-10-19 12-00-42 AI-аналитик … 1
+4. `pfsrow-b7ef53a1b837` — 2026-10-19 07-30-59 Кирилл 1-1
+5. `pfsrow-5096020e5dbf` — 2026-10-19 09-47-22 Новая запись
+
+Порядок после merge П.1 + MOFS store + MFKT `--force` CLI (`HF:impl`
+трёх мастеров; **не** этот ход):
+
+0. **Пересамаризация 11:28-57 (Q-2 закрыт).** Шаг replay **после
+   `HF:impl`**, не код impl и не `TZ:finalize`. Staff, не cron:
+   `--mode manual --force --recording-key AL93XPV3K6cbzyNXbcSy`
+   (канон CLI — MFKT §13/§25). Кусочный питон по файлу запрещён.
+   Пустую самари **до** force на площадку не класть (§32).
+1. `mofs rematch --from 2026-10-19 --to 2026-10-20 --bucket contacts`
+   (projects — только если bind надо пересчитать; `manual_via_mofs` нет).
+   Окно дат покрывает и 11:28 после шага 0.
+2. Для каждой из 5: `python -m protocolfromsummary run "<abs summary.md>" --confirm-republish`
+   при `PFS_POST_SWITCH=1`. Без П.1 шаг no-op (`skipped_present`).
+3. Штатный notify-pending.
+4. OFC — штатный крон или `ofc_sync.sh`.
+5. PFS `run` / `run-pending` на summary 11:28 **если**
+   `summary_has_content_sections` (после шага 0). Реестра PFS нет →
+   insert, не duplicate. Если после force секции контента пусты —
+   `skipped_empty` жив.
+
+Кусочные `_cleanup_playground.py` / ad-hoc PUT / прямой
+`json.dump` реестров — **запрещены**.
+
+Наблюдаемое replay (не pytest-AC): в td1 пяти якорей есть `ri:user`
+у «Александр Ткаченко» / «Кирилл Криворотов» / «Александр Жиров» /
+«Владислав Галашов»; задача «Поднять с Владом…» несёт `АДМ.`;
+«Выдать доступ…» без проектного слага, пока unbound; однословный
+«Кирилл» остаётся текстом.
+
+---
+
+### Scope / Non-goals
+
+Входит: ingest-replace на republish; `_participants_line` mention;
+документирование порядка крона как operator-AC; операционка replay
+как инструкция, не код.
+
+Не входит: Pass 2 / AnywhereContacts; uniqueness §34; allowlist 14 /
+`sr`; picker на ingest/promote; `task_slug` из MOFS; промпт Fireflies /
+`ff_summary.json`; §12 инициалы; §11.3 «не первый»; Gateway;
+`.env` в git; `EcosystemManifest.json` до ORCH; `[NEW-ENTITY]`;
+код OFC; `page move` как drop; staff drop-CLI якоря.
+
+---
+
+### Что НЕ трогать
+
+- Канон §23 шаг 2 `skipped_present` для **не**-republish.
+- §1.7 на боевых минутках; сигнатуры `page_merger.find_row_by_anchor` /
+  `replace_row_by_anchor` / `insert_row_chronological`.
+- Формула `row_anchor`; N-3; `523032632` не в `pfs.page_id`.
+- §29 AC-001/004/005/006/009/012/013; §32 `skipped_empty`;
+  §33 notes вне uniqueness; §34 точка без пробела; §35 Pass 2.
+- Picker в `playground_ingest.py` / на promote.
+- `jobs.json` без «ставь кроны»; `.env`; Gateway; манифест.
+- ТЗ ErrorBus; схема `_registry.json` `schema_version`.
+- Код MOFS matcher / `HYPOCORISTICS`; код MFKT кроме чужого master §25.
+- `ff_summary.json`.
+
+---
+
+### Связи с экосистемой
+
+| Инструмент | Связь |
+|---|---|
+| ProtocolFromSummary | владелец ingest/replace и рендера участников |
+| MarkObjectsFromSummary | тень contacts/bind **до** picker; store в крон-venv — master MOFS v0.11.0 |
+| MoveFromKeyTalk | пустая самари 11:28 — skip §32 правильный; `--force` — master MFKT §25 |
+| AnywhereContacts | Pass 2 уже на диске; **не** патчить |
+| EntityRegistry | closed_list 14 as-is |
+| OFC | штатный sync после ingest; код не этот пакет |
+| ErrorBus | fail-soft ingest warning as-is |
+
+`REV:tz` проверяет: cron-ingest без republish всё ещё skip;
+replace не плодит вторую строку; uniqueness §34 не открыт;
+operator-AC крона с тегом; `[NEW-ENTITY]` нет; Pass 2 не переписан.
+
+---
+
+### Контракты экосистемы
+
+Новых полей шапки PFS нет (уточнение ingest влито в первую h2 на
+`TZ:finalize`: `skipped_present` = не-republish; republish+якорь =
+replace). Этот h3 парсер не читает.
+
+**Источник истины.** Площадка `523032632`: writer ingest =
+PFS. Замена строки = только явный republish, не тихий крон.
+
+**Breaking.** Семантика аддитивна для `--confirm-republish`.
+Cron-идемпотентность §23 не ломается.
+
+---
+
+### Критерии приёмки (AC)
+
+Только пакет `vstrechi-19-10-20-10-prishli-v-neobrabotannye-be`
+для PFS. AC §29–§35 **не** перенумеровать и **не** ослаблять.
+Нормативный язык — наблюдаемое поведение. Live Confluence на
+pytest **не** обязателен.
+
+### AC-001 — republish заменяет строку площадки
+
+Фикстура storage с якорем `pfsrow-…`. Вызов ingest после
+`action=republished` → `update_page` вызван; в новом XML ровно
+один этот якорь; `action != skipped_present`. Юнит, mock PUT.
+
+### AC-002 — крон-ingest по-прежнему skip
+
+Тот же якорь, `action=published` (не republished) →
+`skipped_present`, `update_page` не звать. Регресс
+`test_skip_overwrite_playground_on_duplicate_anchor`.
+
+### AC-003 — участники проектных = mention
+
+Фикстура `ResolvedParticipant(raw="Александр Ткаченко",
+resolved=True, userkey="U123")`. `_participants_line` содержит
+`ri:userkey="U123"`, не голый escaped raw. 1-1 путь без блока
+участников — без диффа §1.1.
+
+### AC-004 — fail-soft участников
+
+`resolved=False` → текст raw, исключения нет. Комната
+`is_room=True` не в строке.
+
+### AC-005 — uniqueness / allowlist не трогать
+
+Diff не меняет `task_slug.py` uniqueness, allowlist 14,
+формат `{mention} {task_slug}{текст}`, picker на promote
+(регресс AC-012 §29). YAML `projects:` не в uniqueness.
+
+### AC-006 — §32 пустая самари
+
+`summary_has_content_sections` false → `skipped_empty`, ingest
+не insert/не replace. Не публиковать 11:28-57 с пустыми
+Задачи/Решения/Блокеры/Риски.
+
+### AC-007 — notify после republish
+
+После успешного replace `notified is False`, `last_action=republished`.
+Diff не обходит `hermes send` / не пишет `notified=true` руками.
+
+### AC-008 — границы
+
+Diff пакета PFS не содержит `USERTOOLS/AnywhereContacts` (кроме
+возможного зелёного прогона тестов), `ff_summary.json`,
+`jobs.json`, `.env`, манифеста, `route.py` сигнатур. OFC-скрипты
+без diff, пока нет 404.
+
+### AC-009 — регресс offline
+
+```
+cd ~/USERTOOLS/ProtocolFromSummary && pytest -q -m "not live_confluence"
+```
+
+Зелёный; новые тесты аддитивны.
+
+### AC-010 — порядок крона MOFS до PFS
+
+Класс **O**. `depends: operator:ставь кроны`.
+Факт: job `aeeccba37e4a` (`mofs_run_cron`) expr минута **строго
+раньше** job `a6e62d06249f` (`pfs_batch`) в каждом часе окна
+8–19 пн–пт. Новый job не создаётся. `pfs_batch` expr без смены,
+если сдвиг MOFS достаточен. `HF:impl` этот AC **не** закрывает.
+Снятие hold: `operator-done: ставь кроны` + evidence expr.
+
+---
+
+### IAC (эскиз; полный `HF:plan` после TZ:finalize)
+
+| IAC | path | verify | covers |
+|---|---|---|---|
+| IAC-01 | `playground_ingest.py` | republish+якорь → replace PUT, один якорь | AC-001 |
+| IAC-02 | тот же | published+якорь → skipped_present | AC-002 |
+| IAC-03 | `storage_xml.py` | resolved+userkey → ri:user; unresolved → raw | AC-003, AC-004 |
+| IAC-04 | diff | нет task_slug uniqueness / allowlist / AC / jobs.json | AC-005, AC-008 |
+| IAC-05 | content_guard | skipped_empty до ingest | AC-006 |
+| IAC-06 | pytest PFS offline | зелёный | AC-009 |
+
+AC-010 в IAC нет (operator).
+
+---
+
+### Открытые вопросы
+
+Нет блокирующих. Q-1 и Q-2 этого пакета **закрыты Сашей 21.10**
+(journal `sasha-decisions` слага
+`vstrechi-19-10-20-10-prishli-v-neobrabotannye-be`). Q-1 §33
+(`sr` в allowlist) и Q-1 §35 (`ff_summary.json`) **не** этот пакет.
+
+**Q-1 — закрыт 21.10.** Оставить слаги 1-1 по канону §34
+(fail-soft без префикса, если slug ∉ closed_list 14). **Без**
+CHANGE uniqueness/allowlist. Replay не обещает префикс
+`kirill_1on1` / `zhirov_1on1` / unbound.
+
+**Q-2 — закрыт 21.10.** Пересамаризировать встречу 11:28-57
+(`AL93XPV3K6cbzyNXbcSy`) штатным MFKT (`staff --force` +
+`--recording-key`), затем MOFS+PFS. **Шаг выполнения:** replay
+**после `HF:impl`** (шаг 0 секции Replay), не код `HF:impl`
+кроме наличия CLI, не `TZ:finalize`. Cron `--force` запрещён
+(MFKT §25). Пустую самари до force на площадку не класть (§32).
+
+---
+
+### Version bump
+
+Секция пакета: **v1.31.0** (новый § после финализированного
+§35; не 1.30.1 — меняется наблюдаемый ingest площадки и рендер
+участников). Шапка master уже **1.31.0** с `TZ:patch`
+(конвенция этого файла: bump шапки на patch; `TZ:finalize`
+подтверждает и пишет `MAIN_TZ_INVENTORY.md`). Не 1.31.1 —
+закрытие Q не новая норма ingest. Параллельно: MOFS **0.11.0**,
+MFKT **0.2.6**. AnywhereContacts **без** bump.
+
+## §37. Meeting-local assignee + приоритет однофамильцев (vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah, BUGFIX, 2026-10-21, v1.32.0)
+
+**TZ:finalize 21.10.2026 (master 1.32.0).** Текст §37 и аддитив §35 / §1.4 п.5 зафиксирован.
+`REV:tz` APPROVE (`dev/vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah/REV-tz.md`).
+Q-1/Q-2/Q-3 закрыты Сашей 21.10 (journal `sasha-decisions`).
+Код / republish — `HF:impl` после `GATE:take-into-work`. Код /
+`jobs.json` / `.env` / live PUT на этой фазе **не** пишутся.
+
+выжимка ≠ SoT; при расхождении — открыть master. Выжимка
+`extract.md` в слаге отсутствует. `[NEW-ENTITY]` **нет**.
+
+Диагноз: `dev/vstrechi-20-21-10-ne-pereneseny-i-rezolv-imen-v-zadachah/_fix_plan_20261021.md`
+(RC-2, RC-4; П.2, П.4). Решения Саши Q-1/Q-2/Q-3 записаны
+в journal 21.10 (12:12 / 12:16 / 12:20) — **не** переспрашивать.
+Кросс: MFKT §7 Шаг 3b / §26 (П.1). AnywhereContacts v0.3.1
+Pass 2 **не** патчить. MOFS matcher **не** патчить.
+
+Не ретрофитит §1–§36 кроме явного указателя в §1.4 п.5 и
+аддитива таблицы/правила в §35. §32 `skipped_empty` жив.
+§34 uniqueness / allowlist 14 **не** ломать. §36 ingest
+replace / mention участников **жив**. §35 Pass 2 / AC-005
+(1 токен ≠ Pass 2) **жив**.
+
+**Маркер I1.** `current` = прод v1.31.0: однословный
+`assignee_raw` («Кирилл») → Pass 2 запрещён при <2 токенах,
+Pass 1 неоднозначен, §11.3 не берёт (Кирилл ≠ Саша) →
+fail-soft текст в задаче при уже срезолвленных участниках
+«Кирилл Криворотов». «Александр Белов»: 2 кандидата
+Confluence → fail-soft §35 AC-004 / §1.4, хотя человек
+в участниках встречи. NER текста задач **нет** (и не этот
+пакет: Q-2 = достаточно mention исполнителя; «Кирилл 1-1»
+20.10 закрыт replay).
+`target` = эта работа: (П.2) meeting-local fallback
+однословного assignee; (П.4) при N>1 однофамильцев
+Confluence/store выбрать однозначного участника встречи,
+иначе первого полного; Белов → `@`, не fail-soft.
+
+---
+
+### Цель
+
+Исполнитель задачи «Кирилл» на встрече, где ровно один
+участник «Кирилл *», даёт тот же `<ri:user>` что участник.
+«Александр Белов» при нескольких однофамильцах Confluence
+резолвится, если в участниках встречи однозначен этот
+человек. Имена внутри текста задачи («Влад», «Александру»)
+остаются голым текстом.
+
+---
+
+### Норма (канон формулировок — также §35)
+
+1. **П.2 Meeting-local fallback.** После `resolve_participants`,
+   в контуре `_resolve_one` исполнителей: 1 токен +
+   `resolved=False` + ровно 1 уже срезолвленный участник
+   матчит первое слово `fio`/`raw`/`display` (lowercase) →
+   его `userkey`. 0 или ≥2 → текст. Без участников → текст.
+2. **П.4 Приоритет участников при N>1.** Кандидаты
+   store/Confluence N>1: пересечь с участниками этой встречи
+   (login/userkey **или** token-set полного имени ≥2).
+   Ровно 1 → mention. ≥2 однофамильца среди участников →
+   первый полный (порядок списка участников summary).
+   0 пересечений → fail-soft. Не `next(iter)` глобально.
+   §11.3 DEFAULT_ASSIGNEE_LOGIN жив отдельно.
+3. **П.3 вне пакета.** Не сканировать `task.text` / блокеры /
+   риски на ФИО (Q-2).
+
+---
+
+### Что НЕ трогать
+
+- AnywhereContacts `find_contacts` Pass 1/2; порог <2 токенов
+  (AC-005 §35); схема `contacts.enc`.
+- MOFS `HYPOCORISTICS` / `_candidates` / `project_bind.assignee`
+  (YAML копирует строку саммари as-is).
+- `task_slug.py` uniqueness / allowlist 14 / picker на promote
+  (AC-012 §29); `task_slug` из MOFS (AC-009).
+- `ff_summary.json` / Fireflies skill.
+- §32 пустая самари; §36 ingest replace.
+- `jobs.json`, `.env`, Gateway, `EcosystemManifest.json`.
+- `[NEW-ENTITY]`.
+- Кусочные скрипты / `json.dump` реестров.
+- Notify / ErrorBus контракт.
+
+---
+
+### Критерии приёмки (AC)
+
+Только этот пакет. AC §29 и AC §31–§36 **не** перенумеровать
+и **не** ослаблять. Класс S. Live Confluence на TZ/HF **не**
+обязателен: фикстура.
+
+### AC-001 — meeting-local: ровно один «Кирилл *»
+
+Фикстура участников: «Кирилл Криворотов» (`resolved=True`,
+userkey задан) + другие без первого слова «кирилл».
+Задача `assignee_raw="Кирилл"` → mention того же userkey.
+
+### AC-002 — meeting-local: двое «Кирилл *» → текст
+
+Два срезолвленных участника с первым словом «кирилл» →
+`assignee_raw="Кирилл"` остаётся текстом, исключения нет.
+
+### AC-003 — регресс однословного без участников (AC-005 §35)
+
+Нет участников / никто не resolved; `assignee_raw="Кирилл"`
+→ текст. Diff **не** включает Pass 2 на 1 токене и **не**
+копирует `HYPOCORISTICS` в `find_contacts`.
+
+### AC-004 — однофамильцы: однозначный участник → mention
+
+Два контакта/кандидата Confluence с фамилией Белов.
+Участники встречи содержат ровно одного «Александр Белов»
+(resolved или raw, полный). Резолв участника и/или того же
+raw → `resolved=True`, userkey выбранного участника, не
+fail-soft.
+
+### AC-005 — однофамильцы: несколько в участниках → первый полный
+
+Два участника-однофамильца с полным ФИО (≥2 токена) в порядке
+summary. N>1 кандидатов store/Confluence → mention **первого**
+полного в этом порядке, не произвольный `iter`.
+
+### AC-006 — N>1 без пересечения с участниками → текст
+
+Регресс §35 AC-004: два Иванова, участники встречи без Ивановых
+→ `resolved=False`. Не брать первого глобально.
+
+### AC-007 — нет NER текста задачи
+
+Diff не вставляет `<ac:link>` в тело `task.text` по именам
+«Влад» / «Александру». Mention только исполнитель (`assignee`)
+и блок участников (уже §36).
+
+### AC-008 — границы
+
+Diff пакета PFS **не** содержит `USERTOOLS/AnywhereContacts`
+(кроме возможного зелёного прогона тестов),
+`USERTOOLS/MarkObjectsFromSummary` matcher,
+`USERTOOLS/MoveFromKeyTalk` (чужой master §26),
+`ff_summary.json`, `jobs.json`, `.env`, манифеста,
+`task_slug.py` uniqueness / allowlist. OFC без diff.
+
+### AC-009 — регресс offline
+
+```
+cd ~/USERTOOLS/ProtocolFromSummary && pytest -q -m "not live_confluence"
+```
+
+Зелёный; новые тесты аддитивны.
+
+---
+
+### IAC (эскиз; полный `HF:plan` после TZ:finalize)
+
+| IAC | path | verify | covers |
+|---|---|---|---|
+| IAC-01 | resolver/pipeline после `resolve_participants` | 1 «Кирилл *» → userkey в задаче | AC-001 |
+| IAC-02 | тот же | двое «Кирилл *» / без участников → текст | AC-002, AC-003 |
+| IAC-03 | тот же + Confluence/store N>1 | Белов в участниках → mention | AC-004 |
+| IAC-04 | тот же | двое однофамильцев-участников → первый полный; без пересечения → текст | AC-005, AC-006 |
+| IAC-05 | diff | нет Pass 2 на 1 токене / HYPOCORISTICS / NER task.text / uniqueness | AC-007, AC-008 |
+| IAC-06 | pytest PFS offline | зелёный | AC-009 |
+
+---
+
+### Открытые вопросы
+
+Нет. Q-1 (meeting-local), Q-2 (без NER текста), Q-3
+(приоритет участников при однофамильцах) **закрыты Сашей
+21.10**. Q-1 §35 (`ff_summary.json`) **не** этот пакет.
+
+---
+
+### Version bump
+
+Секция пакета: **v1.32.0** (новый § после финализированного
+§36; не 1.31.1 — меняется наблюдаемый резолв mention
+исполнителей и однофамильцев). Шапка master уже **1.32.0**
+с `TZ:patch`; `TZ:finalize` подтверждает и пишет
+`MAIN_TZ_INVENTORY.md`. Параллельно: MFKT **0.2.7**.
+AnywhereContacts / MOFS **без** bump.
+
+## §38. Meeting-home fallback in-scope picker (pfs-slagi-zadach-v-1on1-meetingah, BUGFIX-LIGHT, 2026-10-21, v1.33.0)
+
+**SUPERSEDED 21.10.2026 вечером (§39).** Meeting-home
+(`{display_name}.` / 1:1 `pfs.tag` как слаг задачи) **отменён**.
+AC-001 §38 («Кирилл 1-1.» на Codex/Metabase) больше не SoT.
+Исторический текст ниже не вычищать. Канон: §39 v1.35.0 (гибрид H)
++ appendix `appendix_task_slug_1on1_from_context_20261021.md`.
+
+**TZ:patch 21.10.2026 (master 1.33.0).** Текст ниже — норма пакета
+**на момент v1.33.0**, не текущий SoT.
+`TZ:finalize` подтвердит шапку/инвентарь после хвоста LIGHT.
+Код / `entities.json` / republish / прогоны — **не** этот ход
+(П.2–П.5 `_fix_plan_20261021.md`). `[NEW-ENTITY]` **нет**.
+
+выжимка ≠ SoT; при расхождении — открыть этот master.
+Цитаты до/после: `TZ/ProtocolFromSummary/appendix_task_slug_1on1_home_20261021.md`.
+
+Не ретрофитит §1–§37 кроме явных штампов union=0 в §29 fail-soft /
+AC-004 / AC-015, §33 таблица+эталон 14.10+AC-003, §34 таблица
+union+AC-006/AC-012. Closed_list §29, allowlist 14 §31, eligible
+bind = slug ∈ closed_list §34, MOFS read-only AC-009 — **живы**.
+`entities.<1on1>.task_slug` по-прежнему запрещён (AC-010 §29).
+
+**Маркер I1.** `current` = прод v1.32.0: picker in-scope жив;
+closed_list = 14 проектов; union=0 → `_fail_soft_text` as-is при
+`tag_prefix=None` (`kirill_1on1.pfs.tag=null`); empty-warn нет;
+эталон §33 14.10 задачи 3–6 «пусто = норма»; эталон 21.10 задачи
+«Codex» / «MSP Metabase» без префикса. `target` = эта работа:
+in-scope задача после LLM+union **всегда** имеет ведущий префикс —
+проектный `task_slug` **или** meeting-home (`pfs.tag` маршрута,
+иначе `{display_name}.` сущности `route.entity`); union≥2 без home;
+формат home с пробелом после точки (канон Лёни); проектный без
+пробела не менять.
+
+---
+
+### Цель
+
+На in-scope встречах у каждой задачи есть читаемый ведущий префикс
+даже когда уникального входа в 14 проектов нет. Не расширять
+closed_list 1:1-сущностями и не писать `task_slug` на kind 1-1.
+
+---
+
+### Норма (порядок LLM → union → home)
+
+1. Валидный LLM-выбор из closed_list → проектный `task_slug`
+   (`{task_slug}{текст}`, без пробела после точки, AC-001 §29).
+2. Union §34 ровно 1 → тот же канон проекта. Eligible bind =
+   `slug ∈ closed_list` **без изменений**. Bind `kirill_1on1`
+   не eligible и не голосует против `ai_analitik`.
+3. Union **0** → **meeting-home**, не as-is: `route.tag_prefix`
+   (= `pfs.tag`) если задан, иначе `{display_name}.` записи
+   `route.entity`. Empty-warn **нет**.
+4. Union **≥2** → fail-soft **без** угадывания проекта **и без**
+   meeting-home + empty-warn (как §34 D). Home здесь был бы
+   угадыванием «встречи вместо двух проектов».
+
+Skip empty closed_list / registry off / нет `llm_fn`: проектный
+picker skip, meeting-home **ставится** (пустой список не обнуляет
+1:1-префикс). Проектные маршруты (`kind=project` / `multisync`)
+picker не зовут (AC-002 §29): префикс = meeting-level `pfs.tag`
+в `render_row`, не этот пакет.
+
+### Формат
+
+| Источник | Склейка | Пример |
+|---|---|---|
+| Проектный `task_slug` | без пробела после точки | `AI-аналитик.Проверить наличие всех доступов` |
+| Meeting-home | `{home} {text}` **с пробелом** после точки тега | `Кирилл 1-1. Перевести основную платформу на Codex` |
+
+Канон Лёни `Лёня 1-1. …` не ломать. Не клеить home как `{slug}{текст}`.
+
+### Идемпотентность
+
+Фильтр входа batch (§29 п.5 / AC-004): known prefixes = непустые
+`task_slug` ∪ непустые `pfs.tag` ∪ meeting-home текущего маршрута
+(`pfs.tag` и/или `{display_name}.` `route.entity`). Republish
+`Кирилл 1-1. …` при `tag_prefix=None` не идёт в LLM и не удваивает
+префикс.
+
+TaskRefresh F2 **код не патчить** (AC-011 §29 жив): матч по
+`pfs.tag` **или** `task_slug`. Backfill `pfs.tag="{display_name}."`
+у in-scope без тега — П.4 через EntityRegistryCLI, не поле
+`task_slug`, не этот ход.
+
+### Эталон 21.10
+
+Встреча `2026-10-21 07-36-08 Кирилл 1-1`, якорь `pfsrow-b391f7f8daa6`,
+площадка `523032632`. Empty LLM, `tag_prefix=None`.
+
+| Задача | Префикс |
+|---|---|
+| Перевести основную платформу на Codex | `Кирилл 1-1.` (display_name-home, пробел) |
+| Перенести доработанный MSP Metabase… | `Кирилл 1-1.` (display_name-home, пробел) |
+| Проверить наличие всех доступов | `AI-аналитик.` (bind `ai_analitik`, без пробела) |
+
+---
+
+### Что НЕ трогать
+
+- Closed_list = `kind=project` ∧ непустой `task_slug`; allowlist 14;
+  сущность `sr`; `_eligible_bind_slug` / `slug_to_canonical`.
+- Поле `entities.<1on1>.task_slug` (запрещено валидатором kind).
+- `entities.json` на этом ходе (П.4 после impl, CLI, не PFS).
+- AnywhereContacts, MOFS matcher / `project_bind.py`, крон, окно,
+  `last_synced_at`, `--recording-key`, `--oct`, Gateway, `.env`,
+  `jobs.json`, манифест.
+- Проектные маршруты (picker out-of-scope).
+- `route.py`, сигнатуры `protocol_publish` / `process_pending`,
+  `storage_xml._task_body`, dual-render, OpenTasks код, TaskRefresh код.
+- Promote picker (AC-012 §29).
+- `[NEW-ENTITY]`.
+
+---
+
+### Связи с экосистемой
+
+| Инструмент | Связь |
+|---|---|
+| EntityRegistry / ERC | closed_list 14 as-is; writer `task_slug` — CLI; П.4 пишет `pfs.tag`, не `task_slug` |
+| MarkObjectsFromSummary | **не** пишет слаг (AC-009); eligible bind читается as-is |
+| TaskRefresh F2 | код без diff; после П.4 home = `pfs.tag` и матчится как Лёня |
+| ErrorBus | empty-warn только неспасённый union ≥2; `--tool ProtocolFromSummary` |
+
+### Контракты экосистемы
+
+Новых полей шапки нет. Формат `MeetingTask.text` / `ac:task-body`
+уточнён в первой h2 (проектный vs meeting-home). Этот h3 парсер
+не читает. `pfs.tag` required в шапке не ослаблять (П.4 backfill;
+picker до П.4 использует display_name).
+
+---
+
+### Критерии приёмки (AC)
+
+Только пакет `pfs-slagi-zadach-v-1on1-meetingah`. AC §29 и AC
+§31–§37 **не** перенумеровать. Класс S. Код на этой фазе не
+пишется; AC закрывает `HF:test`.
+
+### AC-001 — эталон 21.10: Codex / Metabase → `Кирилл 1-1.`
+
+In-scope `kirill_1on1`, `tag_prefix=None`, empty LLM, closed_list
+с `ai_analitik`. Задачи «Перевести основную платформу на Codex» и
+«Перенести доработанный MSP Metabase…» после picker
+`startswith("Кирилл 1-1. ")` (пробел после точки). Юнит без live API.
+
+### AC-002 — эталон 21.10: доступы → `AI-аналитик.`
+
+Та же встреча: задача «Проверить наличие всех доступов» с
+`project_bind.slug=ai_analitik` hypothesized ∈ closed_list →
+`AI-аналитик.` **без** пробела после точки. Bind `kirill_1on1`
+не делает union=1.
+
+### AC-003 — closed_list / kind / allowlist 14 без изменений
+
+`closed_list` по-прежнему только `kind=project` ∧ непустой
+`task_slug`; `kirill_1on1` вне списка. Diff не заполняет
+`entities.<1on1>.task_slug` и не меняет
+`TASK_SLUG_BACKFILL_DEFAULT_ALLOWLIST`. `kirill_1on1` с непустым
+`task_slug` по-прежнему fail валидатора.
+
+### AC-004 — идемпотентность meeting-home (регресс AC-004 §29)
+
+Текст уже `Кирилл 1-1. …`, `tag_prefix=None`, в entities есть
+`display_name` Кирилла → задача **не** в batch, второй префикс
+не клеится. То же при заданном `pfs.tag="Кирилл 1-1."`.
+
+### AC-005 — empty-warn только неспасённый union ≥2
+
+Union=0 + home → empty-warn **нет**. Union ≥2 → home **нет**,
+empty-warn жив. Валидный LLM / union=1 → проектный префикс,
+warn нет если uniqueness спасла.
+
+### AC-006 — формат: home с пробелом, проектный без (регресс AC-001 §29)
+
+Мок выбранного `ai_analitik` → без пробела после точки.
+Home-ветка → пробел после точки тега (как `Лёня 1-1. …`).
+Регресс `test_clean_1on1_empty_llm_no_empty_warn` с заданным
+`tag_prefix="Кирилл 1-1."` без удвоения.
+
+### AC-007 — MOFS не пишет слаг (регресс AC-009 §29/§34)
+
+Diff пакета не содержит `USERTOOLS/MarkObjectsFromSummary` и не
+пишет `task_slug` / `project_bind` в summary. PFS читает bind
+read-only.
+
+### AC-008 — TaskRefresh F2 без патча кода
+
+Diff **не** содержит `USERTOOLS/TaskRefresh`. F2 по-прежнему
+`startswith` по `pfs.tag` **или** `task_slug`. Meeting-home
+попадает в F2 через `pfs.tag` (П.4), не через `task_slug` 1:1.
+
+### AC-009 — skip пустого closed_list не обнуляет home
+
+Registry off / empty closed_list / нет `llm_fn` → in-scope задача
+всё равно с meeting-home; пайплайн не падает. Проектный маршрут
+picker не зовёт (AC-002 §29).
+
+### AC-010 — границы + регресс offline
+
+```
+cd ~/USERTOOLS/ProtocolFromSummary && pytest -q -m "not live_confluence"
+```
+
+Зелёный; новые тесты аддитивны. Нет правок `jobs.json` / `.env` /
+манифеста / `route.py` / ERC allowlist / `entities.json` на TZ-ходе /
+AnywhereContacts. `promote_meeting` = 0 picker (AC-012 §29).
+
+---
+
+### IAC (эскиз; LIGHT без HF:plan — ориентир HF:impl/test)
+
+| IAC | path | verify | covers |
+|---|---|---|---|
+| IAC-01 | `task_slug.py` | Codex/Metabase → `Кирилл 1-1. `; доступы → `AI-аналитик.` | AC-001, AC-002, AC-006 |
+| IAC-02 | `task_slug.py` | `kirill_1on1` вне closed_list; bind 1:1 не eligible | AC-003 |
+| IAC-03 | `task_slug.py` | уже `Кирилл 1-1.` → не в batch | AC-004 |
+| IAC-04 | `task_slug.py` | union≥2 без home + empty-warn; union=0 без warn | AC-005 |
+| IAC-05 | skip/empty closed | home всё равно | AC-009 |
+| IAC-06 | diff + pytest | MOFS/TR/entities.json не в diff TZ; offline зелёный | AC-007, AC-008, AC-010 |
+
+---
+
+### Открытые вопросы
+
+Нет. Развилка «task_slug у 1:1 в closed_list?» закрыта диагнозом:
+**нет**. П.4 (`pfs.tag` backfill) — после impl, не этот ход.
+
+---
+
+### Version bump
+
+Секция пакета: **v1.33.0** (новый § после финализированного §37;
+не 1.32.1 — меняется наблюдаемый префикс in-scope при union=0).
+Шапка master **1.33.0** с `TZ:patch`. AnywhereContacts / MOFS /
+TaskRefresh / EntityRegistry **без** bump. `[NEW-ENTITY]` нет.
+
+### Приложения к ТЗ
+
+| Файл | Содержание |
+|---|---|
+| `appendix_task_slug_1on1_home_20261021.md` | **superseded** §39; исторические цитаты meeting-home |
+
+## §39. Обязательный слаг из контекста задачи (pfs-slug-1on1-iz-konteksta-vstrechi, 2026-10-21, v1.35.0)
+
+**TZ:patch 21.10.2026 вечер, 3-й проход (master 1.35.0).** Текст ниже — норма пакета
+**гибрид H**. Код / `entities.json` / `entities.schema.json` / ERC /
+скилл / republish — **не** этот ход (пишет `HF:impl`). `[NEW-ENTITY]` **нет**.
+
+выжимка ≠ SoT; при расхождении — открыть этот master.
+Канон решения Саши: `dev/pfs-slug-1on1-iz-konteksta-vstrechi/sasha_slugi_decision_20261021.md`.
+Эталон форматировки H: `/tmp/arch_verdict_slugi_r2.md` (раунд 2).
+Указатель фазы: `dev/pfs-slug-1on1-iz-konteksta-vstrechi/TZ-patch.md`.
+Цитаты: `appendix_task_slug_1on1_from_context_20261021.md`.
+
+Не ретрофитит §1–§37 кроме явных штампов union=0 / AC-004 skip /
+fail-soft в §29, §33, §34 и строк шапки `MeetingTask.text` /
+`ac:task-body`. **§34 не откатывается** (источник сигнала per-task).
+**§38 superseded:** meeting-home запрещён; AC-001 §38 не SoT.
+Closed_list-фильтр (`kind=project` ∧ непустой `task_slug`) /
+allowlist §31 как *исторический* backfill task_slug /
+eligible bind = `slug ∈ closed_list` / MOFS read-only AC-009 /
+запрет `entities.<1on1>.task_slug` (AC-010 §29) — **живы**.
+Слаг **обязателен** в проде; ADM — **единственный** прод-fallback
+при неуверенности. Overlay-четвёрка как SoT membership **снята**
+(это и была аналитическая ошибка diagnose: lifecycle
+открыт/закрыт не был в модели мира).
+
+**Маркер I1.** `current` = диск/канон v1.34.0: in-scope слаг из
+закрытого overlay `{ai_analitik, trisigma, parsing, adm}`;
+`pick_hint` литералами в `task_slug.py`; реестр/схема v1.2 без
+`open`/`closed_at`; union=0 → `АДМ.`; §38 home запрещён.
+`target` = эта работа (H): identity lifecycle в реестре
+(схема **1.3**, optional `open`/`closed_at`); membership нового
+слага = `{adm} ∪ {project с непустым task_slug}` (живой список);
+`pick_hint` **вычислен** категориями; hard gate named_only;
+шаг 4 без decay и без P(); закрытый проект с named hit → его слаг,
+не ADM.
+
+---
+
+### Цель
+
+На in-scope встречах (1-1 / неразобранное / синк АиД / Лёня)
+задача не публикуется без слага. Слаг берётся из контекста
+постановки (о чём задача), не из наименования сущности/встречи.
+Состав кандидатов **живой**: новый проект с `task_slug` доступен
+без правки кода picker. Закрытость проекта — факт мира, не ноль.
+
+---
+
+### Связь с §34
+
+§34 остаётся каноном **источника сигнала** и момента ingest
+(picker до PUT площадки, promote = 0 picker, notes вне uniqueness,
+один batch, валидный JSON проходит hard gate и побеждает fallback).
+
+Этот § задаёт **область значений** нового слага, **обязательность**
+и **два слоя SoT** (identity vs политика):
+
+- uniqueness/hits для присвоения считаются по кандидатам H
+  (не по литеральной четвёрке);
+- пустой/конфликтный union → `АДМ.`, не as-is и не home;
+- запрещённые источники §34 (`meeting_name`, средняя тема 1-1,
+  список участников, display_name) усиливаются: они не могут быть
+  и **значением** слага.
+
+---
+
+### Слой Identity (реестр `entities.json` + схема)
+
+Владелец факта мира — EntityRegistry. Политику PFS в карточку
+**не** класть (`pick_hint` / `pick_prior` / P() / «угадывать на 1:1»
+в JSON запрещены).
+
+#### Схема `entities.schema.json` v1.2 → **v1.3**
+
+Два поля на записи сущности, оба **OPTIONAL** (не `required` —
+иначе kind 1:1 / person / tool мгновенно красные).
+`additionalProperties: false` **остаётся**.
+
+```json
+"open": {
+  "type": "boolean",
+  "description": "lifecycle: проект жив. Только kind=project; у прочих поле отсутствует."
+},
+"closed_at": {
+  "type": ["string", "null"],
+  "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+  "description": "дата закрытия YYYY-MM-DD; null/нет поля если open=true или неизвестно"
+}
+```
+
+Корневой `schema_version` реестра: `"1.2"` → `"1.3"` (явный bump,
+как 1.1→1.2 на `folder` / v1.2-полях). Для читателей **не breaking**:
+поля optional, доступ через `.get()`; отсутствие ключа = «неизвестно».
+
+#### ERC `validator.py` — инварианты (схема их не выразит)
+
+- поле `open` и/или `closed_at` есть ⇒ `kind == "project"`
+  (у person / 1:1 / tool / misc — **fail**);
+- `open == true` ⇒ `closed_at` отсутствует или `null`;
+- `open == false` ⇒ `closed_at` **рекомендуется** (warning, не fail:
+  исторические закрытия без точной даты);
+- `task_slug` на 1:1 по-прежнему запрещён (живой инвариант AC-010 §29).
+
+CLI ERC schema-driven: новые optional поля подхватываются
+introspector'ом без отдельного флага, **если** они в schema.
+Инварианты — правка `validator.py` + тесты ERC.
+
+#### `closed_list()` — фильтр **не менять**
+
+По-прежнему `kind=project` ∧ непустой `task_slug`. Skip уже
+стоящего префикса (в т.ч. закрытого Антибота / Trisigma) **жив**.
+Не резать identity-список skip до open-only.
+
+#### Backfill — не всем `open: true`
+
+Автопроставление «жив» всем 14 — ложь identity и воспроизводит
+широкую угадайку. Backfill — **таблица от Саши** (кто жив, кто
+закрыт, дата если помнит). Пока строки нет — поле **отсутствует**,
+picker **conservative** (см. слой Picker).
+
+Правила записи (HF:impl / CLI ERC):
+
+- без `--force` массовый backfill lifecycle **запрещён**;
+- `import movefromff` в этом пакете **запрещён**;
+- крон / `last_synced_at` / окно MFF **не** ломать;
+- `[NEW-ENTITY]` нет.
+
+Штамп канона схемы v1.3 в master EntityRegistry — `HF:docs-handoff`
+/ ORCH, не этот `TZ:patch` (владелец схемы ERC; этот § — контракт
+потребителя PFS + объём impl пакета).
+
+---
+
+### Слой Picker (`task_slug.py`)
+
+#### Membership (живой, не литеральная четвёрка)
+
+Убрать `TASK_SLUG_CHOICE_ALLOWLIST` как SoT состава кандидатов.
+Область значений **нового** слага:
+
+```
+candidates = {adm} ∪ {project | task_slug ≠ ∅}
+```
+
+`open` / `closed_at` **не** выкидывают проект из candidates
+(закрытый ≠ 0). Они входят в `prompt_row` и в вычисление
+`pick_hint`. `adm` всегда в candidates (зонтик §19: SR / OKR /
+решения / прочая админка → тот же слаг; сущность `sr` в
+candidates **не** входит).
+
+Новый проект: запись `kind=project` + непустой `task_slug`
+(+ опционально `open: true`) → слаг доступен модели **без**
+правки Python. Пока overlay не дал ему `frequent` — роль
+`named_only` (жёсткий gate).
+
+#### `prompt_row` (сборка из данных + категорий политики)
+
+Не литералы четырёх имён. Не числовые P().
+
+```
+prompt_row = identity(slug, task_slug, display_name, aliases)
+           + {open, closed_at, age?}
+           + pick_hint ВЫЧИСЛЕННЫЙ:
+               adm        → prod_fallback
+               not open   → named_only
+               open       → named_only
+               поле отсутствует (conservative) → named_only
+               overlay    → frequent_project ТОЛЬКО для явных исключений
+```
+
+`age` — производное от `closed_at` (дней с даты закрытия, если
+дата есть); хинт модели, не алгоритм. Overlay исключений на
+момент пакета: `ai_analitik` = `frequent_project`. `adm` =
+`prod_fallback` (выводится правилом, дублировать в overlay
+не обязательно). Trisigma / Парсинг / любой новый / любой
+закрытый / любой open без исключения → `named_only`.
+
+Числовых `probability` / `pick_prior` **нет**. Порядок ключей
+JSON ненормативен.
+
+#### Hard gate
+
+| `pick_hint` | Приём LLM-строки |
+|---|---|
+| `frequent_project` или `adm` (`prod_fallback`) | LLM **может** выбрать без вхождения slug в union |
+| `named_only` | принимается **iff** `slug ∈ union` |
+
+Валидная строка, не прошедшая gate / вне candidates / рассинхрон
+канона → шаг 4. Явный named hit **не** перебивается
+`frequent_project` (мок `ai_analitik` при имени Trisigma →
+канон названного).
+
+#### Иерархия (жёстче хинта)
+
+1. Явный контекстный сигнал задачи (имя / alias / eligible bind
+   ∈ candidates) сильнее хинта.
+2. Хинт — **только** шаг 2 (LLM): дата/возраст закрытия и
+   категория роли; не имитировать уверенность named_only.
+3. Шаг 4 априор и **decay не применяет**.
+4. Не выводить P() формулой из `closed_at`.
+
+---
+
+### Порядок проверок (прод)
+
+Один вызов `apply_task_slugs`, один LLM-batch (§29 AC-007).
+
+| Шаг | Проверка | Действие |
+|---|---|---|
+| 0 | Текст startswith запрещённого home (display_name / `pfs.tag` kind≠project / 1:1 `tag_prefix`) | **Снять** этот префикс один раз; orig = очищенный текст |
+| 1 | startswith канона любого **проектного** `task_slug` из `closed_list()` | **Skip LLM** (идемпотентность). Не ремапить `Антибот.` / `AB-платформа.` → ADM |
+| 2 | LLM, один batch на встречу, per `task_index` | Вход: `tasks_json` (text+assignee+discussion), `notes` («Обсудили»), `closed_list_json` = **candidates H** (identity + open/closed_at/age + вычисленный `pick_hint`). `meeting_name`=`""`, `participants`=`""`. Выход: `entity_slug` ∈ candidates и `task_slug` == канон |
+| 3 | Валидная строка модели | Hard gate. `adm` / `frequent` без union — принять. `named_only` — принять iff ∈ union. Иначе шаг 4. Явный named hit сильнее frequent |
+| 4 | Union по candidates H: hits(assignee) ∪ hits(text) ∪ hits(discussion) ∪ {eligible bind.slug если ∈ candidates} | `len==1` → канон этого slug (**контекст**, в т.ч. **закрытый** проект). `len==0` или `len≥2` или пустой/невалидный LLM → **`АДМ.`** (не as-is, не home, не decay, не frequent на пустой union, не «свежее закрытие») |
+| 5 | Склейка | `{canonical}{orig}` **без пробела** после точки (как §29 AC-001). Пустой orig не оставлять без префикса. Empty-warn нет |
+
+**Техническая последняя строка (не прод):** registry off /
+empty closed_list / нет `llm_fn` → as-is **без** home; пайплайн
+не падает. Не хардкодить `АДМ.`, если канон `entities.adm`
+недоступен.
+
+**Model inputs:**
+
+- Слышит: текст/исполнитель/discussion **этой** задачи; блок
+  «Обсудили» (контекст, не детектор); JSON candidates
+  (slug, task_slug, aliases, open, closed_at, age?, pick_hint).
+- Не слышит: имя встречи, список участников, display_name 1:1,
+  числовые P().
+- Не класть notes в `_task_union_slugs`.
+- Промпт-смысл: «выбери из JSON; явный проект в тексте важнее
+  pick_hint; named_only без имени/union не выбирай; закрыт ≠
+  запрещён, если назван; неуверен / SR / OKR / админка / иное →
+  adm; frequent не заменяет отсутствие сигнала; не оставляй
+  позицию пустой; не бери имя встречи».
+
+**Где вставляется ADM:** единственный прод-fallback после
+LLM+gate+union. Канон `entities.adm.task_slug` = `АДМ.`
+(§19 зонтик жив).
+
+---
+
+### Запреты значения/источника
+
+Не источник и не значение слага: имя встречи (в т.ч. «Кирилл 1-1»),
+`meeting_name`, `display_name` сущности, «средняя тема 1-1»,
+перечисление участников, имя мультисинка, `pfs.tag` kind ∈
+{one_on_one, person_1on1, person, unknown, sync_aid}.
+1:1 / мультисинк **никогда** не слаг.
+
+Формат проектного/ADM слага: без пробела после точки (не формат
+Лёни «`Лёня 1-1. `» с пробелом).
+
+---
+
+### Что НЕ трогать
+
+- `[NEW-ENTITY]`; сущность `sr` как отдельный слаг выбора.
+- Поля `probability` / `pick_prior` / `pick_hint` **в реестре**
+  (hint только вычисленный в picker).
+- Фильтр `closed_list()`; запрет `entities.<1on1>.task_slug`.
+- Массовый `open:true` без таблицы Саши; backfill lifecycle
+  без `--force`; `import movefromff`.
+- Крон, `last_synced_at`, окно MFF, `.env`, Gateway, `jobs.json`,
+  манифест, чужие `_state.json`.
+- AnywhereContacts, MOFS matcher / `project_bind.py`, TaskRefresh
+  **код**, `pipeline.py`, `storage_xml`, `route.py`, promote picker
+  (AC-012 §29).
+- Скилл `protocolfromsummary` Pitfall 17 (docs-handoff позже).
+- Нормы, которые H не отменяет: слаг обязателен; ADM — единственный
+  прод-fallback при неуверенности; §38 meeting-home отменён;
+  §34 источник сигнала жив.
+
+---
+
+### Связи с экосистемой
+
+| Инструмент | Связь |
+|---|---|
+| EntityRegistry / ERC | схема 1.3 optional `open`/`closed_at`; инварианты validator; writer lifecycle — CLI ERC + таблица Саши; `closed_list()` as-is; `adm.task_slug=АДМ.` reuse §19 |
+| MarkObjectsFromSummary | не пишет слаг (AC-009); eligible bind читается; голос в присвоении если slug ∈ candidates H |
+| TaskRefresh F2 | код без diff; матч `pfs.tag` ∨ `task_slug`; 1:1-home больше не ожидаемый префикс задачи |
+| ErrorBus | empty-warn не на ADM-fallback; skip-ветка может warn; ERC warning на `open:false` без `closed_at` |
+
+### Контракты экосистемы
+
+Новых полей шапки PFS нет. `MeetingTask.text` / `ac:task-body` в
+первой h2 уточнены (область H вместо overlay 4). Этот h3 парсер
+не читает.
+
+Поля реестра `open` (bool, optional) и `closed_at`
+(str YYYY-MM-DD \| null, optional) — владелец EntityRegistry;
+PFS только читает. `schema_version` `"1.3"`. Breaking policy
+схемы: optional-аддитив, читатели через `.get()`.
+
+---
+
+### Критерии приёмки (AC)
+
+Только пакет `pfs-slug-1on1-iz-konteksta-vstrechi`. AC §29 и
+§31–§38 **не** перенумеровать. Класс S. Код пишет `HF:impl`.
+
+### AC-001 — эталон 21.10: Codex/Metabase → `АДМ.`, доступы → `AI-аналитик.`
+
+In-scope `kirill_1on1`, `tag_prefix=None`, empty LLM, candidates H
+на месте (как минимум adm + проекты с `task_slug`), bind доступов
+`ai_analitik`. Задачи «Перевести основную платформу на Codex» и
+«Перенести доработанный MSP Metabase…» startswith `АДМ.` **без**
+пробела после точки и **без** `Кирилл 1-1.`. Задача доступов —
+`AI-аналитик.` без пробела. Юнит без live API.
+
+### AC-002 — §34 источник жив
+
+Uniqueness присвоения = assignee ∪ text ∪ discussion ∪ eligible
+bind ∩ candidates H. `MeetingSummary.notes` не клеят детектором
+(`test_notes_pollution_does_not_bind`). Валидный LLM, прошедший
+hard gate, побеждает union.
+
+### AC-003 — identity vs политика
+
+Diff **может** трогать `entities.schema.json` (v1.3), ERC
+`validator.py` + тесты ERC, пин `schema_version` (PFS
+`test_entities_registry` и аналоги). Diff **не** пишет в реестр
+`probability` / `pick_prior` / `pick_hint`. `kirill_1on1` вне
+`closed_list`; bind 1:1 не eligible. `kirill_1on1` с непустым
+`task_slug` — fail валидатора. `closed_list()` фильтр без смены
+семантики. Поля `open`/`closed_at` на kind≠project — fail ERC.
+
+### AC-004 — анти-липкость home
+
+Текст уже `Кирилл 1-1. Codex…`, `tag_prefix=None` → префикс
+снят, задача **в** batch. Мок `adm` → `АДМ.`+очищенный текст;
+empty LLM → `АДМ.`. Проектный `AI-аналитик.` на входе не снимать.
+Любой уже стоящий канон из `closed_list()` (в т.ч. закрытый
+проект) — skip, не ремап в ADM.
+
+### AC-005 — Лёня без слага-сущности
+
+`tag_prefix="Лёня 1-1."`, union=0, empty LLM → тело с `АДМ.`,
+без `Лёня 1-1.`.
+
+### AC-006 — hard gate named_only / frequent
+
+Мок `entity_slug` named_only (напр. `ab_platforma` или `parsing`)
+**без** вхождения в union → не ставится; дальше шаг 4 → ADM при
+len 0. Мок `ai_analitik` (`frequent`) без union **может** быть
+принят (не на админке: см. AC-012). Мок `adm` без union принят.
+Мок named_only **с** union=1 того же slug — принят.
+
+### AC-007 — технический skip без home (инверсия §38 AC-009)
+
+Registry off / empty closed_list / нет `llm_fn` → as-is, не
+`{display_name}.`. Пайплайн не падает.
+
+### AC-008 — known prefixes
+
+Проектные `task_slug` ∪ `pfs.tag` kind=project — skip входа
+(весь `closed_list()`, не open-only). Псевдонимы candidates
+(включая aliases сущности + АДМ/ADM/адм) распознаются как канон.
+1:1-home в skip **не** входит.
+
+### AC-009 — границы diff
+
+Нет `USERTOOLS/MarkObjectsFromSummary`, `USERTOOLS/TaskRefresh`
+кода, `pipeline.py`, `route.py`, `storage_xml.py`, скилла
+`protocolfromsummary`, `.env`, `jobs.json`, манифеста,
+`import movefromff`. Promote = 0 picker. Крон / `last_synced_at`
+без diff.
+
+Разрешённый объём: `entities.schema.json`, ERC `validator.py` +
+тесты ERC, `task_slug.py`, `tests/test_task_slug.py` (+ пин
+schema_version у потребителей реестра, если падает), backfill
+lifecycle **только** по таблице Саши и только с `--force`.
+
+### AC-010 — регресс offline + инверсия эталона §38
+
+```
+cd ~/USERTOOLS/ProtocolFromSummary && pytest tests/test_task_slug.py -q
+cd ~/USERTOOLS/ProtocolFromSummary && pytest -q -m "not live_confluence"
+cd ~/USERTOOLS/EntityRegistryCLI && pytest -q
+```
+
+Зелёный (точный entry-point ERC — как в репозитории CLI).
+`test_etalon_20261021_three_tasks_home_and_bind` инвертирован
+(не home на 1–2).
+
+### AC-011 — явный проект сильнее frequent
+
+Lexical hit / eligible bind `trisigma` или `parsing`.
+Мок LLM вернул `ai_analitik` (априор `frequent_project`).
+Результат — канон **названного** проекта (`Trisigma.` / `Парсинг.`),
+не `AI-аналитик.`. Валидный LLM **того же** named, что hit,
+по-прежнему побеждает union (AC-002).
+
+### AC-012 — frequent не клеит AI-аналитик на админку
+
+Codex / Metabase / SR / OKR / «решения» / нет продуктового
+сигнала, empty LLM → `АДМ.`, **не** `AI-аналитик.` из
+`frequent_project`. Union `len==0` не читает `pick_hint` и не
+применяет decay.
+
+### AC-013 — живой membership без правки Python
+
+Фикстура: новый `kind=project` с непустым `task_slug` (и без
+правки `TASK_SLUG_CHOICE_ALLOWLIST` / без литерала slug в
+picker). Сущность появляется в `closed_list_json` candidates.
+Роль по умолчанию `named_only`. Named hit её канона/alias →
+её слаг. Без имени + empty LLM → `АДМ.`, не автоугадывание
+open-проекта.
+
+### AC-014 — стресс-тест закрытого (закрытый ≠ 0)
+
+Фикстура: проект с `task_slug`, `open: false`, `closed_at`
+заполнен (напр. Trisigma или синтетический). Named hit
+(имя/alias в assignee ∪ text ∪ discussion) + empty LLM или
+мок ADM → канон **этого** проекта, **не** `АДМ.`. Тот же
+проект без имени, union=0 → `АДМ.` (named_only gate). Уже
+стоящий префикс закрытого на входе — skip (AC-004).
+
+### AC-015 — схема 1.3 и инварианты ERC
+
+`entities.schema.json` содержит optional `open` / `closed_at`
+как выше; `additionalProperties: false` жив; поля не required.
+Запись person/1:1 без этих полей — validate ok. Те же поля на
+kind≠project — fail. `open:true` + непустой `closed_at` — fail.
+`open:false` без `closed_at` — warning, не fail. Пин
+`schema_version == "1.3"` у канона реестра после impl-записи
+(до backfill таблицы поля на 14 могут отсутствовать — пин
+корня, не обязательность ключей на каждой карточке).
+
+### AC-016 — backfill conservative
+
+Без таблицы Саши diff **не** проставляет `open:true` всем
+проектам. Отсутствие полей → picker conservative (`named_only`).
+Команда backfill lifecycle без `--force` не пишет. Нет
+`import movefromff` в diff пакета.
+
+### AC-017 — decay не алгоритм шага 4
+
+Нет кода, который из `closed_at` считает P() и выбирает между
+двумя slug на `len≥2` или ставит «свежее закрытие» на `len==0`.
+`len==0`/`len≥2` → только `АДМ.`. `closed_at`/age присутствуют
+в `prompt_row` как хинт модели (наблюдаемо в собираемом JSON).
+
+### AC-018 — open не лицензия угадывать
+
+Проект с `open:true` и без overlay-исключения `frequent` имеет
+`pick_hint=named_only`. Empty LLM / нет union → `АДМ.`, не этот
+проект. Наивный А' («open → автоугадывание») — регресс.
+
+---
+
+### IAC (эскиз; объём расширенный — ориентир HF:impl/test)
+
+| IAC | verify | AC |
+|---|---|---|
+| IAC-01 | empty LLM эталон 21.10: 1–2 `АДМ.`; 3 `AI-аналитик.` | AC-001 |
+| IAC-02 | notes не bind; discussion/bind ∈ candidates клеят | AC-002 |
+| IAC-03 | schema 1.3 + ERC инварианты; нет P() в реестре | AC-003, AC-015 |
+| IAC-04 | strip `Кирилл 1-1.` → batch; skip любого closed_list канона | AC-004 |
+| IAC-05 | Lenya tag_prefix не в тексте | AC-005 |
+| IAC-06 | named_only без union → ADM; frequent/adm без union — gate | AC-006 |
+| IAC-07 | skip registry → as-is не home | AC-007 |
+| IAC-08 | closed_list skip; home не skip | AC-008 |
+| IAC-09 | diff freeze + pytest PFS + ERC | AC-009, AC-010 |
+| IAC-10 | hit Trisigma + мок `ai_analitik` → `Trisigma.` | AC-011 |
+| IAC-11 | empty LLM админка → `АДМ.` | AC-012 |
+| IAC-12 | новый project в фикстуре без правки allowlist | AC-013 |
+| IAC-13 | named hit закрытого → его слаг, не ADM | AC-014 |
+| IAC-14 | нет массового open:true; conservative absent | AC-016 |
+| IAC-15 | шаг 4 без decay/P(); open≠угадайка | AC-017, AC-018 |
+
+---
+
+### Объём (факт для оркестратора, не skip фаз)
+
+**РАСШИРЕННЫЙ, не LIGHT.** Схема + ERC + backfill (по таблице) +
+picker + тесты. Оценка файлов >3 и затрагивает shared-реестр /
+валидатор ERC — семейство `*-LIGHT` этому пакету **не** соответствует.
+Выбор кейса / перепись хвоста — оркестратор (GLOSSARY AC-H10),
+не эта карточка.
+
+Ориентир impl (не исчерпывающий skip-список):
+
+| Файл | Роль |
+|---|---|
+| `~/WorkVault/Registries/entities.schema.json` | v1.3, optional `open`/`closed_at` |
+| ERC `validator.py` + тесты CLI | инварианты lifecycle |
+| `~/USERTOOLS/ProtocolFromSummary/protocolfromsummary/task_slug.py` | снять allowlist-SoT, prompt_row H, hard gate, шаг 4 |
+| `~/USERTOOLS/ProtocolFromSummary/tests/test_task_slug.py` | инверсия §38 + AC §39 H |
+| пин `schema_version` потребителей | 1.2 → 1.3 |
+| `entities.json` lifecycle | **только** таблица Саши + `--force`; иначе поля отсутствуют |
+
+---
+
+### Открытые вопросы
+
+Нет блокирующих для схемы/picker/тестов. Содержание таблицы
+lifecycle (кто жив / закрыт / дата) — вход **Саши на backfill**,
+не стоп `HF:impl` picker: до таблицы поля отсутствуют,
+conservative. Не заводить отдельный пакет: этот поезд и есть H.
+
+---
+
+### Version bump
+
+Секция пакета: **v1.35.0** (тот же пакет `pfs-slug-1on1-iz-konteksta-vstrechi`,
+расширенный объём; не 1.34.1 — меняется SoT membership и схема
+реестра). Шапка master **1.35.0** с `TZ:patch`.
+AnywhereContacts / MOFS / TaskRefresh **без** bump.
+EntityRegistry / ERC — impl этого пакета трогает схему и
+validator; штамп их master-ТЗ — docs-handoff, не этот ход.
+`[NEW-ENTITY]` нет.
+
+Changelog:
+
+| Версия | Что |
+|---|---|
+| 1.34.0 | §39 введён: слаг обязателен; overlay 4 + ADM; §38 superseded; §34 жив; `pick_hint` в overlay, не P() в entities; AC-001…012; LIGHT |
+| **1.35.0** | гибрид H: overlay-четвёрка снята как SoT membership; схема entities 1.3 optional `open`/`closed_at`; ERC инварианты; `pick_hint` вычисленный; hard gate named_only; шаг 4 без decay; стресс закрытого; AC-001…018; объём расширенный |
+
+### Приложения к ТЗ
+
+| Файл | Содержание |
+|---|---|
+| `appendix_task_slug_1on1_from_context_20261021.md` | решение Саши, история overlay 4 vs 14; SoT норм — этот § v1.35.0 |
+| `appendix_task_slug_1on1_home_20261021.md` | superseded; архив §38 |
+
+## §40. Drain silent-promoted в notify_pending (pfs-stale-notifications, BUGFIX-LIGHT, 2026-10-21, v1.35.1)
+
+**TZ:finalize 21.10.2026 (master 1.35.1).** Текст §40 зафиксирован.
+`REV:tz` skip по рецепту BUGFIX-LIGHT. Код ждёт `HF:impl`.
+Pre-impl маркеры «инвентарь / version bump — не этот ход» сняты.
+Не ретрофитит §1–§39 кроме явных штампов §11.6 (stale),
+§24.2 (путь notify) и §26 (таблица + снятие запрета). Шапка
+`RegistryEntry.notified` уже верна — второй смысл не плодить.
+`[NEW-ENTITY, требует согласования Саши]` **нет**.
+
+выжимка ≠ SoT; при расхождении — открыть этот master.
+Указатель фазы: `dev/pfs-stale-notifications/TZ-finalize.md`.
+Диагноз: `dev/pfs-stale-notifications/_fix_plan_20261021.md`
+(`GATE:diagnose-review` закрыт; классификация **BUGFIX-LIGHT** —
+оркестратор, не эта карточка).
+
+**Маркер I1.** `current` = прод v1.35.0: `playground_promote.py`
+ставит `notified=True` **только** если *его* процесс видит
+`PFS_POST_SWITCH`; иначе `False` (канон off/on §23/§24). Обёртка
+`pfs_notify` **всегда** `export PFS_POST_SWITCH=1` (§26).
+`build_text_for_entry`: `last_action=="promoted"` + флаг on →
+`return None`. `notify_pending.main` помечает `notified=True`
+**только если текст непустой**; `None` = `continue` **до**
+присвоения. stale_warn считает все non-historical `notified=False`,
+включая silent-promoted. Инцидент ErrorBus #1854 (21.10): 8 записей
+`promoted` + `notified=False` внутри окна `*/5 10-20`; крон ok,
+stdout пуст, WARN каждые 5 мин. `target` = эта работа: сторона
+notify, которая **уже решила молчать**, обязана **дренажить**
+`notified=True`; stale — только ждущие доставки текста.
+
+---
+
+### Инцидент (факт, не чинить руками)
+
+ErrorBus id=1854, `stage=stale_warn`, 8 non-historical pending
+`last_action=promoted`, `notified=False`, кластер `promoted_at`
+2026-10-21T10:48:09Z…10:48:15Z. Штатный `pfs_batch` с обёрткой
+этой дыры **не** даёт (флаг on → promote сразу True). Ловушка —
+любой promote без флага (CLI, скрипт, REPL, чужой агент).
+
+Поезд 12.10 `pfs-notify-stale` (порог от cron expr) **не** этот
+корень: там доставка прошла. Порог 15 мин здесь работает по
+интенту §11.6: очередь реально не дренируется. Поезда §36–§39 —
+не про notify.
+
+---
+
+### Корневая причина
+
+Смешение env двух процессов + неполный silent-guard:
+
+1. Норма пост-switch §24: успех прохода 2 **не** шлёт TG, очередь
+   помечается `notified=True`.
+2. Promote ставит True **только** если *его* процесс видит флаг.
+3. Notify-крон **всегда** on. Для `promoted` + on текст = `None`
+   (не слать `format_promote_notification` — верно).
+4. `main()` не дренирует `None` → вечный pending → WARN каждый тик.
+
+§26 **создала** половину ловушки: добавила флаг в notify-обёртку и
+явно запретила трогать `notify_pending.py`. Таблица §26: «промоут
+молчит (`return None`)» — без drain. Этот пакет закрывает дыру,
+которую тот LIGHT оставил сознательно.
+
+---
+
+### Канон фикса (код = HF:impl)
+
+Файл: `~/USERTOOLS/ProtocolFromSummary/scripts/notify_pending.py`.
+
+1. В цикле `main()`: если `build_text_for_entry` вернул `None`
+   **и** `last_action=="promoted"` **и** `post_switch_enabled()`
+   **и** не `--dry-run` → `entry.notified = True` + `registry.put`.
+   Текст в stdout **не** печатать.
+2. `stale` считать только по записям, которые ещё **ждут доставки
+   текста**. Исключить `last_action=="promoted"` при
+   `post_switch_enabled()` из набора stale (или сначала drain,
+   потом warn — эквивалентно, если warn после цикла). Иначе тот
+   же тик стукнет ErrorBus по уже дренированным.
+3. Прочие `None` (`meeting_date` пуст, `exported` без пути) **не**
+   дренировать — это не «успех уже доставлен».
+4. `--dry-run` по-прежнему не пишет реестр.
+
+**Не** менять `entry.notified = True if post_switch else False` в
+`playground_promote.py`. Всегда-True на успехе promote сломает
+off-контур: без флага notify **должен** слать
+`format_promote_notification`.
+
+Тесты: `~/USERTOOLS/ProtocolFromSummary/tests/test_notify_pending.py`.
+Существующий `test_notify_promote_success_silent_when_post_switch`
+**оставить** (текст = None). Добавить:
+
+| Тест | Дано | Ожидание |
+|---|---|---|
+| `test_main_drains_promoted_silent_when_post_switch` | `PFS_POST_SWITCH=1`, `last_action=promoted`, `notified=False`, non-historical, `published_at` старше 15 мин | `main([])` rc=0; stdout без текста promote; `notified=True`; нет ErrorBus stale_warn (или stderr без WARN) |
+| `test_main_flag_off_promoted_still_sends` | флаг unset, та же запись | stdout содержит `format_promote_notification`; `notified=True` |
+
+Регресс: `test_notify_ingest_points_to_playground`,
+`test_historical_no_reload_*`, `test_dry_run_does_not_mark_notified`
+зелёные. Не мокать live `_registry.json`. Фикстура tmp_path как в
+`test_main_marks_notified_true_and_prints`.
+
+Операционка 8 записей (не этот ход, после HF:impl): следующий тик
+`pfs_notify` дренирует без TG. Ручной `registry.put` / правка
+`_registry.json` **запрещены**. ErrorBus 1854: после пустого pending
+ожидается auto-resolve / reconcile; `events.db` в этом поезде не
+чистить.
+
+---
+
+### Что НЕ трогать
+
+- `playground_promote.py` присвоение `notified` (канон off/on §23/§24).
+- Обёртки `~/.hermes/scripts/protocolfromsummary_notify_pending.sh`,
+  `pfs_batch_run_pending.sh`.
+- `jobs.json`, `.env`, Gateway, `EcosystemManifest`.
+- Порог `--stale-warn-minutes` / cron-aware next-run (чужой
+  неимплементированный П.1 `pfs-notify-stale`).
+- `historical_no_reload`, `--limit`, форматы `format_*_notification`,
+  ingest-ветка площадки `523032632`.
+- `pipeline.py` ingest/republish, picker, `route.py`, формула
+  `row_anchor`, N-3, страница `432316254`.
+- Поезда §36–§39 (слаги / имена / republish площадки).
+- Ручная правка живого `_registry.json`.
+- `[NEW-ENTITY]`.
+
+---
+
+### Критерии приёмки (AC)
+
+Только пакет `pfs-stale-notifications`. AC §24/§26 **не**
+перенумеровать; этот § добавляет AC-001…007. Класс S. Код пишет
+`HF:impl`. `depends: operator:*` нет.
+
+### AC-001 — drain silent-promoted на пути notify
+
+`PFS_POST_SWITCH=1`, `last_action=promoted`, `notified=False`,
+non-historical → `notify_pending.main` rc=0; stdout **без** текста
+promote; после прогона `notified=True`. Даже если promote оставил
+False.
+
+### AC-002 — флаг off по-прежнему шлёт promote
+
+Флаг unset, та же запись → stdout содержит
+`format_promote_notification`; `notified=True`. Канон off жив.
+
+### AC-003 — `return None` на тексте жив
+
+`test_notify_promote_success_silent_when_post_switch` зелёный
+(текст = None). Drain **не** подменяет молчание текстом.
+
+### AC-004 — stale_warn не по silent-promoted
+
+Та же запись, `published_at` старше 15 мин, флаг on → после
+`main()` **нет** ErrorBus stale_warn / stderr WARN по ней.
+`historical_no_reload` по-прежнему вне выборки.
+
+### AC-005 — прочие `None` не дренировать
+
+Пустой `meeting_date` / `exported` без пути → `notified` не
+ставится в True из-за `None`. `--dry-run` реестр не пишет.
+
+### AC-006 — границы diff
+
+Diff impl: только `scripts/notify_pending.py` +
+`tests/test_notify_pending.py` (+ этот master на TZ:patch, не в
+impl). Нет `playground_promote.py`, `.sh`, `jobs.json`, `.env`,
+Gateway, манифеста.
+
+### AC-007 — регресс notify/promote on
+
+`pytest tests/test_notify_pending.py` и
+`test_live_promote_notified_true_when_post_switch` зелёные.
+Ingest-ветка площадки и форматы без регресса.
+
+---
+
+### IAC (эскиз; LIGHT — ориентир HF:impl/test)
+
+| IAC | verify | ожидание | AC |
+|---|---|---|---|
+| IAC-01 | `pytest tests/test_notify_pending.py::test_main_drains_promoted_silent_when_post_switch tests/test_notify_pending.py::test_main_flag_off_promoted_still_sends tests/test_notify_pending.py::test_notify_promote_success_silent_when_post_switch -q` | 3 passed | AC-001, AC-002, AC-003 |
+| IAC-02 | `pytest tests/test_notify_pending.py tests/test_promote_v2.py::test_live_promote_notified_true_when_post_switch -q` | зелёный | AC-007 |
+| IAC-03 | git diff stat impl | только `notify_pending.py` + `test_notify_pending.py` | AC-006 |
+| IAC-04 | non-historical `notified=false` ∧ `last_action=promoted` в живом реестре = 0 после тика / прогона на копии | очередь дренирована, без TG на эти 8 | AC-001, AC-004 |
+
+Baseline соседей: USERTOOLS PFS; сравнивать прирост vs pre-impl,
+не «diff абсолютно пуст».
+
+---
+
+### Связи с экосистемой
+
+| Связь | Контракт |
+|---|---|
+| §11.6 stale_warn | stale = ждущие доставки текста; `promoted`+флаг on вне stale |
+| §23/§24 notified на promote | канон off/on в `playground_promote.py` **жив**; этот § его не переписывает |
+| §24.2 путь notify | `promoted` + флаг on → нет stdout **и** `notified=True` даже при False от promote |
+| §26 таблица / запрет | «молчит (`return None`)» + drain; запрет трогать `notify_pending.py` — скоуп §26, снят точечно |
+| крон `pfs_notify` `21255143c523` | обёртка уже с флагом; `.sh` / `jobs.json` не трогать |
+| ErrorBus 1854 | auto-resolve после пустого pending; `events.db` не чистить этим поездом |
+
+Открытых вопросов секция не добавляет.
+
+---
+
+### Version bump
+
+Секция пакета: **1.35.1** (патч, багфикс контракта, который уже
+записан в §24.2). Шапка master и `MAIN_TZ_INVENTORY.md`:
+**1.35.0 → 1.35.1** (`TZ:finalize` 21.10.2026). AnywhereContacts /
+MOFS / TaskRefresh / EntityRegistry **без** bump. `[NEW-ENTITY]` нет.
+
+AC-001…007 зафиксированы: закрыты планом
+(`_fix_plan_20261021.md`) и IAC-01…04; impl/verify = `HF:impl` /
+`HF:test`. Класс S; `depends: operator:*` нет.
+
+Changelog:
+
+| Версия | Что |
+|---|---|
+| 1.35.0 | §39 гибрид H: lifecycle open/closed_at; picker candidates H; AC-001…018 |
+| **1.35.1** | §40 drain silent-promoted в `notify_pending`; stale_warn без `promoted`+флаг on; запрет §26 снят точечно |

@@ -2,14 +2,14 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Машина исполнения разработки Hermes без канбана (единый скилл + файловое состояние)"
-version: 0.6.0
-date: 2026-10-20
+version: 0.7.0
+date: 2026-10-21
 status: draft
 author: архитектор (cursor-grok-4.6-high, Cursor CLI)
-last-section-added: 2026-10-20 — v0.6.0 TZ:finalize llm-cost-optimization: Б46; MUST-read секции; doorbell fingerprint; AC-094…116; operator-hold ставь кроны + удаляй
-case: CHANGE
-slug: llm-cost-optimization
-previous_slug: migrate-dev-roles-cursor-to-codex
+last-section-added: 2026-10-21 — v0.7.0 TZ:finalize hard-stop-limity-hodov-fazy-p-5-auto-close-teleg: штамп Б49 П.5.б overlay ходов фазы + П.7.4 auto-close telegram 80 api fail-closed (REV:tz APPROVE)
+case: BUGFIX
+slug: hard-stop-limity-hodov-fazy-p-5-auto-close-teleg
+previous_slug: ktalk-tmo-fatal-classifier
 depends_on:
   - TZ/GLOSSARY.md >= 0.2.15
   - TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md >= 0.4.4
@@ -49,12 +49,12 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б5** | Что сохранить из канбана | Б1 вопрос 2 | слой статусов Б11, бэклог Б28 |
 | **Б6** | Канон внутри скилла; G1 ещё drift выжимки; **v0.4.1:** G6 таблица исчерпывающая (RS:collect / MIG:block-k / SK:preflight); **v0.5.0:** модели ролей = Codex (Б45), G6 «invoke-роль не звать» | GLOSSARY 0.2.15, Б1 вопрос 1, Б12, Б45 | рецепты Б18–Б27 |
 | **Б7** | Карта «код / скилл» (T3) | Б3, Б4 | границы Б8, Б9 |
-| **Б8** | Файлы `pipeline/` | Б7, T1, T4 | CLI Б16, инварианты Б17 |
+| **Б8** | Файлы `pipeline/`; **v0.6.1:** `cmd_set_case` pop `state_sha256` после `set_case` | Б7, T1, T4, Б47 | CLI Б16, инварианты Б17; AC-117 |
 | **Б9** | Структура скилла; процедура REV в `SKILL.md`; MUST-read в `references/context.md`; docs комплекта (README, onboarding, cases-guide, config.example) | Б1, Б6, Б7, Б12, Б13.5, Б16.1 | установка Б13.3, продукт Б13.5, миграция Б31 |
-| **Б10** | Очередь и состояние (T1); ключ выжимки в `_state.json`; **v0.4.5:** occupancy ≠ CLI-mutex; abort сжигает имя; **v0.4.6:** живой invoke с `pid=None` ≠ leftover, второй поезд поверх запрещён; **v0.4.8:** окно pre-invoke (`awaiting_invoke`) + `recover_counts` + journal `recover`; **v0.4.9:** occupancy `complete-phase`/`next`/`invoke` пока жив wrapper этого слага | Б3, Б8, Б12, Б40, Б41, Б43, Б44 | complete-phase Б16, журнал T5, reuse compress Б18.4; AC-058/059/063/071/076/078 |
+| **Б10** | Очередь и состояние (T1); ключ выжимки в `_state.json`; **v0.4.5:** occupancy ≠ CLI-mutex; abort сжигает имя; **v0.4.6:** живой invoke с `pid=None` ≠ leftover, второй поезд поверх запрещён; **v0.4.8:** окно pre-invoke (`awaiting_invoke`) + `recover_counts` + journal `recover`; **v0.4.9:** occupancy `complete-phase`/`next`/`invoke` пока жив wrapper этого слага; **v0.6.1:** рабочий dict после `set_case` без stored sha | Б3, Б8, Б12, Б40, Б41, Б43, Б44, Б47 | complete-phase Б16, журнал T5, reuse compress Б18.4; AC-058/059/063/071/076/078/117 |
 | **Б11** | Формат статуса (T2); **v0.4.5:** running только при живом PID; **v0.4.6:** leftover `--check` не включает окно post-invoke | Б5 слой 2, Б40, Б41 | CLI `status`, HITL; AC-060/062/063 |
 | **Б12** | Точечный контекст: три слоя хранения, доктрина двух источников, MUST-read, ключ выжимки; **v0.6.0:** MUST-read TZ/REV = секции (не весь master по умолчанию) | Б1 вопрос 3, Б4 Q-Archi-02/04/05, Б46 П.2 | emit-prompt в Б18–Б27; G1 в Б6.5; AC-097…099 |
-| **Б13** | Переносимость и `invoke_role` (T4); **Б13.3** установка; **Б13.4** handoff слага; **Б13.5** продукт/платформа; **v0.4.2:** post-invoke проверка канонического имени артефакта; **v0.4.5:** PID-probe ≠ sirene без pid; **v0.4.6:** pid до spawn; окно post-invoke; запрет пайпа stdout; **v0.4.8:** model на `invoke_prepare`; канон артефакта расширен (TZ:patch / diagnose / RS / MIG); пустой JSON `result` ≠ proof; **v0.4.9:** `session_id` из JSON агента; конец хода ≠ notify; **v0.5.0:** default backend = `codex exec` (Б45); cursor-cli = откат | Б1.4, Б1.9, Q-Archi-03/04/06, Б40, Б41, Б43, Б44, Б45 | конфиг Б14, комплект поставки, AC-025/040/042/047/060/061/062/064/073/075/076/077/081/082 |
+| **Б13** | Переносимость и `invoke_role` (T4); **Б13.3** установка; **Б13.4** handoff слага; **Б13.5** продукт/платформа; **v0.4.2:** post-invoke проверка канонического имени артефакта; **v0.4.5:** PID-probe ≠ sirene без pid; **v0.4.6:** pid до spawn; окно post-invoke; запрет пайпа stdout; **v0.4.8:** model на `invoke_prepare`; канон артефакта расширен (TZ:patch / diagnose / RS / MIG); пустой JSON `result` ≠ proof; **v0.4.9:** `session_id` из JSON агента; конец хода ≠ notify; **v0.5.0:** default backend = `codex exec` (Б45); cursor-cli = откат; **v0.6.2:** трёхзначный control-flow `classify_provider_fatal` (успешный JSON ≠ JSON-ошибка ≠ не-JSON) | Б1.4, Б1.9, Q-Archi-03/04/06, Б40, Б41, Б43, Б44, Б45, Б48 | конфиг Б14, комплект поставки, AC-025/040/042/047/060/061/062/064/073/075/076/077/081/082/119/120 |
 | **Б14** | Единый конфиг; **v0.3.2:** `orchestration.mode` / `orchestration.pilot_slugs`; **v0.5.0:** `invoke.default_backend: codex`, effort/LIGHT/escalate в `roles.*` (Б45) | eco-config §10, Блок F, Б45 | ключи YAML, запрет `.env`, dual-path |
 | **Б15** | Хранение ТЗ и архивация | TZ-storage-system, инвентарь | `TZ:finalize`, DECOMM |
 | **Б16** | Цикл оркестратора; **Б16.1** согласование архитектор↔ревизор (REV сверяет выжимку с master); **v0.4.2:** канон `REV-tz.md`/`REV-plan.md`, `rev_verdict()` только блок «## Вердикт»; **Б16.4 v0.4.5:** occupancy leftover + PID-probe sirene; **Б16.5 v0.4.6:** слепота PID invoke + второй поезд; **Б16.6 v0.4.8:** action `RECOVER` + тот же ход recover/warn/next; **Б16.7 v0.4.9:** граница хода = journal/канон/ps, не notify Cursor; doorbell-спека; **v0.6.0:** fingerprint без `canon_mtime` при живом pid; `queue=<n>` | Б3, Б6.4, Б8, Б10, Б12, Б40, Б41, Б43, Б44, Б46 | complete-phase/next всех кейсов; протокол REV для Б9, Б18; AC-037/047/058/060/061…064/071…079/109 |
@@ -66,19 +66,22 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б30** | Перенос истории канбана (T5) | Б1 В1 | W4, журнал |
 | **Б31** | Миграция W0–W4 и откат; **v0.4.5:** abort сжигает каноническое имя пилота (`eco-config-w4`) | Б1 В2, вопрос 5, Б40 | AC миграции; AC-059 |
 | **Б32** | Ошибки инструмента → ErrorBus | Б1 вопрос 2 | `--tool dev_workflow` |
-| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены; **v0.4.5:** п.39–41 occupancy leftover / abort канона / dead-pid на sirene; **v0.4.6:** п.42–45 слепота PID invoke / второй поезд / post-invoke dead-pid / пайп stdout; **v0.4.8:** п.46–50 recoverable INTERRUPTED ждать Сашу / крон-reaper как recover / второй recover-pass / json.dump recover / complete без model; **v0.4.9:** п.51–55 notify как конец хода / complete поверх живого wrapper / канон dwka_guard / замена pid / крон doorbell без глагола; **v0.6.0:** п.63–65 лимиты ходов фазы не ядром / auto-close без патча gateway / SQL telemetry ro допустим | Б3 вердикт, Б12, Б13.4, Б13.5, Б40, Б41, Б43, Б44, Б46 | неприемлемость |
-| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта; **v0.4.5:** AC-058…060 класс S; **v0.4.6:** AC-061…064 класс S; **v0.4.7:** AC-065…070; **v0.4.8:** AC-071…075 класс S; **v0.4.9:** AC-076…079 класс S; **v0.5.0:** AC-080…093 (Codex); **v0.6.0:** AC-094…116 (`llm-cost-optimization`; O: ставь кроны / удаляй) | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1, Б40, Б41, Б43, Б44, Б45, Б46 | GATE:done этого слага = конец W1; AC-017/018 не здесь |
+| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены; **v0.4.5:** п.39–41 occupancy leftover / abort канона / dead-pid на sirene; **v0.4.6:** п.42–45 слепота PID invoke / второй поезд / post-invoke dead-pid / пайп stdout; **v0.4.8:** п.46–50 recoverable INTERRUPTED ждать Сашу / крон-reaper как recover / второй recover-pass / json.dump recover / complete без model; **v0.4.9:** п.51–55 notify как конец хода / complete поверх живого wrapper / канон dwka_guard / замена pid / крон doorbell без глагола; **v0.6.0:** п.63–65 лимиты ходов фазы не ядром / auto-close без патча gateway / SQL telemetry ro допустим; **v0.6.1:** п.66–67 `from_dict` без pop после `set_case` / ослабление `from_dict` или sha в recipe; **v0.6.2:** п.68–69 сливать None успешного JSON с не-JSON / лечить ложный fatal через recoverable или выкидывание паттерна; **v0.7.0:** п.70 сырой SQL write / обход `SessionDB.end_session`; п.71 лимиты ходов в `warn_after` / `agent.max_turns` | Б3 вердикт, Б12, Б13.4, Б13.5, Б40, Б41, Б43, Б44, Б46, Б47, Б48, Б49 | неприемлемость |
+| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта; **v0.4.5:** AC-058…060 класс S; **v0.4.6:** AC-061…064 класс S; **v0.4.7:** AC-065…070; **v0.4.8:** AC-071…075 класс S; **v0.4.9:** AC-076…079 класс S; **v0.5.0:** AC-080…093 (Codex); **v0.6.0:** AC-094…116 (`llm-cost-optimization`; O: ставь кроны / удаляй); **v0.6.1:** AC-117…118 (`pipeline-set-case-crisis-sha-bug`); **v0.6.2:** AC-119…120 (`ktalk-tmo-fatal-classifier`); **v0.7.0:** AC-108/113 валят GATE:done слага `hard-stop-…`; AC-121 O `ставь кроны` watcher | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1, Б40, Б41, Б43, Б44, Б45, Б46, Б47, Б48, Б49 | GATE:done этого слага = конец W1; AC-017/018 не здесь |
 | **Б35** | Контракты экосистемы (contracts-standard.md); **v0.3.2:** входные `orchestration.mode` / `pilot_slugs` | Б10, Б12, Б14, Б32 | SoT = `_state.json`; `extract.md` производный; migrate_vN своей схемы; dual-path-ключи только через эту таблицу |
 | **Б36** | Что показать Саше | Q-Archi-01..06, DRY-отклонение, продукт Б13.5, **v0.4.0:** Q-Archi-07/08 | не блокирует TZ:finalize |
 | **Б37** | Пакет `devworkflow-task-slug`: файрвол ролей, поезд сам, `suggest-slug`, G6, контроль Саши, изоляция origin; **v0.4.2:** Python-контроль канона артефакта и вердикта (норма 4) | Б6.4, Б7, Б11, Б16, Б21, факт сбоя 14.10, FINDING-PyContr-2 | AC-044…051; GATE:done этого слага |
 | **Б40** | Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`: occupancy-дедлок «первый next + брошенный sirene-doing»; abort сжигает каноническое имя пилота; PID-probe ≠ sirene без pid | инцидент 14.10 w4, `_fix_plan_20261017.md`, Б10, Б11, Б13.2, Б16.4, Б18.4–5, Б29 A3, Б31 | AC-058…060 класс S; GATE:done этого BUGFIX |
 | **Б41** | Пакет `sravnit-skills-vs-tree-docs-zavis-v-rs-collect-d`: leftover sirene ≠ живой invoke с незаписанным pid; `invoke_role` пишет pid до spawn; `cmd_next` не бьёт окно post-invoke; пайп `head`/`tail` на stdout invoke-role запрещён | инцидент 18.10 RESEARCH `RS:collect`, `_fix_plan_20261018.md`, Б10, Б11, Б13.2, Б16.5, Б29 A3 | AC-061…064 класс S; GATE:done этого BUGFIX; корпус Б40/AC-058…060 не откатывать |
-| **Б42** | Пакет `dev-workflow-cursor-cli`: invoke_role FATAL_PATTERNS сужен (JSON-структурный, без голых timeout/credits/billing — только ошибки без легитимного завершения); `--source_kind`→`--source-kind` | инцидент 15.10 ErrorBus 1832/1834, `_fix_plan_20261015.md`, Б13.2, Б29 A1–A2, Б32 | AC-065…070 класс S; GATE:done этого BUGFIX |
+| **Б42** | Пакет `dev-workflow-cursor-cli`: invoke_role FATAL_PATTERNS сужен (JSON-структурный, без голых timeout/credits/billing — только ошибки без легитимного завершения); `--source_kind`→`--source-kind`; **v0.6.2 развитие control-flow — Б48** | инцидент 15.10 ErrorBus 1832/1834, `_fix_plan_20261015.md`, Б13.2, Б29 A1–A2, Б32, Б48 | AC-065…070 класс S; GATE:done этого BUGFIX; AC-119…120 развивают, не откатывают |
 | **Б43** | Пакет `dev-workflow-avtovosstanovlenie`: автовосстановление recoverable-сбоев (dead-pid / G6 wrong-role / empty result / rc=0 без complete / model=None) + warn Саше класс S; без reaper/крона/авто-ретрая | инциденты 19.10 (ktalk + этот слаг), правило Саши 19.10, cursor-cli-resilience 1/5, Б10, Б13.2, Б16 | AC-071…075 класс S; GATE:done этого SKILL-CHANGE; корпуса Б40–Б42 не откатывать |
 | **Б44** | Пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`: конец хода ≠ notify Cursor; occupancy `complete`/`next`/`invoke` пока жив wrapper; `session_id` писать; recover one-shot оставить; страж-doorbell по `ставь кроны` (крон в этом поезде не ставим); AC-061 pid=wrapper не трогать | RS:analyze 19.10 APPROVE `intent-arhitektor-pochemu-teryaem-pidy`, collect §8, Б1.2, Б10, Б13.2, Б16.5–6, Б33 п.47, Б40–Б43 | AC-076…079 класс S; GATE:done этого CHANGE; корпуса Б40–Б43 / AC-058…075 не откатывать |
 | **Б45** | Пакет `migrate-dev-roles-cursor-to-codex`: штатный бэкенд ролей = Codex exec; таблица моделей Саши; починка `run_codex`; sandbox; skip-git; auth; пилот; откат на cursor-cli | решение Саши 20.10, Q-Archi-03, Б6.4, Б13.2, Б14, факт `codex run --cwd` / 401 token_expired | AC-080…093; GATE:done этого CHANGE; корпуса Б40–Б44 / AC-058…079 не откатывать |
-| **Б46** | Пакет `llm-cost-optimization`: экономия ключа tutu; П.1–П.8; MUST-read TZ/REV = секции; doorbell fingerprint без `canon_mtime` при живом pid + `queue=<n>`; auto-GATE без LLM; operator-hold `ставь кроны` / `удаляй` | аудит 20.10 $12.49/24ч, корпус TZ:patch, REV:tz APPROVE, Б12.3, Б16.7, Б17.4, Б33, Б44.4 / AC-079 | AC-094…116; GATE:done этого CHANGE (holds O); корпуса Б40–Б45 / AC-058…093 не откатывать; код П.1 / П.5.б / П.7.4 — отдельные цепочки |
-| **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд; **v0.5.0:** исключение allowlist скиллов Б45.5 (тела таблиц моделей/вызова, не баннер dual-path); **v0.6.0:** `dwka_guard` hold `удаляй`; `jobs.json` hold `ставь кроны` | Б13.1, Б13.5, Б31.2, Б33, Б37, Б45, Б46 | чеклист Шаг 4 tz-workflow |
+| **Б46** | Пакет `llm-cost-optimization`: экономия ключа tutu; П.1–П.8; MUST-read TZ/REV = секции; doorbell fingerprint без `canon_mtime` при живом pid + `queue=<n>`; auto-GATE без LLM; operator-hold `ставь кроны` / `удаляй` | аудит 20.10 $12.49/24ч, корпус TZ:patch, REV:tz APPROVE, Б12.3, Б16.7, Б17.4, Б33, Б44.4 / AC-079 | AC-094…116; GATE:done этого CHANGE (holds O); корпуса Б40–Б45 / AC-058…093 не откатывать; код П.1 — отдельная цепочка; код П.5.б / П.7.4 — Б49 |
+| **Б47** | Пакет `pipeline-set-case-crisis-sha-bug`: `cmd_set_case` после `set_case` сбрасывает `state_sha256` (`d.pop`) перед `from_dict`; `from_dict`/`set_case` не ослаблять; LIGHT = `cli.py` + `test_set_case_light.py` | инцидент `set-case` CRISIS mismatch, `_fix_plan_setcase.md`, Б6.1, Б8, Б10, Б20, Б22 | AC-117…118 класс S; GATE:done этого BUGFIX-LIGHT; корпуса Б40–Б46 / AC-058…116 не откатывать |
+| **Б48** | Пакет `ktalk-tmo-fatal-classifier`: трёхзначный control-flow `classify_provider_fatal` (успешный JSON / JSON-ошибка / не-JSON); envelope клиента выигрывает у цитат в `result`; паттерн `request timed out` не выкидывать | инцидент ErrorBus #1850/#1852/#1855, `_fix_plan_20261021.md`, Б13.2, Б29 A1, Б42 | AC-119…120 класс S; GATE:done этого BUGFIX-LIGHT; корпуса Б40–Б47 / AC-058…118 не откатывать |
+| **Б49** | Пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`: overlay лимитов ходов фазы в `invoke_role` (П.5.б); no_agent-watcher auto-close telegram ≥80 api fail-closed через `SessionDB.end_session` (П.7.4); канон валидного handoff-summary; крон watcher — класс O | ErrorBus #1838, `_fix_plan_20261021.md`, Б46 П.5.б / П.7.4, Б33 п.63–65 | AC-108/113 валят GATE:done **этого** слага; AC-121 O `ставь кроны`; корпуса Б40–Б48 / AC-058…120 не откатывать |
+| **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд; **v0.5.0:** исключение allowlist скиллов Б45.5 (тела таблиц моделей/вызова, не баннер dual-path); **v0.6.0:** `dwka_guard` hold `удаляй`; `jobs.json` hold `ставь кроны`; **v0.6.1:** `from_dict` жёсткий; `set_case` без sha; чужие `_state.json` PFS-слагов; **v0.6.2:** список `FATAL_PATTERNS` / таймауты `agent -p` / REV / страж п.47 / I1; **v0.7.0:** `warn_after` / ядро / сырой SQL write / `session.py` / `hermes-session-reset-policy` тело | Б13.1, Б13.5, Б31.2, Б33, Б37, Б45, Б46, Б47, Б48, Б49 | чеклист Шаг 4 tz-workflow |
 | **Связи с экосистемой** | Кто с кем (не поля) | Б14, Б32, манифест | отдельно от Б35 |
 | **Открытые вопросы** | Явный h2 (пусто / «нет») | Б36, AC-018 на W4 | чеклист Шаг 4 |
 
@@ -122,13 +125,13 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 Пишется только текст ТЗ (`TZ:patch` / `TZ:finalize` + инвентарь). **Не** писать код `pipeline/`, **не** создавать скилл на диске, **не** строить граф канбана, **не** создавать карточки, **не** выключать канбан, **не** рестартовать gateway, **не** ставить кроны.
 
-Этот ход — `TZ:finalize` **v0.6.0** пакета `llm-cost-optimization`. Пишется только текст ТЗ (+ строка инвентаря + AC-list). **Не** писать код `pipeline/`, **не** менять скиллы/YAML Hermes/`jobs.json` на диске, **не** звать `codex login`, **не** рестартовать gateway, **не** ставить кроны, **не** коммитить в `~/hermes-agent`.
+Этот ход — `TZ:finalize` **v0.7.0** пакета `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`. Штамп корпуса TZ:patch без правок смысла + строка инвентаря. **Не** писать код `pipeline/` / `~/.hermes/scripts/`, **не** менять YAML Hermes / `jobs.json` / `tool_loop_guardrails.warn_after`, **не** рестартовать gateway, **не** ставить кроны, **не** писать сырой SQL в `state.db`, **не** патчить `gateway/session.py` / ядро.
 
-Нормы пакета — Б46: экономия ключа tutu (DeepSeek flash); аудит 20.10 **$12.49/24ч**. П.1–П.8. Штат ролей Codex (Б45) **не** откатывать на Cursor. Корпуса Б40–Б45 / AC-058…093 / AC-061 **без правок смысла** (не откатывать). Решение 13.10 (Б1.2) **не** пересматривать. Канон 10 кейсов / фазы / G6 / классы S/O/C **не** пересматривать. `[NEW-ENTITY, требует согласования Саши]` **нет**. Q-n этого пакета **нет** (Q-2 auth Codex — чужой поезд `migrate-dev-roles-cursor-to-codex`, не занимать). Q-1 W4 (выключение dispatch) **не** заводится.
+Нормы пакета — Б49: (1) overlay лимитов ходов фазы в `invoke_role` (GATE≤4 / TZ·REV·прочие invoke≤20 / HF≤25), не ключи `warn_after`, не ядро; (2) no_agent-watcher auto-close telegram ≥80 api fail-closed через публичный `SessionDB.end_session(id, "api_limit_80")`. Корпуса Б40–Б48 / AC-058…120 **без правок смысла** (не откатывать). AC-108/113 с этой версии валят GATE:done **этого** слага (для `llm-cost-optimization` по-прежнему не валят — Б46). Флаг `hard_stop_enabled: true` уже в config.yaml — не менять (AC-107). Решение 13.10 (Б1.2) **не** пересматривать. `[NEW-ENTITY, требует согласования Саши]` **нет** (канал стража/ErrorBus не заводить; ошибки — через существующий `report_error`). Q-n этого пакета **нет**. Q-2 auth Codex и Q-1 W4 **не** занимать.
 
-Поезд init как `DEV`; содержание пакета = CHANGE существующего DevWorkflow. Архитектор кейс **не** меняет (G5). Semver **0.6.0**.
+Поезд init как `BUGFIX-LIGHT` triage-батча → оркестратор снял LIGHT (`set-case BUGFIX`) после diagnose-review. Архитектор кейс **не** меняет (G5). Semver **MINOR** 0.6.2 → **0.7.0** (новый код overlay + watcher, не штамп). Инвентарь `MAIN_TZ_INVENTORY.md` — этот ход.
 
-Предыдущий пакет `migrate-dev-roles-cursor-to-codex` (v0.5.0) остаётся в корпусе; этот CHANGE его не переписывает, а **режет расход tutu** конфигом, 0-токенными детекторами и MUST-read секций.
+Предыдущий пакет `ktalk-tmo-fatal-classifier` (v0.6.2) остаётся в корпусе; этот BUGFIX его не переписывает, а закрывает дыру «норма П.5.б / П.7.4 на диске, кода нет» (ErrorBus #1838).
 
 ### Б0.4 Связь с живыми документами
 
@@ -156,14 +159,18 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | `TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md` | текст корпуса не править до DECOMM канбана; W0 — пометка superseded-runtime в шапке, не перепись | Б15, Б31.2 |
 | Ядро gateway (`gateway/session.py` и родственное) | не патчить; не рестартовать из этого плана | Б0.3, Б33 п.21 |
 | `~/.hermes/kanban.db` | не rm; не делать SoT новой машины | Б30, Б31.1 |
-| `jobs.json` / кроны | не создавать без «ставь кроны»; **v0.6.0:** hold `ставь кроны` на (1) doorbell tick 1 мин no_agent; (2) алерт кэша П.1; (3) flip `pfs_batch`. Этот поезд **не** пишет `jobs.json` | Б33 п.22/55, Б44, Б46, AC-096/110/111 |
+| `jobs.json` / кроны | не создавать без «ставь кроны»; **v0.6.0:** hold `ставь кроны` на (1) doorbell tick 1 мин no_agent; (2) алерт кэша П.1; (3) flip `pfs_batch`. **v0.7.0:** (4) watcher `tg_session_auto_close` 15–30 мин no_agent (Б49, AC-121). Этот поезд **не** пишет `jobs.json` | Б33 п.22/55, Б44, Б46, Б49, AC-096/110/111/121 |
 | `~/.hermes/scripts/dwka_guard.sh` | не канонизировать; не копировать в `pipeline/` как SoT стража; не механизм recover. **v0.6.0:** судьба — operator-hold `удаляй` (AC-114/115); не `rm` до глагола | Б33 п.47/53, Б43.2, Б44, Б46 П.8 |
 | `EcosystemManifest.json` / `entities.json` / per-tool `.env` / секреты в YAML | исполнитель не пишет; per-tool `.env` запрещён | Б14, Б33 п.14 |
-| sqlite / SQL как SoT, кэш выжимок или транспорт контекста | не заводить; `kanban.db` — только read-only архив после W4. **v0.6.0:** П.1 читает `state.db` **ro telemetry**, не кладёт выжимки в SQL (дух п.25; Б33 п.65) | Б12, Б13.4, Б33 п.6/25/65, Б46 П.1 |
+| sqlite / SQL как SoT, кэш выжимок или транспорт контекста | не заводить; `kanban.db` — только read-only архив после W4. **v0.6.0:** П.1 читает `state.db` **ro telemetry**, не кладёт выжимки в SQL (дух п.25; Б33 п.65). **v0.7.0:** П.7.4 читает `sessions`/`messages` `mode=ro`; запись закрытия — только `SessionDB.end_session`, не сырой SQL (Б33 п.70, Б49) | Б12, Б13.4, Б33 п.6/25/65/70, Б46 П.1, Б49 |
 | `USERTOOLS/DevWorkflow/` | не заводить: это продукт процесса, не USERTOOL | Б13.5, Б14 |
 | профильные USERTOOLS (встречи, протоколы, контакты, Confluence) | не патчить «ради онбординга» DevWorkflow; не подменять комплектом | Б13.5, Б33 п.31 |
 | `hermes-feature/SKILL.md`, `tz-workflow/SKILL.md` (чужие скиллы) | **исключение W2, не локальный форк:** только баннер dual-path **сверху**. Тело процедуры, блоки 0–8, триггеры, `references/` — не трогать. **v0.3.2:** 10–15 строк allowlist (AC-043). **v0.4.0:** те же два файла, **аддитив +2–4 строки файрвола** («не предлагай слаги / технические варианты; стоп, отдай `dev-workflow`»). **v0.4.1:** коридор длины баннера **12–19** непустых строк = (10–15) + (2–4); round-up до 20 запрещён (иначе pytest AC-050 п.1 false-pass на 20-строчный баннер). **v0.5.0 пакет `migrate-dev-roles-cursor-to-codex`:** **второе исключение — allowlist Б45.5.** В тех же двух файлах (и в `cursor-cli`, `cursor-task-context`, `codex`, `dev-workflow`, `deep-mine-project`) **разрешено** заменить таблицу ролей/моделей и паттерн вызова `agent -p` → `invoke_role` / Codex exec. Баннер dual-path **не** расширять и не сносить. Тело процедуры кейсов/блоков 0–8 / файрвол оркестратора — не переписывать ради «раз уж открыли файл». Откат штата = YAML `default_backend: cursor-cli` + git checkout allowlist. Скиллы **вне** Б45.5 (в т.ч. leftover `agent -p` в чужих SKILL.md) — **не этот поезд** | Б13.5, Б31 W2, Б37, Б45.5, AC-043, AC-050, AC-086 |
 | `TZ/ProtocolFromSummary/ProtocolFromSummary_TZ.md`, код PFS, picker §29, `entities.<slug>.task_slug` | **второй поезд.** Баг «задачам встречи не проставляется `task_slug`» (встреча «Кирилл 1-1 2026-10-14», канбан `pfs-task-slug-regress`) — **заказчик-пример**, не владелец слага `devworkflow-task-slug`. Чинить PFS в этом TZ-WRITE **запрещено** | Б0.3, Б37 |
+| `pipeline_state.from_dict`, `pipeline_recipe.set_case`; чужие `dev/*/ _state.json` | **v0.6.1:** не ослаблять сверку sha с диска; не класть пересчёт sha в recipe. Не править `_state.json` слагов `pfs-slug-1on1-iz-konteksta-vstrechi` и `pfs-slagi-zadach-v-1on1-meetingah`. Фикс `set-case` — только `cmd_set_case` pop (Б47) | Б8, Б33 п.66–67, Б47 |
+| `invoke_role.FATAL_PATTERNS` (список), таймауты `agent -p`, REV (`rev_verdict` / канон `REV-tz.md`), страж Б33 п.47 / doorbell AC-079, I1/MVP (10 кейсов) | **v0.6.2:** не сокращать паттерны «чтобы цитата не била»; не менять таймауты клиента; не трогать REV-нормы и страж; не лечить ложный fatal, делая `provider_fatal` recoverable. Фикс = control-flow `_fatal_reason` (Б48) | Б13.2, Б33 п.11/47/68–69, Б42, Б44, Б48 |
+| `tool_loop_guardrails.warn_after` / `hard_stop_after`; `agent.max_turns`; `goals.max_turns`; `delegation.max_iterations` | **v0.7.0:** не переименовывать и не подставлять GATE/TZ/HF. Флаг `hard_stop_enabled: true` уже в config.yaml — не менять (AC-107). Лимиты ходов фазы = overlay `invoke_role` `turn_count`, не ядро (Б49, Б33 п.63/71) | Б46 П.5.а, Б49 |
+| `gateway/session.py`; сырой SQL write в `state.db`; `hermes-session-reset-policy` тело; схема `state.db` | **v0.7.0:** не патчить session.py / ядро; не `UPDATE sessions` строкой SQL; не форк hook рядом с plugin П.7.3. Close = `SessionDB.end_session(id, "api_limit_80")`. Схему `state.db` не менять | Б13.1, Б33 п.8/21/64/65/70, Б46 П.7.3–4, Б49 |
 
 ---
 
@@ -384,7 +391,7 @@ D1/D2 снимается: есть только вызов роли `invoke_role
 
 Новый тип работы = новая строка в этой таблице **и** согласование Саши. Архитектор кейс не выбирает и фазы не укорачивает.
 
-Семейство (DEV / CHANGE / BUGFIX / …) фиксируют **по таблице триггеров** (`references/cases-guide.md` / Б37): «баг / не работает / почини» → **BUGFIX сразу**, без меню вариантов. Вопрос Саше про кейс — **только** если два семейства равноправны (DEV vs CHANGE, когда неизвестно, жив ли инструмент). Форма вопроса — одно закрытое «это доработка X или новый инструмент?», **не** нумерованный список слагов и **не** технические развилки. LIGHT — сужение **того же** семейства после известного объёма (BUGFIX — после `GATE:diagnose-review`; CHANGE — после оценки на `TZ:patch`). Сужение = **одна функция** `pipeline set-case` (переписать рецепт в `_state.json`). Второго create-батча карточек нет — поэтому обрыв `children=[]` исчезает. Архитектор кейс не выбирает (G5).
+Семейство (DEV / CHANGE / BUGFIX / …) фиксируют **по таблице триггеров** (`references/cases-guide.md` / Б37): «баг / не работает / почини» → **BUGFIX сразу**, без меню вариантов. Вопрос Саше про кейс — **только** если два семейства равноправны (DEV vs CHANGE, когда неизвестно, жив ли инструмент). Форма вопроса — одно закрытое «это доработка X или новый инструмент?», **не** нумерованный список слагов и **не** технические развилки. LIGHT — сужение **того же** семейства после известного объёма (BUGFIX — после `GATE:diagnose-review`; CHANGE — после оценки на `TZ:patch`). Сужение = **одна функция** `pipeline set-case` (переписать рецепт в `_state.json`). **v0.6.1 / отладка set-case:** `cmd_set_case` после `set_case` (мутация dict) **обязан** сбросить `state_sha256` (`d.pop`) перед `from_dict` — иначе `CRISIS: state_sha256 mismatch`. Shared `set_case` sha не считает; `from_dict` с диска не ослаблять (Б8, Б10, Б47, AC-117). Второго create-батча карточек нет — поэтому обрыв `children=[]` исчезает. Архитектор кейс не выбирает (G5).
 
 ### Б6.2 Фазы (имена без изменений)
 
@@ -569,6 +576,8 @@ pipeline journal --slug <slug>                   # печать journal.md хв�
 
 Контракт CLI: `complete-phase` / `hold` / `interrupt` / `abort` / `recover` **требуют** `--reason`. `complete-phase`, `operator-done` и `recover` **требуют** `--evidence`. Нет флага — exit 2 (ошибка вызова), состояние не менять. Это закрывает дыру «`--reason` не поддерживается» (C12). `recover` **не** spawn роли и **не** `next` (Б16.6, AC-071).
 
+**v0.6.1 `cmd_set_case`.** После `read_state` → `to_dict()` → `pipeline_recipe.set_case(d, case)` рабочий dict уже **не** совпадает с stored sha (sha считали по телу до сужения; recipe sha не трогает). Перед `from_dict` / `write_state` — `d.pop("state_sha256", None)`. Пустой stored → пересчёт без CRISIS. Не чинить `from_dict` (проверка с диска жёсткая). Не класть пересчёт sha в `set_case` (слой recipe = LIGHT-сужение recipe/phases, не целостность диска). Диск валиден через `write_state` → `to_dict()`. `repair` очередь, не sha: на этом CRISIS бесполезен. Отладка `set-case` mismatch — эта склейка в `cli.py`, не shared-ядро (Б47, AC-117).
+
 **v0.4.0 `suggest-slug`.** Детерминированный kebab из `--title` (транслит, lowercase, max 48, уникальность vs `DEV_STATE_ROOT/*/`). Stdout JSON: один `slug`, `source=suggest-cli`, `collision` bool. **Не** возвращает список кандидатов человеку. `--kind` в этом пакете только `train` (`dev/<slug>/`). Kind `task` / `entities.task_slug` **запрещён** (второй поезд PFS). `init` пишет `slug_source`: default `suggest-cli` (если `--slug` опущен — Python сам кладёт выход `suggest-slug`); `sasha-verbatim` — слаг **дословно** из фразы Саши, не из меню Сирени; `reuse` — каталог уже есть. Иной источник / нумерованный список слагов в origin от оркестратора → G6.
 
 Корень `~/WorkVault/Registries/pipeline_*.py` после W1 — тонкие обёртки-алиасы (или удаление после пилота), чтобы старые скиллы на W0–W2 не падали. На W4 алиасы убираются вместе с откатом-стопом старых скиллов.
@@ -671,7 +680,7 @@ dev/
 |---|---|---|
 | Папка есть, в индексе нет | repair | добавить в индекс, journal event `repair_reindex` |
 | В индексе есть, папки нет | **CRISIS** | не молчать: ErrorBus critical + `status=blocked` синтетической записи нельзя (папки нет) → строка CRISIS в `status --check`, Саше в origin если известен. Восстановление из `_Archives` / git, не из воздуха |
-| sha256 не сходится | CRISIS | не писать поверх; journal `hash_mismatch`; ErrorBus |
+| sha256 не сходится | CRISIS | не писать поверх; journal `hash_mismatch`; ErrorBus. **v0.6.1:** это улика **с диска**. Рабочий dict после `set_case` — не диск: `cmd_set_case` сбрасывает stored sha (`d.pop`) до `from_dict`, иначе ложный CRISIS на штатном сужении (Б8, Б47) |
 
 `abort` переводит `status=aborted`, папку **не** удаляет. Удаление — только DECOMM с гейтом Саши. Повторный `init` того же слага после `aborted`/`done` — exit 1 «слаг занят»: **имя слага сгорело**. Канонические имена пилота Б31 (`eco-config-w3`, `eco-config-w4`) снимать с occupancy **через `interrupt`**, не `abort` (Б40, AC-059). Смоук-abort одноразового слага (`install-smoke`, Б13.3 п.6) — штатен.
 
@@ -1020,6 +1029,16 @@ Default `--backend` и модели ролей — из `EcosystemConfig.yaml`. 
 
 Авто-ретрай **запрещён** (закрывает streak protocol_violation). Повтор — только фраза Саши или сознательный `pipeline next` Сирени после разбора. **v0.4.8:** один `recover` + один re-invoke той же фазы того же класса — это **коррекция**, не авто-ретрай provider_fatal (AC-009 / Б33 п.11 остаются). Provider_fatal / 90-90 / billing по-прежнему interrupt **без** recover.
 
+**Классификатор provider-fatal, control-flow (v0.6.2, Б48).** `_json_error_reason` на валидном JSON без ошибки (`is_error=false` / нет `type=="error"`) возвращает `None`. Этот `None` **нельзя** сливать с «это не JSON»: иначе `FATAL_PATTERNS.search` по stdout+stderr матчит цитату плана/ТЗ/кода внутри `result` (живой: `Request timed out` при rc=0 → ложный `provider_fatal`, `role` не пишется, ErrorBus #1850/#1852/#1855). Трёхзначный разбор:
+
+| Вывод | Действие |
+|---|---|
+| (а) валидный JSON, `is_error=false` **или** поля ошибки нет | **не** provider-fatal при любом тексте в `result`; `FATAL_PATTERNS` по телу `result` **не** гонять |
+| (б) валидный JSON, `is_error=true` **или** `type=="error"` | provider-fatal (envelope клиента **выигрывает** у любых цитат в том же blob) |
+| (в) не-JSON | fallback на строгие сигнатуры: только реальное сообщение клиента/парсера (`Request timed out` в выводе процесса, не в теле результата роли) |
+
+Список `FATAL_PATTERNS` **не** сокращать (паттерн `request timed out` остаётся для (б)/(в)). Таймауты `agent -p` **не** менять. `provider_fatal` остаётся ∈ `NON_RECOVERABLE_FAIL`. AC-119 / AC-120.
+
 ### Б13.3 Установка на другом Hermes
 
 Чеклист `references/install.md` (норматив):
@@ -1246,7 +1265,7 @@ tools:
 
 Запрещено: цикл «раз в минуту смотри state»; скилл, который сам себя будит; heartbeat-тред.
 
-LIGHT: после улики объёма Сирень вызывает `pipeline set-case --case CHANGE-LIGHT|BUGFIX-LIGHT`. Рецепт переписывается одной функцией; уже done фазы сохраняются; будущие skip-фазы не появляются в recipe (не «пустые auto-pass»).
+LIGHT: после улики объёма Сирень вызывает `pipeline set-case --case CHANGE-LIGHT|BUGFIX-LIGHT`. Рецепт переписывается одной функцией; уже done фазы сохраняются; будущие skip-фазы не появляются в recipe (не «пустые auto-pass»). CLI обязан сбросить `state_sha256` после мутации dict (Б8, Б47): иначе `set-case` падает CRISIS и **не** пишет state; `repair` не лечит.
 
 ### Б16.1 Согласование архитектор ↔ ревизор в новом движке
 
@@ -1777,7 +1796,7 @@ Skip: stabilize, compress, REV:tz (таблично при ≤3 вне shared), 
 
 | Шаг | Вход | Выход |
 |---|---|---|
-| `pipeline set-case --case CHANGE-LIGHT` | recipe CHANGE, оценка ≤3 файла на `TZ:patch` | skip-фазы вычеркнуты из `recipe[]`, статусы `done` сохранены; второго init нет |
+| `pipeline set-case --case CHANGE-LIGHT` | recipe CHANGE, оценка ≤3 файла на `TZ:patch` | skip-фазы вычеркнуты из `recipe[]`, статусы `done` сохранены; второго init нет. **v0.6.1:** `cmd_set_case` после `set_case` делает `d.pop("state_sha256", None)` до `from_dict`; rc=0, диск читается, sha файла = `to_dict` (Б8, Б47, AC-117) |
 
 ---
 
@@ -1832,7 +1851,7 @@ BUG:diagnose → GATE:diagnose-review
 
 План = `_fix_plan` (утверждён на diagnose-review). Skip: HF:plan, GATE:plan-approve, backup, ORCH, REV.
 
-`BUG:diagnose` + `GATE:diagnose-review` **всегда** остаются. Уникальные входы/выходы этих двух фаз = Б21. Хвост после `set-case` = Б20.
+`BUG:diagnose` + `GATE:diagnose-review` **всегда** остаются. Уникальные входы/выходы этих двух фаз = Б21. Хвост после `set-case` = Б20. Та же норма sha, что в Б20: после мутации dict — `pop` в `cmd_set_case`, не в `set_case` и не ослабление `from_dict` (Б47).
 
 ---
 
@@ -1942,7 +1961,7 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 
 | ID | Ошибка | Вердикт | Чем закрывается |
 |---|---|---|---|
-| A1 | protocol_violation (rc=0 без complete) | **закрывается** | complete только с proof; invoke_role не маппит фатал в 0; нет диспетчера, который ретраит. **v0.4.8:** rc=0 + канон + `doing` → same-turn complete (AC-074), не «успех потому что rc=0» |
+| A1 | protocol_violation (rc=0 без complete) | **закрывается** | complete только с proof; invoke_role не маппит фатал в 0; нет диспетчера, который ретраит. **v0.4.8:** rc=0 + канон + `doing` → same-turn complete (AC-074), не «успех потому что rc=0». **v0.6.2:** ложный `provider_fatal` на цитате в JSON `result` (rc=0) рвёт запись `role` → interrupt dead pid; закрывается control-flow Б48 / AC-119, не ослаблением non-recoverable |
 | A2 | timed_out 90/90 | **закрывается** | детект budget в invoke_role → interrupted + ErrorBus; нет авто-ретрая |
 | A3 | crashed pid not alive | **закрывается** | PID-probe на status/next → interrupted **для invoke-роли** при мёртвом pid **и** `role is None`; без reaper. **v0.4.5:** `pid=None` на sirene-фазе G6 ≠ crashed pid; `next` → WORK, не `dead pid`. Колонка running требует живой PID. `--check` флажит leftover sirene без авто-interrupt (AC-058/060). **v0.4.6:** живой invoke с `pid=None` в state ≠ crashed pid (AC-061/063); окно post-invoke (`role` проставлен) ≠ crashed pid (AC-062). **v0.4.8:** окно pre-invoke (`awaiting_invoke`) ≠ crashed pid; true-crash recoverable → `RECOVER` один раз, не ждать Сашу (AC-071) |
 | A4 | reclaimed (ручной re-claim) | **закрывается** | нет claim_lock; Сирень продолжает `next` с диска |
@@ -2127,7 +2146,13 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 62. Удалять бэкенд `cursor-cli` из адаптера / `backends{}` «раз штат Codex» (ломает откат AC-088).
 63. Лимиты ходов фазы (GATE≤4 / TZ·REV≤20 / HF≤25) класть в ядро `hermes-agent`. Overlay воркера канбана / `invoke_role` (max turns на фазу) — отдельная TZ→HF П.5.б, не этот пакет как код ядра (Б46).
 64. Патчить `gateway/session.py` / ядро ради auto-close telegram по 80 api. Цепочка П.7.4 — вне ядра, fail-closed без summary (Б46).
-65. Класть выжимки / ход DevWorkflow в SQL; **писать** в `state.db`. **Допустимо:** SQL telemetry read-only (`~/.hermes/state.db` `mode=ro`) для алерта промаха кэша П.1 — не SoT, не кэш выжимок, не транспорт (дух п.25, Б46 П.1).
+65. Класть выжимки / ход DevWorkflow в SQL; **писать** в `state.db`. **Допустимо:** SQL telemetry read-only (`~/.hermes/state.db` `mode=ro`) для алерта промаха кэша П.1 — не SoT, не кэш выжимок, не транспорт (дух п.25, Б46 П.1). **v0.7.0:** запись в `sessions` для П.7.4 — только публичный `SessionDB.end_session(id, "api_limit_80")` (тот же API, что `cli_close` / plugin `session_reset`); сырой SQL write по-прежнему запрещён (п.70, Б49).
+66. Кормить `from_dict` рабочим dict после `set_case` **с живым** `state_sha256` от тела до сужения (ложный `CRISIS: state_sha256 mismatch`). Перед `from_dict` — `d.pop("state_sha256", None)` в `cmd_set_case` (Б8, Б47, AC-117).
+67. Ослаблять `from_dict` (`verify=False`, мягкая сверка) или пересчитывать sha внутри `set_case` / слоя recipe, «чтобы set-case прошёл». Проверка с диска остаётся жёсткой; целостность на запись — `write_state` → `to_dict()`. `repair` не замена pop.
+68. Сливать `None` успешного JSON (`is_error=false` / нет error-поля) с «это не JSON» и гонять `FATAL_PATTERNS` по телу `result` (ложный provider-fatal на цитате плана/ТЗ/кода; ErrorBus #1850/#1852/#1855). Б13.2, Б48, AC-119.
+69. Лечить ложный provider-fatal, делая его recoverable / авто-ретраем, или выкидывая паттерн `request timed out` из `FATAL_PATTERNS`. Паттерн остаётся для не-JSON и JSON-envelope ошибки. `provider_fatal` ∈ `NON_RECOVERABLE_FAIL` (дух п.11). Б42 корпус не откатывать.
+70. Сырой SQL write в `state.db` (`UPDATE sessions …` и аналоги) из watcher П.7.4; импорт/патч `gateway/session.py`; `SessionStore.reset_session` в обход публичного `hermes_state_sessions.SessionDB.end_session`. Закрытие telegram ≥80 api — только `end_session(id, "api_limit_80")` (Б49, дух п.64/65).
+71. Класть лимиты ходов фазы (GATE≤4 / TZ·REV·прочие invoke≤20 / HF≤25) в `tool_loop_guardrails.warn_after` / `hard_stop_after` или в `agent.max_turns` / `goals.max_turns` / `delegation.max_iterations` / несуществующий `--max-turns` Cursor CLI. Overlay — `invoke_role` поле `phases[phase].turn_count` (Б49, дух п.63). Не путать с ядровым 90-90 (AC-009).
 
 ---
 
@@ -2135,7 +2160,7 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 
 Класс по умолчанию **S** (показ ≠ ожидание). Класс O — только со строкой `depends: operator:<verb>`.
 
-I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` = этот документ. **v0.6.0 пакет `llm-cost-optimization`:** I1 — Б46.
+I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` = этот документ. **v0.6.0 пакет `llm-cost-optimization`:** I1 — Б46. **v0.6.1 пакет `pipeline-set-case-crisis-sha-bug`:** I1 — Б47. **v0.6.2 пакет `ktalk-tmo-fatal-classifier`:** I1 — Б48. **v0.7.0 пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`:** I1 — Б49.
 
 ### Сводка AC
 
@@ -2197,12 +2222,12 @@ I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` 
 | AC-062 | S | Окно post-invoke: invoke-фаза + `doing` + `role` проставлен + pid обёртки мёртв → `cmd_next` = `WORK`, не `interrupt reason=dead pid`. Мёртвый pid + `role is None` → INTERRUPTED (AC-008 / AC-060 п.2 остаётся) | Б13.2, Б16.5, Б41 |
 | AC-063 | S | Leftover sirene ≠ живой invoke с незаписанным pid. Оркестратор не заводит второй поезд и не `next`/`interrupt` по `pid=None`, пока `ps` показывает `pipeline.cli invoke-role --slug <этот>`. `--check` leftover invoke только при `role is None`; живой pid после AC-061 = running. **v0.4.9:** CLI-gate `complete-phase` тоже ждёт конца wrapper — AC-076/078, корпус этого AC не откатывать | Б10, Б11, Б16.5, Б41, Б44 |
 | AC-064 | S | `invoke-role` не запускать через `| head` / `| tail` / отсекатель stdout (SIGPIPE). Скилл / процедура: фон без пайпа. Фикстура/чеклист: в `SKILL.md` и в этом ТЗ запрет явный | Б13.2, Б16.5, Б33 п.45, Б41 |
-| AC-065 | S | Классификатор fatal структурно-осознанный: JSON `--output-format json` парсится как JSON (`is_error`/`type=="error"` → fatal); не-JSON — fallback на строгие сигнатуры провайдера, **без** голых `timeout`/`credits`/`billing`/`payment`; «выполнил, но в тексте есть бытовая лексика» → НЕ fatal. Юнит: `{"result":"timeout 120-300s"}` → False; `{"is_error":true}` / `iteration 90/90` / `http 503` → True | Б13.2, Б29 A1–A2, Б42 |
+| AC-065 | S | Классификатор fatal структурно-осознанный: JSON `--output-format json` парсится как JSON (`is_error`/`type=="error"` → fatal); не-JSON — fallback на строгие сигнатуры провайдера, **без** голых `timeout`/`credits`/`billing`/`payment`; «выполнил, но в тексте есть бытовая лексика» → НЕ fatal. Юнит: `{"result":"timeout 120-300s"}` → False; `{"is_error":true}` / `iteration 90/90` / `http 503` → True. **v0.6.2:** валидный JSON `is_error=false`/без error-поля → НЕ fatal при любом тексте в `result` (цитата `Request timed out` ≠ сбой провайдера). Трёхзначный control-flow и envelope-приоритет — Б48 / AC-119 (корпус 0.4.7 не откатывать) | Б13.2, Б29 A1–A2, Б42, Б48 |
 | AC-066 | S | `classify_provider_fatal` НЕ трактует любой `rc != 0` как провайдер-fatal: коды-киллы терминала (124/137/свои) = «вызов не завершён» (retry), не ErrorBus critical; fatal фиксируется после короткого retry с тем же evidence | Б13.2, Б29 A1–A2, Б42 |
 | AC-067 | S | ErrorBus флаг согласован: `pipeline_errorbus` шлёт `--source-kind` (дефис), не `--source_kind`; событие несёт `--exit-code`/`--stage`/`--cmdline`/`--log-path`/`--llm-model`/`--detail`. Фикстура: событие содержит rc/role/слаг/причину, не пустые поля | Б32, Б42 |
 | AC-068 | S | fatal-ветка `invoke_role` зовёт `report(..., detail=<why>, exit_code=rc, stage=phase, cmdline=<redacted>, llm_model=model)`; причина строка («provider-fatal: rc=3 json is_error=true» / «rc=124 terminal-kill») — событие самодиагностируемо | Б13.2, Б32, Б42 |
 | AC-069 | S | Severity/нотификация ErrorBus амортизированы по смыслу, не на каждый инкремент 24ч-окна дедупа; посторонний `test` 1833 закрыт/resolved. Живой прогон слаг-паритета (П.7): вывод с `timeout`/`credits` в тексте роли → статус собран, без ErrorBus; искусственный `http 503`/`iteration 90/90` → fatal с полным detail | Б32, Б29, Б42 |
-| AC-070 | S | Юнит-тесты `classify_provider_fatal`/`refuse_clean_exit_on_fatal`: «выполнил, но текст содержит timeout/credits/billing» → False; `is_error:true` / `iteration 90/90` / `http 503` → True; флаг ErrorBus `--source-kind` корректно парсится (не `--source_kind`) | Б13.2, Б32, Б42 |
+| AC-070 | S | Юнит-тесты `classify_provider_fatal`/`refuse_clean_exit_on_fatal`: «выполнил, но текст содержит timeout/credits/billing» → False; `is_error:true` / `iteration 90/90` / `http 503` → True; флаг ErrorBus `--source-kind` корректно парсится (не `--source_kind`). **v0.6.2:** юнит `{"result":"…Request timed out…","is_error":false}` → False (дырка корпуса 0.4.7). Envelope `is_error=true` / не-JSON `Request timed out` → True. Б48 / AC-120 | Б13.2, Б32, Б42, Б48 |
 | AC-071 | S | Pre-invoke (`awaiting_invoke`+`pid=None`) ≠ dead-pid (`next`→WORK). True-crash invoke (мёртвый pid, `role is None`, нет live ps) → `action=RECOVER` при счётчике 0: `pipeline recover` (write_state, не spawn) + origin warn класс S + `next` в том же ходе. Второй тот же класс → INTERRUPTED. Нет крон/reaper/авто-spawn | Б10, Б13.2, Б16.6, Б43 |
 | AC-072 | S | G6 mismatch: exit 1 + journal `g6_role_mismatch`, state кроме journal не менять (корпус AC-047). Оркестратор в том же ходе зовёт `invoke_role` с ролью таблицы G6 (первый правильный вызов) + warn origin. Не interrupt, не второй поезд | Б6.5, Б16.6, Б43 |
 | AC-073 | S | Пустой/усечённый JSON `result` при rc=0 не proof. Канон расширен: `TZ-patch.md`, `_fix_plan_YYYYMMDD.md`, `RS-collect.md` / `RS-analyze.md`, `MIG-plan.md` (+ старые REV/extract/HF-plan). Нет канона → invoke_role ≠ 0; один correction-pass с файловой доставкой. Канон на диске + короткий `result` = успех | Б13.2, Б16.6, Б43 |
@@ -2240,15 +2265,20 @@ I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` 
 | AC-105 | S | Живой канбан: GATE auto в journal без `session_id` tutu и без usage>0 | Б46 П.4 |
 | AC-106 | S | Если проверка зелёная с первого раза — impl-дифф по гейтам пуст | Б46 П.4 |
 | AC-107 | S | `rg hard_stop_enabled ~/.hermes/config.yaml` → `true`; ключи `exact_failure` на месте | Б46 П.5.а |
-| AC-108 | S | Цепочка П.5.б: HF 26-й ход / GATE 5-й → interrupt. **Не** валит GATE:done этого поезда | Б33 п.63, Б46 П.5.б |
+| AC-108 | S | Цепочка П.5.б: HF 26-й ход / GATE 5-й / TZ 21-й → interrupt `budget_exhausted:phase-turns`, backend не spawn. **v0.6.0:** не валит GATE:done `llm-cost-optimization`. **v0.7.0:** валит GATE:done слага `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` (Б49) | Б33 п.63/71, Б46 П.5.б, Б49 |
 | AC-109 | S | Pytest doorbell: тот же fp; живой pid+mtime канона → fp тот же; смерть pid+mtime → fp другой; tick `queue=<n>` без WAKE/next/recover; смена n → fp другой; нет копии `dwka_guard.sh` | Б16.7, Б44.4, Б46 П.6 |
 | AC-110 | O `depends: operator:ставь кроны` | `jobs.json` vs baseline пуст до `operator-done: ставь кроны` | Б46 П.6 |
 | AC-111 | O `depends: operator:ставь кроны` | После глагола: `pfs_batch.no_agent==true` и `script` непустой; `pfs_notify` bit-identical | Б46 П.6.4 |
 | AC-112 | S | `threshold: 0.3`, `hygiene_hard_message_limit: 180`; плагин `hermes-session-reset-policy` 0.3.0; `idle_minutes: 180` | Б46 П.7 |
-| AC-113 | S | Цепочка П.7.4: 80 api без summary → сессия жива; с summary → закрыта; `git hermes-agent` пуст. **Не** валит GATE:done этого поезда | Б33 п.64, Б46 П.7.4 |
+| AC-113 | S | Цепочка П.7.4: 80 api без валидного handoff-summary → сессия жива + 1× ErrorBus; с валидным summary → `SessionDB.end_session(id, "api_limit_80")`; `git hermes-agent` пуст. **v0.6.0:** не валит GATE:done `llm-cost-optimization`. **v0.7.0:** валит GATE:done слага `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` (Б49) | Б33 п.64/65/70, Б46 П.7.4, Б49 |
 | AC-114 | S | AC-list пакета содержит operator-hold `удаляй` на `dwka_guard.sh` | Б46 П.8 |
 | AC-115 | O `depends: operator:удаляй` | После `operator-done: удаляй` + evidence: файла нет, `rg dwka_guard` в `jobs.json` пуст | Б46 П.8 |
 | AC-116 | S | `pipeline doorbell` / tick не импортирует и не exec `dwka_guard.sh` | Б46 П.8 |
+| AC-117 | S | `cmd_set_case`: после `set_case(d, case)` — `d.pop("state_sha256", None)` до `from_dict`/`write_state`. CLI `set-case` rc=0, stderr без `CRISIS: state_sha256 mismatch`; повтор на тот же LIGHT тоже 0; диск: `from_dict` не `SystemExit`, `read_state` ок, `case`/`recipe` сужены, sha файла = `to_dict`. `from_dict` и `set_case` без правок смысла | Б8, Б10, Б20, Б22, Б33 п.66–67, Б47 |
+| AC-118 | S | `pytest pipeline/tests/test_set_case_light.py`: (1) CLI round-trip как оператор; (2) unit: после `set_case` dict с живым старым sha → `from_dict` CRISIS; после `pop` — ок. Живые `_state.json` чужих слагов не трогать | Б8, Б47 |
+| AC-119 | S | Трёхзначный control-flow `_fatal_reason` / `classify_provider_fatal`: (а) валидный JSON `is_error=false`/без error-поля → не provider-fatal, `FATAL_PATTERNS` по `result` не гонять; (б) валидный JSON `is_error=true`/`type=="error"` → fatal, envelope выигрывает у цитат; (в) не-JSON → fallback на строгие сигнатуры (сообщение клиента/парсера). Список `FATAL_PATTERNS` не сокращать; `provider_fatal` non-recoverable | Б13.2, Б33 п.68–69, Б42, Б48 |
+| AC-120 | S | `pytest pipeline/tests/test_invoke_fatal.py`: JSON `{"result":"…Request timed out…","is_error":false}` и тот же result без `is_error` → `classify` False, `_fatal_reason` None, `refuse_clean_exit` False; `{"is_error":true,"error":"Request timed out"}` / `{"type":"error",…}` → True (json-ветка); не-JSON `"Request timed out"` → True (pattern); бытовое `"timeout 120-300s"` JSON и plain → False (регресс AC-065). Существующие AC-065/066/070 не ломать. Прирост файлов: `invoke_role.py` + `test_invoke_fatal.py` | Б13.2, Б42, Б48 |
+| AC-121 | O `depends: operator:ставь кроны` | `jobs.json` watcher `tg_session_auto_close` vs baseline пуст до `operator-done: ставь кроны`. Интервал 15–30 мин, `no_agent`, не каждую минуту. Пока hold open — GATE:done этого слага красный | Б33 п.22/55, Б49 |
 
 **Область `GATE:done` этого пакета (`rs-refuse-kanban`, CHANGE).** Финальный и равен концу **W1** (постройка `pipeline/` + скилл: `HF:impl` / `HF:test` / `ORCH:shared-state`). Согласовано с Б17.7 и Б18.6. Волны W2–W4 — отдельные хода, не один долгий `in_phase`. В таблице выше нет класса O: этот слаг не остаётся `waiting_operator` до W4.
 
@@ -2269,6 +2299,12 @@ AC-016 / AC-019 / AC-035 — класс S про поздние волны: по
 **Область `GATE:done` пакета `migrate-dev-roles-cursor-to-codex` (CHANGE, v0.5.0).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` **раздельно** правок `invoke_role.py` (`run_codex` канон exec; parser session_id Codex; снят fallback composer-2.5; 401=fatal) + pytest argv/sandbox/skip-git; `ORCH:shared-state` пишет YAML `default_backend` + `roles.*` (не executor); `HF:docs-handoff` allowlist скиллов Б45.5 + GLOSSARY §3. AC-080 класс O блокирует `GATE:done` до `operator-done: answer:Q-2` + evidence живого smoke. Не удаляет `run_cursor_cli`. Не переносит координатора/компрессор. Не ставит кроны. Не откатывает Б40–Б44 / AC-058…079 / AC-061. `[NEW-ENTITY]` нет. AC-081…093 — класс S.
 
 **Область `GATE:done` пакета `llm-cost-optimization` (CHANGE, v0.6.0).** Финальный после хвоста **этого** слага: конфиг Hermes (П.3.3 / П.5.а / П.7.1–3) + fingerprint doorbell (П.6.2–3, тесты AC-109) + docs MUST-read/окно/503 (П.2 / П.3.2 / П.3.4) + проверка auto-GATE без LLM (П.4) + hold-список П.8. `HF:impl` / `HF:test` **раздельно**. Не реализует П.1 / П.5.б / П.7.4 (отдельные цепочки; AC-094/095/108/113 **не** валят этот `GATE:done`). Не пишет `jobs.json` (AC-096/110/111 класс O: `depends: operator:ставь кроны`). Не `rm` `dwka_guard.sh` (AC-115 класс O: `depends: operator:удаляй`). Не патчит ядро / gateway. Не откатывает Б40–Б45 / AC-058…093 / AC-061. Штат Codex не возвращать на Cursor. `[NEW-ENTITY]` нет. Q-n нет. AC-097…107, AC-109, AC-112, AC-114, AC-116 — класс S. Preflight красный, пока holds open.
+
+**Область `GATE:done` пакета `pipeline-set-case-crisis-sha-bug` (BUGFIX-LIGHT, v0.6.1).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` правок `cli.py` `cmd_set_case` (одна строка `d.pop("state_sha256", None)`) + `pipeline/tests/test_set_case_light.py`; `HF:docs-handoff` абзац скилла: отладка `set-case` CRISIS = pop в CLI, не `repair` и не ослабление `from_dict`. Не трогает `pipeline_recipe.set_case` / `pipeline_state.from_dict`. Не трогает чужие `_state.json` (в т.ч. `pfs-slug-1on1-iz-konteksta-vstrechi`, `pfs-slagi-zadach-v-1on1-meetingah`). Не откатывает Б40–Б46 / AC-058…116. `[NEW-ENTITY]` нет. AC-117…118 — класс S.
+
+**Область `GATE:done` пакета `ktalk-tmo-fatal-classifier` (BUGFIX-LIGHT, v0.6.2).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` правок `invoke_role.py` (`_fatal_reason` / `_json_error_reason`: различить успешный JSON и не-JSON) + `pipeline/tests/test_invoke_fatal.py` (цитата `Request timed out` в `result` → False; envelope / plain → True); `HF:docs-handoff` одна фраза скилла: «цитата timeout в result ≠ provider-fatal». Не сокращать `FATAL_PATTERNS`. Не менять таймауты `agent -p`. Не трогать REV, страж Б33 п.47 / doorbell, occupancy AC-061/076/078, `pipeline_gates` recover-классы, MoveFromKeyTalk. Не делать `provider_fatal` recoverable. Не откатывает Б40–Б47 / AC-058…118 / корпус Б42. `[NEW-ENTITY]` нет. AC-119…120 — класс S.
+
+**Область `GATE:done` пакета `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` (BUGFIX, v0.7.0).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` **раздельно** overlay `invoke_role` `turn_count` (П.5.б) + no_agent-watcher `tg_session_auto_close` (П.7.4) + pytest `test_phase_turns.py` / `test_tg_auto_close.py`; `HF:docs-handoff` одна фраза скилла: telegram ≥80 api без валидного handoff-summary не закрываем; ходы фазы ≠ `warn_after`. AC-108 и AC-113 **валят** этот `GATE:done`. AC-121 класс O блокирует `GATE:done` до `operator-done: ставь кроны` + evidence job watcher. Регресс AC-107 (`hard_stop_enabled: true`) — IAC, конфиг не трогать. Не патчит ядро / `gateway/session.py`. Не сырой SQL write. Не `warn_after`. Не `jobs.json` до глагола. Не откатывает Б40–Б48 / AC-058…120 / корпус Б46 (для `llm-cost-optimization` AC-108/113 по-прежнему не валят). Штат Codex не возвращать на Cursor. Живой монстр `216865ac` / ErrorBus #1838 resolve — не этот GATE:done (операция после боя watcher / auto-resolve скана). `[NEW-ENTITY]` нет. Q-n нет. AC-108, AC-113 — класс S. Preflight красный, пока hold AC-121 open.
 
 Номера AC-017 и AC-018 **зарезервированы** за будущим MIGRATION-слагом (таблица ниже). В этом пакете их нет, чтобы не путать `GATE:done`.
 
@@ -2727,6 +2763,7 @@ Digest манифеста видит: `enabled` + `default_backend` + факт �
 22. **TZ:finalize v0.4.9 (пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`).** Конец хода ≠ notify Cursor — Б44, Б16.7, AC-076…079 класс S. REV:tz APPROVE; этот `TZ:finalize` штампует корпус без правок смысла. Замечания ревизора (не блокируют APPROVE): U+FFFD в `extract.md` — ближайший compress; occupancy-gate не трогает `recover_counts` — `HF:plan`; IAC-09 паттерн `rg` — `HF:plan` / `HF:docs-handoff`. `[NEW-ENTITY]` нет. 13.10 не пересматриваем. Показ, не hold.
 23. **TZ:patch v0.5.0 (пакет `migrate-dev-roles-cursor-to-codex`).** Штат ролей = Codex exec, таблица Б6.4; Cursor снят со штата, адаптер остаётся для отката; координатор/компрессор не переносятся. `run_codex` чинить на `HF:impl`. Auth — AC-080 O / Q-2 (не путать с Q-1 W4). Бриф «версия 0.1.0 / новый файл» закрыт: канон = секция мастера 0.5.0. `[NEW-ENTITY]` нет. Показ, не hold (кроме Q-2).
 24. **TZ:finalize v0.6.0 (пакет `llm-cost-optimization`).** Экономия ключа tutu — Б46, AC-094…116. REV:tz APPROVE; этот `TZ:finalize` штампует корпус без правок смысла. Operator-hold `ставь кроны` + `удаляй`. Код не писался. `[NEW-ENTITY]` нет. Q-n нет. Показ, не hold (кроме O-AC).
+25. **TZ:finalize v0.7.0 (пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`).** Overlay лимитов ходов фазы + auto-close telegram 80 api fail-closed — Б49, AC-108/113/121. REV:tz APPROVE; этот `TZ:finalize` штампует корпус без правок смысла. Operator-hold `ставь кроны` (AC-121). Код не писался. `[NEW-ENTITY]` нет. Q-n нет. Замечания ревизора (не блокируют): категория «прочие invoke ≤20» — `HF:plan`; совпадение `_COMPACTION_PREFIXES` — `HF:impl`. Показ, не hold (кроме O-AC).
 
 Открытые вопросы этого пакета — в разделе `## Открытые вопросы` (явный h2). Бриф закрыт.
 
@@ -2915,6 +2952,8 @@ AC пакета: **AC-061…064** (класс S). `GATE:done` слага — Б3
 Код `pipeline/` (это TZ-WRITE; реализация на `HF:impl`). Пакеты Б40 (w4), Б41 (sravnit) и их корпуса. Содержимое RESEARCH-слага / его живой invoke. Канбан, `kanban.db`, ядро `hermes-agent`, gateway, кроны. PFS `task_slug`. `dispatch_in_gateway` / `kanban-decommission`. Восстановление корпуса v0.4.3/v0.4.4. Новый `[NEW-ENTITY]`.
 
 AC пакета: **AC-065…070** (класс S). `GATE:done` слага — Б34.
+
+**Развитие v0.6.2.** Control-flow «успешный JSON vs не-JSON» (дыра: `_fatal_reason` сливает два смысла `None`) — пакет `ktalk-tmo-fatal-classifier` (**Б48**, AC-119…120). Корпус (а)–(е) / AC-065…070 **не откатывать**: голые `timeout`/`credits`/`billing` уже убраны; паттерн `request timed out` остаётся для JSON-envelope ошибки и не-JSON. Цитата в `result` успешного JSON — не сбой провайдера.
 
 ---
 
@@ -3689,6 +3728,197 @@ AC пакета: **AC-094…116**. `GATE:done` слага — Б34 (ждёт hol
 
 ---
 
+## Б47. Пакет `pipeline-set-case-crisis-sha-bug` (v0.6.1) — `set-case` / CRISIS sha mismatch
+
+**I1 этого пакета.** `current`: `pipeline set-case` падает `CRISIS: state_sha256 mismatch`. `cmd_set_case` (`cli.py`) делает `to_dict()` (кладёт sha тела **до** смены кейса), `pipeline_recipe.set_case` мутирует `case`/`recipe`/`phases` **без** пересчёта sha, `from_dict` сверяет старый stored sha с новым телом → `sys.exit(1)` до `write_state`. `repair` чинит очередь, не sha. Диск штатным CLI **не** портится. `target`: после `set_case` сбросить stored sha в CLI (`d.pop("state_sha256", None)`), затем `from_dict`/`write_state`; проверка с диска остаётся жёсткой.
+
+Кейс записи — **BUGFIX-LIGHT** (≤2 файла вне shared: `cli.py` одна строка + `tests/test_set_case_light.py`). Слаг: `pipeline-set-case-crisis-sha-bug`. SoT входа: `_fix_plan_setcase.md`. `[NEW-ENTITY, требует согласования Саши]` **нет**. Корпуса Б40–Б46 / AC-058…116 **не откатывать**. Мастер ProtocolFromSummary — другой поезд.
+
+### Б47.1 Нормы
+
+| # | Норма | Куда | AC |
+|---|---|---|---|
+| (а) | `cmd_set_case`: после `set_case(d, case)` — `d.pop("state_sha256", None)` перед `from_dict`/`write_state`. Иначе CRISIS. Отладка `set-case` mismatch — эта склейка | Б8, Б6.1, Б10, Б16, Б20, Б22 | AC-117 |
+| (б) | `from_dict` не ослаблять; `set_case` sha не считает (LIGHT-сужение ок). Валидность диска = `write_state` → `to_dict()`. Не `verify=False`, не sha в recipe | Б10, Б33 п.66–67 | AC-117 |
+| (в) | LIGHT-тест: CLI round-trip rc=0 без CRISIS + unit «живой sha → CRISIS, pop → ок». Чужие `_state.json` не трогать | Б8 | AC-118 |
+
+### Б47.2 Код (не этот ход)
+
+| Что | Где | Когда |
+|---|---|---|
+| pop sha | `Registries/pipeline/cli.py` `cmd_set_case` сразу после `set_case` | `HF:impl` |
+| тесты | `Registries/pipeline/tests/test_set_case_light.py` (IAC `_fix_plan_setcase.md`) | `HF:test` (тот же LIGHT-хвост) |
+| абзац скилла | отладка set-case ≠ repair | `HF:docs-handoff` |
+
+Не трогать: `pipeline_state.from_dict`, `pipeline_recipe.set_case`, `.env`, gateway, кроны, `pipeline_gates`, живые `_state.json` `pfs-slug-1on1-iz-konteksta-vstrechi` и `pfs-slagi-zadach-v-1on1-meetingah`. Соседний `recipe_add` без sha — не этот тикет.
+
+AC пакета: **AC-117…118** (класс S). `GATE:done` слага — Б34.
+
+---
+
+## Б48. Пакет `ktalk-tmo-fatal-classifier` (v0.6.2) — ложный provider-fatal на цитате `Request timed out`
+
+**I1 этого пакета.** `current` (факт диска 21.10, диагноз по `_fix_plan_20261021.md`): `_json_error_reason` на валидном JSON без ошибки (`is_error=false` / нет `type=="error"`) возвращает `None`. `_fatal_reason` трактует этот `None` так же, как «это не JSON», и падает в `FATAL_PATTERNS.search` по всему stdout+stderr. Строгий паттерн `request timed out` матчит цитату плана/ТЗ/кода внутри поля `result`. rc=0, агент работу закончил, канон мог быть записан — `invoke_role` ставит `fail_class=provider_fatal` и выходит **до** записи `phases[phase].role`. Дальше мёртвый pid + `role=None` → `interrupt reason=dead pid`. `provider_fatal` ∈ `NON_RECOVERABLE_FAIL` → recover заблокирован. Живые ErrorBus **#1850** (architect), **#1852** (executor), **#1855** (`RS:collect` triage); жертва-поезд `ktalk-kontur-samari-taimaut-llm-dlinnyj-transkript`. Это **не** сбой провайдера и **не** таймаут LLM KTalk. `target`: трёхзначный control-flow; envelope клиента выигрывает у цитат; паттерн `request timed out` остаётся для не-JSON / JSON-ошибки.
+
+Кейс записи — **BUGFIX-LIGHT** (≤2 файла кода+тестов вне shared: `invoke_role.py` + `tests/test_invoke_fatal.py`). Слаг: `ktalk-tmo-fatal-classifier`. SoT входа: `_fix_plan_20261021.md`. `[NEW-ENTITY, требует согласования Саши]` **нет**. Корпуса Б40–Б47 / AC-058…118 **не откатывать**. Б42 / AC-065…070 — развитие control-flow, не перепись (голые timeout/credits уже убраны).
+
+### Б48.1 Нормы
+
+| # | Норма | Куда | AC |
+|---|---|---|---|
+| (а) | Трёхзначный control-flow `_fatal_reason`: (а) валидный JSON `is_error=false`/без error-поля → **не** provider-fatal, `FATAL_PATTERNS` по `result` не гонять; (б) валидный JSON `is_error=true`/`type=="error"` → fatal; (в) не-JSON → fallback на строгие сигнатуры (сообщение клиента/парсера: `Request timed out` в выводе процесса, не в теле результата) | Б13.2, Б29 A1, Б42 | AC-119 |
+| (б) | Envelope-приоритет: JSON error-объект клиента в stdout **выигрывает** у любых цитат в том же blob | Б13.2, Б42 | AC-119 |
+| (в) | Юниты: цитата `Request timed out` в успешном JSON → False; envelope / plain → True; бытовое `timeout 120-300s` → False (регресс Б42). Существующие AC-065/066/070 не ломать | Б13.2, Б42 | AC-120 |
+| (г) | `provider_fatal` остаётся non-recoverable. Не лечить ложный fatal, делая его recoverable, и не выкидывать паттерн `request timed out` из `FATAL_PATTERNS` | Б33 п.11/68–69 | AC-119 |
+
+### Б48.2 Код (не этот ход)
+
+| Что | Где | Когда |
+|---|---|---|
+| short-circuit успешного JSON (различить два `None`) | `Registries/pipeline/invoke_role.py` `_fatal_reason` / `_json_error_reason` | `HF:impl` |
+| тесты цитаты + негативы envelope / не-JSON | `Registries/pipeline/tests/test_invoke_fatal.py` | `HF:test` |
+| одна фраза скилла | цитата timeout в `result` ≠ provider-fatal | `HF:docs-handoff` |
+
+Распарсить stdout как JSON-объект (`json.loads`; если целиком не объект — последняя JSON-строка, тот же приём что `parse_agent_session_id`, чтобы NDJSON/хвост логов не срывал envelope). Envelope успеха → сразу `None`, без `FATAL_PATTERNS` по blob (включая stderr: при успешном envelope клиент сказал, что вызов состоялся).
+
+**TZ:finalize 2026-10-21.** Штамп корпуса TZ:patch без правок смысла. AC-119…120 закрыты планом/тестами (класс S). Код — `HF:impl` / `HF:test`: ≥1 теста на каждый из 4 кейсов живой пробы 21.10 — JSON `is_error=false` с цитатой `Request timed out` → не fatal; JSON `is_error=false` с безопасной лексикой (`timeout 120-300s`) → не fatal; JSON `is_error=true` → fatal; не-JSON сообщение `Request timed out` → fatal.
+
+### Б48.3 Что не в этом пакете
+
+Список `FATAL_PATTERNS` (не сокращать). Таймауты `agent -p`. REV-нормы (`rev_verdict`, канон `REV-tz.md`, AC-047). Страж Б33 п.47 / doorbell AC-079 / `dwka_guard`. I1/MVP (10 кейсов, фазы, G6, классы S/O/C). Occupancy AC-061/076/078. Авто-ретрай (Б33 п.11). `pipeline_gates.py` recover-классы. `_db.py` дедуп. `pipeline_errorbus.py`. Запись pid / `session_id`. `TERMINAL_KILL_RCS`. MoveFromKeyTalk / LLM_TIMEOUT. Ядро `hermes-agent`, gateway, `jobs.json` / кроны, `kanban_*`, PFS/`task_slug`. Корпуса Б40–Б47.
+
+AC пакета: **AC-119…120** (класс S). `GATE:done` слага — Б34.
+
+---
+
+## Б49. Пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` (v0.7.0) — П.5.б лимиты ходов фазы + П.7.4 auto-close telegram 80 api fail-closed
+
+**I1 этого пакета.** `current` (факт диска 21.10, диагноз по `_fix_plan_20261021.md`): `LLMAnomalyScan` честно репортит уже случившийся монстр (`api_call_count>500` / `tool_call_count>1000`) — постфактум, не потолок. Нормы Б46 П.5.б (GATE≤4 / TZ·REV≤20 / HF≤25) и П.7.4 (auto-close telegram ≥80 api fail-closed) на диске с v0.6.0; код **отсутствует**. `invoke_role.py` не считает ходы фазы, не ставит `fail_class=budget_exhausted`, не зовёт `interrupt reason=budget_exhausted:phase-turns`. Watcher auto-close нет. П.5.а `hard_stop_enabled: true` уже в `~/.hermes/config.yaml` — **не этот баг**. Живая улика: telegram-сессия `20261021_100524_216865ac` api=1062, `ended_at` NULL; ErrorBus **#1838** open. `target`: overlay ходов в `invoke_role` (не ядро, не `warn_after`); no_agent-watcher закрывает telegram ≥80 api только через публичный `SessionDB.end_session` и только при валидном handoff-summary (fail-closed).
+
+Кейс записи — **BUGFIX** полный (не LIGHT: ≥4 файла кода+тестов + новый крон-скрипт; канон summary ещё не был SoT). Слаг: `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`. SoT входа: `_fix_plan_20261021.md`. `[NEW-ENTITY, требует согласования Саши]` **нет** (канал стража/ErrorBus не заводить; ошибки — существующий `report_error`). Корпуса Б40–Б48 / AC-058…120 **не откатывать** (смысл AC-108/113 не менять; меняется только *чей* `GATE:done` они валят). Semver **MINOR** 0.6.2 → **0.7.0** (новый код overlay + watcher, не штамп). Q-n **нет**.
+
+Один поезд «П.5.б + П.7.4». Второй слаг не плодить. Семейство BUGFIX (дефект: норма на диске, кода нет); архитектор кейс не меняет (G5).
+
+### Б49.1 П.5.б — overlay ходов фазы (не ядро)
+
+**Ход фазы** = один вызов `cmd_invoke_role` на пару `(slug, phase)`, включая resume / correction-pass. Не внутренние tool-call Cursor (их 90 — ядро, не трогать). Не `--max-turns` CLI (флага нет). Не `agent.max_turns: 90` / `goals.max_turns: 20` / `delegation.max_iterations: 50`.
+
+| Класс `phase` | hard_stop ходов |
+|---|---|
+| `GATE:*` | ≤ 4 |
+| `TZ:*` / `REV:*` | ≤ 20 |
+| `HF:*` | ≤ 25 |
+| прочие invoke (`BUG:` / `RS:` / `MIG:` / `DEC:`) | как `TZ:*` (≤20) |
+
+GATE sirene по G6 `invoke-роль не звать`; лимит GATE страхует ошибочный invoke и тест AC-108.
+
+**Где (HF:impl, не этот ход).** Перед spawn в `Registries/pipeline/invoke_role.py`: `turn_count = phases[phase].turn_count` (default 0). Если `turn_count+1 > limit(phase)` → **не** звать backend; `fail_class=budget_exhausted`; `pipeline interrupt --reason budget_exhausted:phase-turns`; ErrorBus `:11112` `--tool dev_workflow`; rc≠0. Иначе инкремент на `invoke_prepare` (тот же `write_state`, что pid — AC-061 не ломать). Таблица лимитов — `pipeline_gates.py` **или** новый `phase_turns.py` рядом. Числа **не** класть в `tool_loop_guardrails.warn_after` / `hard_stop_after`.
+
+Сверх лимита: без авто-ретрая (`budget_exhausted` ∈ `NON_RECOVERABLE_FAIL`, дух AC-009 / Б33 п.11). Не reaper. Канбан-воркер `kanban_*` **не** патчить (Б13.1).
+
+Поле `_state.json`: `phases[phase].turn_count` (int, default 0). Схема `state.db` **не** меняется. Схема `_state.json` — аддитив поля, не migrate_vN.
+
+П.5.а: только проверка `rg hard_stop_enabled` → `true` (AC-107 уже зелёный). Конфиг не трогать, если бит уже true.
+
+### Б49.2 П.7.4 — watcher auto-close (не plugin, не ядро)
+
+**Путь:** no_agent-скрипт, паттерн `llm_anomaly_errorbus.py` + `report_error.sh`. **Не** второй hook `pre_gateway_dispatch` рядом с `hermes-session-reset-policy` (риск двойного `/new`). **Не** патч `gateway/session.py`.
+
+Источник: `file:~/.hermes/state.db?mode=ro`. Колонки `sessions`: `id`, `source`, `title`, `api_call_count`, `ended_at`, `end_reason`, `session_key`, `last_activity_at` + таблица `messages` для summary. Схему `state.db` не менять. SoT критерия — чтение ro из `sessions`/`messages`.
+
+**Канон валидного handoff-summary** (замок; не откладывать на HF:plan).
+
+**Не** `sessions.handoff_state` / `handoff_platform` / `handoff_error` — колонки TUI, на этом контуре всегда NULL.
+**Не** `~/.hermes/sessions/request_dump_<id>_*.json` — дампы запросов, не summary.
+
+Сессия имеет **валидный** handoff-summary ⇔ существует ≥1 строка `messages`:
+
+1. `session_id` = `sessions.id`;
+2. `_compressed_summary = 1`;
+3. `active = 1`;
+4. `content` начинается с одного из маркеров Hermes (`tools/session_search_tool.py` `_COMPACTION_PREFIXES` + живой `[PRIOR CONTEXT`): `[CONTEXT COMPACTION` · `[CONTEXT SUMMARY]` · `[PRIOR CONTEXT`;
+5. после trim `len(content) ≥ 80`;
+6. **невалидно** (дух AC-073): пусто / только маркер; `content` ∈ {`{}`, `[]`, `null`} или JSON без текста summary; thinking-only (`role=assistant` и непусто только `reasoning`/`reasoning_content`, а `content` пуст).
+
+Имя сессии = `sessions.id` (`YYYYMMDD_HHMMSS_<hex>`). Routing key = `sessions.session_key` (`agent:main:telegram:group:<chat>:<thread>`).
+
+**Правило закрытия** (все истины, иначе **не закрывать**):
+
+1. `source = 'telegram'`;
+2. `ended_at IS NULL`;
+3. `api_call_count ≥ 80`;
+4. нет живой аренды хода (`session_turn_leases.expires_at > now` для этого разговора; нет строки / неясно → **fail-closed, не закрывать**);
+5. валидный handoff-summary по канону выше.
+
+api<80 — тишина. api≥80 без summary — сессия жива + одно событие ErrorBus `telegram session ≥80 api without handoff-summary` (дедуп 24ч на `sessions.id`, как П.1). Не reaper, не kill PID.
+
+**Как закрывать:** публичный `hermes_state_sessions.SessionDB.end_session(id, "api_limit_80")`. Это тот же API, что CLI (`cli_close`) и plugin (`session_reset`). Gateway на следующем входящем сам заведёт свежую сессию для `session_key` (`_is_session_ended_in_db`). В тестах — injectable `end_session_fn`, боевой `state.db` не писать.
+
+Запрещено: `UPDATE sessions …` строкой SQL из нашего скрипта; импорт/патч `gateway/session.py`; `SessionStore.reset_session` в обход.
+
+`--tool` ErrorBus watcher: **один** ключ `hermes_cost` (тот же контур, что цепочка П.1). Не плодить второе имя. `--tool` overlay ходов: `dev_workflow`.
+
+**Крон:** этот поезд скрипт кладёт на диск; в `jobs.json` **не** пишет. Hold `depends: operator:ставь кроны` (AC-121). Интервал 15–30 мин (не каждую минуту, Б33 п.1/22/55). Пока hold open — GATE:done красный.
+
+### Б49.3 Код (не этот ход)
+
+| Что | Где | Когда |
+|---|---|---|
+| overlay `turn_count` / interrupt `budget_exhausted:phase-turns` | `Registries/pipeline/invoke_role.py` (+ `pipeline_gates.py` или новый `phase_turns.py`) | `HF:impl` |
+| тесты ходов | `Registries/pipeline/tests/test_phase_turns.py` | `HF:test` |
+| watcher | `~/.hermes/scripts/tg_session_auto_close.py` + `.sh` | `HF:impl` |
+| тесты auto-close (mocked sqlite `mode=ro`) | `Registries/pipeline/tests/test_tg_auto_close.py` (или error_bus) | `HF:test` |
+| одна фраза скилла | telegram ≥80 api без summary не закрываем; ходы фазы ≠ `warn_after` | `HF:docs-handoff` |
+| job watcher | `~/.hermes/cron/jobs.json` | **только** `ставь кроны` (AC-121) |
+
+Склейка `HF:impl`+`HF:test` запрещена.
+
+Тесты mocked; боевой `state.db` / прод-ErrorBus не трогать. `conftest` уже `PIPELINE_ERRORBUS_DISABLE=1`. Юниты П.7.4 — свой fake `report_error`.
+
+**Фикстуры AC-108 (П.5.б):**
+
+| # | Дано | Ожидание |
+|---|---|---|
+| H1 | HF:impl, `turn_count=25` → 26-й `invoke_role` | interrupt `budget_exhausted:phase-turns`; backend **не** spawn; state bit-identical except interrupt/fail_class/journal |
+| H2 | GATE:*, 5-й invoke | то же |
+| H3 | TZ:patch, 20-й проходит, 21-й interrupt | то же |
+| H4 | `hard_stop_enabled: true`; ключи `exact_failure` не менялись | `rg` конфиг (AC-107 регресс) |
+| H5 | корпус AC-009 / 90-90 (`Iteration budget exhausted`) не красный | не путать с phase-turns |
+
+**Фикстуры AC-113 (П.7.4):**
+
+| # | Дано | Ожидание |
+|---|---|---|
+| T1 | telegram, api=80, валидный compaction-content, `ended_at` NULL, нет lease | `end_session` вызван с `"api_limit_80"`; в rw-фикстуре `ended_at` не NULL |
+| T2 | telegram, api=80, **нет** summary (0 строк `_compressed_summary` / thinking-only / `{}`) | closer **не** звался; сессия жива; 1× ErrorBus |
+| T3 | telegram, api=79, с summary | не трогать |
+| T4 | `source=cli` / `cron`, api=200, с summary | не трогать |
+| T5 | api=80, summary ок, **живой** lease | не закрывать (fail-closed mid-turn) |
+| T6 | повтор T1 того же `id` в окне 24ч | второе ErrorBus нет; второй close нет |
+| T7 | `git -C ~/hermes-agent diff` по этому пункту пуст | AC-113 |
+
+**TZ:finalize 2026-10-21.** Штамп корпуса TZ:patch без правок смысла. REV:tz APPROVE. AC-108 / AC-113 закрыты планом/тестами (класс S, валят GATE:done **этого** слага). AC-121 класс O `depends: operator:ставь кроны` (hold до глагола). AC-107 — регресс П.5.а, конфиг не трогать. Код — `HF:impl` / `HF:test` **раздельно**. Замечания ревизора (не блокируют APPROVE): категория «прочие invoke (BUG:/RS:/MIG:/DEC:) ≤20» — явной строкой на `HF:plan`; совпадение констант `_COMPACTION_PREFIXES` с `tools/session_search_tool.py` — на `HF:impl`.
+
+### Б49.4 Что не в этом пакете
+
+`~/hermes-agent`, `gateway/session.py`, restart gateway. Сырой SQL write в `state.db`. `tool_loop_guardrails.warn_after` / `hard_stop_after`. `agent.max_turns: 90` и лимиты ядра/delegation/goals. Тело `hermes-session-reset-policy` / свой форк hook. `kanban_*`, `kanban.db` как SoT. `jobs.json` без глагола. `dwka_guard.sh` (hold `удаляй` чужой). Б40–Б48 / AC-058…120 смысл; штат Codex не возвращать на Cursor; AC-061 pid=wrapper; recover one-shot Б43; billing/90-90 mapping. Цепочка П.1 cache-miss (другой слаг). PFS / MoveFromFF / `pfs_notify`. `[NEW-ENTITY]` канал. Склейка HF:impl+HF:test; обход `emit-prompt`. Откат конфига П.3.3 / П.7.1–2. Живой монстр `216865ac` **этим пакетом не закрывать вручную** (после боя watcher закроет между ходами, если summary валиден; ручной `/new` — глагол Саши, не SQL). #1838 не resolve, пока SQL-детектор ещё видит api>500 за 7д.
+
+IAC-ориентир (черновик для `HF:plan`; формулировки AC — с диска):
+
+| IAC | path | verify | covers |
+|---|---|---|---|
+| IAC-01 | `invoke_role.py` + `test_phase_turns.py` | HF 26-й ход / GATE 5-й / TZ 21-й → interrupt `budget_exhausted:phase-turns`, backend не spawn | AC-108, Б46 П.5.б, Б33 п.63/71 |
+| IAC-02 | `~/.hermes/config.yaml` | `hard_stop_enabled: true`; `exact_failure` на месте; `target_ratio: 0.2` | AC-107 (регресс П.5.а) |
+| IAC-03 | `tg_session_auto_close.py` | mocked T1–T6 | AC-113, Б46 П.7.4, Б33 п.64/70 |
+| IAC-04 | `~/hermes-agent` | `git diff` пуст | AC-113, Б13.1 |
+| IAC-05 | `pipeline/tests` | полный pytest зелёный; корпус AC-061…079 / AC-117…120 не красный | регресс |
+| IAC-06 | `jobs.json` | vs baseline пуст до `operator-done: ставь кроны` | AC-121, Б33 п.22 |
+| IAC-07 | соседи | прирост: pipeline overlay+тест + `~/.hermes/scripts/tg_session_auto_close.*` + тест + Б49. Нулевой смысл-дифф ядра / `kanban_*` / `warn_after` / PFS | «не трогать» |
+
+AC пакета: **AC-108, AC-113** (класс S, валят этот GATE:done); **AC-121** (класс O `depends: operator:ставь кроны`). `GATE:done` слага — Б34.
+
+---
+
 ## Открытые вопросы
 
 Блокирующих открытых вопросов пакетов до v0.4.9 **нет**. Бриф `rs-refuse-kanban` закрыт 2026-10-13. Риски 14.10 закрыты Q-Archi-04/05. Блок E закрыт Q-Archi-06. Пакет `devworkflow-task-slug`: Q-Archi-07/08 решены в Б36 п.15–16 (не ждут реплики, чтобы закрыть `TZ:finalize`). Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`: Q нет; `[NEW-ENTITY]` нет. Пакет `sravnit-skills-vs-tree-docs-zavis-v-rs-collect-d`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-cursor-cli`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-avtovosstanovlenie`: Q нет; `[NEW-ENTITY]` нет. Пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`: Q нет; 13.10 не пересматриваем; `[NEW-ENTITY]` канала стража нет.
@@ -3696,6 +3926,12 @@ AC пакета: **AC-094…116**. `GATE:done` слага — Б34 (ждёт hol
 **Пакет `migrate-dev-roles-cursor-to-codex` (v0.5.0).** Открыт **Q-2** (класс O, AC-080): Саша прошёл device-auth Codex; evidence = smoke `codex exec` rc=0 без 401 `token_expired`. Закрытие: `operator-done: answer:Q-2` + evidence. Без закрытия `GATE:done` **того** слага не complete. Номер `Q-1` не занимать (W4 / AC-018). `[NEW-ENTITY]` нет.
 
 **Пакет `llm-cost-optimization` (v0.6.0).** Q-n этого пакета **нет**. Q-2 (auth Codex) — чужой поезд, не занимать. `[NEW-ENTITY]` нет.
+
+**Пакет `pipeline-set-case-crisis-sha-bug` (v0.6.1).** Q-n этого пакета **нет**. `[NEW-ENTITY]` нет.
+
+**Пакет `ktalk-tmo-fatal-classifier` (v0.6.2).** Q-n этого пакета **нет**. `[NEW-ENTITY, требует согласования Саши]` **нет**.
+
+**Пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` (v0.7.0).** Q-n этого пакета **нет**. `[NEW-ENTITY, требует согласования Саши]` **нет**.
 
 Вопрос `Q-1` «утвердить план выключения dispatch» **не** открыт: его заведёт `MIG:plan` будущего MIGRATION-слага (W4), см. AC-018 в Б34.
 
@@ -3735,11 +3971,21 @@ AC пакета: **AC-094…116**. `GATE:done` слага — Б34 (ждёт hol
 - TZ:finalize v0.4.9: `dev/pochinka-payplayna-dev-workflow-konets-hoda-po-k/REV-tz.md` verdict=APPROVE; `TZ-patch.md`
 - TZ:patch v0.5.0: бриф `TZ:patch` слага `migrate-dev-roles-cursor-to-codex` 20.10 (таблица ролей Саши; риски auth 401, `codex run --cwd`, sandbox, skip-git); диск `invoke_role.run_codex`; `EcosystemConfig.yaml` `default_backend: cursor-cli`; скилл `codex` (флаг `--full-auto` устарел)
 - TZ:finalize v0.6.0: корпус `~/.hermes/kanban/attachments/t_07a2d903/_tz_patch_20261020_llm-cost-optimization_1.md`; REV:tz APPROVE (claude-sonnet-5-medium); аудит 20.10 $12.49/24ч; `_fix_plan_20261020.md`
+- TZ:patch v0.6.1: `dev/pipeline-set-case-crisis-sha-bug/_fix_plan_setcase.md`; `TZ-patch.md`; `cli.py` `cmd_set_case` (диагноз: to_dict → set_case без sha → from_dict CRISIS)
+- TZ:patch v0.6.2: `dev/ktalk-tmo-fatal-classifier/_fix_plan_20261021.md`; `TZ-patch.md`; `invoke_role.py` `_fatal_reason`/`_json_error_reason` (диагноз: None успешного JSON сливается с не-JSON; паттерн `request timed out` матчит цитату в `result`; ErrorBus #1850/#1852/#1855)
+- TZ:finalize v0.6.2: `dev/ktalk-tmo-fatal-classifier/TZ-patch.md`; `_fix_plan_20261021.md`; BUGFIX-LIGHT (REV:tz skip); штамп без правок смысла; инвентарь 0.6.0→0.6.2
+- TZ:patch v0.7.0: `dev/hard-stop-limity-hodov-fazy-p-5-auto-close-teleg/_fix_plan_20261021.md`; `TZ-patch.md`; ErrorBus #1838; нормы Б46 П.5.б / П.7.4 без кода; overlay `invoke_role` + watcher `SessionDB.end_session`
+- TZ:finalize v0.7.0: `dev/hard-stop-limity-hodov-fazy-p-5-auto-close-teleg/REV-tz.md` verdict=APPROVE; `TZ-patch.md`; `_fix_plan_20261021.md`; штамп без правок смысла; инвентарь 0.6.2→0.7.0
 
 ---
 
 ## Changelog
 
+- **2026-10-21 v0.7.0** — TZ:finalize пакета `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` после REV:tz APPROVE (BUGFIX полный). Штамп корпуса TZ:patch без правок смысла: Б49 / Б33 п.70–71 / AC-108/113 класс S (валят этот GATE:done) / AC-121 O `ставь кроны` / AC-107 регресс. Overlay П.5.б + watcher П.7.4 через `SessionDB.end_session`. Инвентарь. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет. Замечания ревизора («прочие invoke ≤20»; `_COMPACTION_PREFIXES`) — `HF:plan` / `HF:impl`, не этот штамп.
+- **2026-10-21 v0.7.0** — TZ:patch пакета `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` (BUGFIX полный) по `_fix_plan_20261021.md`. Overlay лимитов ходов фазы в `invoke_role` (GATE≤4 / TZ·REV·прочие invoke≤20 / HF≤25), не `warn_after`, не ядро (П.5.б). Watcher auto-close telegram ≥80 api fail-closed через `SessionDB.end_session(id, "api_limit_80")`; канон валидного handoff-summary; сырой SQL / `session.py` запрещены (П.7.4). AC-108/113 валят GATE:done **этого** слага; AC-121 O `ставь кроны` на job watcher. Б49, Б33 п.70–71. Корпуса Б40–Б48 / AC-058…120 смысл не откатывались. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет.
+- **2026-10-21 v0.6.2** — TZ:finalize пакета `ktalk-tmo-fatal-classifier` (BUGFIX-LIGHT, REV:tz skip LIGHT). Штамп корпуса TZ:patch без правок смысла: Б48 / Б13.2 / Б33 п.68–69 / AC-119…120 класс S; трёхзначный control-flow, envelope-приоритет, не-JSON fallback. Инвентарь 0.6.0→0.6.2. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет.
+- **2026-10-21 v0.6.2** — TZ:patch пакета `ktalk-tmo-fatal-classifier` (BUGFIX-LIGHT) по `_fix_plan_20261021.md`. Трёхзначный control-flow `classify_provider_fatal` / `_fatal_reason`: (а) валидный JSON `is_error=false`/без error-поля → не provider-fatal при любом тексте в `result` (цитата `Request timed out` ≠ сбой провайдера); (б) JSON `is_error=true`/`type=="error"` → fatal, envelope выигрывает у цитат; (в) не-JSON → fallback на строгие сигнатуры (сообщение клиента/парсера). Список `FATAL_PATTERNS` не сокращать; `provider_fatal` non-recoverable. LIGHT: `invoke_role.py` + `test_invoke_fatal.py`. Б48, Б13.2, Б33 п.68–69, AC-065/070 развитие, AC-119…120 класс S. Корпуса Б40–Б47 не откатывались. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет.
+- **2026-10-21 v0.6.1** — TZ:patch пакета `pipeline-set-case-crisis-sha-bug` (BUGFIX-LIGHT) по `_fix_plan_setcase.md`. `cmd_set_case`: после `set_case` мутации dict сбросить `state_sha256` (`d.pop`) перед `from_dict` — иначе `CRISIS: state_sha256 mismatch`; отладка `set-case` = эта склейка, не `repair` и не recipe. `from_dict` жёсткий; `set_case` sha не считает; диск валиден через `write_state` → `to_dict()`. LIGHT: `cli.py` 1 строка + `test_set_case_light.py`. Б47, Б8, Б6.1, Б10, Б16, Б20, Б22, Б33 п.66–67, AC-117…118 класс S. Корпуса Б40–Б46 не откатывались. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет.
 - **2026-10-20 v0.6.0** — TZ:finalize пакета llm-cost-optimization после REV:tz APPROVE (CHANGE процесса). Штамп корпуса TZ:patch без правок смысла: Б46 / Б12.3 / Б16.7 / Б17.4 / Б33 / Б34 / AC-094…. оператор-hold `ставь кроны` + `удаляй`. Код не писался (HF:impl). [NEW-ENTITY] нет.
 - **2026-10-20 v0.5.0** — TZ:patch пакета `migrate-dev-roles-cursor-to-codex` (CHANGE процесса; поезд init как DEV). Штат ролей = Codex exec по таблице Б6.4 (`gpt-6.1-sol` / `gpt-6-astra` / `gpt-5.6-terra` / `gpt-6-luna`); Cursor CLI снят со штата, адаптер оставлен для отката. Канон `codex exec -C -m -c effort --skip-git-repo-check --json --sandbox danger-full-access`; не `run --cwd`; не `--full-auto`. Auth 401 = AC-080 O / Q-2 (не Q-1 W4). Координатор и компрессор не на Codex. `gpt-6-terra` запрещён. Allowlist скиллов Б45.5. Пилот до перевода всех поездов. Б45, Б4 Q-Archi-03, Б13.2, Б14, Б33 п.56–62, AC-080…093. Код не писался (HF:impl). `[NEW-ENTITY]` нет.
 - **2026-10-19 v0.4.9** — TZ:finalize пакета `pochinka-payplayna-dev-workflow-konets-hoda-po-k` после REV:tz APPROVE. Штампует корпус TZ:patch v0.4.9 без правок смысла: Б44 / Б16.7 / AC-076…079 класс S. Инвентарь. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Замечания ревизора (U+FFFD в extract; occupancy-gate не трогает `recover_counts`; IAC-09 паттерн `rg`) — `HF:plan` / compress / `HF:docs-handoff`, не этот штамп.

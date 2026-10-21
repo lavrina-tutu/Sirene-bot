@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "entities": {
     "trisigma": {
       "kind": "project",
@@ -25,7 +25,9 @@
           "primary": false
         }
       ],
-      "task_slug": "Trisigma."
+      "task_slug": "Trisigma.",
+      "open": false,
+      "closed_at": "2026-09-30"
     },
     "ab_platforma": {
       "kind": "project",
@@ -44,7 +46,8 @@
         "tag": "AB-платформа."
       },
       "folder": "Entities/ab_platforma",
-      "task_slug": "AB-платформа."
+      "task_slug": "AB-платформа.",
+      "open": true
     },
     "ai_ready": {
       "kind": "project",
@@ -79,7 +82,8 @@
           "primary": true
         }
       ],
-      "task_slug": "AI-ready."
+      "task_slug": "AI-ready.",
+      "open": true
     },
     "ai_analitik": {
       "kind": "project",
@@ -93,7 +97,20 @@
         "мультиагентная система",
         "чат-бот",
         "чатбот",
-        "chatbot"
+        "chatbot",
+        "codex",
+        "cursor",
+        "deepseek",
+        "claude",
+        "gpt",
+        "glm",
+        "openrouter",
+        "skill",
+        "скил",
+        "агент",
+        "гермес",
+        "llm",
+        "MCP"
       ],
       "pfs": {
         "page_id": "477061038",
@@ -107,7 +124,8 @@
           "primary": true
         }
       ],
-      "task_slug": "AI-аналитик."
+      "task_slug": "AI-аналитик.",
+      "open": true
     },
     "ml_platforma": {
       "kind": "project",
@@ -129,7 +147,9 @@
           "primary": true
         }
       ],
-      "task_slug": "ML-платформа."
+      "task_slug": "ML-платформа.",
+      "open": false,
+      "closed_at": "2026-09-10"
     },
     "metroteka": {
       "kind": "project",
@@ -153,7 +173,9 @@
           "primary": true
         }
       ],
-      "task_slug": "Метротека."
+      "task_slug": "Метротека.",
+      "open": false,
+      "closed_at": "2026-03-13"
     },
     "parsing": {
       "kind": "project",
@@ -195,7 +217,8 @@
           "primary": false
         }
       ],
-      "task_slug": "Парсинг."
+      "task_slug": "Парсинг.",
+      "open": true
     },
     "datatalks": {
       "kind": "multisync",
@@ -363,7 +386,8 @@
           "primary": true
         }
       ],
-      "task_slug": "DevRel."
+      "task_slug": "DevRel.",
+      "open": true
     },
     "cu": {
       "kind": "project",
@@ -392,7 +416,9 @@
           "primary": false
         }
       ],
-      "task_slug": "ЦУ."
+      "task_slug": "ЦУ.",
+      "open": false,
+      "closed_at": "2026-03-25"
     },
     "omd": {
       "kind": "tool",
@@ -565,7 +591,9 @@
           "primary": false
         }
       ],
-      "task_slug": "Атрибуция."
+      "task_slug": "Атрибуция.",
+      "open": false,
+      "closed_at": "2026-02-25"
     },
     "antibot": {
       "kind": "project",
@@ -597,7 +625,9 @@
           "primary": false
         }
       ],
-      "task_slug": "Антибот."
+      "task_slug": "Антибот.",
+      "open": false,
+      "closed_at": "2025-10-10"
     },
     "dayana_1on1": {
       "kind": "one_on_one",
@@ -626,7 +656,9 @@
         "page_id": "439235672",
         "tag": "Альфа."
       },
-      "task_slug": "Альфа."
+      "task_slug": "Альфа.",
+      "open": false,
+      "closed_at": "2025-08-13"
     },
     "vestnik": {
       "kind": "project",
@@ -650,7 +682,8 @@
           "primary": true
         }
       ],
-      "task_slug": "Вестник."
+      "task_slug": "Вестник.",
+      "open": true
     },
     "okr": {
       "kind": "project",
@@ -703,7 +736,8 @@
         "page_id": "519474318",
         "tag": "АДМ."
       },
-      "task_slug": "АДМ."
+      "task_slug": "АДМ.",
+      "open": true
     },
     "alekseeva": {
       "kind": "person",

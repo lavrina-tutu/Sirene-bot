@@ -1,9 +1,9 @@
 ---
 tool: TaskRefresh
-version: 2.4.2
-date: 2026-09-09
+version: 2.4.3
+date: 2026-10-21
 status: active
-last-section-added: "§27 — «Всё в одном» для ./tr new: срок и ссылки из строки постановки (09.09.2026, v2.4.2)"
+last-section-added: "§28 — current-mode бутстрап CONFLUENCE_TOKEN / CONTACTS_ENCRYPTION_KEY (taskrefresh-ne-podhvatyvaet-confluence-token-i-k, TZ:finalize 2026-10-21, v2.4.3)"
 ---
 
 <!--
@@ -1672,3 +1672,145 @@ Reuse-first: **не** дублировать макросы/href. Новая л�
 6. Макросы собираются только через существующие `_is_jira_url` / `_build_jira_macro_element` / `_append_link_or_jira`; в диффе нет второй копии regex/serverId.
 7. Регресс: пакет тестов (включая §25) зелёный; новые кейсы §27.5 покрыты юнитами.
 8. SKILL.md: предупреждение «new не вставляет ссылки» снято; однопроходный сценарий описан. Живой smoke на Confluence: GET после `new` подтверждает макрос/`<a href>`/`<time datetime="YYYY-MM-DD"/>` без сырого `14.09` в атрибуте.
+
+## §28. Current-mode бутстрап секретов `CONFLUENCE_TOKEN` / `CONTACTS_ENCRYPTION_KEY` (21.10.2026, v2.4.3)
+
+**TZ:finalize 21.10.2026 (master 2.4.3).** Текст §28 зафиксирован.
+`REV:tz` skip по рецепту BUGFIX-LIGHT. Код ждёт `HF:impl`.
+Pre-impl маркеры «инвентарь / version bump — не этот ход» сняты.
+Не ретрофитит §1–§27. Текст §26 и §27 (`normalize_deadline` / «всё в одном» для `./tr new`) **без правок**.
+`[NEW-ENTITY, требует согласования Саши]` **нет**.
+
+выжимка ≠ SoT; при расхождении — открыть этот master.
+Указатель фазы: `dev/taskrefresh-ne-podhvatyvaet-confluence-token-i-k/TZ-finalize.md`.
+Диагноз: `dev/taskrefresh-ne-podhvatyvaet-confluence-token-i-k/_fix_plan_20261021.md`
+(`GATE:diagnose-review` закрыт; классификация **BUGFIX-LIGHT** — оркестратор, не эта карточка).
+**Версия:** v2.4.3 (PATCH `2.4.2` → `2.4.3`; bump нет — диск уже 2.4.3 после TZ:patch).
+
+**Маркер I1.** `current` = прод v2.4.2, `USERTOOLS_CONFIG_MODE` unset (= current-mode): `_load_taskrefresh_env` в `taskrefresh/config.py` зовёт `load_tool_config("task_refresh", keys=["CONFLUENCE_URL", "ENTITIES_REGISTRY_PATH"])` и **не** зовёт `load_usertools_env()`; `ConfluenceSync/.env` не парсится (в отличие от legacy L18–19); модульные `CONFLUENCE_TOKEN` / `CONTACTS_ENCRYPTION_KEY` = `os.environ.get(..., "")` → оба `""`; `ConfluenceClient(url, token)` → `ValueError: CONFLUENCE_TOKEN is required`; резолв ФИО через `ContactStore` без ключа — вторая жертва того же бутстрапа. Несекреты живы, потому что они в YAML (`shared.CONFLUENCE_URL`, `tools.task_refresh.ENTITIES_REGISTRY_PATH`). `target` = эта работа: current-mode как PFS/MOFS (Pitfall 4 / ofc-404-all): `load_usertools_env()` + явный fallback `ConfluenceSync/.env` для `_TR_SECRET_KEYS`; `load_tool_config` **остаётся** только на несекреты; process env секрета не перетирается.
+
+---
+
+### §28.1. Цель
+
+В current-mode импорт `taskrefresh.config` (и любой `./tr`) получает непустые `CONFLUENCE_TOKEN` и `CONTACTS_ENCRYPTION_KEY` из канонических SoT, без секретов в YAML/overlay, без `TaskRefresh/.env`, без дубля токена в hermes `.env`.
+
+---
+
+### §28.2. SoT секретов и несекретов (current-mode)
+
+Схема `EcosystemConfig.schema.json` (`propertyNames`) режет `TOKEN|SECRET|PASSWORD|API_KEY`. Это **норма безопасности**, не баг: YAML/overlay **не** отдают значения секретов. Смену `propertyNames` этот пакет **запрещает**.
+
+Общий лоадер `load_tool_config` читает секрет из `os.environ` / `tool_dir/.env` **только если** (1) ключ попал в `keys=` **и** (2) `resolve_key` не вернул `None`. Иначе — `KeyError`. Это **не** путь TaskRefresh:
+
+- `tool_dir` = `~/USERTOOLS/TaskRefresh` (своего `.env` нет и **не** создавать).
+- `CONTACTS_ENCRYPTION_KEY` лоадер **не** считает секретом (`_SECRET_KEY` без `ENCRYPTION_KEY`) — класть его в `keys=` даёт `KeyError` на `value=None`.
+- `CONFLUENCE_TOKEN` нет в hermes `.env` **намеренно** (канон PFS Pitfall 4 / инцидент ofc-404-all: битый/дублирующий токен в hermes перекрывает валидный CS → HTTP 404 `authorized:false`).
+- Живая проба 21.10: `load_tool_config("task_refresh", keys=[…, "CONFLUENCE_TOKEN"])` и `load_tool_config("confluence_sync", keys=["CONFLUENCE_TOKEN"])` при `migration_status=accepted` → `KeyError`. Вариант «добавить ключ в `keys=`» **отклонён**.
+
+| Ключ | SoT | Не SoT |
+|---|---|---|
+| `CONFLUENCE_TOKEN` | `~/USERTOOLS/ConfluenceSync/.env`; process env, **если уже задан** | YAML/overlay, `~/.config/hermes/.env`, `TaskRefresh/.env`, литерал `config.py`, `keys=` `load_tool_config` |
+| `CONTACTS_ENCRYPTION_KEY` | `~/.config/hermes/.env`; fallback `ConfluenceSync/.env`, если ключ **там появится**; process env, если уже задан | YAML/overlay, `keys=` `load_tool_config`, литерал `config.py` |
+| `CONFLUENCE_URL` / `ENTITIES_REGISTRY_PATH` | YAML (`shared` / `tools.task_refresh`); process `setdefault` (process побеждает YAML — текущее поведение TR, **не** копировать PFS-overwrite) | контур секретов |
+
+Reuse-first: эталон — `protocolfromsummary/config.py` `_PFS_SECRET_KEYS` + `_bootstrap_paths` (не новый лоадер, не правка shared-модуля).
+
+---
+
+### §28.3. Бутстрап `_load_taskrefresh_env` (current-mode)
+
+Файл: `~/USERTOOLS/TaskRefresh/taskrefresh/config.py`. Dual-read несекретов **сохранить**. Менять только current-mode хвост. Имена ориентир; поведение — норма.
+
+`_load_taskrefresh_env()` в current-mode **обязан**:
+
+1. Звать `usertools_env.load_usertools_env()` **без** `local_env_path` → hermes `.env` → `CONTACTS_ENCRYPTION_KEY`. `CONFLUENCE_TOKEN` туда не класть.
+2. Прогнать `load_tool_config("task_refresh", keys=["CONFLUENCE_URL", "ENTITIES_REGISTRY_PATH"])` и `os.environ.setdefault` для несекретов (как сейчас).
+3. Включить `CONFLUENCE_TOKEN` и `CONTACTS_ENCRYPTION_KEY` в **контур чтения секретов** TaskRefresh: `_TR_SECRET_KEYS = ("CONFLUENCE_TOKEN", "CONTACTS_ENCRYPTION_KEY")`; `cs_parsed = usertools_env._parse_env_file(_CONFLUENCESYNC_ENV)`; для каждого ключа — `if secret_key not in os.environ and secret_key in cs_parsed: os.environ[secret_key] = cs_parsed[secret_key]`.
+4. Модульные `CONFLUENCE_TOKEN` / `CONTACTS_ENCRYPTION_KEY` по-прежнему читать из env **после** бутстрапа (`os.environ.get`).
+
+Legacy-ветка (`USERTOOLS_CONFIG_MODE == "legacy"`, L18–19): `load_usertools_env(local_env_path=_CONFLUENCESYNC_ENV)` — **safety-net, смысл не менять**. Это **не** TZ §26.
+
+Инварианты:
+
+- Не добавлять секреты в `keys=`. Не писать значения в YAML / манифест / digest / `config.py`.
+- Не возвращать `python-dotenv` / `AnywhereContacts/.env` (в AC `.env` секретов нет).
+- Не копировать паттерн ConfluenceSync `CONFLUENCE_TOKEN` в `_CS_CONFIG_KEYS` при `migration_status=accepted` (соседний KeyError на `Settings()`; TR его не чинит).
+- `usertools_config.py` / regex `_SECRET_KEY` / `usertools_env.py` этим пакетом **не трогать** (shared → не LIGHT; PFS уже обходит явным fallback).
+
+---
+
+### §28.4. Тесты (ориентир `tests/test_config_env.py`, новый файл)
+
+Изолировать hermes env (как MOFS `test_bootstrap_key_from_confluence_sync_env`: патч `load_usertools_env` + `_CONFLUENCESYNC_ENV` на tmp). Секреты в тестах — фиктивные строки (`"from-cs"`, `"from-hermes"`), не прод. Assert по факту наличия/равенству фикстуры; **не** печатать живые токены.
+
+| Кейс | Ожидание |
+|---|---|
+| current-mode, process пуст, CS tmp содержит TOKEN, `load_usertools_env` не ставит ENC | TOKEN = `from-cs`; ENC пуст (CS без ключа) |
+| current-mode, `load_usertools_env` ставит ENC, CS содержит TOKEN | оба заданы; ENC не из CS |
+| current-mode, TOKEN уже в process env | CS-значение **не** перетирает |
+| current-mode, шпион `load_tool_config` | `keys` == `["CONFLUENCE_URL", "ENTITIES_REGISTRY_PATH"]` (секретов нет) |
+| legacy, CS tmp с TOKEN | TOKEN задан (регресс L18–19) |
+| YAML/URL | `CONFLUENCE_URL` по-прежнему из `load_tool_config` / `setdefault` (не из секретов) |
+
+Существующие тесты (`test_new_task` / §25–27) не ломать. `conftest` audit-изоляцию не трогать.
+
+---
+
+### §28.5. Что НЕ трогать
+
+- Текст §26 и §27: `normalize_deadline`, алгоритм дата-строки §24, ссылки §25, CLI `new`/`apply`/`do`/`batch`, `JIRA_SERVER_*` в `config.py`.
+- Код-ветка legacy `_load_taskrefresh_env` (L18–19) как safety-net.
+- `propertyNames` YAML-схемы (`TOKEN|SECRET|PASSWORD|API_KEY`); dual-read несекретов `setdefault`.
+- `~/.hermes/lib/usertools_config.py` / `usertools_env.py` / regex `_SECRET_KEY`.
+- `ConfluenceSync/confluencesync/config.py` (соседний KeyError current-mode — не этот пакет).
+- `CONFLUENCE_TOKEN=` в `~/.config/hermes/.env`; новый `TaskRefresh/.env`; секреты в `EcosystemConfig.yaml` / манифест / digest.
+- Хардкод токена / копия в YAML.
+- `date_parse.py` / `write_ops.py` / `task_block.py` / `session_store.py` / тесты §26–27 — чужой грязный diff: не откатывать и не коммитить этим пакетом.
+- Кроны, gateway, `jobs.json`, ядро Hermes. SKILL `taskrefresh` — только `HF:docs-handoff`, одна фраза: токен из CS `.env`, не из YAML.
+- §7: hermes-config-repo / gateway / Contacts кроме `contacts.enc` через AnywhereContacts / `_registry.json` PFS / страница 432316254 WRITE / OpenTasks macro / storage `<ac:task>` вне W1–W5.
+- Не удалять задачи в Confluence; не статичный whitelist страниц.
+- `[NEW-ENTITY]`.
+
+---
+
+### Критерии приёмки (AC)
+
+Только пакет `taskrefresh-ne-podhvatyvaet-confluence-token-i-k`. Класс S. `depends: operator:*` нет. Формулировки AC — норма этого §; IAC хвоста — в `_fix_plan_20261021.md` (BUGFIX-LIGHT без `HF:plan`).
+
+### AC-001 — current-mode: TOKEN из CS, ENC из hermes
+
+Класс S. Дано: `USERTOOLS_CONFIG_MODE` unset, process без `CONFLUENCE_TOKEN` и `CONTACTS_ENCRYPTION_KEY`. После импорта `taskrefresh.config`: `len(CONFLUENCE_TOKEN) > 0` (источник — `ConfluenceSync/.env`), `len(CONTACTS_ENCRYPTION_KEY) > 0` (источник — hermes `.env`), `CONFLUENCE_BASE_URL` непустой (YAML/`setdefault`). `ConfluenceClient(url, token)` не поднимает `ValueError: CONFLUENCE_TOKEN is required`. В stdout — только длины, не значения.
+
+### AC-002 — `load_tool_config` без секретов в `keys=`
+
+Класс S. Юнит-шпион: `keys == ["CONFLUENCE_URL", "ENTITIES_REGISTRY_PATH"]`. Импорт `taskrefresh.config` в current-mode **не** `KeyError`. Секреты в `keys=` не добавлять.
+
+### AC-003 — process env секрета не перетирается
+
+Класс S. `CONFLUENCE_TOKEN` уже в process env → значение из CS `.env` **не** побеждает (`if secret_key not in os.environ`).
+
+### AC-004 — legacy safety-net жив
+
+Класс S. `USERTOOLS_CONFIG_MODE=legacy` по-прежнему читает CS `.env` через `load_usertools_env(local_env_path=_CONFLUENCESYNC_ENV)`. Смысл ветки L18–19 не менять.
+
+### AC-005 — секреты не в YAML / манифесте / коде
+
+Класс S. `rg CONFLUENCE_TOKEN` по `EcosystemConfig.yaml` / `EcosystemManifest.json` / digest → 0. В diff пакета нет литерала токена. `propertyNames` схемы не менялись. Нет нового `TaskRefresh/.env`. Нет `CONFLUENCE_TOKEN=` в `~/.config/hermes/.env`.
+
+### AC-006 — периметр LIGHT
+
+Класс S. Прирост vs git-baseline (снимать на `HF:backup`): `taskrefresh/config.py` (секрет-хвост current-mode) + `tests/test_config_env.py`. `pytest tests/` зелёный, включая регресс §25–27. Чужой грязный diff и `usertools_config.py` / `_SECRET_KEY` в прирост не входят.
+
+### Сводка AC пакета §28 (TZ:finalize)
+
+Класс S. `depends: operator:*` нет. Код = `HF:impl`. Нумерация **локальная** пакета (AC-001…006); глобальный ряд DevWorkflow AC-121 **не** заводился.
+
+| AC | Норма | Статус TZ:finalize |
+|---|---|---|
+| AC-001 | current-mode: TOKEN из CS `.env`, ENC из hermes `.env`, URL из YAML; клиент без `CONFLUENCE_TOKEN is required` | закрыт планом/тестами |
+| AC-002 | `load_tool_config` `keys=` без секретов; импорт не KeyError | закрыт планом/тестами |
+| AC-003 | TOKEN уже в process env → CS не перетирает | закрыт планом/тестами |
+| AC-004 | legacy L18–19 по-прежнему читает CS `.env` | закрыт планом/тестами |
+| AC-005 | секреты не в YAML / манифесте / digest / `TaskRefresh/.env` / hermes `.env`; схема `propertyNames` без смены | закрыт планом/тестами |
+| AC-006 | прирост vs baseline = `config.py` (секрет-хвост) + `tests/test_config_env.py`; pytest зелёный | закрыт планом/тестами |

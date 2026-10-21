@@ -1,12 +1,12 @@
 ---
 tool: MarkObjectsFromSummary
 status: active
-version: 0.10.1
+version: 0.11.0
 author: Opus (черновик для Саши)
 created: 2026-07-16
-updated: 2026-09-28
+updated: 2026-10-21
 decisions_locked: 2026-07-17 (D1-D6); 2026-07-18 (D7 — решение Саши: provenance + `mofs edit` + fallback detection); 2026-07-18 (v0.6.0 — команда `mofs review` для инспекции матчей, чистая изолированная фильтр-логика); 2026-07-21 (v0.7.0 — Safety: dry-run для run/rematch/edit, scope enforcement, preflight, --from/--to, дата-валидация; реализовано 103/103 тестов); 2026-07-21 (v0.8.0 — contacts v0.2: ФИО из тела summary, date: во frontmatter; брифовые решения D1-D5 зафиксированы); 2026-07-22 (v0.9.0 — backfill-contacts NER Q11.1-Q11.8 все приняты Сашей; диагностические фиксы П.1-П.6; tools-корзина расширена до 13 tools; тесты 148/148); 2026-07-23 (v0.9.1 — план доработки matcher_contacts: обратный порядок ФИО «Имя Фамилия» + словарь гипокористик; принцип «не угадывать» сохранён)
-last-section-added: "LLM-конфиг из Hermes config.yaml — mofs-llm-from-hermes-default (TZ:finalize 28.09.2026, v0.10.1)"
+last-section-added: "ContactStore в крон-venv — vstrechi-19-10-20-10-prishli-v-neobrabotannye-be (TZ:finalize 21.10.2026, v0.11.0, REV:tz APPROVE)"
 depends_on:
   - EntityRegistry v0.2.0 (реализован; `WorkVault/Registries/entities.json` — единственный канонический источник алиасов)
   - EntityRegistryCLI v0.2.0 (реализован; единственный write-path в `entities.json`)
@@ -1667,3 +1667,163 @@ CHANGE.
 конфиг-поверхность и транспорт LLM, это фича, не hotfix. 0.10.0 не
 садился на диск (REQUEST_CHANGES `REV:tz`); эта секция — исправленный
 канон пакета.
+
+
+## Доработка: ContactStore в крон-venv (vstrechi-19-10-20-10-prishli-v-neobrabotannye-be, 2026-10-21) — v0.11.0
+
+**TZ:finalize 21.10.2026 (master 0.11.0).** Текст секции зафиксирован.
+`REV:tz` APPROVE (`dev/vstrechi-19-10-20-10-prishli-v-neobrabotannye-be/REV-tz.md`).
+Q-1/Q-2 пакета закрыты в PFS §36 (этот master своих Q не имел).
+Код / `jobs.json` / `.env` / ключ в git на этой фазе **не** пишутся.
+Кросс: PFS §36, MFKT §25. `[NEW-ENTITY]` **нет**.
+
+выжимка ≠ SoT; при расхождении — открыть master.
+
+**Маркер I1.** `current` = прод v0.10.1: `pyproject.toml` **не**
+зависит от `anywhere-contacts`; крон-venv MOFS →
+`ModuleNotFoundError: anywhere_contacts` **или** (если пакет
+появится) `Settings.contacts_encryption_key` только из env, а
+MOFS `.env` содержит лишь `WORKVAULT_PATH`/`TOOL_DIR`. Пустой
+ключ → `store = None` **молча** (ветка `if key:` до try);
+`contacts_store_unavailable` пишется только после исключения
+внутри try. События 20.10: `processed` без contacts. YAML
+`contacts: []` у встреч 19–20.10 — следствие, не «люди неизвестны
+contacts.enc». Matcher reverse 2-словных (`_candidates`) и
+Pass 2 AnywhereContacts **уже** умеют «Ткаченко Александр».
+`target` = эта работа: runtime-зависимость `anywhere-contacts`
+в боевом `.venv`; секрет `CONTACTS_ENCRYPTION_KEY` тем же
+bootstrap, что PFS (`config.py` `_PFS_SECRET_KEYS` из
+`USERTOOLS/ConfluenceSync/.env` + shared `.env`, не дублировать
+ключ в git / per-tool `.env`); если store недоступен —
+**громко** всегда (`contacts_store_unavailable`, не только
+ImportError). Алгоритм `HYPOCORISTICS` / `_candidates` /
+`find_contacts` **не** патчить.
+
+---
+
+### Цель
+
+Крон `mofs run` реально открывает `ContactStore` и пишет
+frontmatter `contacts:` для 2-словных ФИО. Staff
+`mofs rematch --from 2026-10-19 --to 2026-10-20 --bucket contacts`
+после impl размечает уже лежащие summary (команда **уже** в CLI,
+сигнатуру не ломать).
+
+---
+
+### Scope
+
+1. **`pyproject.toml`.** Добавить
+   `anywhere-contacts @ file:///${PROJECT_ROOT}/../AnywhereContacts`
+   (тот же приём, что `mofs-index`). Установить в боевой `.venv`
+   MOFS (`uv sync` / существующий путь установки крона). Не
+   копировать `store.py` в дерево MOFS.
+2. **Bootstrap секрета.** Прочитать `CONTACTS_ENCRYPTION_KEY`
+   в том же контуре, что PFS: `usertools_env.load_usertools_env()`
+   + fallback parse `~/USERTOOLS/ConfluenceSync/.env` для
+   `_PFS_SECRET_KEYS`-эквивалента (`CONTACTS_ENCRYPTION_KEY`).
+   Не писать ключ в `MarkObjectsFromSummary/.env`. Не класть
+   секрет в YAML / git. `contacts_enc_path` остаётся каноном
+   `WorkVault/Contacts/contacts.enc`.
+3. **Громкий unavailable.** Если нет пакета / нет пути enc /
+   нет ключа / `ContactStore.read()` падает → событие
+   `contacts_store_unavailable` **всегда** (reason=
+   `import|missing_key|missing_path|read_error`), `store=None`,
+   прогон contacts-корзины не притворяется успехом с пустым
+   списком без лога. Не hard-fail весь `mofs run` по projects/tools
+   (корзины независимы, D-принцип): contacts skip + warning;
+   остальные корзины живут.
+4. **Staff rematch.** Существующий
+   `mofs rematch --from DATE --to DATE --bucket contacts`
+   обязан видеть store после п.1–2. Новых флагов не заводить.
+5. **Тесты.** Юнит: ключ пуст → событие, не тихий None;
+   ImportError → событие; мок store.read успех → `store` не None.
+   Регресс matcher_contacts / HYPOCORISTICS зелёный без правок
+   алгоритма.
+
+Не входит: новый алгоритм поиска; Pass 2 в AnywhereContacts;
+правка `HYPOCORISTICS` / `_candidates`; write-path `contacts.enc`;
+`entities.json`; `jobs.json` без «ставь кроны»; порядок крона
+(это PFS §36 AC-010 O); picker PFS; `[NEW-ENTITY]`.
+
+Порядок крона MOFS до PFS — **не** этот master: норма и
+operator-AC живут в PFS §36. Этот пакет код крона не пишет.
+
+---
+
+### Что НЕ трогать (этот пакет)
+
+- Алгоритмы Шагов 2–3, `_candidates`, `HYPOCORISTICS`, принцип
+  «не угадывать».
+- `AnywhereContacts.ContactStore.find_contacts` / Pass 2
+  (уже v0.3.1).
+- Write-ban `contacts.enc` / `entities.json`.
+- Сигнатуры CLI `run` / `rematch` / `backfill-contacts` /
+  `edit` / `review` (новые флаги не заводить).
+- LLM-конфиг v0.10.1 / `MOFS_LLM_*` / порог 0.85.
+- Gateway, манифест, `.env` в git, `ff_summary.json`.
+- Крон-expr (operator PFS §36).
+
+---
+
+### Критерии приёмки (AC)
+
+Только этот пакет для MOFS. AC-001…013 v0.10.1 **не**
+перенумеровать. Класс S, кроме порядка крона (чужой AC-010 PFS).
+
+### AC-001 — зависимость в venv
+
+`python -c "import anywhere_contacts"` в интерпретаторе крона
+MOFS (тот же bin, что `mofs_run_cron.sh`) exit 0.
+`pyproject.toml` содержит `anywhere-contacts @ file://`.
+
+### AC-002 — ключ без per-tool .env
+
+При отсутствии `CONTACTS_ENCRYPTION_KEY` в `MarkObjectsFromSummary/.env`
+и наличии ключа в `ConfluenceSync/.env` (или shared `.env`)
+`Settings.contacts_encryption_key` непустой. Юнит с мок parse.
+Ключ не появляется в git diff.
+
+### AC-003 — громкий unavailable
+
+Пустой ключ / нет файла enc / ImportError → в логе событие
+`contacts_store_unavailable` (не только stdout). Нет события
+при успешном `store.read()`.
+
+### AC-004 — алгоритм поиска без диффа
+
+Diff не меняет `matcher_contacts.py` логику reverse/гипо,
+`HYPOCORISTICS`, `find_contacts`. Регресс существующих тестов
+матчера contacts зелёный.
+
+### AC-005 — rematch CLI жив
+
+`mofs rematch --help` показывает `--from` / `--to` / `--bucket`.
+После п.1–2 `rematch --bucket contacts` на фикстуре с 2-словным
+ФИО пишет `contacts:` (мок store).
+
+### AC-006 — границы
+
+Diff не содержит `jobs.json`, `.env` секрета, PFS uniqueness,
+AnywhereContacts `store.py`, `ff_summary.json`, манифеста.
+
+### AC-007 — pytest MOFS
+
+`pytest` пакета MOFS зелёный; новые тесты аддитивны; без живой
+сети.
+
+---
+
+### Открытые вопросы
+
+Нет своих. Q-1/Q-2 пакета жили в PFS §36 и **закрыты Сашей 21.10**
+(journal): Q-1 = оставить §34 без CHANGE; Q-2 = пересамаризация
+11:28-57 staff MFKT `--force` **после `HF:impl` в replay**, затем
+MOFS rematch + PFS. Этот master код крона не пишет.
+
+### Version bump
+
+Минорный: **0.10.1 → 0.11.0**. Патч 0.10.2 отвергнут: появляется
+runtime-зависимость и bootstrap секрета, это не hotfix прозы.
+Шапка master уже **0.11.0** с `TZ:patch`; `TZ:finalize` подтверждает
+и пишет `MAIN_TZ_INVENTORY.md`. Не 0.11.1.

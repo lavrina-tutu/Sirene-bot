@@ -332,7 +332,10 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
     пустом LLM и ровно одном текстовом хите клеится `canonical_task_slug + orig_text` без пробела
     после точки; empty-warn при этом **не** шлётся. При ≥2 текстовых хитах или assignee-сигнале без
     спасения fallback — empty-warn остаётся. Fail-soft без уникального хита — только `tag_prefix`
-    встречи или текст as-is.
+    встречи или текст as-is. **v1.35.0+ (§39 гибрид H, 21.10.2026): механизм meeting-home (§38)
+    ОТМЕНЁН Сашей** («У задачи не может не быть слага. Это правило»). Слаг обязателен для ВСЕХ
+    задач (в т.ч. 1:1 и мультисинков); при union=0 → **АДМ**, а НЕ home встречи и НЕ as-is.
+    Этой записи §38 (home) — не придерживаться: она историческая, §38 отклонён.
 
 18. **Источник слага задачи — контекст задачи + MOFS, а НЕ «средняя тема» протокола**
     (§34 pfs-slug-prebuild, v1.29.0+, 15.10.2026) — слаги задач на этапе необработанных (до promote)
@@ -384,6 +387,45 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
     `tests/test_contacts_resolver.py::test_meeting_19_10_new_format_names_resolve_to_tag`
     (E2E фикстура встречи 19.10, AC-002/009).
 
+20. **§39 «гибрид H»: слага-кандидаты = ВСЕ project с task_slug из реестра (не жёсткая
+    четвёрка), lifecycle (open/closed_at) в entities.json (схема 1.3), политика в picker**
+    (pfs-slug-1on1-iz-konteksta-vstrechi, v1.35.0, 21.10.2026) — заменил §38 (отклонён,
+    см. Питфолл 17): «У задачи не может не быть слага» — для ВСЕХ задач (в т.ч. 1:1 и
+    мультисинков); встреча 1:1/мультисинк не слаг. **Источник кандидатов — `closed_list(entities)`**
+    (kind=project ∧ task_slug≠∅), без `TASK_SLUG_CHOICE_ALLOWLIST`-четвёрки ({ai_analitik,
+    trisigma, parsing, adm} удалён как SoT-membership, добавлен `adm` микс в `_candidates_h`).
+    Модель в prompt-строке видит open/closed_at/age_days + вычисленный pick_hint:
+    `adm`→`prod_fallback`, `frequent` ТОЛЬКО для ai_analitik (`_FREQUENT_OVERLAY`), иначе
+    `named_only`. Hard gate: frequent|adm → LLM может без union; named_only → принимается iff
+    slug∈union. Шаг 4 (union 0/≥2) → **АДМ**, без decay, без P()-формулы. **Числа/вероятности
+    в реестр НЕ пишем** (вердикт архитектора): decay через `closed_at` (чем дольше закрыт — тем
+    ниже вероятность, но ≠ 0 — стресс-тест Саши: закрытый Trisigma задача может попасть). Закрытый
+    проект в кандидатах остаётся; новый проект (open:true) подхватывается без правки кода (AC-013).
+    **Схема entities 1.3:** optional `open` (boolean) / `closed_at` (string YYYY-MM-DD|null) на
+    сущности; `additionalProperties:false` жив; ERC-инварианты: open/closed_at⇒kind=project (fail
+    lifecycle_forbidden_kind), open:true⇒нет closed_at (fail lifecycle_open_with_closed_at),
+    open:false⇒closed_at warning (lifecycle_closed_without_date). ERC CLI: `_parse_scalar` булевый +
+    `edit --force` обязателен для lifecycle-полей. Backfill открытых/закрытых проектов — только
+    через ERC CLI `--force` (без import movefromff, `last_synced_at`/крон не трогать). MMP
+    (новый проект): добавить в entities.json `open: true` + kind=project + task_slug — автоматически
+    станет кандидатом в 1:1/мультисинках. При диагностике «слага нет/не тот» — смотреть
+    `closed_list(entities)` (живой список), а не старую четвёрку.
+    **Поддерживание словаря signals (проект ↔ термины) — через `aliases` в entities.json:**
+    Саша правит назначаемость прямыми терминами («добавь Codex/MPC/GPT/LLM → ai_analitik»), НЕ
+    кодом пикера. `task_slug.py` матчит задачу по `_project_item_identities(item)` =
+    slug ∪ task_slug ∪ display_name ∪ aliases через `_identity_matches` (подстрока, len≥3). Термины,
+    которых нет в aliases проекта, уходят в АДМ — «Codex» не в словаре ai_analitik ⇒ задача
+    «перевести платформу на Codex» = АДМ. **Добавлять через ERC CLI ПО-ОДНОМУ `--append`** (сохранять
+    существующие, не перезаписывать массив):
+    ```bash
+    cd ~/USERTOOLS/EntityRegistryCLI && for t in codex cursor llm MCP; do \
+      .venv/bin/python3 -m entityregistrycli edit ai_analitik aliases "$t" --append -y; done
+    .venv/bin/python3 -m entityregistrycli validate  # rc=0, только известные task_slug_missing warnings
+    ```
+    Правка реестра автоматически учитывается пикером на следующем прогоне — перепрогон встречи НЕ
+    требуется (Саша: «перепрогонять ничего не надо»), но и не ломается историческим guard (Питфоллы
+    6-7). Поле `aliases` валидно в схеме 1.3 (additionalProperties:false его не запрещает).
+
 ## Пост-switch контур (§24, v1.17.0): PFS_POST_SWITCH — только ingest на площадку
 
 Флаг **`PFS_POST_SWITCH`** ∈ `{1,true,yes,on}` (без регистра, дефолт **off**; читается
@@ -413,6 +455,7 @@ Do NOT restore `deliver=telegram:400307920` on the batch cron — Саша expli
   `promote_meeting` ставит `notified=True` при флаге on; `build_text_for_entry` для
   `last_action=="promoted"` при флаге on возвращает `None` (двойная страховка).
 - `promote_invalid_target` → как раньше (`format_promote_invalid_target`, без изменений).
+- **§40 (v1.35.1, pfs-stale-notifications):** if promote прошёл БЕЗ `PFS_POST_SWITCH` на своём процессе (CLI/скрипт/REPL без флага), а notify-крон всегда с флагом on → `notified` остаётся False → вечный pending → stale_warn каждые 5 мин. Не чинить promote (правило off/on), чинить notify: в `notify_pending.main`, если `build_text_for_entry` вернул `None` И `last_action=="promoted"` И флаг on И не `--dry-run` → `notified=True` (drain). stale_warn исключает `promoted`+флаг on из набора stale. Не дренировать прочие `None` (meeting_date пуст, exported без пути) — это битые данные, не «уже доставлено».
 
 **Дедуп — только на проходе 2** (`playground_promote._promote_dedup_minutes_against_target`, флаг on):
 - Внутри `promote_meeting` после td3 complete и GET цели, до replace/insert/PUT; вызывается

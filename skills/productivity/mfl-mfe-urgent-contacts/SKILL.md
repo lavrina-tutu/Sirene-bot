@@ -47,6 +47,18 @@ urgent_contacts:
 - 21.08.2026: Солдатенков (soldatenkov) не добавлен по явной просьбе Саши; Середа (sereda) исключён — уволился
 - 03.09.2026: добавлен zaynullin (Зайнуллин Ильдар), username подтверждён через Loop API (infrastructural engineer)
 
+## Самостоятельный список `urgent_channels` (не контакты)
+
+Отдельный allowlist каналов (в `loop_rules.yaml`), все посты которых уходят 🔴 независимо от автора, включая подтопики первого уровня (резолвит `ChannelResolver.expand_with_topics`, новые топики подхватываются на каждом прогоне автоматически):
+
+```yaml
+urgent_channels:
+- chat-rukovoditeley-departamenta-aid   # Чат руководителей АИД, id=7r6dmtdgtbrefxe9itai8aozzw, 60 подтопиков (добавлен 22.10.2026)
+- ai-analitik-multiagentnaya-sistema-aid  # id=jqhs9np3i3nj7qxh3e4hm6ox1r OPEN, 15 подтопиков
+```
+
+Сообщение от контакта из `urgent_contacts` в канале из `urgent_channels` — одно 🔴 (merge по `post.id`, первое ведро побеждает). `blacklist_*`/`is_urgent` на channel-ведре не применяются (bucket isolation).
+
 ## Процедура обновления
 
 1. Открыть `loop_rules.yaml`

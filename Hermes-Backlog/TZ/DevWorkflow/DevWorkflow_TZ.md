@@ -3131,6 +3131,49 @@ AC пакета: **AC-076…079** (класс S). `GATE:done` слага — Б3
 | Откат YAML на `cursor-cli` | Удаление адаптера `run_cursor_cli` |
 | Auth как шаг перед боем (AC-080 O) | Сам `codex login` из этого TZ-WRITE |
 
+### Б45.0.1 Архитектура (слои)
+
+Три слоя не смешивать: **оркестратор** (Сирень, D1 = tutu flash) собирает пакет и зовёт **адаптер**; адаптер spawn **воркера роли** (D2 = Codex на этом контуре). Компрессор — отдельный путь Hermes, не `invoke_role` для architect/reviewer/executor.
+
+```mermaid
+flowchart LR
+  subgraph D1["D1 — оркестратор"]
+    S[Сирень default]
+    EP[emit-prompt]
+    IR[pipeline invoke-role]
+    S --> EP --> IR
+  end
+  subgraph adapter["invoke_role.py"]
+    R{default_backend}
+    R -->|codex штат| CX[codex exec]
+    R -->|откат| CU[agent -p cursor-cli]
+    R -->|не эти роли| HI[hermes-internal stub]
+  end
+  IR --> R
+  CX --> ART[артефакт на диске]
+  CU --> ART
+```
+
+Поток одной invoke-фазы: `next` → `emit-prompt` → `invoke_prepare` (pid, model, backend в `_state.json`) → `run_codex` / `run_cursor_cli` → парсинг JSON → `complete-phase` по канону. Occupancy, recover, session_id, doorbell — корпус Б44 / Б48; этот пакет их **не** пересматривает.
+
+**Факт диска на старте пакета (не целевое):** `run_codex` всё ещё `[bin, "run", "--cwd", …]` — расхождение с каноном Б45.2; правка только на `HF:impl` (AC-081).
+
+### Б45.0.2 Контракты экосистемы (dual-path)
+
+Ключи только через `EcosystemConfig.yaml` → `tools.dev_workflow` (Б14, Б35). Секреты — `~/.codex/auth.json` / shared `.env`, не YAML.
+
+| Ключ / артефакт | Назначение | Кто пишет |
+|---|---|---|
+| `invoke.default_backend` | `codex` штат; `cursor-cli` откат | `ORCH:shared-state` |
+| `invoke.backends.codex.bin` | имя бинаря (`codex`) | `ORCH:shared-state` |
+| `invoke.backends.cursor-cli.*` | сохранить для отката (AC-088) | не удалять на impl |
+| `roles.architect` / `reviewer` / `executor` / `executor_light` | model + effort (+ `escalate_*` для astra) | `ORCH:shared-state` |
+| `roles.compressor.model: null` | компрессор = Hermes flash, не Codex | без изменения смысла |
+| `phases.<PHASE>.backend` / `model` | журнал факта вызова | `invoke_prepare` |
+| `dev/<slug>/extract.md` | индекс; при конфликте с master — диск | компрессор после compress |
+
+Новые ключи dual-path без строки в Б35 **запрещены**.
+
 ### Б45.1 Аутентификация (до боя)
 
 Факт брифа: токен Codex истёк, 401 `token_expired` (проверено). Без живой сессии `HF:impl` ролей Codex не стартует.

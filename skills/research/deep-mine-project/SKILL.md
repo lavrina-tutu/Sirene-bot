@@ -89,7 +89,7 @@ L0 canonical MD stays in `Confluence/`, `Meetings/`, `Entities/`. Overlay SoT fo
 | B facts llm | Hermes API-JSON | deepseek flash |
 | C contexts | Hermes API-JSON | x-ai/grok-4.6 |
 | G analyze | Cursor agent | grok-high |
-| H document | Cursor agent | composer-2.5 |
+| H document | Codex exec | gpt-5.6-terra |
 
 ## Pitfalls
 

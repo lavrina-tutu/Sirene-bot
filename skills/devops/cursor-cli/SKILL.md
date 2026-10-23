@@ -81,6 +81,8 @@ which agent         # ~/.local/bin/agent
 | Исполнитель | `composer-2.5` | DSV4-M (medium reasoning) |
 | Координатор | `composer-2.5` | DSV4-L (low reasoning) |
 
+> **Откат/legacy roles_cursor (Б45).** Таблица выше — роли Cursor (`roles_cursor.*`) как **откат**. Штатный бэкенд ролей Hermes — Codex exec через `invoke-role`: архитектор `gpt-6.1-sol`, ревизор `gpt-6-astra`, исполнитель `gpt-5.6-terra` (LIGHT — `executor_light` `gpt-6-luna`). Координатор/компрессор — Сирень на Hermes `deepseek/deepseek-v4-flash-0731`, не Cursor и не Codex.
+
 > **Компрессор НЕ роль Cursor (09.09.2026).** Компрессия ТЗ (`TZ:compress`) и digest проектов (`project-context-compressor`) переведены на основную модель Hermes `deepseek/deepseek-v4-flash-0731` напрямую, **без `agent -p`**. См. «Pitfall — компрессор ушёл с Cursor на deepseek» ниже.
 
 > **ИНВАРИАНТ (Саша, 31.08):** один `agent -p` = одна модель = одна роль. Блоки пайплайна (`PLAN-IMPL-TAIL`, `HF-TAIL`, `TZ-WRITE` и др.) — имена из GLOSSARY §5.1, не карточки. Канон: `~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md`.

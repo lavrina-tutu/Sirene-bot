@@ -2,11 +2,11 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Машина исполнения разработки Hermes без канбана (единый скилл + файловое состояние)"
-version: 0.7.0
-date: 2026-10-21
+version: 0.7.2
+date: 2026-10-23
 status: draft
 author: архитектор (cursor-grok-4.6-high, Cursor CLI)
-last-section-added: 2026-10-21 — v0.7.0 TZ:finalize hard-stop-limity-hodov-fazy-p-5-auto-close-teleg: штамп Б49 П.5.б overlay ходов фазы + П.7.4 auto-close telegram 80 api fail-closed (REV:tz APPROVE)
+last-section-added: 2026-10-23 — v0.7.2 TZ:patch migrate-dev-roles-cursor-to-codex rework REV:tz раунд 2: раздельные pre/post-flip IAC без цикла, запись model из единого backend-aware resolver
 case: BUGFIX
 slug: hard-stop-limity-hodov-fazy-p-5-auto-close-teleg
 previous_slug: ktalk-tmo-fatal-classifier
@@ -422,7 +422,7 @@ D1/D2 снимается: есть только вызов роли `invoke_role
 | Архитектор, эскалация | вызов роли, тот же `--role architect` | Codex exec | `gpt-6-astra`, effort `high` (**форсировать**; default модели = low). Триггер — Б45.3 | то же, что архитектор | не отдельная G6-роль; не штат |
 | Ревизор | вызов роли | Codex exec | `gpt-6-astra`, effort `high`; толстый master (`REV:tz` / `REV:plan` на DEV/CHANGE полном) — `xhigh`. Medium **не** штат; pesky CHANGE-LIGHT допустим | слабые места ТЗ/плана; прожарка; вердикт APPROVE / REQUEST-CHANGES | не ход процесса; не пишет ТЗ и код |
 | Исполнитель | вызов роли | Codex exec | `gpt-5.6-terra`, effort `medium`; многофайл / live test (`HF:test` не-LIGHT) — `high` | код и прогон тестов **только по плану архитектора**; мелкие локальные отклонения (опечатка, import) допустимы | не ТЗ, не план; глобальное отклонение / неясно → **возврат архитектору**, не выдумывать |
-| Исполнитель LIGHT | вызов `--role executor` на кейсе CHANGE-LIGHT / BUGFIX-LIGHT | Codex exec | `gpt-6-luna`, effort `high` | то же, что исполнитель, на ≤3 файлах | не новая G6-роль; YAML-ключ `roles.executor_light` |
+| Исполнитель LIGHT | вызов `--role executor` на кейсе CHANGE-LIGHT / BUGFIX-LIGHT | Codex exec **только** при backend `codex` | `gpt-6-luna`, effort `high` (`roles.executor_light`) | то же, что исполнитель, на ≤3 файлах | не новая G6-роль; при backend `cursor-cli` LIGHT = `roles_cursor.executor` (Б45.3) |
 | Компрессор | Сирень | Hermes default | `deepseek-v4-flash-0731` (как сейчас) | выжимка-индекс 3–5 КБ (или части 1/N); файл пишет Python после валидации | без Codex и без Cursor; не SoT смысла |
 | Координатор | Сирень (sirene-фазы G6) | Hermes default | `deepseek-v4-flash-0731` (как сейчас) | бэкап, инвентарь, операторка на фазах оркестратора | **не** на Codex; устаревшая строка GLOSSARY «координатор = Cursor composer-2.5» снимается на `TZ:finalize` / `ORCH` (AC-083) |
 
@@ -1001,7 +1001,7 @@ Default `--backend` и модели ролей — из `EcosystemConfig.yaml`. 
 
 **Запись `session_id` (v0.4.9, AC-077; v0.5.0 Codex, AC-089).** Поле `phases[phase].session_id` в схеме есть (`_empty_phase`). После rc=0 (и на correction-invoke AC-073) адаптер **обязан** распарсить JSON stdout бэкенда и записать поле на том же `write_state`, что `role` (~331–344). Cursor: `--output-format json` (объект / NDJSON / последний объект с `session_id` или `sessionId`). Codex: `--json` (event stream; взять id сессии из канонического поля событий Codex, не выдумывать ключ). `--resume` correction-pass берёт это поле, когда wrapper уже мёртв. Пустой parse → оставить `null`, не fail успеха канона. `session_id` **не** SoT живости и **не** замена pid. AC-061 pid=wrapper **не** переписывать.
 
-**Запись model / снятие awaiting_invoke (v0.4.8, AC-075).** На том же `write_state` `invoke_prepare`: `phases[phase].model` = `--model` или `tools.dev_workflow.roles.<role>.model` (resolved, не `None` для architect/reviewer/executor); `phases[phase].backend`; `awaiting_invoke=false`. Поле `role` на prepare **не** писать: маркер post-invoke AC-062 остаётся «`role` после rc=0». Иначе true-crash выглядит как успешный выход.
+**Запись model / снятие awaiting_invoke (v0.4.8, AC-075; backend-aware — Б45.3).** На том же `write_state` `invoke_prepare`: `phases[phase].model` = единый resolved-результат backend-aware resolver Б45.3 — **та же модель, которая передаётся адаптеру и в его argv** (не `None` для architect/reviewer/executor); `phases[phase].backend` = выбранный backend; `awaiting_invoke=false`. Сначала выбрать backend, затем модель: предусмотренный явный override `--model` имеет приоритет; без override для `cursor-cli` брать `tools.dev_workflow.roles_cursor.<role>.model` (executor в т.ч. LIGHT), для `codex` + LIGHT executor — `tools.dev_workflow.roles.executor_light.model`, для прочих Codex-вызовов — соответствующий `tools.dev_workflow.roles.<role>.model`. Не читать общий `roles.<role>` повторно при записи: resolver, argv и поле фазы используют один результат. Поле `role` на prepare **не** писать: маркер post-invoke AC-062 остаётся «`role` после rc=0». Иначе true-crash выглядит как успешный выход.
 
 **Окно pre-invoke (v0.4.8, AC-071).** Симметрично post-invoke AC-062, но **до** spawn: `next` на invoke-фазу → `doing` + `awaiting_invoke=true` + `pid=None` → `WORK`. Ложный `INTERRUPTED dead pid` в этом окне — дефект (инцидент 19.10: `next` TZ:patch сразу после compress, роль ещё не запущена). В том же ходе: emit-prompt + invoke_role. Брошенное окно = leftover, recover один раз.
 
@@ -2239,18 +2239,18 @@ I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` 
 | AC-079 | S | Doorbell: 0-токенный `pipeline doorbell` считает fingerprint очереди; тот же отпечаток → молчание; смена → wake Сирень (существующий канал), она одна `pipeline next`. Не копия `dwka_guard.sh`. Не recover/spawn/kill. `jobs.json` в этом поезде не пишется; GATE:done **не** ждёт крона | Б16.7, Б33 п.22/47/55, Б44 |
 | AC-080 | O `depends: operator:answer:Q-2` | Codex auth жив: smoke `codex exec` этого контура **не** 401 `token_expired`; `~/.codex/auth.json` обновлён (device-auth). Без evidence — бой `HF:impl` ролей Codex не стартовать | Б45.1 |
 | AC-081 | S | `run_codex` собирает `codex exec -C <ABS> -m <id> -c model_reasoning_effort='"<effort>"' --skip-git-repo-check --json --sandbox danger-full-access` + operand = тело prompt-file. Нет `run`, нет `--cwd`, нет `--full-auto`. Юнит: argv фикстуры | Б13.2, Б45.2, Б33 п.56–57 |
-| AC-082 | S | `EcosystemConfig.yaml` `invoke.default_backend: codex`; `roles.architect/reviewer/executor/executor_light` = таблица Б6.4; `cursor-cli` остаётся в `backends{}`. Fallback `composer-2.5` в `_resolve_model_backend` снят | Б14, Б45.3 |
+| AC-082 | S | На `ORCH:shared-state` **после** зелёного пилота HF:test (Б45.6): `invoke.default_backend: codex`; `invoke.codex_pilot_slugs: []`; `roles.*` = таблица Б6.4; `roles_cursor.*` заполнены таблицей отката Cursor (architect/reviewer/executor, без LIGHT-ключа); `cursor-cli` в `backends{}`. До этого хода `default_backend` может оставаться `cursor-cli`. Fallback `composer-2.5` в `_resolve_model_backend` снят | Б14, Б45.3, Б45.6 |
 | AC-083 | S | Б6.4 / `canon.md` / GLOSSARY §3: D2 = Codex-slug; координатор и компрессор = `deepseek-v4-flash-0731`, без Codex. Строка «координатор = Cursor composer-2.5» снята | Б6.4, Б45.4 |
 | AC-084 | S | Вызов из gateway несёт `--sandbox danger-full-access`. Смоук: роль **записывает** канонический файл (read-only sandbox → fail) | Б45.2, Б33 п.59 |
 | AC-085 | S | Каждый `codex exec` роли несёт `--skip-git-repo-check`. Смоук на workspace без `.git` (TZ / USERTOOLS) → rc не «not a git repo» | Б45.2, Б33 п.58 |
 | AC-086 | S | Allowlist скиллов Б45.5: таблицы моделей и паттерн вызова приведены к Codex / `invoke_role`. Баннер dual-path не снесён. Скиллы вне allowlist не патчились | Б45.5 |
-| AC-087 | S | Пилот: этот поезд после YAML-flip **или** следующий CHANGE прошёл хотя бы одну invoke-роль на Codex (journal `backend=codex`, канон на диске) **до** перевода остальных живых поездов | Б45.6 |
-| AC-088 | S | Откат: YAML `default_backend: cursor-cli` + модели cursor-grok / claude-sonnet / composer → `invoke_role --role architect` снова зовёт `agent -p`. Адаптер `run_cursor_cli` на месте. Не `rm` бэкенда | Б45.7, Б33 п.62 |
+| AC-087 | S | Пилот на `HF:test` **до** общего flip: при `default_backend: cursor-cli` и pilot-prep (Б45.6) invoke **этого** слага → journal `backend=codex`, модели из `roles.*`; контрольный invoke **другого** слага (не ∈ `codex_pilot_slugs`) → `backend=cursor-cli`, модели из `roles_cursor.*`. После успешного пилота на `ORCH:shared-state` проверить боевой YAML (AC-082/IAC-12), затем новым invoke непилотного слага подтвердить journal `backend=codex` через `default_backend`, не через pilot-список (IAC-09b); evidence перед `GATE:done`. Post-flip проверки не условие зелёного `HF:test`/пилота IAC-09a. Вариант «следующий CHANGE» **не** закрывает AC-087/GATE:done **этого** слага | Б45.6, Б45.8, Б45.10 |
+| AC-088 | S | Откат (чеклист Б45.7): YAML `default_backend: cursor-cli`; `roles_cursor.*` = cursor-grok / claude-sonnet / composer; `invoke_role` на **architect, reviewer, executor** (обычный и LIGHT-кейс) зовёт `agent -p` с моделями `roles_cursor.*` (LIGHT **не** читает `executor_light` / Codex-slug). `roles.*` Codex может остаться в файле, но resolver при `cursor-cli` **не** использует. Для каждой проверки модель в argv `--model` = `phases[phase].model` уже на `invoke_prepare`; предусмотренный явный override одинаково отражён в argv и поле фазы. Адаптер `run_cursor_cli` на месте. Не `rm` бэкенда | Б13.2, Б45.7, Б33 п.62 |
 | AC-089 | S | `parse_agent_session_id` (или сосед) принимает Codex `--json` stream; `phases[phase].session_id` пишется. AC-061 pid=wrapper не менять | Б13.2, Б45.2 |
-| AC-090 | S | Кейс CHANGE-LIGHT / BUGFIX-LIGHT + `--role executor` → модель `gpt-6-luna` effort high (`roles.executor_light`). Иначе executor = `gpt-5.6-terra`. Ревизор medium не штат (pesky LIGHT допустим) | Б6.4, Б45.3 |
+| AC-090 | S | Разрешение backend-aware (Б45.3): backend `codex` + кейс LIGHT + `--role executor` → `roles.executor_light` (`gpt-6-luna`, effort high). Backend `codex` + не-LIGHT → `roles.executor` (`gpt-5.6-terra`). Backend `cursor-cli` (в т.ч. LIGHT) → **только** `roles_cursor.executor` (`composer-2.5`); `executor_light` не читается. На обеих ветках, включая Codex LIGHT и предусмотренный явный override, модель в argv (`-m` Codex / `--model` Cursor) = `phases[phase].model` на `invoke_prepare`; для Codex architect/reviewer тот же инвариант с соответствующим `roles.<role>`. Ревизор medium не штат (pesky CHANGE-LIGHT допустим) | Б6.4, Б13.2, Б45.3, Б45.7 |
 | AC-091 | S | `rg gpt-6-terra` по `pipeline/` + YAML `tools.dev_workflow.roles` + allowlist скиллов Б45.5 — пусто (кроме явного запрета в этом ТЗ) | Б45.3, Б33 п.61 |
 | AC-092 | S | Скилл `dev-workflow` не вызывает `agent -p` и не вызывает `codex exec` в обход `invoke_role`. Три бэкенда адаптера на месте (AC-013 не откатывать) | Б13.2, Б45.5 |
-| AC-093 | S | 401 / `token_expired` в stdout/stderr Codex → `classify_provider_fatal` True, rc≠0, ErrorBus, **без** авто-ретрая (корпус AC-009). Не clean-exit 0 | Б13.2, Б45.1 |
+| AC-093 | S | Codex auth/provider fatal **структурно** (Б45.2, корпус AC-119/120): True только при (а) событии ошибки в разобранном Codex `--json` JSONL (`is_error`/`type=="error"`/код клиента с 401 или `token_expired` в поле ошибки, не в `result` успешного события), либо (б) не-JSON stderr/stdout с сигнатурой отказа клиента (строгий fallback). Цитата `HTTP 401` / `token_expired` **внутри** содержательного текста успешного события → False. При смешанном потоке приоритет у **любого** структурного события ошибки. Реальный отказ → rc≠0, ErrorBus, **без** авто-ретрая (корпус AC-009). Не clean-exit 0 | Б13.2, Б45.1, Б45.2, Б48 |
 | AC-094 | S | П.1 скрипт `mode=ro`; фикстура ratio<0.50 + api=10 + cost=0.50 → одно ErrorBus; иначе тишина. *Не валит GATE:done этого поезда* | Б46 П.1 |
 | AC-095 | S | Повтор того же `id` в окне 24ч → второе событие нет. *Не валит GATE:done этого поезда* | Б46 П.1 |
 | AC-096 | O `depends: operator:ставь кроны` | `jobs.json` цепочки П.1 не появляется до `operator-done: ставь кроны` | Б46 П.1 |
@@ -2296,7 +2296,7 @@ AC-016 / AC-019 / AC-035 — класс S про поздние волны: по
 
 **Область `GATE:done` пакета `pochinka-payplayna-dev-workflow-konets-hoda-po-k` (CHANGE, v0.4.9).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` **раздельно** правок `cli.py` (occupancy complete/next/invoke) + `invoke_role.py` (`session_id` из JSON; pid 254–256 без правок) + `pipeline_gates.py` + `pipeline doorbell` + pytest turn-end; `HF:docs-handoff` абзац скилла: граница хода = journal/канон/ps, не notify Cursor. Не ставит кроны (AC-079 код детектора, не `jobs.json`). Не откатывает Б40–Б43 / AC-058…075 / AC-061. Не канонизирует `dwka_guard.sh`. Не заменяет pid на агента. `[NEW-ENTITY]` канала стража нет. AC-076…079 — класс S. GATE:done **не** класс O на `ставь кроны`.
 
-**Область `GATE:done` пакета `migrate-dev-roles-cursor-to-codex` (CHANGE, v0.5.0).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` **раздельно** правок `invoke_role.py` (`run_codex` канон exec; parser session_id Codex; снят fallback composer-2.5; 401=fatal) + pytest argv/sandbox/skip-git; `ORCH:shared-state` пишет YAML `default_backend` + `roles.*` (не executor); `HF:docs-handoff` allowlist скиллов Б45.5 + GLOSSARY §3. AC-080 класс O блокирует `GATE:done` до `operator-done: answer:Q-2` + evidence живого smoke. Не удаляет `run_cursor_cli`. Не переносит координатора/компрессор. Не ставит кроны. Не откатывает Б40–Б44 / AC-058…079 / AC-061. `[NEW-ENTITY]` нет. AC-081…093 — класс S.
+**Область `GATE:done` пакета `migrate-dev-roles-cursor-to-codex` (CHANGE, v0.5.0; нормы пилота/отката v0.7.1).** Финальный после хвоста **этого** слага по Б18.2: `HF:impl` → `HF:test` (pilot-prep ORCH + пилот с изоляцией) → `HF:docs-handoff` → `ORCH:shared-state` (общий flip **после** пилота). Раздельные invoke `HF:impl` / `HF:test`. Код: `run_codex` канон exec; resolver (`codex_pilot_slugs` / `default_backend`) + `roles`/`roles_cursor`; session_id Codex; снят fallback composer-2.5; AC-093 структурный JSONL. YAML: pilot-prep на старте `HF:test`; flip `default_backend` + очистка `codex_pilot_slugs` только на `ORCH:shared-state` после зелёного `HF:test`. `HF:docs-handoff` allowlist Б45.5 + GLOSSARY §3. AC-080 O до Q-2. Не удаляет `run_cursor_cli`. Не переносит координатор/компрессор. Не ставит кроны. Не откатывает Б40–Б44 / AC-058…079 / AC-061. `[NEW-ENTITY]` нет. AC-081…093 — класс S.
 
 **Область `GATE:done` пакета `llm-cost-optimization` (CHANGE, v0.6.0).** Финальный после хвоста **этого** слага: конфиг Hermes (П.3.3 / П.5.а / П.7.1–3) + fingerprint doorbell (П.6.2–3, тесты AC-109) + docs MUST-read/окно/503 (П.2 / П.3.2 / П.3.4) + проверка auto-GATE без LLM (П.4) + hold-список П.8. `HF:impl` / `HF:test` **раздельно**. Не реализует П.1 / П.5.б / П.7.4 (отдельные цепочки; AC-094/095/108/113 **не** валят этот `GATE:done`). Не пишет `jobs.json` (AC-096/110/111 класс O: `depends: operator:ставь кроны`). Не `rm` `dwka_guard.sh` (AC-115 класс O: `depends: operator:удаляй`). Не патчит ядро / gateway. Не откатывает Б40–Б45 / AC-058…093 / AC-061. Штат Codex не возвращать на Cursor. `[NEW-ENTITY]` нет. Q-n нет. AC-097…107, AC-109, AC-112, AC-114, AC-116 — класс S. Preflight красный, пока holds open.
 
@@ -2658,8 +2658,12 @@ Evidence `TZ:finalize` / `ORCH:shared-state` слага `devworkflow-task-slug` 
 | PIPELINE_ROOT | str | required | EcosystemConfig.yaml | абсолютный путь |
 | SKILL_ROOT | str | required | EcosystemConfig.yaml | абсолютный путь |
 | DIGEST_PATH | str | required | EcosystemConfig.yaml | абсолютный путь к `EcosystemManifest.digest.md` |
-| invoke.default_backend | enum[cursor-cli, codex, hermes-internal] | required | EcosystemConfig.yaml | v0.5.0 штат=`codex`; откат=`cursor-cli` |
-| roles.architect.model | str | required | EcosystemConfig.yaml | v0.5.0 = `gpt-6.1-sol` |
+| invoke.default_backend | enum[cursor-cli, codex, hermes-internal] | required | EcosystemConfig.yaml | v0.5.0 штат=`codex` **после** пилота (Б45.6); до flip — `cursor-cli` допустим |
+| invoke.codex_pilot_slugs | list[str] | required | EcosystemConfig.yaml | pilot-prep `HF:test`: `[<пилотный слаг>]`, иначе `[]`; очистка на flip |
+| roles.architect.model | str | required | EcosystemConfig.yaml | v0.5.0 = `gpt-6.1-sol` (backend `codex`) |
+| roles_cursor.architect.model | str | required | EcosystemConfig.yaml | откат = `cursor-grok-4.6-high`; обязателен с pilot-prep |
+| roles_cursor.reviewer.model | str | required | EcosystemConfig.yaml | откат = `claude-sonnet-5-medium` |
+| roles_cursor.executor.model | str | required | EcosystemConfig.yaml | откат = `composer-2.5`; LIGHT на Cursor тоже сюда |
 | roles.architect.effort | enum[low, medium, high, xhigh] | required | EcosystemConfig.yaml | штат `high`; толстый TZ/IAC = `xhigh` |
 | roles.architect.escalate_model | str | optional | EcosystemConfig.yaml | `gpt-6-astra`; не отдельная G6-роль |
 | roles.architect.escalate_effort | enum[low, medium, high, xhigh] | optional | EcosystemConfig.yaml | `high` (форсировать; default модели = low) |
@@ -3111,7 +3115,7 @@ AC пакета: **AC-076…079** (класс S). `GATE:done` слага — Б3
 
 ---
 
-## Б45. Пакет `migrate-dev-roles-cursor-to-codex` (v0.5.0) — штат ролей = Codex exec
+## Б45. Пакет `migrate-dev-roles-cursor-to-codex` (v0.5.0; пилот/откат/AC-093 — v0.7.1) — штат ролей = Codex exec
 
 **I1 этого пакета.** `current`: D2 ролей architect/reviewer/executor идёт через Cursor CLI (`agent -p`; модели `cursor-grok-4.6-high` / `claude-sonnet-5-medium` / `composer-2.5`); YAML `invoke.default_backend: cursor-cli`; адаптер `run_codex()` зовёт неканон `codex run --cwd`; Codex auth на контуре истёк (401 `token_expired`); default sandbox Codex = read-only (роль не запишет файл); `--skip-git-repo-check` нет (Backlog/USERTOOLS не git). `target`: штат = `codex exec` по утверждённой таблице Б6.4; Cursor CLI снят со штата; адаптер `cursor-cli` сохранён как откат; координатор и компрессор остаются на Hermes `deepseek-v4-flash-0731`; `gpt-6-terra` в allowlist нет.
 
@@ -3144,9 +3148,11 @@ flowchart LR
     S --> EP --> IR
   end
   subgraph adapter["invoke_role.py"]
-    R{default_backend}
-    R -->|codex штат| CX[codex exec]
-    R -->|откат| CU[agent -p cursor-cli]
+    R{slug in codex_pilot_slugs?}
+    R -->|да| CX[codex exec]
+    R -->|нет| R2{default_backend}
+    R2 -->|codex| CX
+    R2 -->|откат| CU[agent -p cursor-cli]
     R -->|не эти роли| HI[hermes-internal stub]
   end
   IR --> R
@@ -3164,10 +3170,12 @@ flowchart LR
 
 | Ключ / артефакт | Назначение | Кто пишет |
 |---|---|---|
-| `invoke.default_backend` | `codex` штат; `cursor-cli` откат | `ORCH:shared-state` |
-| `invoke.backends.codex.bin` | имя бинаря (`codex`) | `ORCH:shared-state` |
+| `invoke.default_backend` | `codex` штат **после** пилота; до flip — `cursor-cli` допустим | `ORCH:shared-state` (flip) |
+| `invoke.codex_pilot_slugs` | список слагов с backend `codex` при `default_backend: cursor-cli` | pilot-prep ORCH (старт `HF:test`); очистка `[]` на flip |
+| `invoke.backends.codex.bin` | имя бинаря (`codex`) | `ORCH:shared-state` / pilot-prep |
 | `invoke.backends.cursor-cli.*` | сохранить для отката (AC-088) | не удалять на impl |
-| `roles.architect` / `reviewer` / `executor` / `executor_light` | model + effort (+ `escalate_*` для astra) | `ORCH:shared-state` |
+| `roles.*` | Codex: model + effort (+ `escalate_*`) | pilot-prep ORCH + flip |
+| `roles_cursor.*` | Cursor откат: architect / reviewer / executor (model only) | pilot-prep ORCH; обязателен до пилота и при откате |
 | `roles.compressor.model: null` | компрессор = Hermes flash, не Codex | без изменения смысла |
 | `phases.<PHASE>.backend` / `model` | журнал факта вызова | `invoke_prepare` |
 | `dev/<slug>/extract.md` | индекс; при конфликте с master — диск | компрессор после compress |
@@ -3185,7 +3193,7 @@ flowchart LR
 3. Смоук: `codex exec -C <ABS_не_git> -m gpt-5.6-terra -c model_reasoning_effort='"medium"' --skip-git-repo-check --json --sandbox danger-full-access 'reply with ok'`.
 4. Улика: rc=0 и **нет** `token_expired` / HTTP 401. Journal: `operator-done: answer:Q-2` + evidence (ISO + rc/цитата).
 
-Класс O: AC-080 `depends: operator:answer:Q-2`. Новый operator-глагол **не** заводить. Не занимать номер `Q-1` (зарезервирован AC-018 W4). 401 после боя → provider_fatal (AC-093 / корпус AC-009), без авто-ретрая.
+Класс O: AC-080 `depends: operator:answer:Q-2`. Новый operator-глагол **не** заводить. Не занимать номер `Q-1` (зарезервирован AC-018 W4). Реальный auth/provider отказ Codex после боя → provider_fatal по AC-093 (структурно, не цитата в успешном результате), без авто-ретрая.
 
 Секреты: shared `.env` / `~/.codex/auth.json`, не YAML (Б14).
 
@@ -3223,7 +3231,7 @@ codex exec \
 
 `session_id`: парсить Codex `--json` stream (AC-089). AC-061 pid=wrapper **не** трогать. Occupancy / doorbell / recover (Б44) не пересматривать.
 
-Классификатор fatal: добавить сигнатуры `token_expired` / HTTP 401 Codex (AC-093) **без** голых бытовых `timeout`/`credits` (корпус Б42).
+**Классификатор fatal (AC-093, согласован с AC-119/120).** Парсить stdout/stderr Codex `--json` как **JSONL** (несколько событий). Для каждой строки: если валидный JSON — смотреть envelope (`is_error`, `type`, поля ошибки клиента); **не** сканировать `result`/текст ассистента на подстроки. Fatal auth/provider = структурное событие с 401 / `token_expired` в поле ошибки **или** не-JSON stderr с сигнатурой отказа клиента (строгий fallback, корпус Б42). Смешанный поток: **любое** структурное событие ошибки → fatal, даже если позже успешный `result` с цитатой «HTTP 401 token_expired». Успешный JSON без error-полей → False при любой цитате в `result`. Юнит: (+) реальный auth failure JSONL; (−) успешный JSONL с цитатой брифа.
 
 ### Б45.3 Таблица моделей и YAML
 
@@ -3241,13 +3249,37 @@ codex exec \
 
 **Эскалация архитектора** (не новая G6-роль): оркестратор передаёт `--model gpt-6-astra` (effort high) **только** после `REV:tz` / `REV:plan` = REQUEST-CHANGES на rework той же фазы, либо по явной фразе Саши. Самовольно на каждом TZ:patch — запрещено.
 
-**LIGHT:** `cmd_invoke_role` при `--role executor` читает `st.case`; если LIGHT — берёт `roles.executor_light`, иначе `roles.executor`. `--role executor_light` в CLI **не** заводить (G6 не знает такого).
+**Выбор backend (до выбора модели):**
+
+1. Если `slug ∈ invoke.codex_pilot_slugs` → backend `codex` (даже при `default_backend: cursor-cli`).
+2. Иначе → `invoke.default_backend`.
+
+**Выбор модели (после backend):**
+
+| backend | роль | не-LIGHT executor | LIGHT executor |
+|---|---|---|---|
+| `codex` | architect / reviewer / executor | `roles.executor` (+ effort) | `roles.executor_light` |
+| `cursor-cli` | architect / reviewer / executor | `roles_cursor.executor` | **тот же** `roles_cursor.executor` (LIGHT не читает `executor_light`) |
+
+`--role executor_light` в CLI **не** заводить (G6 не знает такого).
+
+**Таблица `roles_cursor.*` (откат, обязательна с pilot-prep):**
+
+| Ключ | model |
+|---|---|
+| `roles_cursor.architect` | `cursor-grok-4.6-high` |
+| `roles_cursor.reviewer` | `claude-sonnet-5-medium` |
+| `roles_cursor.executor` | `composer-2.5` |
+
+Effort/LIGHT-ключи для Cursor-ветки **не** используются (`run_cursor_cli` не передаёт Codex-effort).
+
+**Единый результат resolver.** Предусмотренный явный `--model` сохраняет приоритет над моделью выбранной ветки. Resolved-модель передаётся адаптеру (`-m` Codex / `--model` Cursor) и без повторного чтения `roles.<role>` пишется в `phases[phase].model` на `invoke_prepare` (Б13.2, AC-075/088/090). Это журнал фактического вызова, включая контрольный Cursor invoke до flip, откат и Codex LIGHT. Момент записи pid/backend/`awaiting_invoke` и запись `role` только после rc=0 не меняются.
 
 **Запрет:** `gpt-6-terra` в YAML, скиллах allowlist, fallback-ах кода.
 
-**Снять hardcoded fallback** `composer-2.5` в `_resolve_model_backend` (иначе дыра YAML вернёт Cursor-модель). Нет модели в YAML для architect/reviewer/executor → prepare exit 2, как сейчас для architect без YAML.
+**Снять hardcoded fallback** `composer-2.5` в `_resolve_model_backend` (иначе YAML-дыра маскирует отсутствие ключа). Нет обязательной модели для выбранного backend/роли → prepare exit 2.
 
-YAML пишет **`ORCH:shared-state`**, не исполнитель (Б14). `HF:impl` пишет код адаптера и тесты.
+**Кто пишет YAML (Б45.6):** pilot-prep — оркестратор в **первом ходе `HF:test`** (`roles.*`, `roles_cursor.*`, `codex_pilot_slugs: [<этот слаг>]`; `default_backend` не менять). Общий flip — **`ORCH:shared-state`** после зелёного `HF:test` (`default_backend: codex`, `codex_pilot_slugs: []`). Исполнитель YAML не пишет. `HF:impl` — только код адаптера и тесты.
 
 ### Б45.4 GLOSSARY / canon / AGENTS.md
 
@@ -3275,40 +3307,48 @@ YAML пишет **`ORCH:shared-state`**, не исполнитель (Б14). `HF
 
 ### Б45.6 Пилот
 
-Switch проверяется пилотом **до** перевода всех поездов.
+Switch проверяется пилотом **до** общего `default_backend: codex`. Хвост фаз — **Б18.2** (`HF:impl` → `HF:test` → `HF:docs-handoff` → `ORCH:shared-state`); flip глобального backend **только** на последнем шаге.
 
-Порядок боя:
+**Порядок боя (исполнимый):**
 
-1. Auth (AC-080) + `HF:impl` адаптера (ещё можно на текущем бэкенде, пока YAML не flip).
-2. `ORCH:shared-state` flip YAML `default_backend: codex`.
-3. Пилот: `HF:test` **этого** слага гоняет pytest argv **и** один живой `codex exec` (канон файл на диске, journal `backend=codex`). Если живой exec нельзя в pytest — отдельный smoke в `HF:test` IAC, не второй поезд.
-4. Только после зелёного пилота остальные поезда получают Codex (документы allowlist). Не flip YAML «для всех» до пилота.
+| Шаг | Фаза | Действие | `default_backend` | Пилотный слаг | Остальные поезда |
+|---|---|---|---|---|---|
+| 1 | до боя | AC-080 auth (Q-2) | `cursor-cli` (как сейчас) | — | Cursor |
+| 2 | `HF:impl` | код адаптера: `run_codex`, resolver backend+`roles`/`roles_cursor`, AC-093 JSONL | без изменения | Cursor | Cursor |
+| 3 | `HF:test` (первый ход ORCH) | **pilot-prep:** записать `roles.*` (Codex), `roles_cursor.*` (Cursor), `invoke.codex_pilot_slugs: [migrate-dev-roles-cursor-to-codex]` | **не** менять (`cursor-cli`) | backend `codex` через список | Cursor |
+| 4 | `HF:test` | pytest (argv, sandbox, resolver, AC-093 ±) + живой invoke **этого** слага (`journal backend=codex`) + контрольный invoke **чужого** слага (`backend=cursor-cli`, `roles_cursor.*`) | `cursor-cli` | Codex | Cursor |
+| 5 | `HF:docs-handoff` | allowlist скиллов Б45.5 | без flip | как шаг 4 | Cursor |
+| 6 | `ORCH:shared-state` | **только если шаг 4 зелёный:** `default_backend: codex`, `codex_pilot_slugs: []`; `roles.*`/`roles_cursor.*` уже на диске; после flip — боевой YAML IAC-12, затем новый непилотный invoke IAC-09b; evidence перед `GATE:done` | `codex` | как все | Codex |
 
-Альтернатива того же AC-087: следующий CHANGE после этого слага. Evidence — journal того слага. Этот поезд тогда оставляет YAML rollback до evidence.
+**Неуспех шага 4:** `ORCH:shared-state` **не** делает flip; `GATE:done` красный; pilot-prep можно откатить (`codex_pilot_slugs: []`, оставить `roles_cursor.*`). Вариант «доказать на следующем CHANGE» **не** закрывает AC-087 / AC-082 / `GATE:done` **этого** слага.
+
+Прямой `codex exec` вне `invoke_role` **не** доказывает изоляцию маршрутизации (AC-087).
 
 ### Б45.7 Откат
 
-Возврат на Cursor без удаления кода:
+Возврат на Cursor без удаления кода адаптера:
 
 1. YAML `invoke.default_backend: cursor-cli`.
-2. YAML `roles.*` → `cursor-grok-4.6-high` / `claude-sonnet-5-medium` / `composer-2.5` (убрать effort/LIGHT ключи или игнорировать их в `run_cursor_cli`).
-3. `run_cursor_cli` и бэкенд `cursor-cli` **на месте** (Б33 п.62).
-4. Скиллы: `git checkout` allowlist **или** оставить «штат Codex / откат Cursor» как текст — оркестратор смотрит YAML, не SKILL.
+2. YAML `roles_cursor.*` **обязательны** (таблица Б45.3); `roles.*` Codex **могут остаться** — resolver при `cursor-cli` их **не** читает.
+3. Resolver: architect / reviewer / executor на обычном и **LIGHT** кейсе → модели `roles_cursor.*` только; `executor_light` и Codex-effort **не** участвуют.
+4. `run_cursor_cli` и `backends.cursor-cli` **на месте** (Б33 п.62).
+5. Скиллы: `git checkout` allowlist **или** текст «штат по YAML» — оркестратор смотрит `default_backend`, не SKILL.
 
-Откат не требует DECOMM Codex CLI с хоста.
+Проверка отката (AC-088): после шагов 1–3 — `invoke_role` на architect, reviewer, executor (CHANGE и CHANGE-LIGHT) → `agent -p` + `roles_cursor.*`. Откат не требует DECOMM Codex CLI с хоста.
 
 ### Б45.8 Код и скилл (не этот ход)
 
 | П | Где | Когда |
 |---|---|---|
 | П.0 auth | `~/.codex/auth.json` / device-auth | Саша, до боя; AC-080 |
-| П.1 argv | `invoke_role.run_codex` канон Б45.2; снять fallback composer-2.5; LIGHT → executor_light; 401=fatal | `HF:impl` |
-| П.2 session_id | parser Codex `--json` (не трогать pid ~254–256) | `HF:impl` |
-| П.3 тесты | argv / skip-git / sandbox flag / LIGHT case / 401 fatal / нет gpt-6-terra | `HF:test` (**отдельный** invoke) |
-| П.4 YAML | `EcosystemConfig.yaml` + `config.example.yaml` | `ORCH:shared-state` |
-| П.5 скиллы | allowlist Б45.5 + GLOSSARY §3 + AGENTS.md | `HF:docs-handoff` + `ORCH` restore |
-| П.6 пилот | живой `codex exec` после YAML-flip | `HF:test` / следующий CHANGE (AC-087) |
-| П.7 IAC | таблица ниже; baseline соседей до impl | `HF:plan` пишет; `HF:test` гоняет |
+| П.1 argv | `invoke_role.run_codex` канон Б45.2; resolver `codex_pilot_slugs` + `roles`/`roles_cursor`; снять fallback composer-2.5; AC-093 JSONL | `HF:impl` |
+| П.2 session_id | parser Codex `--json` JSONL (не трогать pid ~254–256) | `HF:impl` |
+| П.3 тесты | argv / skip-git / sandbox / backend-aware LIGHT и равенство argv.model = phases.model / AC-093 ± / нет gpt-6-terra; целевой YAML — только фикстура IAC-05 | `HF:test` до flip (**отдельный** invoke); не зависит от боевого post-flip YAML |
+| П.4 YAML pilot-prep | `roles.*`, `roles_cursor.*`, `codex_pilot_slugs` | первый ход ORCH на `HF:test` |
+| П.5 YAML flip | `default_backend: codex`, очистка `codex_pilot_slugs`; затем проверка боевого YAML IAC-12 (AC-082) и новый invoke непилотного слага IAC-09b (AC-087) | `ORCH:shared-state` после зелёного `HF:test` и пилота IAC-09a; evidence до `GATE:done` |
+| П.6 скиллы | allowlist Б45.5 + GLOSSARY §3 + AGENTS.md | `HF:docs-handoff` + `ORCH` restore |
+| П.7 пилот | IAC-09a: живой invoke через `invoke_role` + контроль чужого слага при `default_backend: cursor-cli` (AC-087) | `HF:test` до flip; post-flip invoke — П.5 / IAC-09b |
+| П.8 IAC | таблица ниже; baseline соседей до impl; соблюдать разделение проверок до и после flip | `HF:plan` пишет; `HF:test` — проверки до flip; `ORCH:shared-state` — IAC-12/09b после flip |
 
 Файлы: `invoke_role.py`, тесты, YAML, 7 скиллов, GLOSSARY, AGENTS.md — **больше 3**. Полный CHANGE + REV уместен (G5: LIGHT не выбирает архитектор).
 
@@ -3318,18 +3358,23 @@ Switch проверяется пилотом **до** перевода всех 
 
 ### Б45.10 IAC-ориентир (черновик для `HF:plan`; формулировки AC — с диска)
 
+**Порядок проверок без цикла.** IAC-01…06 и пилот IAC-09a выполняются на `HF:test` **до** П.5; IAC-05 проверяет только фикстуру целевого YAML, не боевой YAML после flip. Зелёный pytest IAC-06 и успешный пилот IAC-09a разрешают П.5 на `ORCH:shared-state`. После П.5 оркестратор проверяет боевой YAML IAC-12 и делает новый invoke непилотного слага IAC-09b; evidence обоих требуется перед `GATE:done`. IAC-12/09b не являются зависимостями регрессионного pytest или пилота `HF:test`. Новых фаз нет.
+
 | IAC | path | verify | depends | covers |
 |---|---|---|---|---|
 | IAC-01 | `Registries/pipeline/invoke_role.py` `run_codex` | pytest: argv содержит `exec`, `-C`, `-m`, `model_reasoning_effort`, `--skip-git-repo-check`, `--json`, `--sandbox`, `danger-full-access`; не содержит `run`, `--cwd`, `--full-auto` | — | AC-081, AC-084, AC-085 |
-| IAC-02 | `invoke_role._resolve_model_backend` | pytest: нет модели YAML → exit 2; нет fallback `composer-2.5`; LIGHT case + executor → `gpt-6-luna`; иначе `gpt-5.6-terra` | IAC-01 | AC-082, AC-090 |
+| IAC-02 | `invoke_role._resolve_model_backend` + `invoke_prepare` | pytest: нет модели → exit 2; нет fallback `composer-2.5`; backend `codex`+LIGHT → `gpt-6-luna`; backend `codex`+не-LIGHT → `gpt-5.6-terra`; backend `cursor-cli`+LIGHT → `roles_cursor.executor`. Для architect/reviewer/executor обеих веток (executor обычный и LIGHT) модель в argv (`-m` / `--model`) = `phases[phase].model` уже на prepare; отдельно предусмотренный явный `--model` одинаково переопределяет argv и поле фазы | IAC-01 | AC-075, AC-082, AC-088, AC-090 |
 | IAC-03 | parser session_id | pytest: фикстура Codex `--json` stream → `phases[phase].session_id`; после prepare `st.pid == os.getpid()` | IAC-01 | AC-089, AC-061 |
-| IAC-04 | fatal 401 | pytest: stdout/stderr `token_expired` / HTTP 401 → `classify_provider_fatal` True | IAC-01 | AC-093 |
-| IAC-05 | YAML / example | `rg` `default_backend: codex`; roles = таблица Б6.4; `backends.cursor-cli` на месте; `gpt-6-terra` нет | П.4 | AC-082, AC-088, AC-091 |
-| IAC-06 | `pipeline/tests` | `cd Registries && PYTHONPATH=. pytest -q pipeline/tests`; корпус AC-061…079 не красный | IAC-01…05 | AC-081…093 |
-| IAC-07 | allowlist скиллов | `rg` в Б45.5: таблицы содержат Codex-slug; нет штатного `agent -p` оркестратора; баннер dual-path на месте | П.5 | AC-083, AC-086, AC-092 |
+| IAC-04 | fatal 401 Codex | pytest (+) JSONL событие ошибки `token_expired`/401; (−) успешный JSONL с цитатой `HTTP 401 token_expired` в `result` → False; смешанный поток с error-событием → True | IAC-01 | AC-093, AC-119 |
+| IAC-05 | фикстура целевого YAML / example | На `HF:test` **до flip**, только фикстура: `default_backend: codex`, `codex_pilot_slugs: []`; `roles.*`+`roles_cursor.*`; `backends.cursor-cli` на месте; `gpt-6-terra` нет. Боевой post-flip YAML здесь не требуется и не проверяется (он — IAC-12) | — | AC-082 (фикстура), AC-088, AC-091 |
+| IAC-06 | `pipeline/tests` | На `HF:test` до flip: `cd Registries && PYTHONPATH=. pytest -q pipeline/tests`; корпус AC-061…079 не красный; без зависимости от боевого post-flip YAML | IAC-01…05 | регресс AC-061…079; pytest-часть AC-081…093 |
+| IAC-07 | allowlist скиллов | `rg` в Б45.5: таблицы содержат Codex-slug; нет штатного `agent -p` оркестратора; баннер dual-path на месте | П.6 | AC-083, AC-086, AC-092 |
 | IAC-08 | соседи | прирост vs baseline: `Registries/pipeline/` + YAML `tools.dev_workflow` + allowlist Б45.5 + GLOSSARY §3 + AGENTS.md. Ядро / `kanban_*` / USERTOOLS / `jobs.json` — нулевой прирост | IAC-06 | «не трогать» |
-| IAC-09 | пилот | journal: `backend=codex` + канон фазы mtime ≥ started_at **или** evidence следующего CHANGE | IAC-06, AC-080 | AC-087 |
-| IAC-10 | откат-док | чеклист Б45.7 в `dev-workflow` docs: YAML flip без `rm` адаптера | П.5 | AC-088 |
+| IAC-09a | пилот до flip | На `HF:test` после pilot-prep П.4, при `default_backend: cursor-cli`: journal пилотного слага `backend=codex`, контрольного — `cursor-cli`; модели соответственно из `roles.*` / `roles_cursor.*`. Не требует П.5 / IAC-12 / IAC-09b | IAC-06, П.4, AC-080 | AC-087 (пилот до flip) |
+| IAC-09b | новый invoke после flip | На `ORCH:shared-state` **после** П.5 и IAC-12: новый invoke слага вне `codex_pilot_slugs` → journal `backend=codex` через `default_backend`; evidence перед `GATE:done` | IAC-09a, П.5, IAC-12 | AC-087 (результат flip) |
+| IAC-10 | откат | pytest/doc: flip `default_backend: cursor-cli`; architect+reviewer+executor (обычный и LIGHT) → `agent -p` + `roles_cursor.*`; при оставшихся Codex `roles.*` модель в argv `--model` = `phases[phase].model` на prepare. Отдельно предусмотренный явный override сохраняет это равенство | П.6 | AC-088, AC-090 |
+| IAC-11 | откат-док | чеклист Б45.7 в `dev-workflow` docs: YAML без `rm` адаптера | П.6 | AC-088 |
+| IAC-12 | боевой YAML после flip | На `ORCH:shared-state` после П.5: фактический `tools.dev_workflow` и example — `default_backend: codex`, `codex_pilot_slugs: []`, `roles.*` = Б6.4, `roles_cursor.*` = Б45.3, `backends.cursor-cli` сохранён, `gpt-6-terra` нет; evidence перед `GATE:done`. Фикстура IAC-05 не заменяет эту проверку | IAC-06, IAC-09a, П.5 | AC-082, AC-088, AC-091 |
 
 Откат кода: git скилла + `_Archives` YAML/pipeline. Схема `_state.json` не меняется.
 
@@ -4013,6 +4058,7 @@ AC пакета: **AC-108, AC-113** (класс S, валят этот GATE:done
 - TZ:patch v0.4.9: `research/20261019_intent-arhitektor-pochemu-teryaem-pidy-analyze.md` (RS:analyze APPROVE); collect `20261019_intent-arhitektor-pochemu-teryaem-pidy-collect.md`; `dev/pochinka-payplayna-dev-workflow-konets-hoda-po-k/` journal/extract; `invoke_role.py` (pid 254–256, role 331–344); `cli.py` (next pid=None 83–85; complete без occupancy); `pipeline_gates.py` (`invoke_wrapper_alive`, `classify_doing`); `~/.hermes/scripts/dwka_guard.sh` (не канон)
 - TZ:finalize v0.4.9: `dev/pochinka-payplayna-dev-workflow-konets-hoda-po-k/REV-tz.md` verdict=APPROVE; `TZ-patch.md`
 - TZ:patch v0.5.0: бриф `TZ:patch` слага `migrate-dev-roles-cursor-to-codex` 20.10 (таблица ролей Саши; риски auth 401, `codex run --cwd`, sandbox, skip-git); диск `invoke_role.run_codex`; `EcosystemConfig.yaml` `default_backend: cursor-cli`; скилл `codex` (флаг `--full-auto` устарел)
+- TZ:patch v0.7.1 rework: `dev/migrate-dev-roles-cursor-to-codex/REV-tz.md` verdict=REQUEST-CHANGES (R1 пилот/flip, R2 roles_cursor/LIGHT, R3 AC-093 JSONL); `TZ-patch.md` слага
 - TZ:finalize v0.6.0: корпус `~/.hermes/kanban/attachments/t_07a2d903/_tz_patch_20261020_llm-cost-optimization_1.md`; REV:tz APPROVE (claude-sonnet-5-medium); аудит 20.10 $12.49/24ч; `_fix_plan_20261020.md`
 - TZ:patch v0.6.1: `dev/pipeline-set-case-crisis-sha-bug/_fix_plan_setcase.md`; `TZ-patch.md`; `cli.py` `cmd_set_case` (диагноз: to_dict → set_case без sha → from_dict CRISIS)
 - TZ:patch v0.6.2: `dev/ktalk-tmo-fatal-classifier/_fix_plan_20261021.md`; `TZ-patch.md`; `invoke_role.py` `_fatal_reason`/`_json_error_reason` (диагноз: None успешного JSON сливается с не-JSON; паттерн `request timed out` матчит цитату в `result`; ErrorBus #1850/#1852/#1855)
@@ -4024,6 +4070,8 @@ AC пакета: **AC-108, AC-113** (класс S, валят этот GATE:done
 
 ## Changelog
 
+- **2026-10-23 v0.7.2** — TZ:patch rework пакета `migrate-dev-roles-cursor-to-codex` после REV:tz REQUEST-CHANGES, раунд 2, ровно остатки R1/R2. **R1:** Б45.8/10 — IAC-05 только фикстура до flip, IAC-06/09a на `HF:test` без зависимости от боевого post-flip YAML; IAC-12 (боевой YAML, AC-082) и IAC-09b (новый непилотный invoke, AC-087) на `ORCH:shared-state` после пилота, evidence до `GATE:done`. **R2:** Б13.2/Б45.3 — `phases[phase].model` = единый backend-aware resolved-результат, переданный адаптеру; явный override сохранён. AC-088/090 и IAC-02/10 проверяют равенство argv и model фазы обеих веток, включая Cursor откат и Codex LIGHT. Канон `TZ-patch.md` и инвентарь синхронизированы. R3/AC-093, модели, argv, PID и моменты записи полей не менялись. Код/скиллы/YAML не писались. `[NEW-ENTITY]` нет. Q-2 открыт.
+- **2026-10-23 v0.7.1** — TZ:patch rework пакета `migrate-dev-roles-cursor-to-codex` после REV:tz REQUEST-CHANGES (R1–R3). **R1:** пилот до общего flip — `invoke.codex_pilot_slugs`, pilot-prep ORCH на старте `HF:test`, flip `default_backend` только на `ORCH:shared-state` после зелёного `HF:test` (Б18.2); AC-082/087/GATE:done согласованы; вариант «следующий CHANGE» снят. **R2:** `roles_cursor.*` + backend-aware LIGHT (Cursor → `roles_cursor.executor`); откат AC-088/090 на architect/reviewer/executor обычный+LIGHT. **R3:** AC-093/IAC-04 структурный Codex JSONL (envelope-приоритет, ± фикстуры), без ослабления AC-119/120. Б35 аддитив ключей. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-2 открыт.
 - **2026-10-21 v0.7.0** — TZ:finalize пакета `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` после REV:tz APPROVE (BUGFIX полный). Штамп корпуса TZ:patch без правок смысла: Б49 / Б33 п.70–71 / AC-108/113 класс S (валят этот GATE:done) / AC-121 O `ставь кроны` / AC-107 регресс. Overlay П.5.б + watcher П.7.4 через `SessionDB.end_session`. Инвентарь. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет. Замечания ревизора («прочие invoke ≤20»; `_COMPACTION_PREFIXES`) — `HF:plan` / `HF:impl`, не этот штамп.
 - **2026-10-21 v0.7.0** — TZ:patch пакета `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` (BUGFIX полный) по `_fix_plan_20261021.md`. Overlay лимитов ходов фазы в `invoke_role` (GATE≤4 / TZ·REV·прочие invoke≤20 / HF≤25), не `warn_after`, не ядро (П.5.б). Watcher auto-close telegram ≥80 api fail-closed через `SessionDB.end_session(id, "api_limit_80")`; канон валидного handoff-summary; сырой SQL / `session.py` запрещены (П.7.4). AC-108/113 валят GATE:done **этого** слага; AC-121 O `ставь кроны` на job watcher. Б49, Б33 п.70–71. Корпуса Б40–Б48 / AC-058…120 смысл не откатывались. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет.
 - **2026-10-21 v0.6.2** — TZ:finalize пакета `ktalk-tmo-fatal-classifier` (BUGFIX-LIGHT, REV:tz skip LIGHT). Штамп корпуса TZ:patch без правок смысла: Б48 / Б13.2 / Б33 п.68–69 / AC-119…120 класс S; трёхзначный control-flow, envelope-приоритет, не-JSON fallback. Инвентарь 0.6.0→0.6.2. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет.

@@ -78,7 +78,7 @@ pipeline next
 
 Перед каждой содержательной фазой (TZ/HF/BUG/REV): только цепочка **emit-prompt → invoke-role**. Обход и `--force` запрещены. Пакет контекста: `references/context.md`.
 
-**`invoke-role` запускать только в фоне** (`terminal background=true, notify=true, persist_on_release=true`). Роль (cursor-grok/claude/composer) отвечает минуты — foreground-терминал с таймаутом 180с убивает вызов до ответа: фаза остаётся `doing` с пустыми `pid/started_at` в `_state.json` и без дописи в `journal.md`, результат теряется. После запуска фона `next`/`complete-phase` делай только на момент завершения роли, прекращай ход; не перезапускай фазу молча. **Запрещено** оборачивать `invoke-role` в `| head` / `| tail` / любой отсекатель stdout (SIGPIPE убьёт wrapper, роль станет сиротой, state останется `doing` без pid) — AC-064. Запускай в фоне без пайпа.
+**`invoke-role` запускать только в фоне** (`terminal background=true, notify=true, persist_on_release=true`). Роль (Codex exec: gpt-6.1-sol / gpt-6-astra / gpt-5.6-terra; откат cursor-grok/claude/composer) отвечает минуты — foreground-терминал с таймаутом 180с убивает вызов до ответа: фаза остаётся `doing` с пустыми `pid/started_at` в `_state.json` и без дописи в `journal.md`, результат теряется. После запуска фона `next`/`complete-phase` делай только на момент завершения роли, прекращай ход; не перезапускай фазу молча. **Запрещено** оборачивать `invoke-role` в `| head` / `| tail` / любой отсекатель stdout (SIGPIPE убьёт wrapper, роль станет сиротой, state останется `doing` без pid) — AC-064. Запускай в фоне без пайпа.
 
 **Конец хода ≠ notify (AC-076/078, Б44.1–44.2).** Уведомление фонового процесса «completed» — **не датчик** конца роли; Сирень **не верит notify** как границе хода: роль зовут фоном, а notify приходит раньше, чем обёртка `invoke-role` дописала файл (ложная граница хода, класс срывов после отказа от канбана). Граница хода = journal `invoke_role` **или** канон-артефакт фазы (mtime ≥ `started_at`) **или** живой `ps invoke-role --slug` (точный токен, не substring). **`Пока обёртка жива`** у этого слага — не `next`, не второй invoke, **не complete-phase**, не `recover` (occupancy-gate, exit 1 «wrapper alive»). Второй `invoke-role` того же слага, пока первый жив, — запрещён. `session_id` из JSON агента пишется в `phases[phase].session_id` и используется `--resume` AC-073.
 
@@ -152,9 +152,9 @@ pipeline next
 
 Прецедент 16.10.2026 (BUG tz-mirror-overwrite): коммит 2889345 добавил в restore-all-skills.sh `cp` зеркало→WorkVault, чем откатил master-ТЗ ProtocolFromSummary с v1.29.0 до v1.28.1. Блоки удалены.
 
-## Роли → Cursor и окно будни (Б46 П.3)
+## Роли → ночной трафик и окно будни (Б46 П.3)
 
-Тяжёлые Cursor-роли (architect/reviewer/executor, `invoke-role` → `agent -p --model …`) переносятся на **ночной трафик**: окно **будни 19:00–09:00 MSK**. Внутри окна роли запускать как обычно; вне окна тяжёлая роль не стартует до окна (или по явной команде Саши).
+Тяжёлые роли (architect/reviewer/executor, `invoke-role` → Codex exec) переносятся на **ночной трафик**: окно **будни 19:00–09:00 MSK**. Внутри окна роли запускать как обычно; вне окна тяжёлая роль не стартует до окна (или по явной команде Саши).
 
 **503/429 — БЕЗ авто-ретрая:** `invoke_role.classify_provider_fatal` мапит `HTTP 50[0-3]|429` → `provider_fatal` → interrupt без recover. Новую ретрай-логику не добавлять.
 

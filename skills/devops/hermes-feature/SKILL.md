@@ -33,7 +33,7 @@ W1: `pilot_slugs: []`, `mode: kanban-primary`.
 
 ## Overview
 
-Единый процесс работы над фичами Hermes и USERTOOLS: от ТЗ до кода, тестов, документации, диагностики и отката. Все блоки выполняются через Cursor CLI (`agent -p`). Архитектор (cursor-grok-4.6-high через Cursor) планирует, исполнитель (composer-2.5 через Cursor) пишет и тестирует.
+Единый процесс работы над фичами Hermes и USERTOOLS: от ТЗ до кода, тестов, документации, диагностики и отката. Содержательные роли выполняются через Codex exec (`invoke-role`): архитектор (gpt-6.1-sol) планирует, ревизор (gpt-6-astra) проверяет, исполнитель (gpt-5.6-terra) пишет и тестирует. Cursor CLI (`agent -p`, roles_cursor.*) — откат.
 
 **ЖЁСТКОЕ ПРАВИЛО:** Архитектор default (Сирень) НЕ пишет ТЗ, планы, анализ самостоятельно в чате. Все задачи архитектора — ТОЛЬКО через Cursor CLI (`agent -p`). Текущий агент default (Сирень) координирует: вызывает Cursor CLI, передаёт контекст, принимает результат. Полный документ (план / ТЗ / appendix / research / файл) в `agent -p` — без обрезки: полный `cat`, либо путь + «прочитай сам», либо явно «часть 1/N» (канон: pitfall cursor-cli). Никаких попыток «написать план самому» без Cursor CLI. ИСКЛЮЧЕНИЕ из „жёсткого правила": диагностика и план починки бага — НЕ напрямую, а через фазу `BUG:diagnose` BUG:diagnose (см. Блок 6В) ДО любого agent -p / cronjob(repeat=1) / делегирования. Прямой agent -p на диагностику/план/реализацию по багу-триггеру без существующей фазы `BUG:diagnose` = нарушение инварианта 8.
 
@@ -74,7 +74,7 @@ W1: `pilot_slugs: []`, `mode: kanban-primary`.
 - `GATE:plan-approve` / `HF:backup` / `HF:impl`: если `HF:plan` не `done` → **стоп** (GLOSSARY инвариант 6). Не skip плана в one-pass.
 - Off-board: **предусловие** — зафиксировать паузу slug в `journal.md` (см. `dev-workflow` `references/handoff.md`), не вызывать `pipeline next` на живой slug; затем допустим прямой `agent -p` с retro-учётом session ids. Параллельный «ручной» cursor-cli на активной фазе того же slug запрещён (инвариант 8).
 - **Снятие устаревшего slug (легаси/другой канал):** если работа уехала из DevWorkflow — закрыть незавершённые фазы через оркестратора (`complete-phase` / пометки в `journal.md`), довести slug до `done` или явно archived; не оставлять «висящие» фазы в `_state.json`.
-- **Модели только в `invoke-role` / `agent -p`:** на `pipeline init` и в рецепте фаз **не** задавать model override (D1). Анти-пример: `model=cursor-grok-4.6-high` на Hermes-воркере tutu → HTTP 400 (`t_2c8ee3b2`). Роли grok/composer — только D2 внутри `invoke-role` → `agent -p --model …`.
+- **Модели только в `invoke-role`:** на `pipeline init` и в рецепте фаз **не** задавать model override (D1). Анти-пример: `model=cursor-grok-4.6-high` на Hermes-воркере tutu → HTTP 400 (`t_2c8ee3b2`). Штатные роли (architect/reviewer/executor) — Codex exec внутри `invoke-role`; Cursor (roles_cursor.*) — откат, только D2 внутри `invoke-role` → `agent -p --model …`.
 
 Граф HF-фаз — развёртка `PLAN-IMPL-TAIL` + `HF-TAIL` (GLOSSARY §5.1; сборка кейсов — §2):
 
@@ -158,7 +158,7 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _f
 G5: не строй кейсовый граф / не меняй --case / не skip фаз / не выбирай LIGHT — это оркестратор.
 ```
 
-Роли/модели (PI B3): compress=оркестратор `deepseek-v4-flash-0731` (без Cursor; заключение t_645aa647); plan/patch/finalize=архитектор `cursor-grok-4.6-high` (CHANGE-LIGHT ≤3 файла: допустим `cursor-grok-4.6-medium`); REV=ревизор `claude-sonnet-5-medium`; impl/test/docs-handoff=исполнитель `composer-2.5`; backup=координатор `composer-2.5`; ORCH=оркестратор.
+Роли/модели (PI B3): compress=оркестратор `deepseek-v4-flash-0731` (без Cursor; заключение t_645aa647); plan/patch/finalize=архитектор `gpt-6.1-sol` (Codex exec, invoke-role; CHANGE-LIGHT ≤3 файла: medium-effort); REV=ревизор `gpt-6-astra`; impl/test/docs-handoff=исполнитель `gpt-5.6-terra` (LIGHT: executor_light `gpt-6-luna`); backup=координатор (Сирень, Hermes, без Codex); ORCH=оркестратор. Откат: Cursor roles_cursor.* (`cursor-grok-4.6-high` / `claude-sonnet-5-medium` / `composer-2.5`; LIGHT на Cursor — roles_cursor.executor).
 
 5. `complete-phase` с metadata:
 
@@ -172,7 +172,7 @@ G5: не строй кейсовый граф / не меняй --case / не sk
   "tz_mtime": "2026-09-05T12:00:00Z",
   "cursor_session_ids": ["..."],
   "role": "исполнитель",
-  "model": "composer-2.5",
+  "model": "gpt-5.6-terra",
   "pipeline_schema": "1.0"
 }
 ```

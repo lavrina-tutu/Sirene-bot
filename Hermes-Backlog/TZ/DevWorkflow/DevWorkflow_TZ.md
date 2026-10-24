@@ -2,14 +2,14 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Машина исполнения разработки Hermes без канбана (единый скилл + файловое состояние)"
-version: 0.7.2
-date: 2026-10-23
+version: 0.7.3
+date: 2026-10-24
 status: draft
-author: архитектор (cursor-grok-4.6-high, Cursor CLI)
-last-section-added: 2026-10-23 — v0.7.2 TZ:patch migrate-dev-roles-cursor-to-codex rework REV:tz раунд 2: раздельные pre/post-flip IAC без цикла, запись model из единого backend-aware resolver
-case: BUGFIX
-slug: hard-stop-limity-hodov-fazy-p-5-auto-close-teleg
-previous_slug: ktalk-tmo-fatal-classifier
+author: архитектор (gpt-6.1-sol, Codex exec)
+last-section-added: 2026-10-24 — v0.7.3 TZ:patch Б50 `llmanomalyscan-shlet-lozhnyy-critical-session-mo`: фильтр штатного session_reset, fail-closed Codex-аудит и защита ErrorBus detail
+case: BUGFIX-LIGHT
+slug: llmanomalyscan-shlet-lozhnyy-critical-session-mo
+previous_slug: hard-stop-limity-hodov-fazy-p-5-auto-close-teleg
 depends_on:
   - TZ/GLOSSARY.md >= 0.2.15
   - TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md >= 0.4.4
@@ -66,8 +66,8 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б30** | Перенос истории канбана (T5) | Б1 В1 | W4, журнал |
 | **Б31** | Миграция W0–W4 и откат; **v0.4.5:** abort сжигает каноническое имя пилота (`eco-config-w4`) | Б1 В2, вопрос 5, Б40 | AC миграции; AC-059 |
 | **Б32** | Ошибки инструмента → ErrorBus | Б1 вопрос 2 | `--tool dev_workflow` |
-| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены; **v0.4.5:** п.39–41 occupancy leftover / abort канона / dead-pid на sirene; **v0.4.6:** п.42–45 слепота PID invoke / второй поезд / post-invoke dead-pid / пайп stdout; **v0.4.8:** п.46–50 recoverable INTERRUPTED ждать Сашу / крон-reaper как recover / второй recover-pass / json.dump recover / complete без model; **v0.4.9:** п.51–55 notify как конец хода / complete поверх живого wrapper / канон dwka_guard / замена pid / крон doorbell без глагола; **v0.6.0:** п.63–65 лимиты ходов фазы не ядром / auto-close без патча gateway / SQL telemetry ro допустим; **v0.6.1:** п.66–67 `from_dict` без pop после `set_case` / ослабление `from_dict` или sha в recipe; **v0.6.2:** п.68–69 сливать None успешного JSON с не-JSON / лечить ложный fatal через recoverable или выкидывание паттерна; **v0.7.0:** п.70 сырой SQL write / обход `SessionDB.end_session`; п.71 лимиты ходов в `warn_after` / `agent.max_turns` | Б3 вердикт, Б12, Б13.4, Б13.5, Б40, Б41, Б43, Б44, Б46, Б47, Б48, Б49 | неприемлемость |
-| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта; **v0.4.5:** AC-058…060 класс S; **v0.4.6:** AC-061…064 класс S; **v0.4.7:** AC-065…070; **v0.4.8:** AC-071…075 класс S; **v0.4.9:** AC-076…079 класс S; **v0.5.0:** AC-080…093 (Codex); **v0.6.0:** AC-094…116 (`llm-cost-optimization`; O: ставь кроны / удаляй); **v0.6.1:** AC-117…118 (`pipeline-set-case-crisis-sha-bug`); **v0.6.2:** AC-119…120 (`ktalk-tmo-fatal-classifier`); **v0.7.0:** AC-108/113 валят GATE:done слага `hard-stop-…`; AC-121 O `ставь кроны` watcher | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1, Б40, Б41, Б43, Б44, Б45, Б46, Б47, Б48, Б49 | GATE:done этого слага = конец W1; AC-017/018 не здесь |
+| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены; **v0.4.5:** п.39–41 occupancy leftover / abort канона / dead-pid на sirene; **v0.4.6:** п.42–45 слепота PID invoke / второй поезд / post-invoke dead-pid / пайп stdout; **v0.4.8:** п.46–50 recoverable INTERRUPTED ждать Сашу / крон-reaper как recover / второй recover-pass / json.dump recover / complete без model; **v0.4.9:** п.51–55 notify как конец хода / complete поверх живого wrapper / канон dwka_guard / замена pid / крон doorbell без глагола; **v0.6.0:** п.63–65 лимиты ходов фазы не ядром / auto-close без патча gateway / SQL telemetry ro допустим; **v0.6.1:** п.66–67 `from_dict` без pop после `set_case` / ослабление `from_dict` или sha в recipe; **v0.6.2:** п.68–69 сливать None успешного JSON с не-JSON / лечить ложный fatal через recoverable или выкидывание паттерна; **v0.7.0:** п.70 сырой SQL write / обход `SessionDB.end_session`; п.71 лимиты ходов в `warn_after` / `agent.max_turns`; **v0.7.3:** п.72 не фильтровать штатный `session_reset` по mode; п.73 принимать failed/non-JSON provider output как audit evidence/detail | Б3 вердикт, Б12, Б13.4, Б13.5, Б40, Б41, Б43, Б44, Б46, Б47, Б48, Б49, Б50 | неприемлемость |
+| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта; **v0.4.5:** AC-058…060 класс S; **v0.4.6:** AC-061…064 класс S; **v0.4.7:** AC-065…070; **v0.4.8:** AC-071…075 класс S; **v0.4.9:** AC-076…079 класс S; **v0.5.0:** AC-080…093 (Codex); **v0.6.0:** AC-094…116 (`llm-cost-optimization`; O: ставь кроны / удаляй); **v0.6.1:** AC-117…118 (`pipeline-set-case-crisis-sha-bug`); **v0.6.2:** AC-119…120 (`ktalk-tmo-fatal-classifier`); **v0.7.0:** AC-108/113 валят GATE:done слага `hard-stop-…`; AC-121 O `ставь кроны` watcher; **v0.7.3:** AC-122…128 (`llmanomalyscan-shlet-lozhnyy-critical-session-mo`) | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1, Б40, Б41, Б43, Б44, Б45, Б46, Б47, Б48, Б49, Б50 | GATE:done этого слага = конец его BUGFIX-LIGHT хвоста; AC-017/018 не здесь |
 | **Б35** | Контракты экосистемы (contracts-standard.md); **v0.3.2:** входные `orchestration.mode` / `pilot_slugs` | Б10, Б12, Б14, Б32 | SoT = `_state.json`; `extract.md` производный; migrate_vN своей схемы; dual-path-ключи только через эту таблицу |
 | **Б36** | Что показать Саше | Q-Archi-01..06, DRY-отклонение, продукт Б13.5, **v0.4.0:** Q-Archi-07/08 | не блокирует TZ:finalize |
 | **Б37** | Пакет `devworkflow-task-slug`: файрвол ролей, поезд сам, `suggest-slug`, G6, контроль Саши, изоляция origin; **v0.4.2:** Python-контроль канона артефакта и вердикта (норма 4) | Б6.4, Б7, Б11, Б16, Б21, факт сбоя 14.10, FINDING-PyContr-2 | AC-044…051; GATE:done этого слага |
@@ -81,6 +81,7 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б47** | Пакет `pipeline-set-case-crisis-sha-bug`: `cmd_set_case` после `set_case` сбрасывает `state_sha256` (`d.pop`) перед `from_dict`; `from_dict`/`set_case` не ослаблять; LIGHT = `cli.py` + `test_set_case_light.py` | инцидент `set-case` CRISIS mismatch, `_fix_plan_setcase.md`, Б6.1, Б8, Б10, Б20, Б22 | AC-117…118 класс S; GATE:done этого BUGFIX-LIGHT; корпуса Б40–Б46 / AC-058…116 не откатывать |
 | **Б48** | Пакет `ktalk-tmo-fatal-classifier`: трёхзначный control-flow `classify_provider_fatal` (успешный JSON / JSON-ошибка / не-JSON); envelope клиента выигрывает у цитат в `result`; паттерн `request timed out` не выкидывать | инцидент ErrorBus #1850/#1852/#1855, `_fix_plan_20261021.md`, Б13.2, Б29 A1, Б42 | AC-119…120 класс S; GATE:done этого BUGFIX-LIGHT; корпуса Б40–Б47 / AC-058…118 не откатывать |
 | **Б49** | Пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`: overlay лимитов ходов фазы в `invoke_role` (П.5.б); no_agent-watcher auto-close telegram ≥80 api fail-closed через `SessionDB.end_session` (П.7.4); канон валидного handoff-summary; крон watcher — класс O | ErrorBus #1838, `_fix_plan_20261021.md`, Б46 П.5.б / П.7.4, Б33 п.63–65 | AC-108/113 валят GATE:done **этого** слага; AC-121 O `ставь кроны`; корпуса Б40–Б48 / AC-058…120 не откатывать |
+| **Б50** | Пакет `llmanomalyscan-shlet-lozhnyy-critical-session-mo`: фильтр штатного `session_reset` по mode; fail-closed compact JSON-контракт Codex; ErrorBus detail только из успешного структурированного аудита | ErrorBus #1861, `_fix_plan_20261024.md`, Б12, Б13.2, Б29 A1–A2, Б33 п.72–73, Б49 | AC-122…128 класс S; GATE:done этого BUGFIX-LIGHT; корпуса Б40–Б49 / AC-058…AC-121 не откатывать |
 | **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд; **v0.5.0:** исключение allowlist скиллов Б45.5 (тела таблиц моделей/вызова, не баннер dual-path); **v0.6.0:** `dwka_guard` hold `удаляй`; `jobs.json` hold `ставь кроны`; **v0.6.1:** `from_dict` жёсткий; `set_case` без sha; чужие `_state.json` PFS-слагов; **v0.6.2:** список `FATAL_PATTERNS` / таймауты `agent -p` / REV / страж п.47 / I1; **v0.7.0:** `warn_after` / ядро / сырой SQL write / `session.py` / `hermes-session-reset-policy` тело | Б13.1, Б13.5, Б31.2, Б33, Б37, Б45, Б46, Б47, Б48, Б49 | чеклист Шаг 4 tz-workflow |
 | **Связи с экосистемой** | Кто с кем (не поля) | Б14, Б32, манифест | отдельно от Б35 |
 | **Открытые вопросы** | Явный h2 (пусто / «нет») | Б36, AC-018 на W4 | чеклист Шаг 4 |
@@ -125,14 +126,15 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 Пишется только текст ТЗ (`TZ:patch` / `TZ:finalize` + инвентарь). **Не** писать код `pipeline/`, **не** создавать скилл на диске, **не** строить граф канбана, **не** создавать карточки, **не** выключать канбан, **не** рестартовать gateway, **не** ставить кроны.
 
-Этот ход — `TZ:finalize` **v0.7.0** пакета `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`. Штамп корпуса TZ:patch без правок смысла + строка инвентаря. **Не** писать код `pipeline/` / `~/.hermes/scripts/`, **не** менять YAML Hermes / `jobs.json` / `tool_loop_guardrails.warn_after`, **не** рестартовать gateway, **не** ставить кроны, **не** писать сырой SQL в `state.db`, **не** патчить `gateway/session.py` / ядро.
+Этот ход — `TZ:patch` **v0.7.3** пакета `llmanomalyscan-shlet-lozhnyy-critical-session-mo`. Пишется аддитивная норма + строка инвентаря; код не пишется на этом ходу.
 
-Нормы пакета — Б49: (1) overlay лимитов ходов фазы в `invoke_role` (GATE≤4 / TZ·REV·прочие invoke≤20 / HF≤25), не ключи `warn_after`, не ядро; (2) no_agent-watcher auto-close telegram ≥80 api fail-closed через публичный `SessionDB.end_session(id, "api_limit_80")`. Корпуса Б40–Б48 / AC-058…120 **без правок смысла** (не откатывать). AC-108/113 с этой версии валят GATE:done **этого** слага (для `llm-cost-optimization` по-прежнему не валят — Б46). Флаг `hard_stop_enabled: true` уже в config.yaml — не менять (AC-107). Решение 13.10 (Б1.2) **не** пересматривать. `[NEW-ENTITY, требует согласования Саши]` **нет** (канал стража/ErrorBus не заводить; ошибки — через существующий `report_error`). Q-n этого пакета **нет**. Q-2 auth Codex и Q-1 W4 **не** занимать.
+Нормы пакета — Б50: (1) SQL-детектор учитывает `session_reset.mode` и исключает только штатные `end_reason='session_reset'` при mode `idle`/`daily`/`both`; (2) `llm_anomaly_scan.sh` атомарно публикует fail-closed compact JSON и не публикует raw provider stderr; (3) ErrorBus принимает `--detail-file` только от успешного структурированного отчёта. SQL остаётся `mode=ro`; окно и пороги не меняются; существующий auto-resolve через `error_bus_cli.py resolve` сохраняется. Корпуса Б40–Б49 / AC-058…AC-121 без правок смысла.
 
-Поезд init как `BUGFIX-LIGHT` triage-батча → оркестратор снял LIGHT (`set-case BUGFIX`) после diagnose-review. Архитектор кейс **не** меняет (G5). Semver **MINOR** 0.6.2 → **0.7.0** (новый код overlay + watcher, не штамп). Инвентарь `MAIN_TZ_INVENTORY.md` — этот ход.
+Этот ход не пишет `~/.hermes/scripts/`, `~/.hermes/error_bus/tests/` или `hermes-selfcheck-audits/SKILL.md`; не меняет `state.db`, `events.db`, `jobs.json`, `config.yaml`, gateway/ядро, `FATAL_PATTERNS`, лимиты и штат Codex/Cursor; не запускает ручной SQL/resolve для ErrorBus #1861; не ставит кроны и не рестартует gateway. `HF:impl`, `HF:test` и `HF:docs-handoff` остаются отдельными фазами.
 
-Предыдущий пакет `ktalk-tmo-fatal-classifier` (v0.6.2) остаётся в корпусе; этот BUGFIX его не переписывает, а закрывает дыру «норма П.5.б / П.7.4 на диске, кода нет» (ErrorBus #1838).
+Поезд init как `BUGFIX-LIGHT` и кейс не меняются (G5). Semver **PATCH** 0.7.2 → **0.7.3**. `[NEW-ENTITY, требует согласования Саши]` нет. Q-n этого пакета нет; Q-2 auth Codex и Q-1 W4 не занимать.
 
+Предыдущий пакет Б49 остаётся в корпусе; этот BUGFIX закрывает два дефекта LLMAnomalyScan (ложный monster на штатном reset и provider stderr в detail), не переписывая нормы лимитов ходов/auto-close.
 ### Б0.4 Связь с живыми документами
 
 | Документ | Роль после этого ТЗ |
@@ -170,7 +172,7 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | `pipeline_state.from_dict`, `pipeline_recipe.set_case`; чужие `dev/*/ _state.json` | **v0.6.1:** не ослаблять сверку sha с диска; не класть пересчёт sha в recipe. Не править `_state.json` слагов `pfs-slug-1on1-iz-konteksta-vstrechi` и `pfs-slagi-zadach-v-1on1-meetingah`. Фикс `set-case` — только `cmd_set_case` pop (Б47) | Б8, Б33 п.66–67, Б47 |
 | `invoke_role.FATAL_PATTERNS` (список), таймауты `agent -p`, REV (`rev_verdict` / канон `REV-tz.md`), страж Б33 п.47 / doorbell AC-079, I1/MVP (10 кейсов) | **v0.6.2:** не сокращать паттерны «чтобы цитата не била»; не менять таймауты клиента; не трогать REV-нормы и страж; не лечить ложный fatal, делая `provider_fatal` recoverable. Фикс = control-flow `_fatal_reason` (Б48) | Б13.2, Б33 п.11/47/68–69, Б42, Б44, Б48 |
 | `tool_loop_guardrails.warn_after` / `hard_stop_after`; `agent.max_turns`; `goals.max_turns`; `delegation.max_iterations` | **v0.7.0:** не переименовывать и не подставлять GATE/TZ/HF. Флаг `hard_stop_enabled: true` уже в config.yaml — не менять (AC-107). Лимиты ходов фазы = overlay `invoke_role` `turn_count`, не ядро (Б49, Б33 п.63/71) | Б46 П.5.а, Б49 |
-| `gateway/session.py`; сырой SQL write в `state.db`; `hermes-session-reset-policy` тело; схема `state.db` | **v0.7.0:** не патчить session.py / ядро; не `UPDATE sessions` строкой SQL; не форк hook рядом с plugin П.7.3. Close = `SessionDB.end_session(id, "api_limit_80")`. Схему `state.db` не менять | Б13.1, Б33 п.8/21/64/65/70, Б46 П.7.3–4, Б49 |
+| `gateway/session.py`; сырой SQL write в `state.db`; `hermes-session-reset-policy` тело; схемы `state.db`/`events.db` | **v0.7.0:** не патчить session.py / ядро; не `UPDATE sessions` строкой SQL; не форк hook рядом с plugin П.7.3. Close = `SessionDB.end_session(id, "api_limit_80")`. Схемы не менять. **v0.7.3:** ErrorBus #1861 не закрывать ручным SQL/DELETE/UPDATE; SQL-детектор остаётся `mode=ro` | Б13.1, Б33 п.8/21/64/65/70/73, Б46 П.7.3–4, Б49, Б50 |
 
 ---
 
@@ -2153,6 +2155,8 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 69. Лечить ложный provider-fatal, делая его recoverable / авто-ретраем, или выкидывая паттерн `request timed out` из `FATAL_PATTERNS`. Паттерн остаётся для не-JSON и JSON-envelope ошибки. `provider_fatal` ∈ `NON_RECOVERABLE_FAIL` (дух п.11). Б42 корпус не откатывать.
 70. Сырой SQL write в `state.db` (`UPDATE sessions …` и аналоги) из watcher П.7.4; импорт/патч `gateway/session.py`; `SessionStore.reset_session` в обход публичного `hermes_state_sessions.SessionDB.end_session`. Закрытие telegram ≥80 api — только `end_session(id, "api_limit_80")` (Б49, дух п.64/65).
 71. Класть лимиты ходов фазы (GATE≤4 / TZ·REV·прочие invoke≤20 / HF≤25) в `tool_loop_guardrails.warn_after` / `hard_stop_after` или в `agent.max_turns` / `goals.max_turns` / `delegation.max_iterations` / несуществующий `--max-turns` Cursor CLI. Overlay — `invoke_role` поле `phases[phase].turn_count` (Б49, дух п.63). Не путать с ядровым 90-90 (AC-009).
+72. Считать завершённую с `end_reason='session_reset'` сессию монстром/bloat при `session_reset.mode ∈ {idle,daily,both}`. Фильтр детектора обязан учитывать режим; при `mode=none` reset не подавляется. Не менять окно/пороги вместо фильтра.
+73. Смешивать stdout/stderr provider с опубликованным отчётом, принимать plain/failed/non-JSON Codex output за успешный audit или передавать raw `ActionRequiredError` в ErrorBus detail. Detail допускается только из валидного compact JSON `subtype=success`, `is_error=false`, строковый `result`; provider failure не является SQL evidence.
 
 ---
 
@@ -2279,6 +2283,13 @@ I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` 
 | AC-119 | S | Трёхзначный control-flow `_fatal_reason` / `classify_provider_fatal`: (а) валидный JSON `is_error=false`/без error-поля → не provider-fatal, `FATAL_PATTERNS` по `result` не гонять; (б) валидный JSON `is_error=true`/`type=="error"` → fatal, envelope выигрывает у цитат; (в) не-JSON → fallback на строгие сигнатуры (сообщение клиента/парсера). Список `FATAL_PATTERNS` не сокращать; `provider_fatal` non-recoverable | Б13.2, Б33 п.68–69, Б42, Б48 |
 | AC-120 | S | `pytest pipeline/tests/test_invoke_fatal.py`: JSON `{"result":"…Request timed out…","is_error":false}` и тот же result без `is_error` → `classify` False, `_fatal_reason` None, `refuse_clean_exit` False; `{"is_error":true,"error":"Request timed out"}` / `{"type":"error",…}` → True (json-ветка); не-JSON `"Request timed out"` → True (pattern); бытовое `"timeout 120-300s"` JSON и plain → False (регресс AC-065). Существующие AC-065/066/070 не ломать. Прирост файлов: `invoke_role.py` + `test_invoke_fatal.py` | Б13.2, Б42, Б48 |
 | AC-121 | O `depends: operator:ставь кроны` | `jobs.json` watcher `tg_session_auto_close` vs baseline пуст до `operator-done: ставь кроны`. Интервал 15–30 мин, `no_agent`, не каждую минуту. Пока hold open — GATE:done этого слага красный | Б33 п.22/55, Б49 |
+| AC-122 | S | При `session_reset.mode=both` штатные `end_reason=session_reset` выше порогов не дают monster/bloat/report; mode `none` сохраняет чувствительность | Б12, Б50, Б33 п.72 |
+| AC-123 | S | SQL только `mode=ro`, окно 604800 секунд и пороги `>500/>1000/>5M`; NULL/иные `end_reason` остаются видимыми | Б50, Б33 п.25/65/72 |
+| AC-124 | S | Каждый запуск scan оставляет compact JSON; plain/failed/усечённый/rc≠0/нет финального `agent_message` не success и не raw stderr | Б50, Б33 п.73 |
+| AC-125 | S | ErrorBus detail принимает только успешный structured report; raw provider failure не записывается | Б13.2, Б32, Б50, Б33 п.73 |
+| AC-126 | S | FPR grep-защиты, MSG_MONSTER/MSG_BLOAT и auto-resolve не регрессируют; SQL monster с failed audit получает нейтральный detail | Б29 A1–A2, Б32, Б50 |
+| AC-127 | S | После исправленного прогона id 1861 закрывается существующим `error_bus_cli.py resolve`; ручной SQL/DELETE/UPDATE отсутствует | Б50, Б33 п.65/73 |
+| AC-128 | S | `hermes-agent`, gateway/session.py, jobs.json, config.yaml, state.db/events.db schema не изменены; HF:impl и HF:test раздельны | Б0.3, «Что НЕ трогать», Б50 |
 
 **Область `GATE:done` этого пакета (`rs-refuse-kanban`, CHANGE).** Финальный и равен концу **W1** (постройка `pipeline/` + скилл: `HF:impl` / `HF:test` / `ORCH:shared-state`). Согласовано с Б17.7 и Б18.6. Волны W2–W4 — отдельные хода, не один долгий `in_phase`. В таблице выше нет класса O: этот слаг не остаётся `waiting_operator` до W4.
 
@@ -2305,6 +2316,8 @@ AC-016 / AC-019 / AC-035 — класс S про поздние волны: по
 **Область `GATE:done` пакета `ktalk-tmo-fatal-classifier` (BUGFIX-LIGHT, v0.6.2).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` правок `invoke_role.py` (`_fatal_reason` / `_json_error_reason`: различить успешный JSON и не-JSON) + `pipeline/tests/test_invoke_fatal.py` (цитата `Request timed out` в `result` → False; envelope / plain → True); `HF:docs-handoff` одна фраза скилла: «цитата timeout в result ≠ provider-fatal». Не сокращать `FATAL_PATTERNS`. Не менять таймауты `agent -p`. Не трогать REV, страж Б33 п.47 / doorbell, occupancy AC-061/076/078, `pipeline_gates` recover-классы, MoveFromKeyTalk. Не делать `provider_fatal` recoverable. Не откатывает Б40–Б47 / AC-058…118 / корпус Б42. `[NEW-ENTITY]` нет. AC-119…120 — класс S.
 
 **Область `GATE:done` пакета `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` (BUGFIX, v0.7.0).** Финальный после хвоста **этого** слага: `HF:impl` / `HF:test` **раздельно** overlay `invoke_role` `turn_count` (П.5.б) + no_agent-watcher `tg_session_auto_close` (П.7.4) + pytest `test_phase_turns.py` / `test_tg_auto_close.py`; `HF:docs-handoff` одна фраза скилла: telegram ≥80 api без валидного handoff-summary не закрываем; ходы фазы ≠ `warn_after`. AC-108 и AC-113 **валят** этот `GATE:done`. AC-121 класс O блокирует `GATE:done` до `operator-done: ставь кроны` + evidence job watcher. Регресс AC-107 (`hard_stop_enabled: true`) — IAC, конфиг не трогать. Не патчит ядро / `gateway/session.py`. Не сырой SQL write. Не `warn_after`. Не `jobs.json` до глагола. Не откатывает Б40–Б48 / AC-058…120 / корпус Б46 (для `llm-cost-optimization` AC-108/113 по-прежнему не валят). Штат Codex не возвращать на Cursor. Живой монстр `216865ac` / ErrorBus #1838 resolve — не этот GATE:done (операция после боя watcher / auto-resolve скана). `[NEW-ENTITY]` нет. Q-n нет. AC-108, AC-113 — класс S. Preflight красный, пока hold AC-121 open.
+
+**Область `GATE:done` пакета `llmanomalyscan-shlet-lozhnyy-critical-session-mo` (BUGFIX-LIGHT, v0.7.3).** Финальный после хвоста этого слага: `HF:impl` правок `~/.hermes/scripts/llm_anomaly_errorbus.py` и `llm_anomaly_scan.sh`, `HF:test` расширения `~/.hermes/error_bus/tests/test_llm_anomaly_scan.py`, `HF:docs-handoff` одной аддитивной записи в `hermes-selfcheck-audits/SKILL.md`. AC-122…128 — класс S. Не трогать Б40–Б49 / AC-058…AC-121; не менять `state.db`, `events.db` schema, gateway, jobs/config, `FATAL_PATTERNS`, лимиты, SQL write и auto-retry. ErrorBus #1861 закрывается только существующим CLI после успешного исправленного прогона, не в этом `TZ:patch`.
 
 Номера AC-017 и AC-018 **зарезервированы** за будущим MIGRATION-слагом (таблица ниже). В этом пакете их нет, чтобы не путать `GATE:done`.
 
@@ -4007,6 +4020,56 @@ AC пакета: **AC-108, AC-113** (класс S, валят этот GATE:done
 
 ---
 
+## Б50. Пакет `llmanomalyscan-shlet-lozhnyy-critical-session-mo` (v0.7.3) — штатный reset не monster и provider failure не audit detail
+
+**I1 этого пакета.** `current` (факт 24.10, `_fix_plan_20261024.md`): SQL-детектор `~/.hermes/scripts/llm_anomaly_errorbus.py:61–84` не учитывает `end_reason='session_reset'`, поэтому при `session_reset.mode=both` две штатные Telegram-сессии с api/tool выше порога дали ложный monster и ErrorBus #1861. Одновременно `llm_anomaly_scan.sh:39–40` смешивает stdout/stderr `codex exec`; plain `ActionRequiredError` с ненулевым rc попадает в невалидный detail-файл, а `llm_anomaly_errorbus.py` передаёт первые байты в ErrorBus как будто это отчёт архитектора. `target`: mode-aware SQL-фильтр, fail-closed compact JSON-контракт аудита и структурная защита detail.
+
+Кейс записи — **BUGFIX-LIGHT** (кейс и recipe из `_state.json` не менять). Слаг: `llmanomalyscan-shlet-lozhnyy-critical-session-mo`. SoT входа: `_fix_plan_20261024.md`. `[NEW-ENTITY, требует согласования Саши]` **нет**. Корпуса Б40–Б49 / AC-058…AC-121 не откатывать. Semver **PATCH** 0.7.2 → **0.7.3**. Q-n этого пакета нет.
+
+### Б50.1 Семантика SQL-детектора
+
+`sql_detect_anomalies` получает заранее разобранный `session_reset_mode`; YAML внутри SQL-функции не читать. Для `mode ∈ {idle, daily, both}` оба предиката monster и bloat дополнить условием `end_reason IS NULL OR end_reason <> 'session_reset'`. `mode=none` не подавляет reset. `end_reason IS NULL` и иные причины остаются видимыми.
+
+Сохранить `file:…?mode=ro`, окно `604800` секунд, пороги `api_call_count > 500`, `tool_call_count > 1000`, `estimated_tokens > 5_000_000`, раздельные `MSG_MONSTER`/`MSG_BLOAT` и существующий auto-resolve через `error_bus_cli.py resolve`. SQL остаётся источником решения о monster/bloat; Codex-аудит не меняет SQL-решение.
+
+### Б50.2 Fail-closed контракт `llm_anomaly_scan.sh`
+
+Скрипт сначала пишет сырой stdout/stderr во временный файл, затем **всегда** атомарно публикует компактный JSON с ключами `subtype`, `is_error`, `result`. JSONL `agent_message` и `turn.failed` разбирается структурно; финальный `agent_message` обязателен. Plain output, пустой/усечённый JSON, ненулевой rc или отсутствие финального `agent_message` дают `subtype=failed`, `is_error=true`, пустой `result`; self-check остаётся `PROBLEM`. Сырой provider stderr в `llm-anomaly-audits` не оставлять и failed-аудит успешным не объявлять. TTL и read-only prompt сохраняются.
+
+### Б50.3 Защита ErrorBus detail
+
+`--detail-file` считается detail только при валидном компактном JSON: `subtype=success`, `is_error=false`, `result` — строка. Failed/non-JSON/неполный отчёт даёт пустой detail либо нейтральную строку `architect audit unavailable (provider failure)`; `ActionRequiredError` и иной provider stderr не копируются. Реальный SQL monster репортируется с нейтральным detail; отсутствие SQL-анomaly не репортируется из-за падения провайдера. Ручной SQL/DELETE/UPDATE для ErrorBus #1861 запрещён; после исправления штатный следующий прогон вызывает существующий `error_bus_cli.py resolve`.
+
+### Б50.4 Код, тесты и docs-handoff (не этот ход)
+
+| Что | Где | Когда |
+|---|---|---|
+| mode-aware SQL predicate + detail validator | `~/.hermes/scripts/llm_anomaly_errorbus.py` | `HF:impl` |
+| temp capture, JSONL parser, atomic compact JSON | `~/.hermes/scripts/llm_anomaly_scan.sh` | `HF:impl` |
+| regression tests on mocked DB/files | `~/.hermes/error_bus/tests/test_llm_anomaly_scan.py` | `HF:test` |
+| две аддитивные нормы в документации | `~/.hermes/skills/devops/hermes-selfcheck-audits/SKILL.md` | `HF:docs-handoff` |
+
+`HF:impl` и `HF:test` — разные фазы и разные invoke. Production `state.db`/`events.db` не использовать в тестах; SQL только `mode=ro`; авто-ретрай provider failure не добавлять.
+
+Регрессионные фикстуры: `session_reset` выше порогов при mode `both` не создаёт monster/bloat/report; тот же набор при mode `none` и активная/иная `end_reason` репортятся; success JSON сохраняет result в detail; plain `ActionRequiredError`, `turn.failed`, пустой/усечённый JSON и rc≠0 не становятся success/detail; настоящий SQL monster с failed Codex-аудитом получает нейтральный detail; injectable `resolve_fn` подтверждает штатный auto-resolve.
+
+### Б50.5 Что не в этом пакете
+
+`hermes-agent`, `gateway/session.py`, `jobs.json`, `config.yaml`, схемы `state.db`/`events.db`, живая сессия `216865ac`, ручной resolve/SQL/DELETE для #1861, `FATAL_PATTERNS`, таймауты/лимиты ядра, `warn_after`, `agent.max_turns`, Cursor/Codex штат, ErrorBus schema, канон фаз/гейтов, auto-retry provider failure, тела чужих пакетов Б40–Б49, `[NEW-ENTITY]`. Кроны не ставить. Не смешивать stdout/stderr в опубликованный detail и не считать failed-аудит SQL evidence.
+
+IAC-ориентир (формулировки AC — с диска):
+
+| IAC | path | verify | covers |
+|---|---|---|---|
+| IAC-01 | `llm_anomaly_errorbus.py` SQL fixture | mode both/none + reset/other end_reason; `mode=ro`, 604800, thresholds | AC-122, AC-123 |
+| IAC-02 | `llm_anomaly_scan.sh` | success JSONL and plain/failed/empty/truncated/rc≠0; atomic compact JSON; no raw stderr | AC-124 |
+| IAC-03 | `llm_anomaly_errorbus.py` detail validator | valid success keeps result; failed/non-JSON yields empty or neutral detail | AC-125, AC-126 |
+| IAC-04 | `test_llm_anomaly_scan.py` | all reset/provider/detail/resolve regressions; no production DB | AC-122…AC-127 |
+| IAC-05 | `hermes-selfcheck-audits/SKILL.md` + neighboring files | two additive docs rules; baseline diff only expected paths | AC-128 |
+| IAC-06 | forbidden surfaces | `git diff`/path audit: no gateway/core/jobs/config/schema/SQL write; HF:impl ≠ HF:test | AC-128 |
+
+**AC пакета:** AC-122…AC-128, класс S. `GATE:done` этого BUGFIX-LIGHT закрывается после хвоста `HF:impl` → `HF:test` → `HF:docs-handoff` и AC-report. #1861 не закрывается вручную на `TZ:patch`; доказательство закрытия — результат штатного CLI после внедрения.
+
 ## Открытые вопросы
 
 Блокирующих открытых вопросов пакетов до v0.4.9 **нет**. Бриф `rs-refuse-kanban` закрыт 2026-10-13. Риски 14.10 закрыты Q-Archi-04/05. Блок E закрыт Q-Archi-06. Пакет `devworkflow-task-slug`: Q-Archi-07/08 решены в Б36 п.15–16 (не ждут реплики, чтобы закрыть `TZ:finalize`). Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`: Q нет; `[NEW-ENTITY]` нет. Пакет `sravnit-skills-vs-tree-docs-zavis-v-rs-collect-d`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-cursor-cli`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-avtovosstanovlenie`: Q нет; `[NEW-ENTITY]` нет. Пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`: Q нет; 13.10 не пересматриваем; `[NEW-ENTITY]` канала стража нет.
@@ -4020,6 +4083,8 @@ AC пакета: **AC-108, AC-113** (класс S, валят этот GATE:done
 **Пакет `ktalk-tmo-fatal-classifier` (v0.6.2).** Q-n этого пакета **нет**. `[NEW-ENTITY, требует согласования Саши]` **нет**.
 
 **Пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` (v0.7.0).** Q-n этого пакета **нет**. `[NEW-ENTITY, требует согласования Саши]` **нет**.
+
+**Пакет `llmanomalyscan-shlet-lozhnyy-critical-session-mo` (v0.7.3).** Q-n этого пакета нет. `[NEW-ENTITY, требует согласования Саши]` нет. Q-2 auth Codex и Q-1 W4 не занимать.
 
 Вопрос `Q-1` «утвердить план выключения dispatch» **не** открыт: его заведёт `MIG:plan` будущего MIGRATION-слага (W4), см. AC-018 в Б34.
 
@@ -4065,11 +4130,14 @@ AC пакета: **AC-108, AC-113** (класс S, валят этот GATE:done
 - TZ:finalize v0.6.2: `dev/ktalk-tmo-fatal-classifier/TZ-patch.md`; `_fix_plan_20261021.md`; BUGFIX-LIGHT (REV:tz skip); штамп без правок смысла; инвентарь 0.6.0→0.6.2
 - TZ:patch v0.7.0: `dev/hard-stop-limity-hodov-fazy-p-5-auto-close-teleg/_fix_plan_20261021.md`; `TZ-patch.md`; ErrorBus #1838; нормы Б46 П.5.б / П.7.4 без кода; overlay `invoke_role` + watcher `SessionDB.end_session`
 - TZ:finalize v0.7.0: `dev/hard-stop-limity-hodov-fazy-p-5-auto-close-teleg/REV-tz.md` verdict=APPROVE; `TZ-patch.md`; `_fix_plan_20261021.md`; штамп без правок смысла; инвентарь 0.6.2→0.7.0
+- TZ:patch v0.7.3: `dev/llmanomalyscan-shlet-lozhnyy-critical-session-mo/_fix_plan_20261024.md`; `TZ-patch.md`; ErrorBus #1861; `llm_anomaly_errorbus.py` SQL detector/detail-file; `llm_anomaly_scan.sh` stdout/stderr contract; `test_llm_anomaly_scan.py`; `hermes-selfcheck-audits/SKILL.md` docs-handoff
 
 ---
 
 ## Changelog
 
+- **2026-10-24 v0.7.3** — TZ:finalize пакета `llmanomalyscan-shlet-lozhnyy-critical-session-mo` (BUGFIX-LIGHT). Штамп Б50 / AC-122…128 без изменения смысла: mode-aware фильтр штатного `session_reset`, fail-closed compact JSON Codex-аудита и detail только из успешного structured report; код, БД, jobs/config и gateway не писались. `REV:tz` не входит в recipe LIGHT; `[NEW-ENTITY]` нет; Q-n нет. Следующий хвост — `HF:impl` → `HF:test` → `HF:docs-handoff`.
+- **2026-10-24 v0.7.3** — TZ:patch пакета `llmanomalyscan-shlet-lozhnyy-critical-session-mo` (BUGFIX-LIGHT) по `_fix_plan_20261024.md`. Б50 / AC-122…128: SQL-фильтр штатного `session_reset` по mode; fail-closed compact JSON для Codex-аудита; ErrorBus detail только из успешного structured report; #1861 закрывается существующим CLI после исправленного прогона. Б33 п.72–73. Корпуса Б40–Б49 / AC-058…AC-121 не откатываются. Код, БД, jobs/config и gateway не писались на `TZ:patch`; `[NEW-ENTITY]` нет; Q-n нет.
 - **2026-10-23 v0.7.2** — TZ:patch rework пакета `migrate-dev-roles-cursor-to-codex` после REV:tz REQUEST-CHANGES, раунд 2, ровно остатки R1/R2. **R1:** Б45.8/10 — IAC-05 только фикстура до flip, IAC-06/09a на `HF:test` без зависимости от боевого post-flip YAML; IAC-12 (боевой YAML, AC-082) и IAC-09b (новый непилотный invoke, AC-087) на `ORCH:shared-state` после пилота, evidence до `GATE:done`. **R2:** Б13.2/Б45.3 — `phases[phase].model` = единый backend-aware resolved-результат, переданный адаптеру; явный override сохранён. AC-088/090 и IAC-02/10 проверяют равенство argv и model фазы обеих веток, включая Cursor откат и Codex LIGHT. Канон `TZ-patch.md` и инвентарь синхронизированы. R3/AC-093, модели, argv, PID и моменты записи полей не менялись. Код/скиллы/YAML не писались. `[NEW-ENTITY]` нет. Q-2 открыт.
 - **2026-10-23 v0.7.1** — TZ:patch rework пакета `migrate-dev-roles-cursor-to-codex` после REV:tz REQUEST-CHANGES (R1–R3). **R1:** пилот до общего flip — `invoke.codex_pilot_slugs`, pilot-prep ORCH на старте `HF:test`, flip `default_backend` только на `ORCH:shared-state` после зелёного `HF:test` (Б18.2); AC-082/087/GATE:done согласованы; вариант «следующий CHANGE» снят. **R2:** `roles_cursor.*` + backend-aware LIGHT (Cursor → `roles_cursor.executor`); откат AC-088/090 на architect/reviewer/executor обычный+LIGHT. **R3:** AC-093/IAC-04 структурный Codex JSONL (envelope-приоритет, ± фикстуры), без ослабления AC-119/120. Б35 аддитив ключей. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-2 открыт.
 - **2026-10-21 v0.7.0** — TZ:finalize пакета `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg` после REV:tz APPROVE (BUGFIX полный). Штамп корпуса TZ:patch без правок смысла: Б49 / Б33 п.70–71 / AC-108/113 класс S (валят этот GATE:done) / AC-121 O `ставь кроны` / AC-107 регресс. Overlay П.5.б + watcher П.7.4 через `SessionDB.end_session`. Инвентарь. Код не писался (HF:impl). `[NEW-ENTITY]` нет. Q-n нет. Замечания ревизора («прочие invoke ≤20»; `_COMPACTION_PREFIXES`) — `HF:plan` / `HF:impl`, не этот штамп.

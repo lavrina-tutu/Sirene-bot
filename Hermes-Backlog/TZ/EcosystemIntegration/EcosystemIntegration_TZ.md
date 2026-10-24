@@ -1,9 +1,10 @@
 ---
 tool: EcosystemIntegration
 version: 0.7.0
-date: 2026-10-13
+date: 2026-10-25
 status: active
 maintainer: Hermes + Cursor
+last-section-added: 2026-10-25 — TZ:finalize пакет perevesti-kron-ecosystem-drift-check-na-no-agent v0.1.2 после REV:tz APPROVE (rework; штамп без изменения смысла)
 ---
 
 # ТЗ: EcosystemIntegration
@@ -876,3 +877,170 @@ Restore секции YAML из `rollback_snapshot` поднимает несек
 | `TZ/EcosystemIntegration/appendix_module0_postanovka_20260930.md` | Зафиксированная постановка модуля 0 (решения Саши 2026-09-30; источник истины для §10) |
 | `TZ/AnywhereContacts/_fix_plan_20261013.md` | Диагноз 13.10: системный класс battle-interpreters, карта 16 ключей, слои A/B |
 
+## Пакет `perevesti-kron-ecosystem-drift-check-na-no-agent` (версия пакета 0.1.2, `TZ:patch`, 2026-10-25)
+
+Формат выбран по канону хранения ТЗ: это новая датированная секция в единственном master-файле `TZ/EcosystemIntegration/EcosystemIntegration_TZ.md`, а не второй live-файл инструмента. Существующие §§1–10.12, исторические контракты и AC не переписываются. Версия `0.1.2` фиксирует rework после `REV:plan`; версия master-файла остаётся `0.7.0` до отдельного решения о выпуске на `TZ:finalize`.
+
+### Каноническое разделение stored/runtime
+
+Нормативное значение поля `jobs.json.script` и аргумента `hermes cron edit --script` — относительное имя `drift_check_noagent.sh` (stored value). Физический runtime-файл — абсолютный `/home/tkachenkoav/.hermes/scripts/drift_check_noagent.sh`; этот путь используется для проверки существования/исполняемости и разрешения stored-имени, но не записывается в `jobs.json` и не передаётся в `--script`. Такое разделение следует штатному `_validate_cron_script_path`: CLI принимает имя внутри `~/.hermes/scripts/`, а scheduler затем разрешает его в физический путь. Обход валидатора, ручной JSON patch и upstream-изменение Hermes в этот пакет не входят.
+
+### Цель
+
+Перевести существующий крон `05265ebdfaa4` «Ecosystem drift-check (страховка)» с агентного запуска Hermes/DeepSeek на детерминированный `no_agent`-скрипт, который выполняет `render_manifest.py --check-drift`, дописывает находки в `ecosystem-drift.log` и отдаёт результат в существующий Telegram-топик Monitoring `:7`.
+
+### Scope
+
+В пакет входит ровно один уже существующий job:
+
+| Поле | Норма после реализации |
+|---|---|
+| `id` | `05265ebdfaa4` |
+| `name` | `Ecosystem drift-check (страховка)` без переименования |
+| `schedule` | `0 4 * * 0` (воскресенье, 04:00) без изменения |
+| `enabled` | `true` без изменения |
+| `no_agent` | `true` |
+| `script` | `drift_check_noagent.sh` (stored value; runtime file `/home/tkachenkoav/.hermes/scripts/drift_check_noagent.sh`) |
+| `deliver` | `telegram:-1004300127777:7` без изменения маршрута |
+
+Скрипт является runtime-обёрткой Hermes и живёт в `~/.hermes/scripts/`, потому что штатный `hermes cron edit` принимает job scripts из этого каталога. Он читает `~/WorkVault/Registries/render_manifest.py`, пишет только `~/WorkVault/Registries/ecosystem-drift.log` и не вызывает модель. `render_manifest.py --check-drift` остаётся единственным источником решения о наличии drift.
+
+Согласованный механизм изменения job — штатная команда `hermes cron edit 05265ebdfaa4` с `--script`, `--no-agent` и сохранением `--deliver`. Перед изменением делается резервная копия текущей записи `jobs.json` в `~/.hermes/_Archives/ecosystem-drift-check-noagent-<timestamp>/jobs.json`; прямое редактирование `jobs.json` не используется. Это изменение `jobs.json` разрешено явным решением Саши «Делаем по канону только 1-2-3» и ограничено этой записью.
+
+Рекомендуемая форма команды (значения `--prompt`, `--model`, `--provider` очищаются, чтобы в записи не оставался исполняемый агентный вход): `hermes cron edit 05265ebdfaa4 --script drift_check_noagent.sh --no-agent --prompt "" --model "" --provider "" --deliver telegram:-1004300127777:7`. CLI принимает только относительное имя внутри `~/.hermes/scripts/`; физический файл остаётся `/home/tkachenkoav/.hermes/scripts/drift_check_noagent.sh`.
+
+### Non-goals
+
+- Не переводить другие кроны; это только шаг 1: drift-check → `no_agent`.
+- Не менять self-check, гибридные задания или шаг 4 `fallback_providers`.
+- Не создавать новые кроны и не менять расписание, имя, включённость или маршрут доставки этого job.
+- Не менять `EcosystemManifest.json`, `EcosystemManifest.schema.json`, `EcosystemConfig.yaml` и digest/render ради перевода job; `--check-drift` читает их в режиме проверки. `MAIN_TZ_INVENTORY` получает только служебную строку этого пакета по канону хранения ТЗ, без изменения манифеста.
+- Не менять `render_manifest.py` и не переносить его логику в обёртку.
+- Не рестартовать Gateway Hermes, не патчить `~/hermes-agent`, ErrorBus или секреты.
+
+### I1 → target
+
+`current`: job хранит агентный prompt, `no_agent=false`, `script=null`, модельный snapshot `deepseek/deepseek-v4-flash-0731`; агент запускает проверку, разбирает stdout и пишет находки.
+
+`target`: тот же job с `no_agent=true`, stored `script=drift_check_noagent.sh` и script-only dispatch; это имя разрешается в физический runtime-файл `/home/tkachenkoav/.hermes/scripts/drift_check_noagent.sh`; stdout скрипта доставляется Hermes напрямую в `telegram:-1004300127777:7`; ни prompt, ни model/provider не участвуют в исполнении. Логика результата полностью детерминирована локальными файлами и `render_manifest.py`.
+
+### Контракты выполнения
+
+#### Скрипт `drift_check_noagent.sh`
+
+1. Запускает `python3 /home/tkachenkoav/WorkVault/Registries/render_manifest.py --check-drift` и захватывает stdout и код завершения без вызова Hermes/LLM.
+2. При чистом результате публикует в stdout ровно `No drift`, не изменяя `ecosystem-drift.log`.
+3. При реальных строках drift (вывод содержит таблицу `path | drift_type | recommendation`) дописывает их в `/home/tkachenkoav/WorkVault/Registries/ecosystem-drift.log` под новым заголовком `## Ecosystem drift (<YYYY-MM-DD>)`, сохраняя append-only порядок. В stdout отдаёт тот же наблюдаемый отчёт для доставки в `:7`.
+4. Обёртка нормализует итоговый код. Если stdout содержит одну или более валидных строк drift (`path | drift_type | recommendation`), она дописывает строки в лог, отдаёт наблюдаемый отчёт в stdout и завершается с `rc=0`, даже если дочерний `--check-drift` вернул ненулевой код. Если валидных строк нет и дочерняя проверка чистая (`rc=0`), скрипт печатает `No drift` и завершается с `rc=0`. Ошибка запуска/парсинга либо ненулевой код без валидного отчёта — операционная ошибка: скрипт печатает короткое детерминированное сообщение, не копирует provider stderr в лог и завершается с `rc≠0`; LLM и автоматический retry не вызываются.
+5. Запись лога не перезаписывает существующие записи и не меняет манифест. При повторном чистом тике новых строк в логе нет.
+
+#### Job и доставка
+
+- Scheduler видит `no_agent=true` и непустой `script`; stdout скрипта является телом уведомления, а пустой stdout не создаёт сообщение.
+- `deliver` остаётся ровно `telegram:-1004300127777:7`; новый Telegram-топик, отдельный канал или прямой вызов Telegram API не заводятся.
+- Устаревшие `prompt`, `model` и `provider` очищаются штатными аргументами `hermes cron edit`, если это поддерживается текущим CLI. `model_snapshot` может сохраниться как историческое поле записи: он не является исполняемым входом `no_agent`-ветки и проверяется только по run-record.
+- Сохраняются job id, расписание, enabled и политика failure delivery; изменяются только script/no_agent и необходимые поля, отключающие агентный prompt.
+
+#### Проверка drift
+
+До применения изменения на `HF:impl` сохраняется неизменяемый baseline snapshot прямого запуска: полный stdout, дочерний `rc` и разобранные валидные строки drift. На момент этого пакета известный baseline содержит одну pre-existing находку `/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/HomeCutover/HomeCutover_TZ.md | tz_not_in_manifest` (рекомендация `Add tools entry with tz_ref=TZ/HomeCutover/HomeCutover_TZ.md`) и `rc=1`; snapshot не изменяет живой манифест или журнал.
+
+После применения изменения выполняется:
+
+`python3 /home/tkachenkoav/WorkVault/Registries/render_manifest.py --check-drift`
+
+Результат сравнивается с сохранённым baseline: множество новых валидных строк (`after - baseline`) должно быть пустым. Pre-existing строки, включая `HomeCutover`, допускаются; поэтому прямой `--check-drift` может сохранить `rc=1`, если baseline drift остался, и это не блокирует пакет. Если после сравнения нет новых строк, скрипт не исправляет drift автоматически и не меняет baseline; reconciliation baseline остаётся отдельной задачей владельца манифеста.
+
+### Контракты экосистемы
+
+| Контракт | Источник | Потребитель | Проверка |
+|---|---|---|---|
+| `render_manifest.py --check-drift` и его exit code | `/home/tkachenkoav/WorkVault/Registries/render_manifest.py` | `drift_check_noagent.sh` | stdout + rc сохраняются до классификации |
+| журнал находок | `/home/tkachenkoav/WorkVault/Registries/ecosystem-drift.log` | оператор/следующий аудит | новый заголовок + строки append, старые записи целы |
+| cron job | `/home/tkachenkoav/.hermes/cron/jobs.json`, запись `05265ebdfaa4` | Hermes scheduler | `no_agent=true`, `script` непуст, schedule/deliver неизменны |
+| уведомление | `telegram:-1004300127777:7` | Monitoring :7 | фактическое сообщение после тестового тика |
+| модельный вызов | отсутствует | — | run-record не содержит LLM session/provider call; DeepSeek не запускается |
+
+### Что НЕ трогать в этом пакете
+
+- Кроны, кроме `05265ebdfaa4`; особенно не менять self-check, `pfs_batch`, гибриды и другие job id.
+- `fallback_providers` и любые конфиги fallback-моделей.
+- `~/hermes-agent`, `gateway/session.py`, scheduler и Gateway; Gateway не рестартовать.
+- `EcosystemManifest.json`, его schema, render/digest и `render_manifest.py`, если отдельная проверка не обнаружит самостоятельную drift-проблему.
+- `ecosystem-drift.log` до первого реального drift-прогона; не чистить и не переписывать историю.
+- Секреты, `EcosystemConfig.yaml`, чужие master-ТЗ и существующие Telegram-топики.
+- Автоматическое создание нового cron; этот пакет только меняет явно согласованный существующий job.
+
+### Критерии приёмки (AC)
+
+Класс всех AC — **S**: наблюдаемая проверка, без нового `depends: operator:`. Реализация кода и job выполняется после этого `TZ:patch`; текущая фаза изменяет только текст ТЗ.
+
+#### AC-021 — cron переведён в no_agent
+
+`hermes cron list --all` и запись `05265ebdfaa4` на диске показывают `no_agent=true`, stored `script=drift_check_noagent.sh`, `enabled=true`, schedule `0 4 * * 0`, name без изменения и `deliver=telegram:-1004300127777:7`; этот stored value разрешается в исполняемый файл `/home/tkachenkoav/.hermes/scripts/drift_check_noagent.sh`.
+
+#### AC-022 — скрипт существует и исполняем
+
+Файл `/home/tkachenkoav/.hermes/scripts/drift_check_noagent.sh` существует, исполняем, проходит `bash -n`; в нём есть вызов `render_manifest.py --check-drift` и путь к `ecosystem-drift.log`. Скрипт не вызывает `hermes`, `agent`, Codex, DeepSeek или Telegram API.
+
+#### AC-023 — чистый прогон
+
+На фикстуре без drift скрипт завершает работу с rc 0, печатает ровно `No drift`, не добавляет строку в `ecosystem-drift.log` и не создаёт пустое уведомление.
+
+#### AC-024 — drift логируется append-only и доставляется штатно
+
+На фикстуре с одной или несколькими валидными строками drift скрипт добавляет новый `## Ecosystem drift (<YYYY-MM-DD>)` и строки `path | drift_type | recommendation`, не удаляя предыдущий журнал; stdout содержит наблюдаемый отчёт для доставки, а итоговый `drift_check_noagent.sh` завершается с `rc=0`, даже если дочерний `--check-drift` вернул `rc≠0`.
+
+#### AC-025 — доставка в Monitoring :7
+
+Тестовый запуск изменённого job доставляет `No drift` либо отчёт drift в `telegram:-1004300127777:7`; новый topic/channel не появляется, `deliver` побитно совпадает с контрактом.
+
+#### AC-026 — DeepSeek не вызывается
+
+Run-record изменённого job показывает script/no-agent execution без LLM session/provider call, model usage и token spend; `deepseek/deepseek-v4-flash-0731` отсутствует среди вызовов этого запуска. Повторный тик не создаёт агентную сессию.
+
+#### AC-027 — drift-check не добавляет новых расхождений
+
+До применения job-изменения сохранён baseline snapshot с stdout, дочерним `rc` и валидными строками. После изменения прямой `python3 /home/tkachenkoav/WorkVault/Registries/render_manifest.py --check-drift` сравнивается с этим snapshot: `after - baseline` пуст, манифест не изменён, а pre-existing `HomeCutover` допускается. Безусловный `exit 0` не требуется: `rc=1` допустим, если прямой checker по-прежнему сообщает только baseline drift; при чистом результате допустим `rc=0`.
+
+#### AC-028 — scope ограничен одним job
+
+Diff/снимок `jobs.json` показывает изменение только записи `05265ebdfaa4`; расписания и payload других jobs, `fallback_providers`, Gateway и ядро Hermes не изменены.
+
+#### AC-029 — штатный механизм и резервная копия
+
+В evidence есть резервная копия исходной записи `05265ebdfaa4`, а изменение выполнено через `hermes cron edit`, а не ручной JSON patch; после команды `hermes cron list --all` подтверждает целостность job.
+
+#### AC-030 — откат воспроизводим
+
+Из резервной копии можно штатной командой `hermes cron edit` с `--agent --script ""` вернуть прежние `no_agent=false`, stored `script=null`, prompt/model/provider и сохранить исходные schedule/name/deliver; абсолютный runtime-путь не является значением rollback-поля. Откат не меняет другие jobs и не требует рестарта Gateway.
+
+#### AC-031 — ошибка проверки видима и не вызывает LLM
+
+При ошибке запуска/парсинга или ненулевом коде `--check-drift` без валидных строк drift скрипт завершает `rc≠0` с коротким детерминированным сообщением; raw stderr не дописывается в `ecosystem-drift.log`, stdout не выдаётся как штатный drift-отчёт, агентный fallback и автоматический retry отсутствуют. Ненулевой дочерний `rc` при валидных строках проверяется по AC-024 и обязан нормализоваться обёрткой до `rc=0`.
+
+### IAC-ориентир для `HF:plan`
+
+| IAC | Переход | Артефакт | Verify | Covers |
+|---|---|---|---|---|
+| IAC-01 | `HF:impl` → `HF:test` | запись job `05265ebdfaa4` | `hermes cron list --all` + diff snapshot: `no_agent=true`, stored `script=drift_check_noagent.sh`, resolved runtime `/home/tkachenkoav/.hermes/scripts/drift_check_noagent.sh`, deliver/schedule/enabled/name/failure policy unchanged | AC-021, AC-028, AC-029 |
+| IAC-02 | `HF:impl` → `HF:test` | `drift_check_noagent.sh` | `test -x`, `bash -n`, изолированный harness с копией скрипта и подменёнными temp-путями к checker/log (живые манифест и журнал не записываются): clean → stdout `No drift`, `rc=0`; valid drift при child `rc≠0` → отчёт, append в temp-log, wrapper `rc=0`; error/no valid rows → короткое сообщение, wrapper `rc≠0` | AC-022–024, AC-031 |
+| IAC-03 | `HF:test` → `GATE:done` | cron run + Monitoring :7 | run-record без LLM + фактическая доставка в `telegram:-1004300127777:7`; сохранённый `model_snapshot`, если остался в записи, проверяется только как неисполняемое историческое поле | AC-025, AC-026 |
+| IAC-04 | `HF:test` → `GATE:done` | baseline snapshot + manifest drift check | сохранить stdout/child `rc`/valid rows до изменения; после изменения проверить `after - baseline = ∅`, манифест unchanged, `HomeCutover` baseline допустим; прямой checker `rc=1` при сохранённом baseline допустим, безусловный `rc=0` не требовать | AC-027 |
+| IAC-05 | `HF:docs-handoff` → `GATE:done` | rollback snapshot | штатное восстановление job, соседние jobs unchanged | AC-030 |
+
+### Preflight перед `HF:impl` и production edit
+
+После записи runtime-файла и до единственного production-вызова `hermes cron edit` проверяется:
+
+1. команда передачи job использует только `--script drift_check_noagent.sh`; ожидаемое значение `jobs.json.script` — ровно это относительное имя;
+2. `test -x /home/tkachenkoav/.hermes/scripts/drift_check_noagent.sh` подтверждает физический runtime-файл, который является разрешением stored-имени, а не stored-значением;
+3. pre-edit snapshot и diff-контроль не содержат абсолютного пути в поле `script`, не затрагивают соседние jobs и сохраняют backup/rollback evidence.
+
+### Откат и граница текущей фазы
+
+Откат runtime выполняется только восстановлением сохранённой записи через `hermes cron edit`; скрипт можно оставить на диске как неиспользуемый артефакт до отдельного решения, удалять его автоматически нельзя. До явного согласования реализации этот пакет не пишет `/home/tkachenkoav/.hermes/scripts/`, `jobs.json`, конфиги, манифест, лог или Gateway: `TZ:patch` добавляет только эту текстовую секцию. `[NEW-ENTITY, требует согласования Саши]` нет; Q-n нет; шаги 2–4 и fallback остаются вне скоупа.
+
+### Финализация пакета (`TZ:finalize`, 2026-10-25)
+
+Пакет `perevesti-kron-ecosystem-drift-check-na-no-agent` v0.1.2 зафиксирован после `REV:tz APPROVE` (архитектор и ревизор; rework). Это финальный штамп корпуса `TZ:patch` без переписывания исторических контрактов и AC; версия master-ТЗ сохраняется `0.7.0`. Реализация, cron, `jobs.json`, манифест и прочие защищённые артефакты этой фазой не изменяются.

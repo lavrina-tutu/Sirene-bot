@@ -1,6 +1,6 @@
 ---
 name: hermes-bugfix-cursor
-description: "Нештатная починка Hermes через Cursor (SSH remote): диагност"
+description: "Используй только если одновременно выполнены все условия: Hermes gateway сломан после update; явно указана конкретная ImportError, SchemaError, KeyError или ModuleNotFoundError; явно требуется ручная Remote-SSH процедура с journalctl/systemctl и rollback по SHA, restart или smoke-test. Общие «баг», «ошибка», «почини» не активируют этот скилл: обычный BUGFIX → dev-workflow; самостоятельный code fix → codex."
 version: 1.0.1
 author: agent
 tags: [hermes, bugfix, cursor, ssh, emergency]

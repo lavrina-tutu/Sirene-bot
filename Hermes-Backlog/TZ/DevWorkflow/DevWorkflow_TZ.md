@@ -2,14 +2,14 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Машина исполнения разработки Hermes без канбана (единый скилл + файловое состояние)"
-version: 0.7.3
-date: 2026-10-24
+version: 0.7.6
+date: 2026-10-25
 status: draft
 author: архитектор (gpt-6.1-sol, Codex exec)
-last-section-added: 2026-10-24 — v0.7.3 TZ:patch Б50 `llmanomalyscan-shlet-lozhnyy-critical-session-mo`: фильтр штатного session_reset, fail-closed Codex-аудит и защита ErrorBus detail
-case: BUGFIX-LIGHT
-slug: llmanomalyscan-shlet-lozhnyy-critical-session-mo
-previous_slug: hard-stop-limity-hodov-fazy-p-5-auto-close-teleg
+last-section-added: 2026-10-25 — v0.7.6 TZ:finalize Б53 `codex-canonicalize`: workspace owner/live mirror, target hashes, helper exclusion, COD-C1…C10, compress skip, REV:tz APPROVE
+case: SKILL-CHANGE
+slug: hermes-bugfix-cursor-explicit-only-gateway-trigg
+previous_slug: suzit-cursor-cli-do-transport-owner-ubrat-recove
 depends_on:
   - TZ/GLOSSARY.md >= 0.2.15
   - TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md >= 0.4.4
@@ -66,8 +66,8 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б30** | Перенос истории канбана (T5) | Б1 В1 | W4, журнал |
 | **Б31** | Миграция W0–W4 и откат; **v0.4.5:** abort сжигает каноническое имя пилота (`eco-config-w4`) | Б1 В2, вопрос 5, Б40 | AC миграции; AC-059 |
 | **Б32** | Ошибки инструмента → ErrorBus | Б1 вопрос 2 | `--tool dev_workflow` |
-| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены; **v0.4.5:** п.39–41 occupancy leftover / abort канона / dead-pid на sirene; **v0.4.6:** п.42–45 слепота PID invoke / второй поезд / post-invoke dead-pid / пайп stdout; **v0.4.8:** п.46–50 recoverable INTERRUPTED ждать Сашу / крон-reaper как recover / второй recover-pass / json.dump recover / complete без model; **v0.4.9:** п.51–55 notify как конец хода / complete поверх живого wrapper / канон dwka_guard / замена pid / крон doorbell без глагола; **v0.6.0:** п.63–65 лимиты ходов фазы не ядром / auto-close без патча gateway / SQL telemetry ro допустим; **v0.6.1:** п.66–67 `from_dict` без pop после `set_case` / ослабление `from_dict` или sha в recipe; **v0.6.2:** п.68–69 сливать None успешного JSON с не-JSON / лечить ложный fatal через recoverable или выкидывание паттерна; **v0.7.0:** п.70 сырой SQL write / обход `SessionDB.end_session`; п.71 лимиты ходов в `warn_after` / `agent.max_turns`; **v0.7.3:** п.72 не фильтровать штатный `session_reset` по mode; п.73 принимать failed/non-JSON provider output как audit evidence/detail | Б3 вердикт, Б12, Б13.4, Б13.5, Б40, Б41, Б43, Б44, Б46, Б47, Б48, Б49, Б50 | неприемлемость |
-| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта; **v0.4.5:** AC-058…060 класс S; **v0.4.6:** AC-061…064 класс S; **v0.4.7:** AC-065…070; **v0.4.8:** AC-071…075 класс S; **v0.4.9:** AC-076…079 класс S; **v0.5.0:** AC-080…093 (Codex); **v0.6.0:** AC-094…116 (`llm-cost-optimization`; O: ставь кроны / удаляй); **v0.6.1:** AC-117…118 (`pipeline-set-case-crisis-sha-bug`); **v0.6.2:** AC-119…120 (`ktalk-tmo-fatal-classifier`); **v0.7.0:** AC-108/113 валят GATE:done слага `hard-stop-…`; AC-121 O `ставь кроны` watcher; **v0.7.3:** AC-122…128 (`llmanomalyscan-shlet-lozhnyy-critical-session-mo`) | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1, Б40, Б41, Б43, Б44, Б45, Б46, Б47, Б48, Б49, Б50 | GATE:done этого слага = конец его BUGFIX-LIGHT хвоста; AC-017/018 не здесь |
+| **Б33** | Что НЕ делать (поведение машины); SQL не SoT/не кэш/не транспорт; обход скилла и PMO-подмена запрещены; **v0.4.5:** п.39–41 occupancy leftover / abort канона / dead-pid на sirene; **v0.4.6:** п.42–45 слепота PID invoke / второй поезд / post-invoke dead-pid / пайп stdout; **v0.4.8:** п.46–50 recoverable INTERRUPTED ждать Сашу / крон-reaper как recover / второй recover-pass / json.dump recover / complete без model; **v0.4.9:** п.51–55 notify как конец хода / complete поверх живого wrapper / канон dwka_guard / замена pid / крон doorbell без глагола; **v0.6.0:** п.63–65 лимиты ходов фазы не ядром / auto-close без патча gateway / SQL telemetry ro допустим; **v0.6.1:** п.66–67 `from_dict` без pop после `set_case` / ослабление `from_dict` или sha в recipe; **v0.6.2:** п.68–69 сливать None успешного JSON с не-JSON / лечить ложный fatal через recoverable или выкидывание паттерна; **v0.7.0:** п.70 сырой SQL write / обход `SessionDB.end_session`; п.71 лимиты ходов в `warn_after` / `agent.max_turns`; **v0.7.3:** п.72 не фильтровать штатный `session_reset` по mode; п.73 принимать failed/non-JSON provider output как audit evidence/detail | Б3 вердикт, Б12, Б13.4, Б13.5, Б40, Б41, Б43, Б44, Б46, Б47, Б48, Б49, Б50, Б51, Б52 | неприемлемость |
+| **Б34** | Критерии приёмки AC пакета W1 (+ AC-036…042 класс S); **v0.4.2:** AC-047 канон имени + парсинг вердикта; **v0.4.5:** AC-058…060 класс S; **v0.4.6:** AC-061…064 класс S; **v0.4.7:** AC-065…070; **v0.4.8:** AC-071…075 класс S; **v0.4.9:** AC-076…079 класс S; **v0.5.0:** AC-080…093 (Codex); **v0.6.0:** AC-094…116 (`llm-cost-optimization`; O: ставь кроны / удаляй); **v0.6.1:** AC-117…118 (`pipeline-set-case-crisis-sha-bug`); **v0.6.2:** AC-119…120 (`ktalk-tmo-fatal-classifier`); **v0.7.0:** AC-108/113 валят GATE:done слага `hard-stop-…`; AC-121 O `ставь кроны` watcher; **v0.7.3:** AC-122…128 (`llmanomalyscan-shlet-lozhnyy-critical-session-mo`); **v0.7.4:** AC-129…137 (`suzit-cursor-cli-do-transport-owner-ubrat-recove`, boundary-only); **v0.7.5:** AC-P1…P6 (`hermes-bugfix-cursor-boundary`, explicit-only gateway Remote-SSH trigger); **v0.7.6:** COD-C1…C10 (`codex-canonicalize`, owner workspace / mirror live, exact target and helper exclusion) | все блоки, I1, Б12, Б13.4, Б13.5, Б16.1, Б40, Б41, Б43, Б44, Б45, Б46, Б47, Б48, Б49, Б50, Б51, Б52, Б53 | GATE:done этого слага = конец его SKILL-CHANGE хвоста; AC-017/018 не здесь |
 | **Б35** | Контракты экосистемы (contracts-standard.md); **v0.3.2:** входные `orchestration.mode` / `pilot_slugs` | Б10, Б12, Б14, Б32 | SoT = `_state.json`; `extract.md` производный; migrate_vN своей схемы; dual-path-ключи только через эту таблицу |
 | **Б36** | Что показать Саше | Q-Archi-01..06, DRY-отклонение, продукт Б13.5, **v0.4.0:** Q-Archi-07/08 | не блокирует TZ:finalize |
 | **Б37** | Пакет `devworkflow-task-slug`: файрвол ролей, поезд сам, `suggest-slug`, G6, контроль Саши, изоляция origin; **v0.4.2:** Python-контроль канона артефакта и вердикта (норма 4) | Б6.4, Б7, Б11, Б16, Б21, факт сбоя 14.10, FINDING-PyContr-2 | AC-044…051; GATE:done этого слага |
@@ -82,7 +82,10 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б48** | Пакет `ktalk-tmo-fatal-classifier`: трёхзначный control-flow `classify_provider_fatal` (успешный JSON / JSON-ошибка / не-JSON); envelope клиента выигрывает у цитат в `result`; паттерн `request timed out` не выкидывать | инцидент ErrorBus #1850/#1852/#1855, `_fix_plan_20261021.md`, Б13.2, Б29 A1, Б42 | AC-119…120 класс S; GATE:done этого BUGFIX-LIGHT; корпуса Б40–Б47 / AC-058…118 не откатывать |
 | **Б49** | Пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`: overlay лимитов ходов фазы в `invoke_role` (П.5.б); no_agent-watcher auto-close telegram ≥80 api fail-closed через `SessionDB.end_session` (П.7.4); канон валидного handoff-summary; крон watcher — класс O | ErrorBus #1838, `_fix_plan_20261021.md`, Б46 П.5.б / П.7.4, Б33 п.63–65 | AC-108/113 валят GATE:done **этого** слага; AC-121 O `ставь кроны`; корпуса Б40–Б48 / AC-058…120 не откатывать |
 | **Б50** | Пакет `llmanomalyscan-shlet-lozhnyy-critical-session-mo`: фильтр штатного `session_reset` по mode; fail-closed compact JSON-контракт Codex; ErrorBus detail только из успешного структурированного аудита | ErrorBus #1861, `_fix_plan_20261024.md`, Б12, Б13.2, Б29 A1–A2, Б33 п.72–73, Б49 | AC-122…128 класс S; GATE:done этого BUGFIX-LIGHT; корпуса Б40–Б49 / AC-058…AC-121 не откатывать |
-| **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд; **v0.5.0:** исключение allowlist скиллов Б45.5 (тела таблиц моделей/вызова, не баннер dual-path); **v0.6.0:** `dwka_guard` hold `удаляй`; `jobs.json` hold `ставь кроны`; **v0.6.1:** `from_dict` жёсткий; `set_case` без sha; чужие `_state.json` PFS-слагов; **v0.6.2:** список `FATAL_PATTERNS` / таймауты `agent -p` / REV / страж п.47 / I1; **v0.7.0:** `warn_after` / ядро / сырой SQL write / `session.py` / `hermes-session-reset-policy` тело | Б13.1, Б13.5, Б31.2, Б33, Б37, Б45, Б46, Б47, Б48, Б49 | чеклист Шаг 4 tz-workflow |
+| **Б51** | Пакет `suzit-cursor-cli-do-transport-owner-ubrat-recove`: cursor-cli как explicit transport/rollback owner; boundary-only правка description в двух зеркалах; body/references и recovery-routing не переписываются | RS-analyze.md v6, TZ-patch.md v2, Б27, Б45.5, Б50 | AC-129…137 класс S; GATE:done этого SKILL-CHANGE хвоста; REV OFF; корпуса Б40–Б50 / AC-058…128 не откатывать |
+| **Б52** | Пакет `hermes-bugfix-cursor-boundary`: explicit-only аварийный trigger после gateway update — конкретная ImportError/SchemaError/KeyError/ModuleNotFoundError + ручная Remote-SSH journalctl/systemctl процедура с rollback SHA, restart или smoke-test; обычный BUGFIX → dev-workflow, standalone code fix → codex | TZ-patch.md, SK-preflight.md, Б27, Б33, Б45.5, Б51 | AC-P1…P6 класс S; GATE:done этого SKILL-CHANGE хвоста; compress skip, REV OFF; usage 19, процедура не архивируется, корпуса Б40–Б51 не откатывать |
+| **Б53** | Пакет `codex-canonicalize`: канонизация расходящихся копий Codex; workspace — единственный владелец, live — зеркало; одноразовый live→workspace импорт принятого содержимого, затем workspace→live; target 23 320 B / SHA-256 `c19c3f0516f3858be2f94c38678640d5bb6791cf13a4d1ffefaa6ba4e2abfae9`; helper `avail_check.sh` исключён | TZ-patch.md, REV-tz.md, SK-preflight.md, Б27, Б33 п.56–59, Б45.5, Б52 | COD-C1…C10 класс S; GATE:done этого SKILL-CHANGE хвоста; compress skip, REV:tz APPROVE; usage 21, cron/manifest/profile/master baseline не меняются, корпуса Б40–Б52 не откатывать |
+| **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд; **v0.5.0:** исключение allowlist скиллов Б45.5 (тела таблиц моделей/вызова, не баннер dual-path); **v0.6.0:** `dwka_guard` hold `удаляй`; `jobs.json` hold `ставь кроны`; **v0.6.1:** `from_dict` жёсткий; `set_case` без sha; чужие `_state.json` PFS-слагов; **v0.6.2:** список `FATAL_PATTERNS` / таймауты `agent -p` / REV / страж п.47 / I1; **v0.7.0:** `warn_after` / ядро / сырой SQL write / `session.py` / `hermes-session-reset-policy` тело; **v0.7.3:** mode-aware reset, fail-closed audit и detail validator Б50; **v0.7.4:** body/references/routing/recovery и baseline двух зеркал cursor-cli не переписываются, Б51 boundary-only; **v0.7.5:** explicit-only trigger hermes-bugfix-cursor, body/usage/cron/manifest/profile и gateway baseline не переписываются, Б52; **v0.7.6:** `codex-canonicalize` — body/reference, helper `avail_check.sh`, usage/cron/manifest/profile/master baseline не переписываются, изменяемая surface ровно два `codex/SKILL.md`, Б53 | Б13.1, Б13.5, Б27, Б31.2, Б33, Б37, Б45, Б45.5, Б46, Б47, Б48, Б49, Б50, Б51, Б52, Б53 | чеклист Шаг 4 tz-workflow |
 | **Связи с экосистемой** | Кто с кем (не поля) | Б14, Б32, манифест | отдельно от Б35 |
 | **Открытые вопросы** | Явный h2 (пусто / «нет») | Б36, AC-018 на W4 | чеклист Шаг 4 |
 
@@ -126,15 +129,15 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 Пишется только текст ТЗ (`TZ:patch` / `TZ:finalize` + инвентарь). **Не** писать код `pipeline/`, **не** создавать скилл на диске, **не** строить граф канбана, **не** создавать карточки, **не** выключать канбан, **не** рестартовать gateway, **не** ставить кроны.
 
-Этот ход — `TZ:patch` **v0.7.3** пакета `llmanomalyscan-shlet-lozhnyy-critical-session-mo`. Пишется аддитивная норма + строка инвентаря; код не пишется на этом ходу.
+Этот ход — `TZ:finalize` **v0.7.6** пакета `codex-canonicalize`. Пишется аддитивный корпус Б53, строка changelog и строка инвентаря; боевые скиллы на этом ходу не редактируются.
 
-Нормы пакета — Б50: (1) SQL-детектор учитывает `session_reset.mode` и исключает только штатные `end_reason='session_reset'` при mode `idle`/`daily`/`both`; (2) `llm_anomaly_scan.sh` атомарно публикует fail-closed compact JSON и не публикует raw provider stderr; (3) ErrorBus принимает `--detail-file` только от успешного структурированного отчёта. SQL остаётся `mode=ro`; окно и пороги не меняются; существующий auto-resolve через `error_bus_cli.py resolve` сохраняется. Корпуса Б40–Б49 / AC-058…AC-121 без правок смысла.
+Нормы пакета — Б53: единственный владелец Codex-предикатов — workspace-копия; live-копия является зеркалом. Одноразово принимается явно разобранное содержимое live → workspace, после чего штатное направление — workspace → live. На `HF:impl` изменяются только два абсолютных пути `autonomous-ai-agents/codex/SKILL.md`; helper `scripts/avail_check.sh` не копируется и не редактируется. Target, byte hashes, запретные поверхности и COD-C1…C10 зафиксированы ниже.
 
-Этот ход не пишет `~/.hermes/scripts/`, `~/.hermes/error_bus/tests/` или `hermes-selfcheck-audits/SKILL.md`; не меняет `state.db`, `events.db`, `jobs.json`, `config.yaml`, gateway/ядро, `FATAL_PATTERNS`, лимиты и штат Codex/Cursor; не запускает ручной SQL/resolve для ErrorBus #1861; не ставит кроны и не рестартует gateway. `HF:impl`, `HF:test` и `HF:docs-handoff` остаются отдельными фазами.
+Этот ход не пишет оба `codex/SKILL.md`, helper, другие скиллы, `pipeline/`, jobs/cron, usage, manifest, profile links, gateway/ядро, БД или glossary; не добавляет owner, routing, recovery, archive/DECOMM и `[NEW-ENTITY]`. `HF:impl` и `HF:test` остаются отдельными фазами; ревизор `REV:tz` уже дал `APPROVE`, а `REV:plan` остаётся в хвосте.
 
-Поезд init как `BUGFIX-LIGHT` и кейс не меняются (G5). Semver **PATCH** 0.7.2 → **0.7.3**. `[NEW-ENTITY, требует согласования Саши]` нет. Q-n этого пакета нет; Q-2 auth Codex и Q-1 W4 не занимать.
+Поезд init как `SKILL-CHANGE` и кейс не меняются (G5). Semver **PATCH** 0.7.5 → **0.7.6**. `[NEW-ENTITY, требует согласования Саши]` нет. Q-n этого пакета нет.
 
-Предыдущий пакет Б49 остаётся в корпусе; этот BUGFIX закрывает два дефекта LLMAnomalyScan (ложный monster на штатном reset и provider stderr в detail), не переписывая нормы лимитов ходов/auto-close.
+Предыдущие пакеты Б40–Б52 остаются в корпусе; этот пакет не откатывает их смысл и не сглаживает маркер `[NEW-ENTITY]`.
 ### Б0.4 Связь с живыми документами
 
 | Документ | Роль после этого ТЗ |
@@ -2164,7 +2167,7 @@ status=waiting_operator  # ждёт Сашу, без эскалации, без 
 
 Класс по умолчанию **S** (показ ≠ ожидание). Класс O — только со строкой `depends: operator:<verb>`.
 
-I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` = этот документ. **v0.6.0 пакет `llm-cost-optimization`:** I1 — Б46. **v0.6.1 пакет `pipeline-set-case-crisis-sha-bug`:** I1 — Б47. **v0.6.2 пакет `ktalk-tmo-fatal-classifier`:** I1 — Б48. **v0.7.0 пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`:** I1 — Б49.
+I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` = этот документ. **v0.6.0 пакет `llm-cost-optimization`:** I1 — Б46. **v0.6.1 пакет `pipeline-set-case-crisis-sha-bug`:** I1 — Б47. **v0.6.2 пакет `ktalk-tmo-fatal-classifier`:** I1 — Б48. **v0.7.0 пакет `hard-stop-limity-hodov-fazy-p-5-auto-close-teleg`:** I1 — Б49. **v0.7.3 пакет `llmanomalyscan-shlet-lozhnyy-critical-session-mo`:** I1 — Б50. **v0.7.4 пакет `suzit-cursor-cli-do-transport-owner-ubrat-recove`:** I1 — Б51. **v0.7.5 пакет `hermes-bugfix-cursor-boundary`:** I1 — Б52.
 
 ### Сводка AC
 
@@ -2290,6 +2293,21 @@ I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` 
 | AC-126 | S | FPR grep-защиты, MSG_MONSTER/MSG_BLOAT и auto-resolve не регрессируют; SQL monster с failed audit получает нейтральный detail | Б29 A1–A2, Б32, Б50 |
 | AC-127 | S | После исправленного прогона id 1861 закрывается существующим `error_bus_cli.py resolve`; ручной SQL/DELETE/UPDATE отсутствует | Б50, Б33 п.65/73 |
 | AC-128 | S | `hermes-agent`, gateway/session.py, jobs.json, config.yaml, state.db/events.db schema не изменены; HF:impl и HF:test раздельны | Б0.3, «Что НЕ трогать», Б50 |
+| AC-129 | S | На `HF:impl` изменяются ровно два абсолютных пути `devops/cursor-cli/SKILL.md`: workspace и live; другие скиллы, references и runtime-поверхности не входят в diff | Б27, Б45.5, Б51 |
+| AC-130 | S | После boundary-правки workspace и live `cursor-cli/SKILL.md` byte-identical; обе копии сохраняют одинаковые frontmatter и body | Б45.5, Б51 |
+| AC-131 | S | `description` явно ограничивает trigger explicit Cursor CLI transport: install/auth, `agent -p`, envelope/JSONL, encoding/truncation, `--resume`, provider/network transport и transport fallback; Codex назван штатным backend, Cursor CLI — backend отката | Б45.5, Б51 |
+| AC-132 | S | Меняется только frontmatter `description`/trigger boundary; body каждого `SKILL.md` byte-for-byte прежнее, `references/cursor-audit.md`, `cursor-cli-patterns.md`, `gateway-restart-inside.md` без diff | Б45.5, «Что НЕ трогать», Б51 |
+| AC-133 | S | Boundary не переносит case/phase/AC routing, `complete-phase`/`invoke_role`, recovery-классификацию или recovery; DevWorkflow остаётся владельцем этих предикатов, standalone Codex — `codex` | Б13.2, Б43, Б45.5, Б51 |
+| AC-134 | S | Cron `065592301723` сохраняет `skills=["hermes-feature", "cursor-cli"]`; `jobs.json` не меняется | Б33 п.22, Б45.5, Б51 |
+| AC-135 | S | `.usage.json` сохраняет буквально `cursor-cli=552`, `cursor-cli-resilience=33`, `devops/cursor-cli=2`; история не сбрасывается и не переименовывается; dangling profile symlink не появляется | Б45.5, Б51 |
+| AC-136 | S | `EcosystemManifest.json` не получает `tools.cursor_cli` и другие записи; соседние routing references и profile state не меняются | Б14, Б45.5, «Что НЕ трогать», Б51 |
+| AC-137 | S | Пакет остаётся двухфайловым `SKILL-CHANGE` change branch: `compress` skip по Б27, `REV:tz` OFF; `TZ:finalize` пишет только master/inventory/evidence, а правка скиллов остаётся `HF:impl` | Б27, Б51 |
+| AC-P1 | S | Explicit-only trigger: gateway-after-update + конкретная ошибка + ручная Remote-SSH процедура; без одного элемента не матчится | Б52.1 |
+| AC-P2 | S | Общие «баг/ошибка/почини» не матчятся; маршруты обычного BUGFIX и standalone code fix явны | Б52.1 |
+| AC-P3 | S | На HF:impl ровно два абсолютных зеркала; workspace/live byte-identical | Б52.2 |
+| AC-P4 | S | Меняется только frontmatter `description`; body и references без diff | Б52.2 |
+| AC-P5 | S | Usage `hermes-bugfix-cursor=19`, cron/manifest/profile/external baseline и отсутствие архивации сохранены | Б52.2 |
+| AC-P6 | S | Двухфайловый SKILL-CHANGE, `TZ:compress` skip, `REV:tz` OFF, TZ:patch без боевых файлов | Б52.3 |
 
 **Область `GATE:done` этого пакета (`rs-refuse-kanban`, CHANGE).** Финальный и равен концу **W1** (постройка `pipeline/` + скилл: `HF:impl` / `HF:test` / `ORCH:shared-state`). Согласовано с Б17.7 и Б18.6. Волны W2–W4 — отдельные хода, не один долгий `in_phase`. В таблице выше нет класса O: этот слаг не остаётся `waiting_operator` до W4.
 
@@ -4070,9 +4088,171 @@ IAC-ориентир (формулировки AC — с диска):
 
 **AC пакета:** AC-122…AC-128, класс S. `GATE:done` этого BUGFIX-LIGHT закрывается после хвоста `HF:impl` → `HF:test` → `HF:docs-handoff` и AC-report. #1861 не закрывается вручную на `TZ:patch`; доказательство закрытия — результат штатного CLI после внедрения.
 
+## Б51. Пакет `suzit-cursor-cli-do-transport-owner-ubrat-recove` (v0.7.4) — cursor-cli boundary-only transport owner
+
+**I1 этого пакета.** `current`: после перехода штатных ролей на Codex в `cursor-cli` всё ещё остаётся широкое историческое описание и смешанные routing/body references. `target`: сохранить `cursor-cli` как rollback/transport owner для явно запрошенного Cursor CLI и закрепить границу в разрешённом frontmatter description; case/phase/AC routing, recovery и классификация остаются у `dev-workflow`, standalone Codex — у `codex`.
+
+Кейс записи — **SKILL-CHANGE** (change branch, не DECOMM). Слаг: `suzit-cursor-cli-do-transport-owner-ubrat-recove`. Источник нормы: Б45.5 и вердикт `RS-analyze.md` v6, секция `SKILL-CHANGE:cursor-cli-boundary`. `[NEW-ENTITY, требует согласования Саши]` **нет**. Корпуса Б40–Б50 / AC-058…AC-128 не откатывать. Semver **PATCH** 0.7.3 → **0.7.4**. Q-n этого пакета нет.
+
+### Б51.1 Разрешённая boundary-правка
+
+На `HF:impl` синхронно правятся ровно два зеркала:
+
+1. `/home/tkachenkoav/hermes-workspace/skills/devops/cursor-cli/SKILL.md`;
+2. `/home/tkachenkoav/.hermes/skills/devops/cursor-cli/SKILL.md`.
+
+Изменяемая поверхность — только YAML `description` в frontmatter, который задаёт trigger surface. Каноническая формулировка:
+
+```yaml
+description: "Use when explicitly requested to install, authenticate, or use Cursor CLI transport: agent -p, envelope/JSONL, encoding/truncation, --resume, provider/network transport, or transport fallback. Codex is the штатный backend for this contour; Cursor CLI is the rollback backend."
+```
+
+Формулировка закрепляет explicit Cursor transport allowlist Б45.5, штатный Codex backend и Cursor rollback backend. Другие frontmatter-поля, body, references, routing и owner predicates не меняются.
+
+### Б51.2 Граница владельца и baseline
+
+`cursor-cli` обслуживает только самостоятельный явно запрошенный Cursor transport и его transport signals (envelope/JSONL, encoding/truncation, `--resume`, auth/network и fallback). DevWorkflow сохраняет ownership для case/phase/AC, `empty-result`, `rc=0` без complete, dead-pid, `model=None`, wrong-role, G1/G6 и correction/recover; `codex` сохраняет standalone Codex CLI. Этот пакет не удаляет `cursor-cli-resilience`, не меняет usage history и не переносит owner.
+
+Baseline обязателен: cron `065592301723` остаётся с `skills=["hermes-feature", "cursor-cli"]`; `.usage.json` сохраняет `cursor-cli=552`, `cursor-cli-resilience=33`, `devops/cursor-cli=2`; в `EcosystemManifest.json` нет `tools.cursor_cli`; dangling profile symlink не создаётся.
+
+### Б51.3 AC и IAC
+
+AC-129…137 — класс **S**. Operator-hold, открытых Q-n и `[NEW-ENTITY]` нет.
+
+| IAC | path / evidence | verify | covers |
+|---|---|---|---|
+| IAC-01 | два абсолютных `cursor-cli/SKILL.md` | `cmp`, sha256, path allowlist: ровно два target path | AC-129, AC-130 |
+| IAC-02 | frontmatter/body split обеих копий | description = каноническая строка; body SHA и references unchanged | AC-131, AC-132 |
+| IAC-03 | baseline files | cron `065592301723`, usage keys, manifest grep, profile dangling-link scan | AC-134…136 |
+| IAC-04 | process evidence | `TZ-patch.md` v2, `compress` skip, `flag_rev=false`, no `REV:tz` phase; master/inventory additive diff | AC-133, AC-137 |
+
+На `TZ:finalize` зафиксированы master Б51 и inventory; боевые зеркала не пишутся. `HF:impl` меняет только description в двух путях, `HF:test` проверяет IAC-01…03, `HF:docs-handoff` передаёт evidence boundary-диффа, `ORCH:shared-state` подтверждает синхронность и неизменность baseline. Результат `TZ:finalize` не объявляет implementation AC закрытыми до этих фаз.
+
+### Б51.4 Что не в этом пакете
+
+Не менять body или references `cursor-cli`, `dev-workflow`, `codex`, `cursor-task-context`, `hermes-feature`, `tz-workflow` и другие скиллы; не переносить recovery/phase predicates, `complete-phase`/`invoke_role` или transport checklist; не менять `jobs.json`, `.usage.json`, `EcosystemManifest.json`, profile links, `pipeline/`, gateway/ядро, SQL/БД, cron или state чужих слагов. Не добавлять новый owner и не удалять `cursor-cli-resilience`; DECOMM для него отдельный поезд. Не запускать `REV:tz`: по Б27 это коридор ≤3 файлов с `compress` skip и `REV OFF`.
+
+**Область `GATE:done` этого пакета:** после `GATE:take-into-work → HF:plan → GATE:plan-approve → HF:backup → HF:impl → HF:test → HF:docs-handoff → ORCH:shared-state`; AC-129…137 закрываются AC-report этого хвоста. `TZ:finalize` не пишет body скилла и не заменяет HF-фазы.
+
+
+## Б52. Пакет `hermes-bugfix-cursor-boundary` (v0.7.5) — explicit-only gateway Remote-SSH trigger
+
+**I1 этого пакета.** `current`: широкое описание `hermes-bugfix-cursor` допускает неявное срабатывание на общий «баг/ошибка/почини» и смешивает аварийный Remote-SSH контур с обычным BUGFIX. `target`: сохранить скилл как вне-DevWorkflow аварийную процедуру и активировать его только по явной связке из трёх условий; обычный BUGFIX остаётся у `dev-workflow`, самостоятельный code fix — у `codex`.
+
+Кейс записи — **SKILL-CHANGE** (change branch, не DECOMM). Слаг поезда: `hermes-bugfix-cursor-explicit-only-gateway-trigg`; пакетное имя: `hermes-bugfix-cursor-boundary`. SoT входа: `TZ-patch.md` и `SK-preflight.md` текущего слага. `[NEW-ENTITY, требует согласования Саши]` **нет**. Корпуса Б40–Б51 / AC-058…AC-137 не откатывать. Semver **PATCH** 0.7.4 → **0.7.5**. Q-n этого пакета нет.
+
+### Б52.1 Explicit-only trigger
+
+Скилл матчится только когда одновременно выполнены все три условия:
+
+1. Hermes gateway сломан после `update`;
+2. в запросе явно названа одна из конкретных ошибок: `ImportError`, `SchemaError`, `KeyError` или `ModuleNotFoundError`;
+3. явно требуется ручная Remote-SSH процедура с `journalctl`/`systemctl` и rollback по SHA, `restart` или `smoke-test`.
+
+Отсутствие любого элемента означает, что trigger не матчится. Общие «баг», «ошибка» и «почини» сами по себе скилл не активируют; обычный BUGFIX маршрутизируется в `dev-workflow`, самостоятельный code fix — в `codex`. Скилл сохраняется, а возможная архивация выносится в отдельный operator-approved `DECOMM`.
+
+### Б52.2 Boundary и неизменяемый baseline
+
+На `HF:impl` синхронно правятся ровно два зеркала:
+
+1. `/home/tkachenkoav/hermes-workspace/skills/devops/hermes-bugfix-cursor/SKILL.md`;
+2. `/home/tkachenkoav/.hermes/skills/devops/hermes-bugfix-cursor/SKILL.md`.
+
+Изменяемая поверхность — только YAML `description` в frontmatter. Другие frontmatter-поля, body Remote-SSH, references и routing не меняются; после правки две копии byte-identical. Usage `hermes-bugfix-cursor=19` сохраняется. Cron, `EcosystemManifest`, profile links, внешние ссылки, Gateway, `hermes-agent`, `.usage.json` и процедура не архивируются этим пакетом и остаются baseline.
+
+### Б52.3 AC пакета (класс S)
+
+| AC | Проверка |
+|---|---|
+| AC-P1 | Trigger требует связку gateway-after-update + одну из четырёх конкретных ошибок + ручной Remote-SSH `journalctl`/`systemctl` с rollback SHA/restart/smoke-test; отсутствие любого элемента не матчится. |
+| AC-P2 | Общие «баг/ошибка/почини» не матчятся; обычный BUGFIX явно указывает `dev-workflow`, standalone code fix — `codex`. |
+| AC-P3 | На `HF:impl` изменены ровно два абсолютных пути из этого блока; workspace и live-копии byte-identical после изменения. |
+| AC-P4 | Отличается только frontmatter `description`; body обеих копий и все references отсутствуют в diff. |
+| AC-P5 | Usage `hermes-bugfix-cursor=19` сохраняется; процедура не архивируется; cron, manifest, profile links и внешние ссылки не меняются. |
+| AC-P6 | Пакет остаётся двухфайловым `SKILL-CHANGE`: `TZ:compress` пропущен, `REV:tz` выключен по Б27; `TZ:patch` не пишет боевые файлы. |
+
+IAC-ориентир: path allowlist и `cmp`/sha256 двух зеркал (AC-P3), frontmatter/body split и references diff (AC-P4), baseline audit `.usage.json`/cron/manifest/profile links (AC-P5), а также `SK-preflight.md` + `TZ-patch.md` с фиксацией skip/REV и отсутствия боевых правок (AC-P6). Этот evidence подтверждает границу пакета; implementation AC не считаются закрытыми на `TZ:finalize`.
+
+### Б52.4 Что не в этом пакете
+
+Не менять body и references `hermes-bugfix-cursor`, другие `SKILL.md`, `dev-workflow`, `codex`, routing/recovery, `pipeline/`, SQL/БД, Gateway/`hermes-agent`, cron/jobs, manifest, profile links, usage history, внешние ссылки и чужие `_state.json`. Не архивировать и не удалять скилл; не выполнять Remote-SSH, `restart` или smoke-test на этой фазе. Не запускать `REV:tz`: по Б27 это ≤3 файлов с `TZ:compress` skip и `REV OFF`.
+
+**Область `GATE:done` этого пакета:** после `GATE:take-into-work → HF:plan → GATE:plan-approve → HF:backup → HF:impl → HF:test → HF:docs-handoff → ORCH:shared-state`; AC-P1…P6 закрываются AC-report этого хвоста. `TZ:finalize` пишет только master/inventory/evidence и не подменяет `HF:impl`/`HF:test`.
+
+
+## Б53. Пакет `codex-canonicalize` (v0.7.6) — workspace владелец, live зеркало, byte-exact target
+
+**I1 этого пакета.** `current`: две копии `codex/SKILL.md` расходятся: workspace содержит компактную версию 1.0.0 (5 386 B), live — более новую расширенную версию 1.0.1 (24 245 B) и live-only helper. `target`: после явного content decision единственным владельцем Codex-предикатов становится workspace; live синхронизируется как зеркало; helper не входит в канон.
+
+Кейс записи — **SKILL-CHANGE** (change branch, не DECOMM). Слаг поезда: `kanonizirovat-codex-rashodyaschiesya-kopii-skill`; пакетное имя: `codex-canonicalize`. SoT входа: `TZ-patch.md`, `SK-preflight.md` и `REV-tz.md` с вердиктом `APPROVE`. `[NEW-ENTITY, требует согласования Саши]` **нет**. Корпуса Б40–Б52 / AC-058…AC-137 и AC-P1…P6 не откатывать. Semver **PATCH** 0.7.5 → **0.7.6**. Q-n этого пакета нет.
+
+### Б53.1 Владелец и направление синхронизации
+
+Канонический владелец после sync:
+
+1. `/home/tkachenkoav/hermes-workspace/skills/autonomous-ai-agents/codex/SKILL.md` — единственный owner.
+2. `/home/tkachenkoav/.hermes/skills/autonomous-ai-agents/codex/SKILL.md` — зеркало.
+
+Профильный `profiles/default/skills/autonomous-ai-agents/codex` остаётся симлинком на workspace. До sync содержимое live было разобрано архитектором; принятое решение — один раз импортировать проверенное содержимое `live → workspace`, затем записать тот же byte-result в live. Все последующие синхронизации идут `workspace → live`; молчаливого выбора строк и возврата к старой компактной workspace-версии нет.
+
+### Б53.2 Точный target и изменяемая surface
+
+На `HF:impl` синхронно правятся ровно два абсолютных пути:
+
+1. `/home/tkachenkoav/hermes-workspace/skills/autonomous-ai-agents/codex/SKILL.md`;
+2. `/home/tkachenkoav/.hermes/skills/autonomous-ai-agents/codex/SKILL.md`.
+
+Frontmatter target:
+
+```yaml
+---
+name: codex
+description: "Use when «кодекс»/Codex CLI for coding, PRs, availability."
+version: 1.0.1
+author: Hermes Agent
+license: MIT
+platforms: [linux, macos, windows]
+metadata:
+  hermes:
+    tags: [Coding-Agent, Codex, OpenAI, Code-Review, Refactoring]
+    related_skills: [claude-code, hermes-agent]
+---
+```
+
+Body target — body live 1.0.1 без двух contiguous-блоков, перечисленных в `TZ-patch.md`: блок с `scripts/avail_check.sh` и расписанием probe-loop; блок с single-`now` probe и сменой sign. Удаляются также окружающие пустые строки; остальной body переносится дословно, без reflow или редакторских правок. `avail_check.sh` в target отсутствует.
+
+Детерминированный target для `HF:impl`/`HF:test`: полный файл 23 320 B, 437 строк, LF-only, финальный `\n`, SHA-256 `c19c3f0516f3858be2f94c38678640d5bb6791cf13a4d1ffefaa6ba4e2abfae`; frontmatter 320 B SHA-256 `41d5d082c3cc2adc910d46b965ec80e47c784a1f24d30e9e1e97c3adee6be259`; body 23 000 B SHA-256 `44de563eae58c3c532828e9e7bf9082eab34bf7829ea24377008b031ead7fb0b`.
+
+Target сохраняет Codex CLI surface Б45.5: `codex exec`, `-C`, `--skip-git-repo-check`, `--json`, `--sandbox danger-full-access`; `--full-auto` остаётся только deprecated compatibility note, `--yolo` — только hidden alias note, рекомендуемый invocation их не использует.
+
+### Б53.3 AC пакета (класс S)
+
+| AC | Проверка |
+|---|---|
+| COD-C1 | Ровно один активный владелец Codex-предикатов: workspace; live — зеркало; профильный симлинк остаётся на workspace; после sync обе копии идентичны target. |
+| COD-C2 | Оба `SKILL.md` совпадают с target byte-for-byte: полный SHA/размер, frontmatter SHA и body SHA из Б53.2. |
+| COD-C3 | Изменены ровно два абсолютных пути из Б53.2; `scripts/avail_check.sh` не добавляется и не редактируется. |
+| COD-C4 | Target сохраняет обязательную Codex CLI surface; `--full-auto`/`--yolo` не становятся рекомендуемым invocation. |
+| COD-C5 | В target нет `avail_check.sh`; live-only helper не становится скрытой третьей копией или зависимостью канона. |
+| COD-C6 | `.usage.json` сохраняет `codex.use_count = 21`; история не сбрасывается и не переименовывается. |
+| COD-C7 | `/home/tkachenkoav/.hermes/cron/jobs.json` не меняется, включая job `a9b1ec4b678f` «Codex доступность (пробный пингер)»; cron не создаётся и не удаляется. |
+| COD-C8 | `EcosystemManifest.json`, `entities.json`, digest, profile links, `restore-all-skills.sh`, pipeline, master-ТЗ и glossary не меняются этим пакетом. |
+| COD-C9 | `[NEW-ENTITY, требует согласования Саши]` нет; owner, routing, recovery, archive/DECOMM и новые cron не создаются. |
+| COD-C10 | На `TZ:patch`/`TZ:finalize` боевые файлы не изменяются; `HF:impl` получает именно два пути и target hashes; `ORCH:shared-state` после зелёных фаз выполняет штатный restore из workspace. |
+
+### Б53.4 Границы фаз и не в пакете
+
+На `TZ:finalize` фиксируются только master, inventory и evidence. `TZ:compress` пропущен по Б27, поскольку изменяемая surface — два файла; `REV:tz` включён по решению архитектора и завершён `APPROVE`, `REV:plan` остаётся в recipe. Следующий хвост: `GATE:take-into-work` → `HF:plan` → `REV:plan` → `GATE:plan-approve` → `HF:backup` → `HF:impl` → `HF:test` → `HF:docs-handoff` → `ORCH:shared-state` → `GATE:done`.
+
+Не менять body/reference-поверхность helper и других скиллов, `scripts/avail_check.sh`, `.usage.json`, cron/jobs, `EcosystemManifest.json`, `entities.json`, digest, profile links, `restore-all-skills.sh`, `pipeline/`, gateway/ядро, SQL/БД, чужие `_state.json`, routing/recovery predicates и архив/DECOMM. Не создавать `[NEW-ENTITY]`; не выполнять sync, restore, cron, restart или smoke-test на этой фазе. `HF:impl` и `HF:test` остаются разными фазами и разными invoke.
+
+**Область `GATE:done` этого пакета:** после полного хвоста AC COD-C1…C10 закрываются AC-report; `TZ:finalize` фиксирует норму и target evidence, но не объявляет implementation AC закрытыми.
+
 ## Открытые вопросы
 
 Блокирующих открытых вопросов пакетов до v0.4.9 **нет**. Бриф `rs-refuse-kanban` закрыт 2026-10-13. Риски 14.10 закрыты Q-Archi-04/05. Блок E закрыт Q-Archi-06. Пакет `devworkflow-task-slug`: Q-Archi-07/08 решены в Б36 п.15–16 (не ждут реплики, чтобы закрыть `TZ:finalize`). Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`: Q нет; `[NEW-ENTITY]` нет. Пакет `sravnit-skills-vs-tree-docs-zavis-v-rs-collect-d`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-cursor-cli`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-avtovosstanovlenie`: Q нет; `[NEW-ENTITY]` нет. Пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`: Q нет; 13.10 не пересматриваем; `[NEW-ENTITY]` канала стража нет.
+
+Пакет `codex-canonicalize` (v0.7.6): Q-n нет; `[NEW-ENTITY, требует согласования Саши]` нет; REV:tz = APPROVE.
 
 **Пакет `migrate-dev-roles-cursor-to-codex` (v0.5.0).** Открыт **Q-2** (класс O, AC-080): Саша прошёл device-auth Codex; evidence = smoke `codex exec` rc=0 без 401 `token_expired`. Закрытие: `operator-done: answer:Q-2` + evidence. Без закрытия `GATE:done` **того** слага не complete. Номер `Q-1` не занимать (W4 / AC-018). `[NEW-ENTITY]` нет.
 
@@ -4131,11 +4311,16 @@ IAC-ориентир (формулировки AC — с диска):
 - TZ:patch v0.7.0: `dev/hard-stop-limity-hodov-fazy-p-5-auto-close-teleg/_fix_plan_20261021.md`; `TZ-patch.md`; ErrorBus #1838; нормы Б46 П.5.б / П.7.4 без кода; overlay `invoke_role` + watcher `SessionDB.end_session`
 - TZ:finalize v0.7.0: `dev/hard-stop-limity-hodov-fazy-p-5-auto-close-teleg/REV-tz.md` verdict=APPROVE; `TZ-patch.md`; `_fix_plan_20261021.md`; штамп без правок смысла; инвентарь 0.6.2→0.7.0
 - TZ:patch v0.7.3: `dev/llmanomalyscan-shlet-lozhnyy-critical-session-mo/_fix_plan_20261024.md`; `TZ-patch.md`; ErrorBus #1861; `llm_anomaly_errorbus.py` SQL detector/detail-file; `llm_anomaly_scan.sh` stdout/stderr contract; `test_llm_anomaly_scan.py`; `hermes-selfcheck-audits/SKILL.md` docs-handoff
+- TZ:patch / REV:tz v0.7.6: `dev/kanonizirovat-codex-rashodyaschiesya-kopii-skill/TZ-patch.md`; `REV-tz.md`; `SK-preflight.md`; target hashes and helper exclusion; explicit owner/mirror decision; `codex.use_count=21` baseline
 
 ---
 
 ## Changelog
 
+- **2026-10-25 v0.7.6** — TZ:finalize пакета `codex-canonicalize` (SKILL-CHANGE, REV:tz APPROVE). Аддитивный Б53 / COD-C1…C10: workspace закреплён единственным владельцем, live — зеркалом; принятое содержимое импортируется live → workspace один раз, затем направление sync workspace → live; target двух `codex/SKILL.md` byte-exact (23 320 B, SHA-256 `c19c3f0516f3858be2f94c38678640d5bb6791cf13a4d1ffefaa6ba4e2abfae9`), helper `avail_check.sh` исключён. Usage `codex=21`, cron/manifest/profile/master baseline сохраняются; на `TZ:finalize` боевые скиллы не писались, `TZ:compress` skip, `REV:plan` остаётся в хвосте; `[NEW-ENTITY]` нет; Q-n нет. Следующий хвост — `GATE:take-into-work` → `HF:plan` → `REV:plan` → `GATE:plan-approve` → `HF:backup` → `HF:impl` → `HF:test` → `HF:docs-handoff` → `ORCH:shared-state` → `GATE:done`.
+
+- **2026-10-25 v0.7.5** — TZ:finalize пакета `hermes-bugfix-cursor-boundary` (SKILL-CHANGE, explicit-only gateway Remote-SSH trigger). Аддитивный Б52 / AC-P1…P6: trigger требует gateway-after-update + конкретную ImportError/SchemaError/KeyError/ModuleNotFoundError + ручную Remote-SSH `journalctl`/`systemctl` процедуру с rollback SHA, restart или smoke-test; общие «баг/ошибка/почини» не матчятся, маршруты `dev-workflow`/`codex` зафиксированы. На `HF:impl` остаются два зеркала и только frontmatter `description`; usage `19`, cron/manifest/profile/external baseline и отсутствие архивации сохраняются. `TZ:compress` skip, `REV:tz` OFF по Б27; код и боевые скиллы на этом ходу не писались; `[NEW-ENTITY]` нет; Q-n нет. Следующий хвост — `GATE:take-into-work` → `HF:plan` → `GATE:plan-approve` → `HF:backup` → `HF:impl` → `HF:test` → `HF:docs-handoff` → `ORCH:shared-state` → `GATE:done`.
+- **2026-10-25 v0.7.4** — TZ:finalize пакета `suzit-cursor-cli-do-transport-owner-ubrat-recove` (SKILL-CHANGE, boundary-only). Аддитивный Б51 / AC-129…137: два зеркала `cursor-cli/SKILL.md`, только frontmatter `description` с explicit transport allowlist, Codex штатный backend и Cursor rollback; body/references/routing/recovery не переписываются. `compress` skip и `REV:tz` OFF по Б27; код и боевые скиллы на этой фазе не писались; cron/usage/manifest/profile baseline сохраняется; `[NEW-ENTITY]` нет; Q-n нет. Следующий хвост — `GATE:take-into-work` → `HF:plan` → `HF:impl` → `HF:test` → `HF:docs-handoff` → `ORCH:shared-state`.
 - **2026-10-24 v0.7.3** — TZ:finalize пакета `llmanomalyscan-shlet-lozhnyy-critical-session-mo` (BUGFIX-LIGHT). Штамп Б50 / AC-122…128 без изменения смысла: mode-aware фильтр штатного `session_reset`, fail-closed compact JSON Codex-аудита и detail только из успешного structured report; код, БД, jobs/config и gateway не писались. `REV:tz` не входит в recipe LIGHT; `[NEW-ENTITY]` нет; Q-n нет. Следующий хвост — `HF:impl` → `HF:test` → `HF:docs-handoff`.
 - **2026-10-24 v0.7.3** — TZ:patch пакета `llmanomalyscan-shlet-lozhnyy-critical-session-mo` (BUGFIX-LIGHT) по `_fix_plan_20261024.md`. Б50 / AC-122…128: SQL-фильтр штатного `session_reset` по mode; fail-closed compact JSON для Codex-аудита; ErrorBus detail только из успешного structured report; #1861 закрывается существующим CLI после исправленного прогона. Б33 п.72–73. Корпуса Б40–Б49 / AC-058…AC-121 не откатываются. Код, БД, jobs/config и gateway не писались на `TZ:patch`; `[NEW-ENTITY]` нет; Q-n нет.
 - **2026-10-23 v0.7.2** — TZ:patch rework пакета `migrate-dev-roles-cursor-to-codex` после REV:tz REQUEST-CHANGES, раунд 2, ровно остатки R1/R2. **R1:** Б45.8/10 — IAC-05 только фикстура до flip, IAC-06/09a на `HF:test` без зависимости от боевого post-flip YAML; IAC-12 (боевой YAML, AC-082) и IAC-09b (новый непилотный invoke, AC-087) на `ORCH:shared-state` после пилота, evidence до `GATE:done`. **R2:** Б13.2/Б45.3 — `phases[phase].model` = единый backend-aware resolved-результат, переданный адаптеру; явный override сохранён. AC-088/090 и IAC-02/10 проверяют равенство argv и model фазы обеих веток, включая Cursor откат и Codex LIGHT. Канон `TZ-patch.md` и инвентарь синхронизированы. R3/AC-093, модели, argv, PID и моменты записи полей не менялись. Код/скиллы/YAML не писались. `[NEW-ENTITY]` нет. Q-2 открыт.

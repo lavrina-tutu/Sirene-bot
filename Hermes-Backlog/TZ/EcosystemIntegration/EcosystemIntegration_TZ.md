@@ -4,7 +4,7 @@ version: 0.7.0
 date: 2026-10-25
 status: active
 maintainer: Hermes + Cursor
-last-section-added: 2026-10-25 — TZ:finalize пакет perevesti-kron-ecosystem-drift-check-na-no-agent v0.1.2 после REV:tz APPROVE (rework; штамп без изменения смысла)
+last-section-added: 2026-10-25 — TZ:patch пакет eco-config-w3 v0.1.0 (OverlayConfig, волна 3; 30 чистых регистраций)
 ---
 
 # ТЗ: EcosystemIntegration
@@ -1044,3 +1044,70 @@ Diff/снимок `jobs.json` показывает изменение тольк
 ### Финализация пакета (`TZ:finalize`, 2026-10-25)
 
 Пакет `perevesti-kron-ecosystem-drift-check-na-no-agent` v0.1.2 зафиксирован после `REV:tz APPROVE` (архитектор и ревизор; rework). Это финальный штамп корпуса `TZ:patch` без переписывания исторических контрактов и AC; версия master-ТЗ сохраняется `0.7.0`. Реализация, cron, `jobs.json`, манифест и прочие защищённые артефакты этой фазой не изменяются.
+
+## Пакет `eco-config-w3` (версия пакета 0.1.0, `TZ:patch`, 2026-10-25)
+
+Это аддитивная запись к модулю 0 OverlayConfig. Версия master-ТЗ остаётся `0.7.0`; исторические §§1–10.12, контракты и AC не переписываются. Канонический указатель фазы: `dev/eco-config-w3/TZ-patch.md`.
+
+### Цель и идентичность
+
+Волна 3 регистрирует в `/home/tkachenkoav/WorkVault/Registries/EcosystemConfig.yaml` ровно пакет из 30 инструментов без собственного конфиг-файла. Для каждой записи допустимы `enabled` и только уже подтверждённая конвенция логов; новых runtime-ключей, путей, моделей и секретов не добавлять. На диске для этого пакета уже наблюдается целевая форма: 28 записей с `enabled: true`, `dialog_backlog` и `dialog_backlog_to_kanban` с `enabled: false`.
+
+Пакетный список (`body` карточки `ORCH:shared-state`):
+
+```yaml
+Q-1: Принять / не принять пакет чистых регистраций OverlayConfig, волна 3.
+package_keys:
+  - aggregate_from_meetings
+  - case_collector
+  - deep_mine_project
+  - dev_kanban_pipeline
+  - dialog_backlog
+  - dialog_backlog_to_kanban
+  - ecosystem_integration
+  - edit_plan_confluence
+  - entities_migration
+  - entity_registry
+  - entity_registry_cli
+  - error_bus
+  - exchange_org_lookup
+  - honcho_integration
+  - meeting_scheduler
+  - mofs_index
+  - mpp_reader
+  - okr_sheets_exporter
+  - okr_tool
+  - piiscan
+  - process_improvement
+  - skills_improvement
+  - status_snapshot
+  - sync_aralov
+  - telegram_group_topics
+  - tg_topic_duplicate
+  - tz_dev_cleanup
+  - tz_dev_decommission
+  - tz_workflow
+  - vestnik_theme
+```
+
+Identity вопроса — `(card_id ORCH:shared-state, Q-1)`. До `operator-done: answer:Q-1` с ISO-временем и цитатой реплики Саши `migration_status` не менять. После ответа: пакетно `accepted`, затем `unified_only` по AC-010…AC-012; соседние tools не менять.
+
+### Границы и запреты
+
+- `dev_kanban_pipeline`, `honcho_integration`, `tz_dev_cleanup`, `tz_dev_decommission`, `tz_workflow` не переносят Hermes `config.yaml` в OverlayConfig.
+- `dialog_backlog` и `dialog_backlog_to_kanban` остаются `enabled: false`: индекс, без runtime.
+- Новый `tools{}` для OverlayConfig, probe, реестра интерпретаторов или `EcosystemConfig` не заводить.
+- Секреты остаются только в shared `.env`; в YAML, манифест и digest их не добавлять.
+- `loop_rules.yaml`, `contract_rules.yaml`, `translit.yaml` не переносить и не удалять.
+- Слои 2/7 и `USERTOOLS_CONFIG_MODE` не вырезать: это волна 4, AC-015/AC-016.
+- Не удалять legacy, `.env`, Hermes `config.yaml`, `jobs.json`, Gateway, `entities.json` или чужие master-ТЗ. AC-011 выполняется только после принятия и отдельного императива `удаляй`.
+
+### Probe-AC с первого драфта `HF:plan`
+
+Для каждого из 30 ключей план обязан иметь отдельную IAC-строку (`IAC-W3-01`…`IAC-W3-30`) с `covers: AC-B01 + AC волны 3`. Артефакты: `~/WorkVault/Registries/battle_interpreters.yaml` и `~/.hermes/lib/probe_battle_venv.py`. В строке реестра фиксируются `wave: 3`, абсолютный `battle_python`, `entry_kind` (`cron`/`wrapper`/`skill`/`shebang`) и `entry`; при отсутствии боевого входа явно записывается «входа нет». Боевой python обязан пройти `import yaml`, `import usertools_config` и declared imports, а `usertools_config.py explain <key>` выполняется тем же python. Pytest PFS/hermes этого AC не закрывает. Боевой python, `entry` и declared imports в TZ-патче не угадываются.
+
+### Связь с AC
+
+Пакет закрывает постановку регистраций для AC-002 и готовит evidence для AC-009, AC-010, AC-011, AC-012, AC-017, AC-B01, AC-B05 и AC-B06. Связанные AC-B02/AC-B03/AC-B04/AC-B07/AC-B08 сохраняются без подмены: AC-B03/AC-B07 относятся к выходу волны 2, AC-B08 — к живому поиску AnywhereContacts, AC-B02/AC-B04 — к системному инварианту и wrapper-слою при применимости. `accepted`/`unified_only` не выставляются этим текстом без `answer:Q-1`; probe и runtime-проверка выполняются в `HF:impl`/`HF:test`, запись статусов — на `ORCH:shared-state`. `[NEW-ENTITY, требует согласования Саши]` нет.
+
+Канонический артефакт: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/eco-config-w3/TZ-patch.md`. Выжимка `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/eco-config-w3/extract.md` остаётся индексом; при расхождении действует этот master.

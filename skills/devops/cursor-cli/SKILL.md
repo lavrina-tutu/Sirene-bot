@@ -1,6 +1,6 @@
 ---
 name: cursor-cli
-description: "Use when: установка, настройка и использование Cursor CLI на"
+description: "Use when explicitly requested to install, authenticate, or use Cursor CLI transport: agent -p, envelope/JSONL, encoding/truncation, --resume, provider/network transport, or transport fallback. Codex is the штатный backend for this contour; Cursor CLI is the rollback backend."
 version: 1.3.1
 author: agent
 license: MIT

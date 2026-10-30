@@ -25,6 +25,18 @@ pipeline invoke-role --role executor \
 
 **Всегда передавай `--slug <slug> --phase <PHASE>` в `invoke-role`.** Без них g6/canonical-трэкинг фазы не выполняется, и вызов может падать мгновенным `rc=1` с пустым stdout — фаза остаётся `doing` без живого pid, результат роли теряется. Для фазы из рецепта это те же `--slug/--phase`, что и в `complete-phase`.
 
+### Outer terminal boundary (один вызов)
+
+Внешний вызов формируется ровно один раз и только так: `background=true`,
+`notify=true`, `persist_on_release=true`. Не добавляй `foreground` или
+`terminate`, не используй `| head`/`| tail`. Ошибка валидации terminal-контракта
+(`notify only applies to background commands`, `persist_on_release ...`) —
+non-retryable: остановись и сообщи, второй command не отправляй. После выдачи
+`session_id` command не повторяй; notify не закрывает фазу. Граница — journal,
+канонический artifact или смерть wrapper. `rc=143` — reconcile с сохранением
+session/artifact evidence; provider fatal — interrupt без retry. stdout роли в
+origin не пересылай.
+
 **Транзиентный сбой Cursor ≠ «провайдер мёртв».** Если `agent -p` отвечает `Failed to reach the Cursor API`, но `curl -I https://api2.cursor.sh` даёт HTTP 200 и токен в `~/.config/cursor/auth.json` на месте — это временный сбой сессии, не обрыв бэкенда. Смоук: `timeout 60 agent -p "Ответь ровно одним словом: ок" -f --model <модель-роли> --workspace <ws> --output-format json`; если вернул `"result":"ок"` rc=0 — Cursor жив, повторяем тот же `invoke-role` (не `interrupt`, не авто-цикл). Диагноз «бэкенд недоступен» ставь только после того, как и curl 200, и смоук-агент упали.
 
 ## Запреты

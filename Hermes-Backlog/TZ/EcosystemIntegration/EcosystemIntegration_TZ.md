@@ -1,10 +1,10 @@
 ---
 tool: EcosystemIntegration
-version: 0.7.0
-date: 2026-10-25
+version: 0.7.2
+date: 2026-10-30
 status: active
 maintainer: Hermes + Cursor
-last-section-added: 2026-10-25 — TZ:patch пакет eco-config-w3 v0.1.0 (OverlayConfig, волна 3; 30 чистых регистраций)
+last-section-added: 2026-10-30 — TZ:finalize партия B1: 9 dual_read + 1 чистая регистрация, runtime-классификация и критерий закрытия
 ---
 
 # ТЗ: EcosystemIntegration
@@ -379,9 +379,10 @@ Digest (`render_manifest.py --digest`): путь конфига + счётчик
 Улики (пакет до реплики; без реплики статус не менять, legacy не удалять):
 
 1. `usertools_config explain <tool>`: каждый несекретный ключ `source=ecosystem_config` (или `shared` для унаследованных), секрет `source=shared_env`, **ноль** `source=legacy` / `source=overlay`.
-2. Реальный цикл, не dry-run: крон ≥3 подряд успешных тика в обычном окне **или** один полный рабочий день (что раньше); по запросу ≥1 реальный вызов Саши/скилла с ожидаемым результатом. Волна 3: `explain` без недостающих ключей + один реальный вызов, если есть боевой вход.
-3. ErrorBus: в окне приёмки нет **новых** событий этого tool про конфиг / env / missing key / YAML parse.
-4. Фиксация: `ORCH:shared-state` **после** явной реплики Саши пишет `migration_status: accepted` (затем, после удаления legacy — `unified_only`) и актуальный `rollback_snapshot`.
+2. **Минимальный runtime-тест реального входа (не dry-run).** Для кандидата на `accepted` выполнить разовый прогон копией боевого входа/крона (или эквивалентный реальный вызов) тем же entrypoint, wrapper/shebang и боевым python, что используются в эксплуатации, с минимальным валидным payload. На время прогона целевые legacy/per-tool env и process env не задаются; несекретные значения берутся из `EcosystemConfig.yaml`, а секрет доступен только в shared `~/.config/hermes/.env` и не экспортирован в process env. Ожидаемый результат должен быть получен при этих условиях. В записи прогона зафиксировать наблюдаемое подтверждение, что эффективное значение прочитано через `usertools_config` (тем же боевым python). Провал теста при чтении legacy/per-tool/process env, при прямом чтении секрета из process env, при обходе лоадера или при отсутствии секрета в shared `.env` означает, что пакет улик не собран. Для инструмента **без боевого входа** и/или **без секретного ключа** эта улика фиксируется как `не применимо`, а обязательными остаются `explain` и probe-контроль (по §10.12.5–10.12.6).
+3. Реальный цикл, не dry-run: крон ≥3 подряд успешных тика в обычном окне **или** один полный рабочий день (что раньше); по запросу ≥1 реальный вызов Саши/скилла с ожидаемым результатом. Волна 3: `explain` без недостающих ключей + один реальный вызов, если есть боевой вход.
+4. ErrorBus: в окне приёмки нет **новых** событий этого tool про конфиг / env / missing key / YAML parse.
+5. Фиксация: `ORCH:shared-state` **после** явной реплики Саши пишет `migration_status: accepted` (затем, после удаления legacy — `unified_only`) и актуальный `rollback_snapshot`.
 
 Удаление legacy-файлов — отдельный императив на уже `accepted` инструмент («работает, удаляй legacy»). Без `depends: operator:удаляй` файлы не сносить.
 
@@ -480,10 +481,11 @@ Digest (`tools=46`): 4 пилота + остальные 42. Волна 1 про
 | # | Улика | Наблюдаемо |
 |---|---|---|
 | (a) | `usertools_config explain <tool>` | каждый несекретный ключ `source=ecosystem_config` (или `shared` для унаследованных из `shared:`); секрет `source=shared_env`; **ноль** `source=legacy` / `source=overlay` |
-| (b) | Боевой цикл, не dry-run | ≥3 подряд успешных тика крона в обычном окне **или** один полный рабочий день (что раньше) |
-| (c) | ErrorBus | в окне приёмки нет **новых** событий этого tool про конфиг / env / missing key / YAML parse |
+| (b) | Минимальный runtime-тест реального входа по §10.6, п.2 | разовый прогон копией боевого входа/крона (или эквивалентный реальный вызов) тем же entrypoint и боевым python; целевые legacy/per-tool env и process env отключены; ожидаемый результат и наблюдаемое подтверждение чтения эффективного значения через `usertools_config`; секрет доступен только в shared `.env` |
+| (c) | Боевой цикл, не dry-run | ≥3 подряд успешных тика крона в обычном окне **или** один полный рабочий день (что раньше) |
+| (d) | ErrorBus | в окне приёмки нет **новых** событий этого tool про конфиг / env / missing key / YAML parse |
 
-Артефакт пакета: вывод `explain` + ссылки на `job_id` / логи крона.
+Артефакт пакета: вывод `explain` + запись runtime-прогона (копия входа, entrypoint/боевой python, ожидаемый результат и подтверждение чтения через `usertools_config`) + ссылки на `job_id` / логи крона.
 
 **Связка `Q-n` (AC-009), 1:1 на пилот:**
 
@@ -729,6 +731,65 @@ Reuse-first: новый USERTOOL / новая сущность vault не пре
 
 Команда поиска контактов исполняется `~/USERTOOLS/AnywhereContacts/venv_linux/bin/python` (не python Hermes). Результат: контакт найден **или** честно «не найден из enc». Нет `ModuleNotFoundError` (`loguru` / `pydantic_core` / `yaml`). В отчёт — found/not-found, без полей enc.
 
+### 10.13 Партия B1 — 9 `dual_read` + 1 чистая регистрация (2026-10-30)
+
+Канонический артефакт партии: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/migratsiya-partii-b1-9-dual-read-1-chistaya-regi/TZ-patch.md`. Выжимка слага — индекс, не SoT; при расхождении открыть этот master-ТЗ на диске. `[NEW-ENTITY, требует согласования Саши]` нет. Партия фиксирует только норму ТЗ: манифест, YAML, runtime-код, jobs, Gateway и статусы миграции остаются за последующими фазами.
+
+#### 10.13.1 Цель и граница
+
+B1 задаёт evidence- и runtime-норму для девяти уже зарегистрированных ключей `dual_read` и одной чистой регистрации без боевого входа. Ключи берутся из `config.tools`, а не из имён каталогов или master-ТЗ. Для `dual_read` legacy и rollback сохраняются до отдельного принятия и явного operator-глагола `удаляй`; для `dialog_backlog` фиксируются только регистрация и probe.
+
+Порядок исполнения: сначала ключи 1–7 таблицы, затем `fireflies_autojoin`, затем `anywhere_contacts`. `dialog_backlog` проходит только регистрационный probe без бизнес-вызова и не меняет порядок живых входов.
+
+#### 10.13.2 Состав и обязательная runtime-классификация
+
+Боевой интерпретатор, `entry_kind`, `entry` и `declared_imports` берутся из существующей строки `/home/tkachenkoav/WorkVault/Registries/battle_interpreters.yaml`; их нельзя угадывать или подменять.
+
+| № | `tool_key` | Класс регистрации | Runtime-класс B1 | Минимальная норма evidence |
+|---:|---|---|---|---|
+| 1 | `contract_assistant` | `dual_read` | `runtime-real` | Тот же wrapper/`battle_python`; разрешён документированный `watch --dry-run`; зафиксировать ожидаемый вывод и отсутствие POST наружу. |
+| 2 | `loop_channel_digest` | `dual_read` | `safe-call-absent` | Живой Loop обязателен, изолированного safe/dry-run режима нет; вызов не выполнять, сохранить точную причину, probe и `explain`. |
+| 3 | `mark_objects_from_summary` | `dual_read` | `runtime-real` | Тем же wrapper/`battle_python` выполнить документированный `mofs run --dry-run` с ограниченным входом; файлы и реестр не изменяются. |
+| 4 | `move_from_zulip` | `dual_read` | `safe-call-absent` | `python -m movefromzulip` требует live Zulip и пишет импортируемые данные; безопасный изолированный вход не подтверждён, вызов не выполнять. |
+| 5 | `proxy_check_linux` | `dual_read` | `safe-call-absent` | Wrapper и `/usr/bin/python3` проверяются probe-ом; бизнес-проверка требует живого proxy/учётных данных и target, safe fixture отсутствует, вызов не выполнять. |
+| 6 | `srtool` | `dual_read` | `runtime-real` | Тем же `battle_python` выполнить документированную read-only команду `srtool preview` либо эквивалентный read-only вход строки реестра; Jira/transition/write не выполнять. |
+| 7 | `task_refresh` | `dual_read` | `runtime-real` | Через зарегистрированный `tr` и тот же `battle_python` выполнить `taskrefresh read` с read-only фильтром; `apply`/`confirm` и PUT не выполнять. |
+| 8 | `fireflies_autojoin` | `dual_read` | `runtime-real` | Тем же cron entrypoint/wrapper и `battle_python` выполнить документированный `run.sh dry-run`; вызова Fireflies и приглашения не делать. |
+| 9 | `anywhere_contacts` | `dual_read` | `runtime-real` | AC-B08: `show-contacts` тем же `~/USERTOOLS/AnywhereContacts/venv_linux/bin/python`; только `found` или честный `not-found из enc`, без полей enc и `ModuleNotFoundError`. |
+| 10 | `dialog_backlog` | `no-entry-чистая-регистрация` | `no-entry` | `enabled: false`, lifecycle `archived`, в реестре буквально `entry=входа нет`; только import probe и `explain`, бизнес-вызов не создавать. |
+
+`runtime-real` означает наблюдаемый вызов зарегистрированного входа тем же `battle_python`; dry-run/read-only засчитывается только как документированный вход инструмента. `safe-call-absent` означает запрет вызова из-за side effect или обязательной live-системы: это не runtime PASS и не разрешение имитировать результат. `no-entry` означает буквальную регистрацию отсутствия входа, а не пропущенную проверку.
+
+Для каждой строки, включая `no-entry`, обязательны `probe_battle_venv.py` в реальном `battle_python` (`import yaml`, `import usertools_config`, `declared_imports`, closure входа) и `usertools_config explain <tool>` тем же Python. В `explain` допустимы только `source=ecosystem_config`/`shared` для несекретных значений и `source=shared_env` для секретов; `source=legacy` и `source=overlay` — ноль. `safe-call-absent` закрывается probe + explain + причиной, без фиктивного PASS.
+
+Для восьми ключей B1 из волны 2 (`anywhere_contacts`, `contract_assistant`, `loop_channel_digest`, `mark_objects_from_summary`, `move_from_zulip`, `proxy_check_linux`, `srtool`, `task_refresh`) действует общий выходной стоп AC-B03/AC-B07: closure и probe подтверждены по всем 12 ключам волны 2 до постановки вопроса о принятии или записи `accepted`. `anywhere_contacts` дополнительно не закрывается без AC-B08. Для `fireflies_autojoin` сохраняется порядок и per-tool probe волны 1 по §10.11.
+
+#### 10.13.3 Критерий закрытия B1
+
+Партия закрыта только когда для каждого из десяти ключей одновременно сохранены:
+
+1. versioned backup и evidence конфигурации/кода/rollback-пути без секретных значений;
+2. `probe_battle_venv.py` завершён `PASS` в реальном `battle_python` строки реестра; один `FAIL`, missing key или closure mismatch закрытию препятствует;
+3. `explain` тем же Python показывает только разрешённые источники, без `source=legacy`/`source=overlay`;
+4. runtime честно классифицирован как `runtime-real`, `safe-call-absent` или `no-entry`; для `runtime-real` есть наблюдаемый результат, для двух других классов нет фиктивного вызова;
+5. в окне проверки ErrorBus нет новых событий этого tool про `config`, `env`, `missing key` или YAML parse.
+
+Для девяти `dual_read` дополнительно нужны per-tool evidence перехода и отдельный link scan; legacy удаляется только после принятия и явного `удаляй`. Для `dialog_backlog` сохраняются `enabled: false` и literal `entry=входа нет`.
+
+`accepted`, `unified_only`, `overlay` и `rollback_snapshot` записывает только последующая фаза `ORCH:shared-state` по AC-009…AC-012. Пакетный вопрос `Q-1` и `operator-done: answer:Q-1` в этой фазе не создаются и не дублируются.
+
+#### 10.13.4 Запреты и границы
+
+- Секреты и payload запрещены в `EcosystemConfig.yaml`, `EcosystemManifest.json`, digest и evidence; в evidence допускаются только redacted источники и статусы.
+- Новые per-tool `.env` не создавать. Секреты хранятся только в shared `~/.config/hermes/.env`; существующие legacy не удалять до принятия и отдельного `удаляй`.
+- Silent fallback запрещён: отсутствующий ключ завершается fail loud; нельзя переименовать legacy/overlay-ветку и оставить её скрытой.
+- `Gateway` не трогать и не рестартовать; кроны/jobs не создавать и не менять без отдельного «ставь кроны».
+- `dialog_backlog` и `dialog_backlog_to_kanban` сохраняют `enabled: false`; их нельзя включать ради probe или миграционного runtime.
+- Не менять счётчики манифеста, `migration_status`, `rollback_snapshot`, бизнес-YAML, `entities.json`, `~/.hermes/config.yaml`, `jobs.json`, чужие master-ТЗ, `battle_interpreters.yaml` и probe-контракт в этой фазе; новый `tools{}` для OverlayConfig не заводить.
+- Писать только эту аддитивную секцию. Карточка `ORCH:shared-state`, манифест, YAML, runtime-код и legacy-файлы остаются за последующими фазами; строка master-ТЗ в `MAIN_TZ_INVENTORY.md` обновляется только по обязательному правилу хранения и не меняет миграционные состояния.
+
+Связь с нормами: §10.6 задаёт per-tool evidence и rollback; §10.11 — порядок `fireflies_autojoin`; §10.12 — боевой interpreter/closure и probe; AC-009…AC-012 — принятие и статусы после operator evidence; AC-B03/AC-B07/AC-B08 — построчное подтверждение волны 2 и живой `show-contacts`.
+
 ### Контракты экосистемы (модуль 0: config-указатель и лоадер)
 
 Норматив **этого пакета**. Исторический H2 `## Контракты экосистемы` (после §8) — снимок формата v0.4.0, его таблицы не менять. Потребители модуля 0 читают контракт ниже и `schema_version: "0.6.0"`, не строку `"0.4.0"` исторического блока.
@@ -815,7 +876,7 @@ Reuse-first: новый USERTOOL / новая сущность vault не пре
 
 ### AC-008 — пакет улик per-tool
 
-Для кандидата на accepted: (a) `explain` без `source=legacy`/`source=overlay`; (b) ≥3 подряд успешных тика крона в обычном окне **или** один полный рабочий день; (c) ErrorBus без новых событий этого tool про конфиг/env/missing key/YAML parse. Артефакт: вывод `explain` + ссылки на job_id/логи.
+Для кандидата на accepted: (a) `explain` без `source=legacy`/`source=overlay`; (b) минимальный runtime-тест реального входа по §10.6, п.2 — разовый прогон тем же entrypoint и боевым python с отключёнными целевыми legacy/per-tool env и process env, значениями из `EcosystemConfig.yaml`, секретом только в shared `.env`, ожидаемым результатом и наблюдаемым подтверждением чтения эффективного значения через `usertools_config`; (c) ≥3 подряд успешных тика крона в обычном окне **или** один полный рабочий день; (d) ErrorBus без новых событий этого tool про конфиг/env/missing key/YAML parse. Артефакт: вывод `explain` + запись runtime-прогона + ссылки на job_id/логи.
 
 ### AC-009 — явная реплика Саши → `accepted`
 
@@ -1111,3 +1172,22 @@ Identity вопроса — `(card_id ORCH:shared-state, Q-1)`. До `operator-d
 Пакет закрывает постановку регистраций для AC-002 и готовит evidence для AC-009, AC-010, AC-011, AC-012, AC-017, AC-B01, AC-B05 и AC-B06. Связанные AC-B02/AC-B03/AC-B04/AC-B07/AC-B08 сохраняются без подмены: AC-B03/AC-B07 относятся к выходу волны 2, AC-B08 — к живому поиску AnywhereContacts, AC-B02/AC-B04 — к системному инварианту и wrapper-слою при применимости. `accepted`/`unified_only` не выставляются этим текстом без `answer:Q-1`; probe и runtime-проверка выполняются в `HF:impl`/`HF:test`, запись статусов — на `ORCH:shared-state`. `[NEW-ENTITY, требует согласования Саши]` нет.
 
 Канонический артефакт: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/eco-config-w3/TZ-patch.md`. Выжимка `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/eco-config-w3/extract.md` остаётся индексом; при расхождении действует этот master.
+
+## Пакет `priemka-per-tool-obyazatelnyy-minimalnyy-runtime` (`TZ:finalize`, 2026-10-30)
+
+Финально зафиксирована согласованная правка для приёмки per-tool. В §10.6 добавлена обязательная улика 2 — минимальный runtime-тест реального входа: один разовый прогон тем же entrypoint/wrapper/shebang и боевым python с минимальным валидным payload, отключёнными целевыми legacy/per-tool и process env, несекретными значениями из `EcosystemConfig.yaml`, секретом только в shared `~/.config/hermes/.env` и наблюдаемым подтверждением чтения эффективного значения через `usertools_config`. Улика ловит класс недо-миграции, при котором код не читает `usertools_config` или секрет не находится в shared `.env`.
+
+Для инструмента без боевого входа и/или без секретного ключа эта улика фиксируется как **не применимо**; обязательными остаются `explain` и probe-контроль по §10.12.5–10.12.6. Нынешние последующие улики §10.6 сдвигаются по нумерации и сохраняют свою роль: реальный цикл, ErrorBus и фиксация `ORCH:shared-state` после явной реплики Саши.
+
+Секция стыкуется с уже согласованными §10.11.4(b) и AC-008: их runtime-норма ссылается на «§10.6, п.2» и не переписывается. Runtime PASS не заменяет явную реплику Саши, `answer:Q-n`, запись `accepted` или последующее удаление legacy.
+
+Канонический артефакт фазы: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/priemka-per-tool-obyazatelnyy-minimalnyy-runtime/TZ-patch.md`. Выжимка `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/priemka-per-tool-obyazatelnyy-minimalnyy-runtime/extract.md` остаётся индексом и не является SoT; при расхождении открыть этот master-ТЗ.
+
+### Вердиктная развилка Q-1 — решено Сашей
+
+**Q-1.** Применять новый runtime-тест только к кандидатам, которые ещё не получили `accepted`, или потребовать одноразовую перепроверку уже принятых инструментов партии A0 — в частности `confluence_sync` и `move_from_jira` — выявленных как фактически недо-мигрированные?
+
+- **Вариант 1:** проверять только новых кандидатов.
+- **Вариант 2:** перепроверить A0 и до результата считать их приёмку требующей исправления.
+
+**Решение Саши (2026-10-30): Вариант 1** — runtime-тест применяется только к новым кандидатам, ещё не получившим `accepted`. Ранее принятая партия A0 (`confluence_sync`, `move_from_jira`) перепроверке по этой улике не подлежит; их недо-миграция уже устранена отдельным закрытым BUGFIX-поездом `partiya-a0-nedo-migratsiya-confluence-sync-conflush`. Область последующей работы сужена до будущих кандидатов; текст AC-009 не меняется. `[NEW-ENTITY, требует согласования Саши]` нет. Исторические §§1–10.12, контракты, AC (кроме уже согласованной вставки в §10.6), `MAIN_TZ_INVENTORY.md`, манифест, YAML, `.env`, код, тесты, кроны, Gateway и `migration_status` этой фиксацией не изменяются.

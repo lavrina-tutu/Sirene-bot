@@ -118,7 +118,7 @@ print("Created:", item.id)
 
 **Предпочтительная вместимость:** 3–8 человек, сортировка: сначала [3..8] ≥ N участников, потом >8.
 
-**Все МСК-переговорки имеют встроенный Zoom** (суффикс `- Zoom` в названии).
+**Видеосвязь — Ktalk, НЕ Zoom.** Zoom в ТУТУ отменён (окт 2026). Ссылка на встречу — всегда личная Ktalk-комната `https://tutu.ktalk.ru/tkachenkoav`; переговорки собственного Zoom Room не имеют.
 
 Получение списка через EWS:
 ```python
@@ -534,7 +534,21 @@ PYTHONPATH=/home/tkachenkoav/USERTOOLS /home/tkachenkoav/USERTOOLS/AnywhereConta
 
 **«Направил встречу» (отдельная ветка, не смешивать с «Привет!»):** Loop-notify on **meeting date**, not message activity: if the meeting is **TODAY** → auto-send «Направил встречу»; otherwise (future date) → **ASK Sasha** before notifying. SEPARATE branch from the «Привет!» greeting-on-today's-correspondence rule — do NOT merge them.
 
-**Create (шаблон §6.2):** между строкой со ссылкой Zoom и строкой «на …» (дата/время) — отдельная строка `Тема: <subject из Exchange>`. В add / reschedule / cancel отдельной строки «Тема:» нет (тема в заголовке сообщения).
+**Create (шаблон §6.2):** между строкой со ссылкой Ktalk и строкой «на …» (дата/время) — отдельная строка `Тема: <subject из Exchange>`. В add / reschedule / cancel отдельной строки «Тема:» нет (тема в заголовке сообщения).
+
+**Точный литеральный текст create-сообщения (`loop_notify.py::build_message`, не пересочинять):**
+```
+Привет!
+Направил в твой свободный слот в календарь встречу: {ссылка}
+Тема: {subject}
+на {дата/время}
+Посмотри, пожалуйста.
+```
+- Дата/время в этой строке — **сокращённый** формат `день, дд мес гггг, чч:мм–чч:мм МСК` с короткими названиями дня и месяца (`Пт, 30 окт 2026, 16:00–16:30 МСК`), а НЕ полные «пятница, 30 октября». Короткие массивы — `_DAY`/`_MONTH` в `loop_notify.py`.
+- Ссылка по умолчанию — `KTALK_LINK` = `https://tutu.ktalk.ru/tkachenkoav` (встреча в переговорке НЕ даёт отдельную Zoom-ссылку — всегда Ktalk).
+- «Привет!» — только если была переписка с участником сегодня (правило выше); иначе строка опускается.
+
+**«loop не надо — сам перешлю»:** если Саша просит НЕ отправлять Loop, но хочет переслать уведомление сам — создать через CLI с `--no-notify-loop` и отдать ему в чат РОВНО этот текст §6.2 (не сочинять свой, не раскрывать «пт» в «пятница»).
 
 Loop вызывается **внутри** `create_meeting` / `reschedule_meeting` / `add_participant` / `cancel_meeting` — **не** вызывать `LoopNotifier` напрямую из скилла при штатном флоу.
 
@@ -603,22 +617,16 @@ Loop на add — автоматически новому участнику (б
 
 ## Связанные файлы
 - `references/anywherecontacts-api.md` — правильный API ContactStore + паттерн нечёткого поиска, схема полей контакта, pitfalls Whisper-ошибок в фамилиях
-- `references/zoom-tutu-setup.md` — Zoom S2S OAuth setup для ТУТУ
+- `references/zoom-tutu-setup.md` — (УСТАРЕЛО, Zoom отменён) legacy Zoom S2S OAuth
 - `references/conference-schedule-pattern.md` — паттерн сохранения расписания конференции в WorkVault + последующее создание событий в календаре
 
-## Zoom API (корпоративный ТУТУ)
+## Видеосвязь: Ktalk (Zoom отменён)
 
-**⚠️ Pitfall:** `marketplace.zoom.us/develop/create` даёт 404 — администратор `tutu-ru.zoom.us` отключил developer privileges для пользователей. Без IT-отдела Marketplace закрыт.
+Zoom в ТУТУ больше не используется (отменён окт 2026). Вместо него — **Ktalk**.
 
-**Краткосрочный обходной путь:**
-- Для встреч в переговорках `- Zoom` — там стоит Zoom Room с постоянным join-URL. Собрать маппинг `room_email → join_url` в YAML (`/home/tkachenkoav/USERTOOLS/ZoomAPI/rooms_map.yaml`).
-- Для встреч без переговорки — ссылка на личную постоянную Zoom-комнату пользователя (Personal Meeting ID).
-
-**Долгосрочно:** попросить IT одним письмом — либо выдать developer privileges на `tkachenkoav@tutu.ru`, либо создать S2S OAuth app от их имени и передать `Account ID`, `Client ID`, `Client Secret`. После этого — инструкция в `/home/tkachenkoav/USERTOOLS/ZoomAPI/README.md`.
-
-**⚠️ Pitfall:** Zoom Personal Access Token (PAT) для REST API **не существует** — только S2S OAuth или user-level OAuth. Ссылка на PAT-документацию в devforum — ошибочна.
-
-**⚠️ Pitfall:** Zoom add-in Outlook нельзя дёрнуть из EWS/exchangelib — он работает только через UI. `IsOnlineMeeting` в EWS относится к Teams, не Zoom.
+- Ссылка на встречу — всегда личная Ktalk-комната пользователя: `https://tutu.ktalk.ru/tkachenkoav` (в MeetingScheduler — константа `KTALK_LINK`).
+- Переговорки МСК НЕ имеют собственного Zoom Room. При встрече в переговорке `location` = название переговорки (без префикса «Zoom - »), видеосвязь — всё равно Ktalk.
+- Терминология Zoom (join-URL, Personal Meeting ID, Zoom Room, S2S OAuth, PAT) — УСТАРЕЛА, не применять.
 
 ## Инструмент «Назначить встречу» (bk-084)
 
@@ -630,7 +638,7 @@ Loop на add — автоматически новому участнику (б
 ## Интеграции
 - **Fireflies** → `fred@fireflies.ai` как Attendee (см. выше)
 - **People/ карточки** → `/home/tkachenkoav/WorkVault/People/<Имя>/card.md`
-- **Zoom** → `references/zoom-tutu-setup.md`
+- **Ktalk** → личная комната `https://tutu.ktalk.ru/tkachenkoav`
 
 ---
 
@@ -697,7 +705,7 @@ item.save(send_meeting_invitations="SendToNone")  # личное, без рас�
 - **Любая встреча с ≥1 участником** (создание, перенос, отмена, добавление участника) →
   ТОЛЬКО через MeetingScheduler / MeetingManager (`create_meeting`, `reschedule_meeting`,
   `cancel_meeting`, `add_participant`). Прямой `CalendarItem(...)` с `required_attendees`
-  ЗАПРЕЩЁН — это инцидент bk-172 (31.08, «Парсинг. Прокси»): терялись Привет!/Zoom/Loop.
+  ЗАПРЕЩЁН — это инцидент bk-172 (31.08, «Парсинг. Прокси»): терялись Привет!/Ktalk/Loop.
 
 ---
 

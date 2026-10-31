@@ -790,6 +790,154 @@ B1 задаёт evidence- и runtime-норму для девяти уже за�
 
 Связь с нормами: §10.6 задаёт per-tool evidence и rollback; §10.11 — порядок `fireflies_autojoin`; §10.12 — боевой interpreter/closure и probe; AC-009…AC-012 — принятие и статусы после operator evidence; AC-B03/AC-B07/AC-B08 — построчное подтверждение волны 2 и живой `show-contacts`.
 
+
+### 10.14 Партия B2 — 10 no-entry регистраций (2026-10-31)
+
+Канонический артефакт партии: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/partiya-b2-eco-config-10-no-entry-registratsiy/TZ-patch.md`. Выжимка `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/partiya-b2-eco-config-10-no-entry-registratsiy/extract.md` — только индекс, не источник правды; при расхождении открыть этот master-ТЗ на диске. `[NEW-ENTITY, требует согласования Саши]` в пакете нет.
+
+#### 10.14.1 Цель и граница партии
+
+B2 фиксирует регистрационный путь для десяти ключей `config.tools`, у которых нет боевого входа. Для каждого ключа сохраняется буквальная регистрация `entry=входа нет`; отсутствие входа — наблюдаемый результат, а не пропущенная проверка.
+
+В границу партии входят только регистрационная evidence, `probe_battle_venv.py` и `usertools_config explain`. Probe выполняется тем же `battle_python`, который указан в существующей строке `/home/tkachenkoav/WorkVault/Registries/battle_interpreters.yaml`; `entry_kind`, `entry`, `declared_imports` и closure не угадываются и не подменяются. Бизнес-вызов для no-entry не создаётся. Для gateway-owned ключей Gateway не вызывается.
+
+Секретные значения нигде не сохраняются и в evidence не выводятся. Допустимы только redacted имена источников/env-переменных. Пакет не переводит инструменты в `accepted` или `unified_only` и не создаёт вопрос `Q-1`; такие статусы и operator-evidence относятся к последующей `ORCH:shared-state`.
+
+#### 10.14.2 Состав и обязательная runtime-классификация
+
+Все десять строк имеют обязательный runtime-класс **`no-entry`**. Для каждой строки `no-entry` означает буквальное `entry=входа нет`, успешный import/closure probe и отсутствие бизнес-вызова.
+
+| № | `tool_key` | Класс регистрации | Runtime-класс B2 | Обязательная норма |
+|---:|---|---|---|---|
+| 1 | `dialog_backlog_to_kanban` | `no-entry` | `no-entry` | Сохранить `enabled: false`; выполнить только probe и `explain`. |
+| 2 | `entities_migration` | `no-entry` | `no-entry` | Бизнес-вход не создавать; literal `entry=входа нет`. |
+| 3 | `honcho_integration` | `no-entry`, gateway-owned | `no-entry` | Gateway не вызывать и не рестартовать; только probe и `explain`. |
+| 4 | `okr_sheets_exporter` | `no-entry` | `no-entry` | Бизнес-вход не создавать; literal `entry=входа нет`. |
+| 5 | `process_improvement` | `no-entry` | `no-entry` | Бизнес-вход не создавать; literal `entry=входа нет`. |
+| 6 | `status_snapshot` | `no-entry` | `no-entry` | Бизнес-вход не создавать; literal `entry=входа нет`. |
+| 7 | `telegram_group_topics` | `no-entry`, gateway-owned | `no-entry` | Gateway не вызывать и не рестартовать; только probe и `explain`. |
+| 8 | `tg_topic_duplicate` | `no-entry` | `no-entry` | Бизнес-вход не создавать; literal `entry=входа нет`. |
+| 9 | `tz_dev_cleanup` | `no-entry` | `no-entry` | Бизнес-вход не создавать; literal `entry=входа нет`. |
+| 10 | `tz_dev_decommission` | `no-entry` | `no-entry` | Бизнес-вход не создавать; literal `entry=входа нет`. |
+
+Для каждой строки обязательны оба read-only шага одним и тем же боевым Python: `probe_battle_venv.py` проверяет `import yaml`, `import usertools_config`, все `declared_imports` и closure; затем выполняется `usertools_config explain <tool>`. В `explain` разрешены только `source=ecosystem_config`/`source=shared` для несекретных значений и `source=shared_env` для секретов. `source=legacy` и `source=overlay` — ноль. Нельзя выдавать фиктивный runtime PASS вместо честной классификации `no-entry`.
+
+#### 10.14.3 Критерий закрытия B2
+
+Партия закрыта только когда по каждому из десяти ключей одновременно сохранены:
+
+1. versioned backup и evidence регистрационной строки/конфигурации и rollback-пути без секретных значений;
+2. `probe_battle_venv.py` завершён `PASS` в реальном `battle_python` строки реестра; любой `FAIL`, отсутствующий ключ или mismatch closure останавливает партию;
+3. `explain` тем же Python показывает только разрешённые источники, без `source=legacy` и `source=overlay`;
+4. runtime зафиксирован как `no-entry`, с буквальным `entry=входа нет` и без бизнес-вызова; для `honcho_integration` и `telegram_group_topics` отдельно зафиксировано отсутствие вызова Gateway;
+5. в окне проверки ErrorBus нет новых событий этого ключа про `config`, `env`, `missing key` или YAML parse.
+
+Красное evidence не маскируется и не превращается в PASS. До отдельной последующей фиксации `ORCH:shared-state` не менять `accepted`, `unified_only`, `overlay` или `rollback_snapshot`; пакетный `Q-1` этим поездом не создаётся.
+
+#### 10.14.4 Запреты и «Что НЕ трогать»
+
+- Секреты хранятся только в shared `.env`; значения секретов, payload и содержимое `.env` запрещены в YAML, манифесте, digest и evidence. В evidence допускаются только redacted имена env-переменных и источников.
+- Новые per-tool `.env` не создавать. Legacy-файлы не удалять до принятия и отдельного operator-глагола `удаляй`.
+- Silent fallback запрещён: отсутствующий ключ завершается fail loud; нельзя скрыто возвращаться к `legacy` или `overlay`.
+- Gateway не трогать и не рестартовать. Кроны и jobs не создавать и не менять без отдельного «ставь кроны».
+- `dialog_backlog_to_kanban` сохраняет `enabled: false`; его нельзя включать ради probe или runtime.
+- Не создавать бизнес-входы, фиктивные safe-вызовы или имитацию успешного runtime для любого B2-ключа.
+- Не угадывать и не редактировать боевой `battle_python`, `entry`, `entry_kind` или `declared_imports` вместо существующей строки реестра; probe под другим Python не засчитывается.
+- Не менять в этой партии чужие master-ТЗ, бизнес-YAML, `entities.json`, Hermes `config.yaml`, `jobs.json`, Gateway, runtime-код и статусы `migration_status`; регистрационные/production-правки выполняются только в предусмотренных последующих фазах.
+- Не создавать новый `tools{}`-ключ, новый статус, новый operator-глагол или пакетный `Q-1`.
+
+Связь с нормами: §10.6 и AC-009…AC-012 задают последующую приёмку и статусы; §10.8 и §10.9 — хранение секретов и границы; §10.12.4–§10.12.6 и AC-B01, AC-B05, AC-B06 — боевой interpreter, declared-imports/closure и probe; AC-002 — регистрация в SoT `EcosystemConfig.yaml` и существующем манифесте.
+
+### 10.15 Партия B3 — 10 низко-связанных живых входов (2026-10-31)
+
+Канонический артефакт партии: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/partiya-b3-eco-config-10-nizko-svyazannyh-zhivyh/TZ-patch.md`. Выжимка `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/partiya-b3-eco-config-10-nizko-svyazannyh-zhivyh/extract.md` — индекс: **выжимка ≠ SoT; при расхождении — открыть master**. Единственный master-ТЗ — `/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EcosystemIntegration/EcosystemIntegration_TZ.md`; относительный `tz_ref` и устаревшие дубликаты не подменяют этот источник. `[NEW-ENTITY, требует согласования Саши]` в партии нет. Секция содержит требования к последующему выполнению, а не утверждение о состоявшихся probe, runtime-вызовах или приёмке.
+
+#### 10.15.1 Нормативные источники
+
+| Источник | Абсолютный путь | Роль |
+|---|---|---|
+| master-ТЗ | `/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EcosystemIntegration/EcosystemIntegration_TZ.md` | SoT норм: §10.4–§10.14, пакет `eco-config-w3`, финализированная runtime-норма, AC-002, AC-008…AC-019 и AC-B01…AC-B08. |
+| extract | `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/partiya-b3-eco-config-10-nizko-svyazannyh-zhivyh/extract.md` | Индекс именно этого слага и состав B3; при конфликте уступает master-ТЗ. |
+| digest | `/home/tkachenkoav/WorkVault/Registries/EcosystemManifest.digest.md` | Индекс существующей экосистемы; счётчики не являются уликой выполнения B3. |
+| канон | `/home/tkachenkoav/hermes-workspace/skills/devops/dev-workflow/references/canon.md` | Границы ролей, канонические артефакты и разделение фаз. |
+| glossary | `/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md` | Канонические имена фаз и ролей. |
+| план состава | `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/eco-config-w4/HF-plan.md` | Раздел «Партия B3», критерий перехода между партиями и единая пакетная приёмка волны 3. |
+
+Образцы формата: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/migratsiya-partii-b1-9-dual-read-1-chistaya-regi/TZ-patch.md` и `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/partiya-b2-eco-config-10-no-entry-registratsiy/TZ-patch.md`. Их состав и результаты не переносятся в B3.
+
+#### 10.15.2 Цель и граница партии
+
+B3 задаёт требования к миграционной evidence десяти низко-связанных ключей с живыми входами из списка ниже. Ключ — существующий ключ `config.tools` манифеста, а не имя каталога или master-ТЗ. Каталог инструмента в последующей реализации определяется через `manifest.tools.<key>.path`; боевой интерпретатор и вход — через существующую строку `/home/tkachenkoav/WorkVault/Registries/battle_interpreters.yaml`.
+
+Для каждого ключа обязательны backup, probe боевого Python, `explain`, честная runtime-классификация, проверка ErrorBus и rollback evidence. Реальный вход выполняется только при разрешении контрактом инструмента: допустим документированный dry-run/read-only режим зарегистрированного входа. При отсутствии разрешённого безопасного вызова фиксируется `safe-call-absent` с буквальной причиной; вызов не выполняется и успешный результат не имитируется. Команды, payload, `battle_python`, `entry_kind`, `entry` и `declared_imports` этим патчем не придумываются.
+
+Партии B1–B4 делят исполнение и evidence, сохраняя пакетную семантику чистых регистраций волны 3. B3 не создаёт отдельный `Q-1`, `Q-2` или `Q-3` и не принимает инструменты самостоятельно. Единственная пакетная запись статусов выполняется в `ORCH:shared-state` после соответствующего `operator-done: answer:Q-1` с evidence по каноническому списку волны 3.
+
+#### 10.15.3 Состав B3 и обязательная runtime-классификация
+
+| № | `tool_key` |
+|---:|---|
+| 1 | `aggregate_from_meetings` |
+| 2 | `case_collector` |
+| 3 | `deep_mine_project` |
+| 4 | `entity_registry` |
+| 5 | `entity_registry_cli` |
+| 6 | `exchange_org_lookup` |
+| 7 | `mofs_index` |
+| 8 | `mpp_reader` |
+| 9 | `piiscan` |
+| 10 | `vestnik_theme` |
+
+Для каждой строки действует одно и то же обязательное правило: `runtime-real` при наблюдаемом разрешённом вызове зарегистрированного входа тем же `battle_python`; иначе `safe-call-absent` с точной причиной отсутствия безопасного вызова. Класс устанавливается по контракту и evidence, а не заранее по названию инструмента.
+
+- `runtime-real`: сохранены разрешённая команда, фактический entrypoint/wrapper/shebang, боевой Python, ожидаемый результат и наблюдаемый результат. Dry-run/read-only засчитывается в классификации только как документированный режим инструмента; произвольный импорт или `--help` не подменяет рабочий вход.
+- `safe-call-absent`: сохранена буквальная причина, например отсутствие документированного безопасного режима, неизолированный side effect либо обязательная live-система; обязательны probe и `explain`. Это не runtime PASS и не свидетельство реального рабочего цикла.
+- `no-entry`: применяется только при фактическом отсутствии входа и буквальной регистрации `entry=входа нет`. Для состава B3 заявлены живые входы; обнаруженное расхождение с реестром фиксируется явно и сверяется с master-ТЗ. Нельзя объявлять живой вход отсутствующим ради обхода проверки или создавать бизнес-вход ради отчёта.
+
+Для **каждого из десяти ключей** `/home/tkachenkoav/.hermes/lib/probe_battle_venv.py` проверяет в реальном `battle_python` строки реестра: `import yaml`, `import usertools_config`, все `declared_imports` и closure входа (`sys.executable` соответствует `battle_python`). Отсутствующий ключ реестра при живом входе, missing import, mismatch closure или любой `FAIL` препятствуют закрытию. Pytest или импорт под другим Python этот probe не заменяют.
+
+`usertools_config explain <tool>` выполняется тем же боевым Python. Для несекретных значений допускаются только `source=ecosystem_config` и `source=shared`, для секретов — только `source=shared_env`. `source=legacy` и `source=overlay` — ноль; секрет, напрямую прочитанный из process env в обход shared-лоадера, не засчитывается. В evidence сохраняются только redacted источники и статусы, без значений и содержимого `.env`.
+
+**Граница приёмки.** Runtime-классификация B3 не ослабляет §10.6, §10.12.6 и AC-008. Для нового кандидата на `accepted` сохраняются отдельные требования master-ТЗ: минимальный реальный прогон, не dry-run, тем же боевым входом и Python с минимальным валидным payload; целевые legacy/per-tool env и process env не задаются, несекретные значения читаются из `EcosystemConfig.yaml`, секрет доступен только в shared `.env`; есть ожидаемый результат и наблюдаемое подтверждение чтения эффективного значения через `usertools_config`. Неприменимость этой улики допускается только по основанию master-ТЗ — нет боевого входа и/или секретного ключа. `safe-call-absent` сам по себе такого основания не создаёт. Требуемый реальный цикл по §10.6 также сохраняется. Неразрешённый контрактом вызов ради приёмки не выполняется; недостающая улика остаётся незакрытой.
+
+#### 10.15.4 Критерий закрытия B3
+
+Партия закрыта для перехода к следующей партии только когда по **каждому из десяти ключей** одновременно сохранены:
+
+1. Versioned backup конфигурации/кода и YAML-секции, evidence выполненных изменений и воспроизводимого rollback-пути без секретных значений. До конфигурационных изменений — backup по проектному правилу в `/home/tkachenkoav/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`, хранение две недели. `.env` не является rollback payload; после приёмки используется архив YAML по §10.5.
+2. `probe_battle_venv.py` завершён `PASS` на реальном `battle_python` строки реестра; подтверждены `yaml`, `usertools_config`, declared imports и closure.
+3. `explain` тем же Python показывает только разрешённые источники без `source=legacy`/`source=overlay`, отсутствующих ключей и секретных значений в отчёте.
+4. Сохранена честная runtime-классификация с evidence по правилу выше: наблюдаемый разрешённый результат для `runtime-real`, probe + `explain` + буквальная причина для `safe-call-absent`, буквальная регистрация отсутствия входа для фактического `no-entry`. Фиктивный runtime PASS запрещён.
+5. В окне проверки ErrorBus нет новых событий этого ключа про `config`, `env`, `missing key` или YAML parse.
+
+Переход подтверждается read-only snapshot: результатом `render_manifest.py --check-drift`, digest со счётчиками и журналом `HF:impl`/`HF:test`. Красный probe, missing key, `source=legacy`/`source=overlay`, новый дубль SoT, незапланированный runtime-effect или отсутствие rollback — стоп. Закрытие партии для перехода не подменяет выполнение улик приёмки и явную реплику Саши по AC-009.
+
+`accepted`, `unified_only`, `overlay` и `rollback_snapshot` записывает только `ORCH:shared-state` по AC-009…AC-012. Для волны 3 — одна пакетная запись после `operator-done: answer:Q-1` с ISO-временем и цитатой реплики Саши на канонический пакет; соседние ключи не менять. Удаление существующего legacy выполняется только после принятия и отдельного `depends: operator:удаляй`; затем допускается `unified_only`. Наличие зелёного probe, dry-run или `safe-call-absent` не разрешает автоматическую приёмку.
+
+`4-clean` не входит в B3: он допускается только после `unified_only` у всех 46 ключей. Слои 2/7 и `USERTOOLS_CONFIG_MODE` глобально не вырезаются этой партией.
+
+#### 10.15.5 Запреты и «Что НЕ трогать»
+
+- Секреты — только в shared `/home/tkachenkoav/.config/hermes/.env` и `source=shared_env`. Секретные ключи и значения запрещены в YAML, overlay, манифесте и digest; содержимое `.env`, секреты и payload не сохраняются в evidence. Допустимы только redacted источники и статусы. Перенос секретов — отдельное операторское действие по существующему канону.
+- Новые per-tool `.env` не создавать. Существующие legacy, overlay и rollback не удалять до принятия и отдельного `удаляй`; бизнес-YAML (`loop_rules.yaml`, `contract_rules.yaml`, `translit.yaml`) не переносить и не удалять.
+- Silent fallback запрещён: отсутствующий ключ — fail loud; скрытый возврат к legacy/overlay и литералам недопустим. Новый несекретный конфиг-ключ — только в `EcosystemConfig.yaml` и сначала в его схеме; партия чистых регистраций не изобретает новые runtime-ключи.
+- Gateway не трогать и не рестартовать. Кроны/jobs не создавать и не менять без «ставь кроны»; реальный вызов не является разрешением на незапланированную запись, импорт данных, публикацию или иной side effect.
+- Не угадывать и не подменять `battle_python`, `entry_kind`, `entry`, `declared_imports`, closure или безопасную CLI-команду. Реестр и probe-контракт не менять ради зелёного отчёта. Не ставить пакеты в `hermes-agent/.venv` или во все venv «на всякий случай».
+- Исторические секции и контракты master-ТЗ, тексты AC, партии B1/B2, чужие master-ТЗ, `entities.json`/schema, Hermes `config.yaml`, `jobs.json`, ядро `hermes-agent`, бизнес-YAML и состояние соседних инструментов не менять.
+- Не заводить новый `tools{}`-ключ, сущность, статус или operator-глагол; не дублировать пакетный вопрос волны 3. `dialog_backlog` и `dialog_backlog_to_kanban` сохраняют `enabled: false` и остаются вне живого runtime B3.
+
+#### 10.15.6 Связь с нормами master-ТЗ
+
+| Норма | Применение в B3 |
+|---|---|
+| §10.4–§10.5, AC-012…AC-014 | Допустимые источники, fail loud, per-tool rollback; запрет скрытого fallback и воздействия на соседей. |
+| §10.6, AC-008…AC-012, финализированная runtime-норма | Улики реального входа и рабочего цикла, ErrorBus, отдельное принятие, запись статусов и удаление legacy. Классификация безопасной проверки не заменяет эти требования. |
+| §10.7–§10.9, AC-002, AC-015…AC-019 | Регистрация без новых runtime-ключей, секреты только в shared `.env`, сохранение бизнес-YAML; общая чистка только после `unified_only` всех 46. |
+| §10.12.1, §10.12.4–§10.12.6, AC-B01, AC-B05, AC-B06 | Боевой Python и closure из реестра, обязательный probe для каждой строки с первого драфта `HF:plan`, declared imports в том же venv и `explain` тем же Python. |
+| §10.13–§10.14 | Применяется существующая трёхклассная runtime-норма и критерий backup + probe + `explain` + runtime evidence + ErrorBus; состав B1/B2 не расширяется. |
+| Пакет `eco-config-w3`, AC-009…AC-012 | B3 является частью исполнения/evidence волны 3; один канонический пакетный `Q-1` и одна запись в `ORCH:shared-state` после ответа, без самостоятельного вопроса B3. |
+| AC-B03, AC-B07, AC-B08 | Сохраняют исходную область: выход всех 12 ключей волны 2 и живой поиск AnywhereContacts. B3 не объявляет их закрытыми своими десятью строками. |
+
 ### Контракты экосистемы (модуль 0: config-указатель и лоадер)
 
 Норматив **этого пакета**. Исторический H2 `## Контракты экосистемы` (после §8) — снимок формата v0.4.0, его таблицы не менять. Потребители модуля 0 читают контракт ниже и `schema_version: "0.6.0"`, не строку `"0.4.0"` исторического блока.

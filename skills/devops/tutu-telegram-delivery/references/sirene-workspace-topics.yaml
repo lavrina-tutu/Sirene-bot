@@ -1,0 +1,27 @@
+schema_version: "1.0"
+chat_id: "-1004300127777"
+dm_chat_id: "400307920"
+topics:
+  General: 1
+  Tools: 3
+  WorkVault: 5
+  Backlog: 6
+  Monitoring: 7
+  Personal: 8
+  Messages: 6556
+  Errors: 11112
+allowlist_csv: "400307920,-1004300127777"
+yaml_extra:
+  allowed_chats: "400307920,-1004300127777"
+  require_mention: false
+  guest_mode: false
+bot:
+  env_key: TELEGRAM_BOT_TOKEN
+  id_prefix: "863022"
+  username: sirene_vm_bot
+env_files:
+  - "$HERMES_HOME/.env"
+  - "$HERMES_HOME/profiles/default/.env"
+config_yaml: "$HERMES_HOME/config.yaml"
+startup_channels: "-1004300127777:1"
+deliver_form: "telegram:-1004300127777:<thread>"

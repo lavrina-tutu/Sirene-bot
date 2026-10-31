@@ -1,7 +1,7 @@
 ---
 name: hermes-feature
 description: "Use when: цикл ТЗ→код Hermes, баг, исследование, доработка"
-version: 2.13.1
+version: 2.14.0
 author: agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -13,575 +13,109 @@ metadata:
 
 # hermes-feature
 
-# Dual-path (DevWorkflow W2)
-
-Пока `orchestration.mode` ≠ `workflow-only`:
-не `pipeline init` вне `pilot_slugs`.
-slug ∈ `pilot_slugs` → стоп, отдай `dev-workflow`.
-Иначе канбан + `hermes-feature` / `tz-workflow`.
-Два поезда на slug запрещены.
-Конфиг: `EcosystemConfig.yaml` → `tools.dev_workflow.orchestration`.
-W1: `pilot_slugs: []`, `mode: kanban-primary`.
-Откат W2: `git checkout` SKILL.md + `restore-all-skills.sh`.
-Баннер 10–15 строк — не переписывать тело старых скиллов.
-Только маршрутизация dual-path.
-Стоп при живом kanban-running на том же slug.
-Пилот один слаг за раз (W2).
-## Термины
-Перед первым `PREFIX:фаза` читать `~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md`.
-Имена фаз/ролей/скиллов только из канона. Голые TZ/HF/ORCH/DEV без двоеточия запрещены.
-
 ## Overview
 
-Единый процесс работы над фичами Hermes и USERTOOLS: от ТЗ до кода, тестов, документации, диагностики и отката. Содержательные роли выполняются через Codex exec (`invoke-role`): архитектор (gpt-6.1-sol) планирует, ревизор (gpt-6-astra) проверяет, исполнитель (gpt-5.6-terra) пишет и тестирует. Cursor CLI (`agent -p`, roles_cursor.*) — откат.
+Единый процесс Hermes и USERTOOLS: ТЗ → план → реализация → тесты → документация → диагностика/откат. Оркестратор ведёт DevWorkflow через `pipeline init`/`next`/`complete-phase`; роли запускаются через `emit-prompt` → `invoke-role`. Исполнители не изменяют общий state.
 
-**ЖЁСТКОЕ ПРАВИЛО:** Архитектор default (Сирень) НЕ пишет ТЗ, планы, анализ самостоятельно в чате. Все задачи архитектора — ТОЛЬКО через Cursor CLI (`agent -p`). Текущий агент default (Сирень) координирует: вызывает Cursor CLI, передаёт контекст, принимает результат. Полный документ (план / ТЗ / appendix / research / файл) в `agent -p` — без обрезки: полный `cat`, либо путь + «прочитай сам», либо явно «часть 1/N» (канон: pitfall cursor-cli). Никаких попыток «написать план самому» без Cursor CLI. ИСКЛЮЧЕНИЕ из „жёсткого правила": диагностика и план починки бага — НЕ напрямую, а через фазу `BUG:diagnose` BUG:diagnose (см. Блок 6В) ДО любого agent -p / cronjob(repeat=1) / делегирования. Прямой agent -p на диагностику/план/реализацию по багу-триггеру без существующей фазы `BUG:diagnose` = нарушение инварианта 8.
+Архитектор (default) не пишет ТЗ, планы или анализ в чате: используй предусмотренный role-путь и передавай документы полностью (`cat`, абсолютный путь или явное `часть 1/N`). Для бага сначала обязательна фаза `BUG:diagnose`; прямой `agent -p` до неё запрещён.
 
 ## When to Use
 
-- «разработай», «новый инструмент», «напиши код», «реализуй» — Блоки 0–4
-- «ошибка», «баг», «не работает», «упало», «разберись», «починить» — Блок 7 (диагностика)
-- «проанализируй», «исследуй», «найди», «посчитай», «сравни» — Блок 8 (исследование)
-- «обновить гермес», «merge upstream» — Блок 1 + `references/hermes-upgrade-pattern.md`
-- Задача с 3+ изменениями конфига/скиллов/инструментов — Блок 6А (QA)
+- «разработай», «новый инструмент», «напиши код», «реализуй» → Блоки 0–4.
+- «баг», «ошибка», «не работает», «почини» → `BUG:diagnose`, затем Блок 7.
+- «исследуй», «проанализируй», «сравни» → Блок 8/RESEARCH.
+- «обнови Hermes», «merge upstream» → Блок 1 + [upgrade reference](references/hermes-upgrade-pattern.md).
+- 3+ изменений конфига/скиллов/инструментов → QA (Блок 6А).
 
-Не для: правок стиля общения (см. `hermes-memory-hygiene`), простой рутины без ТЗ и вариантов.
+Не использовать для простой рутины без ТЗ/вариантов или правок стиля общения.
 
-### Классификатор маршрута (баг vs прямой ответ)
+### Маршрутизация
 
-| Триггерные слова | Маршрут (ОБЯЗАТЕЛЬНО) |
-|---|---|
-| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | кейс BUGFIX (DevWorkflow) = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ шаг оркестратора — `pipeline init --case BUGFIX` (рецепт с `BUG:diagnose`) для slug, ДО любого agent -p / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared). После `TZ:finalize` (багфикс-ТЗ) `GATE:take-into-work` **auto-pass** (`auto-pass: ac-shown`), payload=AC; `GATE:diagnose-review` **auto** по артефакту `_fix_plan_*.md`/непустому body (императив 28.09, старт→финиш) |
-| «спроси», «проверь», «вычисли», «найди данные», «найди в архиве», «сколько», «покажи» | прямой ответ (без кода/процесса; без DevWorkflow-slug) |
-| «одношаговый ответ», RESEARCH-триггеры («проанализируй», «исследуй» без починки) | прямой ответ / RS-граф (по DPK-исключениям) |
+Баг-триггер всегда создаёт `DEV/<slug>` и `BUG:diagnose` первым `pipeline init`-ходом, до любого role/делегирования; затем `GATE:diagnose-review` (auto), TZ-WRITE и полный или LIGHT хвост. LIGHT разрешён только после гейта: ≤3 файлов кода+тестов, без shared/новых сущностей/cron/.env/манифеста. Ошибка провайдера LLM — не BUGFIX.
 
-Правило сверху: «Работа с кодом/процессом (любое изменение) по баг-триггеру — ТОЛЬКО через DevWorkflow (`pipeline init`, кейс BUGFIX). Прямой ответ — только когда НЕТ кода/процесса. Сомнение — всегда в сторону фазы `BUG:diagnose`.»
+Запрос без изменения кода/процесса — прямой ответ без DevWorkflow-slug. При сомнении выбирай `BUG:diagnose`. После `TZ:finalize` AC показывается в origin, `GATE:take-into-work` auto-pass (`auto-pass: ac-shown`).
 
-**Связь с tz-workflow:** после `TZ:finalize` AC показ в origin → `GATE:take-into-work` auto-pass, поезд идёт сам — этот скилл для реализации, без фразы «берём в работу».
+## Термины и dual-path
 
----
+Перед первым `PREFIX:фаза` читай `~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md`; используй только канонические имена. При `orchestration.mode` ≠ `workflow-only` соблюдай `pilot_slugs`, не допускай два поезда на slug и останавливайся при живом kanban-running; детали — [core runbook](references/devworkflow-core.md).
 
 ## DevWorkflow-шаг
 
-> DevWorkflow (`skills/devops/dev-workflow`, `dev/<slug>/_state.json`, `journal.md`). Оркестратор ведёт slug через `pipeline init` / `next` / `complete-phase`; роли — `emit-prompt` → `invoke-role`. Исполнители **не** пишут в `EcosystemManifest.json` / `entities.json` / `.env` / `jobs.json` — только `ORCH:shared-state`.
-
-### Вход
-
-- Любой HF `agent -p` без корня `DEV/<slug>` → **стоп** + оркестратор. Исключения DPK: `BRF:*` в TG; одношаговый ответ; RESEARCH.
-- Вход в HF-ветку: корень `DEV/<slug>` существует **и** `GATE:take-into-work` **done/auto-pass** (`auto-pass: ac-shown`) — не фраза Саши (императив 28.09). Постановщик завёл полный граф одним батчем, гейт авто-прошёлся после `TZ:finalize`.
-- **Все задачи по умолчанию ложатся в план** (кейс DevWorkflow `DEV/<slug>`) после триггера «разработай/доработай/почини» и далее проводятся по канону, без дополнительной команды Саши (требование 1).
-- **Slug-guard:** перед `pipeline init` корня `DEV/<slug>` (в т.ч. багфикс-батча) — проверка активного графа по слагу (`todo|ready|running|blocked`, не `done`/`archived`); дубли запрещены (кейс 1, прецедент pfs-notify-link-unprocessed). При совпадении — reuse существующего графа или `interrupt` до разрешения.
-- `GATE:plan-approve` / `HF:backup` / `HF:impl`: если `HF:plan` не `done` → **стоп** (GLOSSARY инвариант 6). Не skip плана в one-pass.
-- Off-board: **предусловие** — зафиксировать паузу slug в `journal.md` (см. `dev-workflow` `references/handoff.md`), не вызывать `pipeline next` на живой slug; затем допустим прямой `agent -p` с retro-учётом session ids. Параллельный «ручной» cursor-cli на активной фазе того же slug запрещён (инвариант 8).
-- **Снятие устаревшего slug (легаси/другой канал):** если работа уехала из DevWorkflow — закрыть незавершённые фазы через оркестратора (`complete-phase` / пометки в `journal.md`), довести slug до `done` или явно archived; не оставлять «висящие» фазы в `_state.json`.
-- **Модели только в `invoke-role`:** на `pipeline init` и в рецепте фаз **не** задавать model override (D1). Анти-пример: `model=cursor-grok-4.6-high` на Hermes-воркере tutu → HTTP 400 (`t_2c8ee3b2`). Штатные роли (architect/reviewer/executor) — Codex exec внутри `invoke-role`; Cursor (roles_cursor.*) — откат, только D2 внутри `invoke-role` → `agent -p --model …`.
-
-Граф HF-фаз — развёртка `PLAN-IMPL-TAIL` + `HF-TAIL` (GLOSSARY §5.1; сборка кейсов — §2):
-
-```
-GATE:take-into-work  (уже снят)
-├─ HF:compress          parents=[GATE:take-into-work]   # опц., skip на stub/BUGFIX/…
-├─ HF:plan              parents=[HF:compress]
-├─ REV:plan             parents=[HF:plan]               # по умолчанию; искл. лёгкие BUGFIX/SKILL-CHANGE ≤3 файла
-├─ GATE:plan-approve    parents=[REV:plan|HF:plan]
-├─ HF:backup            parents=[GATE:plan-approve]
-├─ HF:impl              parents=[HF:backup]
-├─ HF:test              parents=[HF:impl]
-├─ HF:docs-handoff      parents=[HF:test]
-├─ ORCH:shared-state    parents=[HF:docs-handoff]
-└─ GATE:done            parents=[ORCH:shared-state]
-```
-
-Граф выше — **полный граф кейса, создан одним батчем после брифа** (tz-workflow «Вход триггера»): `GATE:take-into-work` + `PLAN-IMPL-TAIL` + `HF-TAIL` уже в графе с parents и ключами `devpipe:<slug>:<phase>`. **Unfold хвоста после гейта НЕТ** (дыра: второй ход → `children=[]`, фазы complete без детей). В **корневом** one-pass (корень сам делает работу) дочерний хвост **не создавать** вообще — см. «One-pass не плодит хвост».
-
-Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`, `cursor-task-context`. ORCH:shared-state — только `hermes-feature`.
-
-#### Origin и уведомления (DevWorkflow)
-
-При `pipeline init` зафиксировать `--origin-chat` и `--origin-thread` (диалог/топик инициатора; не Monitoring `:7`, не Errors `:11112`). Ход кейса, AC и паузы на Сашу — в **origin**; техника CLI/инвариантов — ErrorBus. Норматив: скилл `dev-workflow` («HITL и уведомления», `references/invoke.md`). Команды `hermes kanban notify-*` и таблица `kanban_notify_subs` — **legacy**, не использовать (диспетчер снят с W4).
-
-Terminal `blocked` / `waiting_operator` трактовать как «ждёт Сашу» в origin, не как зависание фонового dispatch. Рестарт gateway — только по фразе Саши «поднимай» (AC-010), не из этого скилла.
-
-
-### Блок 6В (багфикс)
-
-При триггере «почини» — **до** TZ-ветки (кейс BUGFIX, GLOSSARY §2):
-
-```none
-корень DEV/<slug> + BUG:diagnose   # в ОДНОМ `pipeline init`-ходе (инвариант 9), до agent -p
-# origin задаётся при init (см. «Origin и уведомления» выше)
-GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _fix_plan_*.md / непустому body
-→ далее TZ-WRITE(patch|light) → GATE:take-into-work (auto-pass: ac-shown) → PLAN-IMPL-TAIL | PLAN-IMPL-TAIL-LIGHT
-```
-
-`BUG:diagnose` — read-only, план П.1…П.N → `_fix_plan_YYYYMMDD.md`. Диагноз → `BUG:diagnose`; реализация → `HF:impl`. **`HF:fix` запрещён** (GLOSSARY §7). Инвариант: даже с известным root cause — нет перехода в hermes-feature без ТЗ-файла. `GATE:diagnose-review` — **auto** (доработка B): воркер гейта complete сам, когда `BUG:diagnose` done и на диске есть `_fix_plan_*.md` **или** непустой body; классификация LIGHT — в том же ходе. `GATE:plan-approve` — always auto; `GATE:take-into-work` / `GATE:done` — **always auto**. Баг-триггер всегда начинает с фазы `BUG:diagnose`.
-
-**Корень `DEV/<slug>` создаётся СРАЗУ, в том же `pipeline init`-ходе, что и `BUG:diagnose`** (не ретро, инвариант 9). Ретро-корень = нарушение (прецедент pfs-promote-bugfix 22.09: preflight GATE:done красный). Первый tool-шаг при баг-триггере — `pipeline init` корня `DEV/<slug>` **И** DX в одном батче, **до** любого agent -p / cronjob(repeat=1) / delegate / cronjob-аутсорсинга диагностики.
-
-**Багфикс-батч создаёт ПОЛНЫЙ хвост сразу, не корень+DX на потом (прецедент 11.10: digest/pfs-notify стоят на DX done).** Развёл только
-`корень DEV/<slug>` + `BUG:diagnose` (по букве инварианта 9) — когда DX выполнилась, граф встал: `GATE:diagnose-review` и LIGHT/полный хвост
-ещё не существовали, оркестратору нечего промоутить после DX done, пришлось добирать гейт и хвост вторым ходом. Правило: в том же оркестраторском
-ходе, что корень+DX, создавать и `GATE:diagnose-review` (parents=[DX]) и (после классификации) LIGHT-хвост `TZ:patch→TZ:finalize→GATE:take-into-work→HF:impl→HF:test→HF:docs-handoff→GATE:done` — **целиком**, чтобы поезд от корня шёл до GATE:done без добивания. DX при этом выполняется первой (родитель корня done → ready), гейт и хвост ждут своей очереди по parents.
-
-**Классификация LIGHT (кейс BUGFIX-LIGHT, GLOSSARY §2/§5.2)** — **после** `GATE:diagnose-review`, а не на холодном старте. Критерий: ≤3 файла кода+тесты, вне shared-модулей, без новых сущностей/cron/.env/манифеста. Тогда:
-- корень `DEV/<slug>` + `BUG:diagnose` → `GATE:diagnose-review` → `TZ:patch` → `TZ:finalize` → `GATE:take-into-work` → `HF:impl` → `HF:test` → `HF:docs-handoff` → `GATE:done` (preflight `--case BUGFIX-LIGHT`);
-- skip: `HF:plan`, `GATE:plan-approve`, `HF:backup`, `REV:tz`/`REV:plan`, `HF:compress`, `ORCH:shared-state`;
-- план = `_fix_plan_*.md` **или** непустой body `BUG:diagnose` (утверждён уже на diagnose-review);
-- не генерировать пустые `auto-pass`-флаги (фальшивый audit).
-
-**Auto-гейт (DKP 0.4.0, императив 28.09):** после `TZ:finalize` `GATE:take-into-work` **auto-pass** (`auto-pass: ac-shown`), payload=AC; `GATE:diagnose-review` — **auto** по `_fix_plan_*.md` (доработка B). Leftover «never auto» на `take-into-work`/`done` — устранён.
-
-**G5 (AC-H03/H09/H10):** воркер HF/BUG **не** `pipeline init` кейсовый граф и **не** skip фаз. `pipeline init` / `pipeline set-case` / LIGHT-хвост — **только оркестратор (Сирень) на триггере в чате**, ДО фаз архитектора. Классификация BUGFIX→BUGFIX-LIGHT — **после** `GATE:diagnose-review` оркестратором (перепись хвоста / `--case`); архитектор в `_fix_plan` может написать оценку числа файлов, `pipeline init` LIGHT-хвоста ему **запрещён**.
-
-**Перед любым `agent -p` по инструменту на `BUG:diagnose` (и далее по багфикс-ветке):** обязательный `emit-prompt` — exit 0, иначе **СТОП**, `agent -p` не вызывать. Легальный вызов только от файла `--out` (промпт: `$(cat /tmp/task.md)`):
-
-- `pipeline emit-prompt --slug <slug> --phase <PHASE> --out /tmp/task.md`
-- exit 0 → `invoke-role` с `/tmp/task.md` (или `agent -p` внутри роли); в `journal.md` должен появиться `context-used:` (G2/AC-H06)
-- exit ≠ 0 → СТОП
-- перед `complete-phase` HF/BUG/REV: `pipeline check --slug <slug> --phase <PHASE>` — exit 0 обязателен (G2)
-
-**Питфолл `check` (G2):** `pipeline check` сверяет `journal.md` на маркер `context-used:` после emit-prompt. Без него `complete-phase` TZ/HF/BUG/REV → fail. См. `dev-workflow` `references/context.md`.
-
-**Обхода context-bundle нет (решение Саши 26.09, без исключений):** ни `flag-waived`, ни `--force` / `--force-bypass-sasha-ok` как обход тройки digest+GLOSSARY+мастер-ТЗ; скрипт `emit-prompt`/`check` блокируют всегда.
-
-**Новая сущность / первый прогон ТЗ (chicken-and-egg):** на первом `TZ:patch` нового инструмента/скилла guard падает «инструмент не найден в манифесте: <Name>» — потому что `emit-prompt` требует И запись `tools.<key>` в EcosystemManifest.json, И мастер-ТЗ на диске, а у новой сущности ещё нет ни того ни другого. Это НЕ баг и НЕ повод `--force`: предусловие — **зарегистрировать stub** `tools.<key>` (status draft, `tz_ref` → целевой `TZ/<Name>/<Name>_TZ.md`) в манифесте ДО прогона; stub пишет оркестратор (зона ORCH по сути, хотя формально ORCH:shared-state позже — это аддитивный stub, не полная запись). Мастер-ТЗ даёт резолв по `tz_ref` или фоллбэку `TZ/<Name>/<Name>_TZ.md`, поэтому путь должен существовать. `resolve_tool_entry` матчит и по snake_case-ключу, и по полю `name`, поэтому ключ `dev_workflow` матчится и через `--tool DevWorkflow`.
-
-### Воркер HF-фаз
-
-1. `pipeline status --slug <slug>` → сверка TZ version/mtime → workspace фазы из `_state.json`.
-2. **Перед ролью на фазе** (`HF:plan`, `HF:impl`, `HF:test`, `HF:docs-handoff`, `HF:backup`, `REV:plan`, …): `pipeline emit-prompt --slug <slug> --phase <PHASE> --out /tmp/task.md` — **exit 0 обязателен**, иначе **СТОП**. Затем `invoke-role` (фон) с `/tmp/task.md`; прямой `agent -p` в обход — только внутри invoke-role (см. `dev-workflow`).
-3. `session_id` роли → `journal.md` после первого вызова.
-4. Промпт Cursor CLI — **одна роль, одна фаза:**
-
-```
-Одна роль: {role} ({model}). Только фаза {phase}. Чужие фазы не выполнять.
-G5: не строй кейсовый граф / не меняй --case / не skip фаз / не выбирай LIGHT — это оркестратор.
-```
-
-Роли/модели (PI B3): compress=оркестратор `deepseek-v4-flash-0731` (без Cursor; заключение t_645aa647); plan/patch/finalize=архитектор `gpt-6.1-sol` (Codex exec, invoke-role; CHANGE-LIGHT ≤3 файла: medium-effort); REV=ревизор `gpt-6-astra`; impl/test/docs-handoff=исполнитель `gpt-5.6-terra` (LIGHT: executor_light `gpt-6-luna`); backup=координатор (Сирень, Hermes, без Codex); ORCH=оркестратор. Откат: Cursor roles_cursor.* (`cursor-grok-4.6-high` / `claude-sonnet-5-medium` / `composer-2.5`; LIGHT на Cursor — roles_cursor.executor).
-
-5. `complete-phase` с metadata:
-
-```json
-{
-  "changed_files": ["..."],
-  "registry_touches": [],
-  "manifest_hints": ["tools.<key> fields to set"],
-  "skills_to_sync": ["tz-workflow"],
-  "tz_version": "0.1.0",
-  "tz_mtime": "2026-09-05T12:00:00Z",
-  "cursor_session_ids": ["..."],
-  "role": "исполнитель",
-  "model": "gpt-5.6-terra",
-  "pipeline_schema": "1.0"
-}
-```
-
-6. **Свёртка по `changed_files`:** на фазах **исполнителя** `HF:impl` и `HF:test`: если `changed_files` содержит путь `*_TZ.md` **или** `HF-plan*` → не complete, а `interrupt(reason="review-required: collapsed-chain")`. Не применять к `HF:plan` (план — его артефакт) и к `HF:docs-handoff` (ТЗ — его артефакт).
-7. **Машинный факт на диске для read-only фаз `HF:plan`/`REV:plan`** (контроль premature-impl, инвариант 8/Блок 1А). На фазе планирования целевой каталог скилла не должен получать impl-артефактов:
-   - **до** `agent -p`: снимок `disk_before` целевого каталога скилла из ТЗ — `python3 ~/WorkVault/Registries/pipeline_hf_plan_diskfact.py snapshot --skill-dir <abs>` → `journal.md` (JSON).
-   - после: `disk_after` + `diff --before --after`. Если `PREMATURE_IMPL` (появились `SKILL.md`/`scripts/`/`tests/`/`references`/`cli.py`, которых не было в before) → `interrupt(reason="review-required: impl-before-plan-approve")`; self-report «каталог есть» при `disk_before.exists=false` = это же block.
-   - Легальный черновик (каталог был в before, код в этой фазе не менялся) → complete ок; `HF:impl` затем сверяет с планом, не пишет второй раз.
-   - В `complete-phase.metadata` класть `disk_before`, `disk_after`, `premature_impl: false|true`, `allowed_writes` (план-файлы `HF-plan_*.md`).
-
-
-Непустой `registry_touches` → `interrupt(kind=capability, reason="executor touched shared state")`.
-
-### GATE:plan-approve
-
-- **Always auto** (`auto-pass: architect-plan`); `HF:plan` обязателен до гейта. Саша план не согласовывает.
-
-### Блок 4 — владелец общего state
-
-- Исполнитель = `HF:docs-handoff`: текст скилла/ТЗ-секции **кроме** манифеста; `manifest_hints` в metadata.
-- Запись манифеста, digest/render, `restore-all-skills.sh`, `.env`/`jobs.json`/`entities.json` — **только** `ORCH:shared-state` (после `done` всех инструментных фаз).
-- **`ORCH:shared-state` (HF-TAIL и `DECOMM-TAIL`):** AC фазы — `python3 ~/WorkVault/Registries/render_manifest.py --check-drift` exit 0 **или** остаток дрейфа явно не про slug этого кейса/DECOMM.
-- **После `DEC:exec` (`DECOMM-TAIL`):** в `tools{}` — `status=archived`, `path` = каталог архива; `tz_ref` можно оставить; исторические `links` допустимы — contract-check в `render_manifest.py` пропускает `archived`/`completed`.
-- `ORCH:shared-state` workspace: `dir:/home/tkachenkoav/WorkVault/Registries`.
-
-### GATE:done — статус «готово»
-
-Порядок воркера `GATE:done` (контракт AC-delivered):
-
-1. `pipeline status --slug <slug>`.
-2. Собрать отчёт AC-### → как тестировали (команда, лог/артефакт, результат).
-3. Опубликовать отчёт AC в **диалог = origin-топик** графа (откуда пришёл запрос; не ops-канал Monitoring `:7`, не Errors `:11112`, не личный DM оркестратору; если origin сам `:7` — дубля в другой топик нет).
-4. В `journal.md` на фазе `GATE:done`: маркер `AC-delivered: origin` + тело отчёта:
-   ```
-   AC-delivered: origin
-   ## Отчёт AC
-   AC-001 → команда / лог / результат
-   ```
-   Маркер — ТОЛЬКО после реального поста в origin. Не считать комментарий GATE:take-into-work
-   (список AC-001) и подписку-уведомление Monitoring `:7` доставкой отчёта, **если origin другой**.
-5. Запустить preflight:
-   `python3 ~/WorkVault/Registries/pipeline_gate_done_preflight.py --slug <slug> --case <DEV|CHANGE|CHANGE-LIGHT|BUGFIX|BUGFIX-LIGHT|RESEARCH|MIGRATION|DECOMM|SKILL-DEV|SKILL-CHANGE> --mode done [--flag-rev]` (`--case` ∈ 10 имён AC-H02, `--mode done` явно)
-6. **exit 0 → `complete-phase`** (`auto-pass: preflight-0`), НЕ block «ждать готово» (императив 28.09; preflight 0 достаточен **после снятия operator-holds `operator-done`+evidence и пустых open-questions**). **Нельзя** ✅ на operator-AC со `status=open` в отчёте — честно ⏳; при O open preflight → exit 1 → `interrupt` `review-required: operator-action: <verb>`, complete запрещён. Корень `DEV/<slug>` закрывается **только** после `GATE:done` done (запрет `complete-phase` корня, пока `GATE:done` не done).
-7. exit 1 или 2 → comment чек-лист stderr; `interrupt`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) — чинить граф, не ждать Сашу; operator-hold → `review-required: operator-action: <verb>`; или `review-required: collapsed-chain` (exit 2).
-
-**G3 git-proof (AC-H07):** перед `complete-phase` фаз `HF:test` и перед вызовом preflight `GATE:done` — impl-пути из `changed_files` HF:impl, лежащие в git-worktree, **должны быть закоммичены** (`git status --porcelain -- <path>` пуст). Untracked / modified → не complete. Если `emit-prompt` на `HF:test`/`HF:docs-handoff` дал exit 1 из-за untracked — `agent -p` **не** звать (AC-H05b).
-
-**Always auto** (и в one-pass). Preflight exit 0 **достаточен** для `GATE:done` **после снятия holds и пустых Q**. Фраза Саши «готово» на этом гейте — идемпотентный no-op (гейт уже done). Отчёт AC уже доставлен в origin до auto-complete.
-
-**Воркер `HF:plan`:** после `complete-phase` плана проверить рецепт в `_state.json` — если хвост PLAN-IMPL-TAIL отсутствует (legacy unfold), `interrupt` `review-required: broken-tail: HF:plan без хвоста`, **не** complete «план готов». На каноне v0.4.0+ полный рецепт задаётся при `pipeline init`.
-
-**Процедура H на `HF:plan`:** недосказанный бриф → стоп, `open-questions: Q-n` на корне, block корня `review-required: operator-action: answer:Q-n`, не `needs_input` на HF.
-
-### Режим «делай в 1 проход»
-
-Условия: мастер-ТЗ на диске; открытых вопросов нет; не обход diagnose-review.
-
-Фраза **no-op для снятия AC-гейтов** (DKP 0.4.0): `GATE:take-into-work` / `GATE:done` — **always auto**; `GATE:plan-approve` — always auto.
-
-**Не auto** (кризисный HITL): `GATE:go`, `GATE:block-accept`, IDEA `blocked`, crisis-block корня (`review-required: crisis`). `GATE:diagnose-review` — auto по артефакту.
-
-One-pass — **не** склейка нескольких **дочерних** фаз в одном промпте (`TZ:patch`+`HF:impl` — запрещено GLOSSARY). `BUG:diagnose` — отдельная фаза в рецепте. Баг-триггер начинается с неё.
-
-#### One-pass не плодит хвост (оркестратор, правило C)
-
-**Когда:** режим «делай в 1 проход» и корень `DEV/<slug>` **сам** выполняет цикл — один воркер-корень, **несколько** вызовов `agent -p` по ролям (grok затем composer), не один промпт «ТЗ+код+тесты»; на корне — пометка one-pass.
-
-**При постановке — не разворачивать полный хвост (~16 фаз):** вместе с корнем **не** создавать через `pipeline init` типовой граф `TZ-WRITE` (`TZ:stabilize` → … → `GATE:take-into-work`, см. `tz-workflow`) **плюс** `PLAN-IMPL-TAIL` + `HF-TAIL` (`HF:compress` → … → `ORCH:shared-state` → `GATE:done`, см. граф выше). Работа уже в корневом `agent -p`; дочерний граф после `complete` корня только дублирует её и съедает дублирующий рецепт.
-
-Допустимые варианты:
-
-- **Только корень** (предпочтительно для «корень сделал всё»).
-- **Корень + гейты** без промежуточных TZ/HF-фаз (три гейта для audit: `GATE:plan-approve` / `GATE:take-into-work` / `GATE:done` — always auto).
-- **Минимальный граф** по кейсу (например `CHANGE-LIGHT` в GLOSSARY §5.1), если размер задачи совпадает — не полный DEV/CHANGE.
-
-> **Ограничение G4/one-pass (AC-H08/H09):** укорочение графа / выбор «минимального» / корневой one-pass — решение **оркестратора + Саши** на постановке; архитектор на `TZ:patch`/`REV:tz` **не** решает сократить граф по собственной инициативе.
-
-Полный хвост «на всякий случай» при корневом one-pass **запрещён**.
-
-**Пошаговый one-pass** (редко, если хвост уже нужен по размеру): промежуточные фазы — **отдельные** invoke-role на каждую фазу; гейты — auto-pass. Не путать с корневым one-pass.
-
-**После `complete-phase` корневого one-pass**, если в рецепте **лишние** фазы остались (legacy init):
-
-1. `pipeline status --slug <slug>` — незавершённые фазы рецепта.
-2. Каждую пометить `archived` в `journal.md` + `complete-phase` с reason `auto-archived: one-pass root done` **без** нового invoke-role.
-3. `GATE:done`: отчёт AC в origin → `journal.md` с `AC-delivered: origin` → preflight → `complete-phase`.
-4. В journal: `one-pass tail archived: <N> phases` (audit).
-
-**XOR-канал координатора (инвариант 8, GLOSSARY §5.2):** пока slug в DevWorkflow «в поезде» (`pipeline status` — незавершённые фазы), координатор **не** дублирует работу параллельным `agent -p` на те же фазы. Прежде чем сделать любой **ручной** cursor-cli по слагу:
-1. `pipeline status --slug <slug>`: есть незавершённые фазы → свой `agent -p` **стоп** (ждать `next` / auto-pass гейтов).
-2. Нужен прямой ход (crash-spawn, спешка) → **сначала** пауза slug в `journal.md` (см. `dev-workflow` `references/handoff.md`), не вызывать `next` → затем retro-учёт session ids; для кода — только после `GATE:plan-approve` done. Два параллельных исполнителя одной фазы запрещены.
-
----
-
-## Модели (Cursor CLI) — раздельные задачи по шагам
-
-**Инвариант:** один вызов `agent -p` = одна модель = одна роль. Сирень координирует цепочку из 4 отдельных задач Cursor — **не смешивать** модели в одном промпте.
-
-> Столбец «Модель» — аргумент бинарника `agent -p`, **не** `pipeline init --model` / `model в invoke-role`.
-
-| Шаг | Роль | Модель (`agent -p`) | Блок |
-|---|---|---|---|
-| 0 | Компрессия ТЗ | `deepseek-v4-flash-0731` (оркестратор, без Cursor) | Блок 0 / tz-workflow Шаг 0 |
-| 1 | Архитектор (ТЗ, план, риски) | `cursor-grok-4.6-high` | Блок 0, 1, 1А, 6В |
-| 2 | Исполнитель (код, тесты) | `composer-2.5` | Блок 1А baseline, 2–4, 7 |
-| 3 | Контроль (тесты, верификация) | `composer-2.5` | Блок 3 |
-| — | Координатор (механика) | `composer-2.5` | бэкапы, инвентарь, операторка |
-
-Промпт компрессии: `~/WorkVault/Registries/tz-compressor-prompt.md`. Экстракты **без кэша** между задачами.
-
-### Паттерн вызова Cursor CLI
-
-```bash
-cd ~/WorkVault/Hermes-Backlog/TZ && agent -p "задача" -f --model cursor-grok-4.6-high --output-format json
-```
-
-- `-p` — print-mode (неинтерактивный)
-- `-f` — force (пропуск диалогов доверия)
-- `--model` — модель из таблицы выше
-- `--output-format json` — структурированный вывод с usage/session_id
-
-**Инвариант передачи полного документа:** `-p "$(cat /tmp/task.md)"` = весь файл, без `head -c` / `truncate` / `head -n`. Если не влезает — в промпте абсолютный путь + «прочитай сам», либо явно «часть 1/N». Неполная копия ≠ полный документ (канон: pitfall cursor-cli).
-
----
+1. Проверь активный slug (`todo|ready|running|blocked`), корень `DEV/<slug>`, `GATE:take-into-work` и отсутствие дубликата.
+2. Создавай полный граф одним батчем; не задавай model override в `pipeline init`/рецепте. На живом slug не запускай параллельный ручной Cursor; off-board требует паузы и retro-учёта.
+3. Перед каждой ролью: `pipeline emit-prompt ... --out /tmp/task.md` должен вернуть 0; перед `complete-phase` нужен `pipeline check` 0 и маркер `context-used:`. `--force`/`flag-waived` не обходят context-bundle.
+4. Общий state (`EcosystemManifest.json`, `entities.json`, `.env`, `jobs.json`, digest/render) пишет только `ORCH:shared-state`; воркер сообщает `manifest_hints`.
+5. `GATE:done` auto после preflight 0, снятых holds и пустых вопросов; AC-отчёт сначала публикуется в origin и фиксируется маркером `AC-delivered: origin`.
+
+Граф, origin-routing, identity-checklist, disk-fact контроль планирования, collapsed-chain guard и one-pass правила — [core runbook](references/devworkflow-core.md).
 
 ## Блок 0: ТЗ
 
-ТЗ финализировано архитектором (скилл `tz-workflow`), AC показан в origin, `GATE:take-into-work` авто-пропущен. Реализация после `TZ:finalize` идёт сама (императив 28.09) — отдельной команды Саши не ждём. **Кризис** (невыполнимо / неоптимально / разрушающе) — архитектор пишет в origin и ставит `interrupt` **корня** `review-required: crisis: …`; поезд стоит, пока Саша не решит.
-
----
+ТЗ финализирует архитектор; после `TZ:finalize` поезд продолжается автоматически. Кризис фиксируется в origin и блокирует корень до решения Саши. Подробности role-пути — [roles and phases](references/roles-and-phases.md).
 
 ## Блок 1: Анализ вариантов
 
-**Валидация и рекомендации по постановке — только от архитектора (требование 2).** Сирень (Hermes) НЕ предлагает собственное мнение, варианты решений или рекомендации по постановке/архитектуре задач — передаёт архитектору (`cursor-grok-4.6-high` через Cursor CLI), выполняет по его рекомендациям. Фактологические уточняющие вопросы Саше — текстом (процедура H / R3), без собственных вариантов по постановке (стыковка с Q2 бриф-фазы).
+Архитектор даёт 2–3 варианта, сначала рекомендацию; варианты нумеруются 1/2/3 и строятся reuse-first. После выбора вопросы задаются по одному; подробная процедура — [roles and phases](references/roles-and-phases.md) и [reuse-first](references/reuse-first-rule.md).
 
-**Шаг 0 (оркестратор, без Cursor):** компрессия master-ТЗ по `tz-compressor-prompt.md` на `deepseek-v4-flash-0731` — full-coverage 3–5 КБ, без кэша.
+## Блок 1А: Планирование
 
-**Шаг 1 (отдельный Cursor, архитектор):** анализ вариантов на входе digest + экстракты Шага 0.
-
-- **Критерии:** токены / безопасность / консистентность / поддерживаемость + специфичные для задачи.
-- **Количество:** 2-3 лучших; слабые архитектор отсеивает сам.
-- **Reuse-first (см. references/reuse-first-rule.md):** варианты формируются через существующие USERTOOLS/applications/реестры; новое приложение/инструмент — только если существующие не закрывают, отдельным пунктом «требует согласования Саши».
-- **Подача:** сначала рекомендация с обоснованием → остальные кратко.
-- **Варианты только цифрами 1/2/3**, никогда не A/B/C.
-- После выбора варианта: уточняющие вопросы **по одному** (варианты закрыты на `BRF`/`TZ:patch`).
-
-**Completion criterion:** архитектор зафиксировал выбор в ТЗ, **без** второго «берём в работу» на варианте.
-
----
-
-## Блок 1А: Планирование *(до Блока 2)*
-
-**Архитектор составляет пофайловый план:**
-- Какие файлы создать / изменить
-- Какие функции / классы / методы добавить
-- Какие тесты написать
-- Если план вводит новую сущность — отдельная строка „Новая сущность X — требует согласования Саши“ до Блока 2; без явного ОК реализация новой сущности не начинается.
-- Промежуточные точки проверки с критериями
-
-**ТЗ-файл только для задач с Python-кодом.** Для скиллов, конфигов, memory-правок — план в чате.
-
-**Исполнитель проходит промежуточные точки молча** — без отчётов Саше; на границах `HF:impl`/`HF:test` гоняет `verify` из таблицы IAC; в `complete-phase.metadata` — `iac_passed`.
-
-**Таблица IAC** (синтаксис tasks.md, без отдельного файла `tasks.md` в пакете):
-
-| IAC-## | phase_from→phase_to | path | verify | depends | covers AC-### |
-|---|---|---|---|---|---|
-| (строки пакета) | … | … | команда/артефакт | … | AC-00N |
-
-План на диске: `HF-plan_*.md` в workspace пакета (секция с таблицей IAC). **LIGHT** (BUGFIX-LIGHT / CHANGE-LIGHT): 1–3 строки IAC в секции ТЗ / `_fix_plan_*.md` / body `BUG:diagnose` — **не** возвращать полный `HF:plan`.
-
-**⚠️ Неожиданный каталог скилла на диске = аномалия, не «сверить и дописать».** Если в фазе `HF:plan`/`REV:plan` (read-only по коду скилла) в workspace уже появились `SKILL.md`/`scripts/`/`tests/`, которых не было в `disk_before` — это impl-before-plan-approve (иначе параллельный процесс). Зафиксировать `premature_impl: true` в comment, `interrupt("review-required: impl-before-plan-approve")`, НЕ копировать/дорабатывать чужой код в фазе планирования.
-
-**Устойчивость к сбою:** `## Прогресс выполнения` с чекбоксами в файле плана.
-
-**Completion criterion:** таблица IAC на диске / в `HF-plan_*.md` + `HF:plan` done → `GATE:plan-approve` auto (`auto-pass: architect-plan`).
-
----
+До кода нужен пофайловый план с IAC, тестами, точками проверки и отдельным согласованием новых сущностей. `HF:plan` read-only; `GATE:plan-approve` auto. Полный контракт — [roles and phases](references/roles-and-phases.md).
 
 ## Блок 2: Реализация
 
-### Кто пишет
-- **Исполнитель (composer-2.5)** — пишет код по плану архитектора
-- **Архитектор (cursor-grok-4.6-high) (fallback)** — только если исполнитель не справился: архитектурный тупик или повторяющиеся необъяснимые ошибки. Исполнитель даёт вывод → **Саша решает** запускать ли архитектора.
-
-**Мелкое отклонение** (≤2 файла, не меняет архитектуру) → исполнитель сам.
-**Крупное отклонение** → исполнитель стопится → архитектор делает доплан → исполнитель продолжает.
-**Системный блокер** (пакеты, sudo) → исполнитель стопится → вопрос Саше напрямую.
-
-### Чеклист перед первой строкой кода
-1. ТЗ согласовано + `GATE:take-into-work` done (`auto-pass: ac-shown`) — фразу «берём в работу» не ждём (императив 28.09).
-2. **Бэкап создан** (см. Блок 5).
-3. `HF:plan` done + `GATE:plan-approve` auto (`auto-pass: architect-plan`).
-4. Если план вводит новую сущность — согласование Саши получено отдельно от общего „берём в работу“.
-5. **DevWorkflow / гейт:** `GATE:plan-approve` = done/unblocked **или** auto-pass one-pass (режим «делай в 1 проход»).
-6. **Auto-pass гейта ≠ «можно код сейчас».** Auto-complete `GATE:plan-approve` (one-pass) разрешает **оркестратору** запустить `HF:impl`; координатору он не даёт права писать код вне очереди графа (XOR-канал, инвариант 8). Прямой impl координатора — только после `handoff / пауза slug (см. dev-workflow `references/handoff.md`)` + off-board.
-7. **Стоп-кран identity (DKP «Прекондиция identity») — для HF:impl **origin-routing**: перед этим `HF:impl` воркер **стоп**, если любой из 4 пунктов ложен** → `interrupt(kind=dependency, reason="wait DEV/tg-topic-duplicate identity + поднимай")`, файлы не писать. В `journal.md` на фазе `HF:impl` — блок `identity-checklist:` с **выводом** 4 фактов (не пересказом). Канон 4 пункта:
-
-   1. `build_session_key(TELEGRAM, chat_type='thread', thread_id=N)` → слот `:group:`, не `:thread:`.
-   2. Wake: TELEGRAM + `thread_id` → `SessionSource.chat_type=='group'`.
-   3. Legacy-проверка (если БД ещё на диске): в `kanban_notify_subs` нет подписок с `chat_type='thread'` на `-1004300127777` (см. DKP identity; таблица не SoT после W4).
-   4. Нет живой вилки `telegram:thread:-1004300127777:*` в `state.db`.
-
-   (Live-wake смоук `AC-010` — только после фразы Саши **«поднимай»**: рестарт gateway этим графом **запрещён**; `interrupt(kind=dependency, reason="wait поднимай for AC-010")`, не skip).
-
----
+Исполнитель пишет по плану; мелкое отклонение (≤2 файлов без смены архитектуры) допустимо, крупное требует доплана, системный блокер — вопрос Саше. Бэкап и identity-предусловия обязательны; детали — [roles and phases](references/roles-and-phases.md).
 
 ## Блок 3: Тестирование
 
-- `HF:test` выполняет **исполнитель** (`composer-2.5`): гоняет `verify` из таблицы IAC плана архитектора, молча (AC-H04). **Отдельной роли «тестировщик» нет** (решение Саши 29.09; см. Блок 3 в GLOSSARY).
-- **Мелкий баг** (≤2 файла, очевидная причина) → исполнитель чинит сам (1 попытка)
-- **Крупный баг** → исполнитель фиксирует причину → **Саша решает** → архитектор делает hotfix-план → исполнитель применяет
-- **Готово =** все точки проверки из плана архитектора пройдены (✅/❌)
-- **Волна eco-config (w1–w4):** обязательный AC `HF:test` = `probe_battle_venv.py` PASS на боевом python **каждого** ключа волны; pytest PFS/hermes этот AC **не** закрывает (§10.12 EcologyIntegration)
-- Статус «completed» на весь **граф** — через `GATE:done` auto-complete после preflight exit 0 (не приёмка `HF:plan`).
-
----
+`HF:test` выполняет тот же исполнитель по IAC; отдельной роли тестировщика нет. Готово только после всех verify, включая `probe_battle_venv.py` для eco-config; крупный дефект эскалируется архитектору через решение Саши.
 
 ## Блок 4: Документирование
 
-- ТЗ-файл в `TZ/<Tool>/<Tool>_TZ.md` пока инструмент используется. Архивация — только при выводе из эксплуатации.
-- Исполнитель (`HF:docs-handoff`): текст скилла/ТЗ-секции **кроме** манифеста; `manifest_hints` в `complete-phase.metadata`.
-- **Манифест, digest/render, `restore-all-skills.sh`, `.env`/`jobs.json`/`entities.json` — только `ORCH:shared-state`** (оркестратор Сирень). Исполнитель не пишет в `EcosystemManifest.json`. AC `ORCH:shared-state` / `DECOMM-TAIL` по `--check-drift` — см. «Блок 4 — владелец общего state» (DevWorkflow-шаг).
-- **Скилл:** мелкая правка → архитектор сам; новый раздел → предлагает Саше.
-- **MEMORY и скиллы:** см. `hermes-memory-hygiene`.
-
----
+`HF:docs-handoff` меняет текст скилла/ТЗ и передаёт `manifest_hints`; манифест и общий state — только `ORCH:shared-state`. ТЗ хранится до вывода инструмента из эксплуатации.
 
 ## Блок 5: Бэкапы и откат
 
-- **Задачи архитектора:** бэкап всегда.
-- **Задачи исполнителя:** только если затронут `config.yaml` или `jobs.json`.
-- **Путь:** `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`.
-- **`DECOMM-TAIL`:** после `HF:backup` и `DEC:exec` — обновление манифеста в `ORCH:shared-state`; приёмка drift — тот же AC `--check-drift`, что у HF-TAIL («DevWorkflow-шаг» / «Блок 4 — владелец общего state»).
-- **Хранение:** 2 недели, 1 бэкап в день. Self-check чистит.
-- **Откат:** авария → архитектор немедленно; плановый → архитектор предлагает, ждёт ОК.
+Архитектор бэкапит всегда; исполнитель — при изменении `config.yaml`/`jobs.json`. Путь и retention: `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/`, 2 недели; аварийный откат — архитектор.
 
----
+## Блок 5Б: Разрешающие сигналы
 
-## Блок 5Б: Классификация разрешающего сигнала
-
-**Триггер:** любой `write_file`/`patch` вне `_Archives/`, `cronjob(create|run)`, `curl -X POST|PUT|DELETE` к API.
-
-| Категория | Разрешает? |
-|---|---|
-| `direct-imperative` — глагол-императив от Саши именно на это действие | ✅ |
-| `continuation-of-approved-plan` — пункт из согласованного плана | ✅ |
-| `question-answer` — ответ на вопрос, действие не запрошено | ❌ |
-| `own-inference` — модель вывела «раз X, значит нужно Y» | ❌ |
-| `conditional` — «если X — делай Y», истинность X оценивает модель | ❌ |
-
-Если ❌ — отдельный turn без side-effect-инструментов, текстовый вопрос Саше.
-
----
+Side-effect разрешён только прямым императивом Саши или пунктом согласованного плана. `question-answer`, `own-inference` и `conditional` не разрешают запись, cron или mutating API; полный классификатор — [roles and phases](references/roles-and-phases.md).
 
 ## Блок 6: Эскалация
 
-**Стоп + пишет Саше:** критическая поломка, неопределённость в ТЗ.
-**Ночью:** сохранить состояние в ТЗ-файл → «жду решения» в TG → ждать утра.
-**Молчит:** рутинные cron без ошибок.
+Критическая поломка или неопределённость в ТЗ → стоп и сообщение Саше; ночью сохрани состояние в ТЗ и жди решения. Рутинный cron без ошибок не буди.
 
----
+## Блок 6А: QA
 
-## Блок 6А: QA-проверка
+Для hotfix без предварительного плана: архитекторский checklist → до 3 циклов исправления; остаток ❌ означает откат и доклад. Если IAC-план уже пройден, 6А пропускается.
 
-Не PREFIX:фаза. Не обязательный `agent -p`. Канон покрытия тестами пайплайна — `HF:test` (`composer-2.5`). 6А — только hotfix без плана 1А.
+## Блок 6Б: Делегирование
 
-**Пропускается** если архитектор уже написал план с тестами (Блок 1А) и исполнитель прошёл его (Блок 3).
-
-**Применяется** для изменений БЕЗ предварительного плана архитектора (срочный hotfix, ручная правка).
-
-Процесс: крон архитектора собирает чек-лист → исправить ❌ → повторить (макс 3 попытки) → все ✅ = короткий отчёт. Остались ❌ → откат + доклад.
-
----
-
-## Блок 6Б: Делегирование субагентов
-
-Таблица 6Б — не канон PREFIX:фаза и не канон живого графа DEV/<slug>.
-На живом графе: только agent -p по таблице DKP (инвариант 8). cronjob/delegate_task
-на диспатчащихся детях запрещены.
-
-Namespace (прецедент t_2c8ee3b2): cronjob(repeat=1) и delegate_task — D1
-модель Hermes-воркера cronjob/delegate (hermes chat -m / toolsets file|terminal|web), НЕ нативный
-Cursor CLI subagent и НЕ pipeline init. Передавать cursor-grok-* /
-composer-2.5 / claude-sonnet-* в cronjob(model=) / delegate_task(model=)
-запрещено (HTTP 400 tutu, 0 tool-calls, protocol_violation).
-Если 6Б всё же вне пайплайна: D1 = NULL или tutu vendor/model;
-роль Cursor (D2) — только внутри уже живого воркера через agent -p --model.
-Колонка «Модель» ниже — slug внутреннего agent -p, не аргумент cronjob/delegate.
-
-| Задача | Модель | Инструмент | Таймаут |
-|---|---|---|---|
-| Архитектор: ТЗ / план / анализ | `cursor-grok-4.6-high` | `cronjob(repeat=1)` | — |
-| Архитектор: реализация (fallback) | то же | `cronjob(repeat=1)` | — |
-| Исполнитель: реализация >5 мин | `composer-2.5` | `cronjob(repeat=1)` | — |
-| Исполнитель: короткая <5 мин | `composer-2.5` | `delegate_task` | 300с |
-| Координатор: справочный | `composer-2.5` | `delegate_task` | 120с |
-
-НЕ для диагностики/починки багов инструментов и кронов — это кейс DevWorkflow BUG:diagnose (Блок 6В), а не одноразовый cronjob-аутсорсинг. Архитектор на диагностику бага вызывается только как воркер фазы `BUG:diagnose`.
-
-### Toolsets
-
-| Задача | enabled_toolsets |
-|---|---|
-| Архитектор: ТЗ / план | `["file", "terminal"]` |
-| Исполнитель: реализация | `["file", "terminal"]` |
-| Исполнитель: тестирование | `["file", "terminal"]` |
-| Исследование с web | `["file", "terminal", "web"]` |
-
-### Что передавать в промпт
-
-1. Роль и среда, абсолютные пути
-2. Полный текст ТЗ или плана: `cat` без `head`/`truncate`. Если не влезает в один промпт — абсолютный путь к файлу + «прочитай сам», либо явно «часть 1/N». Запрещено молча обрезать и выдавать обрывок как полный документ. Wiki-ссылки / URL без тела по-прежнему недостаточно. (Канон: pitfall cursor-cli.)
-3. Граница автономности: «механическое — делай сам; семантическое — СТОП»
-4. Формат отчёта, явные запреты
-5. **Критичные факты из MEMORY — явно в промпт.** Cron-сессии НЕ получают MEMORY/USER PROFILE.
-6. **Reuse-first (см. references/reuse-first-rule.md):** субагент не внедряет новые сущности без явного согласования Саши.
-
-Полные правила: `references/subagent-rules.md`.
-
----
+На живом графе не используй `cronjob`/`delegate_task` для диспатчащихся детей. Вне графа соблюдай D1/D2 namespace, toolsets, таймауты, полный контекст и reuse-first; [subagent rules](references/subagent-rules.md).
 
 ## Блок 6В: Диагностика перед починкой
 
-Когда «что-то не работает» — **не чинить сразу**. Порядок:
-
-1. **Заведи slug с фазой `BUG:diagnose`** (`pipeline init --case BUGFIX`, read-only). Роль: `emit-prompt` → invoke-role (архитектор). Оркестратор **не** пишет `_fix_plan` сам.
-2. `GATE:diagnose-review` — **auto**: после `_fix_plan_*.md` / body DX; LIGHT — оркестратором в том же ходе. REV качества ТЗ — `REV:tz` в TZ-WRITE.
-3. Исполнитель реализует по плану на фазах HF (GLOSSARY §5.2)
-
-План сохранить в `_fix_plan_YYYYMMDD.md` рядом с инструментом.
-
----
+Не чинить сразу: `BUG:diagnose` (read-only) → `_fix_plan_YYYYMMDD.md`/непустой body → auto `GATE:diagnose-review` → TZ-WRITE → HF-реализация. План и контекстные guards — [bugfix runbook](references/bugfix-workflow.md).
 
 ## Блок 7: Диагностика и отладка
 
-**При изменении ТЗ** (параллельно передаче задачи в Cursor): запустить drift-check манифеста:
-
-```bash
-python3 ~/WorkVault/Registries/render_manifest.py --check-drift
-```
-
-Расхождения — в отчёт Саше; обновление манифеста — после согласованной реализации (Блок 4).
-
-**Метод:** скилл `systematic-debugging` (4 фазы: root cause → pattern → hypothesis → fix). Диагноз — `BUG:diagnose`; фикс — `HF:impl` (не `HF:fix`).
-
-**Reuse-first при фиксе (см. references/reuse-first-rule.md):** root cause чинится через существующие инструменты; новый инструмент — только предложение на согласование.
-
-**Специфика:**
-- Модель: исполнитель (composer-2.5)
-- Мелкий баг → исполнитель чинит сам (1 попытка)
-- Крупный → Саша решает → архитектор делает hotfix-план
-- Системный блокер → вопрос Саше напрямую
-- Эскалация к архитектору: root cause в архитектуре, не воспроизвелось за 2 попытки
-- Эскалация к Саше: данные могут быть повреждены, production down
-
----
+Используй systematic-debugging: root cause → pattern → hypothesis → fix. Диагноз остаётся `BUG:diagnose`, фикс — `HF:impl`; при изменении ТЗ запускай `render_manifest.py --check-drift`. Reuse-first обязателен.
 
 ## Блок 8: Исследования и анализ
 
-Триггеры: «проанализируй», «исследуй», «найди», «посчитай», «сравни», «что если».
+RESEARCH имеет slug и фазы `RS:*`; collect/analyze и `REV:report` идут раздельными ролями. Алгоритм: Scope → Сбор → Анализ → Рекомендации; без данных и графа код/конфиги/скиллы не менять.
 
-**collect/analyze** = grok `agent -p`; **REV:report** = sonnet; постановка = фазы `RS:*` в рецепте RESEARCH, не свободный чат без slug.
+## Справочники
 
-**Алгоритм:** Scope → Сбор → Анализ → Рекомендации.
-
-**НЕ делать:** не менять код/конфиги/скиллы без графа RESEARCH, не делать выводы без данных.
-
----
-
-## Паттерн обновления Hermes (merge upstream)
-
-Для обновления Hermes из upstream — загрузить `references/hermes-upgrade-pattern.md`.
-Там: стратегия MERGE, risk zones, питфоллы (venv/pytest, index.lock, config migration), бэкап-конвенция, upstream turbulence signals.
-
-### venv-операции в USERTOOLS-инструментах (прецедент 23.09, PFS)
-
-Любое пересоздание/пересборка `.venv` воркером (uv sync, recreate) может сломать боевой крон: shared-зависимости соседних пакетов пропадают. Правило: после ЛЮБОЙ venv-операции в инструменте — `uv sync --extra dev` и проверить импорты всего shared-стека (для PFS: `confluencesync`, `entityregistrycli`, `mofs_index`, `bs4`, `markobjectsfromsummary`), затем боевой импорт/сухой вызов. Smoke: `python -c "import markobjectsfromsummary"`. Sibling-зависимости объявлять в `pyproject.toml` инструмента (`pkg @ file:///${PROJECT_ROOT}/../<Tool>`), не ручным `uv pip install` — источник истины pyproject. Не ставить PyPI-пакет `bs4` (заглушка; нужен `beautifulsoup4`). `uv.lock` не коммитить, пока pyproject не описывает реальный runtime.
-
-**Утверждено:** правки ядра hermes-agent — ТОЛЬКО с ревизором (reviewer). Никогда не патчить ядро без REV.
-
----
-
-## Связанные файлы
-
-- `references/hermes-upgrade-pattern.md` — паттерн обновления Hermes (merge, питфоллы, бэкапы)
-- `references/cursor-cli.md` — установка, аутентификация, pitfall'ы Cursor CLI
-- `references/cursor-cli-patterns.md` — справочник вызовов Cursor CLI
-- `references/cursor-cli-limitations.md` — ограничения Cursor CLI
-- `references/pitfall-remediation-workflow.md` — процедура починки код-питфоллов (Pitfall Scan → закрытие в *-pitfalls.md)
-- `references/srtool-v2-pitfalls.md`
-- `references/movefromloop-v042-pitfalls.md`
-- `references/movefromloop-v043-pitfalls.md`
-- `references/reuse-first-rule.md`
+- [DevWorkflow core](references/devworkflow-core.md) — dual-path, граф, воркеры, гейты, one-pass.
+- [Bugfix routing](references/bugfix-workflow.md) — классификация, BUGFIX, emit-prompt/check, диагностика.
+- [Roles and phases](references/roles-and-phases.md) — модели, блоки 0–8, планы, тесты, state ownership, venv.
+- [Subagent rules](references/subagent-rules.md) — делегирование и контракты промптов.
+- [Verification checklist](references/verification-checklist.md) — полный итоговый чеклист.
+- [Cursor CLI](references/cursor-cli.md), [patterns](references/cursor-cli-patterns.md), [limitations](references/cursor-cli-limitations.md).
+- [Hermes upgrade](references/hermes-upgrade-pattern.md) — merge, risk zones, upgrade pitfalls.
+- [Pitfall remediation](references/pitfall-remediation-workflow.md), [SRTool](references/srtool-v2-pitfalls.md), [MoveFromLoop v0.4.2](references/movefromloop-v042-pitfalls.md), [v0.4.3](references/movefromloop-v043-pitfalls.md), [reuse-first](references/reuse-first-rule.md).
 
 ## Verification Checklist
 
-- [ ] `TZ:finalize` done, AC показан в origin, `GATE:take-into-work` done (`auto-pass: ac-shown`) — фразу «берём в работу» не ждём (императив 28.09)
-- [ ] `HF:plan` done + таблица IAC; `GATE:plan-approve` auto (Блок 1А)
-- [ ] Бэкап создан в `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/` (Блок 5)
-- [ ] Модели: архитектор (cursor-grok-4.6-high) планирует, исполнитель (composer-2.5) пишет/тестирует
-- [ ] Cron-субагент: критичные факты из MEMORY переданы явно в промпт
-- [ ] Перед каждым side-effect — категория разрешающего сигнала определена (Блок 5Б)
-- [ ] Статус «готово»: `GATE:done` always auto после preflight exit 0 (**holds сняты, Q пусты**); отчёт AC — в origin до auto-complete (маркер `AC-delivered: origin`); operator-AC без ✅ при open hold; корень не complete до `GATE:done` done; `HF:plan` + `children=[]` → broken-tail block
-- [ ] Все вызовы через Cursor CLI (`agent -p`)
-- [ ] Полный документ в `agent -p`: `cat` без head/truncate, либо путь + «прочитай сам», либо явно «часть 1/N»; неполная копия не выдана как полная
-- [ ] Новые сущности (если предлагались) — явно вынесены на согласование Саше, не внедрены самостоятельно.
-- [ ] На баг-триггер первым шагом оркестратора был **`pipeline init --case BUGFIX`** (фаза `BUG:diagnose` в рецепте) до invoke-role/agent -p; ретро-init нет (инвариант 9)
-- [ ] Если готовился вызвать agent -p / cronjob / delegate на баг — slug с фазой `BUG:diagnose` уже в `_state.json` (`pipeline status --slug <slug>`), иначе стоп
-- [ ] Новый несекретный конфиг-ключ инструмента — только в `~/WorkVault/Registries/EcosystemConfig.yaml` + `EcosystemConfig.schema.json`; литерал пути/модели/токена в коде и новый per-tool `.env` = дефект; dual-read (`config.overlay.yaml`) запрещён для **новых** tools (сразу `unified_only` через `~/.hermes/lib/usertools_config.py`)
-- [ ] Волна eco-config (w1–w4): `probe_battle_venv.py` PASS на боевом python каждого ключа волны; pytest PFS/hermes этот AC не закрывает
+Перед завершением проверь [полный checklist](references/verification-checklist.md): гейты и AC в origin, IAC/backup, модели и полный контекст, BUGFIX-first, commit/drift/eco-config invariants и отсутствие новых сущностей без согласования.

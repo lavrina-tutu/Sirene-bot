@@ -60,6 +60,26 @@ urgent_channels:
 
 Сообщение от контакта из `urgent_contacts` в канале из `urgent_channels` — одно 🔴 (merge по `post.id`, первое ведро побеждает). `blacklist_*`/`is_urgent` на channel-ведре не применяются (bucket isolation).
 
+## Чёрный список авторов `blacklist_users` (не уведомлять вообще)
+
+Отдельная секция в `loop_rules.yaml`: сообщения от этих пользователей/ботов отбрасываются
+до уведомления (urgent и digest) через `should_drop_by_blacklist`. Username резолвятся через
+Loop API `/api/v4/users/usernames` (нераспознанные — только stderr, без падения).
+
+```yaml
+blacklist_users:
+- dvizhbot
+- ai-assistant
+- ai-assistant-sandbox  # добавлен 02.11.2026 (бот «тестовая среда многопользовательского режима Hermes»)
+- hermes-test-users
+- tedsupportbot
+- tutu_metabase_bot
+- product-test-bot
+```
+
+Проверка резолва username: POST `/api/v4/users/usernames` c LOOP_TOKEN (из `~/.config/hermes/.env`).
+Если username не резолвится — blacklist молча не сработает; проверять перед сдачей.
+
 ## Процедура обновления
 
 1. Открыть `loop_rules.yaml`

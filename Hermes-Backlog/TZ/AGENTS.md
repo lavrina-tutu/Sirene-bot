@@ -23,11 +23,7 @@ All specs (ТЗ) are in `~/WorkVault/Hermes-Backlog/TZ/` (CWD).
 
 ## Dev Skills
 
-### `tz-workflow`
-Load for TZ creation/updates/archival. Defines steps 1-4, models, dev cycle, autonomy rules.
-
-### `hermes-feature`
-Load for Hermes code impl: setup, skill dev, integration, testing. Blocks: 0 → 1 → 1A → 2 → 3 → 4.
+Для ТЗ, кода и скиллов использовать `devops/dev-workflow` и его context/emit path. `tz-workflow` сохраняет хранение ТЗ; `hermes-feature` — предметные implementation/QA rules. Роли и модели — YAML; raw launch не использовать.
 
 ---
 
@@ -55,25 +51,7 @@ Load for Hermes code impl: setup, skill dev, integration, testing. Blocks: 0 →
 
 ## Правила диалога
 
-**R1 — Ответ первым.** Вопрос Саши → первый абзац ответа прямо по существу.
-Затем можно: встречный вопрос, идею, рекомендацию. Нельзя: поднимать
-старое неактуальное уточнение.
-
-**R2 — Старое не блокирует.** Открытое уточнение без ответа + новое
-сообщение от Саши → уточнение отменено. Вернуться можно одной строкой
-в конце ответа.
-
-**R3 — Вопросы Саше. По одному, варианты, рекомендация.** Есть неясность → сказать общее количество вопросов, задавать по одному. Каждый: контекст + нумерованные варианты + моя рекомендация.
-
----
-
-## Cursor CLI Usage
-
-```bash
-agent -p "задача" -f --model <MODEL> --output-format json
-```
-
-Details: `~/.hermes/skills/devops/cursor-cli/references/cursor-cli-patterns.md`
+Правила диалога (R1–R3) берутся из активного SOUL; этот каталог хранит правила ТЗ и среды.
 
 ---
 

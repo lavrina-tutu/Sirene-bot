@@ -14,6 +14,8 @@ source: appendix_chains-and-skills-audit_20260907.md
 Единый язык кейсов, ролей, скиллов, фаз и артефактов. Не процедура и не каталог графов.
 При конфликте с чатом / скиллом / appendix — править этот файл, не плодить синонимы.
 
+> **Активный процесс:** файловый DevWorkflow — `devops/dev-workflow` (master-ТЗ Б55), роли вызываются штатным pipeline после emit-prompt, модели/backend — из YAML `tools.dev_workflow`. Имена 10 кейсов, `PREFIX:фазы`, классы S/O/C и operator-словарь ниже сохраняются без переименования; kanban CLI-процедуры и таблицы запуска исторические/read-only и не являются активным маршрутом.
+
 ## 0. Как читать
 
 1. Фаза канбана = `PREFIX:kebab-case`. Без двоеточия PREFIX — не фаза.
@@ -299,6 +301,10 @@ DX             = BUG:diagnose → GATE:diagnose-review   # только BUGFIX
 ## 8. Инструменты (указатель)
 
 Полный список имён — `MAIN_TZ_INVENTORY.md`. Здесь не дублировать. Не выдумывать аббревиатуры инструментов. Исключение протокола выдачи MFE/MFL — в USER.md, не в пайплайне.
+
+## Исторический changelog (read-only)
+
+Версии ниже сохраняются как история; их kanban CLI-команды (`kanban_create`/`kanban_complete`/`card`/`set-model`) не выдаются за активную процедуру. Активный процесс — файловый DevWorkflow (`devops/dev-workflow`, Б55, YAML `tools.dev_workflow`), см. заголовок.
 
 ## v0.2.6 — долг DKP v0.3.2 AC/IAC HITL (2026-09-25)
 1. Слой артефакта: `AC-###` в master-ТЗ пакета; `IAC-##` в `HF:plan` (`path`/`verify`/`depends`/`covers`). Не фазы и не скиллы. Омоним: САНКТ `IAC-01..10` ≠ пайплайнные `IAC-##`.

@@ -65,3 +65,18 @@ pipeline invoke-role --role <architect|reviewer|executor> \
 ## Сборка контекста (справочно)
 
 Логика digest и путей — в модуле `pipeline_context.py`. Отдельный скилл `cursor-task-context` после W4 не активен; его смысл перенесён сюда и в emit-prompt.
+
+## B56: immutable packet
+
+`emit-prompt` создаёт `devworkflow-packet/1.0`: JSON snapshot, SHA-256 sidecar и
+детерминированный Markdown. Markdown содержит абсолютные FileRef и doctrine, но не тело
+master. Каждый FileRef фиксирует path/hash/mtime; перед `invoke-role` повторно проверяются
+slug, phase, G6, render, marker и refs. Ручной prompt, symlink, неизвестное поле,
+изменённый source или исчезнувшая часть extract дают context error до prepare/backend.
+
+`context-used:` содержит schema, packet_id, packet_path, prompt_sha256 и status/reason
+master/extract. Это запись об emit, не accepted result. После prepare exact packet
+связывается с фазой; G2 проверяет snapshot и не требует сохранённый `/tmp`.
+
+`handoff-contract` в brief/утверждённом плане — data-only YAML. Он определяет master,
+write_scope, prohibitions, inputs и outputs; команды из него никогда не исполняются.

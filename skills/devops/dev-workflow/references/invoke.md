@@ -15,3 +15,14 @@ pipeline invoke-role --role <architect|reviewer|executor> --prompt-file /tmp/tas
 - Фатал/квота означает WAIT; не меняет модели, лимиты или счётчики. Ровно один технический corrective-повтор допускается по `SKILL.md`.
 
 Ревизор пишет только `REV-tz.md` или `REV-plan.md`; verdict читается из канонного блока, не из имени или старого stdout.
+
+## B56 binding
+
+До `invoke_prepare` адаптер принимает только пару, выпущенную `emit-prompt`: immutable
+packet snapshot и byte-exact Markdown. Он сверяет schema/id/slug/phase/G6, sidecar,
+marker и FileRef; затем держит принятые bytes в памяти до backend. Контекстная ошибка
+имеет rc=1, не provider_fatal и не расходует ход.
+
+После prepare phase получает exact `context_packet`; только оно вместе с marker допускает
+G2. Наличие packet_id не означает completion/APPROVE. Для compressor accepted publication
+должна соответствовать packet+prepare и обычному receipt; extract сам по себе не результат.

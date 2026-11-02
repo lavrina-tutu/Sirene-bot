@@ -61,3 +61,7 @@ pipeline invoke-role --role <architect|reviewer|executor> --prompt-file /tmp/tas
 | `references/cases-guide.md` | выбор кейса без изменения канона |
 | `references/kanban-mechanics.md` | только историческая read-only справка |
 | `references/onboarding.md` | краткий вход для заказчика |
+
+B56 использует один owner контекста: `emit-prompt` выпускает immutable packet pair,
+`invoke-role` принимает только эту пару, а G2 сверяет accepted binding. Ручной prompt и
+fallback запрещены; правила полей и MUST-read — в `references/context.md`.

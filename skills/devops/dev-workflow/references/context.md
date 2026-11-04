@@ -4,6 +4,13 @@
 
 Норматив для `emit-prompt` и для текста, который получает роль. Мастер-ТЗ: DevWorkflow **Б12**.
 
+## B56 envelope
+
+Контентная роль получает только проверенный `devworkflow-packet/1.0` и его
+детерминированный Markdown. Прочитать `must_read` и required inputs; inline
+digest/canon/context rules проверены побайтно. Ручной prompt, fallback master
+и старый snapshot не являются входом.
+
 ## Зачем
 
 Между фазами передаётся **не** весь чат и **не** тело master-ТЗ целиком, а пакет-указатель:
@@ -80,3 +87,15 @@ master/extract. Это запись об emit, не accepted result. После 
 
 `handoff-contract` в brief/утверждённом плане — data-only YAML. Он определяет master,
 write_scope, prohibitions, inputs и outputs; команды из него никогда не исполняются.
+
+## MIG: concrete slot admission
+
+В `MIGRATION` общий `pipeline_mig_complete_guard` вызывается до публикации
+packet, `invoke_prepare`, выбора следующего slot и любого `complete-phase` writer.
+Для каждого предшествующего `MIG:block-N` проверяются own acceptance, identity,
+absolute evidence path, hash, timestamp и result receipt. Aggregate status
+`GATE:block-accept` не является proof. Прямой `ORCH:shared-state` или
+`GATE:done` до собственного accept последнего блока отказывает без мутации;
+sirene не получает packet или invoke.
+
+Native compressor: `hermes-native` is the prepare/status selector for `hermes-internal`. The existing native adapter sends concrete `--model` before YAML `roles.compressor.model`; a selected null/empty/native selector uses static `HERMES_COMPRESSOR_MODEL`. Whitespace/non-string or non-concrete ENV models are refused. A successful HTTP response with no valid completion is a post-prepare local refusal (rc=4): it writes no extract/result/receipt and is not provider-fatal. Missing static model/key/base URL, worker failure, or a provider/transport failure remains rc=3/provider-fatal; the static refusal occurs before SDK construction/send/publication. One send, SDK retries=0, no alternative/fallback/rotation. No configuration discovery or new keys.

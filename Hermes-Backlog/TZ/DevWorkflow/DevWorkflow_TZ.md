@@ -2,14 +2,14 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Процесс изменения Hermes/USERTOOLS: одна задача, FIFO и непрерывное продолжение"
-version: 0.9.2
-date: 2026-11-03
-status: approved
+version: 0.9.3
+date: 2026-11-05
+status: draft
 author: архитектор (gpt-6.1-sol, Codex exec)
-last-section-added: "2026-11-03 — TZ:finalize доведения Б56 после REV:tz APPROVE; Б56.11 утверждён, требования и AC-PKT-01…14 сохранены"
-case: DEV
-slug: dovedenie-vnedreniya-formata-mezhfazovyh-paketov
-previous_slug: b55-12-3-novyy-format-mezhfazovyh-paketov-backlo
+last-section-added: "2026-11-05 — Б57: TZ:patch rework R1/R2 упрощения dev-workflow; требуется повторная REV:tz и штатное пересжатие"
+case: SKILL-CHANGE
+slug: uprost-skill-dev-workflow-po-itogam-dejsa-dovede
+previous_slug: dovedenie-vnedreniya-formata-mezhfazovyh-paketov
 depends_on:
   - TZ/GLOSSARY.md >= 0.2.15
   - TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md >= 0.4.4
@@ -27,13 +27,15 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 # DevWorkflow — мастер-ТЗ машины разработки без канбана
 
-**Текущий пакет — доведение внедрения Б56 до утверждённого контракта**, слаг `dovedenie-vnedreniya-formata-mezhfazovyh-paketov`, `TZ:finalize` от 03.11.2026 после независимой `REV:tz APPROVE` этого поезда. Дополнение Б56.11 утверждено; блокирующих замечаний и новых Q-n нет. Нормативная база Б56 согласована 02.11.2026; Б56.1…56.10, утверждённый текст Б56.11 и AC-PKT-01…14 сохранены без изменения требований. Версия 0.9.2 сохранена во frontmatter; статус draft → approved. Исторические done/96/340 passed прежнего поезда не доказывают соответствие полного контракта; runtime AC этого поезда остаются NOT_RUN до собственных проверок.
+**Текущий пакет — упрощение скилла dev-workflow**, слаг `uprost-skill-dev-workflow-po-itogam-dejsa-dovede`, TZ:patch rework по REV:tz REQUEST-CHANGES от 04.11.2026. Адресные требования R1–R7 и AC-SIMP-01…09 — Б57; дополнение пока draft. Исторические APPROVE Б55/Б56 относятся к своим слагам. Переходы процесса выполняет внешний оркестратор после возврата роли; реализация скилла и поведенческие проверки здесь NOT_RUN.
+
+**Предыдущий пакет — доведение внедрения Б56 до утверждённого контракта**, слаг `dovedenie-vnedreniya-formata-mezhfazovyh-paketov`, `TZ:finalize` от 03.11.2026 после независимой `REV:tz APPROVE` этого поезда. Дополнение Б56.11 утверждено; блокирующих замечаний и новых Q-n нет. Нормативная база Б56 согласована 02.11.2026; Б56.1…56.10, утверждённый текст Б56.11 и AC-PKT-01…14 сохранены без изменения требований. Версия 0.9.2 сохранена во frontmatter; статус draft → approved. Исторические done/96/340 passed прежнего поезда не доказывают соответствие полного контракта; runtime AC этого поезда остаются NOT_RUN до собственных проверок.
 
 **Предыдущий пакет — Б55.** `current`: существующий DevWorkflow на файловом состоянии; подтверждённый режим на снимке разбора — `workflow-only`. `target`: одна задача на весь процесс изменения Hermes/USERTOOLS, FIFO и продолжение без сообщения Саши. Фактическая готовность механизмов проверяется отдельно; текст ТЗ не является runtime evidence.
 
 Это **инфраструктурный план**, не USERTOOL и не правка ядра Hermes. Исходный переход от канбана описан в Б1–Б54 и сохранён как история решений. Изменения порядка — Б55.1; новый контракт передачи контекста — Б56 после его реализации и включения. Неизменённые контракты продолжают действовать.
 
-Кейс текущего слага в `_state.json` — `DEV`; архитектор его не меняет. Рецепт, ревизия, реализация и испытания исполняются отдельными фазами существующего DevWorkflow.
+Кейс текущего пакета — `SKILL-CHANGE` по принятому контексту; архитектор его и process state не меняет. Рецепт, ревизия, реализация и испытания исполняются отдельными фазами существующего DevWorkflow.
 
 ---
 
@@ -88,8 +90,9 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б52** | Пакет `hermes-bugfix-cursor-boundary`: explicit-only аварийный trigger после gateway update — конкретная ImportError/SchemaError/KeyError/ModuleNotFoundError + ручная Remote-SSH journalctl/systemctl процедура с rollback SHA, restart или smoke-test; обычный BUGFIX → dev-workflow, standalone code fix → codex | TZ-patch.md, SK-preflight.md, Б27, Б33, Б45.5, Б51 | AC-P1…P6 класс S; GATE:done этого SKILL-CHANGE хвоста; compress skip, REV OFF; usage 19, процедура не архивируется, корпуса Б40–Б51 не откатывать |
 | **Б53** | Пакет `codex-canonicalize`: канонизация расходящихся копий Codex; workspace — единственный владелец, live — зеркало; одноразовый live→workspace импорт принятого содержимого, затем workspace→live; target 23 320 B / SHA-256 `c19c3f0516f3858be2f94c38678640d5bb6791cf13a4d1ffefaa6ba4e2abfae9`; helper `avail_check.sh` исключён | TZ-patch.md, REV-tz.md, SK-preflight.md, Б27, Б33 п.56–59, Б45.5, Б52 | COD-C1…C10 класс S; GATE:done этого SKILL-CHANGE хвоста; compress skip, REV:tz APPROVE; usage 21, cron/manifest/profile/master baseline не меняются, корпуса Б40–Б52 не откатывать |
 | **Б54** | Граница хода и доставка результата; существующий пакет исправлений | Б43–Б49, диагноз 30.10 | AC-PW-01…12; готовность реализации проверить перед reuse |
-| **Б55** | Текущий пакет перепроектирования: одна задача, FIFO, 24/7, ожидание, три регламента повторов, чистка, пилот; явные замены прежних норм | Ответы Саши Q-1…Q-15/Q-8-addendum, RS-collect/RS-analyze, история октября | AC-RP-01…19; тяжёлая техника только triage; границы текущего хода Б0.3 |
+| **Б55** | Пакет перепроектирования: одна задача, FIFO, 24/7, ожидание, три регламента повторов, чистка, пилот; явные замены прежних норм | Ответы Саши Q-1…Q-15/Q-8-addendum, RS-collect/RS-analyze, история октября | AC-RP-01…19; тяжёлая техника только triage; границы текущего хода Б0.3 |
 | **Б56** | Новый формат пакетов: JSON-конверт, render, ссылки/hash, входы/выходы, G1/G2, совместимость и rollout | Б12, Б17, Б35, одобренная idea Б55.12 п.3 | AC-PKT-01…14; TZ:finalize после REV:tz APPROVE, реализация по отдельному плану; границы Б0.3 |
+| **Б57** | Упрощение существующего скилла: R1–R7, AC-SIMP, границы реализации и передачи R1/R2 ревизии | Brief/SK-preflight/REV текущего слага, Б12/Б55/Б56 | AC-SIMP-01…09; draft до повторной REV, runtime NOT_RUN |
 | **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд; **v0.5.0:** исключение allowlist скиллов Б45.5 (тела таблиц моделей/вызова, не баннер dual-path); **v0.6.0:** `dwka_guard` hold `удаляй`; `jobs.json` hold `ставь кроны`; **v0.6.1:** `from_dict` жёсткий; `set_case` без sha; чужие `_state.json` PFS-слагов; **v0.6.2:** список `FATAL_PATTERNS` / таймауты `agent -p` / REV / страж п.47 / I1; **v0.7.0:** `warn_after` / ядро / сырой SQL write / `session.py` / `hermes-session-reset-policy` тело; **v0.7.3:** mode-aware reset, fail-closed audit и detail validator Б50; **v0.7.4:** body/references/routing/recovery и baseline двух зеркал cursor-cli не переписываются, Б51 boundary-only; **v0.7.5:** explicit-only trigger hermes-bugfix-cursor, body/usage/cron/manifest/profile и gateway baseline не переписываются, Б52; **v0.7.6:** `codex-canonicalize` — body/reference, helper `avail_check.sh`, usage/cron/manifest/profile/master baseline не переписываются, изменяемая surface ровно два `codex/SKILL.md`, Б53 | Б13.1, Б13.5, Б27, Б31.2, Б33, Б37, Б45, Б45.5, Б46, Б47, Б48, Б49, Б50, Б51, Б52, Б53 | чеклист Шаг 4 tz-workflow |
 | **Связи с экосистемой** | Кто с кем (не поля) | Б14, Б32, манифест | отдельно от Б35 |
 | **Открытые вопросы** | Явный h2 (пусто / «нет») | Б36, AC-018 на W4 | чеклист Шаг 4 |
@@ -132,11 +135,21 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 ### Б0.3 Границы этой записи (TZ-WRITE)
 
-Текущий ход — `TZ:finalize` слага `dovedenie-vnedreniya-formata-mezhfazovyh-paketov`, уже запущенная роль architect. Основание — независимая `REV:tz APPROVE` от 03.11.2026 в `dev/<slug>/REV-tz.md` на драфт master с SHA-256 `2f18e4413b8c1ccb2250277164b7a1f906aeb28779a5b2df4a08170b907bece9`. Дополнение Б56.11 утверждается без изменения требований. Б56.1…56.11, все AC-PKT-01…14, Б55.1…55.14/AC-RP-01…19 и результаты прежних поездов сохраняются; runtime AC не объявляются закрытыми.
+Текущий ход — TZ:patch rework слага `uprost-skill-dev-workflow-po-itogam-dejsa-dovede`, уже запущенная роль architect по packet `65cb7ba02a1d68781d212dd0f987dbc23c84a1caf04e4bed03bf8b9aae48f954`. Основание — принятый brief и REV:tz REQUEST-CHANGES от 04.11.2026: R1 — запись требований в master и полный контракт, R2 — покрытие/адресность extract. Текущий packet содержит brief и REV как проверенные входы и разрешает запись master. Требования и AC нового пакета — Б57; прежние Б1–Б56 и их идентификаторы сохраняются.
 
-Разрешены только финальная запись этого master, строка DevWorkflow и `updated` в `MAIN_TZ_INVENTORY.md` под существующим lock, канон `dev/<slug>/TZ-finalize.md`, восстановимый snapshot/diff и документные evidence своего слага. Входной snapshot финализации: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/dovedenie-vnedreniya-formata-mezhfazovyh-paketov/backup/tz-finalize-fec043387626407cb60012f10449ce9a/documents.tgz`. Первоначальный snapshot TZ:patch и его evidence сохранены. HF-план на этой фазе не создаётся.
+Разрешены запись этого master, канон `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/TZ-patch.md`, восстановимый snapshot/diff и собственные документные evidence слага. Корень скилла в packet разрешён, но боевые инструкции — работа HF:impl после плана/REV. Inventory не входит в scope текущей фазы; требуемые пути будущей TZ:finalize перечислены в Б57.3/подготовленном контракте. Master получает новый draft; прежние утверждения своих пакетов сохранены.
 
-На текущем ходу не менять боевой код/JSON Schema runtime, скиллы, конфиг, glossary, манифест/digest, личные инструкции, extract, очередь/state/journal и process state. Не вызывать next/complete-phase/recover/invoke-role и не ожидать/мониторить собственный wrapper; приём результата принадлежит внешнему оркестратору после выхода роли. Существующий дефект G2 при разрешённой записи master фиксируется как риск приёмки, без обхода guard или правки state из этой роли. Согласование формата от 02.11.2026 и исходный **[NEW-ENTITY, требует согласования Саши]** сохраняются в Б56; нового инструмента/сервиса/БД/очереди/канала/cron не добавлять. Бюджеты/mutex Б55.12 п.1–2 и возобновление B3/B4/w3/w4 не входят.
+На текущем ходу не менять скиллы, runtime/schema, конфиг/glossary/манифест/digest/личные инструкции, extract, принятый brief/REV, packet/sidecar, очередь/state/journal и process state. Не вызывать next/complete-phase/recover/invoke-role, не ожидать и не мониторить свой wrapper. Приём результата — внешнему оркестратору после выхода. Риск G2 при разрешённой записи master сохраняется без обхода, повторного emit/invoke и ремонта state. **[NEW-ENTITY, требует согласования Саши]** сохранить дословно; новых сущностей нет. No new service, database, queue, channel, cron, budget engine or global mutex. Паузы B3/B4/w3/w4 не снимать.
+
+#### Историческая граница TZ:finalize другого слага от 03.11.2026
+
+Следующий блок сохраняет предыдущую запись Б0.3; слова «текущий ход» внутри цитаты относятся только к указанной финализации. Он не задаёт scope нынешнего SKILL-CHANGE.
+
+> Текущий ход — `TZ:finalize` слага `dovedenie-vnedreniya-formata-mezhfazovyh-paketov`, уже запущенная роль architect. Основание — независимая `REV:tz APPROVE` от 03.11.2026 в `dev/<slug>/REV-tz.md` на драфт master с SHA-256 `2f18e4413b8c1ccb2250277164b7a1f906aeb28779a5b2df4a08170b907bece9`. Дополнение Б56.11 утверждается без изменения требований. Б56.1…56.11, все AC-PKT-01…14, Б55.1…55.14/AC-RP-01…19 и результаты прежних поездов сохраняются; runtime AC не объявляются закрытыми.
+>
+> Разрешены только финальная запись этого master, строка DevWorkflow и `updated` в `MAIN_TZ_INVENTORY.md` под существующим lock, канон `dev/<slug>/TZ-finalize.md`, восстановимый snapshot/diff и документные evidence своего слага. Входной snapshot финализации: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/dovedenie-vnedreniya-formata-mezhfazovyh-paketov/backup/tz-finalize-fec043387626407cb60012f10449ce9a/documents.tgz`. Первоначальный snapshot TZ:patch и его evidence сохранены. HF-план на этой фазе не создаётся.
+>
+> На текущем ходу не менять боевой код/JSON Schema runtime, скиллы, конфиг, glossary, манифест/digest, личные инструкции, extract, очередь/state/journal и process state. Не вызывать next/complete-phase/recover/invoke-role и не ожидать/мониторить собственный wrapper; приём результата принадлежит внешнему оркестратору после выхода роли. Существующий дефект G2 при разрешённой записи master фиксируется как риск приёмки, без обхода guard или правки state из этой роли. Согласование формата от 02.11.2026 и исходный **[NEW-ENTITY, требует согласования Саши]** сохраняются в Б56; нового инструмента/сервиса/БД/очереди/канала/cron не добавлять. Бюджеты/mutex Б55.12 п.1–2 и возобновление B3/B4/w3/w4 не входят.
 
 ### Б0.4 Связь с живыми документами
 
@@ -154,7 +167,7 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 ## Что НЕ трогать
 
-Для текущего пакета действуют адресные границы Б56.10; Б55.14/55.8–55.10 сохраняют область предыдущего пакета. На текущем ходе записи — только документы Б0.3. Исторические allowlist ниже относятся к своим пакетам.
+Для текущего пакета действуют адресные границы Б57.3/Б57.5; Б56.10 и Б55.14/55.8–55.10 сохраняют область своих пакетов. На текущем ходе записи — только документы Б0.3. Исторические allowlist ниже относятся к своим пакетам.
 
 Свод запретов **на диске и в чужом коде**. Это не Б33 (неприемлемое *поведение* машины: минутный цикл, heartbeat, авто-ретрай, канбан-клон). Ниже — указатель; нормы не копировать, читать якоря.
 
@@ -2337,7 +2350,7 @@ I1 на пакете: `current` = канбан-машина DKP 0.4.4; `target` 
 | AC-RP-18 | S | Тяжёлая техника только triage; полная проверка — Б55.13 | Б55 |
 | AC-RP-19 | S | Границы, паузы и переход; полная проверка — Б55.13 | Б55 |
 
-**Область `GATE:done` текущего пакета Б55:** все AC-RP-01…19 обязательны после собственного хвоста. Новые implementation/pilot AC не объявляются закрытыми на записи ТЗ; тяжёлые idea Б55.12 не являются реализационными зависимостями.
+**Область `GATE:done` пакета Б55:** все AC-RP-01…19 обязательны после собственного хвоста. Новые implementation/pilot AC не объявляются закрытыми на записи ТЗ; тяжёлые idea Б55.12 не являются реализационными зависимостями.
 
 **Область `GATE:done` этого пакета (`rs-refuse-kanban`, CHANGE).** Финальный и равен концу **W1** (постройка `pipeline/` + скилл: `HF:impl` / `HF:test` / `ORCH:shared-state`). Согласовано с Б17.7 и Б18.6. Волны W2–W4 — отдельные хода, не один долгий `in_phase`. В таблице выше нет класса O: этот слаг не остаётся `waiting_operator` до W4.
 
@@ -2369,7 +2382,7 @@ AC-016 / AC-019 / AC-035 — класс S про поздние волны: по
 
 Номера AC-017 и AC-018 **зарезервированы** за будущим MIGRATION-слагом (таблица ниже). В этом пакете их нет, чтобы не путать `GATE:done`.
 
-**Текущий отдельный пакет доведения Б56:** все AC-PKT-01…14 обязательны заново для `GATE:done` слага `dovedenie-vnedreniya-formata-mezhfazovyh-paketov` по Б56.11. Исторические результаты прежнего внедрения сохраняются; они не закрывают эти AC текущего поезда. Старые AC не перенумеровываются.
+**Отдельный пакет доведения Б56:** все AC-PKT-01…14 обязательны заново для `GATE:done` слага `dovedenie-vnedreniya-formata-mezhfazovyh-paketov` по Б56.11. Исторические результаты прежнего внедрения сохраняются; они не закрывают эти AC текущего поезда. Старые AC не перенумеровываются.
 
 | AC | Класс | Коротко | Блок |
 |---|---|---|---|
@@ -2387,6 +2400,20 @@ AC-016 / AC-019 / AC-035 — класс S про поздние волны: по
 | AC-PKT-12 | S | Регресс guard-ов/receipt/моделей; полная проверка — Б56.9 | Б56 |
 | AC-PKT-13 | S | IAC/backup/impl-test/загрузка; полная проверка — Б56.9 | Б56 |
 | AC-PKT-14 | S | Разрешённый write-set; полная проверка — Б56.9 | Б56 |
+
+**Область `GATE:done` пакета Б57 (`uprost-skill-dev-workflow-po-itogam-dejsa-dovede`):** все AC-SIMP-01…09 обязательны после собственного хвоста. Формулировки — Б57.4; новый draft не принимает реализацию и не переносит исторические AC-PKT/PW/RP в объём этой задачи.
+
+| AC | Класс | Коротко | Блок |
+|---|---|---|---|
+| AC-SIMP-01 | S | Проверенная факт-база четырёх пунктов brief и границы выводов | Б57.4 |
+| AC-SIMP-02 | S | Размеры/дубли/структура Hermes и адресные references | Б57.4 |
+| AC-SIMP-03 | S | Первый одинаковый повтор IAC FAIL — диагноз до третьего прогона | Б57.4 |
+| AC-SIMP-04 | S | Единая процедура timeout/lifecycle без PID repair и повторного writer | Б57.4 |
+| AC-SIMP-05 | S | Полнота required/actual/missing до complete; каждый IAC.verify | Б57.4 |
+| AC-SIMP-06 | S | Повторная доставка no-op, законные первый запуск и rework сохранены | Б57.4 |
+| AC-SIMP-07 | S | Контракты/10 кейсов/G1–G6/packet/MIG/native сохранены | Б57.4 |
+| AC-SIMP-08 | S | Поведение на реально загруженной версии и загрузка после restore | Б57.4 |
+| AC-SIMP-09 | S | Dirty provenance/backup/собственный write-set/откат и итоговый отчёт | Б57.4 |
 
 ### AC будущего MIGRATION-слага (W4) — не пакета `rs-refuse-kanban`
 
@@ -4949,13 +4976,182 @@ Handoff Б13.4 переносит snapshot evidence в составе слага
 
 ---
 
+## Б57. Пакет `uprost-skill-dev-workflow-po-itogam-dejsa-dovede` — упрощение скилла dev-workflow
+
+Дата: 2026-11-05. Кейс: **SKILL-CHANGE**, ветка CHANGE; фактический рецепт не сокращается. Статус нового дополнения — **draft, ожидает повторной REV:tz**. Основание: принятый [brief](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/brief.md), [SK-preflight](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/SK-preflight.md) и [REV:tz REQUEST-CHANGES от 04.11](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/REV-tz.md). Текущая доработка закрывает документную часть R1 ревизии и готовит адресную передачу R2 компрессору; APPROVE и готовность реализации не объявляются.
+
+Б55 остаётся владельцем порядка, Б12/Б56 — контекста. Этот пакет уточняет исполняемые инструкции существующего скилла; не переаттестует все AC-PW/AC-RP/AC-PKT прежних поездов и не повторяет их реализацию. Требования R1–R7 и AC-SIMP-01…09 перенесены из проверенного драфта в master; этот раздел — SoT, канон слага [TZ-patch.md](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/TZ-patch.md) содержит синхронизированный срез и evidence доработки. Идентификаторы прежних AC не меняются. **выжимка ≠ SoT; при расхождении — открыть master**.
+
+### Б57.1 Current/target и факт-база
+
+**current:** git `hermes-workspace`, `main`, HEAD `c74df1d64cfe9506651f1158c90c881cb4006215`. В HEAD SKILL.md — 8730 B, invoke.md — 3857 B, operational-pitfalls.md — 2607 B; сумма 15194 B. На входе архитектора эти три файла уже dirty: 7923/10595/11615 B, сумма 30133 B; SKILL.md уже помечен 0.8.2. Снимки preflight о clean описывают более ранний вход. Dirty-текст не принимается как результат этой фазы или уже одобренная реализация. Собственный baseline сохранён в [manifest](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/evidence/TZ-patch-65cb7ba0-inputs.json) и [diff](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/evidence/TZ-patch-65cb7ba0-skill-before.diff).
+
+**target:** SKILL.md короче HEAD; суммарный текст трёх файлов короче входного dirty-черновика, с отдельным сравнением с HEAD. Одна таблица выбора действия и один подробный владелец каждого правила. Ранний диагноз одинакового FAIL, один разбор timeout/lifecycle, сверка полноты IAC до complete, отсутствие повторного действия при duplicate delivery. Нового runtime guard или таймаута пакет не обещает.
+
+[Проверенный разбор и ссылки на первичные факты](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/TZ-patch.md) сохраняются; [28 выдержек](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/evidence/TZ-patch-abc90f11-incidents.json) не заменяют отсутствующие transport traces:
+
+| Наблюдение | Установлено / не установлено | Reuse и проверка |
+|---|---|---|
+| IAC-16, PARTIAL_DEV_ONLY; 04.11 02:27/06:15 | Journal исходного слага фиксирует три одинаковых partial; три независимых архива не аттестованы. r8 диагноз/REV подтверждают постоянный partial и слабый oracle; полный offline smoke возможен без live provider. | Б55.3/55.5 и r8 reuse; диагноз после первого одинакового повтора. Новый launcher не строить. |
+| rc=124 foreground; 03.11 13:17–14:47 | Ряд repair прямо связан с foreground caller/transport; это не причина всех поздних 3600s timeout. | Б54 caller contract и существующий invoke; исправление invalid request до отправки, без идентичного повтора. |
+| 3600s timeout и orphan writer; 04.11 07:40 | Wrapper завершился, codex продолжал писать; причины превышения срока каждого вызова не установлены. «5+» из preflight не равно пяти доказанным одинаковым 3600s-инцидентам. | Сначала точные writers/outputs/receipt и reconciliation; one-shot только доказанного true-crash. Таймауты/lifecycle не менять. |
+| FAIL_MATRIX_INCOMPLETE; 04.11 00:24 | Требовалось 169, собрано 76, missing=93; зелёный regression 333/333 полноту не доказывает. | Required/actual/missing до complete impl; каждый verify исполняется отдельно на HF:test. |
+| Серии start; 03.11 20:32–20:51 | 25 start/context-used, 19 invoke_prepare, 11 invoke_role — разные стадии, не сумма платных вызовов. Причина каждого повтора и лишняя стоимость не установлены. | Б54/Б55.4: принятый результат no-op; законный первый запуск и rework сохранены. |
+
+Числа 169/425/14 принадлежат исходному плану, не являются размером будущих матриц. Исторический APPROVE Б56.11 и его AC-PKT-01…14 принадлежат `dovedenie-vnedreniya-formata-mezhfazovyh-paketov`, не этому слагу. Текущий вердикт этого слага — REQUEST-CHANGES от 04.11; поведенческие/реализационные AC-SIMP — NOT_RUN.
+
+### Б57.2 Требования R1–R7
+
+#### R1. Один вход и адресные владельцы
+
+`SKILL.md` должен быть короче HEAD 8730 байт и оставаться ниже существующего preflight-порога 15k. Сокращать повторные пересказы и историю; не выбрасывать решения, запреты, маршруты и ссылки. Показать размеры каждого из трёх файлов и суммарный delta до/после. Новые подробности в references допустимы только когда меняют решение агента; сам перенос текста не считается упрощением.
+
+Относительно входного черновика 30133 B сократить и суммарный текст трёх файлов: убрать повторную спецификацию packet из invoke и историю расследования из operational-pitfalls, оставив ссылки на их владельцев. Сравнение с исходным HEAD 15194 B показывается отдельно: необходимое уточнение алгоритма может увеличить reference, но каждой добавленной ветви соответствует наблюдаемое решение и verify. Это критерий размера документов, не новый бюджетный механизм.
+
+| Правило | Норматив | Единственное подробное место в скилле |
+|---|---|---|
+| Выбор действия, FIFO/удержание задачи, 24/7/ожидание, три регламента | Б55 | `SKILL.md`; references ссылаются на регламент. |
+| Запуск, writers, pre/post-invoke, timeout, reconciliation | Б13/Б16/Б54/Б55.4 | `references/invoke.md`. |
+| Полнота IAC/матрицы, повторный предметный FAIL, локальная доработка/изменение решения | Б18.4/Б55.3/55.5/Б56.5 | `references/operational-pitfalls.md`. |
+| Packet/FileRef/MUST-read/extract/accepted binding | Б12/Б56 | Существующий `references/context.md`, без повторной спецификации в invoke. |
+| Десять кейсов, роли, фазы, G1–G6, operator-словарь | Б6/Б55 | Существующие `canon.md`/`cases-guide.md`; значений моделей в новой процедуре нет, они в YAML. |
+
+Краткое правило выбора и ссылка на подробность допустимы; две расходящиеся подробные процедуры — нет. Не создавать новый reference, launcher, registry, parser или общий framework ради этой правки. Существующий `scripts/pipeline.sh` сохраняется тонкой обёрткой; его `PIPELINE_ROOT` берётся из действующей конфигурации, второго источника путей не добавлять.
+
+#### R2. Первый идентичный повтор FAIL ведёт к диагнозу
+
+Первое наблюдение предметного FAIL допускает адресную доработку по плану. **Первый идентичный повтор после неё — второе наблюдение того же блокера — останавливает следующий неизменный прогон и передаёт факт архитектору до третьего круга.** Идентичность определяется объектом/IAC, нарушенным контрактом и сутью препятствия; номер строки, перефразирование или новая сессия её не отменяют.
+
+Пакет возврата содержит принятую ревизию плана/проверяемый commit, оба результата с логами, что изменяли между ними, новое evidence и затронутое допущение. Если verify явно невыполним или обнаружен конфликт scope/запретов, возврат нужен сразу. Локальный недоделанный пункт при неизменном плане исправляет исполнитель. Архитектор определяет связанную границу перепроверки по Б55.3; содержательное изменение проходит REV. Новый запуск возможен только с доказанно изменённым основанием, а не с тем же partial-артефактом.
+
+Это применение действующих регламентов, не четвёртый регламент и не автоматическая бюджетная машина. Для **двух последовательных REV** действует точное правило Б55.5 «Повтор замечания»; два HF:test FAIL не объявляются двумя REV. «Техническое восстановление» и «Пересмотр требований» сохраняют собственные основания. Диагноз, новая редакция и «доделай» не обнуляют `recover_counts`/phase turns и не разрешают второй recover той же пары.
+
+#### R3. Один порядок разбора timeout/dead-pid
+
+В `invoke.md` должен быть один алгоритм: точный `(slug, phase, invoke)` и transport outcome → wrapper/связанные writers → журнал/канон/impl diff/receipt/accepted context → действие. Проверку writers проводить адресно, без kill, глобального pgrep по похожему имени и нового фонового monitor. `pid=None`, notify, elapsed time, rc=124/137/143 и слово timeout сами по себе не определяют действие.
+
+| Установленные факты | Действие внешнего оркестратора |
+|---|---|
+| Wrapper или подтверждённый связанный писатель ещё работает, в том числе после timeout | Сохранить ожидание; не повторять invoke, не принимать промежуточный diff, не сбрасывать PID/state. Роль продолжает писать свой output и возвращается; собственный wrapper не мониторит. |
+| Pre-invoke: `awaiting_invoke=true`, `pid=None`, отправки ещё не было | WORK; один штатный emit→invoke. Брошенное окно диагностировать по журналу, не объявлять автоматически crash. |
+| Sirene-фаза G6 с `pid=None` | Работа оркестратора по рецепту, без invoke содержательной роли. |
+| Wrapper вышел, `role` записан и пригодный свежий output подтверждён | WORK/RECONCILE по существующему пути: сверка канона/receipt/G1/G2/outputs и обычное принятие, без повторения side effect. Короткий stdout не дефект при полном каноне. |
+| Обрыв после записи output; результат/допуск ещё не подтверждены | Сначала reconciliation по сохранённому контексту и диску. При нехватке proof — диагноз/ожидание; не переписывать существующий результат новым invoke вслепую. |
+| `role` записан, required output отсутствует/не обновлён | `empty-result`/`canonical_artifact_fail`, не dead-pid; коррекция только по действующим пределам и evidence. |
+| `role is None`, `awaiting_invoke=false`, wrapper/writers мертвы, пригодного результата нет | True-crash; штатный recover только при допустимом recoverable-классе и ещё не использованном one-shot. Повтор класса/фазы — диагноз/ожидание. |
+| Структурный provider/auth/billing/503/429 или исчерпанный budget | Без автоматического retry/recover; ожидание причины и подтверждения устранения по Б55.4. Timeout не приравнивать к provider-fatal; цитату ошибки в успешном result не считать отказом провайдера. |
+| Уже принятый completion/receipt доставлен повторно | No-op; не второй complete/invoke/notify или запуск следующего слага ещё раз. |
+
+Закрытые recover-классы сохраняются: `dead-pid`, `wrong-role`, `empty-result`, `rc0-no-complete`, `model-none`. Правильный первый invoke после G6 mismatch и принятие post-invoke результата не требуют сброса recovery. При `model=None` после prepare complete запрещён; дефект resolver передаётся владельцу, модель в state вручную не дописывается.
+
+`repair` обслуживает производный индекс, а не очистку PID, счётчиков или повтор завершённой работы. Прямой JSON-write, смена названия класса, kill/restart и новый slug для обхода стопа запрещены. Значение 3600s и subprocess lifecycle остаются в существующем adapter; документная правка не обещает устранить все причины timeout. Обнаруженный runtime-пробел фиксируется с адресом/уликой и возвращается архитектору, без расширения write-set.
+
+#### R4. Плановая полнота проверяется до complete
+
+На HF:plan исходным является утверждённый IAC `path/verify/depends/covers`. Когда план обещает матрицу, для неё заранее названы обязательные ID/сценарии, селекция, среда и вид evidence. LIGHT использует свой предусмотренный IAC, без выдуманного HF-plan или compress.
+
+Перед завершением HF:impl исполнитель сопоставляет обещанный write-set и **полный требуемый набор** с фактическими файлами/собранными узлами. Для pytest пригоден `--collect-only -q` в предусмотренной среде; для smoke/CLI/pilot — перечень требуемых трасс и их oracle. Сохраняются множества `required`, `actual`, `missing=required-actual`, дубли и объяснённые extra. Число passed, наличие файла и совпадение имён не доказывают исполнения сценария. Missing блокирует заявление готовности impl/допуск к test; незавершённый результат сохраняется для адресной доработки.
+
+Отдельный HF:test исполняет **каждый** IAC.verify по зависимостям и связывает ID с командой, rc, логом, проверенным commit/hash и verdict. Обязательный skip/xfail/no-entry/partial без согласованного основания не закрывает IAC. `PARTIAL_DEV_ONLY` или `required_smoke_complete=false` не становятся PASS от общего зелёного regression. `live_provider=false` допустим для утверждённого offline smoke; component/unit, offline CLI, installed smoke, live provider и production runtime обозначаются раздельно. Недоступный обязательный внешний допуск даёт ожидание, без ослабления AC.
+
+Это обязанность исполнения и приёмки по имеющимся механизмам, **не новый CLI guard**. Из текста нельзя делать вывод, что pipeline уже программно проверяет произвольную матрицу. Переделка runtime preflight в этой задаче не предусмотрена.
+
+#### R5. Дедупликация действия, а не количества строк start
+
+Перед любой отправкой проверить рецепт/G6, фазу, уже отправленный invoke, живых writers, актуальный output, принятие и receipt при наличии. `context-used` означает выпуск пакета, `invoke_prepare` — подготовку вызова, `invoke_role` — результат адаптера; их не суммируют как независимые платные попытки.
+
+Повтор completion принятого результата ничего не исполняет. Новый успешный emit по Б56 может иметь новый packet_id, но сам packet_id не разрешает новый invoke. Законный первый запуск, продолжение незавершённой реализации и согласованный содержательный rework различаются по основанию/evidence; запрета «одна фаза вызывается только один раз навсегда» нет. Повтор после неизменного отказа запрещён; invalid request исправляют до отправки, а не повторяют идентично.
+
+Для Hermes terminal сохранить существующий единственный background request: `background=true`, `notify=true`, `persist_on_release=true` — поля инструмента, не shell-флаги. Не включать foreground/terminate/отсекатель stdout (`| head`, `| tail`); session ID использовать для того же запуска. Notify будит оркестратора, но не доказывает окончание wrapper. Сохранить запрет raw `agent -p`/`codex exec` в обход adapter. Содержательная роль не вызывает процессные команды из своего wrapper.
+
+#### R6. Оформление Hermes без новых зависимостей
+
+Официальные источники повторно проверены в текущем вызове: [Creating Skills](https://hermes-agent.nousresearch.com/docs/developer-guide/creating-skills/) и [Skills System](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/). Применить их структуру: `When to Use` → `Procedure` → `Pitfalls` → `Verification`; русское содержание сохраняется, общая таблица действий находится в Procedure, подробности — в references. Quick Reference нужен только при полезном сокращении команд, не как второй алгоритм. Сохранить `name: dev-workflow`; предлагаемая версия скилла — 0.8.2 после согласования/реализации. Description — одно предложение с триггером, до 60 символов и с точкой; полные условия применения и исключение обычных предметных поручений — в теле.
+
+Применимые `metadata.hermes.tags` и `related_skills` сохраняются; связанные имена должны разрешаться. [Локальный loader](/home/tkachenkoav/hermes-agent/tools/skills_tool.py:613) читает эти поля и отдаёт связанные файлы; reference загружается через `skill_view` с относительным `file_path`. [clip_skill_description](/home/tkachenkoav/hermes-agent/agent/skill_utils.py:853) ограничивает prompt-описание, а [_description_budget_error](/home/tkachenkoav/hermes-agent/tools/skill_manager_tool.py:173) отдельно отвергает новое/изменённое описание сверх 60 символов. Это действующее ограничение authoring, не предел синтаксического YAML parser. На HF:plan сверить установленную версию и реальный способ загрузки; документация сайта не доказывает наличие любой новой функции на хосте.
+
+[Локальный linter](/home/tkachenkoav/hermes-agent/tools/skill_linter.py:1) отделяет advisory conventions от жёсткой валидации. План проверяет новый текст и объясняет оставшиеся advisory findings; отсутствие ошибок разбора не называет полным соответствием оформлению. Существующие README/install-docs требуются master Б9/Б13.5: generic `forbidden-file` warning не разрешает удалять их из этого слага. Author/license заполняются только из подтверждённой атрибуции/лицензии, без выдумывания; bundled-only CI не объявляется автоматически обязательным валидатором custom skill. Конфликт такой рекомендации с master фиксируется с источником, а не расширяет allowlist.
+
+Для штатного пути модели/пути уже задаёт `tools.dev_workflow`. Дополнительные config/credential declarations, зависимости, conditional hiding, blueprint/расписания, inline shell, новый launcher и agents/openai.yaml не нужны. Шаблонные пути Hermes допустимы только при подтверждённой поддержке, не обязательны. Оценка возможностей документации не требует включать каждый optional field. Направление синхронизации остаётся workspace → профили через штатный restore на ORCH, не импорт сайтового default пути как нового владельца.
+
+#### R7. Сохранность контрактов
+
+Сохранить десять кейсов и фактический recipe текущего SKILL-CHANGE, G1–G6, раздельные HF:impl/HF:test и роль ревизора. Никакого set-case/skip по числу файлов из этой роли. FIFO, удержание всей задачи, 24/7/ожидание квоты, три регламента, шесть статусов Б55.6 и последние 48 часов **только выполненных** не меняются.
+
+Не ослаблять immutable packet/sidecar/render, FileRef, MUST-read, extract history/coverage, G2 accepted binding, G3/git-proof, канонические outputs/REV и доставку AC-report. `pipeline_context.py` остаётся владельцем контекста. Изменённый разрешённый output проверяется по принятому snapshot, следующая фаза получает новый пакет; старый пакет из роли не редактировать. Контекстные ошибки не становятся provider-fatal или новым recovery-классом.
+
+При сокращении сохранить адресные ссылки и смысл уже добавленных контрактов `pipeline_mig_complete_guard` (own block acceptance/receipt, sirene без invoke) и native compressor (`hermes-native`/`hermes-internal`, приоритет модели, статический selector, один send/retries=0, rc=4 local empty completion без публикации, rc=3 provider/worker failure). Они не предмет нового проектирования и не удаляются ради размера. Модели/backend/effort — YAML, wrapper PID не заменяется agent PID/session ID.
+
+
+### Б57.3 Допустимые файлы и дальнейшие фазы
+
+На текущей TZ:patch записываются только master, канон слага, восстановимые snapshots/diff и собственные документные evidence. Боевые скиллы и runtime, HF-план, extract, inventory и process state не пишутся. Разрешённый корень скилла не подменяет разделение ролей.
+
+Предлагаемый **implementation allowlist**, который HF:plan должен подтвердить пофайлово:
+
+1. `/home/tkachenkoav/hermes-workspace/skills/devops/dev-workflow/SKILL.md`.
+2. `/home/tkachenkoav/hermes-workspace/skills/devops/dev-workflow/references/invoke.md`.
+3. `/home/tkachenkoav/hermes-workspace/skills/devops/dev-workflow/references/operational-pitfalls.md`.
+
+Остальные references, `scripts/pipeline.sh`, README, runtime pipeline/schema/tests, YAML, профили и личные инструкции — read-only. Собственные план/отчёты/безопасные fixtures/evidence живут внутри текущего слага; точные пути и verify задаёт HF:plan. Добавление runtime-кода или иного target требует адресного возврата с обоснованием; существующий корневой write_scope не расширяет согласованный план молча.
+
+До impl проверить происхождение dirty-изменений и сохранить и HEAD-базу, и входные bytes трёх файлов. Не терять полезные чужие правки и не включать их в свой commit без содержательной сверки. Backup покрывает весь будущий write-set, mode и symlink targets; подтверждается до записи. G3 доказывает свой конечный набор, а не общий статус чужого дерева.
+
+HF:plan делает новый собственный IAC `path/verify/depends/covers` на AC-SIMP ниже; исторический HF-plan исходного кейса не заимствуется. REV:plan проверяет исполнимость, позитивные и отрицательные решения, карту владельцев и наличие реальной загрузки. HF:impl вносит текстовые изменения; HF:test отдельно проверяет их. HF:docs-handoff связывает окончательный текст с тестами и изменениями; ORCH:shared-state выполняет разрешённый restore и проверку конечной загрузки. Все переходы принадлежат внешнему оркестратору; данный документ их не выполняет.
+
+С диска прочитан только рецепт для проверки маршрута: после текущей `TZ:patch` следуют `REV:tz` → `TZ:finalize` → `GATE:take-into-work` → `HF:plan` → `REV:plan` → `GATE:plan-approve` → `HF:backup` → `HF:impl` → `HF:test` → `HF:docs-handoff` → `ORCH:shared-state` → `GATE:done`. Он сохраняется полностью; число target-файлов само по себе не разрешает убрать уже включённые REV/compress/backup.
+
+Для проверки поведения HF:plan использует существующую загрузку Hermes и управляемые результаты/отказы в изолированных данных. Новую содержательную роль не запускают внутри живого wrapper исполнителя. Подготовивший тесты исполнитель сначала возвращается; после выхода wrapper оркестратор проводит проверку изменённой процедуры и отдаёт трассы исполнителю последовательным штатным вызовом. Нельзя подменить решение оркестратора заранее изготовленным итоговым state или напечатанной рекомендацией. Привязка: исходный/resolved path, SHA-256 реально загруженного текста, контекст/время и trace загрузки; после restore подтвердить соответствие проверенной версии. Статический grep не заменяет такую проверку.
+
+
+Финализация по Б15/Б56.5 требует master, inventory и канон TZ-finalize.md. Входной brief этого вызова уже разрешает master, но ещё не содержит inventory в scope TZ:finalize. Подготовленный [data-only контракт](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/evidence/TZ-patch-65cb7ba0-finalize-handoff.yaml) точно перечисляет эти будущие пути и входы; внешнему оркестратору нужно принять его при подготовке соответствующего контекста. Это не разрешение писать inventory из текущей роли и не новый operator-hold. Принятый brief и старый snapshot сохраняются.
+
+### Б57.4 Критерии приёмки
+
+Все девять критериев — класс S, обязательны для GATE:done **слага `uprost-skill-dev-workflow-po-itogam-dejsa-dovede`**. Они проверяют новую инструкцию и её применение, не повторяют весь объём другого поезда. На TZ:patch реализационные/поведенческие критерии — NOT_RUN; документная проверка не независимый APPROVE и не runtime PASS.
+
+| AC | Наблюдаемый результат и требуемое evidence | Связь с нормой |
+|---|---|---|
+| AC-SIMP-01 | Разбор всех четырёх пунктов brief связывает дату/источник → класс → причину либо неизвестность → прежнее правило/фикс → проверку. Уточнены offline smoke, неполная матрица и разные transport-классы; строки start не объявлены платными invokes. Ссылки/исходные hashes проверены; прежние результаты сохранены. | Б55.3/55.7; факт-база выше. |
+| AC-SIMP-02 | Конечный SKILL.md <8730 B и <15k, сумма трёх файлов <30133 B. Frontmatter читается местным Hermes, description ≤60 символов, references/related_skills доступны; четыре секции R6 упорядочены, advisory lint разобран отдельно от parser result. Есть размеры каждого файла/суммы относительно HEAD и входа, карта удалённых дублей с заменой. Одна таблица действий и один подробный владелец каждого правила; полезные контракты сохранены. | Б9/Б27/Б55.8; R1/R6/R7. |
+| AC-SIMP-03 | Загруженная новая процедура на двух одинаковых IAC FAIL после адресной доработки требует диагноз до третьего неизменного прогона. Отдельно различает первый локальный недоделанный пункт, сразу выявленное неверное допущение, новое замечание и новое требование. Два HF:test FAIL не превращает в два REV, счётчики не сбрасывает. | Б55.3/55.5; R2. |
+| AC-SIMP-04 | Безопасные сценарии всех строк R3 дают соответствующее действие: live wrapper/writer запрещает повтор; pre-invoke и sirene не crash; post-invoke принимает существующий результат; role без канона не dead-pid; true-crash имеет one-shot; exhausted/fatal/нехватка proof сохраняют стоп. Timeout с живым orphan не вызывает kill/repair/reset/re-invoke. | AC-061…078/Б54/Б55.4–55.5; R3. |
+| AC-SIMP-05 | Утверждённый IAC задаёт требуемые сценарии; контролируемая missing-матрица блокирует готовность impl даже при общем зелёном regression. Полная collection без исполнения не закрывает HF:test. Полный offline smoke проходит при live_provider=false; missing trace/partial/обязательный skip не получает PASS. Сохранены required/actual/missing, привязка commit и отдельные результаты каждого verify. | Б18.4/Б56.5/56.9; R4. |
+| AC-SIMP-06 | Двойной completion уже принятого invoke не создаёт нового действия/уведомления. Дополнительный context-used/start без основания не запускает роль; законный первый запуск и согласованный rework проходят. Испытание считает отправки/переходы, а не число journal-строк. Invalid terminal request не повторяется идентично. | Б54/Б55.4; R5. |
+| AC-SIMP-07 | Сверка конечного текста и ссылок сохраняет 10 кейсов, G1–G6, REV, раздельные impl/test, operator-словарь, FIFO/паузы/квоты, packet/context owner, MIG и native contract. Нет новых моделей/CLI/схем/счётчиков, второго dispatch или новой очереди. Правила полноты обозначены как обязанности, без выдуманного программного guard. | Б6/Б12/Б33/Б55/Б56; R7. |
+| AC-SIMP-08 | Есть evidence поведения AC-SIMP-03…06 на **реально загруженной изменённой версии**, исходные inputs и решения процедуры, разделённые CLI/transport/управляемые ответы. Передача управления после выхода wrapper последовательна. После restore подтверждены конечные bytes/resolved paths/загрузка; неподтверждённая загрузка или mock вместо требуемого факта даёт NOT_RUN/FAIL, не PASS. | Б55.9–55.11/Б56.8; граница испытания выше. |
+| AC-SIMP-09 | Baseline-diff/backup доказывают только три согласованных target и собственные артефакты; исходные dirty-правки учтены, запрещённые поверхности неизменны. Свой commit/git-proof, отдельный тестовый отчёт, restore/loading и доставленный AC-report связаны. Откат восстанавливает только свой write-set без reset state/счётчиков/пауз/чужой работы. | Б17–Б18/Б33/Б55.10; границы ниже. |
+
+HF:plan задаёт точные команды, пути отчётов и зависимости; проверка наличия слов требований не заменяет поведение. Не нужны повторные платные product invokes для негативных сценариев, повтор старого 169-node проекта или новая общая тестовая инфраструктура. Если обязательный механизм загрузки/доставки недоступен, критерий остаётся незакрытым.
+
+### Б57.5 Что НЕ трогать и откат
+
+Сохранить дословно **[NEW-ENTITY, требует согласования Саши]**. Согласование формата Б56 от 02.11.2026 не является разрешением нового сервиса/инструмента; в этой задаче новых сущностей нет. **No new service, database, queue, channel, cron, budget engine or global mutex.**
+
+Не менять `hermes-agent`/Gateway/systemd, SQL/SoT/schema, runtime pipeline и таймауты/provider policy, конфигурацию/секреты, manifest/digest/glossary, личные инструкции, чужие state/journal/результаты, FIFO/recipe/G6, операторный словарь. Не возобновлять B3/B4/w3/w4. Не создавать cron/reaper/watchdog, не перезапускать Gateway, не заменять pid wrapper, не использовать manual prompt/force/fallback или второй recover. Принятый packet, extract и process state из роли не ремонтировать; разрешённая запись master как output не является таким ремонтом.
+
+Откат реализации — адресное восстановление принадлежащих изменению файлов из проверенного backup/git snapshot после прекращения записи. Сохранить входные dirty-правки, сверить SHA/mode/resolved target; не `git reset --hard`, не перезапись state/journal архивом, не reset recover_counts/turn_count и не включение старого диспетчера. Штатную синхронизацию и проверку конечной загрузки выполняет ORCH. Если продолжение не доказано, текущая задача остаётся в явном ожидании.
+
+
+### Б57.6 Передача замечаний R1/R2 ревизии
+
+1. **R1, часть архитектора:** требования находятся в master Б57, AC-SIMP отражены в Б34; patch синхронизирован. Принятая постановка и rework-request уже проверены как FileRef/InputRef текущего packet. Повторная ревизия получает актуальные master/patch/brief/REV и новый extract в новом проверенном envelope. Master, inventory и canonical TZ-finalize заранее перечислены для будущей финализации; текущая роль inventory не пишет.
+2. **R2, владелец — штатный компрессор при подготовке контекста:** после изменения master выжимка требует пересжатия. Восстановить AC-PW-01…12, AC-RP-01…19, AC-P1…P6, COD-C1…C10, IAC-09a/IAC-09b и остальные священные имена; добавить собственные AC-SIMP-01…09. Полный буквальный инвентарь критериев и аудит старых частей — [evidence](/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/evidence/TZ-patch-65cb7ba0-extract-audit.json). Он вспомогательный: диапазоны и остальные классы имён Б12.6 тоже проверяются, список критериев не объявляется всей проверкой покрытия.
+3. Утверждение «Текущий REV:tz — APPROVE» и требование IAC на AC-PKT из старого extract адресовать **другому** слагу `dovedenie-vnedreniya-formata-mezhfazovyh-paketov` и его датированному Б56.11. Не присваивать их текущему слагу и не удалять старые AC для устранения gap. При 1/N соблюдать семь секций, полный инвентарь/эхо каждой части и машинную проверку совокупного покрытия; extract_key и новые FileRef соответствуют выходному master на момент emit.
+4. Архитектор не исполняет compress, не правит extract/старый packet/state и не создаёт поддельный context-used. R2 остаётся **PENDING штатного пересжатия и проверки**; до этого повторная приёмка ТЗ не объявляется готовой. R1 нельзя объявлять целиком закрытым до принятия актуального контекста следующей REV. Новых Q-n, operator-действий или сущностей нет.
+5. Разрешённая запись master может выявить известный дефект live-ref G2 Б56.11. Приём — по сохранённому входному snapshot и output evidence Б56.6 п.5, внешним оркестратором после возврата роли. Если установленный guard откажет, зафиксировать диагноз существующим регламентом; не менять packet/state, не re-emit/re-invoke ради обхода, не повторять неизменный запуск архитектора.
+
+---
+
 ## Открытые вопросы
 
-**Текущий пакет доведения Б56:** независимая `REV:tz APPROVE` от 03.11.2026 (`dev/dovedenie-vnedreniya-formata-mezhfazovyh-paketov/REV-tz.md`); блокирующих замечаний и новых Q-n нет, формат ранее согласован. `TZ:finalize` утверждает дополнение Б56.11 без изменения требований. Принятие результата текущим упрощённым G2 после разрешённой записи master — известное ограничение реализации, не новый operator-hold и не разрешение обхода. Runtime AC остаются NOT_RUN; прежние вопросы/holds сохраняют своих владельцев.
+**Текущий пакет Б57 (`uprost-skill-dev-workflow-po-itogam-dejsa-dovede`):** новых содержательных Q-n/NEW-ENTITY нет. REV:tz от 04.11 — REQUEST-CHANGES. Документная часть R1 исправлена; R2 требует штатного пересжатия и проверки нового контекста до повторной приёмки. Inventory подготовлен как будущий scope TZ:finalize, без записи в текущей фазе. Это не новый operator-hold; повторная независимая REV ещё не выполнена.
+
+**Пакет доведения Б56 (`dovedenie-vnedreniya-formata-mezhfazovyh-paketov`):** независимая `REV:tz APPROVE` от 03.11.2026 (`dev/dovedenie-vnedreniya-formata-mezhfazovyh-paketov/REV-tz.md`); блокирующих замечаний и новых Q-n нет, формат ранее согласован. `TZ:finalize` утверждает дополнение Б56.11 без изменения требований. Принятие результата текущим упрощённым G2 после разрешённой записи master — известное ограничение реализации, не новый operator-hold и не разрешение обхода. Runtime AC остаются NOT_RUN; прежние вопросы/holds сохраняют своих владельцев.
 
 **Предыдущий пакет Б56:** блокирующих Q-n нет. Согласование новой сущности формата отражено во входе поезда от 02.11.2026. После доработки первого REQUEST-CHANGES (R1/R2) повторная независимая `REV:tz` дала APPROVE (раунд 2, 02.11.2026); оба замечания закрыты в `dev/b55-12-3-novyy-format-mezhfazovyh-paketov-backlo/REV-tz.md`. `TZ:finalize` фиксирует утверждённый текст без изменения требований; реализация и runtime AC остаются последующим фазам. Разрешение не распространяется на отдельный сервис/инструмент и соседние idea; исходный NEW-ENTITY-маркер не удалён. Прежние вопросы/holds ниже сохраняют своих владельцев.
 
-**Текущий пакет Б55:** повторного опроса нет; ответы Q-1…Q-15/Q-8-addendum приняты. `REV:tz APPROVE` (итерация 3, 02.11.2026), R1/R2 закрыты; противоречий ответам и блокирующих вопросов нет (`dev/tz-na-pereproektirovanie-payplaynov-skillov-dev/REV-tz.md`). Нехватку фактов закрывает оркестратор; вопрос Саше допустим только по доказанному противоречию ответам, выявленному ревизором (Б55.3). Кандидат нового инструмента Б55.12 остаётся в triage и не блокирует основной объём.
+**Пакет Б55:** повторного опроса нет; ответы Q-1…Q-15/Q-8-addendum приняты. `REV:tz APPROVE` (итерация 3, 02.11.2026), R1/R2 закрыты; противоречий ответам и блокирующих вопросов нет (`dev/tz-na-pereproektirovanie-payplaynov-skillov-dev/REV-tz.md`). Нехватку фактов закрывает оркестратор; вопрос Саше допустим только по доказанному противоречию ответам, выявленному ревизором (Б55.3). Кандидат нового инструмента Б55.12 остаётся в triage и не блокирует основной объём.
 
 Блокирующих открытых вопросов пакетов до v0.4.9 **нет**. Бриф `rs-refuse-kanban` закрыт 2026-10-13. Риски 14.10 закрыты Q-Archi-04/05. Блок E закрыт Q-Archi-06. Пакет `devworkflow-task-slug`: Q-Archi-07/08 решены в Б36 п.15–16 (не ждут реплики, чтобы закрыть `TZ:finalize`). Пакет `eco-config-w4-zavis-v-tz-stabilize-doing-bez-pid`: Q нет; `[NEW-ENTITY]` нет. Пакет `sravnit-skills-vs-tree-docs-zavis-v-rs-collect-d`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-cursor-cli`: Q нет; `[NEW-ENTITY]` нет. Пакет `dev-workflow-avtovosstanovlenie`: Q нет; `[NEW-ENTITY]` нет. Пакет `pochinka-payplayna-dev-workflow-konets-hoda-po-k`: Q нет; 13.10 не пересматриваем; `[NEW-ENTITY]` канала стража нет.
 
@@ -4982,6 +5178,9 @@ Handoff Б13.4 переносит snapshot evidence в составе слага
 ---
 
 ## Источники этой записи
+
+- Б57, TZ:patch rework 05.11.2026: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/brief.md`, `SK-preflight.md`, `REV-tz.md` (REQUEST-CHANGES от 04.11), `TZ-patch.md`; input packet `65cb7ba02a1d68781d212dd0f987dbc23c84a1caf04e4bed03bf8b9aae48f954`. Snapshot/diff/manifest/аудит extract — `evidence/TZ-patch-65cb7ba0-*` того же слага. Формулировки R1–R7/AC-SIMP сохранены; код/скилл/state не изменялись.
+- Оформление Б57: [Creating Skills](https://hermes-agent.nousresearch.com/docs/developer-guide/creating-skills/) и [Skills System](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/) — проверены 05.11 MSK; местные loader/description validation/linter прочитаны отдельно. Документация не доказывает фактическую загрузку будущего скилла.
 
 - Финализация доведения Б56 от 03.11.2026: постановка `TZ:finalize`, `dev/dovedenie-vnedreniya-formata-mezhfazovyh-paketov/{TZ-patch.md,REV-tz.md}` — независимая REV:tz APPROVE, без блокирующих замечаний и новых Q-n. Проверенный входной SHA-256 master `2f18e4413b8c1ccb2250277164b7a1f906aeb28779a5b2df4a08170b907bece9`; snapshot/diff/выходные hash и документная проверка — в `TZ-finalize.md` того же слага. Б56.1…56.11 и AC сохранены; runtime не проверялся.
 - Финализация Б56 от 02.11.2026: постановка `TZ:finalize`, `dev/b55-12-3-novyy-format-mezhfazovyh-paketov-backlo/{TZ-patch.md,REV-tz.md}` — повторная REV:tz APPROVE, раунд 2, R1/R2 закрыты. Проверенный до штампа SHA-256 master: `93e43a9e59f4bc4f33aa3038f872720786eb61913ba4ae9c9ab8462789d40a7a`; snapshot, diff и документная проверка — в `TZ-finalize.md` того же слага.
@@ -5032,6 +5231,8 @@ Handoff Б13.4 переносит snapshot evidence в составе слага
 ---
 
 ## Changelog
+
+- **2026-11-05 — TZ:patch rework, Б57**, пакет `uprost-skill-dev-workflow-po-itogam-dejsa-dovede` по REV:tz REQUEST-CHANGES R1/R2: требования R1–R7 и AC-SIMP-01…09 перенесены в master без изменения смысла; синхронизированы канон, Б0.3, текущие указатели и Б34. Для будущей TZ:finalize подготовлен scope master/inventory/canonical; inventory текущей фазой не писался. R2 передан штатному компрессору с инвентарём пропусков и точной адресацией исторического APPROVE другого слага; старые packet/extract/state сохранены. Дополнение draft, повторная REV ожидается, runtime NOT_RUN. Скиллы/код/конфиг не менялись; новые сущности/сервисы/БД/очередь/канал/cron/budget engine/global mutex не создавались, паузы сохранены.
 
 - **2026-11-03 — TZ:finalize, доведение Б56**, пакет `dovedenie-vnedreniya-formata-mezhfazovyh-paketov`: утверждён после независимой `REV:tz APPROVE`; блокирующих замечаний и новых Q-n нет. Версия 0.9.2 сохранена во frontmatter; статус draft → approved, текущие отметки согласования и Б0.3 актуализированы. Б56.1…56.11, все AC-PKT-01…14, сводка Б34, Б33/Б55 и прежние AC сохранены без изменения требований. Инвентарь согласован с master и его SHA-256 под существующим lock; snapshot/diff и канон записаны в своём слаге. Согласование формата 02.11 и исходный `[NEW-ENTITY, требует согласования Саши]` сохранены; отдельный сервис, бюджеты/mutex и соседние idea не входят, паузы B3/B4/w3/w4 сохраняются. Исторический PASS не перенесён, runtime AC остаются NOT_RUN. Код/schema/скиллы/конфиг/state/journal не менялись. Приём результата после разрешённой записи master — внешнему оркестратору после выхода роли без обхода G2.
 

@@ -2,14 +2,14 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Процесс изменения Hermes/USERTOOLS: одна задача, FIFO и непрерывное продолжение"
-version: 0.9.3
+version: 0.9.6
 date: 2026-11-05
-status: draft
+status: approved
 author: архитектор (gpt-6.1-sol, Codex exec)
-last-section-added: "2026-11-05 — Б57: TZ:patch rework R1/R2 упрощения dev-workflow; требуется повторная REV:tz и штатное пересжатие"
-case: SKILL-CHANGE
-slug: uprost-skill-dev-workflow-po-itogam-dejsa-dovede
-previous_slug: dovedenie-vnedreniya-formata-mezhfazovyh-paketov
+last-section-added: "2026-11-05 — TZ:finalize R1 Б59.5.1 после нового REV:tz APPROVE; 0.9.6 approved; inventory pending scope; runtime NOT_RUN"
+case: BUGFIX
+slug: adresnyy-remont-reconciliation-priemki-post-invo
+previous_slug: adresnyy-remont-publikatsii-vyzhimki-extract-v-c
 depends_on:
   - TZ/GLOSSARY.md >= 0.2.15
   - TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md >= 0.4.4
@@ -27,7 +27,15 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 # DevWorkflow — мастер-ТЗ машины разработки без канбана
 
-**Текущий пакет — упрощение скилла dev-workflow**, слаг `uprost-skill-dev-workflow-po-itogam-dejsa-dovede`, TZ:patch rework по REV:tz REQUEST-CHANGES от 04.11.2026. Адресные требования R1–R7 и AC-SIMP-01…09 — Б57; дополнение пока draft. Исторические APPROVE Б55/Б56 относятся к своим слагам. Переходы процесса выполняет внешний оркестратор после возврата роли; реализация скилла и поведенческие проверки здесь NOT_RUN.
+**Текущий R1 Б59 — требования 0.9.6 утверждены после нового независимого REV:tz APPROVE от 05.11.2026.** TZ:finalize сохраняет согласованные Б59.5.1, ссылки G3/compatibility, four-edge master chain и AC-155/160/161/163/165 без изменения смысла и версии. Разрешённый штамп master опубликован по packet b6a87c0d017ffd478de334cd2fb22220ca1f7c53108e738cdf58662a952e183a; inventory снова отсутствует в scope, поэтому полная финализация по Б15 не объявляется. До фактической разрешённой синхронизации inventory, rebind HF:plan/IAC/evidence и повторной REV:plan собственные HF:impl/compatible completion не допущены. Код/тесты/установка/применение NOT_RUN.
+
+**Сохранённый статус предыдущего согласования Б59 версии 0.9.5 (до R1):**
+
+**Текущий пакет — адресный ремонт приёмки уже выполненного HF:impl**, слаг `adresnyy-remont-reconciliation-priemki-post-invo`, BUGFIX. Б59/AC-150…166: bytes snapshot, backend-free reconciliation exact prepare Б58, проверяемые plan/master transitions и собственный G3. Дополнение утверждено после независимой REV:tz APPROVE от 05.11.2026; версия 0.9.5 и согласованные требования сохранены. Код/тесты/установка/применение NOT_RUN. Inventory вне write_scope принятого packet; по Б15 TZ:finalize не complete до разрешённой синхронизации. Границы текущего хода — Б0.3. Предыдущие требования и результаты Б58/Б57 сохраняют владельцев.
+
+**Предыдущий пакет — адресный ремонт публикации extract в codex-пути компрессора**, слаг `adresnyy-remont-publikatsii-vyzhimki-extract-v-c`, кейс BUGFIX. Требования A′, граница bootstrap и AC-138…149 — Б58; дополнение утверждено после независимой REV:tz APPROVE от 05.11.2026, без изменения требований и версии 0.9.4. Уже внесённые bootstrap-правки не объявляются новым принятым исправлением. Реализация, HF:test и installed/runtime проверки NOT_RUN. Обновление inventory не выполнено: путь отсутствует в write_scope принятого packet; по Б15 финализация не complete до его разрешённой синхронизации. Зависимый пакет Б57 и его замечания R1/R2 сохраняются; process state и переходы принадлежат внешнему оркестратору после возврата роли.
+
+**Предыдущий пакет — упрощение скилла dev-workflow**, слаг `uprost-skill-dev-workflow-po-itogam-dejsa-dovede`, TZ:patch rework по REV:tz REQUEST-CHANGES от 04.11.2026. Адресные требования R1–R7 и AC-SIMP-01…09 — Б57; дополнение пока draft. Исторические APPROVE Б55/Б56 относятся к своим слагам. Переходы процесса выполняет внешний оркестратор после возврата роли; реализация скилла и поведенческие проверки здесь NOT_RUN.
 
 **Предыдущий пакет — доведение внедрения Б56 до утверждённого контракта**, слаг `dovedenie-vnedreniya-formata-mezhfazovyh-paketov`, `TZ:finalize` от 03.11.2026 после независимой `REV:tz APPROVE` этого поезда. Дополнение Б56.11 утверждено; блокирующих замечаний и новых Q-n нет. Нормативная база Б56 согласована 02.11.2026; Б56.1…56.10, утверждённый текст Б56.11 и AC-PKT-01…14 сохранены без изменения требований. Версия 0.9.2 сохранена во frontmatter; статус draft → approved. Исторические done/96/340 passed прежнего поезда не доказывают соответствие полного контракта; runtime AC этого поезда остаются NOT_RUN до собственных проверок.
 
@@ -35,7 +43,7 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 Это **инфраструктурный план**, не USERTOOL и не правка ядра Hermes. Исходный переход от канбана описан в Б1–Б54 и сохранён как история решений. Изменения порядка — Б55.1; новый контракт передачи контекста — Б56 после его реализации и включения. Неизменённые контракты продолжают действовать.
 
-Кейс текущего пакета — `SKILL-CHANGE` по принятому контексту; архитектор его и process state не меняет. Рецепт, ревизия, реализация и испытания исполняются отдельными фазами существующего DevWorkflow.
+Кейс текущего пакета — `BUGFIX` по принятому контексту; архитектор его и process state не меняет. Рецепт, ревизия, реализация и испытания исполняются отдельными фазами существующего DevWorkflow.
 
 ---
 
@@ -93,6 +101,8 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 | **Б55** | Пакет перепроектирования: одна задача, FIFO, 24/7, ожидание, три регламента повторов, чистка, пилот; явные замены прежних норм | Ответы Саши Q-1…Q-15/Q-8-addendum, RS-collect/RS-analyze, история октября | AC-RP-01…19; тяжёлая техника только triage; границы текущего хода Б0.3 |
 | **Б56** | Новый формат пакетов: JSON-конверт, render, ссылки/hash, входы/выходы, G1/G2, совместимость и rollout | Б12, Б17, Б35, одобренная idea Б55.12 п.3 | AC-PKT-01…14; TZ:finalize после REV:tz APPROVE, реализация по отдельному плану; границы Б0.3 |
 | **Б57** | Упрощение существующего скилла: R1–R7, AC-SIMP, границы реализации и передачи R1/R2 ревизии | Brief/SK-preflight/REV текущего слага, Б12/Б55/Б56 | AC-SIMP-01…09; draft до повторной REV, runtime NOT_RUN |
+| **Б58** | Адресный ремонт codex extract publication: accepted identity, final-message, точный комплект, bootstrap scope/classifier | Brief/диагноз ремонтного слага, Б12/Б13/Б55/Б56 | AC-138…149; REV:tz APPROVE, требования утверждены; inventory pending scope, installed/runtime NOT_RUN; Б57 сохранён |
+| **Б59** | Адресная приёмка результата HF:impl Б58 без backend, байтовые outputs, plan/master identity chain, G3 | Brief/принятый диагноз ремонта, Б54/Б55/Б56/Б58 | AC-150…166; новый REV:tz APPROVE R1, 0.9.6 approved; inventory pending scope; код/тесты/установка/применение NOT_RUN |
 | **Что НЕ трогать** | Свод запретов диска/кода (не поведение); **v0.3.2:** исключение W2-баннера в чужих `SKILL.md`; **v0.4.0:** баннер +2–4 строки файрвола; **v0.4.1:** коридор 12–19; тело по-прежнему не трогать; PFS/`task_slug` — второй поезд; **v0.5.0:** исключение allowlist скиллов Б45.5 (тела таблиц моделей/вызова, не баннер dual-path); **v0.6.0:** `dwka_guard` hold `удаляй`; `jobs.json` hold `ставь кроны`; **v0.6.1:** `from_dict` жёсткий; `set_case` без sha; чужие `_state.json` PFS-слагов; **v0.6.2:** список `FATAL_PATTERNS` / таймауты `agent -p` / REV / страж п.47 / I1; **v0.7.0:** `warn_after` / ядро / сырой SQL write / `session.py` / `hermes-session-reset-policy` тело; **v0.7.3:** mode-aware reset, fail-closed audit и detail validator Б50; **v0.7.4:** body/references/routing/recovery и baseline двух зеркал cursor-cli не переписываются, Б51 boundary-only; **v0.7.5:** explicit-only trigger hermes-bugfix-cursor, body/usage/cron/manifest/profile и gateway baseline не переписываются, Б52; **v0.7.6:** `codex-canonicalize` — body/reference, helper `avail_check.sh`, usage/cron/manifest/profile/master baseline не переписываются, изменяемая surface ровно два `codex/SKILL.md`, Б53 | Б13.1, Б13.5, Б27, Б31.2, Б33, Б37, Б45, Б45.5, Б46, Б47, Б48, Б49, Б50, Б51, Б52, Б53 | чеклист Шаг 4 tz-workflow |
 | **Связи с экосистемой** | Кто с кем (не поля) | Б14, Б32, манифест | отдельно от Б35 |
 | **Открытые вопросы** | Явный h2 (пусто / «нет») | Б36, AC-018 на W4 | чеклист Шаг 4 |
@@ -135,6 +145,66 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 ### Б0.3 Границы этой записи (TZ-WRITE)
 
+Текущий ход — TZ:finalize R1 Б59 слага adresnyy-remont-reconciliation-priemki-post-invo, уже запущенная роль architect по packet b6a87c0d017ffd478de334cd2fb22220ca1f7c53108e738cdf58662a952e183a. Основание — новый независимый REV:tz APPROVE от 05.11.2026 на exact master 0.9.6 draft SHA-256 4da0210fe5a3be6afcdbd1e8766929697c9673ace68b64f336a0e118f037173c и TZ-patch R1. Штамп меняет только статус согласования и служебные указатели; версия, Б59.1…59.8/Б59.5.1, все AC, Б57/Б58 и прежние нормы сохраняются побайтно. Требования approved; реализация/тесты/установка/применение NOT_RUN.
+
+Разрешены exact master, обязательный evidence/TZ-finalize.md и собственные документные snapshots/diff/publication/verification/handoff внутри слага. Единственный OutputRef — канон; master output передаётся внешнему оркестратору по Б56.6 п.5 без изменения packet/sidecar/prepare. MAIN_TZ_INVENTORY.md снова отсутствует в принятом write_scope, несмотря на подготовленные ранее handoff и REV. Реестр не пишется; конкретный proposed diff и его preimage переданы оркестратору. По Б15/Б18.4 п.6/Б56.5 полная финализация не объявляется до разрешённой записи inventory. Это дефект допуска контекста, не новый Q-n/operator-hold и не согласование требований Сашей.
+
+Первые два master edges, прежние approvals/archive map и публикационные evidence неизменны. Новый четвёртый edge фиксирует actual master pre/post/packet/scope/diff и новый APPROVE; это документная цепочка, не runtime proof или допуск ремонта. Прежний canonical TZ-finalize сохранён до перезаписи с точной origin→snapshot связью. HF-план/IAC/AC-list/templates на этой фазе не перепривязываются: после inventory требуется отдельный rebind и повторная REV:plan.
+
+Не менять runtime/code/tests, скиллы/config/extract, process state/journal/queue, accepted packet/sidecar/prepare, historical Б58 candidate/SQLite/результаты и чужие counters/паузы B3/B4/w3/w4. Не next/complete-phase/recover/invoke-role, не ждать/мониторить собственный wrapper. Результат принимает внешний оркестратор после выхода роли без обхода guard-ов. [NEW-ENTITY, требует согласования Саши] сохранён дословно. No new service, database, queue, channel, cron, budget engine or global mutex.
+
+#### Историческая граница TZ:patch R1 Б59 версии 0.9.6
+
+Следующие абзацы сохраняют scope предшествующего packet b608882a… и относятся только к той публикации draft.
+
+Текущий ход — `TZ:patch` rework R1 Б59 слага `adresnyy-remont-reconciliation-priemki-post-invo`, уже запущенная роль architect по packet `b608882aba613f6e73f960bce765771711034c453aa92e625bc31c90d7f0a8a6`. Основание — принятый brief, сохранённые REQUEST-CHANGES REV:plan по E-BOOTSTRAP и выбранный контракт собственного legacy completion. Причина повторов и граница сквозной проверки «old load → own G3 → HF:test → install → historical check» установлены по Б55.3/55.5; это нормативный rework, не новый recover и не сброс budgets. Входной master 0.9.5 approved: SHA-256 `58154c6f306aca51af1216c3ff214a54758f78f4f85daefe1f137d76749cffd1`, size 942207, mtime_ns 1793900398824993276.
+
+Текущий packet явно разрешает master и корень слага; его единственный OutputRef — `TZ-patch.md`. По Б56.6 п.5 записаны только этот master 0.9.6 draft, канон, восстановимые snapshots/diff/exact operations и собственные документные evidence с фактическими pre/post FileRef. Корень pipeline в scope не разрешает architect писать runtime code/tests. Handoff имеет kind=forward/from_phase=HF:plan/request=null; текущие R1/план/контракт прочитаны как дополнительные факты с точными refs в evidence, не выданы за InputRef и не дописаны в accepted packet. Эта документная публикация не утверждает исключение. Нужны новая независимая REV:tz, разрешённая TZ:finalize, rebind HF-плана/четырёх edges/IAC/evidence и повторная REV:plan до HF:impl. Прежние approvals и архивы prefix сохранены; final_source_ref остаётся null до фактической финализации. MAIN_TZ_INVENTORY.md отсутствует в scope: не записан, точный будущий scope и правила синхронизации переданы оркестратору; по Б15 finalize без реестра не complete.
+
+Не менять runtime/code/tests, скиллы/config, HF-plan/IAC/AC-list/extract, accepted packet/sidecar/prepare, process state/journal/queue, исторические Б58 candidate/fixture и чужие counters/паузы B3/B4/w3/w4. Не next/complete-phase/recover/invoke-role, не ждать и не мониторить свой wrapper. Приём результата — внешнему оркестратору после выхода; разрешённая запись master проверяется по входному snapshot/output evidence без обхода G2. **[NEW-ENTITY, требует согласования Саши]** сохранён дословно. No new service, database, queue, channel, cron, budget engine or global mutex.
+
+#### Историческая граница TZ:finalize Б59 версии 0.9.5
+
+Текущий ход — `TZ:finalize` Б59 слага `adresnyy-remont-reconciliation-priemki-post-invo`, уже запущенная роль architect по packet `e9c71104ea339da79d7c462d1915d77c0ceb21f43477c6efc59adbf43883ec92`. Основание — независимая `REV:tz APPROVE` от 05.11.2026 в `REV-tz.md` этого слага. Проверенный входной master: version 0.9.5, SHA-256 `7ceac91c23b3e38a07b25734883871dfa331d2bcbcd782ffd17c6b4be75e8a2d`. Штамп меняет только отметки согласования и текущие указатели; Б59.1…59.8, AC-150…166, Б57/Б58 и прежние AC сохраняются без изменения требований. Реализация/тесты/установка/применение — NOT_RUN.
+
+Разрешены этот master, обязательный канон `dev/adresnyy-remont-reconciliation-priemki-post-invo/evidence/TZ-finalize.md`, восстановимые snapshot/diff, точная цепочка pre/post FileRef master и собственные документные evidence. Единственный OutputRef — канон; разрешённая запись master передаётся внешнему оркестратору по Б56.6 п.5, без изменения принятого packet/sidecar/prepare. Корень `Registries/pipeline/` в scope не даёт architect писать код/tests. `MAIN_TZ_INVENTORY.md` вновь отсутствует в write_scope, несмотря на предложение TZ:patch и замечание REV:tz; реестр не пишется. Конкретный staged diff и handoff сохранены в evidence, но не являются синхронизацией. По Б15/Б56.5 фаза не объявляется complete до разрешённого обновления inventory. Это дефект допуска контекста, не новый Q-n/operator-hold и не основание менять state или повторять неизменный invoke.
+
+Не менять runtime, код/tests, скиллы/config, extract, process state/journal/queue, принятые packet/sidecar/prepare, target Б58/candidate/fixture и чужие счётчики/паузы B3/B4/w3/w4. Не next/complete-phase/recover/invoke-role, не ждать/мониторить свой wrapper. Приём результата принадлежит внешнему оркестратору после выхода роли; отказ G2 не разрешает обход. **[NEW-ENTITY, требует согласования Саши]** сохранён дословно; новых сущностей нет. No new service, database, queue, channel, cron, budget engine or global mutex.
+
+#### Историческая граница TZ:patch Б59 от 05.11.2026
+
+Следующие абзацы сохраняют scope прежнего packet ce2e9543… и относятся только к тому вызову.
+
+Текущий ход — TZ:patch Б59 слага `adresnyy-remont-reconciliation-priemki-post-invo`, уже запущенная роль architect по packet `ce2e95435d9f5e21614816e867b0a64d2365879883897bf05ab41693aed0e1da`. Принятый brief разрешает корень ремонтного слага, `Registries/pipeline/` и точный master. Входной master: version 0.9.4, SHA-256 `bb2b745fe9bc07d88616685bdb2e5dd2aa6e2abba3a6d147f616722f8862ee18`; восстановимый snapshot/diff — в evidence слага. Предыдущий черновик по packet 0488c5cc… имел пустой scope и отказ приёмки; новый допуск разрешает документную запись, сохраняя историю и бюджеты по Б55.5. Принятые packet/sidecar/prepare не редактируются.
+
+Записываются только master, канон `dev/adresnyy-remont-reconciliation-priemki-post-invo/TZ-patch.md` и собственные документные evidence/snapshot/diff. Единственный объявленный OutputRef — канон; разрешённая запись master принимается внешним оркестратором по входному snapshot и output evidence Б56.6 п.5 без дописывания OutputRef. Корень pipeline не разрешает architect писать боевой код/тесты. Inventory вне текущего scope; его обязательная синхронизация передана будущей TZ:finalize в data-only handoff и не объявляется выполненной. Б59 меняет только названные приёмочные нормы; REV/финализация/реализация/установка/применение — последующие отдельные фазы.
+
+Не менять process state/journal/queue, packet/sidecar, extract, runtime, чужие результаты/счётчики/паузы. Нет next/complete-phase/recover/invoke-role или ожидания/мониторинга своего wrapper из роли. **[NEW-ENTITY, требует согласования Саши]** сохраняется; новых сущностей нет. No new service, database, queue, channel, cron, budget engine or global mutex.
+
+#### Историческая граница TZ:finalize Б58 от 05.11.2026
+
+Следующие абзацы относятся к указанному старому packet и сохраняют его разрешения; они не задают scope текущего Б59.
+
+Текущий ход — `TZ:finalize` слага `adresnyy-remont-publikatsii-vyzhimki-extract-v-c`, уже запущенная роль architect по packet `d82cf7a2d688179e287f4387ba5597e0100319a0cd7246987c4bac0dd4a6143a`. Основание — независимая `REV:tz APPROVE` от 05.11.2026 в `REV-tz.md` этого слага; проверенный входной master SHA-256 `0e72416ca6ff50c84a23b9846a9bef89a41f3260ef065ab4bea393a09301c4de`. Штампуется согласованное дополнение Б58, версия 0.9.4 сохраняется; технические требования Б58.1…58.7 и AC-138…149 не пересматриваются. Б57 и его R1/R2 остаются у зависимого слага; runtime AC этого ремонта — NOT_RUN.
+
+Разрешены финальная запись этого master, обязательный канон `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/adresnyy-remont-publikatsii-vyzhimki-extract-v-c/evidence/TZ-finalize.md`, snapshot/diff и собственные документные evidence. Принятый packet разрешает master в write_scope, но декларирует только указанный canonical output; его запись и выходной hash передаются по Б56.6 п.5 без дописывания OutputRef. Предложенный ранее handoff не включён в разрешения целиком: `MAIN_TZ_INVENTORY.md` вне scope. Реестр не пишется; конкретное предложение синхронизации передаётся оркестратору, и по Б15/Б56.5 `TZ:finalize` не объявляется complete до разрешённого обновления inventory. Это дефект допуска контекста, не новый operator-hold или вопрос Саше.
+
+Боевой код/тесты, скиллы, конфиг, extract, process state/journal, принятые packet/sidecar, чужие результаты/паузы/счётчики не меняются. Не next/complete-phase/recover/invoke-role, не мониторить свой wrapper. Приём изменённого разрешённого master — по входному snapshot и output evidence внешним оркестратором после выхода; отказ G2 не разрешает обход, state-write или повтор того же invoke. **[NEW-ENTITY, требует согласования Саши]** сохранён; новых сущностей нет. No new service, database, queue, channel, cron, budget engine or global mutex.
+
+#### Историческая граница TZ:patch Б58 от 05.11.2026
+
+Следующие абзацы сохраняют границу подготовки драфта по packet b71ef117…; слова «текущий ход» относятся только к тому вызову.
+
+Текущий ход — `TZ:patch` слага `adresnyy-remont-publikatsii-vyzhimki-extract-v-c`, уже запущенная роль architect по packet `b71ef1179ae9a9c39dbcbdd1d4f88561eaf380a621bcac5219f17e21138c6dc5`. Основание — принятый brief после GATE:diagnose-review и `_fix_plan_20261105.md`. Нормы ремонта и AC-138…149 записываются в Б58; Б57/AC-SIMP и прежние утверждения не принимаются заново.
+
+На этой фазе разрешены только запись master, canonical `dev/adresnyy-remont-publikatsii-vyzhimki-extract-v-c/TZ-patch.md`, восстановимый snapshot/diff и собственные документные evidence. Разрешённый packet корень `Registries/pipeline/` не отменяет запрет architect писать боевой код: это работа HF:impl по будущему плану/REV. Inventory отсутствует в текущем write_scope; подготовлен будущий data-only scope для TZ:finalize, сам реестр сейчас не меняется. Старый snapshot/brief не переписываются.
+
+Не менять process state/journal, принятый packet/sidecar, extract и чужие результаты; не next/complete-phase/recover/invoke-role, не мониторить свой wrapper. Приём результата — внешнему оркестратору после выхода. Разрешённый master output проверяется по Б56.6 п.5; отказ guard не разрешает роли менять state или повторять invoke. **[NEW-ENTITY, требует согласования Саши]** сохраняется; новых сущностей нет. No new service, database, queue, channel, cron, budget engine or global mutex. Паузы B3/B4/w3/w4 и счётчики сохраняются.
+
+#### Историческая граница TZ:patch Б57 другого слага от 05.11.2026
+
+Следующие абзацы сохраняют границу предшествующего пакета. Слова «текущий ход» внутри них относятся к его packet 65cb7ba0…, не задают scope нынешнего BUGFIX.
+
 Текущий ход — TZ:patch rework слага `uprost-skill-dev-workflow-po-itogam-dejsa-dovede`, уже запущенная роль architect по packet `65cb7ba02a1d68781d212dd0f987dbc23c84a1caf04e4bed03bf8b9aae48f954`. Основание — принятый brief и REV:tz REQUEST-CHANGES от 04.11.2026: R1 — запись требований в master и полный контракт, R2 — покрытие/адресность extract. Текущий packet содержит brief и REV как проверенные входы и разрешает запись master. Требования и AC нового пакета — Б57; прежние Б1–Б56 и их идентификаторы сохраняются.
 
 Разрешены запись этого master, канон `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/TZ-patch.md`, восстановимый snapshot/diff и собственные документные evidence слага. Корень скилла в packet разрешён, но боевые инструкции — работа HF:impl после плана/REV. Inventory не входит в scope текущей фазы; требуемые пути будущей TZ:finalize перечислены в Б57.3/подготовленном контракте. Master получает новый draft; прежние утверждения своих пакетов сохранены.
@@ -167,7 +237,7 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 ## Что НЕ трогать
 
-Для текущего пакета действуют адресные границы Б57.3/Б57.5; Б56.10 и Б55.14/55.8–55.10 сохраняют область своих пакетов. На текущем ходе записи — только документы Б0.3. Исторические allowlist ниже относятся к своим пакетам.
+Для Б59 действуют Б59.6/59.8 и конкретный scope принятого packet; исторический candidate/packet Б58 сохраняются, адресный state repair допускается только проверенным entrypoint на предусмотренной ORCH-фазе. Для предыдущего ремонта действуют адресные границы Б58.5/Б58.7; Б57.3/Б57.5, Б56.10 и Б55.14/55.8–55.10 сохраняют область своих пакетов. На текущем ходе записи — только документы Б0.3. Исторические allowlist ниже относятся к своим пакетам; ремонт существующей выбранной codex-ветки не меняет YAML/default backend компрессора.
 
 Свод запретов **на диске и в чужом коде**. Это не Б33 (неприемлемое *поведение* машины: минутный цикл, heartbeat, авто-ретрай, канбан-клон). Ниже — указатель; нормы не копировать, читать якоря.
 
@@ -460,7 +530,7 @@ D1/D2 снимается: есть только вызов роли `invoke_role
 |---|---|---|
 | G1 | emit-prompt / next | фаза не из рецепта слага; drift version/mtime ТЗ; hash выжимки не от текущей `tz_version` (`extract_of_tz_version` / `extract_sha256`); после `HF:impl` git-proof уже красный — не стартовать `HF:test` / `HF:docs-handoff` |
 | G2 | complete-phase TZ/HF/BUG/REV | нет маркера `context-used:` |
-| G3 | `GATE:done` и старт `HF:test` | пути из `HF:impl.changed_files` внутри git-worktree не закоммичены |
+| G3 | success/complete `HF:impl`, допуск `HF:test`/`HF:docs-handoff`, `GATE:done` | собственный write-set не доказан/пуст при ожидаемом коде либо git-proof недействителен; точные правила и существующее no-code основание — Б59.5; время заполнения stored proof только для собственного legacy completion — Б59.5.1 |
 | G4 | init (create) и `GATE:done` | рецепт не полон по кейсу |
 | G5 | любой TZ/HF/BUG воркер | архитектор/исполнитель меняет кейс или skip обязательных фаз |
 | G6 | `init` / emit-prompt / invoke_role / complete-phase (любая фаза из `recipe[]`, не сужение TZ\|HF\|BUG\|REV) | `--role` не совпадает с таблицей фаза→роль ниже; `slug_source` на init отсутствует или не ∈ {`suggest-cli`,`sasha-verbatim`,`reuse`}; complete фазы с `actor=sirene` там, где роль = architect/reviewer/executor; stdout `suggest-slug` отдан Саше как нумерованный список |
@@ -1429,7 +1499,7 @@ slug|status|phase|role|pid_alive|wrapper_alive[|canon_mtime=…]
 
 Обязательны `--reason` и `--evidence`. Evidence — проверяемый указатель: `path=… version=…` или `sha256=…` или `session_id=… rc=0 file=…`. Текстовая отписка «готово» без пути — fail.
 
-Дополнительно для фаз с git: `changed_files` (список abs-путей). Нет списка при кейсе с `HF:impl` → fail, кроме `no-code-change: <reason>` в evidence.
+Дополнительно для фаз с git: проверенный собственный `changed_files` (список abs-путей), записанный общей success-финализацией по Б59.5. Нет/пустой список при ожидаемом коде → fail. Единственное исключение по времени заполнения stored changed_files — проверенный собственный legacy completion Б59.5.1; фактический committed diff остаётся непустым. Существующее `no-code-change: <reason>` принимается только с заранее утверждённым no-code планом, нулевым собственным diff и связанным proof Б59.5; одна строка evidence не заменяет эти проверки.
 
 ### Б17.4 Auto-гейты: какая улика
 
@@ -2414,6 +2484,40 @@ AC-016 / AC-019 / AC-035 — класс S про поздние волны: по
 | AC-SIMP-07 | S | Контракты/10 кейсов/G1–G6/packet/MIG/native сохранены | Б57.4 |
 | AC-SIMP-08 | S | Поведение на реально загруженной версии и загрузка после restore | Б57.4 |
 | AC-SIMP-09 | S | Dirty provenance/backup/собственный write-set/откат и итоговый отчёт | Б57.4 |
+
+**Область `GATE:done` пакета Б58 (`adresnyy-remont-publikatsii-vyzhimki-extract-v-c`):** все AC-138…149 обязательны после собственного полного BUGFIX-хвоста. Формулировки и положительные/отрицательные проверки — Б58.6. На TZ:finalize реализация/installed/runtime NOT_RUN. Живое возобновление зависимого слага — отдельное последующее действие оркестратора, не циклическое условие завершения ремонта; замечания Б57 не снимаются.
+
+| AC | Класс | Коротко | Блок |
+|---|---|---|---|
+| AC-138 | S | Полный codex compressor response и отдельный last-message channel | Б58.2/58.6 |
+| AC-139 | S | Захваченная identity и проверка источников перед publication | Б58.2/58.6 |
+| AC-140 | S | Непригодный final-message/parts/coverage дают local refusal | Б58.3/58.6 |
+| AC-141 | S | Точный комплект, alias, N=12, 3→2→1 и cleanup | Б58.3/58.6 |
+| AC-142 | S | Transport/fatal/I/O failure без успешного result/receipt/done | Б58.3/58.6 |
+| AC-143 | S | Узкое benign warning исключение без потери настоящего auth/provider fatal | Б58.4/58.6 |
+| AC-144 | S | Concrete diagnosis output, midnight и pre-prepare scope validation | Б58.4/58.6 |
+| AC-145 | S | Владельцы production/result/receipt/metadata и отказ старого proof | Б58.3/58.6 |
+| AC-146 | S | Две реальные offline CLI-трассы codex compress до consumer packet | Б58.5/58.6 |
+| AC-147 | S | Native/refresh/остальные роли и общий regression без смены policy | Б58.5/58.6 |
+| AC-148 | S | Backup/dirty provenance/G3/installed hashes/write-set/rollback | Б58.5/58.6 |
+| AC-149 | S | Handoff зависимого слага без reset/второго recover/подмены REV | Б58.6/58.7 |
+| AC-150 | S | FileRef text совместим с прежним; binary file/directory snapshot содержит SQLite с точными hash/size, без decode failure. Invalid UTF-8 текстового input/canonical по-прежнему отказан; нет replacement/binary fallback для текста. | Б59 |
+| AC-151 | S | Полное исходное дерево/96 refs, required/freshness/before=null, `.git` исключение и canonical сохраняются. Missing/empty/unchanged required, unreadable/non-regular/symlink/escape, добавление/удаление/rename/смена target или байта SQLite/mtime после snapshot дают отказ, включая G2 и повторное применение. | Б59 |
+| AC-152 | S | Реальная изолированная CLI-трасса воспроизводит post-invoke failure с runtime emit/prepare. Repair создаёт exact context_result/receipt, исходную форму outputs, девять absolute changed_files и связанный git/reconciliation proof. Packet/render/sidecar/prepare не меняются; result не создан mock-ом. | Б59 |
+| AC-153 | S | Живой wrapper/дочерний/orphan writer, неизвестная process identity/outcome, недостаточная runtime provenance, rc≠0/143, fatal даже при rc=0 и непогашенный provider-fatal дают отказ. Проверены обе допустимые формы transport evidence и отсутствие логов как отсутствие proof. Backend/send/prepare/recover при repair=0. | Б59 |
+| AC-154 | S | Только exact old↔new plan FileRef/diff A/независимый APPROVE допускаются. Другой diff/hash/mtime/target, подмена approval или другого source отказывают до writer; G2 после repair повторно проверяет ту же связь. Старый packet для нового invoke не допускается. | Б59 |
+| AC-155 | S | В отдельной положительной трассе master реально меняется 0.9.4→0.9.5 только утверждённым Б59/штампом; exact цепочка сохраняется. Полные `pipeline check` (G1 до G2) и отдельный completion проходят без изменения старых tz/extract реквизитов repair. Лишний edge, правка Б58, mtime-only/target/hash drift master, подмена approval и stale extract отказывают. Новый emit получает текущие refs штатно. Для R1 дополнительно проходит exact four-edge chain через разрешённые TZ:patch 0.9.6 и TZ:finalize с новым REV:tz; неполный/неутверждённый tail и лишний пятый edge отказаны. | Б59 |
+| AC-156 | S | Точный baseline/ancestry/HEAD и ровно девять собственных paths/hashes подтверждены. Лишний/пропущенный path, иной HEAD/baseline/hash, dirty index/worktree, untracked/ignored/outside-repo, не-repo cwd, git rc≠0/timeout с пустым stdout — отказ, без success receipt. | Б59 |
+| AC-157 | S | Один repair event содержит exact phase/reason/evidence hash/preimage/after hashes. Только разрешённая дельта state; counters/status/role/model/backend/session/pids/prepare/timestamps/holds/history сохранены. Readback G1/G2/G3 успешен; done появляется только после отдельного обычного completion. | Б59 |
+| AC-158 | S | Повтор exact repair до и после completion — byte-equal no-op state/journal/queue.log/index, 0 новых events/backend. Изменённые outputs/refs/evidence/identity и частичный несовпадающий receipt/result отказаны, а не перезаписаны. | Б59 |
+| AC-159 | S | Чужие slug/phase/packet/session, неверный hash/schema/render/sidecar при наличии/emit marker, wrapper/turn/started_at и новый prepare отказаны до writer. Dry-run не пишет файлы/логи; syntax rc=2, context rc=1, проверенный applied/no-op rc=0 различимы. Unknown evidence keys/duplicate JSON/команды не принимаются. | Б59 |
+| AC-160 | S | Обычный успешный HF:impl пишет собственные changed_files/result/receipt/git proof одним переходом. Пустой code write-set и неуспех G3 не оставляют успешного result/receipt и не допускают HF:impl completion. Только собственный initial legacy result Б59.5.1 может сохранить целые result/receipt и добавить independently verified непустой G3 одновременно с ordinary complete; реальные old-owner→new-owner CLI traces обязательны. | Б59 |
+| AC-161 | S | При пустом/неверном/неcommitted code write-set отказывают next, прямые emit/invoke HF:test/HF:docs-handoff **до writer/prepare/turn/send** и done preflight. Поиск одного helper в коде не заменяет executable caller traces. До compatible complete legacy stored proof остаётся отказом всех admission caller; после него обычный полный G3 допускает отдельный HF:test без backend/prepare/recover/turn delta при completion. | Б59 |
+| AC-162 | S | Законный заранее утверждённый no-code маршрут проходит с нулевым diff/причиной/связанным proof/required outputs. Голая строка `no-code-change:`, пустой список при ожидаемом коде и подменённый план отказаны. Полный/LIGHT, отсутствие HF:impl по рецепту и законные add/delete/rename проверены отдельно. | Б59 |
+| AC-163 | S | Fault injection append JSONL/journal, replace state, index rebuild, readback/verifier откатывает все четыре preimages, нет половины proof/receipt/changed_files. Drift state/prepare/refs/tree/git между dry-run и commit отказан. Hard kill рассматривается отдельно: inconsistency не принимается/no-op и не чинится ручным JSON; crash-атомарность не заявлена. Те же четыре preimages и race/refusal oracle обязательны для собственного compatible complete Б59.5.1; partial/conflicting/completed-foreign proof не переписывается. | Б59 |
+| AC-164 | S | На совмещённом candidate зелёные адресные и полная suite: original Б58 publication/native/JSONL/fatal/context, receipt/session/occupancy/recover/turn/G1–G6. Один backend/SDK retries=0/native rc=3/4/модельные правила сохранены. Никакого платного invoke для отрицательных проверок. | Б59 |
+| AC-165 | S | Свой commit/G3/backup, loaded paths/hash и tested→installed manifest доказывают установленную совмещённую версию. Installed offline smoke выполнен. Затем внешний оркестратор применяет exact entrypoint к Б58 после свежих prerequisites; фиксирует один repair, 0 backend/prepare, неизменные counters и успешный read-only check. Если proof недостаточен — AC остаётся FAIL/blocked, не фиктивный done. Полный хвост Б58 не является prerequisite GATE:done этого ремонта. Загрузка своего первого HF:impl, compatible complete и HF:test из candidate доказана по Б59.5.1; runtime до ORCH неизменен, собственный переход не использует historical reconcile-result. | Б59 |
+| AC-166 | S | Baseline/after diff и refs подтверждают только разрешённый scope, сохранность исторического candidate/fixture/packet/prepare и чужих counters/пауз. Документация/handoff содержит точный интерфейс, фактические статусы/ограничения и восстановимый адресный rollback без отката чужой работы или перезаписи state историческим архивом. | Б59 |
 
 ### AC будущего MIGRATION-слага (W4) — не пакета `rs-refuse-kanban`
 
@@ -4843,7 +4947,7 @@ Evidence хранится раздельно с перекрёстными сс�
 
 ### Б56.4 Типы ссылок и содержательный контракт
 
-`FileRef` = object с required `path` (string, абсолютный путь), `resolved_path` (string, реальный абсолютный путь после symlink), `sha256` (64 lowercase hex), `size_bytes` (integer ≥0), `mtime_ns` (integer ≥0). Чтение строго UTF-8 для текстов, без `errors=replace`; hash считается по исходным байтам. Изменение symlink target проверяется отдельно от hash. `PlannedRef` = object только с `path`; путь назначения абсолютный, ещё отсутствует, не выдаётся за прочитанный источник.
+`FileRef` = object с required `path` (string, абсолютный путь), `resolved_path` (string, реальный абсолютный путь после symlink), `sha256` (64 lowercase hex), `size_bytes` (integer ≥0), `mtime_ns` (integer ≥0). Чтение строго UTF-8 для текстов, без `errors=replace`; hash считается по исходным байтам. Изменение symlink target проверяется отдельно от hash. Для нетекстовых changed_files outputs действуют байтовый FileRef и полный snapshot Б59.2; строгий текстовый контракт сохраняется для текстовых потребителей. `PlannedRef` = object только с `path`; путь назначения абсолютный, ещё отсутствует, не выдаётся за прочитанный источник.
 
 `InputRef` = object `{phase,ref,purpose}`: phase — каноническая фаза производителя или null только для исходного брифа; ref=FileRef; purpose=непустая string с ролью входа. Входами являются **проверенные канонные файлы**, а не stdout и не «последний файл по mtime». Явное отсутствие ненужного входа — пустой список; отсутствие обязательного входа — отказ. При rework `request` указывает сохранённую ревизию/датированную постановку: объект, нарушенный контракт, суть дефекта или новые требования и затронутые AC. `from_phase` отражает источник текущей передачи; порядковый номер recipe не подменяет rework.
 
@@ -4897,14 +5001,14 @@ Evidence хранится раздельно с перекрёстными сс�
 2. Проверяются матрица обязательных входов/чтений/выходов, `handoff.kind`, архивированная причина rework, явное основание границ. Пути слага после resolve остаются внутри его каталога; внешние источники разрешены только утверждёнными путями из постановки/плана/YAML. Подмена соседнего слага, неоднозначная часть extract или несуществующий заголовок — fail, без автоматического поиска «похожего» файла.
 3. Перед spawn invoke заново проверяет снимок/sidecar, packet_id, детерминированный render и hash prompt; текущие slug/phase/G6, источники и существующие G1/G3/occupancy. Все проверки — **до invoke_prepare и платного backend**. Изменившийся source требует нового emit; старый пакет не разрешён по одному прежнему context_used=true. Backend/model/effort берутся из YAML/resolver, не из конверта.
 4. Успешный `context-used:` сохраняет прежние поля и добавляет `packet_schema`, `packet_id`, `packet_path`, `prompt_sha256`, а также `master_status`/`master_reason` и `extract_status`/`extract_reason` из проверенного конверта. Реквизиты отсутствующего источника остаются null/пустыми; G1/G2 принимают их только вместе с допустимой веткой этого конкретного пакета, а не по одному пустому полю. При invoke_prepare штатный writer сохраняет первые четыре поля внутри `phases.<PHASE>.context_packet`; это аддитив optional object схемы state/1.0, не новый root и не state bump. Каждый новый успешный emit дописывает свой маркер; дедуп только по тому же packet_id, не по одному имени фазы. G2 на новых вызовах требует совпадения **slug + phase + packet_id** успешного emit и принятого invoke. Маркер другой фазы/слага или исторический context_used сам по себе не проходит.
-5. Роль вправе изменить предназначенные для записи master/план/канон. Поэтому complete сверяет входной принятый снимок и output evidence относительно него, а не требует совпадения нового master с его **входным** hash. Изменения вне разрешённого write-set не становятся допустимыми благодаря этому исключению. Следующая фаза получает новый снимок; прежний пакет не редактируется. G2 не означает автоматического APPROVE/complete.
+5. Роль вправе изменить предназначенные для записи master/план/канон. Поэтому complete сверяет входной принятый снимок и output evidence относительно него, а не требует совпадения нового master с его **входным** hash. Изменения вне разрешённого write-set не становятся допустимыми благодаря этому исключению. Следующая фаза получает новый снимок; прежний пакет не редактируется. Только exact исторический результат Б59.1 может использовать адресную проверяемую цепочку редакций Б59.3–59.4 при G1/check/G2; это не разрешение нового invoke старого packet или общего source drift. G2 не означает автоматического APPROVE/complete.
 6. Неверный ввод — exit 2 для CLI-синтаксиса, exit 1 для схемы/контекста; диагностика содержит поле/путь и причину, без секретов. Ни state/phase, ни успешный context-used, ни бюджет вызовов не меняются при отказе **до** публикации/prepare. Сбой фиксации после публикации оставляет недопущенные файлы, но не успешный emit. Неизвестная schema, повреждённый packet или drift не становятся provider_fatal/новым recover-классом; одинаковый ошибочный вызов не повторять.
 
 Hash доказывает целостность/совпадение, не защищает от злонамеренного локального writer и не удостоверяет понимание LLM. Содержательную полноту проверяют IAC/REV по master. Новые учётчики повторов и глобальные lock-лимитаторы здесь не добавляются.
 
 ### Б56.7 Совместимость, включение и откат
 
-Включение выполняется после зелёного изолированного `HF:test`, адресно на `ORCH:shared-state` обновлением единственного сборщика/проверяющего пути и `references/context.md`; новый YAML-флаг/второй dispatcher не нужен. В одном выпуске обновляются emit/check/invoke/G2 и потребители текста. Выполняющийся старый wrapper принимается по своему сохранённому контексту, его не kill/re-emit. Первый **новый** invoke после включения требует Б56. Старые завершённые фазы и история `context-used` не переписываются и не объявляются невалидными задним числом; несовершённая старая фаза получает новый emit перед следующим invoke. Исторический результат, требующий reconciliation, не перезапускается ради изготовления пакета: принимается по Б54/Б55 с явным legacy evidence.
+Включение выполняется после зелёного изолированного `HF:test`, адресно на `ORCH:shared-state` обновлением единственного сборщика/проверяющего пути и `references/context.md`; новый YAML-флаг/второй dispatcher не нужен. В одном выпуске обновляются emit/check/invoke/G2 и потребители текста. Выполняющийся старый wrapper принимается по своему сохранённому контексту, его не kill/re-emit. Для собственного первого HF:impl ремонта Б59 применяется только явно утверждённый compatible completion Б59.5.1; это не общий backfill. Первый **новый** invoke после включения требует Б56. Старые завершённые фазы и история `context-used` не переписываются и не объявляются невалидными задним числом; несовершённая старая фаза получает новый emit перед следующим invoke. Исторический результат, требующий reconciliation, не перезапускается ради изготовления пакета: принимается по Б54/Б55 с явным legacy evidence.
 
 Пакеты неизвестной версии не «мигрируются» заменой поля schema. После изменения входов/путей/мажорной схемы конверт пересобирается штатным emit из SoT; архивный снимок остаётся прежним. Для последующей несовместимой версии требуется отдельная норма и уведомление локальных потребителей emit/check/invoke/G2/skills. Автоматической миграции state и массового backfill нет.
 
@@ -5143,9 +5247,479 @@ HF:plan задаёт точные команды, пути отчётов и з�
 
 ---
 
+## Б58. Пакет `adresnyy-remont-publikatsii-vyzhimki-extract-v-c` — адресная публикация extract в codex-пути
+
+Дата: 2026-11-05. Кейс: **BUGFIX**, полный рецепт сохранён. Статус дополнения —
+**approved после независимой REV:tz APPROVE от 05.11.2026**. Штамп TZ:finalize
+сохраняет версию 0.9.4 и согласованные требования; implementation/installed/runtime —
+NOT_RUN. Inventory вне scope принятого packet, поэтому завершение фазы по Б15
+остаётся неподтверждённым до разрешённой синхронизации. Основание — принятый brief ремонтного слага,
+`_fix_plan_20261105.md` после `GATE:diagnose-review` и evidence этого диагноза.
+Это ремонт существующего `Registries/pipeline/`; нового продукта или пути запуска нет.
+Б55 сохраняет процесс, Б12/Б56 — контекст, Б57 — требования зависимого упрощения скилла.
+Исторические APPROVE/done не принимают этот ремонт и не закрывают R1/R2 зависимой REV.
+
+### Б58.1 Current/target, reuse и граница вывода
+
+**current:** исторический codex compress зависимого слага
+`uprost-skill-dev-workflow-po-itogam-dejsa-dovede` получил prepare/result нового запуска
+при старом `proof.extract_production`; completion отвергает identity mismatch. Alias
+`extract.md` расходится с part 1. Наличие файлов и механический coverage=True не доказывают
+валидную публикацию. Диагноз разделяет основной дефект и bootstrap finalization.
+
+На проверенном входе ремонта bootstrap уже внесён: конкретное имя `_fix_plan_20261105.md`,
+scope каталога с `/`, `--output-last-message` и второй call site publisher в codex.
+Hashes четырёх исходников совпадают с диагностическим baseline. Поэтому утверждение
+«publisher сейчас вызывается только в native» описывает исходный инцидент, а не текущий код.
+Остатки: identity для codex перечитывается после backend, AcceptedCompressorContext
+создаётся лишь для native; generic role prompt не обеспечивает полный extract в последнем
+ответе; старые numbered parts остаются; временный last-message каталог не очищается;
+output/scope не проверяется до prepare; исключение всего plain stderr при rc=0 скрывает
+настоящий auth failure. Существующая fixture `test_codex_non_json_auth_stderr_is_fatal`
+это выявляет по диагностическому evidence; в этой TZ:patch тесты повторно не запускались.
+
+Причина двух ранних архитектурных fatal без исходных transport streams не считается
+доказанным «timeout только возврата». Сужение исключения warning требует сохранённого
+анонимизированного потока или изолированного воспроизведения, а не догадки.
+
+**target A′:** принятый compressor context → один выбранный backend → полный финальный
+текст → существующий `publish_validated_extract` → canonical/output checks → текущий
+`context_result/receipt` → штатный completion metadata → проверенный packet потребителя.
+Ни rc=0, ни прямые записи модели в canonical, ни старый proof этой цепочки не заменяют.
+
+Reuse: `AcceptedCompressorContext`, `_build_compressor_messages`, `_split_compressor_parts`,
+`publish_validated_extract`/`_atomic_parts`, `check_result_outputs`, `compressor_metadata`,
+существующие receipt/G2 и изолированная CLI-лаборатория. Не строить второй publisher,
+launcher, receipt framework или транзакционный движок. Переработка общего semantic
+coverage всех семейств имён — вне ремонта; обнаруженную ограниченность текущего regex
+нельзя выдавать за выполнение полного Б12.6.
+
+### Б58.2 Принятый вызов и полный текст компрессора
+
+1. Для обеих существующих compressor-веток `codex` и `hermes-internal` захватить
+   `AcceptedCompressorContext` из проверенного packet/render bytes и **этого prepare**
+   до backend. Зафиксировать packet_id/path, prompt hash и prepare identity
+   `(wrapper_pid, turn_count, started_at)`. Ответу нельзя присвоить identity заново
+   прочитанного после backend чужого prepare. Процессные поля пишет существующий writer.
+2. Codex получает предметные operands существующего сборщика: core/overlay/master,
+   принятый envelope и правило доставки: **последнее сообщение содержит весь extract**,
+   Python пишет canonical после валидации. Обычная инструкция роли «запиши артефакты,
+   верни резюме» для compressor заменяется адресно в адаптере. Accepted packet,
+   sidecar/render и marker не переписываются. Тело master — operand compressor,
+   не новая inline-копия в packet обычной роли. Прочитанные bytes core/overlay
+   фиксируются для этого dispatch и проверяются перед публикацией; их прежний
+   model/fallback-текст не меняет policy YAML. Сами prompt-файлы ремонтом не правятся.
+3. Уникальный абсолютный `--output-last-message` используется только для codex
+   compressor; stdout/stderr остаются исходными JSONL для classifier/session_id.
+   Остальные роли сохраняют argv и работу через accepted_prompt. Срок 3600s,
+   subprocess lifecycle, sandbox, backend/model/effort resolver не меняются.
+4. После rc=0 и отсутствия fatal читается только файл финального сообщения этого
+   dispatch: существующий обычный файл, не symlink/каталог/FIFO/device, strict UTF-8,
+   непустой текст. Нет fallback на stdout JSONL, tool output, прежний extract или
+   отчёт модели о записи файлов. Тип проверяется до чтения, чтобы отказ не блокировался
+   на FIFO. Временные файлы и каталоги убираются в finally на всех путях, включая exception.
+5. До замены canonical сверяются входной snapshot, принятые FileRef
+   (path/resolved target/hash/size/mtime), захваченные prompt operands и packet/prepare.
+   Изменение источника в разрешённом scope тоже не разрешает сжимать другие bytes
+   под прежним accepted вызовом. Проверка непосредственно перед replacement принадлежит
+   существующей публикационной границе и применяется к native/codex без нового API-сервиса.
+   Drift или новая identity отвергаются до replacement. Общая защита от произвольного
+   конкурентного локального writer/новый lock не обещаются.
+
+### Б58.3 Валидация, точный комплект и владельцы результата
+
+Полный текст разбивается существующим splitter. Для multipart обязательны ровно N
+последовательных `## Часть k/N`, k=1…N и единое N; никакая содержательная часть ответа
+не отбрасывается молча. Непустой текст перед первым multipart header отвергается;
+служебные пробельные строки допустимы. Каждая часть ≤5120 Unicode-символов, не байт.
+Действующие семь секций, inventory/эхо и машинный coverage сохраняются. Не ослаблять
+валидацию ради успешного вызова publisher; локальные ошибки текста/headers/coverage
+возвращают rc=4, включая прежний SystemExit валидатора, без успешного result/receipt.
+
+После проверки всего текста staging/replace оставляют ровно текущий набор:
+
+| Ответ | Canonical на диске | Участие в chars/hash |
+|---|---|---|
+| Одна часть | `extract.md`; прежних numbered parts нет | Только `extract.md`. |
+| N≥2 | `extract-1.md`…`extract-N.md`; `extract.md` byte-equal part 1 | Numbered parts по числовому порядку, alias повторно не считается. |
+
+После успешной записи нового набора убрать только устаревшие basename
+`extract-[1-9][0-9]*.md` собственного слага. N не ограничивается десятью. Проверить
+3→2→1 и N=12; consumer glob не должен подхватить старые части. Соседние файлы,
+другой slug и symlink targets не затрагиваются. Для canonical symlink допустимы
+безопасный отказ либо замена/удаление самой ссылки в разрешённом scope без перехода
+к target; чтение/изменение target и рекурсивное удаление каталогов запрещены.
+
+До canonical replacement ошибка сохраняет прежние canonical и publication metadata.
+При I/O failure между последовательными replace/unlink общая атомарность набора
+не обещается: отказ виден, новые успешные result/receipt/done отсутствуют, частичный
+набор не принимается потребителем. Это не основание достраивать proof вручную.
+
+| Владелец | Записывает |
+|---|---|
+| Publisher | Canonical и `proof.extract_production` для захваченного packet/prepare. Сам не пишет result, receipt, финальные metadata или done. |
+| Общий post-invoke | После проверок — `context_result`, receipt, outputs текущего prepare. Не принимает ручной canonical вместо publication. |
+| Штатный completion через `compressor_metadata` | Проверяет prepare/publication/result/receipt и комплект; пишет `extract_key`, `extract_sha256`, `extract_chars`, `extract_of_tz_version`, freshness master и done. |
+
+При transport rc≠0, структурном fatal при rc=0, invalid text, identity/source drift
+или I/O failure нет успешного результата текущего вызова. Старые proof сохраняют
+исторический смысл и не дают complete нового prepare. Rc=143 не разрешает compressor
+reconcile успеха только по записанным моделью файлам. Нового backend/retry нет.
+Provider-fatal остаётся non-recoverable; локальный отказ публикации — rc=4.
+Native сохраняет своё разделение rc=3 provider/worker/static failure и rc=4
+успешный HTTP без пригодного completion, один send и SDK retries=0.
+
+### Б58.4 Адресный bootstrap output/scope и classifier
+
+Конкретное датированное имя `_fix_plan_YYYYMMDD.md` материализуется при emit;
+дата Europe/Moscow фиксируется в immutable OutputRef. Invoke/приём после полуночи
+используют **этот путь**, не пересчитывают сегодняшнее имя. Завершающий `/` сохраняет
+существующее обозначение каталога в `_in_scope`; простое совпадение строкового prefix
+не является разрешением соседнего пути.
+
+Builder/validator/load сверяют совместимость всех заявленных outputs с write_scope
+до prepare/backend/расхода phase turn, не требуя существования будущего output.
+При отсутствии специального scope для diagnosis предпочтителен точный canonical
+путь; для неизвестного N compressor нужен предусмотренный контрактом scope каталога.
+Явно заданный несовместимый/слишком узкий контракт отвергается, не дополняется
+разрешениями автоматически. Не расширять все scope, не брать write-set из результата.
+Перечень extract-1…10 не считается лимитом/заменой согласованного каталога;
+publisher проверяет разрешённость собственных targets и cleanup. Schema пакета не меняется.
+Старые snapshots не исправляются; G2 после результата сохраняется.
+
+Для **codex** сузить bootstrap `_fatal_reason`: benign diagnostic warning успешного
+auxiliary models-refresh при rc=0 может быть исключён только по воспроизведённой
+узкой сигнатуре. Полное исключение plain stderr при rc=0 отменяется; настоящий
+plain client authentication/provider/transport failure вне этого warning даёт fatal
+даже при rc=0. Успешный JSONL result/tool/assistant text не сканируется на цитаты;
+любое структурное error-событие до/после success сохраняет приоритет. Bare слова
+`401 token_expired` без сигнатуры отказа клиента не дают fatal. Generic plain
+`Request timed out` вне доказанного benign warning остаётся отказом.
+Список `FATAL_PATTERNS`, native/Cursor policy, TERMINAL_KILL_RCS и timeout не меняются;
+HTTP 401/429/503, auth/billing и 90-90 не получают auto-recover. Rc=0 не скрывает
+ошибку и не доказывает успех по одному наличию канона.
+
+### Б58.5 Реализация, проверка и границы фаз
+
+На TZ:patch были записаны master, `TZ-patch.md`, snapshot/diff и собственные
+документные evidence. `REV:tz` от 05.11.2026 дала независимый APPROVE без блокирующих
+замечаний. Текущая TZ:finalize штампует согласованное дополнение и пишет обязательный
+`evidence/TZ-finalize.md`, snapshot/diff и документные evidence; боевой код/тесты
+остаются HF:impl/HF:test, несмотря на разрешённый корень `Registries/pipeline/`.
+Inventory требуется обновить под существующим lock, но его путь по-прежнему вне
+write_scope принятого packet. Подготовлено конкретное предложение diff для оркестратора;
+оно не изменяет реестр/packet/brief/state и не даёт complete без inventory по Б15.
+
+Предлагаемый implementation allowlist, уточняемый пофайлово на HF:plan:
+
+| Путь относительно `/home/tkachenkoav/WorkVault/Registries` | Допустимый объём |
+|---|---|
+| `pipeline/invoke_role.py` | Captured compressor context/operands, final-message channel, source/identity checks, cleanup и узкое исправление classifier. |
+| `pipeline/pipeline_extract.py` | Существующая публикационная граница, точный набор, безопасная уборка старых частей и диагностируемые отказы. |
+| `pipeline/pipeline_context.py` | Concrete diagnosis output, ранняя совместимость scope/output, сохранение G2/metadata ownership; убрать ошибочное policy-объяснение bootstrap. |
+| `pipeline/tests/test_codex_compressor_publication.py` | Новая offline интеграция обоих compress и отрицательные сценарии. |
+| `pipeline/tests/test_invoke_backends.py`, `test_codex_jsonl.py`, `test_context_packet.py` | Argv/fatal/context/native/refresh регрессии; literal дата и узкий scope. |
+| `pipeline/tests/fixtures/context_packet_cli.py` | Executable codex stub отдаёт last-message, не изготавливает publication/result/receipt вместо runtime. |
+
+Существующие `cli.py`, `pipeline_gates.py`, `pipeline_state.py`, resolver, native transport,
+schemas и prompt-файлы read-only, если HF:plan не предъявит необходимый адресный
+возврат архитектору/ревизору. Нельзя расширить список по наличию разрешённого корня.
+HF:docs-handoff пишет собственный отчёт ремонта; скилл Б57 не входит в targets.
+
+HF:plan делает новый IAC `path/verify/depends/covers` для каждого AC-138…149 и всех
+положительных/отрицательных случаев ниже; диагноз — вход, не готовый HF-план.
+Нужны exact test IDs, команды, безопасные roots, источник benign fixture, oracle и
+пути логов. Базовый smoke — **реальные** emit/invoke/publication/check/complete/emit
+consumer в изолированном DEV_STATE_ROOT с executable stub вместо платного codex.
+Stub пишет только финальный ответ и transport events; proof/metadata создаёт runtime.
+Для HF:compress использовать законный рецепт с включённым producer, а не выдуманную фазу.
+Считать dispatch/publisher/receipt и сравнивать identity, bytes/hash/parts, не просто rc.
+
+HF:backup до записи сохраняет весь будущий write-set, hashes/mode/resolved targets и
+входные bootstrap/dirty-правки. Runtime root сейчас не git-repository; HF:plan обязан
+назвать существующий пригодный checkout/candidate, доказать свой commit/G3 и адресную
+установку tested bytes, не произвольный git init в runtime. Свой diff не присваивает
+уже внесённый bootstrap. HF:impl и HF:test — отдельные вызовы; запуск tests из роли
+архитектора и живой consumer-state как тестовая фикстура не требуются.
+
+Будущий HF:test выполняет адресные argv/JSONL/fatal/context/publication/native/refresh
+проверки и полную `python3 -B -m pytest -p no:cacheprovider pipeline/tests -q` из
+согласованного candidate с корректным PYTHONPATH, `PYTHONDONTWRITEBYTECODE=1`,
+`PIPELINE_ERRORBUS_DISABLE=1`. Полный regression не подменяет пропущенный сценарий.
+Installed smoke связывает реально загруженные pipeline paths/hashes с tested candidate;
+stub, installed offline, live provider и production runtime отмечаются раздельно.
+
+### Б58.6 Критерии приёмки
+
+Все двенадцать критериев — **класс S**, обязательны для GATE:done ремонтного слага.
+На этой фазе implementation/installed/runtime проверки — **NOT_RUN**.
+Новых operator-hold и Q-n нет. Старые номера AC и их владельцы не меняются.
+
+| AC | Наблюдаемый результат и evidence |
+|---|---|
+| AC-138 | Codex compressor получает core/overlay/master и отдельное правило полного финального ответа; accepted packet/render неизменны. Уникальный absolute last-message передаётся только compressor; обычные role argv/session parsing сохранены. Один dispatch без альтернативного backend. |
+| AC-139 | Для native/codex publication связана с захваченными packet/prepare/prompt bytes. Подмена packet_id, wrapper/turn/started_at или любого accepted source hash/size/mtime/resolved target после dispatch отвергается до canonical replacement, без нового result/receipt; нельзя присвоить ответ новому prepare. Отдельно изменяются core/overlay после их захвата. |
+| AC-140 | Missing/empty/invalid UTF-8/symlink/non-regular last-message, oversized part, отсутствующий AC-001/IAC-01, неполные/переставленные headers и содержательный preamble дают rc=4 без fallback, успешных result/receipt и повторного dispatch. До replacement прежние canonical/proof сохранены. |
+| AC-141 | Одна часть, 2 части, N=12 и 3→2→1 оставляют ровно текущий набор. Alias byte-equal part 1, порядок числовой, ≤5120 chars/part, chars/hash исключают alias-дубль; consumer не видит stale numbered parts. Соседние файлы/slug и symlink targets неизменны. Temp cleanup подтверждён на success/отказах/exception. |
+| AC-142 | Rc≠0, structured fatal при rc=0 и rc=143 без publication не создают успешной публикации/результата. I/O fault после валидного текста и между replace/unlink даёт видимый отказ без success receipt/done; частичный набор не принимается. Проверка не обещает общую атомарность. |
+| AC-143 | Узкая воспроизведённая benign models-refresh fixture при rc=0 не fatal; plain `codex client authentication failed: HTTP 401 token_expired`, genuine plain provider/transport error и JSONL error до/после success дают fatal. Quotes внутри result/tool text и bare auth words не fatal. Старый auth test снова проходит, FATAL_PATTERNS/kill/native/Cursor semantics сохранены. |
+| AC-144 | BUG:diagnose получает конкретный output в разрешённом scope. Emit до полуночи/invoke после сохраняют дату OutputRef. Несовместимый явный scope/output, включая близкий строковый prefix соседнего пути, отвергается до prepare/send/turn без успешного marker/state mutation. Будущего файла до backend не требуют; N=12 не ограничен bootstrap-перечнем. |
+| AC-145 | Publisher пишет только canonical/production; общий post-invoke — result/receipt; completion — metadata/done. Старая publication с новым prepare/result, изменённые bytes, отсутствующий production и ручная запись canonical не принимаются. Context_result/receipt/production принадлежат одному prepare; G1/G2/G6 не ослаблены. |
+| AC-146 | Две отдельные offline CLI-трассы TZ:compress и законного HF:compress проходят `emit → invoke codex → publisher → result → check/complete → emit consumer`. Runtime сам создаёт proof/receipt/metadata; один backend/publisher, все текущие FileRef/parts/key/version/hash совпадают. Трасса содержит команды, rc, counters и snapshots; прямой mock publisher не зачёт. |
+| AC-147 | Native H01…H10, один send/SDK retries=0/no fallback, model selection и rc=3/4 сохранены. Прочие роли/argv/parser/receipt/occupancy/recover/turn/G1–G6 regression зелёные. Native/codex после разрешённого accepted master refresh дают актуальный consumer; произвольный source drift отказан. Полная suite выполнена отдельно от адресных сценариев. |
+| AC-148 | Baseline/backup, собственный commit/G3, loaded paths/hashes candidate и установленного кода, отдельные impl/test и AC-report доказывают только allowlist. Bootstrap не присвоен новому diff. Не меняются запрещённые поверхности/state/счётчики/паузы; документирован восстановимый адресный rollback и фактический installed smoke. |
+| AC-149 | Handoff содержит проверенные исходные consumer counters (turn_count=14, dead-pid=1, empty-result=1), условие нового штатного допуска и запрет reset/дополнительного recover. Изолированный сценарий не обходит исчерпанный one-shot. Установленный ремонт и схема передачи подтверждены; живой повтор compress/REV зависимого слага остаётся отдельным действием после завершения ремонта, не скрытой работой HF:test и не условием, создающим цикл. |
+
+### Б58.7 Возврат зависимого поезда, запреты и откат
+
+После принятого, проверенного и установленного ремонта и завершения его задачи внешний
+оркестратор сверяет отсутствие связанных writers и актуальный допуск зависимого слага.
+Только допустимый штатный compress из **нового проверенного packet** создаёт новую
+publication/result/metadata. Исходный turn_count=14 и использованные
+`recover_counts[TZ:compress]={dead-pid:1, empty-result:1}` сохраняются; законный новый
+invoke может увеличить turn, но не обнулить его. Установленное исправление причины и
+диагноз — evidence нового основания по Б55.5, а не автоматическое разрешение обхода
+guards. Дополнительный recover этих пар, новая причина ради счётчика, смена модели
+или новый slug запрещены. Если действующий допуск отказывает — процессный блокер
+с evidence, без ручного state-write и неизменного повтора.
+
+Repair GATE:done не ждёт независимой REV зависимого слага. После его штатного
+пересжатия повторная REV получает актуальные master/extract и проверяет R1/R2, семь
+секций, инвентарь Б12.6, AC-SIMP и адресацию исторического APPROVE Б56.11. Текущий
+regex AC-\d{3}/IAC-\d{2} не проверяет все AC-PW/AC-RP/AC-SIMP/COD-C и суффиксы
+IAC-09a/b; зелёный publisher не снимает содержательные замечания и не меняет чужой
+вердикт. Б57/его AC и общий semantic coverage этим ремонтом не переписываются.
+
+**[NEW-ENTITY, требует согласования Саши]** сохраняется дословно; новых сущностей нет.
+**No new service, database, queue, channel, cron, budget engine or global mutex.**
+Не менять YAML/model/backend/effort policy, Hermes core/Gateway/systemd, prompts,
+10 кейсов/recipe/G6/operator-словарь, native transport/fallback, таймауты, чужие
+state/journal/packet/receipt/результаты и паузы B3/B4/w3/w4. Не создавать cron/reaper,
+не рестартовать Gateway, не ослаблять G1/G2/G3/coverage/provider-fatal/phase-turns,
+не заменять wrapper PID агентом. Ремонт существующей выбранной codex-ветки не является
+переносом компрессора/координатора на другой backend по умолчанию: исторические
+таблицы Б6/Б45/Б33 п.60 не подменяют действующий YAML и не требуют менять его здесь.
+
+Rollback — только свой доказанный diff из проверенного backup/checkout после прекращения
+записи, с сохранением исходного bootstrap и чужой работы. Никаких `git reset --hard`,
+архивной перезаписи state/journal, reset counters или изготовления новых proof под
+старые bytes. Откат кода не делает прежнюю publication валидной для нового prepare.
+Если после отката приём не доказан — явный блокер, не фиктивный done.
+
+---
+
+## Б59. Пакет `adresnyy-remont-reconciliation-priemki-post-invo` — приёмка уже исполненного HF:impl
+
+**Текущая редакция R1 — 0.9.6 approved после нового независимого REV:tz APPROVE от 05.11.2026.** Штамп сохраняет Б59.5.1, связанные уточнения пяти существующих AC и весь технический корпус. Inventory вне scope текущего packet: полная финализация не объявляется; обязательны разрешённая синхронизация, rebind HF:plan и повторная REV:plan до реализации/compatible completion. Код/тесты/установка/применение NOT_RUN. Следующая историческая отметка относится к согласованию прежней редакции 0.9.5.
+
+Дата: 2026-11-05. Кейс: **BUGFIX**, полный рецепт. Дополнение — **approved после независимой REV:tz APPROVE от 05.11.2026**; TZ:finalize сохраняет версию 0.9.5 и требования Б59.1…59.8/AC-150…166. Реализация/тесты/установка/применение — NOT_RUN; inventory вне scope принятого packet, поэтому complete фазы по Б15 не объявляется. Основание — brief и `_fix_plan_20261105.md` текущего ремонтного слага после GATE:diagnose-review. Это ремонт существующего приёмочного пути DevWorkflow. Норма не принимает реализацию Б58, не закрывает HF:test и не меняет чужой вердикт.
+
+### Б59.1 Current/target, reuse и точный адрес
+
+**Current:** executor Б58 записал candidate и impl evidence, но `output_snapshot → _ref → _read` применил strict UTF-8 к SQLite в required changed_files-каталоге. Локальный отказ приёмки произошёл до context_result/receipt. План затем исправлен адресной правкой A; immutable packet и prepare остались исходными. Пустой `HF:impl.changed_files` дополнительно скрывает отсутствие G3: текущий guard возвращает успех для пустого списка, а git helper не проверяет rc/tracking/repo. Исторические 211 passed — свидетельство HF:impl, не завершённый HF:test.
+
+**Target:** нетекстовый snapshot по bytes + проверенная приёмка **одного исходного prepare без backend** + адресная связь согласованных редакций входов, проверяемая при G1/check и G2 + заполнение собственного git write-set в обычном success-пути. Reuse: `pipeline_context`, общий post-invoke в `invoke_role`, `pipeline_gitproof`, `lock_queue`/`commit_context_locked`, существующие `repair` event, CLI, receipt и тестовая лаборатория. Второго launcher/publisher/writer/storage не вводить. Транспортный `reconcile_invoke_result()` сам по себе не является этим допуском; существующая queue-команда `repair` не переопределяется.
+
+Обозначения только для текста: `B=/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/adresnyy-remont-publikatsii-vyzhimki-extract-v-c`, `C=B/candidate`. Реализация получает корни из существующего YAML/`paths.py`, не вшивает абсолютный домашний путь.
+
+| Реквизит допуска | Единственное разрешённое значение |
+|---|---|
+| slug / phase / role | `adresnyy-remont-publikatsii-vyzhimki-extract-v-c` / `HF:impl` / `executor` |
+| packet_id | `a2a48cbfbefc191e86f99dc75b6b57ce67e5ca598b8c71c3cfb129e4fc32e6db` |
+| packet file SHA-256 | `e30c59142bde3918b19395e62a7d40377ebbf60f9a635ffc7246733fe759af96` — отличается от content packet_id по Б56.2 |
+| prompt SHA-256 | `5cc8fdfa454de38c7f8b96f9dce9006b199a80f544d2e7b6259079142d4d5c00` |
+| prepare identity | `{wrapper_pid: 3824437, turn_count: 1, started_at: "2026-11-05T17:35:26+03:00"}` |
+| backend / model / session | `codex` / `gpt-5.6-terra` / `01a1ac22-d892-7c02-a9fa-b1fa63a8408e` |
+| baseline / candidate HEAD | `d419a5b5a2e1e028f495ac1bafab42c7a85c8167` / `ee9e0d2ba115d43359700f11f02aab12ab0fdf27` |
+| промежуточный commit | `038b589a69e060bc2c9b914d3fa86cc391a3a50d`, проверяемая часть исходной цепочки |
+| исходный before | ровно два null по ключам `C/Registries/pipeline` и `B/evidence/HF-impl.md` |
+| required outputs | исходный **каталог** `C/Registries/pipeline` и canonical `B/evidence/HF-impl.md`; не новая редакция outputs |
+| состояние первого применения | root `interrupted`, phase `HF:impl`, phase status `doing`, role `executor`, awaiting_invoke=false, turn_count=1, context_result/receipt отсутствуют, changed_files=[] |
+
+Исторический каталог содержит 96 файлов по диагнозу. SQLite fixture `C/Registries/pipeline/tests/fixtures/kanban_history_mini.sqlite`: 8192 bytes, SHA-256 `0c17d27b2f783afb9cc79a8ecd232ed6ff8aab9f82115a7a7b7fc8568a3bc5dd`. Число файлов и полный manifest сверяются с сохранённым диагностическим наблюдением; другое текущее дерево не принимается только потому, что оно тоже читается. Snapshot каталога и свой git diff — разные доказательства.
+
+Свой write-set Б58 — ровно девять относительных путей ниже, с абсолютным префиксом `C/`. Их SHA-256 обязаны совпасть между HEAD blob, worktree, `B/evidence/HF-impl.md` и сохранёнными refs диагноза:
+
+```text
+Registries/pipeline/invoke_role.py
+Registries/pipeline/pipeline_extract.py
+Registries/pipeline/pipeline_context.py
+Registries/pipeline/tests/test_codex_compressor_publication.py
+Registries/pipeline/tests/test_invoke_backends.py
+Registries/pipeline/tests/test_codex_jsonl.py
+Registries/pipeline/tests/test_context_packet.py
+Registries/pipeline/tests/fixtures/context_packet_cli.py
+Registries/pipeline/tests/test_invoke_resolution.py
+```
+
+Другой slug/phase/packet/turn/session/HEAD не получает исторический допуск. Общие primitives байтового чтения, финализации и G3 применяются к обычному пути; исторические разрешения drift остаются только у адреса таблицы.
+
+### Б59.2 Байтовая идентичность и полный snapshot outputs
+
+1. Разделить получение FileRef по bytes и проверку текстового потребителя. Hash/size всегда считаются по исходным bytes; FileRef сохраняет `path/resolved_path/sha256/size_bytes/mtime_ns` и прежние проверки изменения при чтении. Для уже поддержанного UTF-8 файла результат FileRef побайтно эквивалентен прежнему. Packet/schema/render, Markdown, inline, канонные текстовые результаты и extract читаются strict UTF-8. Ошибка текста не включает binary fallback; `errors=replace/ignore` не вводить.
+2. `changed_files` file/directory — непрозрачные bytes для snapshot независимо от расширения/первого неудачного decode. Контракт OutputRef и packet schema не меняется. Обычный текстовый файл кода в snapshot хешируется тем же способом. Когда тот же файл используется как текстовый input, его текстовый контракт проверяется отдельно.
+3. Исходная форма snapshot `dict[output_path] → FileRef | dict[child_path] → FileRef | null` сохраняется. Каталог Б58 не превращается в девять outputs; SQLite остаётся внутри. Порядок обхода детерминирован; действует только прежнее исключение `.git`, не произвольные игноры binary/fixture/cache. Внутри разрешённого дерева нельзя молча пропустить unreadable, non-regular или исчезнувший узел. Symlink/escape/смена target отвергаются до чтения небезопасного target; политика одинаковая для snapshot и повторной проверки.
+4. Проверять стабильность состава дерева и каждого FileRef, включая добавление/удаление/rename, замену файла или target во время обхода. Пустой required каталог — отсутствующий required результат. Required/freshness/изменённость относительно **исходного** prepare сохраняются; before=null не переснимается. Canonical проходит также strict UTF-8, существующие freshness/содержательные проверки.
+5. Полный snapshot повторно проверяется непосредственно перед commit, при readback и при G2. Изменение SQLite хотя бы на байт или mtime/пути/состава дерева после принятия блокирует проверку; прежний receipt не означает no-op на изменившемся результате. Новый global mutex или защита от произвольного злонамеренного локального writer не обещается; связанные writers исключаются условиями Б59.3.
+
+### Б59.3 Проверенный entrypoint без повторного исполнения
+
+Добавить подкоманду **существующего** CLI:
+
+```text
+pipeline reconcile-result --slug <exact B slug> --phase HF:impl \
+  --evidence <ABS_JSON> --reason <nonempty-text> [--dry-run]
+```
+
+Это целевой интерфейс после реализации, сейчас команды ещё нет. Dry-run выполняет те же проверки допуска, ничего не пишет, stdout содержит verdict/target/причины. Exit 0 — проверенный dry-run, применённый repair либо проверенный duplicate no-op; exit 1 — несоответствие контекста/доказательств/IO; exit 2 — CLI syntax. Различать `validated/applied/no-op` в stdout. Нет `--force`, skip-source, generic backfill, нового operator-глагола или команды из evidence. Синтаксический/проверочный отказ не вызывает writer, backend, notify или recover.
+
+Evidence — сохранённый regular strict UTF-8 JSON в текущем ремонтном слаге, без symlink, исполняемого кода/команд/секретов/raw provider body. Дубликаты JSON-ключей, unknown fields и неверные типы отвергаются. Это локальный manifest проверок существующего продукта, не новая schema packet/state или сервис. Его полный byte hash и FileRef закрепляются в `proof.reconciliation`; evidence не включает hash самого себя. Замена файла/mtime после принятия аннулирует proof. HF:plan обязан дать точную вложенную структуру и fixture для всех полей следующей закрытой верхней структуры, не оставляя выбор доказательств исполнителю:
+
+| Поле manifest | Проверяемое содержимое |
+|---|---|
+| `format` | const `b59-post-invoke-reconciliation/1.0` |
+| `target` | exact slug/phase, context_packet, prepare identity и сохранённые backend/model/session Б59.1 |
+| `preimage` | полный SHA bytes исходного target state и stored state_sha256; соответствующие позиции/хеши структурных событий истории |
+| `packet_ref` | полный FileRef исходного snapshot; packet_id пересчитывается отдельно; original canonical bytes/render/prompt hash/успешный emit marker проверяются |
+| `prepare` | точная исходная context_prepare целиком, включая два null; совпадение с текущим state и invoke_prepare history |
+| `writers` | время наблюдения, identity/argv/родство исходного wrapper/agent/дочерних и orphan writers, проверяемые источники завершения, актуальная проверка отсутствия связанных writers |
+| `transport` | фактический исход исходного вызова и provenance Б59.3 ниже; полный hash точного runtime и проверяемые ссылки на события/transport evidence |
+| `inputs` | исходные refs, plan transition A, ограниченная master chain Б59.4 и адресные независимые approvals; все прочие refs совпадают полностью |
+| `git` | repo root, baseline/HEAD/ancestry, полный diff и 9-path manifest/hashes, tracking/index/worktree, argv/rc/stderr/timeouts; ссылки на impl evidence/allowlist |
+| `output_manifest` | полный исходный каталог и canonical по Б59.2, byte hash канонического manifest, источник наблюдений/сверка с диагнозом |
+| `authority` | FileRef утверждённого дополнения/REV:tz, HF-plan/REV:plan ремонта, backup и installed tested→loaded manifest; чужой APPROVE плана A не заменяет эти approvals |
+
+Проверки выполняются до мутации в следующем порядке:
+
+1. Проверить exact target, штатную целостность state, пакет и связь emit→prepare→локальный отказ. Валидировать schema/hash/render/G6, принятый context_packet и исходную identity; более новый prepare, чужая роль/модель/session или частично противоречивый result/receipt дают отказ. Эфемерный `/tmp` prompt не нужен для исторического G2; сохранившийся sidecar проверяется на byte-equal snapshot, его отсутствие не фабрикуется новым emit.
+2. Подтвердить завершение исходного invoke и отсутствие связанных writers. `pid=None`, timeout, notify, мёртвый номер PID или повторно использованный PID сами по себе недостаточны. Сопоставлять process identity/argv/время/родство. Недостаточная видимость процесса/потерянная provenance дают отказ с названием недостающего свидетельства. Проверка выполняется при будущем применении внешним оркестратором, не мониторингом wrapper текущей контентной роли.
+3. Подтвердить backend outcome. Допускается сохранённый rc=0 и успешный transport с отсутствием fatal по **точному исходному classifier/runtime**, либо проверяемое доказательство достижения локальной success-ветки до output failure: структурная hash-chain emit/prepare/canonical_artifact_fail, exact текст SQLite-ошибки, original runtime bytes/hash и однозначная ветка rc=0 после fatal-check. Второй вариант требует сохранённого provenance реально загруженного runtime этого invoke; текущая копия файла и статический анализ без этой связи недостаточны. Любой непогашенный provider-fatal, rc≠0, структурная error даже при rc=0, противоречие transport или неизвестный исход блокируют запись. Отсутствие fatal/log/stdout не считается успехом. Rc=143 не получает новый допуск через этот entrypoint. Backend для изготовления улики не вызывается.
+4. Проверить источники по Б59.4, git по Б59.5 и исходные required outputs. Отчёт роли и чистый stdout git не заменяют этих проверок. Сверить полный исторический manifest; никакие новые bytes не присваиваются прежнему prepare.
+5. Собрать новый state только в памяти. В `proof.context_result` записать исходные packet_id, prepare_identity, прежнюю форму outputs и receipt. Receipt равен **`adresnyy-remont-publikatsii-vyzhimki-extract-v-c|HF:impl|01a1ac22-d892-7c02-a9fa-b1fa63a8408e`** и точно совпадает с фазовым `receipt`. `HF:impl.changed_files` — девять абсолютных путей Б59.1; добавить проверенный `proof.git` и `proof.reconciliation` со ссылкой/hash evidence и связями manifest/result. Новый PID/session/time ремонта не подменяет identity. Частичный/иной receipt или proof не переписывается автоматически.
+6. Под существующим коротким `.queue.lock` перечитать target state и историю, сравнить полный preimage hash/prepare, повторить критические refs/tree/git/writer checks. Без backend/долгих внешних действий под lock. Если preimage изменился — отказ, evidence нужно собирать заново. Выполнить один `commit_context_locked` с существующим `event=repair`, `actor=pipeline`, `phase=HF:impl`, непустыми reason и `evidence=path=<ABS> sha256=<hash>`, before/after state hashes. Не вызывать вложенно `write_state`, повторно берущий lock. Readback проверяет всё новое состояние общими G1/G2/G3 и допустимую дельту. Ошибка append/journal/replace/index/readback откатывает state/journal/queue.log/queue.json к точным preimages. Новый writer или mutex не нужен; `pipeline_state.py` остаётся без изменений.
+
+Разрешённая дельта первого repair: только context_result, одинаковый phase receipt, changed_files, git/reconciliation proof и служебный state_sha256/last_progress_at, связанные проекции одного repair event. Root status остаётся `interrupted`, phase/status — `HF:impl/doing`; role/backend/model/session/pid/awaiting_invoke, исходный context_prepare/context_packet, started_at/ended_at, fail_class и прежняя история, recipe/holds/questions, все turn_count/recover_counts и прежние tz/extract реквизиты сохраняются. Время фактической приёмки живёт в новом proof/event, не в прошлом prepare. Никаких done/complete/next или сброса `empty-result` из entrypoint.
+
+Повтор того же exact manifest/result/receipt после **повторной проверки** — no-op: state/journal/queue.log/index побайтно неизменны, нового event/backend/prepare/notify нет. No-op разрешён также после обычного completion, если сохранился этот результат и его bindings; первоначальный preimage относится к первому repair, текущий completed state проверяется по разрешённой штатной истории. Изменённые outputs/refs/evidence/identity или противоречивая половина proof дают отказ, а не no-op. Exception rollback не объявляется crash-атомарностью четырёх файлов: после hard kill возможна явно диагностируемая несогласованность, которую нельзя принять или «достроить» вручную; автоматический повтор не расходует новый бюджет и не переписывает противоречивое состояние.
+
+### Б59.4 Адресная связь редакций и сохранение G1/G2
+
+В исходном packet план не входил в write_scope HF:impl. Поэтому Б56.6 п.5 сам по себе не разрешает его drift. Разрешение ниже действует только при exact proof Б59.1–59.3 и повторно проверяется **одним общим verifier** из reconciliation, `pipeline check`/его G1 и G2 completion. Флаг `reconciled=true` или одно совпадение receipt не являются разрешением. Все вхождения одного ref в sources/inputs/must_read проверяются согласованно.
+
+**План:** старый `B/HF-plan.md`: hash `8a3c32541b9ca14d577bf0c3a5acd922eb94c0174898cb77195f5ddd5ec00ff1`, size 52492, mtime_ns `1793887875289154668`; новый: hash `2b62f2836d6d288bc42c0c680f3308b1080873176eb4b24ec31754f64fa441a5`, size 54224, mtime_ns `1793892222338471406`. Lexical/resolved path — тот же `B/HF-plan.md`. Исходные bytes восстанавливают старые hash/size; исторический FileRef берётся из packet, mtime не выдумывается и не выставляется `touch`. Единственная замена — outputs.HF:impl: каталог→девять required changed_files, canonical сохранён. Diff A и независимый адресный APPROVE с hash новой редакции обязательны. Источник APPROVE — сохранённый финальный ответ `/tmp/rev_consult2_impl_20261105.txt`, исходный SHA `7c2893a7d02ad2ca777cd703e78dbe3c4b56982c2305b69df5118355a9ce75c4`; durable копия/происхождение находятся в ремонтном слаге. Запрос REV-CONSULT не заменяет финальный вердикт. Иной diff, хотя бы mtime-only drift новой редакции, или потерянная approval provenance отвергаются.
+
+**Master:** исходный FileRef — `DevWorkflow_TZ.md` version 0.9.4, hash `bb2b745fe9bc07d88616685bdb2e5dd2aa6e2abba3a6d147f616722f8862ee18`, size 872877, mtime_ns `1793886007060809086`, path/resolved path `/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/DevWorkflow/DevWorkflow_TZ.md`. Публикация этого Б59 законно изменит его. Допускается только заранее сохранённая непрерывная цепочка точных pre/post FileRef и bytes/diff адресного внесения **этого Б59** и его последующего штампа TZ:finalize версии 0.9.5 после REV:tz APPROVE. В цепочке нет промежуточных чужих изменений. Разрешённые области — перечисленные изменения master в TZ-patch этого слага, Б59/его AC и служебные указатели/шапка/changelog; нормы Б58 и его AC не меняются. Каждый edge имеет own writer/packet/scope evidence, полный diff/hash и надлежащий APPROVE; финальный ref фиксируется после реально разрешённой записи/финализации. Реквизиты будущего файла не выдумываются из candidate, hash master не включает сам себя. Новый content/mtime/target после зафиксированного финального ref, изменение Б58, произвольная третья редакция вне точного R1-продолжения ниже или отсутствие цепочки — отказ до writer.
+
+Для R1 разрешено ровно адресное продолжение уже сохранённых двух edges: approved master 0.9.5 SHA `58154c6f306aca51af1216c3ff214a54758f78f4f85daefe1f137d76749cffd1` → TZ:patch версии 0.9.6 этого же слага (Б59.5.1 и связанные ссылки/AC) → TZ:finalize после нового независимого REV:tz APPROVE. Полная разрешённая цепочка содержит ровно четыре edges; первая пара сохранена побайтно. Каждый новый edge имеет фактические publication/packet/scope/pre/post bytes/diff/approval; будущий финальный FileRef фиксируется только после разрешённой записи. Staged proposal и прежний APPROVE 0.9.5 не заменяют этих refs. Б58/его AC и plan A неизменны. Неутверждённый третий edge, пропуск любого edge, лишний пятый или дальнейшая чужая публикация/mtime/target drift дают отказ. Ни старый original packet/prepare, ни stored tz/extract Б58 не переписываются. Пока suffix не опубликован/утверждён, допуска по новой цепочке нет.
+
+Canonical TZ-patch/REV-tz/TZ-finalize и их approval provenance первых двух edges сохраняются в immutable durable копиях до обычной перезаписи канонических документов при R1. Original FileRef пяти полей и оба prefix edges неизменны; отдельная заранее закреплённая archive map связывает каждый exact origin с FileRef копии и доказанной публикацией/preimage соответствующей разрешённой перезаписи. Проверяются bytes hash/size origin, реальный hash/mtime/path snapshot и provenance; mtime копии не выдаётся за mtime origin. Только перечисленные документы двух prefix edges могут читаться по этой archive map; произвольная замена source/approval не допускается. При отсутствии полной archived closure или доказательства разрешённой перезаписи — отказ. Имена новых publication/diff/verification evidence используют R1 suffix и не затирают прежние источники.
+
+Исключение G1 касается только подтверждённой разницы версии/mtime master этой цепочки при проверке уже принятого исторического результата. Stored tz/extract поля Б58 не обновляются repair. Любая неприменимая к цепочке ошибка G1, прежний произведённый/stale extract или чужой ref сохраняют отказ. Новый emit/`load_packet_for_invoke` остаются строгими: этот старый packet не используется для нового prepare, правка source требует новый emit. Следующий штатный emit Б58 получает актуальный master/план, фиксирует их штатно и соблюдает политику extract Б56.3; массового backfill нет.
+
+Остальные refs исходного packet полностью совпадают по пяти полям FileRef. Повторная проверка evidence/approvals/diff/result bindings обязательна при completion. Ни snapshot/sidecar/render, ни исходный context_prepare/marker не редактируются. Этот механизм не наследуется другим слагом, phase или новым prepare и не является общей отменой G1/G2.
+
+### Б59.5 Свой write-set и G3 в обычном пути
+
+Обычная успешная финализация нового HF:impl должна записывать проверенные `changed_files` вместе с context_result/receipt/git proof **одним локальным переходом**. Источник — утверждённый план/его allowlist и собственный baseline→HEAD diff. Directory output, stdout роли, полный `git ls-files` или произвольный список из evidence не являются собственным write-set. До финализации G3 проверяется; неуспех не оставляет успешного receipt/result. Историческая приёмка использует тот же primitive, но допускает только девять путей Б59.1.
+
+Для каждого repo требуется явный проверенный top-level, baseline/HEAD, ancestry и принадлежащие ему paths; cwd runtime не используется по умолчанию. Проверять rc каждого git вызова, timeout/stderr, status index/worktree, tracking, отсутствие лишних/пропущенных собственных изменений и совпадение HEAD blob/worktree hashes. Git error с пустым stdout, не-repo, ignored/untracked или путь вне repo дают отказ. Определять repo по проверенному manifest плана, не по выводу модели. В общем пути законные добавления/удаления/переименования по утверждённому плану подтверждаются diff status/blob или tombstone в HEAD; удалённый путь нельзя объявить untracked только по отсутствию файла. Для Б58 все девять файлов существуют и tracked.
+
+Пустой список при ожидаемом коде — отказ в success-post-invoke, HF:impl completion, перед первым writer запуска HF:test/HF:docs-handoff и перед GATE:done. Guard вызывается не только из preflight: admission проверяется в `next`, прямых emit/invoke этих HF-фаз до prepare/turn/send и обычном completion. Общий helper используется всеми caller-ами; guards не дублируются расходящимися реализациями. Массово переписывать старые завершённые proof запрещено.
+
+Существующее исключение Б17.3 `no-code-change: <reason>` сохраняется только для заранее утверждённого документного/no-code маршрута: непустая конкретная причина и FileRef утверждённого плана/IAC, в котором код не требуется, проверенный нулевой собственный diff и обычные required outputs, связанный с packet/prepare proof отсутствия code change. Одна строка evidence, `changed_files=[]`, отсутствие HF:impl в рецепте или неиспользуемый `no_code_change_ok()` не превращают ожидаемую реализацию в no-code. Для кейса без HF:impl guard неприменим по recipe, а не PASS пустого impl. Полные/LIGHT и законные document/deletion/rename сценарии покрываются IAC; новых no-code флагов/обходов не вводить.
+
+#### Б59.5.1 Однократная совместимость собственного незавершённого HF:impl
+
+Это адресное исключение из требования о времени записи stored changed_files в Б17.3/Б59.5. Оно действует только для первого HF:impl слага `adresnyy-remont-reconciliation-priemki-post-invo` после утверждения этого дополнения и исправленного HF-плана. Непустой committed code diff, G1/G2/G3 и остальные запреты обязательны. Исправленный ordinary success по-прежнему пишет result/receipt/changed_files/git одним переходом. Исключение не восстанавливает отсутствующий result и не наследуется другим prepare или слагом.
+
+1. Original wrapper исполняет установленный старый `Registries/pipeline` без замены загруженного frame. Его module roots/исходные bytes фиксируются до invoke и подтверждаются фактической загрузкой. Executor пишет только собственный candidate и outputs; canonical и каждый из тринадцати required файлов объявлены пофайлово, поэтому старый wrapper не читает SQLite-каталог. После возврата executor старый wrapper сам сохраняет обычный целый context_result и одинаковый phase receipt. До завершения wrapper никаких процессных переходов нет.
+2. Допуск только при case BUGFIX, root in_phase, phase HF:impl doing, role executor, awaiting_invoke=false, первом turn_count=1 и единственном начальном prepare этой фазы. Не должно быть незакрытого fail_class/provider-fatal или обхода hold/вопроса. Emitted packet, accepted context_packet и полный context_prepare/identity/outputs должны совпасть с успешными штатными emit/prepare по утверждённым новым master/плану/IAC/allowlist. Все source refs актуальны; исторических исключений drift здесь нет. Packet/prepare/session и законный success event связаны непрерывной историей. Новый prepare, иная роль/session/turn, source/approval drift или невозможность проверить историю дают отказ.
+3. Проверить целый сохранённый context_result={packet_id,prepare_identity,outputs,receipt}, равный фазовому receipt и успешному invoke event. Обычные G2, required/freshness и полный повторный output snapshot проходят. Требуется отсутствие proof.git целиком и stored changed_files=[]: только это legacy сочетание может быть дополнено. Missing/частичный/conflicting result/receipt, частичный или существующий git proof, completed/foreign target отказываются без записи. Пустой фактический code diff не является legacy совместимостью.
+4. До записи независимо вычислить ровно тринадцать committed paths своего candidate: baseline `ee9e0d2ba115d43359700f11f02aab12ab0fdf27`, проверенный HEAD/ancestry, утверждённые plan/allowlist, repo top-level, index/worktree/tracking/blobs, все git rc/timeout/stderr по Б59.5. Сохранённый отчёт executor и список из evidence не заменяют вычисление. Кандидат должен совпасть с теми же outputs старого result. Никакого no-code основания у этого ремонта нет.
+5. После выхода wrapper внешний оркестратор вызывает существующий ordinary `complete-phase` новым отдельным процессом из собственного candidate, до HF:test и без установки в runtime. Code roots выбирает утверждённый план; loaded owner/dependency paths и hashes должны совпасть с собственным committed candidate и проверенными baseline dependencies. Проверяемый closed data-only evidence внутри ремонтного слага содержит exact source/approval/packet/prepare/result/git/writer/loading bindings. Его FileRef закрепляется внутри proof.git; новый CLI flag, ENV продукта, launcher или state/packet schema не вводятся. Для доказательства загрузки разрешены стандартные диагностические параметры того же Python `-B -v -X pycache_prefix=<новый отсутствующий путь внутри evidence слага>`; они не меняют модель/backend и не создают cache. Наличие прежнего cache в этом пути или неоднозначные/mixed imports дают отказ. Import trace и pre/post source hashes относятся к реальному вызову, отдельный import-probe не заменяет его.
+6. Отсутствие original wrapper/agent/child/orphan writers подтвердить по сохранённому завершению и свежей process identity/visibility по правилам Б59.3. Повторить критические refs/git/outputs/writers и full state preimage под существующим коротким queue lock. Собрать proposed state в памяти: добавить только checked changed_files и proof.git с linked legacy evidence; context_result, receipt, packet/prepare, backend/model/session и прежние события оставить неизменными. В том же единственном `commit_context_locked` выполнить обычный complete: phase status/evidence/reason/ended_at, root phase/status/pid и служебный hash/progress меняются только как в обычном completion. Event ровно один: complete/actor=cli/phase=HF:impl/reason+evidence/before+after hashes. Repair event не создаётся. Phase pid, started_at, turn/recover counts, recipe, holds/questions и tz/extract поля не менять. Отдельной промежуточной записи proof или mark-done нет.
+7. Readback проверяет целые G1/G2/G3, byte-equal прежние result/receipt и точную разрешённую дельту. Ошибка JSONL/journal/state replace/index/readback/verifier восстанавливает точные четыре preimage существующим locked commit. Kill inconsistency не является success/no-op и не достраивается вручную. Повтор successful complete принимается только как обычный verified duplicate: текущие полный G3, linked evidence и законная completion history проверяются до no-op. Completed legacy state без этой связи не мигрируется. Любое повреждение отказывает.
+8. Backend/send/prepare/recover/turn deltas этого перехода равны нулю. Direct next/emit/invoke HF:test/HF:docs-handoff, preflight/done и общий G3 ничего не дописывают и при legacy пустом stored proof отказывают до writer. После compatible complete они допускают уже полный обычный G3. HF:test остаётся отдельным executor invoke из candidate; installed runtime до ORCH:shared-state неизменен.
+
+
+**Обязательные bindings совместимости.** Evidence имеет format `b59-own-legacy-completion/1.0`; все его поля обязательны, дополнительные поля на каждом уровне запрещены. Strict UTF-8, duplicate keys/NaN/неверные типы/bool вместо integer/symlink/escape отвергаются. Закрытая верхняя структура: `format,target,preimage,packet_ref,prepare,legacy_result,source_refs,plan_ref,plan_approval,master_ref,tz_approval,allowlist_ref,owners,writers,git,outputs`. Полные типы вложенных объектов, FileRef/identity/event/repo/process/command/snapshot и fixture закрепляются HF-планом до повторной REV:plan; незаполненный шаблон не допускает применение. `legacy_result` содержит исходные packet_id/prepare_identity/outputs/receipt; owners содержит old и completion с cwd/import_root/modules/trace; outputs равен legacy_result.outputs и текущему snapshot. Evidence не ссылается на собственный будущий результат, proof или stdout команды.
+
+Существующий `proof.git` получает вложенное обязательное поле `legacy_completion=null|LegacyBinding`; для обычного нового success и исторического repair оно null. Для этой совместимости `LegacyBinding={format,evidence_ref,packet_id,prepare_identity,legacy_result_sha256,sources_sha256,owners_sha256,preimage_state_sha256}`, format тот же, evidence_ref — полный проверенный FileRef, остальные hash — lowercase SHA-256, identity — точная исходная. Это вложенный proof существующего state, не новая schema packet/state. Хеши объектов считаются canonical JSON по Б56.2; original result/receipt после completion остаются равны исходным canonical JSON значениям. Bound preimage проверяется относительно единственного законного complete event; после done не сравнивается с новым state как с doing-preimage.
+
+Owners.completion в evidence описывает заранее проверенную ожидаемую closure candidate. Перед первым writer сам исполняющийся complete получает фактические `__file__/spec.origin`, исходные bytes и code identity всех утверждённых pipeline owners/dependencies, сверяет их с HEAD/планом и ожидаемой closure и сохраняет её canonical hash в owners_sha256. Hash включает cwd/import_root/identities/bytes, без переменных PID/времени. Проверка фактической загрузки и source hashes проводится до и после перехода; stdout runtime сообщает closure/hash/rc/evidence hash для сохранения внешним оркестратором. Отдельный import-probe не доказывает выполнение complete. G3 повторно проверяет source/approval/old-result/owner/evidence bindings и независимо вычисленный repo proof; наличие format, boolean или одного LegacyBinding не является обходом. Нужны actual source bytes/provenance обоих owners; неизвестный runtime не объявляется старым успешным owner.
+
+До одобрения этого дополнения, его разрешённой публикации/финализации и повторной REV:plan этот переход не запускается. Старый APPROVE Б59 версии 0.9.5 не утверждает исключение. Отсутствие разрешения нельзя заменить старым пустым G3 guard, ручным state write, новым launcher или повторным invoke. При нарушении prerequisites — адресный отказ/диагноз по существующему регламенту без нового recover-класса и reset budgets.
+
+### Б59.6 Пофайловый scope и границы фаз
+
+Таблица задаёт минимальный разрешаемый объём **после записи/REV этого дополнения**, не право текущей роли менять код. HF:plan уточняет exact write-set/IAC и получает REV:plan. Б58.5 read-only поверхности открываются этим адресным дополнением только в названных целях.
+
+| Путь относительно `/home/tkachenkoav/WorkVault/Registries/pipeline` | Разрешённый объём |
+|---|---|
+| `pipeline_context.py` | Байтовый FileRef/output snapshot, стабильность дерева; общий verifier адресных source transitions для historical G1/check/G2; общий вызов G3 до HF admission. Текстовые schema/inline/required проверки сохранить. |
+| `invoke_role.py` | Reuse общей success-финализации; проверенный git write-set/result/receipt одним переходом; backend-free entrypoint exact reconciliation и G3 до прямого HF invoke. Не менять argv/resolver/fatal/transport ownership. |
+| `pipeline_gitproof.py` | Проверяемый собственный manifest, git rc/repo/tracking/blob/index и непустой code write-set; проверенное существующее no-code основание; проверка legacy evidence bindings только Б59.5.1. |
+| `cli.py` | Routing `reconcile-result`, G3 admission до writer, общий historical G1/check путь и только адресный atomic ordinary completion Б59.5.1, включая проверку фактических loaded owners. Не переписывать queue repair, recovery, recipe или операторские гейты. |
+| `tests/test_context_packet.py`, `tests/test_gitproof.py`, `tests/test_state_atomic.py`, `tests/test_invoke_transport_boundary.py`, `tests/test_turn_end.py`, `tests/test_preflight_no_db.py` | Адресные regression/fault injection соответствующего владельца; не ослаблять прежние проверки. |
+| `tests/test_post_invoke_reconciliation.py` | Один новый тестовый модуль в существующей suite: положительная CLI-трасса и все адресные отказы/no-op. |
+| `tests/fixtures/context_packet_cli.py` | Только executable stub/fixtures для реальной CLI-трассы; stub не изготавливает result/receipt/proof вместо runtime. |
+| `README.md` | Документация нового узкого интерфейса, prerequisites/evidence/rollback; без новых runtime-настроек. |
+
+`pipeline_state.py` — **reuse без изменения** существующих lock/locked commit; `pipeline_log.py`, `pipeline_gates.py`, `pipeline_preflight.py`, `pipeline_extract.py`, schema, prompts, resolver/backend implementations и скиллы — read-only. В preflight уже есть вызов git helper; его исправление применяется без правки caller. Если выявлен недостаток этого scope, executor возвращает конкретное отклонение архитектору/REV, не расширяет allowlist самостоятельно.
+
+Реализация — в **собственном candidate ремонтного слага**, основанном на сохранённой версии Б58 HEAD так, чтобы Б58 publication fixes вошли в baseline, а новый commit/diff содержал только этот ремонт. Исторический `B/candidate` не меняется. Runtime не является git repo; `git init` в runtime запрещён. HF:backup сохраняет весь будущий write-set, modes/hashes/resolved targets и installed preimages. Не присваивать bootstrap/исходные commits своему diff.
+
+HF:plan создаёт IAC `path/verify/depends/covers` для AC-150…166: exact nodeids/argv, roots, manifests, командные rc и пути логов. Положительная лабораторная трасса: штатные init/emit/prepare и executable stub создают outputs/transport, воспроизводится старый post-invoke отказ, затем новый CLI восстанавливает результат; отдельные `check → complete-phase HF:impl → HF:test admission` подтверждают пригодность. Положительные proof/state не пишутся тестом вручную. Подмена refs, I/O/git/process ошибки — явно маркированные negative injections.
+
+HF:impl/HF:test — разные роли/вызовы. Проверки на изолированном DEV_STATE_ROOT, локальных копиях refs, `GIT_OPTIONAL_LOCKS=0` для чтения; Python `/home/tkachenkoav/hermes-agent/.venv/bin/python`, `-B -m pytest -p no:cacheprovider`, `PYTHONDONTWRITEBYTECODE=1`, `PIPELINE_ERRORBUS_DISABLE=1`, candidate PYTHONPATH. После адресных сценариев — полная candidate `Registries/pipeline/tests`; 211 исторических tests Б58 не подменяют новый прогон и полный HF:test. Считать backend/prepare/repair events и дельты state, а не только rc. В reconciliation-трассе backend calls=0; первоначальный stub invoke учитывается отдельно.
+
+### Б59.7 Критерии приёмки
+
+Все AC-150…166 — **класс S**, обязательны для GATE:done этого ремонта. На TZ:patch они **NOT_RUN**; документные проверки не объявляются их runtime PASS. Старые AC-138…149 остаются у Б58. Новых Q-n/operator-hold нет.
+
+| AC | Наблюдаемый результат / обязательный oracle |
+|---|---|
+| AC-150 | FileRef text совместим с прежним; binary file/directory snapshot содержит SQLite с точными hash/size, без decode failure. Invalid UTF-8 текстового input/canonical по-прежнему отказан; нет replacement/binary fallback для текста. |
+| AC-151 | Полное исходное дерево/96 refs, required/freshness/before=null, `.git` исключение и canonical сохраняются. Missing/empty/unchanged required, unreadable/non-regular/symlink/escape, добавление/удаление/rename/смена target или байта SQLite/mtime после snapshot дают отказ, включая G2 и повторное применение. |
+| AC-152 | Реальная изолированная CLI-трасса воспроизводит post-invoke failure с runtime emit/prepare. Repair создаёт exact context_result/receipt, исходную форму outputs, девять absolute changed_files и связанный git/reconciliation proof. Packet/render/sidecar/prepare не меняются; result не создан mock-ом. |
+| AC-153 | Живой wrapper/дочерний/orphan writer, неизвестная process identity/outcome, недостаточная runtime provenance, rc≠0/143, fatal даже при rc=0 и непогашенный provider-fatal дают отказ. Проверены обе допустимые формы transport evidence и отсутствие логов как отсутствие proof. Backend/send/prepare/recover при repair=0. |
+| AC-154 | Только exact old↔new plan FileRef/diff A/независимый APPROVE допускаются. Другой diff/hash/mtime/target, подмена approval или другого source отказывают до writer; G2 после repair повторно проверяет ту же связь. Старый packet для нового invoke не допускается. |
+| AC-155 | В отдельной положительной трассе master реально меняется 0.9.4→0.9.5 только утверждённым Б59/штампом; exact цепочка сохраняется. Полные `pipeline check` (G1 до G2) и отдельный completion проходят без изменения старых tz/extract реквизитов repair. Лишний edge, правка Б58, mtime-only/target/hash drift master, подмена approval и stale extract отказывают. Новый emit получает текущие refs штатно. Для R1 дополнительно проходит exact four-edge chain через разрешённые TZ:patch 0.9.6 и TZ:finalize с новым REV:tz; неполный/неутверждённый tail и лишний пятый edge отказаны. |
+| AC-156 | Точный baseline/ancestry/HEAD и ровно девять собственных paths/hashes подтверждены. Лишний/пропущенный path, иной HEAD/baseline/hash, dirty index/worktree, untracked/ignored/outside-repo, не-repo cwd, git rc≠0/timeout с пустым stdout — отказ, без success receipt. |
+| AC-157 | Один repair event содержит exact phase/reason/evidence hash/preimage/after hashes. Только разрешённая дельта state; counters/status/role/model/backend/session/pids/prepare/timestamps/holds/history сохранены. Readback G1/G2/G3 успешен; done появляется только после отдельного обычного completion. |
+| AC-158 | Повтор exact repair до и после completion — byte-equal no-op state/journal/queue.log/index, 0 новых events/backend. Изменённые outputs/refs/evidence/identity и частичный несовпадающий receipt/result отказаны, а не перезаписаны. |
+| AC-159 | Чужие slug/phase/packet/session, неверный hash/schema/render/sidecar при наличии/emit marker, wrapper/turn/started_at и новый prepare отказаны до writer. Dry-run не пишет файлы/логи; syntax rc=2, context rc=1, проверенный applied/no-op rc=0 различимы. Unknown evidence keys/duplicate JSON/команды не принимаются. |
+| AC-160 | Обычный успешный HF:impl пишет собственные changed_files/result/receipt/git proof одним переходом. Пустой code write-set и неуспех G3 не оставляют успешного result/receipt и не допускают HF:impl completion. Только собственный initial legacy result Б59.5.1 может сохранить целые result/receipt и добавить independently verified непустой G3 одновременно с ordinary complete; реальные old-owner→new-owner CLI traces обязательны. |
+| AC-161 | При пустом/неверном/неcommitted code write-set отказывают next, прямые emit/invoke HF:test/HF:docs-handoff **до writer/prepare/turn/send** и done preflight. Поиск одного helper в коде не заменяет executable caller traces. До compatible complete legacy stored proof остаётся отказом всех admission caller; после него обычный полный G3 допускает отдельный HF:test без backend/prepare/recover/turn delta при completion. |
+| AC-162 | Законный заранее утверждённый no-code маршрут проходит с нулевым diff/причиной/связанным proof/required outputs. Голая строка `no-code-change:`, пустой список при ожидаемом коде и подменённый план отказаны. Полный/LIGHT, отсутствие HF:impl по рецепту и законные add/delete/rename проверены отдельно. |
+| AC-163 | Fault injection append JSONL/journal, replace state, index rebuild, readback/verifier откатывает все четыре preimages, нет половины proof/receipt/changed_files. Drift state/prepare/refs/tree/git между dry-run и commit отказан. Hard kill рассматривается отдельно: inconsistency не принимается/no-op и не чинится ручным JSON; crash-атомарность не заявлена. Те же четыре preimages и race/refusal oracle обязательны для собственного compatible complete Б59.5.1; partial/conflicting/completed-foreign proof не переписывается. |
+| AC-164 | На совмещённом candidate зелёные адресные и полная suite: original Б58 publication/native/JSONL/fatal/context, receipt/session/occupancy/recover/turn/G1–G6. Один backend/SDK retries=0/native rc=3/4/модельные правила сохранены. Никакого платного invoke для отрицательных проверок. |
+| AC-165 | Свой commit/G3/backup, loaded paths/hash и tested→installed manifest доказывают установленную совмещённую версию. Installed offline smoke выполнен. Затем внешний оркестратор применяет exact entrypoint к Б58 после свежих prerequisites; фиксирует один repair, 0 backend/prepare, неизменные counters и успешный read-only check. Если proof недостаточен — AC остаётся FAIL/blocked, не фиктивный done. Полный хвост Б58 не является prerequisite GATE:done этого ремонта. Загрузка своего первого HF:impl, compatible complete и HF:test из candidate доказана по Б59.5.1; runtime до ORCH неизменен, собственный переход не использует historical reconcile-result. |
+| AC-166 | Baseline/after diff и refs подтверждают только разрешённый scope, сохранность исторического candidate/fixture/packet/prepare и чужих counters/пауз. Документация/handoff содержит точный интерфейс, фактические статусы/ограничения и восстановимый адресный rollback без отката чужой работы или перезаписи state историческим архивом. |
+
+### Б59.8 Установка, применение, продолжение Б58 и откат
+
+Перед собственным HF:test внешний оркестратор после выхода старого wrapper принимает его целый legacy result только через Б59.5.1 новым candidate CLI; это выполнение существующей команды из candidate, без ранней установки. HF:test остаётся отдельным invoke. На HF:docs-handoff записать собственный отчёт, интерфейс/evidence, оставшиеся application prerequisites и rollback. ORCH:shared-state после зелёного HF:test адресно устанавливает **совмещённые tested bytes**. Loaded paths/hashes/CLI smoke проверяются отдельно от stub; installed offline/live provider/production runtime статусы не смешиваются. Последующая установка Б58 не должна затереть reconciliation: handoff Б58 получает manifest совмещённой версии и механическое основание установки; его исторический candidate при этом неизменен. Если для дальнейшего HF:test/IAC Б58 нужен совмещённый тестовый checkout — отдельная копия, явно заданные loaded paths/hashes и адресное согласование, без подмены исторических результатов.
+
+После установки, backup целевых state/journal и свежего immutable evidence внешний оркестратор на разрешённой ORCH:shared-state ремонта применяет entrypoint **один раз** к target Б58. Это единственная адресная граница снятия запрета записи чужого state: result/receipt/changed_files/git/reconciliation proof плюс служебный hash/progress и один repair event по Б59.3. Она должна быть явно отражена в HF-плане/REV и scope будущей фазы; broad `dev/` не разрешается. `queue.log.jsonl/queue.json` меняются только штатной проекцией этого перехода под существующим lock. Отсутствие достаточного backend/writer/source/git proof оставляет проверяемый блокер. При разработке/тестировании живой Б58 read-only.
+
+После repair — обычный read-only check. GATE:done ремонта требует AC-150…166, preflight=0 и доставленный AC-report; он **не ждёт** HF:test/GATE:done Б58 или зависимого Б57. Затем внешний оркестратор штатно завершает восстановленный HF:impl Б58 с собственными impl+repair evidence и выполняет отдельный HF:test/прочий хвост его рецепта до delivered AC-report/GATE:done. Receipt не является автоматическим APPROVE/complete. Не повторять исходный invoke, не тратить новый turn/recover для прежних bytes. Ремонт не снимает содержательных замечаний Б57 и не даёт обхода исчерпанных счётчиков его compressor.
+
+Rollback кода — адресное восстановление только своих изменённых installed файлов из проверенного backup после прекращения writers, с сохранением Б58 publication fix и чужих правок. Не `git reset --hard`, не копирование старой queue/state поверх новых событий. Если repair уже принят, историю/receipt не удалять: старый runtime, не понимающий proof, должен отказать, а не объявить PASS или повторить side effect. Конфликт/пробел доказательств — явный блокер и возврат по существующему регламенту; новых repair/recover классов не вводить.
+
+**[NEW-ENTITY, требует согласования Саши]** сохраняется дословно; новых инфраструктурных сущностей нет. **No new service, database, queue, channel, cron, budget engine or global mutex.** Не менять Hermes core/Gateway/systemd/cron, YAML/model/backend/effort policy, provider-fatal/kill/timeout/native/fallback, prompts/schema, case/recipe/G6/operator-словарь, Б57/R1/R2 и старые AC, паузы B3/B4/w3/w4. Не удалять fixture, не менять candidate ради hash, не ослаблять required/coverage/G1/G2/G3, не подменять baseline/prepare и не редактировать packet/sidecar/marker. Архитектор не пишет боевой код, не выполняет HF:test или процессные переходы; живость собственного wrapper не работа фазы.
+
+---
+
 ## Открытые вопросы
 
-**Текущий пакет Б57 (`uprost-skill-dev-workflow-po-itogam-dejsa-dovede`):** новых содержательных Q-n/NEW-ENTITY нет. REV:tz от 04.11 — REQUEST-CHANGES. Документная часть R1 исправлена; R2 требует штатного пересжатия и проверки нового контекста до повторной приёмки. Inventory подготовлен как будущий scope TZ:finalize, без записи в текущей фазе. Это не новый operator-hold; повторная независимая REV ещё не выполнена.
+**Текущий R1 Б59:** новый независимый REV:tz APPROVE получен; требования 0.9.6 утверждены без изменения смысла/AC. Штамп master и фактический четвёртый edge опубликованы. Inventory отсутствует в scope; proposed diff/handoff не заменяет запись и complete. Далее нужны разрешённая синхронизация, rebind HF:plan/IAC/evidence и повторная REV:plan. Собственный legacy completion и исторический Б58 repair не запускались. AC-150…166/implementation/installed/application NOT_RUN. Новых Q-n/operator-hold/сущностей нет.
+
+**Предыдущее согласование Б59 версии 0.9.5:** новых содержательных Q-n/operator-hold/сущностей нет; независимая REV:tz APPROVE от 05.11.2026 получена, согласованные требования утверждены без изменения версии 0.9.5. Технический proof исходного transport/writers собирается только при будущем применении; указания REV переданы HF:plan. Inventory вновь вне scope принятого packet TZ:finalize; staged diff/handoff переданы оркестратору, синхронизация и complete фазы не объявлены. AC-150…166/implementation/installed/application NOT_RUN.
+
+**Текущий пакет Б58 (`adresnyy-remont-publikatsii-vyzhimki-extract-v-c`):** новых Q-n, operator-hold и сущностей нет. A′ и граница доведения bootstrap утверждены после независимой REV:tz APPROVE от 05.11.2026; реализация и installed/runtime проверки NOT_RUN. Штамп master выполнен без изменения требований и версии 0.9.4. Inventory вне scope принятого packet; его синхронизация передана оркестратору конкретным предложением, без заявления complete по Б15. Текущий packet/state не изменён. Зависимому слагу не даётся автоматический новый recover или обход допуска.
+
+**Пакет Б57 (`uprost-skill-dev-workflow-po-itogam-dejsa-dovede`):** новых содержательных Q-n/NEW-ENTITY нет. REV:tz от 04.11 — REQUEST-CHANGES. Документная часть R1 исправлена; R2 требует штатного пересжатия и проверки нового контекста до повторной приёмки. Inventory подготовлен как будущий scope TZ:finalize, без записи в текущей фазе. Это не новый operator-hold; повторная независимая REV ещё не выполнена.
 
 **Пакет доведения Б56 (`dovedenie-vnedreniya-formata-mezhfazovyh-paketov`):** независимая `REV:tz APPROVE` от 03.11.2026 (`dev/dovedenie-vnedreniya-formata-mezhfazovyh-paketov/REV-tz.md`); блокирующих замечаний и новых Q-n нет, формат ранее согласован. `TZ:finalize` утверждает дополнение Б56.11 без изменения требований. Принятие результата текущим упрощённым G2 после разрешённой записи master — известное ограничение реализации, не новый operator-hold и не разрешение обхода. Runtime AC остаются NOT_RUN; прежние вопросы/holds сохраняют своих владельцев.
 
@@ -5179,6 +5753,14 @@ HF:plan задаёт точные команды, пути отчётов и з�
 
 ## Источники этой записи
 
+- Б59 R1, TZ:finalize 05.11.2026: packet b6a87c0d017ffd478de334cd2fb22220ca1f7c53108e738cdf58662a952e183a, новые TZ-patch/REV-tz APPROVE на master 0.9.6 draft SHA-256 4da0210fe5a3be6afcdbd1e8766929697c9673ace68b64f336a0e118f037173c. В evidence ремонтного слага записаны TZ-finalize.md и TZ-finalize-r1-* snapshots/diff/operations/publication/four-edge-chain/archive-overwrite/handoff/verification. Версия и нормы/AC сохранены; inventory proposal не применён из-за scope. Process/runtime/Б58 не менялись; implementation/application NOT_RUN.
+
+- Б59, TZ:finalize 05.11.2026: принятый packet `e9c71104ea339da79d7c462d1915d77c0ceb21f43477c6efc59adbf43883ec92`, проверенные `TZ-patch.md` и `REV-tz.md` (APPROVE); входной master SHA-256 `7ceac91c23b3e38a07b25734883871dfa331d2bcbcd782ffd17c6b4be75e8a2d`. В `dev/adresnyy-remont-reconciliation-priemki-post-invo/evidence/` сохранены обязательный `TZ-finalize.md`, полные pre/post snapshots, diff, FileRef-chain и документная верификация. Нормы/AC сохранены; inventory proposal не применён из-за scope. Process state/runtime/target Б58 не менялись; implementation/application NOT_RUN.
+
+- Б59: принятый packet `ce2e95435d9f5e21614816e867b0a64d2365879883897bf05ab41693aed0e1da`, `dev/adresnyy-remont-reconciliation-priemki-post-invo/{brief.md,_fix_plan_20261105.md,TZ-patch.md}`; диагноз принят GATE:diagnose-review 05.11.2026. Входной master прочитан полностью блоками; исходные packet/identity/plan-A/git/output refs и документные snapshot/diff/output FileRef сохранены в evidence этого слага. Runtime/test/state не изменялись, реализации и применения ремонта нет.
+
+- Б58, TZ:finalize 05.11.2026: принятый packet `d82cf7a2d688179e287f4387ba5597e0100319a0cd7246987c4bac0dd4a6143a`, проверенные `TZ-patch.md` и `REV-tz.md` (APPROVE) ремонтного слага; входной master SHA-256 `0e72416ca6ff50c84a23b9846a9bef89a41f3260ef065ab4bea393a09301c4de`. Snapshot/diff/verification и обязательный `evidence/TZ-finalize.md` находятся в том же слаге. Технические требования и AC сохранены; inventory не записан ввиду отсутствия пути в scope, process state/packet не изменены, HF:test не выполнялся.
+- Б58, TZ:patch 05.11.2026: `dev/adresnyy-remont-publikatsii-vyzhimki-extract-v-c/{brief.md,_fix_plan_20261105.md,TZ-patch.md}`, консультация/вердикт и диагностические evidence того же слага; accepted packet `b71ef1179ae9a9c39dbcbdd1d4f88561eaf380a621bcac5219f17e21138c6dc5`. Текущие invoke_role/pipeline_extract/pipeline_context/cli и argv/JSONL/context/native fixtures прочитаны; исходные hashes совпали с диагнозом. Master прочитан полностью; snapshot/diff/verification — в ремонтном слаге. Код/tests/state не менялись, HF:test не выполнялся.
 - Б57, TZ:patch rework 05.11.2026: `/home/tkachenkoav/WorkVault/Hermes-Backlog/dev/uprost-skill-dev-workflow-po-itogam-dejsa-dovede/brief.md`, `SK-preflight.md`, `REV-tz.md` (REQUEST-CHANGES от 04.11), `TZ-patch.md`; input packet `65cb7ba02a1d68781d212dd0f987dbc23c84a1caf04e4bed03bf8b9aae48f954`. Snapshot/diff/manifest/аудит extract — `evidence/TZ-patch-65cb7ba0-*` того же слага. Формулировки R1–R7/AC-SIMP сохранены; код/скилл/state не изменялись.
 - Оформление Б57: [Creating Skills](https://hermes-agent.nousresearch.com/docs/developer-guide/creating-skills/) и [Skills System](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/) — проверены 05.11 MSK; местные loader/description validation/linter прочитаны отдельно. Документация не доказывает фактическую загрузку будущего скилла.
 
@@ -5231,6 +5813,18 @@ HF:plan задаёт точные команды, пути отчётов и з�
 ---
 
 ## Changelog
+
+- **2026-11-05 — TZ:finalize R1 Б59, 0.9.6 approved**: после нового независимого REV:tz APPROVE статус draft → approved, без изменения версии/Б59.1…59.8/Б59.5.1/AC и прочих норм. Packet b6a87c0d017ffd478de334cd2fb22220ca1f7c53108e738cdf58662a952e183a разрешает exact master и canonical; записаны actual четвёртый edge/pre/post/snapshots/diff/operations и доказательство сохранения прежнего канона. Prefix edges/approvals/archives не изменены. Inventory снова вне scope: конкретный proposal/handoff передан без записи, полная финализация по Б15 не объявлена. Rebind HF-плана и повторная REV:plan остаются prerequisites реализации. Код/tests/installed/application и AC-150…166 NOT_RUN; state/journal/queue/packet/Б58/counters/паузы сохранены. Нет process commands/backend/wrapper monitoring; [NEW-ENTITY, требует согласования Саши] и запрет новых инфраструктурных сущностей сохранены.
+
+- **2026-11-05 — TZ:patch rework R1 Б59, 0.9.6 draft**: опубликованы собственный legacy completion Б59.5.1, closed evidence/actual loaded-owner/G3 и адресный four-edge master tail; уточнены G3/Б17.3/Б56.7/Б59.6/59.8 и обе таблицы AC-155/160/161/163/165. Packet `b608882aba613f6e73f960bce765771711034c453aa92e625bc31c90d7f0a8a6` разрешает master/канон; сохранены точные pre/post refs, snapshots/diff/operations и прежние approvals/prefix archives. Новые REV:tz/финализация/rebind/REV:plan и runtime проверки NOT_RUN. Inventory вне scope, передан будущей разрешённой TZ:finalize. Б58/Б57/остальные AC, process state/journal/queue, счётчики/паузы сохранены; нет process commands/backend/wrapper monitoring. [NEW-ENTITY, требует согласования Саши] сохранён; новых инфраструктурных сущностей нет.
+
+- **2026-11-05 — TZ:finalize, Б59**, пакет `adresnyy-remont-reconciliation-priemki-post-invo`: независимая REV:tz APPROVE от 05.11.2026, блокирующих замечаний и новых Q-n нет. Статус draft → approved, версия 0.9.5 сохранена; Б59.1…59.8, AC-150…166, Б57/Б58 и прежние AC без изменения требований. Штамп master/канон/snapshot/diff и непрерывная цепочка FileRef записаны в разрешённом scope; указания REV переданы HF:plan. Inventory отсутствует в scope packet e9c71104…, staged diff/handoff не применён; синхронизация и complete фазы по Б15 не объявлены. Реализация/тесты/установка/применение NOT_RUN. Код/tests/скиллы/config/extract/state/journal/queue/packet/target candidate/fixture не менялись, счётчики/паузы сохранены. Исходный `[NEW-ENTITY, требует согласования Саши]` сохранён; новых сервиса/БД/очереди/канала/cron/budget engine/global mutex нет. Процессных команд и мониторинга своего wrapper нет; результат принимает внешний оркестратор после выхода роли без обхода guard-ов.
+
+- **2026-11-05 — TZ:patch, Б59**, пакет `adresnyy-remont-reconciliation-priemki-post-invo`: version 0.9.4 → 0.9.5 во frontmatter, status draft; bytes snapshot нетекстовых outputs, backend-free приёмка exact prepare HF:impl Б58, адресные plan/master chains при G1/check/G2 и проверенный G3 обычного success/admission; AC-150…166 класс S. Master/канон/snapshot/diff записаны в разрешённом scope packet ce2e9543…; предыдущий отказ 0488c5cc… сохранён. Независимая REV/реализация/тесты/установка/применение NOT_RUN. Inventory передан будущей разрешённой TZ:finalize, сейчас не писался. Б58/Б57 и прежние AC сохранены; новых сущностей/сервиса/БД/очереди/канала/cron/budget engine/global mutex нет, state/счётчики/паузы не менялись.
+
+- **2026-11-05 — TZ:finalize, Б58, адресный ремонт extract publication**, пакет `adresnyy-remont-publikatsii-vyzhimki-extract-v-c`: согласованное дополнение утверждено после независимой REV:tz APPROVE от 05.11; status draft → approved, версия 0.9.4 сохранена. Технические требования Б58.1…58.7, все AC-138…149, Б57/R1/R2 и прежние корпуса/AC сохранены без изменения. Штамп master, snapshot/diff и обязательный `evidence/TZ-finalize.md` записаны в разрешённых границах. Inventory по-прежнему вне scope принятого packet; подготовлено предложение diff, обновление реестра и complete фазы не объявлены. Новых Q-n/operator-hold/сущностей нет, исходный `[NEW-ENTITY, требует согласования Саши]` и запрет новых сервиса/БД/очереди/канала/cron/budget engine/global mutex сохранены. Код/tests/скиллы/конфиг/extract/state/journal/packet не менялись; implementation/installed/runtime NOT_RUN, счётчики и паузы сохранены. Приём результата — внешнему оркестратору после выхода роли без обхода G2.
+
+- **2026-11-05 — TZ:patch, Б58, адресный ремонт extract publication**, пакет `adresnyy-remont-publikatsii-vyzhimki-extract-v-c`: version во frontmatter 0.9.3 → 0.9.4; драфт A′ и AC-138…149. Зафиксирован уже внесённый bootstrap и остатки: captured context/identity, полный final-message codex, повторная проверка источников, точный комплект/stale cleanup, конкретный diagnosis output/scope до prepare и узкое benign stderr исключение без auth-регрессии. Reuse существующих publisher/result/receipt/completion; native/model/backend policy и общий semantic coverage не меняются. Б57/AC-SIMP/его R1/R2 и прежние корпуса сохранены. Подготовлен будущий scope inventory без текущей записи. Snapshot/diff/canonical/evidence — в ремонтном слаге; независимая REV и implementation/installed/runtime NOT_RUN. Код/tests/extract/state/journal/packet не менялись, counters/паузы сохранены. Новых сущностей/сервиса/БД/очереди/канала/cron/budget engine/global mutex нет; процессных команд из роли нет.
 
 - **2026-11-05 — TZ:patch rework, Б57**, пакет `uprost-skill-dev-workflow-po-itogam-dejsa-dovede` по REV:tz REQUEST-CHANGES R1/R2: требования R1–R7 и AC-SIMP-01…09 перенесены в master без изменения смысла; синхронизированы канон, Б0.3, текущие указатели и Б34. Для будущей TZ:finalize подготовлен scope master/inventory/canonical; inventory текущей фазой не писался. R2 передан штатному компрессору с инвентарём пропусков и точной адресацией исторического APPROVE другого слага; старые packet/extract/state сохранены. Дополнение draft, повторная REV ожидается, runtime NOT_RUN. Скиллы/код/конфиг не менялись; новые сущности/сервисы/БД/очередь/канал/cron/budget engine/global mutex не создавались, паузы сохранены.
 

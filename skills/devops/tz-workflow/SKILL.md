@@ -1,6 +1,6 @@
 ---
 name: tz-workflow
-version: 2.12.0
+version: 2.13.0
 description: "Содержание, хранение и inventory ТЗ Hermes/USERTOOLS"
 ---
 

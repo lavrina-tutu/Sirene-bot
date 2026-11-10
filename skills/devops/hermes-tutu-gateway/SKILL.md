@@ -84,9 +84,9 @@ for m in models:
 
 См. `references/tutu-gateway-models.md` — скрипты для проверки tool calling и extended thinking.
 
-## Вызов из внешнего инструмента (не Cursor)
+## Вызов из внешнего инструмента (без агентной обёртки)
 
-Компрессорные/экстрактные задачи выполняются НА `deepseek-v4-flash-0731` прямо из Python-скрипта через публичный `call_llm(task="compression")` (`agent.auxiliary_client`), **без обёртки Cursor CLI**. Полный рабочий паттерн (ленивый импорт, критичный питфолл `reasoning_details`, env-fallback на Cursor `--mode ask`, откат): см. `references/call-llm-from-external-tool.md`.
+Компрессорные/экстрактные задачи выполняются НА `deepseek-v4-flash-0731` прямо из Python-скрипта через публичный `call_llm(task="compression")` (`agent.auxiliary_client`), **без агентной обёртки (codex CLI / invoke-role)**. Полный рабочий паттерн (ленивый импорт, критичный питфолл `reasoning_details`, env-fallback на codex CLI `--mode ask`, откат): см. `references/call-llm-from-external-tool.md`.
 
 ## Нативная эскалация на более сильную модель (внутри Hermes)
 

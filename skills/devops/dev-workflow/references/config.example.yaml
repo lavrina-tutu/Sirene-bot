@@ -1,6 +1,6 @@
 # Шаблон tools.dev_workflow для EcosystemConfig.yaml
 # Скопировать в свой конфиг; подставить пути ЭТОГО хоста. Секреты — только в ~/.hermes/.env
-# Пост-flip вид (Б45): штатные роли на Codex exec, cursor-cli сохранён как откат.
+# Роли ВСЕГДА через codex CLI (Курсор отменён). См. roles ниже.
 
 tools:
   dev_workflow:
@@ -17,8 +17,6 @@ tools:
       default_backend: codex
       codex_pilot_slugs: []
       backends:
-        cursor-cli:
-          bin: agent
         codex:
           bin: codex
         hermes-internal:
@@ -26,7 +24,7 @@ tools:
 
     roles:
       architect:
-        model: gpt-6.1-sol
+        model: gpt-6-astra
         effort: high
         effort_thick: xhigh
         escalate_model: gpt-6-astra
@@ -36,22 +34,15 @@ tools:
         effort: high
         effort_thick: xhigh
       executor:
-        model: gpt-5.6-terra
+        model: gpt-6.1-sol
         effort: medium
         effort_multifile: high
       executor_light:
         model: gpt-6-luna
         effort: high
       compressor:
-        model: null
-
-    roles_cursor:
-      architect:
-        model: cursor-grok-4.6-high
-      reviewer:
-        model: claude-sonnet-5-medium
-      executor:
-        model: composer-2.5
+        model: gpt-6.1-terra
+        effort: medium
 
     notify:
       default_chat_id: "<TELEGRAM_CHAT_ID>"

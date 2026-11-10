@@ -834,6 +834,24 @@
         "tag": "Стендап Туту."
       },
       "folder": "Entities/stendap_tutu"
+    },
+    "zd": {
+      "kind": "project",
+      "parent": null,
+      "display_name": "Закупка данных (ZD)",
+      "aliases": [
+        "zd",
+        "закупка данных",
+        "data procurement",
+        "data purchase"
+      ],
+      "folder": "Entities/zd",
+      "pfs": {
+        "page_id": "535962742",
+        "tag": "ZD."
+      },
+      "task_slug": "ZD.",
+      "open": true
     }
   }
 }

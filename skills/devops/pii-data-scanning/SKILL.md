@@ -97,4 +97,4 @@ metadata:
 - Email в **именах файлов** встреч (`~/WorkVault/Meetings/.../taranov@tutu.ru - ...`) — это path, а не значение; маскировка значений его не трогает; такие файлы — легитимная находка на чистку в рамках pii-privacy.
 
 ## Выполнение скан-задачи
-Через Cursor CLI (архитектор → ТЗ → композер), по `tz-workflow`/`hermes-feature`. Верифицировать self-report независимо: прогонять pytest самому и проверять `baseline.json`/`audit_history.jsonl` regex-ом на сырые email (композер может отрапортовать «замаскировано», а на деле — утечка).
+Через codex CLI (архитектор → ТЗ → исполнитель), по `tz-workflow`/`hermes-feature`. Верифицировать self-report независимо: прогонять pytest самому и проверять `baseline.json`/`audit_history.jsonl` regex-ом на сырые email (исполнитель может отрапортовать «замаскировано», а на деле — утечка).

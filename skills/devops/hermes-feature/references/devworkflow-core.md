@@ -22,9 +22,9 @@ W1: `pilot_slugs: []`, `mode: kanban-primary`.
 
 ## Overview
 
-Единый процесс работы над фичами Hermes и USERTOOLS: от ТЗ до кода, тестов, документации, диагностики и отката. Содержательные роли выполняются через Codex exec (`invoke-role`): архитектор (gpt-6.1-sol) планирует, ревизор (gpt-6-astra) проверяет, исполнитель (gpt-5.6-terra) пишет и тестирует. Cursor CLI (`agent -p`, roles_cursor.*) — откат.
+Единый процесс работы над фичами Hermes и USERTOOLS: от ТЗ до кода, тестов, документации, диагностики и отката. Содержательные роли выполняются **только через codex CLI** (`invoke-role`): архитектор (gpt-6-astra) планирует, ревизор (gpt-6-astra) проверяет, исполнитель (gpt-6.1-sol) пишет и тестирует, компрессор (gpt-6.1-terra) извлекает/переупаковывает факты. Cursor CLI (`agent -p`, roles_cursor.*) — отменён.
 
-**ЖЁСТКОЕ ПРАВИЛО:** Архитектор default (Сирень) НЕ пишет ТЗ, планы, анализ самостоятельно в чате. Все задачи архитектора — ТОЛЬКО через Cursor CLI (`agent -p`). Текущий агент default (Сирень) координирует: вызывает Cursor CLI, передаёт контекст, принимает результат. Полный документ (план / ТЗ / appendix / research / файл) в `agent -p` — без обрезки: полный `cat`, либо путь + «прочитай сам», либо явно «часть 1/N» (канон: pitfall cursor-cli). Никаких попыток «написать план самому» без Cursor CLI. ИСКЛЮЧЕНИЕ из „жёсткого правила": диагностика и план починки бага — НЕ напрямую, а через фазу `BUG:diagnose` BUG:diagnose (см. Блок 6В) ДО любого agent -p / cronjob(repeat=1) / делегирования. Прямой agent -p на диагностику/план/реализацию по багу-триггеру без существующей фазы `BUG:diagnose` = нарушение инварианта 8.
+**ЖЁСТКОЕ ПРАВИЛО:** Архитектор default (Сирень) НЕ пишет ТЗ, планы, анализ самостоятельно в чате. Все задачи архитектора — ТОЛЬКО через codex CLI (`invoke-role`, роль `architect`, модель `gpt-6-astra`). Текущий агент default (Сирень) координирует: вызывает роли через `invoke-role`, передаёт контекст, принимает результат. Полный документ (план / ТЗ / appendix / research / файл) в контексте роли — без обрезки: полный `cat`, либо путь + «прочитай сам», либо явно «часть 1/N». Никаких попыток «написать план самому» без codex роли. ИСКЛЮЧЕНИЕ из „жёсткого правила": диагностика и план починки бага — НЕ напрямую, а через фазу `BUG:diagnose` BUG:diagnose (см. Блок 6В) ДО любого invoke-role / cronjob(repeat=1) / делегирования. Прямой invoke-role на диагностику/план/реализацию по багу-триггеру без существующей фазы `BUG:diagnose` = нарушение инварианта 8.
 
 ## When to Use
 
@@ -40,7 +40,7 @@ W1: `pilot_slugs: []`, `mode: kanban-primary`.
 
 | Триггерные слова | Маршрут (ОБЯЗАТЕЛЬНО) |
 |---|---|
-| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | кейс BUGFIX (DevWorkflow) = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ шаг оркестратора — `pipeline init --case BUGFIX` (рецепт с `BUG:diagnose`) для slug, ДО любого agent -p / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared). После `TZ:finalize` (багфикс-ТЗ) `GATE:take-into-work` **auto-pass** (`auto-pass: ac-shown`), payload=AC; `GATE:diagnose-review` **auto** по артефакту `_fix_plan_*.md`/непустому body (императив 28.09, старт→финиш) |
+| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | кейс BUGFIX (DevWorkflow) = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ шаг оркестратора — `pipeline init --case BUGFIX` (рецепт с `BUG:diagnose`) для slug, ДО любого invoke-role / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared). После `TZ:finalize` (багфикс-ТЗ) `GATE:take-into-work` **auto-pass** (`auto-pass: ac-shown`), payload=AC; `GATE:diagnose-review` **auto** по артефакту `_fix_plan_*.md`/непустому body (императив 28.09, старт→финиш) |
 | «спроси», «проверь», «вычисли», «найди данные», «найди в архиве», «сколько», «покажи» | прямой ответ (без кода/процесса; без DevWorkflow-slug) |
 | «одношаговый ответ», RESEARCH-триггеры («проанализируй», «исследуй» без починки) | прямой ответ / RS-граф (по DPK-исключениям) |
 
@@ -58,14 +58,14 @@ W1: `pilot_slugs: []`, `mode: kanban-primary`.
 
 ### Вход
 
-- Любой HF `agent -p` без корня `DEV/<slug>` → **стоп** + оркестратор. Исключения DPK: `BRF:*` в TG; одношаговый ответ; RESEARCH.
+- Любой HF `invoke-role` без корня `DEV/<slug>` → **стоп** + оркестратор. Исключения DPK: `BRF:*` в TG; одношаговый ответ; RESEARCH.
 - Вход в HF-ветку: корень `DEV/<slug>` существует **и** `GATE:take-into-work` **done/auto-pass** (`auto-pass: ac-shown`) — не фраза Саши (императив 28.09). Постановщик завёл полный граф одним батчем, гейт авто-прошёлся после `TZ:finalize`.
 - **Все задачи по умолчанию ложатся в план** (кейс DevWorkflow `DEV/<slug>`) после триггера «разработай/доработай/почини» и далее проводятся по канону, без дополнительной команды Саши (требование 1).
 - **Slug-guard:** перед `pipeline init` корня `DEV/<slug>` (в т.ч. багфикс-батча) — проверка активного графа по слагу (`todo|ready|running|blocked`, не `done`/`archived`); дубли запрещены (кейс 1, прецедент pfs-notify-link-unprocessed). При совпадении — reuse существующего графа или `interrupt` до разрешения.
 - `GATE:plan-approve` / `HF:backup` / `HF:impl`: если `HF:plan` не `done` → **стоп** (GLOSSARY инвариант 6). Не skip плана в one-pass.
-- Off-board: **предусловие** — зафиксировать паузу slug в `journal.md` (см. `dev-workflow` `references/handoff.md`), не вызывать `pipeline next` на живой slug; затем допустим прямой `agent -p` с retro-учётом session ids. Параллельный «ручной» cursor-cli на активной фазе того же slug запрещён (инвариант 8).
+- Off-board: **предусловие** — зафиксировать паузу slug в `journal.md` (см. `dev-workflow` `references/handoff.md`), не вызывать `pipeline next` на живой slug; затем допустим прямой `invoke-role` с retro-учётом session ids. Параллельный «ручной» codex CLI (invoke-role) на активной фазе того же slug запрещён (инвариант 8).
 - **Снятие устаревшего slug (легаси/другой канал):** если работа уехала из DevWorkflow — закрыть незавершённые фазы через оркестратора (`complete-phase` / пометки в `journal.md`), довести slug до `done` или явно archived; не оставлять «висящие» фазы в `_state.json`.
-- **Модели только в `invoke-role`:** на `pipeline init` и в рецепте фаз **не** задавать model override (D1). Анти-пример: `model=cursor-grok-4.6-high` на Hermes-воркере tutu → HTTP 400 (`t_2c8ee3b2`). Штатные роли (architect/reviewer/executor) — Codex exec внутри `invoke-role`; Cursor (roles_cursor.*) — откат, только D2 внутри `invoke-role` → `agent -p --model …`.
+- **Модели только в `invoke-role`:** на `pipeline init` и в рецепте фаз **не** задавать model override (D1). Штатные роли (architect/reviewer/executor/compressor) — codex CLI внутри `invoke-role`.
 
 Граф HF-фаз — развёртка `PLAN-IMPL-TAIL` + `HF-TAIL` (GLOSSARY §5.1; сборка кейсов — §2):
 
@@ -85,7 +85,7 @@ GATE:take-into-work  (уже снят)
 
 Граф выше — **полный граф кейса, создан одним батчем после брифа** (tz-workflow «Вход триггера»): `GATE:take-into-work` + `PLAN-IMPL-TAIL` + `HF-TAIL` уже в графе с parents и ключами `devpipe:<slug>:<phase>`. **Unfold хвоста после гейта НЕТ** (дыра: второй ход → `children=[]`, фазы complete без детей). В **корневом** one-pass (корень сам делает работу) дочерний хвост **не создавать** вообще — см. «One-pass не плодит хвост».
 
-Skills: HF-* / GATE после take-into-work — `hermes-feature`, `cursor-cli`, `cursor-task-context`. ORCH:shared-state — только `hermes-feature`.
+Skills: HF-* / GATE после take-into-work — `hermes-feature`. ORCH:shared-state — только `hermes-feature`.
 
 #### Origin и уведомления (DevWorkflow)
 
@@ -98,16 +98,16 @@ Terminal `blocked` / `waiting_operator` трактовать как «ждёт �
 ### Воркер HF-фаз
 
 1. `pipeline status --slug <slug>` → сверка TZ version/mtime → workspace фазы из `_state.json`.
-2. **Перед ролью на фазе** (`HF:plan`, `HF:impl`, `HF:test`, `HF:docs-handoff`, `HF:backup`, `REV:plan`, …): `pipeline emit-prompt --slug <slug> --phase <PHASE> --out /tmp/task.md` — **exit 0 обязателен**, иначе **СТОП**. Затем `invoke-role` (фон) с `/tmp/task.md`; прямой `agent -p` в обход — только внутри invoke-role (см. `dev-workflow`).
+2. **Перед ролью на фазе** (`HF:plan`, `HF:impl`, `HF:test`, `HF:docs-handoff`, `HF:backup`, `REV:plan`, …): `pipeline emit-prompt --slug <slug> --phase <PHASE> --out /tmp/task.md` — **exit 0 обязателен**, иначе **СТОП**. Затем `invoke-role` (фон) с `/tmp/task.md`; прямой вызов роли в обход — только внутри invoke-role (codex CLI; см. `dev-workflow`).
 3. `session_id` роли → `journal.md` после первого вызова.
-4. Промпт Cursor CLI — **одна роль, одна фаза:**
+4. Промпт codex CLI (`invoke-role`) — **одна роль, одна фаза:**
 
 ```
 Одна роль: {role} ({model}). Только фаза {phase}. Чужие фазы не выполнять.
 G5: не строй кейсовый граф / не меняй --case / не skip фаз / не выбирай LIGHT — это оркестратор.
 ```
 
-Роли/модели (PI B3): compress=оркестратор `deepseek-v4-flash-0731` (без Cursor; заключение t_645aa647); plan/patch/finalize=архитектор `gpt-6.1-sol` (Codex exec, invoke-role; CHANGE-LIGHT ≤3 файла: medium-effort); REV=ревизор `gpt-6-astra`; impl/test/docs-handoff=исполнитель `gpt-5.6-terra` (LIGHT: executor_light `gpt-6-luna`); backup=координатор (Сирень, Hermes, без Codex); ORCH=оркестратор. Откат: Cursor roles_cursor.* (`cursor-grok-4.6-high` / `claude-sonnet-5-medium` / `composer-2.5`; LIGHT на Cursor — roles_cursor.executor).
+Роли/модели (PI B3), всё через codex CLI: compress=компрессор `gpt-6.1-terra`; plan/patch/finalize=архитектор `gpt-6-astra` (CHANGE-LIGHT ≤3 файла: medium-effort); REV=ревизор `gpt-6-astra`; impl/test/docs-handoff=исполнитель `gpt-6.1-sol` (LIGHT: executor_light `gpt-6-luna`); backup=координатор (Сирень, Hermes, без Codex); ORCH=оркестратор. Cursor roles_cursor.* — отменён.
 
 5. `complete-phase` с metadata:
 
@@ -119,16 +119,16 @@ G5: не строй кейсовый граф / не меняй --case / не sk
   "skills_to_sync": ["tz-workflow"],
   "tz_version": "0.1.0",
   "tz_mtime": "2026-09-05T12:00:00Z",
-  "cursor_session_ids": ["..."],
+  "codex_session_ids": ["..."],
   "role": "исполнитель",
-  "model": "gpt-5.6-terra",
+  "model": "gpt-6.1-sol",
   "pipeline_schema": "1.0"
 }
 ```
 
 6. **Свёртка по `changed_files`:** на фазах **исполнителя** `HF:impl` и `HF:test`: если `changed_files` содержит путь `*_TZ.md` **или** `HF-plan*` → не complete, а `interrupt(reason="review-required: collapsed-chain")`. Не применять к `HF:plan` (план — его артефакт) и к `HF:docs-handoff` (ТЗ — его артефакт).
 7. **Машинный факт на диске для read-only фаз `HF:plan`/`REV:plan`** (контроль premature-impl, инвариант 8/Блок 1А). На фазе планирования целевой каталог скилла не должен получать impl-артефактов:
-   - **до** `agent -p`: снимок `disk_before` целевого каталога скилла из ТЗ — `python3 ~/WorkVault/Registries/pipeline_hf_plan_diskfact.py snapshot --skill-dir <abs>` → `journal.md` (JSON).
+   - **до** `invoke-role`: снимок `disk_before` целевого каталога скилла из ТЗ — `python3 ~/WorkVault/Registries/pipeline_hf_plan_diskfact.py snapshot --skill-dir <abs>` → `journal.md` (JSON).
    - после: `disk_after` + `diff --before --after`. Если `PREMATURE_IMPL` (появились `SKILL.md`/`scripts/`/`tests/`/`references`/`cli.py`, которых не было в before) → `interrupt(reason="review-required: impl-before-plan-approve")`; self-report «каталог есть» при `disk_before.exists=false` = это же block.
    - Легальный черновик (каталог был в before, код в этой фазе не менялся) → complete ок; `HF:impl` затем сверяет с планом, не пишет второй раз.
    - В `complete-phase.metadata` класть `disk_before`, `disk_after`, `premature_impl: false|true`, `allowed_writes` (план-файлы `HF-plan_*.md`).
@@ -168,7 +168,7 @@ G5: не строй кейсовый граф / не меняй --case / не sk
 6. **exit 0 → `complete-phase`** (`auto-pass: preflight-0`), НЕ block «ждать готово» (императив 28.09; preflight 0 достаточен **после снятия operator-holds `operator-done`+evidence и пустых open-questions**). **Нельзя** ✅ на operator-AC со `status=open` в отчёте — честно ⏳; при O open preflight → exit 1 → `interrupt` `review-required: operator-action: <verb>`, complete запрещён. Корень `DEV/<slug>` закрывается **только** после `GATE:done` done (запрет `complete-phase` корня, пока `GATE:done` не done).
 7. exit 1 или 2 → comment чек-лист stderr; `interrupt`; **запрет** complete. reason: `review-required: preflight GATE:done` (exit 1) — чинить граф, не ждать Сашу; operator-hold → `review-required: operator-action: <verb>`; или `review-required: collapsed-chain` (exit 2).
 
-**G3 git-proof (AC-H07):** перед `complete-phase` фаз `HF:test` и перед вызовом preflight `GATE:done` — impl-пути из `changed_files` HF:impl, лежащие в git-worktree, **должны быть закоммичены** (`git status --porcelain -- <path>` пуст). Untracked / modified → не complete. Если `emit-prompt` на `HF:test`/`HF:docs-handoff` дал exit 1 из-за untracked — `agent -p` **не** звать (AC-H05b).
+**G3 git-proof (AC-H07):** перед `complete-phase` фаз `HF:test` и перед вызовом preflight `GATE:done` — impl-пути из `changed_files` HF:impl, лежащие в git-worktree, **должны быть закоммичены** (`git status --porcelain -- <path>` пуст). Untracked / modified → не complete. Если `emit-prompt` на `HF:test`/`HF:docs-handoff` дал exit 1 из-за untracked — `invoke-role` **не** звать (AC-H05b).
 
 **Always auto** (и в one-pass). Preflight exit 0 **достаточен** для `GATE:done` **после снятия holds и пустых Q**. Фраза Саши «готово» на этом гейте — идемпотентный no-op (гейт уже done). Отчёт AC уже доставлен в origin до auto-complete.
 
@@ -188,9 +188,9 @@ One-pass — **не** склейка нескольких **дочерних** �
 
 #### One-pass не плодит хвост (оркестратор, правило C)
 
-**Когда:** режим «делай в 1 проход» и корень `DEV/<slug>` **сам** выполняет цикл — один воркер-корень, **несколько** вызовов `agent -p` по ролям (grok затем composer), не один промпт «ТЗ+код+тесты»; на корне — пометка one-pass.
+**Когда:** режим «делай в 1 проход» и корень `DEV/<slug>` **сам** выполняет цикл — один воркер-корень, **несколько** вызовов `invoke-role` по ролям (architect `gpt-6-astra` затем executor `gpt-6.1-sol` через codex CLI), не один промпт «ТЗ+код+тесты»; на корне — пометка one-pass.
 
-**При постановке — не разворачивать полный хвост (~16 фаз):** вместе с корнем **не** создавать через `pipeline init` типовой граф `TZ-WRITE` (`TZ:stabilize` → … → `GATE:take-into-work`, см. `tz-workflow`) **плюс** `PLAN-IMPL-TAIL` + `HF-TAIL` (`HF:compress` → … → `ORCH:shared-state` → `GATE:done`, см. граф выше). Работа уже в корневом `agent -p`; дочерний граф после `complete` корня только дублирует её и съедает дублирующий рецепт.
+**При постановке — не разворачивать полный хвост (~16 фаз):** вместе с корнем **не** создавать через `pipeline init` типовой граф `TZ-WRITE` (`TZ:stabilize` → … → `GATE:take-into-work`, см. `tz-workflow`) **плюс** `PLAN-IMPL-TAIL` + `HF-TAIL` (`HF:compress` → … → `ORCH:shared-state` → `GATE:done`, см. граф выше). Работа уже в корневом `invoke-role`; дочерний граф после `complete` корня только дублирует её и съедает дублирующий рецепт.
 
 Допустимые варианты:
 
@@ -211,6 +211,6 @@ One-pass — **не** склейка нескольких **дочерних** �
 3. `GATE:done`: отчёт AC в origin → `journal.md` с `AC-delivered: origin` → preflight → `complete-phase`.
 4. В journal: `one-pass tail archived: <N> phases` (audit).
 
-**XOR-канал координатора (инвариант 8, GLOSSARY §5.2):** пока slug в DevWorkflow «в поезде» (`pipeline status` — незавершённые фазы), координатор **не** дублирует работу параллельным `agent -p` на те же фазы. Прежде чем сделать любой **ручной** cursor-cli по слагу:
-1. `pipeline status --slug <slug>`: есть незавершённые фазы → свой `agent -p` **стоп** (ждать `next` / auto-pass гейтов).
+**XOR-канал координатора (инвариант 8, GLOSSARY §5.2):** пока slug в DevWorkflow «в поезде» (`pipeline status` — незавершённые фазы), координатор **не** дублирует работу параллельным `invoke-role` на те же фазы. Прежде чем сделать любой **ручной** codex CLI / invoke-role по слагу:
+1. `pipeline status --slug <slug>`: есть незавершённые фазы → свой `invoke-role` **стоп** (ждать `next` / auto-pass гейтов).
 2. Нужен прямой ход (crash-spawn, спешка) → **сначала** пауза slug в `journal.md` (см. `dev-workflow` `references/handoff.md`), не вызывать `next` → затем retro-учёт session ids; для кода — только после `GATE:plan-approve` done. Два параллельных исполнителя одной фазы запрещены.

@@ -6,7 +6,7 @@ author: agent
 license: MIT
 platforms: [linux]
 tags: [loop, digest, news, summary, tutu]
-related_skills: [mattermost-loop-api, cursor-cli]
+related_skills: [mattermost-loop-api]
 ---
 
 # Loop Channel Digest

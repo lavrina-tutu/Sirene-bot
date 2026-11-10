@@ -1,6 +1,8 @@
 # Hermes Upgrade — Pattern & Data
 
-Этот файл описывает паттерн обновления Hermes из upstream. Все операции выполняются через Cursor CLI.
+> **Исторический журнал единичного апгрейда Hermes v0.18.2 → v0.20.0 (07.08.2026).** Cursor CLI отменён (решение Саши 10.11.2026), оперативные роли — через codex CLI. Ниже — только переиспользуемые паттерны и питфоллы, модель-агностичные.
+
+Этот файл описывает паттерн обновления Hermes из upstream.
 
 ## Branch Layout
 
@@ -62,12 +64,7 @@
 - **Version:** v0.18.2 → v0.20.0
 - **Commits:** `d237f9d810` (merge), `550e91f74a` (config v0→v33)
 
-### Cursor model performance
-- `claude-sonnet-5-thinking-high` → **timeout** on large analysis (822s+, no output)
-- `claude-sonnet-5-thinking-medium` → **completed** in ~348s with full plan
-- `composer-2.5` → **completed** conflict resolution in 80s, test update in 182s
-
-### `hermes doctor --fix` for config migration
+### `hermes doctor --fix` для config migration
 After merge, `hermes doctor` showed `Config version outdated (v0 → v33)`. Running `hermes -p default doctor --fix` auto-migrated config.yaml to v33.
 
 ## Upstream Turbulence Signal
@@ -92,8 +89,6 @@ If upstream has:
 
 **Правило:** всегда использовать `.venv/bin/python -m pytest`, НЕ системный `pytest`. Проверить: `.venv/bin/python -m pytest --version`. Прецедент: 07.08.2026, upgrade Hermes v0.18.2 → v0.20.0 (5136 коммитов).
 
-## ⚠️ Питфол: thinking-high таймаутится на больших задачах
+## ⚠️ Питфол: большие задачи анализа — через codex-роль
 
-`claude-sonnet-5-thinking-high` с timeout=600с **не уложился** при составлении плана обновления (822с+, пустой output). `claude-sonnet-5-thinking-medium` справился за 348с с тем же промптом.
-
-**Правило:** для задач анализа/планирования с большим объёмом входных данных (5000+ коммитов, 60+ файлов) — сразу использовать `thinking-medium`, не `thinking-high`. Прецедент: 07.08.2026.
+Для задач анализа/планирования с большим объёмом входных данных (5000+ коммитов, 60+ файлов) — использовать **architect через codex CLI** (`gpt-6-astra`, `invoke-role`), не держать задачу в одном вызове с ограниченным таймаутом. Прецедент: 07.08.2026, single large-analysis call таймаутился (822с+, пустой output).

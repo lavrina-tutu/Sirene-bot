@@ -15,11 +15,11 @@ Entry-point:
 | `init` | overlay skeleton + PROJECT.yaml | no |
 | `collect` | A→B→C(CSV)→D→entity→E | no |
 | `refresh` | version poll + stale report | no |
-| `digest` | F (compress leaves/themes/plan) | composer-2.5 |
+| `digest` | F (compress leaves/themes/plan) | компрессор gpt-6.1-terra (codex CLI) |
 | `pack` | task pack (PACK.md + BRIEF.md) | no |
 | `mine` | collect + digest | mixed |
-| `analyze` | G (pack-based if `--task`, or `--full-archive`) | cursor-grok-4.6-high |
-| `document` | H | composer-2.5 |
+| `analyze` | G (pack-based if `--task`, or `--full-archive`) | архитектор gpt-6-astra (codex CLI) |
+| `document` | H | исполнитель gpt-6.1-sol (codex CLI) |
 
 ## Common flags
 

@@ -1,6 +1,6 @@
 ---
 name: hermes-feature
-version: 2.15.0
+version: 2.15.1
 description: "Предметные правила реализации и проверки Hermes/USERTOOLS"
 ---
 

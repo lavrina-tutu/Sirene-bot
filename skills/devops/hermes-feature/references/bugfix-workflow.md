@@ -6,7 +6,7 @@
 
 | Триггерные слова | Маршрут (ОБЯЗАТЕЛЬНО) |
 |---|---|
-| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | кейс BUGFIX (DevWorkflow) = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ шаг оркестратора — `pipeline init --case BUGFIX` (рецепт с `BUG:diagnose`) для slug, ДО любого agent -p / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared). После `TZ:finalize` (багфикс-ТЗ) `GATE:take-into-work` **auto-pass** (`auto-pass: ac-shown`), payload=AC; `GATE:diagnose-review` **auto** по артефакту `_fix_plan_*.md`/непустому body (императив 28.09, старт→финиш) |
+| «баг», «ошибка», «не работает», «упало», «почини», «починка», «разберись», «проанализируй ошибки», «cron run failed», «отдай на разбор/план починки», «fix», «root cause» | кейс BUGFIX (DevWorkflow) = BUG:diagnose → GATE:diagnose-review → TZ-WRITE(patch/light) → PLAN-IMPL-TAIL(-LIGHT). ПЕРВЫЙ шаг оркестратора — `pipeline init --case BUGFIX` (рецепт с `BUG:diagnose`) для slug, ДО любого invoke-role / cronjob / delegate. Ретро-корень запрещён (инвариант 9). Классификация LIGHT — после GATE:diagnose-review (≤3 файла вне shared). После `TZ:finalize` (багфикс-ТЗ) `GATE:take-into-work` **auto-pass** (`auto-pass: ac-shown`), payload=AC; `GATE:diagnose-review` **auto** по артефакту `_fix_plan_*.md`/непустому body (императив 28.09, старт→финиш) |
 | «спроси», «проверь», «вычисли», «найди данные», «найди в архиве», «сколько», «покажи» | прямой ответ (без кода/процесса; без DevWorkflow-slug) |
 | «одношаговый ответ», RESEARCH-триггеры («проанализируй», «исследуй» без починки) | прямой ответ / RS-граф (по DPK-исключениям) |
 
@@ -21,7 +21,7 @@
 При триггере «почини» — **до** TZ-ветки (кейс BUGFIX, GLOSSARY §2):
 
 ```none
-корень DEV/<slug> + BUG:diagnose   # в ОДНОМ `pipeline init`-ходе (инвариант 9), до agent -p
+корень DEV/<slug> + BUG:diagnose   # в ОДНОМ `pipeline init`-ходе (инвариант 9), до invoke-role
 # origin задаётся при init (см. «Origin и уведомления» выше)
 GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _fix_plan_*.md / непустому body
 → далее TZ-WRITE(patch|light) → GATE:take-into-work (auto-pass: ac-shown) → PLAN-IMPL-TAIL | PLAN-IMPL-TAIL-LIGHT
@@ -29,7 +29,7 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _f
 
 `BUG:diagnose` — read-only, план П.1…П.N → `_fix_plan_YYYYMMDD.md`. Диагноз → `BUG:diagnose`; реализация → `HF:impl`. **`HF:fix` запрещён** (GLOSSARY §7). Инвариант: даже с известным root cause — нет перехода в hermes-feature без ТЗ-файла. `GATE:diagnose-review` — **auto** (доработка B): воркер гейта complete сам, когда `BUG:diagnose` done и на диске есть `_fix_plan_*.md` **или** непустой body; классификация LIGHT — в том же ходе. `GATE:plan-approve` — always auto; `GATE:take-into-work` / `GATE:done` — **always auto**. Баг-триггер всегда начинает с фазы `BUG:diagnose`.
 
-**Корень `DEV/<slug>` создаётся СРАЗУ, в том же `pipeline init`-ходе, что и `BUG:diagnose`** (не ретро, инвариант 9). Ретро-корень = нарушение (прецедент pfs-promote-bugfix 22.09: preflight GATE:done красный). Первый tool-шаг при баг-триггере — `pipeline init` корня `DEV/<slug>` **И** DX в одном батче, **до** любого agent -p / cronjob(repeat=1) / delegate / cronjob-аутсорсинга диагностики.
+**Корень `DEV/<slug>` создаётся СРАЗУ, в том же `pipeline init`-ходе, что и `BUG:diagnose`** (не ретро, инвариант 9). Ретро-корень = нарушение (прецедент pfs-promote-bugfix 22.09: preflight GATE:done красный). Первый tool-шаг при баг-триггере — `pipeline init` корня `DEV/<slug>` **И** DX в одном батче, **до** любого invoke-role / cronjob(repeat=1) / delegate / cronjob-аутсорсинга диагностики.
 
 **Багфикс-батч создаёт ПОЛНЫЙ хвост сразу, не корень+DX на потом (прецедент 11.10: digest/pfs-notify стоят на DX done).** Развёл только
 `корень DEV/<slug>` + `BUG:diagnose` (по букве инварианта 9) — когда DX выполнилась, граф встал: `GATE:diagnose-review` и LIGHT/полный хвост
@@ -46,10 +46,10 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _f
 
 **G5 (AC-H03/H09/H10):** воркер HF/BUG **не** `pipeline init` кейсовый граф и **не** skip фаз. `pipeline init` / `pipeline set-case` / LIGHT-хвост — **только оркестратор (Сирень) на триггере в чате**, ДО фаз архитектора. Классификация BUGFIX→BUGFIX-LIGHT — **после** `GATE:diagnose-review` оркестратором (перепись хвоста / `--case`); архитектор в `_fix_plan` может написать оценку числа файлов, `pipeline init` LIGHT-хвоста ему **запрещён**.
 
-**Перед любым `agent -p` по инструменту на `BUG:diagnose` (и далее по багфикс-ветке):** обязательный `emit-prompt` — exit 0, иначе **СТОП**, `agent -p` не вызывать. Легальный вызов только от файла `--out` (промпт: `$(cat /tmp/task.md)`):
+**Перед любым `invoke-role` по инструменту на `BUG:diagnose` (и далее по багфикс-ветке):** обязательный `emit-prompt` — exit 0, иначе **СТОП**, `invoke-role` не вызывать. Легальный вызов только от файла `--out` (промпт: `$(cat /tmp/task.md)`):
 
 - `pipeline emit-prompt --slug <slug> --phase <PHASE> --out /tmp/task.md`
-- exit 0 → `invoke-role` с `/tmp/task.md` (или `agent -p` внутри роли); в `journal.md` должен появиться `context-used:` (G2/AC-H06)
+- exit 0 → `invoke-role` с `/tmp/task.md` (прямой вызов codex CLI внутри роли); в `journal.md` должен появиться `context-used:` (G2/AC-H06)
 - exit ≠ 0 → СТОП
 - перед `complete-phase` HF/BUG/REV: `pipeline check --slug <slug> --phase <PHASE>` — exit 0 обязателен (G2)
 
@@ -73,7 +73,7 @@ GATE:diagnose-review  parents=[BUG:diagnose]   # auto по артефакту _f
 
 ## Блок 7: Диагностика и отладка
 
-**При изменении ТЗ** (параллельно передаче задачи в Cursor): запустить drift-check манифеста:
+**При изменении ТЗ** (параллельно передаче задачи в codex): запустить drift-check манифеста:
 
 ```bash
 python3 ~/WorkVault/Registries/render_manifest.py --check-drift
@@ -86,7 +86,7 @@ python3 ~/WorkVault/Registries/render_manifest.py --check-drift
 **Reuse-first при фиксе (см. references/reuse-first-rule.md):** root cause чинится через существующие инструменты; новый инструмент — только предложение на согласование.
 
 **Специфика:**
-- Модель: исполнитель (composer-2.5)
+- Модель: исполнитель (`gpt-6.1-sol` через codex CLI)
 - Мелкий баг → исполнитель чинит сам (1 попытка)
 - Крупный → Саша решает → архитектор делает hotfix-план
 - Системный блокер → вопрос Саше напрямую

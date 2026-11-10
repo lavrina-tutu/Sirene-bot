@@ -28,7 +28,7 @@ Semi-automated deep project mining v1.0.0: Confluence L0 + Gantt-JSON plan + mee
 - VPN / on-prem for Confluence
 - `CONFLUENCE_TOKEN`, venv `~/hermes-agent/.venv`
 - Java 17 for MppReader **only if** Gantt JSON is absent (MPP fallback)
-- Cursor CLI `agent` for G/H only; Hermes API for facts/context synthesis
+- codex CLI (invoke-role) for G/H only; Hermes API for facts/context synthesis
 
 ## How to Run
 

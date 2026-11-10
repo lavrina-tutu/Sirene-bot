@@ -1,6 +1,6 @@
 ---
 name: dev-workflow
-version: 0.8.1
+version: 0.8.2
 description: "Единый файловый процесс разработки Hermes и USERTOOLS"
 ---
 

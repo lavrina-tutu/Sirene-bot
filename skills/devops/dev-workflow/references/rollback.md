@@ -44,15 +44,9 @@
 
 Откат **одного** слага из allowlist баннер **не** снимает.
 
-## Откат бэкенда Codex→Cursor (Б45.7, после flip)
+## Откат бэкенда Codex→Cursor — ОТМЕНЁН (решение Саши 10.11.2026)
 
-Чеклист миграции `migrate-dev-roles-cursor-to-codex`. Выполняет **только ORCH** в ответственном окне, живой поезд завершён, wrapper'ы не живы.
-
-1. **YAML** — в боевом `tools.dev_workflow.invoke`: `default_backend: cursor-cli`; `codex_pilot_slugs: []` (снять pilot, если остался). `roles_cursor.*` обязаны быть заполнены: architect `cursor-grok-4.6-high`, reviewer `claude-sonnet-5-medium`, executor `composer-2.5`.
-2. **`roles.*` Codex можно оставить** в файле — resolver при `cursor-cli` их **не использует** (Б45.3); `executor_light` на Cursor **не** читается — LIGHT идёт в `roles_cursor.executor`.
-3. **`invoke_role` контроль** — прогон на architect / reviewer / executor (обычный и LIGHT-кейс) должен звать `agent -p` с моделями `roles_cursor.*`; модель `phases[phase].model` = та же, что в argv, уже на `invoke_prepare`. Journal: `backend=cursor-cli`.
-4. **Не откатывать частично** — код нового resolver+Codex остаётся (операционный откат это не трогает). Откат «старый resolver поверх новых roles» запрещён: только согласованный комплект pipeline+YAML из HF:backup.
-5. `restore-all-skills.sh`, штатная сверка канонa.
+**Курсор больше не используется.** Все роли dev-workflow и подскиллов работают **только через codex backend** (`default_backend: codex`), роли фиксированы: architect/reviewer `gpt-6-astra`, executor `gpt-6.1-sol`, compressor `gpt-6.1-terra`. Блок `roles_cursor` и миграция `migrate-dev-roles-cursor-to-codex` удалены/неприменимы. Откат на Cursor не производить.
 
 ## Что не делать при откате
 

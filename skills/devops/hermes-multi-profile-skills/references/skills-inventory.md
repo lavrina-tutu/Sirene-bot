@@ -20,7 +20,7 @@
 
 ## Текущий anthropic — 77 скиллов
 
-Содержит: about_usr_skills, aggregate-tz-opus-workflow, apple-macos, baoyu-article-illustrator, baoyu-comic, brief-mode, cloud-storage-webdav, creative-ideation, dialog-backlog, dspy, epic-development, exchange-meeting, fireflies-transcripts, godmode, hermes-bugfix-cursor, hermes-feature, hermes-gateway-setup, jira-okr, jira-sr, jira-tutu, kanban-orchestrator, linear, media-utilities, minecraft-modpack-server, native-mcp, obliteratus, ocr-and-documents, photo-deduplication, pixel-art, pokemon-player, read-mpp, research-tools, sirene-chat-friends, spotify, status-snapshot, travel-writing, upstream-dependency-monitor, webhook-subscriptions, writing-plans
+Содержит: about_usr_skills, aggregate-tz-opus-workflow, apple-macos, baoyu-article-illustrator, baoyu-comic, brief-mode, cloud-storage-webdav, creative-ideation, dialog-backlog, dspy, epic-development, exchange-meeting, fireflies-transcripts, godmode, hermes-feature, hermes-gateway-setup, jira-okr, jira-sr, jira-tutu, kanban-orchestrator, linear, media-utilities, minecraft-modpack-server, native-mcp, obliteratus, ocr-and-documents, photo-deduplication, pixel-art, pokemon-player, read-mpp, research-tools, sirene-chat-friends, spotify, status-snapshot, travel-writing, upstream-dependency-monitor, webhook-subscriptions, writing-plans
 
 ## Архив куратора anthropic (от 18.06.2026)
 

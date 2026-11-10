@@ -14,7 +14,7 @@
 
 **Полный рецепт сразу после брифа** (императив 28.09): второй «разворот хвоста» после гейта запрещён (legacy unfold). Оркестратор ведёт фазы через `pipeline next`. `GATE:take-into-work` в рецепте и auto-pass после `TZ:finalize`.
 
-- **Запрет `model` на create:** на `TZ:*`, `REV:tz`, `HF:*`, `BUG:*` и `IDEA:analyze` — **без** `--model` / `model=` (D1 = NULL, воркер default Hermes; анти-пример: `invoke-role` с model override (запрещено) на `TZ:patch` → HTTP 400 у Hermes-воркера, `protocol_violation`, прецедент `t_2c8ee3b2`). Роли grok/composer — только D2 внутри `agent -p --model …`.
+- **Запрет `model` на create:** на `TZ:*`, `REV:tz`, `HF:*`, `BUG:*` и `IDEA:analyze` — **без** `--model` / `model=` (D1 = NULL, воркер default Hermes; анти-пример: `invoke-role` с model override (запрещено) на `TZ:patch` → HTTP 400 у Hermes-воркера, `protocol_violation`, прецедент `t_2c8ee3b2`). Кодекс roles — только D2 внутри `invoke-role`.
 - **Ключ на КАЖДУЮ фазу при create:** `devpipe:<slug>:<phase>:<tz_version_or_none>` (lookup до create, дубль = no-op; rework — суффикс `:rework:<n>:<tz_version>`).
 
 - **Все задачи по умолчанию** после триггера «разработай/доработай/почини» ложатся в план (кейс DevWorkflow `DEV/<slug>`) и далее проводятся по канону, без дополнительной команды Саши.
@@ -36,7 +36,7 @@ DEV/<slug>                          корень (живёт до GATE:done)
 
 LIGHT-кейсы (BUGFIX-LIGHT / CHANGE-LIGHT ≤3 файла) — короткий хвост в том же батче (GLOSSARY §5.2): `TZ:patch → TZ:finalize → GATE:take-into-work → HF:impl → HF:test → HF:docs-handoff → GATE:done`. Весь граф создаётся одним ``pipeline init` после брифа после брифа; второго unfold нет.
 
-`workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на фазах: `tz-workflow`, `cursor-cli`, `cursor-task-context`. Idempotency каждой фазы: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
+`workspace_kind`: `dir:/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ` для TZ-шагов. Skills на фазах: `tz-workflow`. Idempotency каждой фазы: `devpipe:<slug>:<phase>:<tz_version_or_none>`.
 
 #### Origin и уведомления (DevWorkflow)
 
@@ -60,7 +60,7 @@ TZ:patch (секция + version bump + инвентарь в том же ход
   (не трогать общие модули: парсинг дат, запись задач, резолв людей).
 - `HF:plan`/`GATE:plan-approve`/`HF:backup`/`ORCH:shared-state` — **skip** для ≤3 файлов
   (бэккап = git/копия 3 файлов; манифест не меняется).
-- Такая карточка НЕ содержит «склейку фаз одним agent -p» — каждая из
+- Такая карточка НЕ содержит «склейку фаз одним invoke-role» — каждая из
   TZ:patch / HF:impl / HF:test / HF:docs-handoff — отдельная карточка/вызов.
 
 - **Выбор LIGHT — оркестратор + Саша на старте** (семейство `*-LIGHT`); сужение
@@ -74,11 +74,11 @@ TZ:patch (секция + version bump + инвентарь в том же ход
 
 Триггер «баг/ошибка/не работает/почини/разберись/cron run failed» — **первый tool-шаг**:
 `pipeline init` корня `DEV/<slug>` **И** `BUG:diagnose` в одном create-батче
-(инвариант 9, GLOSSARY §2/§5.2), **до** любого agent -p / cronjob / delegate.
+(инвариант 9, GLOSSARY §2/§5.2), **до** любого invoke-role / cronjob / delegate.
 Ретро-корень запрещён (прецедент pfs-promote-bugfix 22.09 → preflight красный).
 
 ```
-корень DEV/<slug> + BUG:diagnose      # ОДИН create-батч, до agent -p
+корень DEV/<slug> + BUG:diagnose      # ОДИН create-батч, до invoke-role
 GATE:diagnose-review    parents=[BUG:diagnose]   # auto по артефакту _fix_plan_*.md / непустому body; не HITL Саши
 → TZ-WRITE(patch) → GATE:take-into-work (auto-pass: ac-shown) → ...
 ```
@@ -92,12 +92,12 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # auto по артефакту 
 Режим `full` = кейс CHANGE (GLOSSARY §2). Все пункты — **отдельные карточки**; parents как в графе выше:
 
 - [ ] `TZ:stabilize` done (path, `version`, `mtime` в metadata)
-- [ ] `TZ:compress` done (экстракт 3–5 КБ, без кэша, модель `deepseek-v4-flash-0731` оркестратором)
-- [ ] `TZ:patch` done (архитектор `cursor-grok-4.6-high`, `--resume` своей сессии)
+- [ ] `TZ:compress` done (экстракт 3–5 КБ, без кэша, модель `gpt-6.1-terra` через codex CLI)
+- [ ] `TZ:patch` done (архитектор `gpt-6-astra`, `--resume` своей сессии)
 - [ ] `REV:tz` done **или** comment `flag-waived: Sasha` (default ON для CHANGE)
 - [ ] `TZ:finalize` done (запись `TZ/<Tool>/<Tool>_TZ.md` + инвентарь) — **только после** родителей ниже
 - [ ] на каждой фазе TZ-WRITE / `REV:tz` при create: `model_override` IS NULL (проверка `pipeline status --slug <slug>`)
-- [ ] ни один из шагов не выполнен «тем же» `agent -p`, что соседний
+- [ ] ни один из шагов не выполнен «тем же» `invoke-role`, что соседний
 
 Для `TZ-WRITE(new)` / `(patch)` — тот же запрет склейки; набор карточек по §5.2 (stabilize/compress в скобках §5.1).
 
@@ -106,32 +106,32 @@ GATE:diagnose-review    parents=[BUG:diagnose]   # auto по артефакту 
 На каждом Шаге 0–4:
 
 1. `pipeline status --slug <slug>` — статус мог смениться (blocked/archived → стоп).
-2. Сверка `version`/`mtime` мастер-ТЗ с диска (см. `cursor-task-context`).
-3. На фазах с `agent -p` (`TZ:patch`, `TZ:finalize`, `REV:tz`, …) — сначала `emit-prompt` по контракту «TZ-WRITE: emit-prompt перед agent -p» (exit 0, иначе СТОП).
-4. `фоновый invoke-role` на длинных `agent -p`.
-5. По успеху — `complete-phase` текущей фазы (metadata: `tz_path`, `tz_version`, `tz_mtime`, `extract_chars` для compress, `cursor_session_ids`).
+2. Сверка `version`/`mtime` мастер-ТЗ с диска.
+3. На фазах с запуском роли (`TZ:patch`, `TZ:finalize`, `REV:tz`, …) — сначала `emit-prompt` по контракту «TZ-WRITE: emit-prompt перед invoke-role» (exit 0, иначе СТОП).
+4. `фоновый invoke-role` на длинных запусках роли.
+5. По успеху — `complete-phase` текущей фазы (metadata: `tz_path`, `tz_version`, `tz_mtime`, `extract_chars` для compress).
 6. Следующая фаза станет `ready` автоматически (`auto_promote_children`).
 
-D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 внутри `agent -p`. Канон GLOSSARY §3.
+D1 ≠ D2: на create `model_override` NULL; codex CLI только D2 внутри `invoke-role`. Канон GLOSSARY §3.
 
-| Шаг | Фаза | Модель (`agent -p`, не `pipeline init --model`) |
-|---|---|---|
-| stabilize | TZ:stabilize | — (без agent -p; stat/YAML) |
-| 0 | TZ:compress | deepseek-v4-flash-0731 (оркестратор) |
-| TZ-WRITE | TZ:patch | cursor-grok-4.6-high (`--resume`) |
-| REV | REV:tz | claude-sonnet-5-medium |
-| finalize | TZ:finalize | cursor-grok-4.6-high — запись `TZ/<Tool>/<Tool>_TZ.md` + `MAIN_TZ_INVENTORY.md` |
+| Шаг | Фаза | Модель (codex CLI, не `pipeline init --model`) |
+||---|---|---|
+| stabilize | TZ:stabilize | — (без invoke-role; stat/YAML) |
+| 0 | TZ:compress | gpt-6.1-terra (compressor) |
+| TZ-WRITE | TZ:patch | gpt-6-astra (architect, `--resume`) |
+| REV | REV:tz | gpt-6-astra (reviewer) |
+| finalize | TZ:finalize | gpt-6-astra (architect) — запись `TZ/<Tool>/<Tool>_TZ.md` + `MAIN_TZ_INVENTORY.md` |
 
-### TZ-WRITE (`TZ:patch`, `TZ:finalize`): emit-prompt перед `agent -p`
+### TZ-WRITE (`TZ:patch`, `TZ:finalize`): emit-prompt перед `invoke-role`
 
-Перед **любым** `agent -p` на фазах `TZ:patch` и `TZ:finalize` (по инструменту):
+Перед **любым** запуском роли (`invoke-role`/codex CLI) на фазах `TZ:patch` и `TZ:finalize` (по инструменту):
 
 - `pipeline emit-prompt --slug <slug> --phase <PHASE> --out /tmp/task.md
-- exit 0 → **скопировать блок `context-used:` из `/tmp/task.md` в `journal.md`** (G2/AC-H06), затем `agent -p "$(cat /tmp/task.md)" -f --model <МОДЕЛЬ> --workspace <ABS_DIR> --output-format json`
-- exit ≠ 0 → **СТОП**, `agent -p` не вызывать
+- exit 0 → **скопировать блок `context-used:` из `/tmp/task.md` в `journal.md`** (G2/AC-H06), затем `invoke-role` с промптом из `/tmp/task.md` (модель роли из YAML `tools.dev_workflow`, кодекс CLI как backend).
+- exit ≠ 0 → **СТОП**, роль не запускать (`invoke-role` не вызывать)
 - перед `complete-phase` фазы TZ-WRITE / `REV:tz`: `pipeline_context_bundle.py pipeline check --slug <slug> --phase <PHASE> <slug>` — exit 0 обязателен, иначе complete запрещён (G2)
 
-Легальный `agent -p` — только от файла `--out` (`$(cat /tmp/task.md)`), не произвольная строка в `-p`.
+Легальный запуск роли — только от файла `--out` (`$(cat /tmp/task.md)`), не произвольная строка промпта.
 
 **Обхода context-bundle нет (решение Саши 26.09, без исключений):** ни `flag-waived`, ни `--force` / `--force-bypass-sasha-ok` как обход тройки digest+GLOSSARY+мастер-ТЗ; `emit-prompt`/`check` блокируют всегда. (`flag-waived: Sasha` для skip `REV:tz` — отдельный механизм, не context-bundle.)
 
@@ -140,9 +140,9 @@ D1 ≠ D2: на create `model_override` NULL; Cursor-slug только D2 вну
 1. `pipeline status --slug <slug>` текущей и родителей.
 2. Parents: `TZ:compress` done, `TZ:patch` done, и (`REV:tz` done **или** waive `flag-waived: Sasha`). Если REV-карточки нет и кейс DEV с opt REV — parent = `TZ:patch` (как DPK граф `parents=[REV:tz|TZ:patch]`).
 3. Любой parent не done → **стоп**, не писать ТЗ (карточка не complete).
-4. Metadata complete: `role=архитектор`, `model=cursor-grok-4.6-high`, `cursor_session_ids`, `tz_path`/`tz_version`/`tz_mtime` (PI B3).
+4. Metadata complete: `role=архитектор`, `model=gpt-6-astra` (codex CLI), `tz_path`/`tz_version`/`tz_mtime` (PI B3).
 
-**Усиление:** TZ `agent -p` без корня `DEV/<slug>` → **стоп** (не создавать корень «по памяти»).
+**Усиление:** TZ `invoke-role` без корня `DEV/<slug>` → **стоп** (не создавать корень «по памяти»).
 
 **Промпт архитектора TZ-WRITE** (то, что попадает в `/tmp/task.md`): «исполняй поставленную задачу; не строй граф и не создавай недостающие карточки; выбор LIGHT / смену `--case` / skip фаз не делай — это оркестратор; вопросы Саше — через оркестратора» (AC-H03/H09).
 

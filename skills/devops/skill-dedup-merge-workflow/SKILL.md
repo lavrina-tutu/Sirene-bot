@@ -7,8 +7,8 @@ license: MIT
 platforms: [linux]
 metadata:
   hermes:
-    tags: [skills, dedup, merge, hygiene, cursor]
-    related_skills: [all-skills-hygiene, cursor-cli, cursor-code, skill-authoring-principles]
+    tags: [skills, dedup, merge, hygiene]
+    related_skills: [all-skills-hygiene, hermes-agent-skill-authoring]
 ---
 
 # Skill Dedup Merge Workflow
@@ -23,12 +23,12 @@ metadata:
 
 **Правило этапа:** каждый шаг — по одной паре, с итогом Саше и подтверждением перед следующей. Не гнать все пары разом.
 
-## Роли Cursor CLI
+## Роли (через codex CLI)
 
 | Этап | Роль | Модель | Режим | Таймаут |
 |---|---|---|---|---|
-| «Можно ли слить?» | Архитектор | `claude-sonnet-5-thinking-medium` | `--mode plan` (без правок) | 600с |
-| Само слияние | Исполнитель | `composer-2.5` | agent (права на запись) | 300с |
+| «Можно ли слить?» | Архитектор | `gpt-6-astra` | `--mode plan` readonly (через invoke-role) | 600с |
+| Само слияние | Исполнитель | `gpt-6.1-sol` | права на запись (через invoke-role) | 300с |
 
 ## Алгоритм (на каждую пару)
 
@@ -40,13 +40,13 @@ metadata:
 ### 2. Архитектор (подтверждение)
 - `mkdir -p /tmp/skill-merge-<N> && cd /tmp/skill-merge-<N> && git init -q`
 - Промпт: абсолютные пути обоих SKILL.md, что в кронах, какие триггеры, ПРАВИЛО: если имя в кроне — не менять. Вопрос: «можно ли слить / что уникального перенести / какие триггеры добавить / есть ли причины НЕ сливать?»
-- `agent -p "$(cat prompt.txt)" -f --model claude-sonnet-5-thinking-medium --mode plan --output-format json`
+- `invoke-role` (codex CLI, role architect `gpt-6-astra`, `--mode plan` readonly)
 - **Если архитектор говорит «не сливать» — НЕ сливаем** (прецедент: пара authoring-скиллов, разные домены). Доложи Саше, переходи к следующей паре.
 
 ### 3. Исполнитель (слияние)
 - Сбэкапь поглощаемый файл (+ целевой): `cp -r <dir> /tmp/skill-merge-<N>/backup-...`
-- Промпт composer: какие файлы править (абсолютные пути), что перенести (по пунктам из плана архитектора), правило «сохрани все существующие строки», «не переноси устаревшие вещи», «не удаляй поглощаемый скилл (удалят отдельно)».
-- `agent -p "$(cat prompt-exec.txt)" -f --model composer-2.5 --output-format json`
+- Промпт исполнителю (codex CLI, role executor `gpt-6.1-sol`): какие файлы править (абсолютные пути), что перенести (по пунктам из плана архитектора), правило «сохрани все существующие строки», «не переноси устаревшие вещи», «не удаляй поглощаемый скилл (удалят отдельно)».
+- `invoke-role` (codex CLI, role executor `gpt-6.1-sol`, права на запись)
 
 ### 4. Верификация + синк + удаление + метрики
 - Прочитай итоговый SKILL.md: frontmatter валиден, все маркеры на месте (архитекторские пойнтные проверки).
@@ -62,8 +62,8 @@ metadata:
 - **`skill_manage(action='delete')` НЕ находит скиллы** в default (инструмент работает с другим профилем, `absorbed_into` не резолвится). Удаляй через `shutil` + чисти `.usage.json` вручную.
 - **Шелл `rm -rf` блокирует safety-фильтр** («on the unconditional blocklist»). Используй Python `shutil.rmtree` (или `bash <saved-blocked-script.sh>`, но лучше шутил).
 - **Крон на skill:** если скилл-приёмник в `skills=[...]` крона — НЕ переименовывай и не меняй description по-сути, только дополняй триггеры в конец.
-- **Глюк Cursor: пустой `result` при `outputTokens>0`** — ответ не долетел (типично для длинных plan-анализов). Возвращайся через `--resume <session_id>` с промптом «Продолжи. Выдай полный предыдущий ответ».
-- **Временный workdir должен быть git-repo** (`git init`), иначе Cursor не стартует в print-mode.
+- **Глюк codex CLI: пустой `result` при `outputTokens>0`** — ответ не долетел (типично для длинных plan-анализов). Возвращайся через `--resume <session_id>` с промптом «Продолжи. Выдай полный предыдущий ответ».
+- **Временный workdir должен быть git-repo** (`git init`), иначе codex CLI не стартует в print-mode.
 - **Описание-триггер:** объединение триггеров = дописать слова поглощаемого скилла в конец description оживающего (не удаляя существующие). Проверяй `description ≤ 1024 chars`.
 - **Ссылка сохраняется:** всё ранее установленное различие моделей/питфоллов между копиями — сверяй через `diff`, чтобы не откатить актуальную версию.
 

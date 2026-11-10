@@ -1,9 +1,9 @@
-# Вызов Tutu deepseek из внешнего Python-инструмента (без Cursor CLI)
+# Вызов Tutu deepseek из внешнего Python-инструмента (без агентной обёртки)
 
-Паттерн перевода рабочих инструментов (~/USERTOOLS/*, deep-mine, digest-контуры) с агентной обёртки Cursor CLI (`agent -p --model composer-2.5`) на **прямое обращение к Hermes-LLM** через публичный `call_llm()`. Проверено на deep-mine `cursor_jobs.py` (2026-09-09), 89/89 тестов зелёные.
+Паттерн перевода рабочих инструментов (~/USERTOOLS/*, deep-mine, digest-контуры) с агентной обёртки codex CLI (`invoke-role`) на **прямое обращение к Hermes-LLM** через публичный `call_llm()`. Проверено на deep-mine `cursor_jobs.py` (2026-09-09), 89/89 тестов зелёные.
 
 ## Когда применять
-Задача «компрессор/экстракт/сжатие» (компрессор = роль оркестратора, НЕ архитектор/исполнитель). Правило Саши: компрессор выполняется НА `deepseek/deepseek-v4-flash-0731` в Hermes, **без передачи в Cursor CLI**. Cursor остаётся только для ролей архитектора (`cursor-grok-4.6-high`), исполнителя (`composer-2.5`) и ревизора (`claude-sonnet-5-medium`). Cursor-обёртка на сжатие — это ~13 мин спавна ради экстракта 3–5 КБ (прецедент TaskRefresh).
+Задача «компрессор/экстракт/сжатие» (компрессор = роль оркестратора, НЕ архитектор/исполнитель). Штатные роли — через codex CLI / invoke-role: архитектор `gpt-6-astra`, исполнитель `gpt-6.1-sol`, компрессор `gpt-6.1-terra`. Ниже — **прямой вызов тул-эндпоинта** Tutu gateway через `call_llm()` без агентной обёртки ролей (суть про endpoint, не про штатные роли): агентная спавн-обёртка ради экстракта 3–5 КБ избыточна (~13 мин спавна, прецедент TaskRefresh).
 
 ## Рабочий механизм — `call_llm()`
 
@@ -48,11 +48,11 @@ def compress_with_llm(prompt, overlay, *, timeout=300.0):
 ## КРИТИЧНЫЙ ПИТФОЛЛ — НЕ использовать `extract_content_or_reasoning`
 У `deepseek-v4-flash-0731` reasoning может уехать в `reasoning_details`. Если взять его как «content», в digest попадёт scratchpad → валидатор `digest_validate.py` режет как журнал → `rejected`. **Бери только `message.content`**; если стабильно пусто — только тогда точечно `extract_content_or_reasoning` + сразу прогон валидатора.
 
-## Запасной путь (Cursor) — сохранить через env, не CLI-флаг
-Если deepseek не даёт full-coverage на жирном входе → откат на Cursor, но **обязательно `--mode ask`** (иначе снова tools → журнал в теле → rejected, прецедент Trisigma 45/66 rejected):
+## Запасной путь (codex CLI) — сохранить через env, не CLI-флаг
+Если deepseek не даёт full-coverage на жирном входе → откат на codex CLI / invoke-role, но **обязательно `--mode ask`** (иначе снова tools → журнал в теле → rejected, прецедент Trisigma 45/66 rejected):
 ```python
-if os.environ.get("DEEP_MINE_COMPRESSOR", "hermes") == "cursor":
-    result = run_agent(prompt, "composer-2.5", overlay, source_mode="l0_allowed", mode="ask")
+if os.environ.get("DEEP_MINE_COMPRESSOR", "hermes") == "codex":
+    result = run_agent(prompt, "gpt-6.1-sol", overlay, source_mode="l0_allowed", mode="ask")
     ...
 ```
 `run_agent` расширяется опциональным `mode=` (добавляет `--mode` в argv), для архитектора/исполнителя `mode` не передаётся.
@@ -63,6 +63,6 @@ if os.environ.get("DEEP_MINE_COMPRESSOR", "hermes") == "cursor":
 ## Правки по скиллу tz-workflow (канон)
 | Было | Стало |
 |---|---|
-| компрессор = composer-2.5 + `agent -p` | компрессор = deepseek-v4-flash-0731, оркестратор (Сирень), без Cursor |
+| компрессор = gpt-6.1-terra + invoke-role (codex CLI) | компрессор = gpt-6.1-terra через codex CLI (invoke-role) |
 | канон в GLOSSARY §3, tz-compressor-prompt, tz-workflow Шаг 0 | единый `core-compressor-prompt.md` (роль/модель/процесс), оба промпта — overlay (только вход/выход) |
-| auxiliary.compression model='' | явный `deepseek/deepseek-v4-flash-0731` (защита от будущего дефолта) |
+| auxiliary.compression model='' | явный `gpt-6.1-terra` (защита от будущего дефолта) |

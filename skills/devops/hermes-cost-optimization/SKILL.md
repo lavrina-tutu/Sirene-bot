@@ -413,13 +413,13 @@ cronjob(action='create',
 | Исследования/оркестрация | `qwen/qwen3.6-plus` | tutu | $0.325/M in, $1.95/M out |
 | Delegation | `deepseek/deepseek-v4-pro` | tutu | Как основной |
 
-### Cursor CLI
+### DevWorkflow роли (codex CLI / invoke-role)
 
 | Роль | Модель |
 |---|---|
-| Архитектор (ТЗ, планы) | `cursor-grok-4.6-high` |
-| Исполнитель (код, тесты) | `composer-2.5` |
-| Координатор | `composer-2.5` |
+| Архитектор (ТЗ, планы) | `gpt-6-astra` |
+| Исполнитель (код, тесты) | `gpt-6.1-sol` |
+| Координатор | `gpt-6-astra` |
 
 ### Кроны (free tier) — PITFALL
 

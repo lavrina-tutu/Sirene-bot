@@ -8,7 +8,7 @@ platforms: [linux]
 metadata:
   hermes:
     tags: [usertools, PFS, MOFS, llm-config, cron, env-leak, dedup]
-    related_skills: [protocolfromsummary, mofs-operations, hermes-feature, cursor-cli, pfs-mff-troubleshooting]
+    related_skills: [protocolfromsummary, mofs-operations, hermes-feature, pfs-mff-troubleshooting]
 ---
 
 # USERTOOLS × LLM integration — диагностика и решения
@@ -139,7 +139,7 @@ env -i $TOOL/.venv/bin/python3 -c "import sys,os; sys.path.insert(0,'$TOOL'); im
 тоже), а боевой крон тула идёт через СВОЙ venv (`$TOOL/.venv/bin/python`) — там yaml может
 отсутствовать. `import` падает только на СВОЁМ venv. Гонять на чужом venv = маскировать дефект.
 
-**Подтверждённый вердикт архитектора (12.10.2026, cursor-grok):** PyYAML ставится в **боевой venv каждого тула** (requirements + install). НЕ заводить общий venv на все тулы — PyYAML с C-ускорителем ABI-привязан к версии Python, одна копия не поедет и на 3.11, и на 3.14. **Ленивый `import yaml` (внутри функции) — НЕ делать**: он лишь отодвигает `ModuleNotFoundError` с импорта модуля до первого вызова и ухудшает диагностику; любой `load_tool_config`/`explain`/`resolve_key` всё равно требует yaml, т.е. top-level `import yaml` — правильный fail-loud. Разделять «зависимость от лоадера» и «исправление лоадера» нельзя: это runtime-зависимость общего лоадера, а не удобство импорта.
+**Подтверждённый вердикт архитектора (12.10.2026):** PyYAML ставится в **боевой venv каждого тула** (requirements + install). НЕ заводить общий venv на все тулы — PyYAML с C-ускорителем ABI-привязан к версии Python, одна копия не поедет и на 3.11, и на 3.14. **Ленивый `import yaml` (внутри функции) — НЕ делать**: он лишь отодвигает `ModuleNotFoundError` с импорта модуля до первого вызова и ухудшает диагностику; любой `load_tool_config`/`explain`/`resolve_key` всё равно требует yaml, т.е. top-level `import yaml` — правильный fail-loud. Разделять «зависимость от лоадера» и «исправление лоадера» нельзя: это runtime-зависимость общего лоадера, а не удобство импорта.
 
 **Правило (обязательный AC при переносе на единый конфиг):**
 1. Снять фактический боевой интерпретатор из БОЕВОГО входа (jobs.json / crontab / wrapper `*.sh` → `venv_linux/bin/python3`), НЕ python3 из сессии теста. Верифицировать конфиг-перенос на СВОЁМ venv тула (том, что реально гонит крон), не на соседнем — тест на чужом venv маскирует дефект (приёмочный прогон через venv PFS был зелёный, а боевой крон MFF падал).
@@ -167,11 +167,11 @@ shared `WORKVAULT_PATH`), обязан входить в `_MFKT_CONFIG_KEYS` (и
 «конфиг грузится» в dry-run может отличаться от живого (dry-run прошёл по shared, но только потому,
 что не дошёл до `load_settings`).
 
-## Питфолл 5: Cursor CLI требует git — в USERTOOLS нет корневого репо
+## Питфолл 5: CLI-агент требует git — в USERTOOLS нет корневого репо
 
-`agent -p` не запускается вне git-репозитория. Корень `~/USERTOOLS` — НЕ git-репо (внутри тулы лежат вложенные `.git`). Либо работать в `~/WorkVault` (git-adv), либо временно `git init` в корне USERTOOLS ради раскатки и после `rm -rf .git`. Не забыть: временный корневой `.git` вызовет drift `usertool_not_in_manifest` в `render_manifest.py --check-drift` — убрать его после.
+`invoke-role` (codex CLI) не запускается вне git-репозитория. Корень `~/USERTOOLS` — НЕ git-репо (внутри тулы лежат вложенные `.git`). Либо работать в `~/WorkVault` (git-adv), либо временно `git init` в корне USERTOOLS ради раскатки и после `rm -rf .git`. Не забыть: временный корневой `.git` вызовет drift `usertool_not_in_manifest` в `render_manifest.py --check-drift` — убрать его после.
 
-Всегда независимо верифицировать результат Cursor-исполнителя по реальному строю: `grep -rl usertools_env`, реальные smoke-прогоны на нужных venv, `git diff` конфигов (секреты не попали в коммит), сверка снятых ключей с центральным `.env`.
+Всегда независимо верифицировать результат codex-исполнителя по реальному строю: `grep -rl usertools_env`, реальные smoke-прогоны на нужных venv, `git diff` конфигов (секреты не попали в коммит), сверка снятых ключей с центральным `.env`.
 - Двухступенчато: fuzzy (порог 80%, `SequenceMatcher`) по задачам с тем же `assignee_userkey` →
   LLM batch для остатка. Промпт кодирует правило: «разные исполнители = разные задачи, даже при
   100% совпадении текста».
@@ -184,4 +184,4 @@ shared `WORKVAULT_PATH`), обязан входить в `_MFKT_CONFIG_KEYS` (и
 - `references/usertools-cron-venv-syspath.md` — **крон USERTOOLS игнорирует shebang, гоняет скрипты через hermes-agent/.venv**: тул со своим venv (например exchangelib в MoveFromLoop/venv_linux) надо явно `sys.path.insert` в крон-скрипт; + exchangelib 5.6.0 `message_class` нельзя в `.only()`. Проверено 2026-08-26.
 - `protocolfromsummary` / `mofs-operations` — подробности конкретных инструментов (user-owned).
 - `hermes-feature` — полный dev-цикл фич (ТЗ → план → код → тесты).
-- `cursor-cli` — вызов архитектора/исполнителя через Cursor CLI.
+- `codex` — вызов архитектора/исполнителя через codex CLI (роли: architect/reviewer `gpt-6-astra`, executor `gpt-6.1-sol`, compressor `gpt-6.1-terra`).

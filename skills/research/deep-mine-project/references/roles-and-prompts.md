@@ -4,18 +4,18 @@ One `agent -p` = one model = one role.
 
 | Role | Model | Step | Source |
 |---|---|---|---|
-| Coordinator | Сирень + composer-2.5 mechanics | A–E, refresh | L0 (collect/refresh) |
-| Compressor | composer-2.5 | F (`project-context-compressor-prompt.md`) | **L0** (`index.md`) |
-| Architect | cursor-grok-4.6-high | G | **pack + digest** (no L0) |
-| Executor | composer-2.5 | H | **plan + digest** (no L0) |
+| Coordinator | Сирень + механич. | A–E, refresh | L0 (collect/refresh) |
+| Compressor | gpt-6.1-terra (codex CLI) | F (`project-context-compressor-prompt.md`) | **L0** (`index.md`) |
+| Architect | gpt-6-astra (codex CLI) | G | **pack + digest** (no L0) |
+| Executor | gpt-6.1-sol (codex CLI) | H | **plan + digest** (no L0) |
 
 ## Compress leaf
 
 ```bash
 cd ~/WorkVault/Projects/<Slug>
-agent -p "$(cat ~/WorkVault/Registries/project-context-compressor-prompt.md)
----
-Сожми L0: <local_path>" -f --model composer-2.5 --output-format json
+invoke-role --role compressor --model gpt-6.1-terra --backend codex \
+  --prompt-file ~/WorkVault/Registries/project-context-compressor-prompt.md \
+  --context "Сожми L0: <local_path>"
 ```
 
 ## Analyze (G)

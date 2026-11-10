@@ -35,8 +35,8 @@ metadata:
 | Роль | Модель | Делает |
 |------|--------|--------|
 | Координатор | Сирень | чеклист инвариантов, pack, брифы пачек |
-| Архитектор | cursor-grok-4.6-high | тексты полей (markdown), 3 пачки |
-| Исполнитель | composer-2.5 | section-patch, verify, `fot_budget.py` |
+| Архитектор | gpt-6-astra (codex CLI) | тексты полей (markdown), 3 пачки |
+| Исполнитель | gpt-6.1-sol (codex CLI) | section-patch, verify, `fot_budget.py` |
 | Grok | — | **не** PUT, **не** ceil/бюджет/даты |
 
 ## Три пачки grok (не 17)

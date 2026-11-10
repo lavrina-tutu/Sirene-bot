@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [hermes, mcp, integration, oauth, config]
-    related_skills: [hermes-feature, hermes-gateway-setup, cursor-cli]
+    related_skills: [hermes-feature, hermes-gateway-setup]
 ---
 
 # hermes-mcp-setup — подключение внешних MCP-серверов к Hermes

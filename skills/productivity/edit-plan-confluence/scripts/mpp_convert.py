@@ -162,10 +162,11 @@ def build_resources(
     return plugin_res, name_to_id
 
 
-def build_dependencies(rows: list[dict[str, str]], flat: dict[int, dict[str, Any]], start_id: int) -> tuple[list[dict[str, Any]], list[str]]:
+def build_dependencies(rows, flat, start_id, drop_links=None):
     deps: list[dict[str, Any]] = []
     warnings: list[str] = []
     dep_id = start_id
+    dropped = set(drop_links or ())
     for r in rows:
         preds_raw = r.get("predecessors") or ""
         if not preds_raw or preds_raw == "[]":
@@ -177,6 +178,8 @@ def build_dependencies(rows: list[dict[str, str]], flat: dict[int, dict[str, Any
         tid = int(r["id"])
         for p in pids:
             p = int(p)
+            if (p, tid) in dropped:
+                continue
             if p in flat and tid in flat and tid != p:
                 deps.append(
                     {
@@ -191,6 +194,37 @@ def build_dependencies(rows: list[dict[str, str]], flat: dict[int, dict[str, Any
                 )
                 dep_id += 1
     return deps, warnings
+
+
+def critical_path_days(gantt: dict[str, Any]) -> float:
+    """Срок проекта, как его пересчитает плагин: сумма длительностей
+    по самой длинной цепочке зависимостей (FS, type==2). Плагин игнорирует
+    готовые start/end в JSON и считает критический путь сам."""
+    def walk(nodes):
+        for n in nodes:
+            yield n
+            if n.get("children"):
+                yield from walk(n["children"])
+
+    nodes = {n["id"]: n for n in walk(gantt.get("eventsData", []))}
+    if not nodes:
+        return 0.0
+    pred: dict[int, list[int]] = {nid: [] for nid in nodes}
+    for d in gantt.get("dependenciesData", []):
+        if d.get("active", True) is False:
+            continue
+        pred[d["to"]].append(d["from"])
+    dur = {nid: (n.get("duration") or 0.0) for nid, n in nodes.items()}
+    fin: dict[int, float] = {}
+
+    def longest(nid: int) -> float:
+        if nid in fin:
+            return fin[nid]
+        best = max((longest(p) for p in pred[nid]), default=0.0)
+        fin[nid] = best + dur[nid]
+        return fin[nid]
+
+    return max(longest(nid) for nid in nodes)
 
 
 def build_assignments(
@@ -265,6 +299,7 @@ def convert_mpp_csv(
     *,
     template_json: dict[str, Any] | None = None,
     calendars_data: list[dict[str, Any]] | None = None,
+    drop_links: list[tuple[int, int]] | None = None,
 ) -> dict[str, Any]:
     tmpl = template_json or json.loads(EMPTY_TEMPLATE.read_text(encoding="utf-8"))
     leaf = _leaf_template(tmpl)
@@ -283,7 +318,7 @@ def convert_mpp_csv(
         + ([int(x) for x in flat] if flat else [0]),
         default=0,
     )
-    deps, _warn = build_dependencies(rows, flat, max_used + 1)
+    deps, _warn = build_dependencies(rows, flat, max_used + 1, drop_links=drop_links)
     max_used = max(max_used, max((d["id"] for d in deps), default=0))
     asn_out, _ = build_assignments(asns, flat, name_to_id, max_used + 1)
 

@@ -31,11 +31,14 @@ def find_macro(storage: str) -> MacroInfo | None:
     if not m:
         return None
     macro_id = m.group(1)
+    param_id = m.group(2)
     return MacroInfo(
         macro_id=macro_id,
-        param_id=m.group(2),
+        param_id=param_id,
         param_hash=m.group(3),
-        attachment_name=f"gantt-chart-{macro_id}.json",
+        # 📌 Имя вложения плагин gantt-chart-planner строит от ac:parameter "id",
+        # НЕ от ac:macro-id (проверено на живой AB 519492935: вложение gantt-chart-<param_id>.json).
+        attachment_name=f"gantt-chart-{param_id}.json",
     )
 
 

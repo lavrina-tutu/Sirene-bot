@@ -95,7 +95,7 @@ def patch_itogo(storage: str, d1: str, d2: str, n_days: int, m_hours: int) -> st
     n_fmt = format_thousands(n_days)
     if ITOGO_LINE1_RE.search(storage):
         storage = ITOGO_LINE1_RE.sub(
-            lambda m: f"{m.group(1)}{d1}{m.group(3)}{d2}{m.group(5)}{n_fmt}{m.group(7)}",
+            lambda m: f"{m.group(1)}{d1}{m.group(3)}{d2}{m.group(5)}{n_fmt} рабочих дней",
             storage,
             count=1,
         )

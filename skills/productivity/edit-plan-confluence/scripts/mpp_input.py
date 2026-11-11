@@ -7,7 +7,39 @@ from dataclasses import dataclass
 from pathlib import Path
 
 VENV_PYTHON = Path.home() / "hermes-agent" / ".venv" / "bin" / "python3"
+SYSTEM_PYTHON = Path("/usr/bin/python3")
 READ_MPP = Path.home() / "USERTOOLS" / "MppReader" / "read_mpp.py"
+
+
+def _pick_python() -> str:
+    """venv может не иметь mpxj (питфолл read-mpp) — выбрать интерпретатор с mpxj."""
+    import shutil
+    import subprocess
+    import sys
+
+    cands: list[Path] = []
+    if VENV_PYTHON.is_file():
+        cands.append(VENV_PYTHON)
+    if SYSTEM_PYTHON.is_file():
+        cands.append(SYSTEM_PYTHON)
+    sp = shutil.which("python3")
+    if sp:
+        cands.append(Path(sp))
+    if not cands:
+        cands.append(Path(sys.executable))
+    for py in cands:
+        try:
+            r = subprocess.run(
+                [str(py), "-c", "import mpxj, jpype"],
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
+            if r.returncode == 0:
+                return str(py)
+        except Exception:
+            continue
+    return str(cands[0])
 
 
 @dataclass
@@ -47,7 +79,7 @@ def export_csv(mpp_path: Path, out_dir: Path | None = None) -> MppCsvPaths:
     mpp_path = mpp_path.resolve()
     out = out_dir or mpp_path.parent
     out.mkdir(parents=True, exist_ok=True)
-    python = str(VENV_PYTHON if VENV_PYTHON.is_file() else "python3")
+    python = _pick_python()
     cmd = [
         python,
         str(READ_MPP),

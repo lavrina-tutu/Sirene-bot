@@ -55,6 +55,7 @@ def _guard_page(page_id: str, allow_live_ab: bool) -> None:
 def build_plan_from_mpp(
     mpp_path: Path,
     existing_gantt: dict[str, Any] | None = None,
+    drop_links: list[tuple[int, int]] | None = None,
 ) -> dict[str, Any]:
     csvs = export_csv(mpp_path)
     template = existing_gantt or _load_empty_template()
@@ -65,7 +66,26 @@ def build_plan_from_mpp(
         csvs.assignments_csv,
         template_json=template,
         calendars_data=calendars,
+        drop_links=drop_links,
     )
+
+
+def gantt_critical_warning(gantt: dict[str, Any]) -> str | None:
+    """Если плагин пересчитает срок проекта (критический путь по связям)
+    быстрее/дольше, чем указано в корне (duration из MPP) — вернуть текст
+    предупреждения. Плагин игнорирует start/end и живёт по цепочке связей."""
+    from mpp_convert import critical_path_days
+
+    root = gantt["eventsData"][0]
+    mpp_dur = float(root.get("duration") or 0.0)
+    plugin_dur = critical_path_days(gantt)
+    if abs(mpp_dur - plugin_dur) >= 0.05:
+        return (
+            f"плагин покажет срок {plugin_dur:g} дней, а не {mpp_dur:g} из MPP "
+            f"(критический путь по связям не совпадает с корнем). Если нужно "
+            f"совпадение — исключи лишние зависимости через --drop-dep FROM:TO"
+        )
+    return None
 
 
 def build_plan_copy_parent(parent_gantt: dict[str, Any]) -> dict[str, Any]:
@@ -102,6 +122,7 @@ def prepare_apply_diff(
     mpp_path: Path | None,
     *,
     allow_live_ab: bool = False,
+    drop_links: list[tuple[int, int]] | None = None,
 ) -> tuple[dict, dict[str, Any], str, list[str]]:
     _guard_page(page_id, allow_live_ab)
     page = client.get_page(page_id)
@@ -115,9 +136,12 @@ def prepare_apply_diff(
         had_plan = bool(existing_gantt)
 
     if mpp_path:
-        gantt = build_plan_from_mpp(mpp_path, existing_gantt if existing_gantt else None)
+        gantt = build_plan_from_mpp(mpp_path, existing_gantt if existing_gantt else None, drop_links=drop_links)
         csvs = export_csv(mpp_path)
         d1, d2, n, m = compute_itogo_from_csv(csvs.tasks_csv, csvs.assignments_csv)
+        w = gantt_critical_warning(gantt)
+        if w:
+            warnings.append(w)
     else:
         raise ValueError("MPP file required for apply")
 
@@ -142,10 +166,13 @@ def apply_plan(
     confirm: str,
     *,
     allow_live_ab: bool = False,
+    drop_links: list[tuple[int, int]] | None = None,
 ) -> ApplyResult:
     if not is_confirmed(confirm):
         raise PermissionError("Запись без подтверждения «лей»/«пиши»/«да» запрещена")
-    page, gantt, _diff, _ = prepare_apply_diff(client, page_id, mpp_path, allow_live_ab=allow_live_ab)
+    page, gantt, _diff, _ = prepare_apply_diff(
+        client, page_id, mpp_path, allow_live_ab=allow_live_ab, drop_links=drop_links
+    )
     storage = page["body"]["storage"]["value"]
     macro = find_macro(storage)
     span = macro_span(storage)
@@ -185,6 +212,7 @@ def prepare_child_diff(
     mpp_path: Path | None,
     *,
     allow_live_ab: bool = False,
+    drop_links: list[tuple[int, int]] | None = None,
 ) -> tuple[str, dict[str, Any], str, bool]:
     _guard_page(parent_id, allow_live_ab)
     parent = client.get_page(parent_id)
@@ -197,7 +225,7 @@ def prepare_child_diff(
         parent_gantt, _ = load_gantt_json(client, parent_id, parent_macro)
 
     if mpp_path:
-        gantt = build_plan_from_mpp(mpp_path, parent_gantt)
+        gantt = build_plan_from_mpp(mpp_path, parent_gantt, drop_links=drop_links)
         csvs = export_csv(mpp_path)
         d1, d2, n, m = compute_itogo_from_csv(csvs.tasks_csv, csvs.assignments_csv)
     elif parent_gantt:
@@ -227,11 +255,13 @@ def create_child_with_plan(
     mpp_path: Path | None = None,
     *,
     allow_live_ab: bool = False,
+    drop_links: list[tuple[int, int]] | None = None,
 ) -> ApplyResult:
     if not is_confirmed(confirm):
         raise PermissionError("Запись без подтверждения «лей»/«пиши»/«да» запрещена")
     child_title, gantt, _diff, _ = prepare_child_diff(
-        client, parent_id, title, mpp_path, allow_live_ab=allow_live_ab
+        client, parent_id, title, mpp_path,
+        allow_live_ab=allow_live_ab, drop_links=drop_links,
     )
     if mpp_path:
         csvs = export_csv(mpp_path)
@@ -239,8 +269,9 @@ def create_child_with_plan(
     else:
         d1, d2, n, m = compute_itogo_from_gantt(gantt)
     itogo_html = build_itogo_html(d1, d2, n, m)
-    page, macro_id, _pid, _phash = create_child_page(client, parent_id, child_title, itogo_html)
+    page, macro_id, param_id, _phash = create_child_page(client, parent_id, child_title, itogo_html)
     page_id = str(page["id"])
-    filename = f"gantt-chart-{macro_id}.json"
+    # 📌 вложение — по param_id (ac:parameter id), не macro-id
+    filename = f"gantt-chart-{param_id}.json"
     new_ver = upload_gantt_json(client, page_id, filename, gantt, None)
     return ApplyResult(page_id, child_title, page_url(page_id), new_ver, itogo_html)

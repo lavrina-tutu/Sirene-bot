@@ -34,11 +34,27 @@ def cmd_preview(args: argparse.Namespace) -> int:
     return 0
 
 
+def _parse_drop_links(values: list[str] | None) -> list[tuple[int, int]] | None:
+    """'28:19' / '28-19' → [(28,19)]. Возвращает None если не задано."""
+    if not values:
+        return None
+    out = []
+    for v in values:
+        v = v.strip().replace("-", ":")
+        parts = v.split(":")
+        if len(parts) != 2:
+            raise argparse.ArgumentTypeError(f"неверный формат --drop-dep '{v}', нужно FROM:TO")
+        out.append((int(parts[0].strip()), int(parts[1].strip())))
+    return out
+
+
 def cmd_diff(args: argparse.Namespace) -> int:
     mpp = resolve_mpp_path(args.mpp) if args.mpp else None
+    drop = _parse_drop_links(args.drop_dep)
     if args.child:
         title, _gantt, diff, _ = prepare_child_diff(
-            _client(), args.page_id, args.title, mpp, allow_live_ab=args.allow_live_ab
+            _client(), args.page_id, args.title, mpp,
+            allow_live_ab=args.allow_live_ab, drop_links=drop,
         )
         print(diff)
         return 0
@@ -46,7 +62,8 @@ def cmd_diff(args: argparse.Namespace) -> int:
         print("error: --mpp required for diff apply", file=sys.stderr)
         return 2
     _page, _gantt, diff, _ = prepare_apply_diff(
-        _client(), args.page_id, mpp, allow_live_ab=args.allow_live_ab
+        _client(), args.page_id, mpp,
+        allow_live_ab=args.allow_live_ab, drop_links=drop,
     )
     print(diff)
     return 0
@@ -57,6 +74,7 @@ def cmd_apply(args: argparse.Namespace) -> int:
         print("error: --confirm must be лей|пиши|да", file=sys.stderr)
         return 2
     mpp = resolve_mpp_path(args.mpp) if args.mpp else None
+    drop = _parse_drop_links(args.drop_dep)
     if args.child:
         result = create_child_with_plan(
             _client(),
@@ -65,6 +83,7 @@ def cmd_apply(args: argparse.Namespace) -> int:
             title=args.title,
             mpp_path=mpp,
             allow_live_ab=args.allow_live_ab,
+            drop_links=drop,
         )
     else:
         if not mpp:
@@ -76,6 +95,7 @@ def cmd_apply(args: argparse.Namespace) -> int:
             mpp,
             args.confirm,
             allow_live_ab=args.allow_live_ab,
+            drop_links=drop,
         )
     print(json.dumps({
         "page_id": result.page_id,
@@ -124,6 +144,8 @@ def build_parser() -> argparse.ArgumentParser:
     sd.add_argument("--mpp")
     sd.add_argument("--child", action="store_true")
     sd.add_argument("--title")
+    sd.add_argument("--drop-dep", action="append", metavar="FROM:TO",
+                    help="исключить зависимость FROM→TO (можно повторять)")
     sd.set_defaults(func=cmd_diff)
 
     sa = sub.add_parser("apply", help="Apply plan after confirm")
@@ -132,6 +154,8 @@ def build_parser() -> argparse.ArgumentParser:
     sa.add_argument("--confirm", required=True)
     sa.add_argument("--child", action="store_true")
     sa.add_argument("--title")
+    sa.add_argument("--drop-dep", action="append", metavar="FROM:TO",
+                    help="исключить зависимость FROM→TO (можно повторять)")
     sa.set_defaults(func=cmd_apply)
 
     sc = sub.add_parser("convert", help="Offline MPP→JSON convert")

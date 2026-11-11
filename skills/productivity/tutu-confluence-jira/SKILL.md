@@ -1,7 +1,7 @@
 ---
 name: tutu-confluence-jira
 description: "Confluence/JIRA ТУТУ: страницы, задачи, dom.tutu.ru"
-version: 1.8.2
+version: 1.9.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -460,6 +460,15 @@ curl -s -H "Authorization: Bearer $CONFLUENCE_TOKEN" "https://dom.tutu.ru/rest/a
 
 **Совместимость с дашбордами задач (OpenTasks 492610494, «Активные задачи по проектам АиД» 412092707):** они построены на макросе `tasks-report-macro`, фильтрующем по `spaces` + `labels` (обычно `_aid`), **не по pageId**. Поэтому после переноса страниц в DPAN задачи продолжают отображаться автоматически — при условии, что на странице стоит метка, которую макрос требует. Проверять label: `GET /rest/api/content/{id}/label` → `results[].name`; отсутствие `_aid` на странице = её задачи не попадают в дашборд (это было так и до переноса).
 
+## Правка дашборда задач OpenTasks (вкладки tabs-group / tasks-report-macro)
+
+Дашборд OpenTasks (pageId 492610494) — макрос `tabs-group` → вкладки `tab-pane` → `tasks-report-macro` (`spaces` / `labels=_aid` / `assignees` = `<ri:user ri:userkey="..."/>`; **отсутствие `assignees` = все пользователи**; `status=complete` = DONE). Полный алгоритм правки вкладок (переименование, удаление, смена исполнителя, «все пользователи», перемещение в конец, verify) — `references/opentasks-tabs-editing.md`.
+
+**Ключевые питфоллы:**
+- Конец вложенного макроса (tab-pane с tasks-report внутри) искать **счётчиком глубины** `<ac:structured-macro>`/`</ac:structured-macro>`, не по первому `</ac:structured-macro>`.
+- При перемещении вкладки в конец вставлять её ПЕРЕД хвостом (закрытием tabs-group): `b[:last_inside_end] + pane_text + b[last_inside_end:ps] + b[pe:]`. Вставка после хвоста даёт PUT ok, но панель рендерится отдельным блоком ПОД вкладками.
+- `body.view` рендерит только активную (первую) вкладку; неактивные грузятся JS. Проверять структуру повторным GET, живой вид — глазами Саши (браузер ВМ упирается в SSO keycloak).
+
 ### Персональные права (restrictions) в Server/DC
 
 Два слоя: **space permissions** (на всё пространство) и **content restrictions** на странице (сужают, операции `read`/`update`).
@@ -627,6 +636,7 @@ python3 ~/hermes-workspace/skills/productivity/tutu-confluence-jira/scripts/vest
 - `references/section-patch.md` — патч одной секции storage (GET → inner replace → PUT)
 - `references/verify-skeleton.md` — 7-пунктовый чеклист после PUT
 - `references/confluence-storage-format-hidden-markers.md` — экспериментально проверенные варианты невидимых маркеров/ID в ячейках таблицы Confluence storage-формата: что переживает API PUT round-trip, что вырезается сервером, что осталось непроверенным (реальное ручное редактирование через веб-UI)
+- `references/opentasks-tabs-editing.md` — правка дашборда OpenTasks: структура tabs-group/tab-pane/tasks-report-macro, парсинг вложенных макросов, операции над вкладками, питфоллы, verify
 - `references/zoom-api-setup.md`
 
 **Ключевые pageId:**

@@ -29,6 +29,7 @@ related_skills: [about_usr_skills, hermes-feature]
 urgent_contacts:
   - alekseeva.ym  # Алексеева Юлия
   - aralov        # Аралов Александр
+  - arifulin      # Арифулин Альберт (добавлен 11.11.2026)
   - agababyan     # Агабабян Арут
   - gladkikh      # Гладких Юрий
   - khrupov       # Хрупов Дмитрий
@@ -56,6 +57,7 @@ urgent_contacts:
 urgent_channels:
 - chat-rukovoditeley-departamenta-aid   # Чат руководителей АИД, id=7r6dmtdgtbrefxe9itai8aozzw, 60 подтопиков (добавлен 22.10.2026)
 - ai-analitik-multiagentnaya-sistema-aid  # id=jqhs9np3i3nj7qxh3e4hm6ox1r OPEN, 15 подтопиков
+- f20c9a1deb1e202705b254c2fb9486f3        # Закупка данных для аналитики (проект), приватный, резолв через channels_by_name (добавлен 11.11.2026)
 ```
 
 Сообщение от контакта из `urgent_contacts` в канале из `urgent_channels` — одно 🔴 (merge по `post.id`, первое ведро побеждает). `blacklist_*`/`is_urgent` на channel-ведре не применяются (bucket isolation).

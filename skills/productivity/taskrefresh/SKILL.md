@@ -1,6 +1,6 @@
 ---
 name: taskrefresh
-description: "Use when: (1) Саша говорит «поработаем с задачами» / «мои за"
+description: "Use when: работа с задачами Confluence — просмотр/правка/постановка задач, в т.ч. «создай задачку в минутках проекта X на Исполнителя / срок N»"
 version: 2.7.1
 author: agent
 license: MIT
@@ -570,10 +570,11 @@ Userkey резолвить через `contacts_resolver.resolve_assignee('ФИ�
 
 Когда задачи пришли из внешнего источника (сообщение Loop, договорённость на созвоне) и должны лечь в минутки конкретного проекта («<Slug>. Задачи и договоренности (Минутки)») с датой-строкой = день записи:
 
-1. Найти страницу минуток через `~/WorkVault/Registries/entities.json` → поле `pfs.page_id` (slug проекта); для ZD это 535962742.
+1. Найти страницу минуток через `~/WorkVault/Registries/entities.json` → поле `pfs.page_id` (slug проекта) или из «Ключевые pageId» в `tutu-confluence-jira`; для ZD это 535962742.
 2. GET страницы (`?expand=body.storage,version`), вставить новую строку `<tr>` сразу после заголовочного `</tr>` (новые даты ВЫШЕ старых).
 3. Формат строки: первая ячейка `<td><div class="content-wrapper"><p><time datetime="YYYY-MM-DD" /></p></div></td>` (дата постановки = сегодня, не дедлайн); вторая — `<td><div class="content-wrapper">` + `<ac:task-list>` с задачами.
-4. Формат задачи: `<ac:task><ac:task-id>N</ac:task-id><ac:task-status>incomplete</ac:task-status><ac:task-body><ac:link><ri:user ri:userkey="<uk>" /></ac:link> <Проект>. текст задачи <time datetime="YYYY-MM-DD" /></ac:task-body></ac:task>` — исполнитель через `<ri:user>`, project_tag из `project_registry.json`, дедлайн внутри task-body.
+4. Формат задачи: `<ac:task><ac:task-id>N</ac:task-id><ac:task-status>incomplete</ac:task-status><ac:task-body><ac:link><ri:user ri:userkey="<uk>" /></ac:link> <Проект>. текст задачи <time datetime="YYYY-MM-DD" /></ac:task-body></ac:task>` — исполнитель через `<ri:user>`, project_tag из `project_registry.json`, дедлайн внутри task-body. **`task-id` = max из существующих `<ac:task-id>` на странице + 1** (не начинать с 1, не дублировать).
+4а. **Дедлайн по умолчанию (не задан явно) = сегодня + 7 календарных дней** (синки еженедельные, fallback как в ПФС). Постановка: левая ячейка `<time datetime>` = сегодня, внутри task-body `<time datetime>` = дедлайн — это разные даты.
 5. Userkey исполнителя: если человек уже упоминается в задачах этой же страницы — взять его userkey из существующей задачи (надёжно); иначе резолвить через `contacts_resolver.resolve_assignee('ФИО')` или CQL (см. `tutu-confluence-jira`). Обратный резолв `GET /rest/api/user?key=<userkey>` для отображения имени работает — `?key=`, не `?userKey=`.
 6. PUT с `version+1` (title, type, body, БЕЗ space). Верифицировать GET: ровно N `<td>`, порядок дат, счётчики текста.
 

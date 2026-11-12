@@ -50,6 +50,12 @@ per-project protocol tables on Confluence (dom.tutu.ru). Code lives at
    row in place, it does not duplicate it.
 4. After any live write, **GET the page back and grep the relevant fragment** to confirm the real
    HTML — don't trust `result.action == "published"` alone as proof of correctness.
+   **Верификация — прямой REST, не модуль `confluence`:** в пакете `protocolfromsummary/` нет
+   клиентского модуля — `import confluence` падает. GET через urllib/requests с
+   `CONFLUENCE_BASE_URL` + `CONFLUENCE_TOKEN` из `protocolfromsummary.config`,
+   `?expand=body.storage,version`, искать row_anchor в `body.storage.value` и считать `ri:user`.
+   При `PFS_POST_SWITCH=off` проверять ОБЕ страницы: минутки (route.page_id) и площадку
+   (`PLAYGROUND_PAGE_ID`) — у обеих один row_anchor.
 5. Run the offline suite before and after any code change:
    `cd ~/USERTOOLS/ProtocolFromSummary && source .venv/bin/activate && python3 -m pytest -q -m "not live_confluence"`.
    `-m live_confluence` tests hit real Confluence pages — don't run those casually.
@@ -204,6 +210,18 @@ per-project protocol tables on Confluence (dom.tutu.ru). Code lives at
     `_DEADLINE_SEP_RE = re.compile(r" /\s*")` (модульная константа) — ищет последнее вхождение
     `" /"` с любым количеством пробелов после. `rfind(" / ")` заменён на `finditer + last match`.
     **Фикс для уже опубликованных строк:** переопубликовать встречу через `run --confirm-republish`.
+
+11. **Однословное имя (прозвище) ложно резолвится как переговорка** — `is_room` это
+    substring-матч в обе стороны: «Оля» ⊂ «Изолятор» → задача получает текст
+    `(переговорка Оля)` и исполнителя DEFAULT_ASSIGNEE_LOGIN вместо человека. Для имён без
+    ФИО из транскрипта это ОЖИДАЕМОЕ поведение, не баг: не «чинить» резолв, а либо указывать
+    в summary ФИО (тогда матч корректный), либо принимать строку как есть. То же правило
+    для участников: однословные в «Участники:» остаются текстом без `<ri:user>`.
+
+12. **Относительные дедлайны («через N дней») не парсятся** — `parse_deadline` понимает
+    только абсолютные даты; «через 3 дня.» даёт WARNING и fallback +7 дней от даты встречи
+    (а «через 7 дней» тоже +7 — сроки неразличимы). Если в протоколе нужны точные сроки —
+    писать в задаче абсолютную дату после « / », а не «через N дней».
 
 ## Dedup module (`dedup.py`)
 

@@ -38,6 +38,7 @@ urgent_contacts:
   - nabieva       # Набиева Даяна
   - peretyatkova  # Перетяткова Екатерина
   - rasov         # Расов Арсений
+  - rudovskaya    # Рудовская Оксана (добавлена 13.11.2026)
   - tsyba         # Цыба Леонид
   - zaynullin     # Зайнуллин Ильдар
   - zhirov        # Жиров Александр
@@ -45,6 +46,7 @@ urgent_contacts:
 ```
 
 **История изменения:**
+- 13.11.2026: добавлена rudovskaya (Рудовская Оксана, Руководитель партнерских проектов), username подтверждён через Loop API
 - 21.08.2026: добавлены руководители АиД: alekseeva.ym, kotelnikova, nabieva, peretyatkova, rasov, zhirov
 - 21.08.2026: Солдатенков (soldatenkov) не добавлен по явной просьбе Саши; Середа (sereda) исключён — уволился
 - 03.09.2026: добавлен zaynullin (Зайнуллин Ильдар), username подтверждён через Loop API (infrastructural engineer)

@@ -1,14 +1,25 @@
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+import pytest
+
 from itogo import (
     apply_itogo,
     build_itogo_html,
     compute_itogo_from_csv,
     format_thousands,
+    parse_itogo_text,
     patch_itogo,
+    record_itogo_observation,
     strip_trudozatraty,
 )
 from macro import build_macro_html, macro_span
+
+MOFS_ROOT = Path.home() / "USERTOOLS" / "MofsIndex"
+if str(MOFS_ROOT) not in sys.path:
+    sys.path.insert(0, str(MOFS_ROOT))
 
 
 def test_itogo_from_csv_080926(tasks_csv, assignments_csv):
@@ -112,3 +123,66 @@ def test_strip_trudozatraty_variants():
     plain = "<p>Трудозатраты: 10 человек-часов</p>"
     assert "Трудозатраты" not in strip_trudozatraty(plain)
     assert strip_trudozatraty(strip_trudozatraty(canon)) == ""
+
+
+def test_parse_itogo_text_found():
+    storage = "<p><strong>Итого: с 01.01.26 по 02.02.26 - 10 рабочих дней</strong></p>"
+    d1, d2, n = parse_itogo_text(storage)
+    assert (d1, d2, n) == ("01.01.26", "02.02.26", 10)
+
+
+def test_parse_itogo_text_missing_is_none_not_fabricated():
+    d1, d2, n = parse_itogo_text("<p>нет итого тут</p>")
+    assert (d1, d2, n) == (None, None, None)
+
+
+@pytest.fixture
+def plan_conn(tmp_path):
+    from mofs_index.db import connect, initialize
+    from mofs_index.plan.migrate import ensure_plan_schema
+    from mofs_index.plan import writer as plan_writer
+
+    c = connect(tmp_path / "index.sqlite", durable=True)
+    initialize(c)
+    ensure_plan_schema(c)
+    plan_id = plan_writer.ensure_plan(c, "zd")
+    yield c, plan_id
+    c.close()
+
+
+def test_record_itogo_observation_known(plan_conn):
+    conn, plan_id = plan_conn
+    storage = "<p><strong>Итого: с 01.01.26 по 02.02.26 - 10 рабочих дней</strong></p>"
+    obs_id = record_itogo_observation(
+        plan_id, "537561928", page_version=1, raw_storage=storage, conn=conn,
+    )
+    row = conn.execute(
+        "SELECT itogo_d1, itogo_d2, itogo_n, quality FROM plan_page_observation WHERE observation_id=?",
+        (obs_id,),
+    ).fetchone()
+    assert tuple(row) == ("01.01.26", "02.02.26", 10, "ok")
+
+
+def test_record_itogo_observation_missing_is_unknown_not_fabricated(plan_conn):
+    """AC-110: отсутствующий исторический «Итого» помечен unknown, не
+    выдуман как 01.01.00."""
+    conn, plan_id = plan_conn
+    obs_id = record_itogo_observation(
+        plan_id, "537561928", page_version=4, raw_storage="<p>нет итого</p>", conn=conn,
+    )
+    row = conn.execute(
+        "SELECT itogo_d1, itogo_n, quality FROM plan_page_observation WHERE observation_id=?",
+        (obs_id,),
+    ).fetchone()
+    assert tuple(row) == (None, None, "unknown")
+
+
+def test_record_itogo_observation_two_observations_not_glued_by_number(plan_conn):
+    """Разные наблюдения с совпадающим N не склеиваются: каждое — отдельная строка."""
+    conn, plan_id = plan_conn
+    storage = "<p><strong>Итого: с 01.01.26 по 02.02.26 - 10 рабочих дней</strong></p>"
+    obs1 = record_itogo_observation(plan_id, "537561928", page_version=1, raw_storage=storage, conn=conn)
+    obs2 = record_itogo_observation(plan_id, "537561928", page_version=2, raw_storage=storage, conn=conn)
+    assert obs1 != obs2
+    count = conn.execute("SELECT COUNT(*) FROM plan_page_observation").fetchone()[0]
+    assert count == 2

@@ -107,6 +107,55 @@ def cmd_apply(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_archive_history(args: argparse.Namespace) -> int:
+    """P1.W1.10/11: GET-only импорт истории вложения, не публикация."""
+    from plan_history import import_history
+
+    client = _client()
+    report = import_history(
+        client, args.page_id, args.attachment_id,
+        range(args.from_version, args.to_version + 1),
+        project_slug=args.project_slug,
+    )
+    print(json.dumps({
+        "page_id": report.page_id,
+        "attachment_id": report.attachment_id,
+        "event_count": report.event_count,
+        "unique_hashes": sorted(report.unique_hashes),
+        "outcomes": [
+            {"version": o.version, "status": o.status, "sha256": o.sha256, "reason": o.reason}
+            for o in report.outcomes
+        ],
+    }, ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_save(args: argparse.Namespace) -> int:
+    """P4.ACC.2: явная save-only операция (R-008). Сохраняет snapshot MPP,
+    НЕ публикует в Confluence, НЕ сдвигает baseline (AC-144)."""
+    from plan_save import save_snapshot
+
+    mpp = resolve_mpp_path(args.mpp)
+    result = save_snapshot(
+        mpp,
+        page_id=args.page_id,
+        project_slug=args.project_slug,
+        timezone_hint=args.timezone_hint,
+    )
+    print(json.dumps({
+        "snapshot_id": result.snapshot_id,
+        "plan_id": result.plan_id,
+        "lineage_id": result.lineage_id,
+        "project_slug": result.project_slug,
+        "mpp_artifact_id": result.mpp_artifact_id,
+        "export_artifact_id": result.export_artifact_id,
+        "task_count": result.task_count,
+        "dependency_count": result.dependency_count,
+        "published": result.published,
+    }, ensure_ascii=False, indent=2))
+    return 0
+
+
 def cmd_convert(args: argparse.Namespace) -> int:
     from mpp_calendar import calendar_from_mpp
     from mpp_convert import convert_mpp_csv
@@ -157,6 +206,21 @@ def build_parser() -> argparse.ArgumentParser:
     sa.add_argument("--drop-dep", action="append", metavar="FROM:TO",
                     help="исключить зависимость FROM→TO (можно повторять)")
     sa.set_defaults(func=cmd_apply)
+
+    sh = sub.add_parser("archive-history", help="GET-only import of attachment version history (P1.W1.10)")
+    sh.add_argument("--page-id", required=True)
+    sh.add_argument("--attachment-id", required=True)
+    sh.add_argument("--from-version", type=int, required=True)
+    sh.add_argument("--to-version", type=int, required=True)
+    sh.add_argument("--project-slug", default="zd")
+    sh.set_defaults(func=cmd_archive_history)
+
+    sv = sub.add_parser("save", help="Save-only MPP snapshot: NOT published, baseline unchanged (R-008/AC-144)")
+    sv.add_argument("--mpp", required=True)
+    sv.add_argument("--page-id", default=None, help="Привязка к существующей Confluence-линии (без сетевых вызовов)")
+    sv.add_argument("--project-slug", default=None)
+    sv.add_argument("--timezone-hint", default=None)
+    sv.set_defaults(func=cmd_save)
 
     sc = sub.add_parser("convert", help="Offline MPP→JSON convert")
     sc.add_argument("--mpp", required=True)

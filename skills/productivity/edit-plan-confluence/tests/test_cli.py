@@ -5,7 +5,11 @@ import sys
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
-PYTHON = Path.home() / "hermes-agent" / ".venv" / "bin" / "python3"
+# Единый механизм выбора интерпретатора с mpxj (питфолл: hermes-agent venv без mpxj).
+# conftest добавляет scripts/ в sys.path.
+from mpp_input import _pick_python  # noqa: E402
+
+PYTHON = Path(_pick_python())
 
 
 def test_cli_help():

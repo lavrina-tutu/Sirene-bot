@@ -1,6 +1,7 @@
 """Download / upload gantt-chart-<macro-id>.json attachment."""
 from __future__ import annotations
 
+import hashlib
 import io
 import json
 import mimetypes
@@ -20,6 +21,10 @@ class AttachmentInfo:
     filename: str
     version: int
     title: str
+
+
+class UploadVerificationConflict(RuntimeError):
+    """GET версии, полученной из ответа upload, не совпал по hash с отправленным (R-009 п.7)."""
 
 
 def find_gantt_attachment(attachments: list[dict], macro: MacroInfo) -> AttachmentInfo | None:
@@ -69,6 +74,26 @@ def upload_gantt_json(
     if existing:
         return _post_attachment_data(client, page_id, existing.attach_id, filename, payload)
     return _create_attachment(client, page_id, filename, payload)
+
+
+def verify_uploaded(
+    client: ConfluenceClient,
+    page_id: str | int,
+    filename: str,
+    version: int,
+    expected_sha256: str,
+) -> tuple[bool, bytes]:
+    """Version-specific GET полученной конкретной версии (не ``latest``),
+    сверка hash полученных байт с отправленными (R-009 п.7, P1.W1.5, AC-105).
+
+    Несовпадение возвращается как ``(False, raw)`` — вызывающая сторона
+    обязана пометить это конфликтом, не перезаписывая подготовленные байты
+    фактическими (не поднимать исключение молча здесь, чтобы caller мог
+    записать событие ``attachment_verify=conflict`` перед остановкой).
+    """
+    raw = client.download_attachment(page_id, filename, version)
+    actual_sha256 = hashlib.sha256(raw).hexdigest()
+    return actual_sha256 == expected_sha256, raw
 
 
 def _multipart_body(filename: str, content: bytes, content_type: str) -> tuple[bytes, str]:

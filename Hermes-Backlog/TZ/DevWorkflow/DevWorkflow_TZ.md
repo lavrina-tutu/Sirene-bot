@@ -2,27 +2,28 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Процесс изменения Hermes/USERTOOLS: одна задача, FIFO и непрерывное продолжение"
-version: 0.10.4
-date: 2026-11-11
+version: 0.11.0
+date: 2026-11-14
 status: draft
 author: архитектор (Codex exec)
-case: BUGFIX
-slug: adresnyy-remont-publikatsii-extract-v-kompressor
-previous_slug: vnedrenie-konsolidirovannogo-master-tz-devworkfl
-last-section-added: '2026-11-11 — Б60.1.2/60.3.4/60.8: CAPCONST-R10, однократные 90% публичных максимумов; draft до собственной REV:tz/TZ:finalize; CAP-R3 открыт'
+case: CHANGE
+slug: pochinka-dev-workflow-20261112
+previous_slug: adresnyy-remont-publikatsii-extract-v-kompressor
+last-section-added: '2026-11-14 — адресная доставка D1–D9/Q1/Q2, M1–M3; M6 сохранён; A1-A3-TRACE изд.2 / REV-a-pack-v2 APPROVE; runtime NOT_RUN, ENV-03/D6 NOT_PROVEN, CAP-R3 открыт; Б15: state — штатный канбан по D2, immutable files отдельно, без общей файлово-DB транзакции'
 depends_on:
-  - TZ/GLOSSARY.md >= 0.2.15
+  - TZ/GLOSSARY.md >= 0.3.0
   - TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md >= 0.4.4
   - TZ/TZ-Workflow/TZ-storage-system.md >= 1.1
   - TZ/EcosystemIntegration/EcosystemIntegration_TZ.md >= 0.7.0
   - TZ/ErrorBus/ErrorBus_TZ.md >= 0.3.1
   - TZ/ProcessImprovement/ProcessImprovement_TZ.md >= 0.4.3
 consumers:
-  - skill:dev-workflow (единственный активный процесс после W4)
+  - skill:dev-workflow (единственный владелец предметного процесса на штатном канбане)
   - profile:default (Сирень = оркестратор)
+  - profiles:assignee/reviewer (роли; запуск штатным dispatcher)
   - TZ/MAIN_TZ_INVENTORY.md
 reuse_first: "не USERTOOL; код в Registries/pipeline/; скилл в hermes-workspace; ядро hermes-agent не трогать"
-supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
+supersedes_runtime: "только прежняя конкурирующая кастомизация DevWorkflow после проверенного переноса; штатный канбан сохраняется"
 ---
 
 # DevWorkflow — мастер-ТЗ процесса разработки
@@ -35,29 +36,31 @@ supersedes_runtime: TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md
 
 Номера сохранённых тематических блоков являются якорями. Отсутствующие старые номера не означают пропуск фазы или потерю требования. Старые AC/IAC/COD сохраняют исходного владельца и область проверки; они не становятся AC любого нового поезда.
 
+Адресная доставка 14.11.2026: принятые владельцем D1–D9/Q1/Q2 перенесены по [A1-A3-TRACE, изд.2](../../dev/pochinka-dev-workflow-20261112/out/A1-A3-TRACE.md) после [REV-a-pack-v2 APPROVE](../../dev/pochinka-dev-workflow-20261112/out/REV-a-pack-v2.md); основания — [DECISIONS](../../dev/pochinka-dev-workflow-20261112/out/DECISIONS-KANBAN-TZ.md), [FINAL](../../dev/pochinka-dev-workflow-20261112/out/FINAL-TZ-dev-workflow-kanban.md) и [HF-plan §15](../../dev/pochinka-dev-workflow-20261112/out/HF-plan-kanban.md). M1–M3 включены, правильные T-ID по M6 сохранены. Отчёт доставки с exact diff и hashes — [A-FINALIZE-DONE](../../dev/pochinka-dev-workflow-20261112/out/A-FINALIZE-DONE.md). Статус этой доставки не утверждает прежние draft-области и не наследует независимую REV новых bytes; runtime/установка/W1 NOT_RUN, ENV-03/D6 NOT_PROVEN, B2 принят как дизайн, B3 не включён. Сохранённые AC → K/P/C → IAC → W1 адресованы FINAL §13.4 и HF §13/15; метаданные required57+delta11=68 и component nodeids хранятся только в [N-DELTA11](../../dev/pochinka-dev-workflow-20261112/out/N-DELTA11.md), без копирования списка в master.
+
 ## Б0. Назначение, имена и границы
 
 DevWorkflow ведёт изменения Hermes/USERTOOLS: разработку, тесты, баги, настройки, документацию, скиллы, ТЗ и системные инструкции SOUL/AGENTS/profile/USER/MEMORY. Обычные поручения предметным инструментам находятся вне очереди; изменение самих инструментов входит в неё.
 
-Три слоя: скилл dev-workflow ведёт процедуру; Python в Registries/pipeline/ проверяет детерминированные инварианты; файлы dev/<slug>/ сохраняют ход. Оркестратор — Сирень, роль профиля default. Отдельного скилла dev-orchestrator нет. Канбан не участвует в runtime новой машины. Граф означает recipe[], карточка — исторический синоним фазы.
+DevWorkflow — предметный процесс на штатном канбане Hermes: скилл dev-workflow задаёт процедуру и версию recipe, Python в Registries/pipeline/ проверяет предметные инварианты через поддерживаемые native API, dev/<slug>/ хранит документы и доказательства. Сирень назначает assignee-профиль; штатный dispatcher запускает worker. Root хранит запрос и итог, phase-card — работу, supporting-card — допустимую диагностику без цикла от blocked-работы. Author/review могут быть одной карточкой с отдельными каноническими фазами и runs; HF:impl/HF:test всегда раздельны. Второго диспетчера и скилла dev-orchestrator нет. Старый запрет канбана superseded D1/D2.
 
 | Объект | Единственный владелец |
 |---|---|
-| Ход задачи | dev/<slug>/_state.json, журнал journal.md; schema devworkflow-state/1.0 |
+| Ход задачи | Штатный канбан: tasks/dependencies/task_runs/task_events; identity = board + task_id + run_id, постоянный slug |
 | Смысл требований | TZ/<Tool>/<Tool>_TZ.md на диске |
-| Пути, backend, модели, effort | EcosystemConfig.yaml → tools.dev_workflow и shared |
-| Выжимка | extract.md своего слага, производный индекс |
-| Индекс очереди | queue.json, перестраивается из glob */_state.json |
+| Пути, роли→профили, рецепты | EcosystemConfig; физически читаемые Hermes модели профилей и dispatcher — штатные конфиги Hermes, один owner/reader каждого значения |
+| Выжимка и evidence | extract.md своего слага и immutable artifacts, производные от требований; не управляющий реестр |
+| Порядок допуска | Штатные карточки/зависимости; FIFO готовности Б55, без queue.json/reindex |
 | Манифест и digest | EcosystemIntegration; запись на ORCH:shared-state |
 | Имена | GLOSSARY.md; references/canon.md — согласованный операционный указатель |
 
-SQL не является SoT, кэшем выжимок или транспортом контекста. Общий sqlite/NFS-БД и второй реестр состояния не создаются. Read-only telemetry смежных инструментов не является состоянием DevWorkflow.
+Штатная SQLite-БД канбана — SoT исполнения по D2; требования и доказательства имеют отдельных владельцев. Доступ только поддерживаемыми native API/tools/CLI, прямой SQL-write запрещён. Новая БД/очередь и общий sqlite/NFS-транспорт не создаются. Старые _state.json/queue.json/journal.md — история прежней машины в git после проверенного переноса; файловые отчёты — датированные выгрузки с refs доски и временем чтения, без управления исполнением. Очистка требует отдельного разрешённого объёма и restore/delete closure.
 
 ### Б0.3 Границы хода
 
-Границы первичного документного перехода — Б61.1. Scope адресной правки continuation и её согласование — Б61.4; принятая NORM-R3 компрессора — Б60.1, принятая client capacity policy — Б60.1.1. Текущая адресная расчётная дельта CAPCONST-R10 и её отдельная цепочка согласования — Б60.1.2; нормативные изменения ограничены Б60.3.4/60.8.
+Границы первичного документного перехода — Б61.1. Scope адресной правки continuation и её согласование — Б61.4; принятая NORM-R3 компрессора — Б60.1, принятая client capacity policy — Б60.1.1. Текущая адресная расчётная дельта CAPCONST-R10 и её отдельная цепочка согласования — Б60.1.2; нормативные изменения ограничены Б60.3.4/60.8. Адресная доставка D/Q по A1-A3-TRACE — отдельная текущая дельта; перечисленные прежние области и approvals не расширяются.
 
-Разрешения конкретной роли задаёт принятый packet и утверждённое задание/план. Наличие широкого корня в write_scope не расширяет согласованный пофайловый объём и не меняет роль. Архитектор пишет требования, план и документные evidence, боевой код выполняется на HF:impl; HF:test — отдельный вызов. Переходы процесса выполняет внешний оркестратор после выхода роли.
+Разрешения конкретной роли задаёт принятый packet и утверждённое задание/план. Наличие широкого корня в write_scope не расширяет согласованный пофайловый объём и не меняет роль. Архитектор пишет требования, план и документные evidence, боевой код выполняется на HF:impl; HF:test — отдельный вызов. В managed worker собственная штатная terminal-передача kanban_complete / kanban_request_review / kanban_block выполняется после завершения всех внешних writers и проверки identity/gates; выход всего Hermes turn не является границей фазы. После передачи запись запрещена; независимый reviewer работает другим профилем. Роль не управляет очередью/чужими runs, внешний executor не получает raw board mutation. Сохранённый oracle AC-074/076/078 → P04/P06/P08, IAC-04/05.
 
 Предыдущие approvals относятся к своим редакциям и слагам. Б58/Б59 — отменённые поезда: не возобновлять, не применять historical reconcile-result или own legacy completion, не устанавливать candidates целиком. Общие G3 и byte snapshot перенесены в Б17.3 и Б56.4. Общая совместимость старого результата определена Б56.7; адресного backfill она не разрешает.
 
@@ -93,7 +96,7 @@ SQL не является SoT, кэшем выжимок или транспор
 | Компрессор | Содержательный индекс | Не SoT; canonical пишет Python, Б60 |
 | Координатор | Backup, inventory, адресный shared-state | Фазы оркестратора; не отдельная содержательная роль |
 
-Один invoke-role — одна роль. Значения моделей и effort читаются из YAML, не из таблиц истории.
+Роль = assignee-профиль, reviewer независим; запуск принадлежит штатному dispatcher. Один invoke_role внутри worker — одна содержательная роль; это adapter, без claim/очереди/запуска следующей фазы. Hermes internal, Codex и Cursor входят в первый выпуск; активны Hermes/Codex, отсутствие Cursor live не отменяет контрактных проверок и не блокирует выпуск. Carrier model и executor model различаются, effective backend/model/effort/session фиксируются точно по единственному владельцу конфигурации (Б14), без fallback при квоте.
 
 | Guard | Условие допуска |
 |---|---|
@@ -120,69 +123,41 @@ G6 проверяет все фазы recipe[], включая RS/MIG/DEC; от�
 
 Применимость: `RS:collect` — architect, read-only как `BUG:diagnose`; `SK:preflight` — оркестратор, механический `wc -c` как `TZ:stabilize`; `MIG:block-k` — дефолт architect (контент блока не invents роль).
 
-Несовпадение → emit-prompt / invoke_role / complete-phase **exit 1**, state не менять (кроме journal `g6_role_mismatch`).
+Несовпадение G6 → локальный отказ до admission/prepare/внешнего send; успешное состояние и счётчики не меняются. Диагностика сохраняет причину и identity штатным evidence, не создаёт принятую роль. Проверяется собственная фаза/run, actor не даёт прав чужой роли.
 
 HF:impl и HF:test выполняются раздельно. Auto-гейт остаётся фазой recipe и завершается после своей улики без LLM.
 
 ## Б8. CLI, состояние и журнал
 
-Python-инварианты живут в Registries/pipeline/, скилл — в hermes-workspace/skills/devops/dev-workflow/. Код не размещается в USERTOOLS/DevWorkflow/ или hermes-agent. Существующие modules pipeline_state.py, pipeline_queue.py, pipeline_log.py, pipeline_recipe.py, pipeline_gates.py, pipeline_preflight.py, pipeline_gitproof.py, pipeline_context.py, invoke_role.py, paths.py, probe.py и pipeline_errorbus.py имеют одного владельца своей функции. Скилл хранит процедуру в SKILL.md, предметные подробности в references, scripts/pipeline.sh остаётся тонкой обёрткой.
+Python-инварианты и единственные владельцы контекста, verifier, proof и ErrorBus остаются в Registries/pipeline/, скилл — в hermes-workspace/skills/devops/dev-workflow/. Код не размещается в USERTOOLS/DevWorkflow/ или hermes-agent. Поддерживаемые native API канбана разрешены (D1); прежние pipeline_state/queue/recover не владеют lifecycle. invoke_role — adapter внутри worker; предметные modules не становятся второй машиной. SKILL.md хранит процедуру, references — подробности, scripts/pipeline.sh — тонкую обёртку предметных операций.
 
-Команды ниже — интерфейс, не предписание исполнять их из содержательной роли.
+Штатные операции исполнения — create/назначение профиля/dependencies/heartbeat/review/complete/block/unblock и чтение runs/events через поддерживаемый канбан. Человек использует штатный CLI/dashboard/API с процедурной проверкой Б17; агент — защищённые tools. Содержательная роль имеет только собственную terminal/review передачу при identity/gates; не fan-out, не чужие runs.
 
-CLI (человеко-читаемые глаголы):
+Предметный интерфейс DevWorkflow сохраняет emit-prompt/check/render/ref, проверку recipe/G1–G6, write-set/proof, обзор и разрешённые операторские evidence. Старый перечень lifecycle CLI init/next/complete-phase/recover/doorbell/repair-reindex не является активным владельцем исполнения (D1–D3). Исторические имена проверок/AC не переименовываются.
 
-```
-pipeline init --case CHANGE [--slug <slug>] --title <text> --origin-chat <id> --origin-thread <id> [--slug-source suggest-cli|sasha-verbatim|reuse]
-pipeline suggest-slug --title <text> [--kind train]
-pipeline next --slug <slug>
-pipeline complete-phase --slug <slug> --phase <PHASE> --reason <text> --evidence <text>
-pipeline hold --slug <slug> --verb <operator-verb> --reason <text>
-pipeline operator-done --slug <slug> --verb <verb> --evidence <text>
-pipeline emit-prompt --slug <slug> --phase <PHASE> --out <path>
-pipeline check --slug <slug> --phase <PHASE>
-pipeline status [--slug <slug>] [--check]
-pipeline set-case --slug <slug> --case CHANGE-LIGHT
-pipeline interrupt --slug <slug> --reason <text>
-pipeline abort --slug <slug> --reason <text>     # не rm
-pipeline recover --slug <slug> --reason <text> --evidence <text> [--class dead-pid|wrong-role|empty-result|rc0-no-complete|model-none]
-pipeline doorbell [--slug <slug>]                # 0-токенный fingerprint очереди; не next, не recover
-pipeline repair [--slug <slug>]
-pipeline journal --slug <slug>                   # печать journal.md хвоста
-```
+Перед принятием перехода обязательны reason/evidence по действию, actor/phase/session и native identity. Missing reason/evidence отклоняется до принятия; CLI syntax — exit 2, предметный отказ — exit 1. Evidence содержит проверяемый path/version/hash либо session_id/rc/file; слово «готово» не proof.
 
-complete-phase / hold / interrupt / abort / recover требуют --reason; complete-phase / operator-done / recover требуют --evidence. Отсутствующий аргумент: exit 2, state неизменен. Evidence содержит проверяемый path/version/hash либо session_id/rc/file; слово «готово» не proof.
+Детерминированный suggest-slug сохраняет lowercase kebab, транслит, максимум 48, collision и source=suggest-cli; kind только train, entities.task_slug вне этого интерфейса. Опущенный slug нормализуется до G6; другие источники — sasha-verbatim и reuse. Проверяется занятость имени, включая done/aborted/archive; меню слагов запрещено.
 
-suggest-slug --title возвращает один детерминированный lowercase kebab, транслит, не длиннее 48, с collision bool и source=suggest-cli. Kind только train; kind task и entities.task_slug — вне этого CLI. init допускает опущенные --slug и --slug-source: Python вычисляет один slug и default suggest-cli. Иные источники: sasha-verbatim — дословный slug из сообщения Саши, reuse — существующий каталог. G6 проверяет уже вычисленный результат. Меню кандидатов в origin запрещено.
+Законное LIGHT-сужение делает Сирень через поддерживаемые операции графа по одному проверенному recipe: done/history/применимость extract сохраняются, второй граф не создаётся. Изменение зависимостей — до нового допуска. state_sha/pop/reindex superseded D2, не способ починить чужой accepted binding.
 
-set-case сужает recipe одной функцией и сохраняет done-фазы, второго init нет. После set_case(d, case) в cmd_set_case выполняется d.pop("state_sha256", None) до from_dict/write_state. from_dict с диска остаётся строгим; recipe не считает sha. repair перестраивает индекс, не ремонтирует sha/PID и не сбрасывает бюджет.
+### Б10. Штатное состояние и файловые доказательства
 
-### Б10. Файловая запись
+Членство и состояние задачи принадлежат штатному канбану, не наличию _state.json. Повтор create связан idempotency_key с той же работой; done/aborted занимают имя навсегда. Cancel сохраняет историю и документы, не rm; удаление требует DECOMM.
 
-Членство в очереди — наличие _state.json. Повторный init незавершённого слага идемпотентен; done/aborted занимают имя навсегда. abort сохраняет каталог и историю; он не равен rm и не используется для освобождения исторического пилота. Удаление требует DECOMM.
+До native mutation verifier проверяет весь переход и захваченные revision/identity/артефакты. Канбан атомарно фиксирует свой переход/run/event. Файлы и внешние side effects не входят в эту транзакцию: временный файл и atomic os.replace сохраняются для immutable publication, затем readback и штатный binding; частичная публикация недопущена. queue-lock/state_sha/reindex не владеют переходом; длительный LLM/send под файловым lock запрещён.
 
-Под существующим .queue.lock: прочитать state и сверить state_sha256; полностью проверить событие до мутации; временный файл в том же каталоге, atomic os.replace, append journal.md/queue.log.jsonl и rebuild queue.json. Ошибка записи не оставляет принятую половину перехода; rollback проверяет соответствующие preimages. Несколько файлов не объявляются crash-атомарными. Ни ручного JSON-write, ни долгого LLM/send под lock.
+Drift identity/revision/ссылок, пропавшее evidence и неполная запись дают отказ/диагноз и ErrorBus по классу; нельзя писать поверх неподтверждённых bytes, фабриковать state или backfill accepted history. Восстановление только из доказанного snapshot и поддерживаемым владельцем. Принятый целый результат при повторной доставке — verified no-op без side effect/повторного уведомления.
 
-Папка без index — repair_reindex; index без папки и hash_mismatch — CRISIS, ErrorBus и явная диагностика. Не писать поверх несовпадающего hash, не создавать синтетический state отсутствующей папки. Восстановление из доказанного snapshot/git. repair_reindex и hash_mismatch описывают причину в reason/evidence существующих repair/crisis; отдельные event-имена из них не создаются.
+Карточка хранит refs требований/версии конфига/recipe и предметные сведения slug/title/case/phase/origin/holds/Q. Runs/events хранят технические attempts и identity; accepted invocation связывает phase/role/profile/backend/model/session/ordinal/packet/proof. Это предметный контракт native metadata, не SQL-схема DevWorkflow. turn_count Б49 — logical admitted invokes, не recover_counts; старые завершённые snapshots неизменны.
 
-State хранит schema, slug/title/case/status/phase/recipe, phases, origin, operator_holds, open_questions, recover_counts, tz/extract metadata и state_sha256. Фаза хранит status/started_at/ended_at/pid/session_id/backend/model/role/awaiting_invoke/changed_files/context_used/reason/evidence/proof. turn_count — аддитив int default 0; context_packet — optional object. Breaking schema требует migrate_vN_to_vN+1(), старый state без миграции не запускается. История завершённых фаз не переписывается.
+### Б10.2 События и provenance
 
-### Б10.2 Закрытый словарь событий и provenance
+История исполнения — штатные task_events/task_runs и связанные immutable evidence. Исторические event IDs init/start/next/complete/interrupt/hold/operator_done/abort/set_case/repair/crisis/suggest_slug/g6_role_mismatch/recover/canonical_artifact_fail/invoke_prepare/invoke_role/context_used сохраняют своё происхождение; это не новый enum native API и не активный файловый lifecycle.
 
-| Назначение | event |
-|---|---|
-| Приём и движение | init, start, next, complete, interrupt, hold, operator_done, abort, set_case |
-| Проверки и исправление | repair, crisis, suggest_slug, g6_role_mismatch, recover, canonical_artifact_fail |
-| Вызов роли | invoke_prepare, invoke_role |
-| Контекст | context_used |
+Каждое предметное evidence имеет ts с timezone, board/task/run identity, slug, phase, actor, reason/evidence по действию и ссылку на проверенную revision. Actor (sirene/architect/reviewer/executor/operator/pipeline/cli) описывает источник, а не разрешение закрыть чужую роль: проверяется accepted role/profile/run. Root create/cancel допускает отсутствие предметной фазы; это не новая recipe-фаза. Неполная запись не становится принятой.
 
-Существующее событие отказа invoke и compatibility-события writer сохраняют прежние имена и читаются по проверенной закрытой таблице существующего pipeline_log.py. Таблица выше задаёт обязательные производственные события, а сохранённые compatibility-значения не создают фаз, разрешений или регламентов. Test-only события не являются производственным маршрутом. Единственный writer/validator полного словаря — pipeline_log.py; второй enum в скиллах не поддерживается.
-
-actor описывает источник записи: sirene / architect / reviewer / executor / operator / pipeline / cli. CLI writer использует cli также в обычных переходах; это не G6-роль и не право закрыть чужую содержательную фазу. Фактическая роль отдельно проверяется по phases.<PHASE>.role и accepted invocation. После C01 этот actor не зависит от запрещённого legacy completion.
-
-Каждая запись имеет ts с timezone, slug, event, actor и phase. init/root abort допускают отсутствие фазы; root set_case без active phase использует phase=- как поле журнала, не recipe-фазу. Обычные события и operator_done требуют active phase. reason обязателен для complete/hold/interrupt/abort/recover, evidence — complete/operator_done/recover. Процессный вызов сохраняет pid/session_id; мутация — state_sha256_before/after. Проверка до replace; неполная запись даёт exit 1.
-
-context-used:, AC-shown:, AC-delivered: — маркеры evidence, не имена recipe/events. Structured context_used сохраняется: его читатель сверяет packet binding. transport_terminated и artifact_ready — evidence keys recover/canonical_artifact_fail, не новые события. Receipt исключает повторную запись принятого invoke.
+context-used:, AC-shown:, AC-delivered: остаются маркерами evidence. Structured context_used проверяется по packet binding. Transport/session/writer proof и artifact refs хранятся отдельно от native lifecycle outcome; receipt исключает повтор принятого invoke. Файловый journal не является вторым управляющим реестром.
 
 ## Б12. Обязательное чтение
 
@@ -213,24 +188,23 @@ G2 доказывает, что `emit-prompt` **вызвали**, не что LL
 
 ## Б13. Вызов роли и приём результата
 
-Для каждой содержательной роли единственный путь — emit-prompt с rc=0, затем invoke-role --prompt-file --role --workspace. --workspace абсолютный; не scratch. Перед prepare проверяются G1/G3/G6, packet и scope/outputs. Ручной prompt, --force и raw agent -p/codex exec в обход adapter запрещены.
+Для содержательной роли managed worker получает immutable emit-prompt с rc=0 и проверяет packet/G1/G3/G6/scope/outputs до работы и внешнего send. Внешняя работа — invoke-role --prompt-file --role --workspace внутри этого run; --workspace абсолютный, не scratch. Ручной prompt, --force и raw agent -p/codex exec в обход adapter запрещены. Единый verifier защищает также terminal tools; ручные действия — Б17/M1. Бесплатность первого Hermes model-turn и перехват любого CLI/dashboard/API не обещаются.
 
-Для Hermes terminal используется один request с background=true, notify=true, persist_on_release=true; это поля инструмента. После получения session id тот же command не отправляется повторно. Validation error не retryable: сначала исправить вход. Foreground/terminate и `| head` / `| tail` / любой отсекатель stdout на invoke-role запрещены (SIGPIPE). Проверка AC-064: явный запрет есть в этом ТЗ и SKILL.md; фикстура/чеклист процедуры подтверждает фоновый вызов без пайпа. Не проверять SIGPIPE живым убийством агента. Эти поля не превращаются в shell-флаги другого транспорта.
+Transport сохраняет полный stdout/stderr и управляемого child до завершения writers. Фоновый вызов, где он поддержан, имеет background=true, notify=true, persist_on_release=true; после session id команда не отправляется повторно. Validation error не retryable. Foreground/terminate и head/tail/другие отсекатели stdout запрещены; AC-064 проверяется фикстурой/чеклистом, без живого SIGPIPE-убийства. Это свойства конкретного транспорта, не shell-флаги другого backend.
 
-На invoke_prepare writer записывает os.getpid() обёртки в st.pid и phases[phase].pid до spawn; backend/model — тот же resolved результат, что передан adapter, awaiting_invoke=false. role записывается после успешной приёмки результата, не на prepare. session_id берётся из структурного JSON/JSONL (Cursor session_id/sessionId, Codex штатное поле stream); пустой parse оставляет null и сам по себе не отменяет полный canonical. session_id не заменяет PID.
+До dispatch фиксируются native board/task/run identity, profile/phase, admission ordinal, packet/Request refs, фактические backend/model/effort и external session. PID adapter/writer сохраняется как transport evidence, не владелец фазы; session_id его не подменяет. Структурный parse Cursor/Codex сохраняется, null session сам по себе не отменяет полный canonical.
 
 | Факт | Действие |
 |---|---|
-| Точный wrapper жив, даже если canonical уже записан | Никаких next/complete-phase/recover/второго invoke и второй задачи |
-| Sirene-фаза с pid=None | WORK оркестратора в том же ходе, без содержательной invoke-роли |
-| awaiting_invoke=true, pid=None до prepare | Штатный pre-invoke WORK; брошенное окно диагностируется |
-| Wrapper вышел, role записан, canonical/result пригоден | Post-invoke WORK/RECONCILE, обычный complete с evidence |
-| Role записан, required canonical отсутствует/не обновлён | empty-result / canonical_artifact_fail; Б16 и пределы Б55.5 |
-| Role отсутствует, не awaiting_invoke, wrapper завершён и пригодного результата нет | Доказанный true-crash, классификация Б16 |
-| Обрыв/143 после записи файла | Сверка writers, outcome, snapshot, канона/receipt по существующему пути; файл сам по себе не PASS |
-| Уже принятый результат доставлен повторно | Verified no-op без второго side effect/complete/notify |
+| Свой внешний transport/writer жив | Нет второго invoke или terminal передачи; закончить собственную запись |
+| Механическая фаза Сирени | Проверка/evidence без содержательного invoke |
+| Подготовка до admission | Не считать running/crash по одному pid=None |
+| Writers завершены, canonical/output и identity/gates проверены | Собственный kanban_complete / kanban_request_review / kanban_block завершает владение; после передачи записи запрещены |
+| Canonical отсутствует/непригоден | Не success; причина и штатный protocol/lifecycle outcome, без самодельного recover |
+| Crash/обрыв 124/137/143 | Проверка native run, writers, outcome, snapshot/receipt; файл сам по себе не PASS и не разрешение retry |
+| Уже принятый целый результат доставлен повторно | Verified no-op без второго side effect/terminal/notify |
 
-Notify будит внешнего оркестратора и не доказывает окончание wrapper. Неясный outcome/связанный writer означает ожидание/диагноз, а не слепой повтор. Успешный ответ adapter не закрывает фазу автоматически. Compressor имеет более строгий контракт Б60.6, files-only reconciliation для него запрещён.
+Чистый выход без принятого terminal — protocol_violation; rc=0 adapter не закрывает фазу. Notify — сигнал, не доказательство завершения writer. Выход всего Hermes turn не нужен для законной передачи после quiescence. При request_review карточка остаётся review и не открывает downstream до независимого reviewer-профиля; request_changes возвращает автору с новым packet и архивной причиной. Неясный outcome — блок/диагноз. Для Компрессора Б60 требует полную цепочку, files-only reconciliation запрещён.
 
 Канон generic результата существует, непуст и обновлён после started_at либо отличается hash от preimage. Короткий stdout допустим при полном файле; rc=0 без канона не proof. Не-канонное имя даёт ненулевой rc и hint. Исторические соседние REV-файлы не читаются как текущий вердикт.
 
@@ -248,13 +222,15 @@ Notify будит внешнего оркестратора и не доказы
 
 ### Б13.2 Backend и модель
 
-Backend сначала: slug из invoke.codex_pilot_slugs использует codex, иначе invoke.default_backend. Затем explicit --model, иначе роли выбранного backend: codex → roles.<role>, LIGHT executor → roles.executor_light; cursor-cli, включая LIGHT → roles_cursor.<role>. Один resolved model передаётся argv и на prepare; отсутствие обязательной модели даёт exit 2. Hardcoded fallback composer-2.5 не допускается. Координатор остаётся sirene; compressor model/capabilities — Б60.4. Изменение backend для обхода quota запрещено.
+Backend/model/effort разрешаются по ссылкам единственного владельца Б14 и выбранному assignee-профилю; pilot/default flip-switch не является активным контрактом. Explicit override допустим только как обоснованное исключение данной работы и не меняет defaults/чужие runs. Для Codex ordinary executor — roles.executor, LIGHT — roles.executor_light; architect/reviewer своей ветки. Cursor, включая LIGHT, читает только roles_cursor.<role>, без Codex key-access/fallback; native использует собственную принятую ветку. Missing required model → local exit 2 до prepare/send. Один resolved результат в source/prepare/argv/accepted-run; hardcoded composer fallback запрещён. Compressor resolver/capabilities — Б60.4. Carrier и executor не подменяют друг друга.
 
 Обычный codex adapter: codex exec -C <ABS> -m <id> -c model_reasoning_effort='"<effort>"' --skip-git-repo-check --json --sandbox danger-full-access и тело prompt как operand. Не codex run/--cwd/--full-auto/--yolo. Для compressor host-write ограничен ОС по Б60.4. Cursor rollback сохраняет agent -p, --output-format json и только explicit --resume сохранённой фазы; --continue запрещён. Native — hermes-internal, без внешнего CLI.
 
-Provider-fatal классифицируется структурно. Валидный успешный JSON не сканируется FATAL_PATTERNS по содержательному result. Error envelope имеет приоритет; Codex JSONL проверяет любое error-событие до/после success. Не-JSON использует строгие сигнатуры реального client error, не голые timeout/credits/billing/payment. Цитата HTTP 401/token_expired/Request timed out в успешном result не failure. Подлинные auth/billing/429/5xx/90-90 дают ненулевой rc, interrupt/ErrorBus без автоматического retry/recover. FATAL_PATTERNS и TERMINAL_KILL_RCS не ослабляются.
+Provider-fatal классифицируется структурно: валидный успешный JSON не сканируется по содержательному result; error-envelope имеет приоритет, в Codex JSONL проверяются все error-события до/после success. Не-JSON — строгие сигнатуры реального client error, не голые timeout/credits/billing/payment. Цитата HTTP 401/token_expired/Request timed out в успешном result не failure; FATAL_PATTERNS и TERMINAL_KILL_RCS не ослабляются.
 
-Rc 124/137/143 сам по себе не provider-fatal и не разрешение retry: сначала lifecycle и пригодный результат, затем один применимый регламент Б55.5. Узкое benign models-refresh исключение допустимо только по точной воспроизведённой fixture Б60.7, не broad stderr suppression.
+D6: временные 429/5xx/timeout/billing/quota → actual Hermes worker rc=75, native rate_limited/возврат/cooldown; credentials401/403, model404, TLS → worker rc=78, native gave_up/sticky blocked с первой попытки до исправления и ручного kanban_unblock. Внутри attempt retry/fallback запрещены. Local adapter rc3/4 и текст tool-result не являются worker75/78; необходим supported path и наблюдаемые task_runs/events. ENV-03 NOT_PROVEN; APPROVE B2-дизайна не доказывает эту передачу, B3 semantics rc не включён.
+
+Rc124/137/143 сам по себе не provider-fatal, success или retry: сначала lifecycle/writers/receipt. Exhaustion90/90 не success, идёт в ErrorBus и не переименовывается в transient75 без основания. Native технические attempts/breaker отделены от предметных повторов Б55.5; rc75 не объявляется ограниченным max_retries, если native failure counter его не считает. Benign models-refresh исключение — только точная fixture Б60.7, не broad stderr suppression.
 
 ### Б13.3 Установка и комплект
 
@@ -264,11 +240,11 @@ Rc 124/137/143 сам по себе не provider-fatal и не разрешен
 
 ### Б13.4 Handoff
 
-Живой слаг передаётся файловым bundle: весь dev/<slug>/ с AC/планами/REV/extract/частями/context/history и master либо его синхронная копия. /tmp/task.md и sidecar не возятся. На приёме пути state разрешаются из YAML нового хоста, G1/check и новый emit; архивные snapshot refs не переписываются. Extract reuse допускается только по проверенному ключу/manifest. Слаг активен на одном хосте: flock не межмашинный. Общая sqlite/NFS-БД не является транспортом.
+Handoff живого слага включает supported transfer штатной доски/tasks/dependencies/runs/events/attachments и весь комплект документов dev/<slug>/, master либо синхронную копию, immutable context/history. До переноса source остановлен для записи, owner один; на target сверяются identity mapping, refs/bytes, profiles/config/recipe, G1/check и новый emit. Архивные snapshot refs не переписываются; /tmp/task.md и sidecar не возятся. Files-only bundle недостаточен. Общая SQLite/NFS-БД не транспорт; unknown supported transfer capability — ENV-06, не выдуманный PASS. Scrub экспортируемых native counters по поддерживаемому переносу не даёт нового предметного retry budget.
 
 ## Б14. Конфигурация и внешние контракты
 
-DevWorkflow использует unified_only в EcosystemConfig.yaml, без per-tool .env/overlay. Пути берёт paths.py через usertools_config.py. Литералы домашнего каталога в Python запрещены. Шаблон config.example.yaml содержит те же required ключи с путями принимающего хоста; старый неполный YAML-эскиз не применяется.
+Конституция путей/ролей→профилей/рецептов — EcosystemConfig с unified_only, paths.py/usertools_config.py и без per-tool .env/overlay. Штатные конфиги Hermes владеют физически читаемыми profile models и dispatcher settings, меняются через hermes config set. У значения один owner и effective reader; карточка хранит refs/version и обоснованный per-work override, не копию настроек. Литералы home в Python запрещены; config.example.yaml отражает актуальные required refs/ключи и пути target-хоста. Секреты только вне карточек/артефактов.
 
 | Поле | Тип | Обязательность | Источник (кто отдаёт) | Формат/enum |
 |---|---|---|---|---|
@@ -278,22 +254,10 @@ DevWorkflow использует unified_only в EcosystemConfig.yaml, без pe
 | PIPELINE_ROOT | str | required | EcosystemConfig.yaml | абсолютный путь |
 | SKILL_ROOT | str | required | EcosystemConfig.yaml | абсолютный путь |
 | DIGEST_PATH | str | required | EcosystemConfig.yaml | абсолютный путь к `EcosystemManifest.digest.md` |
-| invoke.default_backend | enum[cursor-cli, codex, hermes-internal] | required | EcosystemConfig.yaml | v0.5.0 штат=`codex` **после** пилота (Б13); до flip — `cursor-cli` допустим |
-| invoke.codex_pilot_slugs | list[str] | required | EcosystemConfig.yaml | pilot-prep `HF:test`: `[<пилотный слаг>]`, иначе `[]`; очистка на flip |
-| roles.architect.model | str | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles_cursor.architect.model | str | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles_cursor.reviewer.model | str | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles_cursor.executor.model | str | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.architect.effort | enum[low, medium, high, xhigh] | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.architect.escalate_model | str | optional | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.architect.escalate_effort | enum[low, medium, high, xhigh] | optional | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.reviewer.model | str | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.reviewer.effort | enum[low, medium, high, xhigh] | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.executor.model | str | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.executor.effort | enum[low, medium, high, xhigh] | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.executor_light.model | str | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.executor_light.effort | enum[low, medium, high, xhigh] | required | EcosystemConfig.yaml | Значение выбранной роли/ветки из YAML; алгоритм Б13.2/Б60.4 |
-| roles.compressor.model | str | optional | EcosystemConfig.yaml | выбор compressor проверяется по Б60.4 |
+| role_profile_refs | mapping | required | EcosystemConfig | роль → существующий assignee/reviewer профиль |
+| backend/model/effort refs | refs | required по роли/ветке | Единственный config owner по effective reader | Hermes carrier/profile models — штатный Hermes config; external adapter role branches — единственный config, который физически читает adapter; source/resolved refs фиксируются, дубль значений запрещён |
+| roles / roles_cursor / roles.executor_light | refs | по выбранной ветке | Config owner выбранного adapter | Б13.2: exact branch, explicit override, missing до prepare/send; без pilot switches |
+| roles.compressor.model / capabilities | refs | по Б60.4 | Единственный resolver/config owner compressor | Б60.4; native/Codex, carrier отдельно |
 | digest_body | str | required | EcosystemManifest.digest.md | markdown; не секреты |
 | tz_path | str | optional | master-ТЗ на диске / TZ:stabilize | абсолютный путь; required после finalize |
 | tz_version | str | optional | YAML-frontmatter master-ТЗ | semver X.Y.Z |
@@ -306,28 +270,25 @@ DevWorkflow использует unified_only в EcosystemConfig.yaml, без pe
 | origin.thread_id | str | required | сессия Telegram / resolve_origin | id топика; `:11112` запрещён для кейса |
 | origin.chat_type | enum[group] | required | resolve_origin | всегда group |
 | trigger | enum[new_tz, enhance, bugfix, research, idea_feed] | required | фраза Саши | new_tz=разработай/напиши ТЗ; enhance=доработай; bugfix=почини; research=исследуй; idea_feed=в бэклог |
-| orchestration.mode | enum[kanban-primary, dual-path, workflow-only] | required | EcosystemConfig.yaml (`tools.dev_workflow.orchestration`) | W1=`kanban-primary`; W2–W3=`dual-path`; W4 / голый install=`workflow-only`; нет ключа / неизвестное значение → exit 1 |
-| orchestration.pilot_slugs | list[str] | required | EcosystemConfig.yaml (`tools.dev_workflow.orchestration`) | W1=`[]`; W2+: allowlist слагов; пустой список = не перехватывать триггеры |
+| config_ref / recipe_ref | refs + version | required | EcoConfig и штатные Hermes configs по владельцу | версия/источник проверяются до допуска; orchestration.mode dual-path/workflow-only и pilot_slugs superseded D8/D9 |
 | slug_source | enum[suggest-cli, sasha-verbatim, reuse] | required | `pipeline init` (v0.4.0) | CLI default `suggest-cli`; G6 проверяет нормализованное поле |
-| phases.<PHASE>.role | enum[architect, reviewer, executor, compressor, sirene] | optional | invoke_role / оркестратор | required на complete TZ/HF/BUG/REV после включения G6 |
-| phases.<PHASE>.model | str | optional | invoke_prepare (v0.4.8) | slug; required на complete architect/reviewer/executor |
-| phases.<PHASE>.awaiting_invoke | bool | optional | `pipeline next` (v0.4.8) | true только в окне pre-invoke |
-| recover_counts | str | optional | `pipeline recover` (v0.4.8) | JSON-объект `{phase:{class:int}}` внутри `_state.json`; не отдельный файл |
+| phase / role / profile | canonical refs | required на admission/terminal | recipe/G6 + native run identity | accepted role не выводится из actor |
+| backend / model / effort / session | structured evidence | required по backend | resolved adapter/profile и accepted run | фактический source/prepare/argv/result согласованы |
+| admission / ordinal / packet refs | structured evidence | required для invoke | native run + предметный verifier | preparation не объявляется работающей ролью |
+| technical attempts | native history | штатные | task_runs/events/dispatcher | не импорт recover_counts; Б49 logical invokes отдельно |
 
 ### Выходные контракты
 
 | Поле | Тип | Потребитель (кто получает) | Формат/enum |
 |---|---|---|---|
-| schema | str | `pipeline_state` migrate / `status --check` | `devworkflow-state/N.N` внутри `_state.json` |
+| execution refs | structured refs | verifier/status/consumer | board/task/run/revision/packet/artifact binding; не devworkflow-state schema |
 | tools.dev_workflow.enabled | bool | EcosystemIntegration / `render_manifest.py` | true/false; служебный YAML-ключ |
 | tools.dev_workflow.migration_status | enum[unified_only] | EcosystemIntegration | сразу `unified_only` (новый контур) |
 | error.tool | str | ErrorBus (`:11112`) | всегда `dev_workflow` |
 | notify_text | str | origin-топик (`pipeline_notify`) | markdown; не ErrorBus |
 | inventory_row | str | tz-workflow / наблюдатель инвентаря | строка `MAIN_TZ_INVENTORY.md` после TZ:finalize |
 
-Digest манифеста видит: `enabled` + `default_backend` + факт наличия `pipeline/` — не значения секретов и не содержимое `_state.json`.
-
-Breaking state format: bump schema и migrate_vN_to_vN+1() в pipeline_state.py; уведомить локальных потребителей, EcosystemIntegration и ErrorBus. Версия ТЗ не равна schema. Аддитивы не добавляются при старом round-trip так, чтобы нарушить исходный SHA; массового backfill нет. SQL-схемы канбана не мигрируются этим процессом.
+Digest отражает enabled, config/profile refs и наличие комплекта, не секреты и не второй state. SQL-схемы канбана процесс не мигрирует. Изменение предметного binding/version требует уведомления потребителей и проверенной совместимости, без backfill принятых snapshots; версия ТЗ не равна версии packet/schema.
 
 ## Б15. Хранение документов и backup
 
@@ -339,7 +300,7 @@ Breaking state format: bump schema и migrate_vN_to_vN+1() в pipeline_state.py;
 | Реестр | `TZ/MAIN_TZ_INVENTORY.md` — обновлять после любой структурной записи ТЗ |
 | Снапшот перед большой перепиской | `WorkVault_backup/.../<Tool>_TZ_snapshots-YYYYMMDD-HHMM.tgz` |
 | Архив ТЗ | только когда **инструмент** снят (DECOMM), в `_archived/` |
-| Runtime | **не** в `TZ/<Tool>/` (state — `dev/<slug>/`, код — `pipeline/`) |
+| Runtime | **не** в `TZ/<Tool>/` (state — штатный канбан: tasks/dependencies/task_runs/task_events, доступ через native API; immutable files — отдельно в `dev/<slug>/`, без общей файлово-DB транзакции; код — `pipeline/`) |
 
 После структурной записи master обновляется MAIN_TZ_INVENTORY.md под существующим LOCK_EX. TZ:finalize требует master, inventory и canonical TZ-finalize.md; evidence ссылает оба документа. Отсутствие inventory в разрешённом scope — дефект допуска: proposal не является записью и finalize не complete.
 
@@ -355,19 +316,13 @@ REV обязателен там, где предусмотрен полным к
 
 ### Б16.6 Технические классы
 
-| Класс | Действие при доказанном основании |
-|---|---|
-| dead-pid | Без пригодного результата и живого wrapper, не штатный pre-invoke: один recover → warn origin → next |
-| wrong-role | G6 отказ до запуска: первый правильный invoke по таблице, без interrupt/reset |
-| empty-result | Канона нет: один correction с файловой доставкой; resume только сохранённой session либо чистый вызов |
-| rc0-no-complete | Пригодный post-invoke результат: обычный complete, не повтор invoke |
-| model-none | Complete запрещён; исправление resolver/адресный возврат или один допустимый invoke с моделью из YAML |
+Lifecycle — native claim/heartbeat/reclaim/timeout/failure_limit/max_retries/circuit breaker (D3/D7). Долгие операции используют kanban_heartbeat; собственного reaper/watchdog/claim-lock и kill по возрасту нет. dead-pid/empty-result/rc0-no-complete/model-none остаются диагностическими причинами, не командами самодельного recover. Pre-admission G6/model/context отказ не расходует логический invoke; правильный первый вызов не recovery. Полный canonical и короткий stdout допустимы, missing canonical не success. Rc0 без terminal — protocol_violation. При crash законный следующий владелец сначала сверяет сохранённый effect/receipt, не повторяет его наугад.
 
-recover использует write_state, записывает reason/evidence/class, увеличивает recover_counts[phase][class]; не spawn и не next. Второй recover той же пары запрещён. Не применять к live wrapper/provider-fatal/billing/90-90/явной паузе/CRISIS/never-auto. RECOVER с допустимым счётчиком выполняется оркестратором в том же ходе; исчерпанный/неприменимый класс — INTERRUPTED и диагноз. Warn класса S идёт в существующий origin, не создаёт канал.
+D6 применяется по Б13.2: actual worker75/78, не local rc. Старые recover_counts не переносятся в max_retries; нет второго своего технического бюджета. Паузы/holds/CRISIS не снимаются cooldown или диагнозом. Launch/crash/provider failures идут в ErrorBus с безопасным evidence, warn S — в существующий origin.
 
-### Б16.7 Doorbell
+### Б16.7 Штатное продолжение
 
-0-токенный детектор существующего пути, резервный wake при потере completion. Сегмент slug|status|phase|role|pid_alive|wrapper_alive[|canon_mtime=…]. canon_mtime опускается при живом pid или wrapper, иначе включается. Fingerprint включает queue=<n>: незавершённые готовые задачи, включая текущую, без idea/переданных idea/done/aborted. Проекция одна с Б55.6. Неизменный tick сообщает queue=<n>, без WAKE/LLM/next/recover; смена даёт WAKE и существующий wake оркестратору. Tick не spawn/kill/recover и не копирует dwka_guard.sh. Реальная доставка обязательна; печатный WAKE её не доказывает. Расписание только по «ставь кроны»; платформа с LLM на каждом неизменном тике не подходит.
+Продолжение/wake принадлежит native dispatcher и штатным событиям. Собственный doorbell-продолжатель superseded D3. Доставленный wake и последующее действие проверяются отдельно от печатного WAKE; неизменный tick не вызывает LLM/send. Нет собственного tick→next/recover/spawn/kill, копии dwka_guard.sh или нового daemon/cron. Исторические имена AC-079/109/116 сохраняются при новом oracle.
 
 ## Б17. Гейты и собственный G3
 
@@ -384,23 +339,27 @@ recover использует write_state, записывает reason/evidence/c
 
 ### Б17.3 Собственный committed write-set
 
-Обычная успешная финализация HF:impl записывает проверенные changed_files, context_result, receipt и git proof одним локальным переходом. Источник — утверждённый план/allowlist и собственный baseline→HEAD diff. Directory output, stdout, git ls-files или список модели не являются write-set.
+Перед собственной terminal-передачей HF:impl verifier проверяет changed_files, context_result, receipt и git proof, связанные с native run/admission/packet. Файлы публикуются и читаются обратно до native acceptance; это не одна файлово-DB транзакция. Источник write-set — утверждённый план/allowlist и собственный baseline→HEAD diff; directory output/stdout/git ls-files/список модели не являются write-set.
 
 Для каждого repo проверяются top-level, baseline/HEAD/ancestry, принадлежность paths, rc/timeout/stderr каждого git вызова, tracking, чистые index/worktree, отсутствие лишних/пропущенных собственных изменений, HEAD blob/worktree hashes. Ошибка git с пустым stdout, non-repo, ignored/untracked/outside-repo — отказ. Законные add/delete/rename доказываются diff status/blob/tombstone, удалённый файл не объявляется untracked по одному отсутствию.
 
-Пустой список при ожидаемом коде запрещён в success, complete HF:impl, next и прямых emit/invoke HF:test/HF:docs-handoff до writer/prepare/turn/send, preflight GATE:done. Один общий verifier вызывается всеми admission callers. Исправление старого завершённого proof задним числом запрещено.
+Пустой write-set при ожидаемом коде запрещён в success/terminal HF:impl и до admission/prepare/send HF:test/HF:docs-handoff, а также на GATE:done. Один verifier используется всеми защищёнными admission/terminal callers; ручная поверхность проверяется процедурно по M1 ниже. Исправление старого завершённого proof задним числом запрещено.
 
 no-code-change: допустим только при заранее утверждённом no-code плане/IAC с FileRef, конкретной причине, проверенном нулевом собственном diff, required outputs и proof, связанном с packet/prepare. Голая строка и changed_files=[] не заменяют основание. Если в recipe нет HF:impl, G3 неприменим, а не PASS пустого impl. Отменённые адресные nine/thirteen-file исключения не действуют.
 
+M1 (Q1): (1) защищённый agent gate при invalid/exception/timeout отказывает до действия/внешнего send и successful transition; первый Hermes turn не обещан бесплатным; (2) manual CLI/dashboard/API action может быть предметно принят при том же verifier до действия, same revision/identity, hash результата/config/recipe, времени/check rc и независимом post-readback без drift; (3) bypass/force/check чужой редакции/подмена evidence не принят даже при board=done. Post-hook не отменяет уже выполненную transaction. Raw SQL запрещён; native tools не запрещаются целиком. P30/P16, IAC-04/06, W1-04.
+
 ### Б17.5 Классы AC и operator-hold
 
-Класс AC по умолчанию **S**: показ не останавливает процесс и не требует ожидания фразы Саши. Класс **O** — только с явной строкой `depends: operator:<verb>` на конкретном AC в ТЗ пакета. В state ему соответствует `operator_holds[{verb, status:open, ac}]`: verb совпадает с объявленной зависимостью, ac указывает именно удерживаемый критерий. Открытый hold удерживает GATE:done; показ обычного S не создаёт операторской зависимости. Класс **C** — кризис: поток стоит до его снятия, правило S ожидание кризиса не отменяет.
+Класс AC по умолчанию **S**: показ не останавливает процесс и не требует ожидания фразы Саши. Класс **O** — только с явной строкой `depends: operator:<verb>` на конкретном AC в ТЗ пакета. В предметных metadata/evidence штатного канбана ему соответствует hold `{verb, status:open, ac}`: verb совпадает с объявленной зависимостью, ac указывает именно удерживаемый критерий. Открытый hold удерживает GATE:done; показ обычного S не создаёт операторской зависимости. Класс **C** — кризис: поток стоит до его снятия, правило S ожидание кризиса не отменяет.
 
-Закрытый operator-словарь: поднимай · ставь кроны · удаляй · answer:Q-n · rollback-to-kanban. Новый глагол требует изменения master. Снятие: `pipeline operator-done --verb --evidence`. До записи проверяются закрытый verb, matching open hold и evidence с ISO timestamp плюс rc либо цитатой факта. Неизвестный verb, отсутствующий или несовпадающий hold и неполное evidence дают отказ до изменения state/journal; одна фраза оператора их не легализует. Одна фраза без факта не закрывает O. Preflight done красный, пока есть open holds; обязательные проверки фаз, Q и доставки AC-report сохраняются.
+Закрытый operator-словарь: поднимай · ставь кроны · удаляй · answer:Q-n · rollback-to-kanban. Новый глагол требует изменения master. Снятие: штатная предметная запись operator-done с verb/evidence законным владельцем. Имя rollback-to-kanban сохраняется, но означает откат версии integration при сохранённой доске/истории, не включение legacy dispatcher. До записи проверяются закрытый verb, matching open hold и evidence с ISO timestamp плюс rc либо цитатой факта. Неизвестный verb, отсутствующий или несовпадающий hold и неполное evidence дают отказ до изменения native binding/history; одна фраза оператора их не легализует. Одна фраза без факта не закрывает O. Preflight done красный, пока есть open holds; обязательные проверки фаз, Q и доставки AC-report сохраняются.
 
 ### Б17.8 Workspace
 
 TZ, REV:tz и IDEA работают в TZ, код USERTOOL — …/USERTOOLS/<Tool>, скилл — hermes-workspace/skills, ORCH — Registries, кросс-контрактный диагноз — TZ. При двух деревьях одной фазы допускаются последовательные invoke той же роли с непересекающейся записью и единым доказанным write-set. Это не склейка HF:impl/HF:test и не параллель ролей.
+
+M2: A writers ended ≤ B start; отдельные packet/admission ordinal и proof каждого repo, union committed write-set exact. Въезд B только после проверенного A, terminal после обоих. Б49=2 logical invokes, не 1 и не 4 за carrier+executor. Overlap/alias/sibling escape/ранний B/чужая роль/отсутствующий proof/test внутри impl дают отказ до запрещённого send/write/acceptance. HF:test — отдельный run. Трасса Б17.8 → P23-WS → IAC-05 → W1-05; неподдержанная безопасная последовательность — явный ENV-03/04, не второй dispatcher.
 
 ## Б18. Полный цикл CHANGE
 
@@ -461,7 +420,7 @@ TZ-WRITE(freeze) → GATE:take-into-work → MIG:plan → GATE:plan-approve → 
 
 ## Б25. DECOMM
 
-DEC:inventory → GATE:go → HF:backup → DEC:exec → ORCH:shared-state → GATE:done. Инвентарь всех путей, never-auto «удаляй» с цитатой/ts, проверенный backup, затем архивирование и shared-state. Рецепт не даёт rm без evidence. Откат на канбан не является разрешением DECOMM без собственной приёмки.
+DEC:inventory → GATE:go → HF:backup → DEC:exec → ORCH:shared-state → GATE:done. Инвентарь всех путей, never-auto «удаляй» с цитатой/ts, проверенный backup, затем архивирование и shared-state. Рецепт не даёт rm без evidence. Откат на канбан не является разрешением DECOMM без собственной приёмки. Для снимаемого скилла полный read-only inventory функций/потребителей/зависимостей и чтение всего скилла обязательны, compress не применяется; допустим decommission-without-master без фиктивного master/compress-PASS (Q2).
 
 ## Б26. SKILL-DEV
 
@@ -469,16 +428,17 @@ DEV в hermes-workspace/skills, REV default ON, размерный preflight и 
 
 ## Б27. SKILL-CHANGE
 
-SK:preflight — механический wc -c оркестратора, затем подтверждённая CHANGE либо DECOMM ветка в skill_change_branch. Новый маршрут использует следующий приоритет:
+SK:preflight — механический wc -c оркестратора; подтверждённая skill_change_branch разделяет create/change и DECOMM.
 
 | Условие | Следствие |
 |---|---|
-| SKILL.md больше 15 000 байт | Compress обязателен независимо от количества файлов |
-| Размер равен порогу или меньше, implementation ≤3 файлов | Допустим малый маршрут/skip compress и REV по канону, если остальные ограничения LIGHT соблюдены |
-| Больше трёх implementation-файлов, shared или другие ограничения | Полный соответствующий маршрут |
-| Исторический индивидуальный skip | Только факт своего старого поезда; не прецедент для нового |
+| Создание/изменение: SKILL.md >15 000 байт | Compress обязателен независимо от числа файлов |
+| Создание/изменение: размер ≤15 000 и implementation ≤3 файлов | Малый маршрут/skip compress и REV только при остальных условиях LIGHT |
+| Создание/изменение: >3 implementation-файлов, shared или иные ограничения | Полный соответствующий маршрут |
+| DECOMM при любом размере, в том числе без master | Полный read-only inventory функций/ссылок/потребителей и чтение снимаемого скилла; без compress и без изготовления master; go «удаляй» + backup до delete |
+| Исторический индивидуальный skip | Только факт своего поезда, не прецедент |
 
-Это десятичный порог в байтах, strict >. Он уточняет прежнее 15k; размер части extract измеряется отдельно в Unicode, Б60.5. Already required compress нельзя убрать из recipe ради новой упаковки.
+Порог strict >15000 десятичных байт (14999/15000/15001); 3/4 paths проверяются отдельно. DECOMM не получает compress-PASS. Размер части extract — Unicode, Б60.5; уже требуемый create/change compress нельзя удалить ради упаковки.
 
 ## Б28. Идеи
 
@@ -486,19 +446,19 @@ idea=true сохраняет запрос и origin без автостарта.
 
 ## Б32. Ошибки и origin
 
-Технические ошибки DevWorkflow: report_error.sh через pipeline_errorbus.py, --tool dev_workflow, :11112, --source-kind, не --source_kind; rc/stage/cmdline/log-path/llm-model/detail передаются с безопасной диагностикой. Не Monitoring :7. Кейсовые HITL, AC-shown/AC-delivered, WAIT/DONE/INTERRUPTED и warn — существующий origin chat/thread, без stdout роли. Severity/нотификация амортизируются по смыслу, не на каждый increment дедупа. Новый канал и ErrorBus cron не создаются.
+Технические ошибки DevWorkflow: report_error.sh через pipeline_errorbus.py, --tool dev_workflow, :11112, --source-kind, не --source_kind; rc/stage/cmdline/log-path/llm-model/detail передаются с безопасной диагностикой. Не Monitoring :7. Кейсовые HITL, AC-shown/AC-delivered, WAIT/DONE/INTERRUPTED и warn — существующий origin chat/thread, без stdout роли. Severity/нотификация амортизируются по смыслу, не на каждый increment дедупа. Новый канал и ErrorBus cron не создаются. :11112 — ErrorBus topic, не HTTP-порт. Ошибки запуска/crash доставляются отдельно от обычного kanban_task_blocked; структурный source/run/phase и delivery ack/pending различаются, rc0 оболочки не доказательство доставки.
 
 ## Б33. Запреты
 
 - Ноль патчей hermes-agent, gateway/session.py, kanban_*; ноль systemd hooks на update и restart Gateway из этого процесса без установленного operator-допуска.
-- Нет минутного dispatcher, heartbeat/reaper/claim_lock/max_in_progress, канбан-клона, возраста started_at как повода kill, живого kanban.db как SoT или SQL write состояния разработки.
+- Единственный lifecycle — штатный канбан с claim/heartbeat/reclaim/timeout/breaker. Запрещены собственный dispatcher/reaper/watchdog/claim-lock/doorbell-продолжатель, канбан-клон, kill по возрасту started_at и прямой SQL-write. Native канбан как SoT разрешён D1/D2/D3.
 - Нет нового сервиса, БД, очереди, канала, cron, budget engine или global mutex. **[NEW-ENTITY, требует согласования Саши]** не сглаживать. No new service, database, queue, channel, cron, budget engine or global mutex.
 - Кроны только после «ставь кроны», удаление требующих этого объектов только после «удаляй». dwka_guard.sh не канон/механизм recover; не исполнять и не удалять в обход его hold.
 - Секреты не в YAML/git/packet; per-tool .env запрещён. Исполнитель не пишет общий manifest/секреты/jobs; новые YAML-ключи не добавляются «на будущее».
 - Нет ручной правки process state/journal/queue, accepted packet/sidecar/prepare, backfill proof, reset counters и переписывания чужой истории. Любая запись только штатным writer разрешённой фазы.
-- Нет подмены case/recipe/G6, обязательной ревизии или операторского словаря; нет склейки ролей и HF:impl/HF:test, process commands из живой содержательной роли.
-- Нет --force/ручного prompt/--continue, повторного invoke при живом wrapper, неверного canonical или complete без проверяемого evidence. PID обёртки не заменяется agent/pgid/session_id.
-- Нет безлимитного retry, второго recover той же пары, обхода quota backend/моделью/аккаунтом/slug, перестановки FIFO без указания Саши. Лимиты ходов не переносятся в ядро/agent.max_turns/tool_loop_guardrails.warn_after.
+- Нет подмены case/recipe/G6, обязательной ревизии или операторского словаря; нет склейки ролей и HF:impl/HF:test. Разрешены только собственные штатные terminal/review tools managed worker при проверенных identity/gates (D5/Q1); управление очередью, чужими runs и raw board mutation внешним executor запрещены. AC-074/076/078 → P04/P06/P08, IAC-04/05 сохраняются.
+- Нет --force/ручного prompt/--continue, повторного invoke при живом собственном transport/writer, неверного canonical или terminal без проверяемого evidence. Законная terminal-передача после завершения writers не ждёт выхода всего Hermes turn. Native identity не подменяется PID/pgid/external session.
+- Нет безлимитного retry, собственного recover-loop, обхода quota backend/моделью/аккаунтом/slug, перестановки FIFO без указания Саши. Технические attempts — native, recover_counts не импортируются; внутри attempt retry/fallback запрещены. D6 worker75/cooldown и worker78/sticky по Б13.2 не заменяются local rc. Б49 не переносится в agent.max_turns/tool_loop_guardrails.warn_after.
 - Не считать extract SoT, не обрезать имена/пакет/обязательные секции, не шарить extract между слагами; нет неявного отсутствия ранее произведённого extract.
 - Не переносить recovery/case/phase ownership в cursor-cli, не удалять Cursor rollback. Компрессор использует выбранную YAML ветку по Б60; координатор остаётся sirene.
 - Не возобновлять Б58/Б59, B3/B4/w3/w4 и иные явные паузы; не присваивать исторический candidate/done/approval другой задаче. Runtime FAIL/no-entry не становится PASS по закрытию процесса.
@@ -512,49 +472,49 @@ idea=true сохраняет запрос и origin без автостарта.
 
 | AC | Класс | Проверка |
 |---|---|---|
-| AC-001 | S | Три слоя на диске; ноль кода в hermes-agent; ноль импортов kanban_* в pipeline/ |
-| AC-002 | S | SoT = `_state.json`; queue.json пересобирается из glob |
-| AC-003 | S | flock + atomic rename + append journal; abort не rm |
-| AC-004 | S | glob vs index: repair / CRISIS + ErrorBus; state_sha256 |
+| AC-001 | S | Нет patch Hermes core/второй машины; старый запрет канбана заменён D1; P28/P30/P32, IAC-01, IAC-04, IAC-10. |
+| AC-002 | S | Доска единственный SoT, документная проекция не запускает работу; P01/P33, IAC-03, IAC-04. |
+| AC-003 | S | Штатные атомарные изменения и история, crash не создаёт runnable half-graph; P01/P33, IAC-03, IAC-04. |
+| AC-004 | S | Вместо state_sha сверяются board/run identity и exact artifact bindings; P16/P27/P33, IAC-04, IAC-06. |
 | AC-006 | S | CHANGE: полный recipe Б18, skip только табличный или flag-waived |
-| AC-007 | S | complete-phase без --reason/--evidence → exit 2, state не меняется |
-| AC-008 | S | мёртвый PID → interrupted, без reaper и авто-spawn. классификация interrupt остаётся; ход Сирени на recoverable — AC-071 (`RECOVER`), не этот AC |
-| AC-009 | S | billing / 90-90 → interrupted + ErrorBus, без авто-ретрая |
-| AC-010 | S | нет минутного цикла, нет heartbeat/claim/max_in_progress в коде pipeline |
+| AC-007 | S | Переход без reason/evidence отказан предметным check; P33, IAC-04. |
+| AC-008 | S | Stale/expired run обслуживает native reclaim, своего reaper нет; P13, IAC-05. |
+| AC-009 | S | Transient75/cooldown и terminal78/sticky; exhaustion90/90 отдельный; P10/P11/P12, IAC-05. ENV-03/D6 NOT_PROVEN; B3 не включён, local rc не worker outcome. |
+| AC-010 | S | Единственный native dispatcher, нет loops/kill/reaper владельца процесса; P13/P32, IAC-03, IAC-05, IAC-10. |
 | AC-011 | S | G3: changed_files HF:impl в git-worktree закоммичены до HF:test и GATE:done |
 | AC-012 | S | Emit обязателен, --force отсутствует; полный immutable packet, доктрина/MUST-read, exact context-used binding Б56; готовая часть extract ≤5120 Unicode по Б60. |
-| AC-013 | S | invoke_role: три бэкенда; скилл не вызывает `agent -p` в обход адаптера |
-| AC-014 | S | конфиг только EcosystemConfig `tools.dev_workflow`; нет per-tool .env |
-| AC-015 | S | ошибки инструмента в ErrorBus :11112; кейс — origin |
-| AC-020 | S | `pipeline status --check` exit 1 если контур задет (нет скилла/pipeline/импорт kanban) |
-| AC-021 | S | LIGHT = set-case одна функция; второго create-батча нет |
+| AC-013 | S | Hermes и Codex live; Cursor contract поставлен отдельно от live availability; P23, IAC-02, IAC-05. |
+| AC-014 | S | У каждой настройки owner/reader; refs в карточке и per-run evidence; P22, IAC-02. |
+| AC-015 | S | ErrorBus safe structured event+delivery ack; rc0 wrapper недостаточен; P24/P25, IAC-08. |
+| AC-020 | S | Установленная совместимость канбана; прежнее no-kanban superseded D1; P26/P28/P32, IAC-09, IAC-10. |
+| AC-021 | S | LIGHT допустим по объёму/запретам, короткий хвост без выдуманных фаз; K03/K05/P20, IAC-03. |
 | AC-022 | S | status=done слага только после GATE:done done |
 | AC-023 | S | S/O/C; operator-done требует evidence; open Q валит preflight |
-| AC-025 | S | install.md: чистый `status --check` на конфиге другого корня (фикстура путей) |
-| AC-026 | S | CLI: reason обязателен на complete/hold/interrupt/abort; также на `recover`; evidence — на complete/operator-done/`recover` |
-| AC-027 | S | journal: все поля Б10.2; неполная запись → exit 1 |
+| AC-025 | S | Другой root: полный install/board mapping/load, не только скопированный skill; P26, IAC-09. |
+| AC-026 | S | Обязательные поля reason/evidence/identity проверяются перед приёмом; P33, IAC-04. |
+| AC-027 | S | Каждый предметный event имеет source/run/phase/actor/time, no phantom acceptance; P33, IAC-04. |
 | AC-028 | S | Полные действующие oracle A1–C15 определены в Б34.1; изолированные фикстуры/чеклист проверяют каждый, без чтения истории и без живого убийства агента. |
 | AC-030 | S | HF:test зовёт probe боевого python |
-| AC-031 | S | preflight перенесён: нет kanban.db, есть mandatory_phases/holds/AC-report/git_proof |
+| AC-031 | S | Единый final preflight защищает terminal, manual обход не аттестован; P07/P20/P30, IAC-04. |
 | AC-032 | S | имена фаз/кейсов = канон Б6; запрещённые синонимы GLOSSARY §7 соблюдены в скилле |
-| AC-037 | S | цикл архитектор↔ревизор в новом движке (Б16.1): REQUEST-CHANGES не complete REV и не auto-promote к finalize; вердикт вернулся архитектору; повторный APPROVE; смена фазы без потери `_state.json` |
+| AC-037 | S | Exact canonical verdict, independent review/changes/review, no self-approve; P04/P05, IAC-04. |
 | AC-038 | S | reuse `extract.md` внутри слага при том же `extract_key` без повторного compress; между слагами файл не подхватывается |
 | AC-039 | S | после bump `tz_version` / mtime emit-prompt не берёт старую выжимку; G1 красный, если `extract_sha256` не от текущей version |
-| AC-040 | S | handoff-фикстура чужого `DEV_STATE_ROOT`: bundle без sqlite, перепись путей из YAML, `pipeline check` / G1 на приёме; `/tmp/task.md` не в bundle |
+| AC-040 | S | Handoff включает доску/runs/events/attachments/ссылки, а не папку dev; P26, IAC-09. |
 | AC-041 | S | complete `TZ:compress` / `HF:compress` запрещён при непокрытых священных именах master vs extract; часть 1/N вместо молчаливой обрезки |
-| AC-042 | S | комплект поставки (скилл + pipeline + шаблон конфига + docs) разворачивается на чистом контуре по onboarding/install; пилотный смоук без знания внутренностей |
+| AC-042 | S | Полный проверенный install/restore и loaded tested bytes на другом Hermes; P26/P29, IAC-09. |
 | AC-044 | S | Файрвол ролей: Сирень не пишет ТЗ/код, не предлагает слаги и технические варианты; архитектор — ТЗ/план/диагноз, не боевой код и не `HF:test`; ревизор — только проверка; исполнитель — только план, неясно → возврат архитектору |
 | AC-045 | S | Вход «баг + слаги»: `init --case BUGFIX` сразу; в origin нет нумерованного меню слагов/решений от оркестратора до `invoke_role` architect |
 | AC-046 | S | suggest-slug возвращает один kebab ≤48; init без --slug/--slug-source успешно вычисляет suggest-cli; отсутствующий/подменённый сохранённый slug_source отвергается. Kind task запрещён. |
 | AC-047 | S | G6: таблица Б6 покрывает все фазы recipe десяти кейсов, включая RS:collect, MIG:block-k и SK:preflight; нет строки — exit 1. Для содержательных фаз сверяются `phases.<PHASE>.role` и accepted invocation. Обычный CLI writer с actor=cli и правильной принятой ролью проходит при прочих G1–G5; отсутствие/чужая принятая роль даёт exit 1 независимо от actor, в том числе actor=architect не легализует неверную роль. SK:preflight с содержательной invoke-ролью и emit/invoke с чужой ролью отказаны. Канонический basename и свежесть результата — Б13; неканонный файл даёт fail+hint. Вердикт и конфликт полей — Б16.1. |
 | AC-048 | S | `pipeline status --slug` показывает стадию, кто делает, ход Саши |
-| AC-049 | S | Origin = вход требований + выход отчётности; stdout роли в origin не копируется; оркестрация = файлы + subprocess. `[NEW-ENTITY]` канал не создаётся |
-| AC-058 | S | Occupancy-дедлок: после `next`→WORK на sirene-фазе G6 — в том же ходе `complete-phase` или `interrupt`; leftover `in_phase`+`doing`+`pid=None` — дефект; CLI чужой слаг не mutex |
-| AC-059 | S | На изолированном слаге abort сохраняет каталог и journal, устанавливает aborted; повторный init того же имени даёт exit 1. Interrupt до abort сохраняет имя незавершённой задачи и позволяет штатное продолжение через writer; ручной JSON-write запрещён. Правило членства и занятых имён — Б10. Исторические пилоты не возобновляются. |
-| AC-060 | S | Sirene с pid=None → WORK без interrupt; true-crash invoke без role → RECOVER при счётчике 0, иначе INTERRUPTED; leftover --check красный без автоматической мутации. |
-| AC-061 | S | `invoke_role` записывает `st.pid` и `phases[phase].pid` на `write_state` `invoke_prepare` **до** spawn адаптера (`os.getpid()` обёртки). После `invoke_prepare` (stub backend) `read_state().pid` = pid CLI и `pid_alive` |
-| AC-062 | S | Post-invoke doing + role + мёртвый wrapper → WORK без dead-pid. При role is None true-crash использует AC-071 и Б16.6. |
-| AC-063 | S | Leftover sirene ≠ живой invoke с незаписанным pid. Оркестратор не заводит второй поезд и не `next`/`interrupt` по `pid=None`, пока `ps` показывает `pipeline.cli invoke-role --slug <этот>`. `--check` leftover invoke только при `role is None`; живой pid после AC-061 = running. CLI-gate `complete-phase` тоже ждёт конца wrapper — AC-076/078, корпус этого AC не откатывать |
+| AC-049 | S | Origin source сохраняется, вопросы/AC/report в исходный thread; P25, IAC-08. |
+| AC-058 | S | Подготовка/crash/ожидание не выдаются за работающую роль; P03/P13/P25, IAC-05, IAC-08. |
+| AC-059 | S | Cancel сохраняет историю/занятое имя, не done и не rm; P01/P33, IAC-03, IAC-09. |
+| AC-060 | S | Перед invocation различимы prep/admission/run/result/terminal; spawn failure честен; P13/P25, IAC-05. |
+| AC-061 | S | Вместо st.pid exact native run identity + external session + writers proof; P06/P13/P23, IAC-05. |
+| AC-062 | S | Saved effect принят один раз по receipt/commit без повторного выполнения; P08, IAC-05. |
+| AC-063 | S | Живой writer исключает второй invoke и terminal передачи; P03/P06, IAC-05. |
 | AC-064 | S | Запрет отсекателя stdout (head/tail/SIGPIPE), фон без пайпа и полный безопасный oracle заданы в Б13. Фикстура/чеклист проверяет явный запрет в SKILL.md и этом ТЗ; живым убийством агента SIGPIPE не проверять. |
 | AC-065 | S | Классификатор fatal структурно-осознанный: JSON `--output-format json` парсится как JSON (`is_error`/`type=="error"` → fatal); не-JSON — fallback на строгие сигнатуры провайдера, **без** голых `timeout`/`credits`/`billing`/`payment`; «выполнил, но в тексте есть бытовая лексика» → НЕ fatal. Юнит: `{"result":"timeout 120-300s"}` → False; `{"is_error":true}` / `iteration 90/90` / `http 503` → True. валидный JSON `is_error=false`/без error-поля → НЕ fatal при любом тексте в `result` (цитата `Request timed out` ≠ сбой провайдера). Трёхзначный control-flow и envelope-приоритет — Б13 / AC-119 (корпус 0.4.7 не откатывать) |
 | AC-066 | S | Rc 124/137/143 сам по себе не provider-fatal и не retry: проверить writers/result/receipt, затем применимый регламент Б55.5; повтор без нового основания запрещён. |
@@ -562,35 +522,35 @@ idea=true сохраняет запрос и origin без автостарта.
 | AC-068 | S | Fatal-ветка invoke_role передаёт report detail/exit_code/stage/cmdline/llm_model с причиной, rc/ролью/slug и redacted командой; событие самодиагностируемо. Terminal kill классифицируется отдельно по AC-066, не объявляется provider-fatal по одному rc. |
 | AC-069 | S | Severity/нотификация ErrorBus амортизированы по смыслу, не на каждый increment дедупа за 24 часа. Живой прогон слаг-паритета на штатном пути Б13.2/Б32: timeout/credits в успешном тексте роли даёт собранный статус без ErrorBus; искусственный http 503/iteration 90/90 даёт fatal с полным detail. Историческое закрытие чужого события не условие нового прогона. |
 | AC-070 | S | Юнит-тесты `classify_provider_fatal`/`refuse_clean_exit_on_fatal`: «выполнил, но текст содержит timeout/credits/billing» → False; `is_error:true` / `iteration 90/90` / `http 503` → True; флаг ErrorBus `--source-kind` корректно парсится (не `--source_kind`). юнит `{"result":"…Request timed out…","is_error":false}` → False (дырка корпуса 0.4.7). Envelope `is_error=true` / не-JSON `Request timed out` → True. Б13 / AC-120 |
-| AC-071 | S | Pre-invoke (`awaiting_invoke`+`pid=None`) ≠ dead-pid (`next`→WORK). True-crash invoke (мёртвый pid, `role is None`, нет live ps) → `action=RECOVER` при счётчике 0: `pipeline recover` (write_state, не spawn) + origin warn класс S + `next` в том же ходе. Второй тот же класс → INTERRUPTED. Нет крон/reaper/авто-spawn |
-| AC-072 | S | G6 mismatch: exit 1 + journal `g6_role_mismatch`, state кроме journal не менять (корпус AC-047). Оркестратор в том же ходе зовёт `invoke_role` с ролью таблицы G6 (первый правильный вызов) + warn origin. Не interrupt, не второй поезд |
-| AC-073 | S | Пустой/усечённый JSON `result` при rc=0 не proof. Канон расширен: `TZ-patch.md`, `_fix_plan_YYYYMMDD.md`, `RS-collect.md` / `RS-analyze.md`, `MIG-plan.md` (+ старые REV/extract/HF-plan). Нет канона → invoke_role ≠ 0; один correction-pass с файловой доставкой. Канон на диске + короткий `result` = успех |
-| AC-074 | S | rc=0 ≠ фаза закрыта. Канон есть + `role` проставлен + `doing` → same-turn `complete-phase` (окно AC-062), не re-invoke. Канона нет → AC-073. `complete-phase` без evidence по-прежнему exit 2 |
-| AC-075 | S | `invoke_prepare` пишет `phases[phase].model` (resolved `--model` / YAML roles) и `backend`; `complete-phase` architect/reviewer/executor при `model is None` → exit ≠ 0. `status --slug` показывает модель после prepare |
-| AC-076 | S | После фонового invoke-role проверяются exact slug/phase, journal, канон/receipt и завершение wrapper по Б13/Б55.4. Записанный файл, invoke_role в journal или notify по отдельности не доказывают выход wrapper. Пока wrapper жив, next новой фазы/второй invoke/complete-phase запрещены. |
-| AC-077 | S | `invoke_role` после rc=0 / correction пишет `phases[phase].session_id` из JSON агента. `--resume` AC-073 берёт поле, когда wrapper мёртв. Не SoT pid (AC-061 не переписывать) |
-| AC-078 | S | Occupancy CLI: `complete-phase` / `next` (старт новой invoke-фазы / `st.pid=None`) / повторный `invoke-role` / `recover` → exit 1, пока `invoke_wrapper_alive(slug)`. Обнуление pid на `next` новой фазы (cli.py:83–85) остаётся для pre-invoke, **не** поверх живого предыдущего wrapper |
-| AC-079 | S | Doorbell: 0-токенный `pipeline doorbell` считает fingerprint очереди; тот же отпечаток → молчание; смена → wake Сирень (существующий канал), она одна `pipeline next`. Не копия `dwka_guard.sh`. Не recover/spawn/kill. `jobs.json` в этом поезде не пишется; GATE:done **не** ждёт крона |
-| AC-081 | S | `run_codex` собирает `codex exec -C <ABS> -m <id> -c model_reasoning_effort='"<effort>"' --skip-git-repo-check --json --sandbox danger-full-access` + operand = тело prompt-file. Нет `run`, нет `--cwd`, нет `--full-auto`. Юнит: argv фикстуры |
-| AC-084 | S | Вызов из gateway несёт `--sandbox danger-full-access`. Смоук: роль **записывает** канонический файл (read-only sandbox → fail) |
-| AC-085 | S | Каждый `codex exec` роли несёт `--skip-git-repo-check`. Смоук на workspace без `.git` (TZ / USERTOOLS) → rc не «not a git repo» |
-| AC-088 | S | При выбранном default_backend: cursor-cli architect/reviewer/executor, включая LIGHT, используют только roles_cursor.<role>; roles.executor_light и Codex roles не читаются. Сохранены run_cursor_cli и agent -p; модель/override в argv и phases[phase].model на prepare совпадают. Проверка resolver — Б13.2; значения берутся из YAML. |
-| AC-089 | S | `parse_agent_session_id` (или сосед) принимает Codex `--json` stream; `phases[phase].session_id` пишется. AC-061 pid=wrapper не менять |
-| AC-090 | S | Backend-aware resolver Б13.2: codex + LIGHT executor использует roles.executor_light, codex без LIGHT — roles.executor, cursor-cli включая LIGHT — только roles_cursor.executor. Для architect/reviewer берётся соответствующая роль выбранной ветки. Явный override одинаково отражён в argv и phases[phase].model уже на invoke_prepare; значения модели/effort задаёт YAML. |
-| AC-092 | S | Скилл `dev-workflow` не вызывает `agent -p` и не вызывает `codex exec` в обход `invoke_role`. Три бэкенда адаптера на месте (AC-013 не откатывать) |
-| AC-093 | S | Codex auth/provider fatal **структурно** (Б13, корпус AC-119/120): True только при (а) событии ошибки в разобранном Codex `--json` JSONL (`is_error`/`type=="error"`/код клиента с 401 или `token_expired` в поле ошибки, не в `result` успешного события), либо (б) не-JSON stderr/stdout с сигнатурой отказа клиента (строгий fallback). Цитата `HTTP 401` / `token_expired` **внутри** содержательного текста успешного события → False. При смешанном потоке приоритет у **любого** структурного события ошибки. Реальный отказ → rc≠0, ErrorBus, **без** авто-ретрая (корпус AC-009). Не clean-exit 0 |
+| AC-071 | S | Старый recover-loop заменён native attempts; subject 2× отдельно; P05/P13, IAC-05, IAC-08. |
+| AC-072 | S | Wrong first role отказан до admission; correct first role проходит без repair; P15, IAC-04. |
+| AC-073 | S | Краткий stdout не канон; missing canonical output не accepted; P15, IAC-04, IAC-05. |
+| AC-074 | S | rc0 без terminal → protocol_violation; готовый файл сам не завершает фазу; P06/P08, IAC-05. Совместная трасса AC-074/076/078 → P04/P06/P08, IAC-04/05; firewall и запрет чужих runs/raw board mutation сохраняются. Missing canonical/reason/evidence не accepted; после готового результата не re-invoke. |
+| AC-075 | S | Configured model/effort и actual resolution/session привязаны к run; P22/P23, IAC-02, IAC-05. |
+| AC-076 | S | Terminal только после quiescence writers; after-terminal write rejected; P06, IAC-04, IAC-05. Совместная трасса AC-074/076/078 → P04/P06/P08, IAC-04/05; firewall и запрет чужих runs/raw board mutation сохраняются. |
+| AC-077 | S | Сохранённая session ровно своего вызова, новый run не захватывает чужую; P23, IAC-05. |
+| AC-078 | S | No duplicate invoke пока свой transport/writer жив; P03/P06, IAC-05. Совместная трасса AC-074/076/078 → P04/P06/P08, IAC-04/05; firewall и запрет чужих runs/raw board mutation сохраняются. |
+| AC-079 | S | Доставленный native wake; custom doorbell удалён, unchanged tick no LLM; P09/P24, IAC-08. |
+| AC-081 | S | Argv подтверждён installed help, workspace/model/session exact; P23, IAC-05. |
+| AC-084 | S | Ordinary workspace имеет только allowed writes; compressor отдельный OS deny; P23/C03, IAC-05, IAC-07. |
+| AC-085 | S | CLI вне repo возможен supported operand; это не отменяет G3 для code writes; P23/P07, IAC-05. |
+| AC-088 | S | Cursor ordinary/LIGHT executor и architect/reviewer выбирают только roles_cursor; source+prepare+argv+accepted-run exact, Codex key-access/substitution=0 (foreign-poison/absent roles), missing model rc2 до prepare/send; availability отдельно; P23/P23-LIGHT: cursor-cli × executor/architect/reviewer × ordinary/LIGHT × yaml/explicit/missing/foreign-poison, IAC-05. |
+| AC-089 | S | Codex session/result evidence распарсены структурно без stdout эвристики; P23, IAC-05. |
+| AC-090 | S | Codex ordinary→roles.executor, LIGHT→roles.executor_light; Cursor ordinary/LIGHT→roles_cursor.executor; architect/reviewer своей ветки; различающие values+explicit, source/prepare/argv/accepted-run exact; missing rc2/send0, чужих reads=0, defaults/чужой run неизменны; P22/P23/P23-LIGHT: все 48 subcases §6.1 и внутренние missing/LIGHT-варианты, IAC-02, IAC-05. |
+| AC-092 | S | Нет raw role CLI в active instructions, вызов только approved adapter; P23/P28/P32, IAC-05, IAC-10. |
+| AC-093 | S | External error доходит supported path до worker75/78; tool text недостаточен; P10/P11/P12, IAC-05. ENV-03/D6 NOT_PROVEN; B3 не включён, local rc не worker outcome. |
 | AC-097 | S | references/context.md для TZ:patch содержит перечень MUST-read Б12 с точной привязкой ReadRef Б56.4; нет единственной обязанности «всегда весь master». Условия полного чтения и чтение выбранных секций без обрезки сохранены. |
 | AC-098 | S | На изолированной фикстуре TZ:patch emit-prompt передаёт полный перечень MUST-read Б12 и ReadRef Б56.4 по принятому заданию; последний БNN/история не подменяют привязку. |
 | AC-099 | S | Evidence фазы показывает чтение полных выбранных секций Б12/Б56.4; при условии обязательного полного master прочитан весь файл без обрезки. Для штатного sections-режима полный файл сверх перечня не требуется. |
-| AC-102 | S | `pytest` `test_http_429_fatal` / `http 503` зелёные; нет нового модуля retry |
-| AC-104 | S | Pytest: `next` на фазе из `AUTO_GATES` при улике → `complete-phase`, `invoke_role` не звался |
+| AC-102 | S | 429/503 в native/Codex/Cursor дают native cooldown, no inner retry; P10/P12, IAC-05. Исходные имена test_http_429_fatal / http 503 сохраняются; новый retry module запрещён. |
+| AC-104 | S | Auto gates проверяются локально, без содержательной роли/extra model turn; P20/P32, IAC-03, IAC-04. |
 | AC-106 | S | Если проверка зелёная с первого раза — impl-дифф по гейтам пуст |
-| AC-108 | S | HF 26-й / GATE 5-й / TZ 21-й invoke → budget_exhausted:phase-turns, backend не spawn; поле turn_count и limits Б49, без ослабления 90-90. |
-| AC-109 | S | Pytest doorbell: тот же fp; живой pid+mtime канона → fp тот же; смерть pid+mtime → fp другой; tick `queue=<n>` без WAKE/next/recover; смена n → fp другой; нет копии `dwka_guard.sh` n считается по единой проекции готовых задач Б55.6. |
-| AC-116 | S | `pipeline doorbell` / tick не импортирует и не exec `dwka_guard.sh` |
-| AC-117 | S | `cmd_set_case`: после `set_case(d, case)` — `d.pop("state_sha256", None)` до `from_dict`/`write_state`. CLI `set-case` rc=0, stderr без `CRISIS: state_sha256 mismatch`; повтор на тот же LIGHT тоже 0; диск: `from_dict` не `SystemExit`, `read_state` ок, `case`/`recipe` сужены, sha файла = `to_dict`. `from_dict` и `set_case` без правок смысла |
-| AC-118 | S | `pytest pipeline/tests/test_set_case_light.py`: (1) CLI round-trip как оператор; (2) unit: после `set_case` dict с живым старым sha → `from_dict` CRISIS; после `pop` — ок. Живые `_state.json` чужих слагов не трогать |
-| AC-119 | S | Трёхзначный control-flow `_fatal_reason` / `classify_provider_fatal`: (а) валидный JSON `is_error=false`/без error-поля → не provider-fatal, `FATAL_PATTERNS` по `result` не гонять; (б) валидный JSON `is_error=true`/`type=="error"` → fatal, envelope выигрывает у цитат; (в) не-JSON → fallback на строгие сигнатуры (сообщение клиента/парсера). Список `FATAL_PATTERNS` не сокращать; `provider_fatal` non-recoverable |
+| AC-108 | S | Б49 phase limits exact; carrier+external=1, ordinal сохраняется; P14/P23-WS, IAC-04, IAC-05. |
+| AC-109 | S | No changes tick sends=0; duplicate/lost event продолжает единожды; P09/P24, IAC-08. |
+| AC-116 | S | Legacy dwka_guard/doorbell absent active closure; native runtime сохранён; P28/P32, IAC-10. |
+| AC-117 | S | LIGHT narrowing graph сохраняет done/history/extract; старый pop/state_sha заменён; K03/K05/P20, IAC-03. |
+| AC-118 | S | LIGHT positive/negative regression: 3/4 paths, shared/новая сущность/cron/env; K03/K05/P20, IAC-03. Исходный путь pipeline/tests/test_set_case_light.py сохраняется; живые чужие _state.json не трогать. |
+| AC-119 | S | Трёхзначный control-flow `_fatal_reason` / `classify_provider_fatal`: (а) валидный JSON `is_error=false`/без error-поля → не provider-fatal, `FATAL_PATTERNS` по `result` не гонять; (б) валидный JSON `is_error=true`/`type=="error"` → fatal, envelope выигрывает у цитат; (в) не-JSON → fallback на строгие сигнатуры (сообщение клиента/парсера). Список `FATAL_PATTERNS` не сокращать; категория provider failure передаётся по D6 в native worker75/78 без внутреннего retry; local classifier не подменяет worker outcome |
 | AC-120 | S | `pytest pipeline/tests/test_invoke_fatal.py`: JSON `{"result":"…Request timed out…","is_error":false}` и тот же result без `is_error` → `classify` False, `_fatal_reason` None, `refuse_clean_exit` False; `{"is_error":true,"error":"Request timed out"}` / `{"type":"error",…}` → True (json-ветка); не-JSON `"Request timed out"` → True (pattern); бытовое `"timeout 120-300s"` JSON и plain → False (регресс AC-065). Существующие AC-065/066/070 не ломать. Проверяемые файлы: `invoke_role.py` + `test_invoke_fatal.py` |
 
 ### Б34.1 Самостоятельные oracle A1–C15
@@ -599,25 +559,25 @@ AC-028 проверяется на изолированных фикстурах
 
 | Метка | Полный наблюдаемый oracle | Действующая норма |
 |---|---|---|
-| A1 | Rc=0 без evidence/канона не закрывает фазу; пригодный результат после выхода wrapper принимается обычным complete однократно. Успешный JSON с цитатой ошибки не provider-fatal. Нет диспетчера, повторяющего вызов. | Б13, Б16.1, Б8 |
-| A2 | Реальное exhaustion 90/90 даёт interrupted и ErrorBus; автоматического retry/spawn нет. | Б13.2, Б55.4 |
-| A3 | Sirene без PID и штатный pre-invoke дают WORK; живой wrapper не interrupt; post-invoke с принятой ролью даёт WORK. True-crash без роли/результата допускает один RECOVER, затем INTERRUPTED. Running требует живого PID; check показывает leftover без автоматической мутации. | Б13, Б16.6, Б55.6 |
-| A4 | Нет claim_lock/re-claim; продолжение читает файловую SoT и не повторяет принятый результат. | Б10, Б13, Б33 |
-| A5 | Нет failure_limit/streak-диспетчера и его retry; применяются три ограниченных регламента с неизменяемыми счётчиками. | Б33, Б55.5 |
-| B6 | Возраст started_at не запускает block/kill; нет rule4, минутного dispatcher/reaper. | Б33, Б55.6 |
-| B7 | Operator-hold отражается waiting_operator и удерживает текущую задачу; класс O не создаёт recurrence/triage-поезд. | Б17, Б55.2 |
-| B8 | На init есть полный recipe, G4 не пропускает обязательные фазы; LIGHT сужается одной set-case без карточных рёбер/второго init. | Б6, Б8, Б20 |
-| B9 | Python не убивает PID как kill-on-restart dispatcher; работа live wrapper защищена. | Б13, Б33 |
-| B10 | Idea не стартует сама и не выдёргивается из triage; продвижение связывает один обычный slug с источником, сохраняет FIFO. | Б28, Б55.2 |
-| B11 | Нет claim; complete без evidence запрещён; пустой/усечённый результат без канона не proof. | Б8, Б13 |
-| C12 | Отсутствующие reason/evidence дают предусмотренный CLI exit 2 без записи; status строится из state и показывает фазу/роль/ход Саши, без потерянной колонки. | Б8, Б55.6 |
-| C13 | Ожидание оператора едино: waiting_operator с причиной и matching hold; blocked не скрывает HITL и не освобождает FIFO. | Б17, Б55.2, Б55.6 |
-| C14 | Модель разрешает единый invoke adapter из выбранной YAML-ветки/допустимого override, не карточный model_override/D1; missing model/auth отказывает по своему классу без обхода. | Б13.2, Б60.4 |
-| C15 | Journal/jsonl/state сохраняют обязательные события и provenance; история доступна без SQL/kanban show; неполное событие не мутирует state. | Б10.2 |
+| A1 | Exact structured evidence, цитата не ошибка, файл не terminal; P06/P08/P12. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б13, Б16.1, Б8 |
+| A2 | 90/90 не provider75 без основания, ErrorBus delivered/pending честно; P12/P24. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б13.2, Б55.4 |
+| A3 | Native run/session/writers отличают active/prep/crash; P06/P13/P25. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б13, Б16.6, Б55.6 |
+| A4 | Native claim вместо старого запрета; accepted receipt не повторяет effect; P08/P13. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б10, Б13, Б33 |
+| A5 | Native breaker отдельно от second-same semantic issue/Б49; P05/P13/P14. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б33, Б55.5 |
+| B6 | Native lifecycle вместо запрета своего reaper; своего владельца нет; P13/P32. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б33, Б55.6 |
+| B7 | O/C/cooldown/idle не позволяют очередь обойти; P03/P20. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б17, Б55.2 |
+| B8 | Полные 10 маршрутов, required/включённые optional не пропущены; K01–K10/P20. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б6, Б8, Б20 |
+| B9 | Native cleanup, quiescent writers, нет второго kill-owner; P06/P13. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б13, Б33 |
+| B10 | Idea зарегистрирована без invoke; ready FIFO имеет источник; P02. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б28, Б55.2 |
+| B11 | Own run/role/phase/canonical output и terminal evidence полны; P06/P15/P33. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б8, Б13 |
+| C12 | Контракт карточки и обзор содержат origin/кто/почему/пределы stale; P25/P33. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б8, Б55.6 |
+| C13 | O/C/Q различены; S не блокирует, необоснованный unblock не снимает O; P03/P20. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б17, Б55.2, Б55.6 |
+| C14 | Единственный owner и effective reader, не копия значений в каждой карточке; P22/P23. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б13.2, Б60.4 |
+| C15 | Native events/runs вместо writer файлового journal, cancel не стирает данные; P33. Исходный subject AC-028 сохранён; несовместимый механизм superseded D1–D9. | Б10.2 |
 
 ## Б49. Лимиты ходов фазы
 
-Ход фазы — один принятый cmd_invoke_role пары slug/phase, включая resume/correction, не внутренний tool-call. turn_count увеличивается на prepare вместе с PID; invalid outer terminal request его не увеличивает. Перед spawn: следующий ход сверх лимита даёт budget_exhausted:phase-turns, interrupt/ErrorBus, ненулевой rc и ноль backend sends. GATE ≤ 4, TZ/REV ≤20, HF ≤ 25, BUG/RS/MIG/DEC ≤20. Для sirene-гейтов G6 запрещает invoke; лимит страхует ошибку. Не менять agent.max_turns/goals/delegation и tool_loop_guardrails ради этой нормы.
+Ход фазы — один логический admitted invoke с binding (board, task, phase, run, admission_ordinal), включая resume/correction, не внутренний tool-call. Carrier+external executor одного вызова считаются один раз; resume/correction — новый invoke; pre-admission отказ не считается. Native technical attempts отдельно, max_retries не заменяет этот лимит. turn_count увеличивается на accepted admission/prepare; invalid outer terminal request его не увеличивает. Перед spawn: следующий ход сверх лимита даёт budget_exhausted:phase-turns, interrupt/ErrorBus, ненулевой rc и ноль backend sends. GATE ≤ 4, TZ/REV ≤20, HF ≤ 25, BUG/RS/MIG/DEC ≤20. Для sirene-гейтов G6 запрещает invoke; лимит страхует ошибку. Не менять agent.max_turns/goals/delegation и tool_loop_guardrails ради этой нормы.
 
 Предметные Telegram watcher/telemetry/anomaly scan, их AC-094…096/112/113/121…128 и точные fixtures находятся в отдельном приложении у прежних владельцев. Отсутствующая/нечитаемая lease запрещает закрытие; T1 требует проверенную истёкшую запись или принятое свидетельство освобождения. Это сохранение C02, не запуск watcher и не изменение jobs.
 
@@ -626,16 +586,16 @@ AC-028 проверяется на изолированных фикстурах
 ### Б55.2 Приём, готовность и FIFO
 
 1. Оркестратор сохраняет каждый новый запрос с исходным текстом, origin и временем поступления. Повторная доставка того же запроса дополняет его запись, не создаёт второй исполняемый поезд. Пока другая задача занята, допустимы регистрация и приём фактов; вторую содержательную роль не звать.
-2. **idea** — объём или требования ещё не закрыты. Использовать существующий `idea=true` и механизм Б28; `pipeline init --idea` не означает автозапуск `RS:collect`/`IDEA:analyze`. Разбор idea начинается только по явной постановке и после освобождения единственного потока. Нового кейса `idea` не вводить.
+2. **idea** — объём или требования ещё не закрыты. Использовать существующий `idea=true` и механизм Б28; заблокированная/triage регистрация штатной карточки не означает автозапуск `RS:collect`/`IDEA:analyze`. Разбор idea начинается только по явной постановке и после освобождения единственного потока. Нового кейса `idea` не вводить. Для DevWorkflow auto_decompose=false; это не отключает dispatcher.
 3. **Готовая задача** — проработанная постановка по существующему ТЗ либо срочный баг с достаточными фактами для канонного `BUG:diagnose`. Готовый запрос не ждёт повторного «берём в работу». Срочность бага не даёт автоматического права обогнать ранее готовые задачи.
 4. Для планового изменения до исполнения известны master, объём, запреты и принятые требования; до `GATE:take-into-work` закрыты содержательные вопросы и пройдена требуемая ревизия. Для бага до диагноза не требуют известного root cause: диагноз входит в ту же единственную задачу. Неподготовленный запрос сохраняется в triage.
-5. FIFO считается по **первой подтверждённой готовности к очереди**, а не по имени каталога, mtime, последнему `next` или возрасту сырой idea. Время приёма сохраняется отдельно для измерения ожидания. При одинаковом времени — порядок записи в существующем `queue.log.jsonl`, затем slug как стабильная развязка. Смена порядка — только дословная дополнительная инструкция Саши с origin и временем в журнале.
+5. FIFO считается по **первой подтверждённой готовности к очереди**, а не по имени каталога, mtime, последнему `next` или возрасту сырой idea. Время приёма сохраняется отдельно для измерения ожидания. При одинаковом времени — порядок записи в штатной истории событий готовности, затем slug как стабильная развязка. Смена порядка — только дословная дополнительная инструкция Саши с origin и временем в журнале.
 6. Для новых готовых запросов время `init` может служить временем готовности. Для ранее сохранённой idea готовность фиксируется отдельной датированной записью журнала с evidence закрытой постановки. Продвижение по существующему Б28 связывает idea и один обычный слаг; исходная idea получает ссылку «передано в <slug>» и больше не считается вторым незавершённым запросом. Массовое пересоздание слагов запрещено.
 7. Выбранная первая задача владеет потоком **до её `GATE:done` и отчёта**, либо явной отмены Сашей с `aborted`. Межфазовый `idle`, ожидание ревизии/контекста/лимита, `blocked`, `interrupted` и `waiting_operator` владение не снимают. Следующую FIFO-задачу в этих случаях не стартовать. При явной отмене хранить причину; отменённая работа не называется выполненной.
 8. Зависимости проверяются до дорогого вызова и отражаются в готовности. Зависимую задачу не объявлять готовой при известном незакрытом допуске. Если после выбора обнаружена зависимость от задачи позади неё, очередь не переставлять молча: архитектор с ревизором диагностируют причину и допустимое устранение внутри согласованного объёма. Иначе фиксируется ожидание/противоречие постановке по Б55.3, без второго поезда и без фиктивного done.
-9. Выбор следующей задачи делает оркестратор по этим правилам, когда текущая закончена. Python хранит факты и показывает порядок; отдельного диспетчера, глобального mutex или сервиса в этом объёме нет. Одна роль работает в каждый момент; несколько workspace одной фазы обслуживаются последовательно.
+9. Сирень задаёт порядок допуска по этим правилам штатными карточками/рёбрами, dispatcher запускает assignee. max_in_progress=1 само по себе не доказывает FIFO/удержание blocked; глобальные настройки общей доски не ограничивают несвязанные работы. Одна рабочая содержательная роль; workspace последовательно. После terminal может ещё существовать завершивший передачу Hermes turn без права записи.
 
-Сохраняются `_state.json` схемы `devworkflow-state/1.0`, `idea`, `status`, `phase`, `phases`, `origin`, `operator_holds`, `open_questions`, `recover_counts`, `journal.md` и вычисляемый `queue.json`. Время готовности, назначение текущей задачи, причина ожидания, ссылка на приоритет и передача idea — датированные факты существующего журнала; это не новая схема task packet. Их запись использует `write_state`/существующие валидные события с `reason`/`evidence`; новые root-поля, event enum и CLI-флаги без необходимости не вводить. В `HF:plan` показать точное соответствие этим существующим механизмам и согласованное чтение после обрыва. Наличие одной записи `status=in_phase` не доказывает ни глобальный запрет, ни владение задачей до конца.
+Источник состояния — native tasks/dependencies/runs/events и предметные evidence/refs. Готовность, текущая задача, причины ожидания, приоритет и передача idea — датированные факты с reason/evidence/identity. _state.json/queue.json/journal.md/recover_counts не являются активной машиной. Сборка графа до открытия входа выполняется под штатной блокировкой: root не предшественник своих фаз, partial graph не runnable; повтор create идемпотентен. Исторические paused/done не переносятся как новые ready.
 
 ### Б55.3 Контекст и проверка допущений
 
@@ -649,51 +609,47 @@ AC-028 проверяется на изолированных фикстурах
 
 ### Б55.4 Продолжение, круглосуточность и ожидание лимита
 
-Основной триггер продолжения — **событие окончания роли** через существующий background completion/notify. Оно будит оркестратора; сам notify не является proof окончания wrapper. Оркестратор сверяет точный `(slug, phase)`, живость wrapper, журнал и канонный артефакт, затем закрывает фазу или применяет один из регламентов Б55.5. После закрытия берёт следующую фазу; после завершения задачи — следующую FIFO. Сообщение Саши для этих переходов не требуется.
+Продолжение принадлежит native dispatcher и task_runs/events; штатный terminal после writers завершает владение фазой (D3/D5). Сирень поддерживает предметный порядок допуска/FIFO, механические гейты и evidence; собственного background notify/doorbell-диспетчера нет. Сообщение Саши для обычного продолжения не требуется.
 
 | Наблюдение | Действие |
 |---|---|
-| Wrapper жив, в том числе файл уже записан | Ждать окончания; не `complete-phase`, не второй invoke и не переход другой задачи. Роль пишет свой артефакт; не мониторит собственный wrapper вместо результата. |
-| Wrapper завершён, канон свежий, результат проверен | Обычный `complete-phase` с evidence; post-invoke WORK/RECONCILE не превращать в dead-pid. |
-| Обрыв после записи результата, завершение фазы не записано | Сначала сверить/принять уже имеющийся результат по Б13, G1/G2 и канону; не перезапускать роль для повторной записи того же файла. Нет достаточных доказательств — явное ожидание/диагноз, без ложного PASS. |
-| Повторное событие старой фазы или повторная доставка результата | Уже обработанный результат — no-op; не второй `complete`, invoke, уведомление или запуск следующего слага ещё раз. Использовать имеющийся receipt, если он реализован; при его отсутствии сверять канон и завершённые переходы. |
-| Утрачен основной сигнал completion | Проверенный существующий doorbell обнаруживает смену состояния и будит оркестратора; это страховка, а не основная оркестрация. |
-| Recoverable сбой без пригодного результата, wrapper мёртв | «Техническое восстановление» Б55.5. |
-| Provider refusal, auth/billing, 5xx без признака восстановления | Ожидание причины и подтверждения её устранения; авто-restart/recover не делать. |
-| Исчерпан возобновляемый лимит роли | Ожидание лимита с основанием и условием возобновления; после подтверждённого восстановления продолжить эту же фазу. |
-| Явная пауза Саши / operator-действие / кризис | Ожидание с точной причиной; не снимать по таймеру и не пропускать вперёд очередь. |
+| Свой transport/writer жив | Нет terminal или второго invoke; закончить запись |
+| Writers завершены, output/identity/gates пригодны | Собственный terminal; после него write запрещён, выход всего Hermes turn не граница |
+| Обрыв после записи, terminal ещё не принят | Проверить native previous run/effect/receipt; достаточное evidence принять однократно, иначе блок/диагноз, без files-only compressor PASS |
+| Duplicate/late/foreign событие | Принятый целый результат no-op; чужой/старый identity отказан |
+| Потерян completion | Штатный wake обязан реально доставить продолжение; stdout WAKE не proof |
+| Crash/launch failure | Native attempts/reclaim/breaker и ErrorBus, без собственного recover |
+| Transient429/5xx/timeout/billing/quota | Actual worker75 и native cooldown по D6 |
+| Credentials401/403/model404/TLS | Worker78, sticky block до исправления/ручного unblock |
+| Operator/CRISIS/явная пауза | Удержать текущую задачу, не снимать таймером |
 
-Роли могут стартовать **24 часа в сутки, 7 дней в неделю**. Старое окно будней 19:00–09:00 MSK и его WAIT_WINDOW отменены. Лимит роли не обходят сменой аккаунта, backend/модели, очищением счётчиков, новым слагом или массовым reset. Штат Codex и Cursor как откат остаются; наличие отката не является разрешением обхода лимита.
+24/7 сохраняется; старое окно 19:00–09:00 отменено. Квота не обходится сменой аккаунта/backend/model/slug или reset. Внутри attempt нет retry/fallback; Retry-After/reset и native cooldown подтверждаются реальными событиями, выдуманного срока/серии пробных paid invokes нет. ENV-03/D6 NOT_PROVEN до фактического worker outcome для backend; дизайн B2 не PASS.
 
-Ожидание лимита имеет evidence ответа провайдера, время начала и известное условие возврата доступности. `Retry-After`/время reset, когда они действительно получены, задают ближайший допустимый момент проверки; выдумывать их нельзя. Возобновление выполняется по существующему сигналу доступности или поддерживаемому одноразовому отложенному wake с одной проверкой после указанного момента, без цикла пробных платных invoke. Неуспешная проверка сохраняет ожидание. При неизвестном сроке нужен внешний подтверждённый сигнал восстановления; watchdog не делает серию provider-запросов. Provider-fatal не становится recoverable: новая попытка после устранённого внешнего условия — явно записанное возобновление, не технический retry.
-
-На `HF:plan` проверить фактическую доставку completion, wake страховки и доступность механизма отложенного события на этом хосте, с адресным исключением для текущего CHANGE по Б61.4: подтверждённые loader/candidate-load/primary facts достаточны для проектирования и независимого согласования плана; оставшиеся end-to-end fallback/availability доказываются на пилоте после `HF:test` prep до окончательного `HF:test` PASS. Для остальных задач момент проверки не меняется. Одного печатного `WAKE` в stdout недостаточно. Если механизм отсутствует или обязательная проверка не подтверждена к установленному моменту, фиксация «ожидание: продолжение не обеспечено» и провал соответствующего AC обязательны; новый сервис, крон или второй канал молча не добавляется. Существующий разрешённый механизм можно проверить и исправить в его границах. Установка расписаний всё ещё требует «ставь кроны»; это ТЗ не даёт такого глагола.
-
-Doorbell сохраняет 0 токенов на неизменном состоянии, wake по смене fingerprint, запрет `next`/`recover`/spawn/kill из tick. Для обзора `queue=<n>` означает незавершённые **готовые** задачи, включая текущую; idea, переданные idea, done и aborted в `n` не входят. Исправление подсчёта использует ту же проекцию Б55.6, не второй набор состояний.
+На HF:plan/приёмке проверить supported completion/wake и действительное продолжение. Прежнее индивидуальное исключение Б61.4 сохраняется только для своего CHANGE, не допускает текущий W1. Нет механизма/evidence к требуемому сроку — NOT_PROVEN/FAIL соответствующего AC, без нового daemon/cron/канала. Неизменный native tick не вызывает LLM/send; исторические doorbell AC сохраняют предмет wake, а не старую реализацию. Обзор готовых задач использует одну проекцию Б55.6.
 
 ### Б55.5 Три разных регламента повторов
 
-Они ведутся в журнале с разными названиями и причинами. Автоматические новые счётчики и бюджетные блокировки не разрабатываются. Уже имеющиеся `recover_counts`, phase-turn limits и ядровые ограничения сохраняются; отключать их ради нового регламента запрещено.
+Регламенты фиксируются раздельно с причиной и ссылкой на предыдущий факт. Технические attempts/breaker принадлежат канбану; старые recover_counts не переносятся в max_retries. Предметный повтор и Б49 сохраняются; новый budget engine не создаётся.
 
 | Название | Что считается | Предел и действие | Что не является этим повтором |
 |---|---|---|---|
-| **Техническое восстановление** | Повтор той же фазы после доказанного recoverable сбоя того же класса; существующая пара `recover_counts[phase][class]` внутри слага | Один corrective повтор на класс и фазу. Повторный такой сбой — остановка для диагноза; нового invoke «пока не получится» нет. Смена слова причины не создаёт новый класс. | Приём уже записанного результата; первое исправление G6 до запуска правильной роли; правка решения по REV; изменение требований; ожидание лимита. |
+| **Техническое восстановление** | Штатные attempts после технического отказа | Native retry/cooldown/reclaim/breaker по D3/D6, без своего recover-loop; внутри attempt retry/fallback запрещены | Предметное замечание, изменение требования, verified no-op и pre-admission refusal не являются новым logical invoke |
 | **Повтор замечания** | Одна и та же неустранённая ошибка повторяется в двух последовательных проверках ревизора: тот же объект, нарушенный контракт и суть дефекта, даже при другом номере/формулировке | Первый REQUEST-CHANGES — доработка. Второе подряд то же замечание — **до третьего круга** остановка и диагноз: почему исправление не устранило причину. Архитектор с ревизором фиксируют изменившийся способ решения и проверку устранения; только затем содержательная доработка продолжается. | Разные новые замечания; технический сбой доставки; новый ответ Саши, действительно меняющий требование. Произвольное переименование старого замечания повтор не обнуляет. |
 | **Пересмотр требований** | Новое указание Саши меняет принятый контракт, AC или границы объёма | Отдельная запись: источник/дата, что изменилось, затронутые AC/план/тесты/документация и минимальный возврат к нужной фазе. Изменение согласует архитектор с ревизором; оркестратор исполняет. Числовой лимит смен требований Саша не задавал — не изобретать. | Технический retry, неустранённый баг и просьба «доделай» без изменения принятого содержания. |
 
-Перед любым повтором назвать **один** применимый регламент, ссылку на предыдущее событие и ожидаемое новое evidence. Совпадение нескольких симптомов одного сбоя не даёт по одному повтору на каждый симптом. Отказ провайдера, явная пауза, живой wrapper и CRISIS не расходуют разрешение на автоматическое техническое восстановление и не лечатся им.
+Перед новым logical invoke указать один регламент, ref предыдущего события и новое основание/evidence. Симптомы одного сбоя не дают отдельных попыток. Native technical history не сбрасывается; явная пауза, живой writer, O/C и исчерпанный Б49 не лечатся повтором.
 
-Диагноз стопа — работа внутри текущей задачи, без повторного запуска уже исчерпанного действия: разобрать имеющиеся логи/артефакты, назвать причину и проверить её устранение. Если это требует содержательной правки, вернуться к существующей фазе архитектора и ревизора; если внешняя причина не устранена — сохранить ожидание. Счётчики не обнуляются автоматически после диагноза, новой сессии, ревизии, смены требований или «доделай». Отдельное изменение разрешённого объёма не скрывает историю исчерпанного восстановления. Нет доказанного изменения основания — нет повторного invoke. После диагноза архитектор с ревизором различают новую содержательную работу на изменённых входах и запрещённый повтор того же технического действия; сохраняют ссылку на исчерпанный бюджет. Второй `recover` той же пары остаётся запрещённым. Изменение записи причины, модели или слага не считается новым основанием.
+Повтор того же замечания дважды останавливает до третьего круга: диагноз внутри текущей задачи, без запуска исчерпанного действия; существенная правка возвращается архитектору/ревизору. Смена формулировки, сессии, модели, slug или «доделай» не новый бюджет. D6 transient cooldown допускается только штатным lifecycle, sticky требует устранения причины и ручного unblock; старое правило одного recover и recover_counts superseded D7.
 
 ### Б55.6 Статусы, завершение и история
 
-Источник — проверенные файлы процесса; `queue.json` перестраиваемый индекс. Обзор не требует отдельной доски. Чтение статуса не запускает работу и не выполняет скрытый recovery. Допустима пересборка производного индекса без изменения состояния задач; `status --check`/repair различаются явно.
+Источник статуса — проверенные native tasks/runs/events и immutable evidence; файловая выгрузка имеет refs/time и не запускает работу. Чтение status не делает hidden recovery/reindex. Старые state/queue-index superseded D2.
 
 | Видимый статус | Условие |
 |---|---|
 | **triage** | `idea=true`, постановка ещё не передана в готовую задачу; auto-start запрещён. |
 | **в очереди** | Готовность подтверждена, рецепт не завершён, задача ещё не выбрана; отображается FIFO-позиция. `idle` само по себе недостаточно. |
-| **в работе** | Выбрана текущая задача и реально исполняется её фаза: живой wrapper роли либо работа оркестратора в текущем ходе. Межфазовый переход относится к той же задаче. |
+| **в работе** | Текущая задача и подтверждённый native active run/свои writers либо механическая работа Сирени; подготовка и stale run не выдаются за исполнение. |
 | **ожидание** | Текущая задача удерживает очередь: контекст/зависимость/лимит/диагноз/пауза/оператор/сбой. Показать причину, с какого времени, чей следующий шаг и проверяемое условие продолжения. При мёртвом процессе без результата «в работе» запрещено. |
 | **завершение** | Результат и проверки готовы, но ещё выполняются доставка AC-report, shared-state или конечный гейт. Это не `done` и поток ещё занят. |
 | **выполнено** | `GATE:done=done`, обязательные фазы/улики/доставка подтверждены, корень `status=done`. Запись исключена из рабочей очереди и сохранена в истории. |
@@ -702,7 +658,7 @@ Doorbell сохраняет 0 токенов на неизменном сост�
 
 Минимум строки: название/slug, статус, фаза, роль, последнее подтверждённое событие, время снимка; при ожидании — причина и следующий шаг. Отсутствующие факты выводятся как «не подтверждено». При ошибке обновления показать «данные устарели, проверены <ISO>; причина <…>», не повторять старую running-строку как актуальную. Возраст сам по себе не является поводом убить роль.
 
-Архив выполненных — существующие каталоги слагов и журналы плюс вычисляемая выборка, без четвёртого корня, новой БД и переноса, меняющего ссылки. Для старого `idle` с done-гейтом сначала сверить финальные доказательства; затем через штатную запись привести корень к `done`, сохранив исходную историю и дату завершения. Если evidence расходятся — явная аномалия/ожидание; не повторный init, не автоматическое повторное исполнение и не выдуманный PASS. При закрытии новой задачи `complete-phase GATE:done` сохраняет `status=done` сразу, а `next` на исчерпанном рецепте не возвращает её в ready.
+Архив — native history и сохранённые immutable artifacts с исходными refs, без новой БД/четвёртого корня. Исторический idle/done сверяется с доказательствами; перенос не переисполняет результат и не переписывает старые snapshots. Root done записывается штатной операцией только после GATE:done/доставки отчёта; исчерпанный recipe не возвращает его в ready. Несогласованные facts — аномалия/ожидание, не выдуманный PASS.
 
 Стадия процесса, результат проверки и принятие предметной миграции различаются в отчёте. Runtime FAIL остаётся FAIL; no-entry не становится runtime PASS. Текущий новый пакет не завершается при незакрытом обязательном AC.
 
@@ -716,25 +672,25 @@ Doorbell сохраняет 0 токенов на неизменном сост�
 |---|---|
 | Персона и правила диалога | Фактически активный SOUL; остальные поверхности ссылаются на него. Личные предпочтения сохраняются. |
 | Ограничения среды, каталога, разрешения на cron/restart | Применимый AGENTS; дочерний файл содержит только свою область и ссылку, без второй общей процедуры. |
-| Процесс, очередь, continuation, recovery | Мастер Б55 задаёт требования; `dev-workflow` содержит одну исполняемую процедуру с отсылкой к этим требованиям, предметные скиллы маршрутизируют к ней. |
-| Роли/модели/effort | Значения — существующий `EcosystemConfig.yaml`; инструкции читают его, не поддерживают свои конкурирующие значения. Исторические таблицы мастер-документа не становятся текущим конфигом. |
+| Процесс / execution | Master задаёт требования; dev-workflow — единственный владелец предметной процедуры; tasks/runs/events/continuation/technical lifecycle — штатный канбан |
+| Роли/модели/effort | EcoConfig: роли→профили/рецепты/пути; Hermes config: физически читаемые profile models/dispatcher; adapter branches имеют единственного effective reader/owner Б14, карточки refs/version |
 | Имена фаз/ролей/скиллов | `GLOSSARY.md`; `references/canon.md` — согласованный операционный указатель, не второй каталог синонимов. |
 | USER | Предпочтения Саши; устаревшие «без гейтов»/«потом берём в работу» не сохраняются как отдельная норма процесса. |
 | MEMORY | Проверенные сведения с источником/актуальностью; устаревшие модели, декомиссованные профили и команды запуска выводятся из активных сведений с сохранением истории. |
 
-После установления фактической загрузки архитектор с ревизором утверждают адресный diff: что удалено, куда перенесён смысл, какие ссылки остались. Оркестратор не переписывает предпочтения и правила по собственному мнению. Скилл `dev-workflow` обязан иметь одну непротиворечивую таблицу действий, включая RECOVER и ожидание лимита; ссылки на отсутствующий корпус заменены Б55. Проверка после правок повторяет загрузку и проверяет конечный prompt, а не только `rg` по одному файлу.
+После установления фактической загрузки архитектор с ревизором утверждают адресный diff: что удалено, куда перенесён смысл, какие ссылки остались. Оркестратор не переписывает предпочтения и правила по собственному мнению. Скилл `dev-workflow` обязан иметь одну непротиворечивую таблицу действий, включая native outcomes и предметное ожидание; штатный sdlc-review допустим, не конкурирующий владелец; ссылки на отсутствующий корпус заменены Б55. Проверка после правок повторяет загрузку и проверяет конечный prompt, а не только `rg` по одному файлу.
 
 ### Б55.10 Реализация и передача управления
 
 Порядок внутри существующего рецепта, без новых фаз:
 
-1. `TZ:patch` → `REV:tz` → `TZ:finalize`: этот master, инвентарь и согласованные AC. При REQUEST-CHANGES — Б55.5. Архитектор не закрывает свою фазу и не вызывает ревизора изнутри живого wrapper; результат передаётся оркестратору.
-2. `GATE:take-into-work` показывает AC; `HF:plan` дополняет матрицу требований текущего задания, проверяет фактические механизмы и пишет IAC `path/verify/depends/covers`. Для пилота план называет существующий способ загрузки изменённой процедуры до restore, способ передачи управления после выхода wrapper, точные команды/пути испытания, проверки трасс и конечной загрузки. Для текущего CHANGE по Б61.4 план допускается к независимой `REV:plan` с именованной TZ-зависимостью; до `HF:impl` необходимы собственные `TZ:patch → REV:tz → TZ:finalize`, актуальная связь master/плана/IAC/REV/packet и fresh backup. `REV:plan` проверяет выполнимость этой границы, отсутствие новых тяжёлых механизмов и циклических зависимостей. Затем auto-гейт плана и backup.
+1. TZ:patch → REV:tz → TZ:finalize сохраняют master/inventory/AC и независимую ревизию. Автор после завершения writers и проверки identity/gates вызывает собственный kanban_request_review; reviewer другого профиля принимает либо request_changes по каноническому verdict. Это не вызов ревизора автором/adapter и не управление очередью. Выход всего Hermes turn не граница; после terminal записи запрещены.
+2. `GATE:take-into-work` показывает AC; `HF:plan` дополняет матрицу требований текущего задания, проверяет фактические механизмы и пишет IAC `path/verify/depends/covers`. Для пилота план называет существующий способ загрузки изменённой процедуры до restore, способ передачи управления после terminal и завершения всех writers, точные команды/пути испытания, проверки трасс и конечной загрузки. Для текущего CHANGE по Б61.4 план допускается к независимой `REV:plan` с именованной TZ-зависимостью; до `HF:impl` необходимы собственные `TZ:patch → REV:tz → TZ:finalize`, актуальная связь master/плана/IAC/REV/packet и fresh backup. `REV:plan` проверяет выполнимость этой границы, отсутствие новых тяжёлых механизмов и циклических зависимостей. Затем auto-гейт плана и backup.
 3. `HF:impl` исправляет минимальный основной путь и адресные инструкции. Зафиксировать baseline соседей до правок и неизменяемый на время прогона снимок версии процедуры в workspace. До общей синхронизации испытательный контур загружает эту версию через существующий поддерживаемый способ загрузки скилла/контекста Hermes с явными абсолютными путями; изолировать только данные недостаточно. Загрузку подтверждают по Б55.11. Если доступен лишь старый активный скилл или поддерживаемый способ не найден, пилот не готов, AC не закрывается; скрытый ранний общий restore или новый загрузчик не вводить. Shared-state и синхронизация — их штатные операции, не работа исполнителя за оркестратора.
-4. `HF:test` — отдельная фаза с последовательной передачей управления, без новой фазы или изменения recipe. Для текущего CHANGE принимающий R0, лабораторный R1 и внешний freeze evidence определены Б61.4; новые guards не приписываются R0:
-   - Исполнитель выполняет проверки отказов и подготавливает безопасный контур, входные данные, управляемые ответы ролей и сбор трасс по IAC. Он возвращает подготовленные артефакты и явно незавершённый результат пилота; затем его wrapper должен закончиться. До подтверждённого выхода этого wrapper пилот не стартует, `HF:test` не complete и следующая содержательная роль не вызывается.
-   - После выхода wrapper оркестратор проверяет подготовку и запускает испытание Б55.11. Выбор/удержание задания и продолжение исполняет проверяемая изменённая процедура в контексте оркестратора Hermes, а не исполнитель или драйвер. P1…P5 — вложенные испытания текущего пакета в изолированных данных; текущая задача всё время удерживает единственный поток, другие боевые запросы не стартуют. Пилотные результаты содержательных ролей подаются управляемыми заменами; новых живых содержательных ролей внутри пилота нет. Проверяемый оркестратор остаётся оркестратором, новой G6-роли не возникает.
-   - По окончании пилота и после прекращения его действий оркестратор передаёт собранные трассы исполнителю отдельным последовательным вызовом на той же `HF:test`. Исполнитель выполняет предусмотренные IAC проверки evidence и пишет окончательный тестовый отчёт; сам не проигрывает недостающие решения оркестратора. Это завершение проверки подготовленного испытания, не технический retry и не разрешение сбросить бюджеты. После выхода этого wrapper оркестратор принимает результат по IAC/AC; только полный PASS позволяет закрыть фазу. Невозможность загрузить новую процедуру, доставить wake, выполнить безопасный runtime или проверить обязательный AC сохраняется как FAIL/ожидание.
+4. `HF:test` — отдельная фаза с последовательной передачей управления, без новой фазы или изменения recipe. Для прежнего индивидуального CHANGE Б61.4 (не текущего W1) принимающий R0, лабораторный R1 и внешний freeze evidence определены Б61.4; новые guards не приписываются R0:
+   - Исполнитель выполняет проверки отказов и подготавливает безопасный контур, входные данные, управляемые ответы ролей и сбор трасс по IAC. Он возвращает подготовленные артефакты и явно незавершённый результат пилота; затем его writers должны завершиться и terminal-передача должна быть подтверждена. До подтверждённого завершения этих writers/передачи пилот не стартует, `HF:test` не complete и следующая содержательная роль не вызывается.
+   - После terminal и завершения writers оркестратор проверяет подготовку и запускает испытание Б55.11. Выбор/удержание задания и продолжение исполняет проверяемая изменённая процедура в контексте оркестратора Hermes, а не исполнитель или драйвер. P1…P5 — вложенные испытания текущего пакета в изолированных данных; текущая задача всё время удерживает единственный поток, другие боевые запросы не стартуют. Пилотные результаты содержательных ролей подаются управляемыми заменами; новых живых содержательных ролей внутри пилота нет. Проверяемый оркестратор остаётся оркестратором, новой G6-роли не возникает.
+   - По окончании пилота и после прекращения его действий оркестратор передаёт собранные трассы исполнителю отдельным последовательным вызовом на той же `HF:test`. Исполнитель выполняет предусмотренные IAC проверки evidence и пишет окончательный тестовый отчёт; сам не проигрывает недостающие решения оркестратора. Это завершение проверки подготовленного испытания, не технический retry и не разрешение сбросить бюджеты. После завершения этих writers/передачи оркестратор принимает результат по IAC/AC; только полный PASS позволяет закрыть фазу. Невозможность загрузить новую процедуру, доставить wake, выполнить безопасный runtime или проверить обязательный AC сохраняется как FAIL/ожидание.
 5. `HF:docs-handoff` связывает окончательный план, тесты и документацию с фактическим diff; устаревшие нормы удалены из активных поверхностей. `ORCH:shared-state` выполняет разрешённую синхронизацию и проверяет конечные загружаемые поверхности по Б55.11. `GATE:done` — после всех обязательных AC этого пакета, включая связь пилота с конечной загрузкой, с честным отчётом; только затем следующий готовый запрос.
 
 Перед переводом старых записей — инвентарь незавершённых, completed и противоречивых состояний; не повторять законченное. B3/B4/w3/w4 остаются под явной паузой Саши. В частности, исторически done w3/w4 не открываются заново из-за поздней hold-строки; у паузы сохраняется источник и область действия. Совместить её со state можно только с доказательством, без выдуманного operator-done и без расширения словаря `hold`. Для новых задач порядок Б55 применяется после проверки. Старый путь не оставляется вторым активным исполнителем.
@@ -743,9 +699,9 @@ Doorbell сохраняет 0 токенов на неизменном сост�
 
 ### Б55.11 Проверки отказов и пять последовательных пилотных заданий
 
-Сначала выполнить проверки отказов Б55.13, затем **пять последовательных заданий** на штатном файловом пути в изолированном `DEV_STATE_ROOT`, с безопасным write-set и восстановлением. Это испытания текущей задачи в `IAC.verify` с передачей управления по Б55.10, а не пять посторонних боевых поездов поверх её живой роли.
+Сначала выполнить проверки отказов Б55.13, затем **пять последовательных заданий** на штатном канбанном пути в изолированном испытательном контуре (`DEV_STATE_ROOT` — только каталог документов/immutable evidence; способ изоляции определяется планом), с безопасным write-set и восстановлением. Это испытания текущей задачи в `IAC.verify` с передачей управления по Б55.10, а не пять посторонних боевых поездов поверх её живой роли.
 
-**Объект испытания — изменённая исполняемая процедура оркестратора.** Именно она принимает запросы, выбирает следующий готовый запрос по FIFO, удерживает текущий при блокере/лимите/idle, проверяет wrapper и артефакт после completion, обрабатывает доставленный wake страховки и возобновляет ту же фазу. Драйвер подаёт исходные запросы, факты готовности/зависимости, результаты ролей и отказы; собирает трассы и сравнивает их с ожидаемым результатом. Он не выбирает следующий slug/фазу за оркестратора, не вызывает за него `next`/`complete-phase`/`recover` и не задаёт заранее переходы, удержание или возобновление. Порядок P1…P5 должен получиться из входных фактов и решений процедуры; ожидаемый порядок в проверке не является командой драйвера. Подмена ответов содержательных ролей не разрешает подменять саму оркестрацию.
+**Объект испытания — изменённая исполняемая процедура оркестратора.** Именно она принимает запросы, выбирает следующий готовый запрос по FIFO, удерживает текущий при блокере/лимите/idle, проверяет native run/terminal и артефакт после завершения writers, обрабатывает доставленный native wake и возобновляет ту же фазу. Драйвер подаёт исходные запросы, факты готовности/зависимости, результаты ролей и отказы; собирает трассы и сравнивает их с ожидаемым результатом. Он не выбирает следующий slug/фазу за оркестратора, не вызывает за него native terminal/route mutations и не задаёт заранее переходы, удержание или возобновление. Порядок P1…P5 должен получиться из входных фактов и решений процедуры; ожидаемый порядок в проверке не является командой драйвера. Подмена ответов содержательных ролей не разрешает подменять саму оркестрацию.
 
 Использовать реальные CLI, штатную запись состояния и фактическую доставку события в контекст проверяемого оркестратора. Изменённые инструкции должны быть доступны ему **до** пилота из workspace через подтверждённый в плане существующий способ загрузки, без отложенного общего restore; при новом ходе/перезапуске контекста сверять загрузку снова. Управляемые отказы моделировать без убийства рабочей роли, Gateway и БД. Только mock completion или напечатанный `WAKE` не доказывает доставку события без Саши.
 
@@ -755,7 +711,7 @@ Evidence хранится раздельно с перекрёстными сс�
 
 | Слой | Обязательное evidence |
 |---|---|
-| Реальная оркестрация | Загруженная версия и контекст; входные факты и фактические решения оркестратора о FIFO, удержании, приёме результата и продолжении; снимки state/queue/journal до и после. Времена выхода подготовительного wrapper, действий пилота и последующего вызова проверки подтверждают последовательность Б55.10. |
+| Реальная оркестрация | Загруженная версия и контекст; входные факты и фактические решения оркестратора о FIFO, удержании, приёме результата и продолжении; снимки native tasks/runs/events и artifact bindings до и после. Времена завершения подготовительных writers/terminal, действий пилота и последующего вызова проверки подтверждают последовательность Б55.10. |
 | Транспорт | Отправка и получение completion/wake существующим механизмом с идентификатором/временем и связью с последовавшим действием процедуры. Для страховки отдельно видны пропуск основного сигнала, доставленный wake и продолжение. Поддельный приём события не зачёт. |
 | CLI и файловые эффекты | Реальные вызовы с аргументами, rc, канонные артефакты/хеши и штатные переходы состояния; одно выполнение side effect и отсутствие второй исполняемой задачи. Прямое изготовление итогового state драйвером не зачёт. |
 | Управляемые результаты ролей и отказы | Какой ответ/отказ подменён, чем и когда подан, исходник/параметры драйвера и их SHA-256; предел подмены и связь с запросом, который действительно выдал оркестратор. Эти данные не выдаются за живой invoke роли или отказ реального провайдера. |
@@ -776,6 +732,31 @@ Evidence хранится раздельно с перекрёстными сс�
 
 Из существующих журналов и доступной телеметрии собрать базу до изменений и результаты после: число первичных invokes, повторов **по каждому из трёх регламентов**, duplicate events без нового invoke, ожидание по причинам, длительность задачи, input/output/cache tokens и стоимость с валютой/источником. `invoke_prepare` и `invoke_role` одного вызова не суммировать; денежные данные без привязки к сессии — «не измерено», не ноль. Проценты экономии указывать только при сопоставимой базе/объёме. Денежный предел выбирается после замера отдельным решением; суммы и автоблокировки здесь не изобретаются.
 
+Самостоятельный P31-MET (M3) обязателен для AC-RP-17, IAC-12/W1-11. Полный измерительный контракт и synthetic oracle: [HF-plan §12.4](../../dev/pochinka-dev-workflow-20261112/out/HF-plan-kanban.md).
+
+**Единицы измерения:** логический accepted role invocation определяется HF-plan §5.3 и Б49 этого master, не количеством prepare/result events. Для cardinality сворачивать по `(board,task,phase,run,admission_ordinal)`, а для external carrier связать его с invoke ID и не считать дважды. Для usage сохранить distinct provider request/session usage rows: если carrier и executor оба реально потратили токены, их **стоимость суммируется**, хотя логический вызов один. Подготовительная и результатная копии одной usage записи не суммируются. Resume/correction — новый invocation, не скрывается внутри одного run.
+
+Причина повтора — ровно одно из «Техническое восстановление», «Повтор замечания», «Пересмотр требований», с ref предыдущего вызова и причиной. Primary отдельно. Технический отказ ДО admission попадает в technical attempts/failures, но не logical invocation и не фазовый лимит. Duplicate events, принятые no-op, отдельной метрикой без invoke. Ожидания — интервалы по reason; пересекающиеся intervals для общего wait считаются union, разбивка по причинам может пересекаться и помечается. Task duration = first accepted request/ready boundary, указанная одинаково для base/final, до delivered report; отдельно queue wait от receive до first_ready/start. UTC timestamps, timezone сохранена.
+
+**Принятый synthetic oracle M3 (метаданные пакета N, не runtime evidence):**
+
+| Поле | База B | Итог F | Oracle |
+|---|---:|---:|---|
+| Primary / technical / same-remark / requirement calls | 4 / 2 / 1 / 1 | 4 / 1 / 1 / 0 | logical total 8→6; prepare+result duplicates не 16→12 |
+| Duplicate completion events без invocation | 3 | 4 | Не входят в 8/6, side effect и report delivery один на их объект |
+| Pre-admission rejected calls | 2 | 2 | logical count не меняется; attempts отдельно |
+| Время request→report | UTC 1000→1120 s | UTC 2000→2080 s | Duration 120→80 s, не сумма latency всех event rows |
+| Непересекающиеся ожидания O / cooldown / dependency | 20 / 30 / 10 s | 10 / 20 / 5 s | Union wait 60→35 s; причины/начало/конец имеют source event |
+| Known usage logical records | 7 из 8 | 5 из 6 | Для каждой известной записи input=100, output=20, cached_input=40 (subset input), cost=0.01 USD из mock billing |
+| Известный subtotal input/output/cache/cost | 700/140/280/0.07 USD | 500/100/200/0.05 USD | Cached не прибавить к input; decimal cost; subtotal отдельно от полного total |
+| Неизвестная запись | B8, usage отсутствует | F6, cost/usage отсутствует | Полные task tokens/cost = «не измерено полностью», unknown count=1; НЕ 0 и НЕ точные totals 700/500 |
+
+Дополнительные subcases: overlap wait [0,10] + [5,15] → union15, не20; timestamps out of order → ошибка данных, не отрицательная duration; повтор billing row с тем же request-id → no extra cost; carrier usage=10/2/0 с cost0.001 + executor usage=100/20/40 с cost0.01 → один invocation, usage subtotal110/22/40, cost0.011; смена валюты → отдельные currency subtotals без придуманного FX; source session mismatch → unknown/error, не число. Изменение definition/base workload делает `comparable=false`, проценты запрещены.
+
+**Реальное доказательство:** до W1 сохранить `metrics-baseline.json` из существующих legacy/канбан logs и доступной telemetry с абсолютными source refs/hash/session/date/определениями; старую машину ради базы НЕ запускать. После P1…P5 — `metrics-final.json` по штатным runs/events и provider usage/billing доступным через разрешённые read-only источники. В `metrics-comparison.md` каждая метрика имеет base/final/value/unit/source/coverage/unknown/comparable. Если база неполна — показать это, экономию не вычислять. Synthetic арифметика не доказывает снижение стоимости реального пилота.
+
+PASS AC-RP-17: обе реальные стороны сохранены с источниками и честными unknown; каждый repeat классифицирован, waits/duration посчитаны по declared boundary; нет double-count; численный fixture и все subcases проходят; нет invented money cap/autoblock и не восстановлены старые counters. Только одна итоговая цифра/summary без базы → FAIL. P31 не закрывается без отдельного P31-MET evidence и реальных base/final артефактов.
+
 ### Б55.12 Отложенные работы
 
 Автоматический учёт бюджетов/стоимости и программный глобальный mutex остаются самостоятельными idea без автостарта. **[NEW-ENTITY, требует согласования Саши]**. Отдельно одобренный формат пакета реализует только Б56 внутри существующего пути; прежняя triage-формулировка не отменяет его согласование. Существующие protective counters сохраняются. Нового инструмента/сервиса/БД/очереди/канала/cron эта редакция не вводит.
@@ -789,18 +770,18 @@ Evidence хранится раздельно с перекрёстными сс�
 | AC-RP-03 | Проверяемая изменённая процедура оркестратора принимает поданные драйвером готовый запрос и idea во время текущего пилотного задания; оба сохранены один раз, idea не стартует. Evidence содержит state/journal/исходный origin, решения процедуры и привязку загрузки по Б55.11; драйвер только подаёт входы. |
 | AC-RP-04 | Три готовых задания с разными временем/именами выбирает оркестратор по FIFO готовности; одинаковое время разрешается стабильно; явная инструкция приоритета имеет источник. Трасса решений загруженной версии процедуры и процессов не содержит второй исполняемой задачи/роли; заданный драйвером порядок не зачёт. Тест не требует глобального CLI-mutex. |
 | AC-RP-05 | При блокере/лимите/межфазовом idle текущей задачи проверяемая процедура сама удерживает её, следующая не стартует; причина и условие продолжения видны. Негативный сценарий зависимости от очереди позади не вызывает скрытой перестановки или второго поезда. Удержание подтверждено решениями оркестратора, а не паузой драйвера. |
-| AC-RP-06 | Проверяемая изменённая процедура после реального получения completion сверяет wrapper/артефакт, закрывает фазу и продолжает фазу/задачу без сообщения Саши. Отдельный пропуск completion вызывает **доставленный** wake существующей страховки и действие той же процедуры; неизменный doorbell не вызывает LLM/роль. Evidence оркестрации/транспорта/CLI/подмен разделены по Б55.11. |
-| AC-RP-07 | Конечный загружаемый prompt/скилл разрешает 24/7 и не содержит действующего ночного окна; проверяемая процедура в сценарии квоты сама ждёт подтверждённого восстановления, затем возобновляет ту же фазу без смены аккаунта/backend, reset и серии пробных invoke. Подмена ответа о квоте явно обозначена; решение о возобновлении не делегировано драйверу. Недоступность такого возобновления даёт FAIL, не условный PASS. |
+| AC-RP-06 | Completion и отдельно lost-event wake реально доставлены и продолжили процесс без Саши; P09/P31, IAC-08, IAC-11. Неизменный tick не вызывает LLM; native outcome и transport evidence проверяются отдельно. |
+| AC-RP-07 | 24/7, ночью тот же маршрут; старое proof-quota replaced native rc75/cooldown, no probe series; P10/P31/K04, IAC-05, IAC-11. |
 | AC-RP-08 | При обрыве после результата и двух одинаковых completion проверяемая процедура принимает результат однократно: одно выполнение side effect/один переход и согласованные state/journal/artifact; rc=0 без канона не закрывает фазу. Проверены G1/G2, свежесть пути/выжимки и загруженная версия; драйвер не выполняет reconciliation вместо оркестратора. |
-| AC-RP-09 | Трасса «Технического восстановления»: один корректирующий повтор того же класса/фазы; второй сбой — диагноз/ожидание. Provider-fatal, живой wrapper, явная пауза и просьба «доделай» не дают reset/recover. Существующие guard-тесты остаются зелёными. |
+| AC-RP-09 | Старые recover_counts superseded D7; native breaker/attempts без самодельного recovery; P13/P05, IAC-05. |
 | AC-RP-10 | Два последовательных REV с той же сутью замечания вызывают диагноз до третьей доработки; архив предыдущих вердиктов сохранён, канон REV один. Отдельный сценарий нового требования имеет источник, затронутые AC/IAC и минимальный rework без сброса других регламентов. |
 | AC-RP-11 | `pipeline status` на фикстуре различает шесть видимых состояний Б55.6 и отмену; `idle+GATE:done done` не попадает в рабочую очередь. Новый конечный complete сохраняет root `done`. Архив выполненных доступен; в сводке выполненных только последние 48 часов. |
 | AC-RP-12 | Ошибка обновления обзора показывает время последнего подтверждения и устаревание; мёртвый PID без результата не выдаётся за работу. Отчёт отдельно сохраняет runtime FAIL/no-entry/частичный объём, процессный done не меняет вердикт теста. |
 | AC-RP-13 | Инвентарь загрузки Б55.9 подтверждён resolved paths/hash и trace/кодом загрузчика до и после. Для P1…P5 есть привязка реально загруженного снимка процедуры/инструкций к сессии и действиям; после restore подтверждена конечная загрузка и её соответствие испытанному снимку по Б55.11. Матрица владельцев и diff показывают одну активную запись каждого правила; USER/MEMORY не содержат конкурирующих процедур. Личные предпочтения и проверенная история сохранены. |
-| AC-RP-14 | По каждому удалённому дублю/обходу есть backup, потребители и ссылка на замену; поиск и проверка конечного prompt не находят активной второй оркестрации, прямого запуска ролей в обход адаптера, битых ссылок и master-дубля. Codex-штат, Cursor-откат и предметные проверки сохранены. |
-| AC-RP-15 | IAC содержит точный write-set/verify/depends/covers, подготовку загрузки до restore и передачу управления Б55.10; `HF:impl` и `HF:test` — разные вызовы. Подготовительный wrapper `HF:test` вышел до пилота, проверяющий вызов исполнителя начался после пилота; задача сохраняла поток, второй живой содержательной роли не было. Финальные план, тестовый отчёт и docs ссылаются на фактические файлы/хеши. После правок скиллов есть evidence штатного restore и конечной загрузки; backup конфигурации проверен до её изменения. |
+| AC-RP-14 | Backup/consumers/replacement каждого дубля, no raw bypass/broken refs/master duplicate; P28, IAC-10. |
+| AC-RP-15 | Write-set/IAC, separate impl/test; prep exit→pilot→reader, exact artifacts и G3; P07/P31, IAC-04, IAC-09, IAC-11. Prep writers завершены и terminal подтверждён до пилота; независимый reader только после пилота. HF:impl/HF:test раздельны, IAC path/verify/depends/covers, backup до config writes, restore/load evidence обязательны. |
 | AC-RP-16 | Пять последовательных заданий P1…P5 имеют отдельные трассы всех шести сценариев Саши и привязку path/версия-снимок/SHA-256/контекст к реально загруженной изменённой процедуре. Она сама выбирает, удерживает, принимает completion/wake и возобновляет задания. Evidence реальной оркестрации, транспорта, CLI и управляемых результатов ролей разделены по Б55.11; исходник/параметры драйвера проверены на отсутствие подмены решений. Только сценарий драйвера, только CLI/транспорт или старая/неподтверждённая процедура дают FAIL. Реальная доставка continuation проверена отдельно от mock; production runtime не подменён фикстурой. При любом обязательном FAIL пакет не объявлен выполненным. |
-| AC-RP-17 | Сохранены база и итог измерений по Б55.11; причины повторов разнесены по трём названиям; ожидания и доступные tokens/cost имеют источник, неизвестные отмечены. Денежный предел не придуман; новая автоматическая блокировка не внедрена. |
+| AC-RP-17 | Exact numerical metrics oracle и real base→final с unknown/source; no invented money cap; P31-MET/P31, IAC-12. Полный контракт Б55.11/P31-MET обязателен; unknown не ноль; synthetic не реальные base/final. |
 | AC-RP-19 | Baseline-diff подтверждает границы Б33, отсутствие restart/новых cron/изменений предметных контрактов эко-конфиг и чужих результатов. Сверка старой очереди сохраняет паузу B3/B4/w3/w4 и доказанные даты done; новая задача после пакета выбирается только по Б55.2. |
 
 ## Б56. Immutable packet и контекст
@@ -811,20 +792,20 @@ Evidence хранится раздельно с перекрёстными сс�
 
 После проверки `emit-prompt` сохраняет неизменяемый снимок `dev/<slug>/context/<packet_id>.json`, формирует `--out /tmp/task.md` и sidecar `/tmp/task.packet.json` (для любого `--out`: `Path(out).with_suffix(".packet.json")`). Sidecar имеет те же байты, что снимок; текст содержит `packet_id` и абсолютный путь снимка. Содержимое текста — детерминированный render конверта, без дополнительных требований, написанных вручную. Hash текста хранится в `context-used`, а не в самом хешируемом конверте. Снимки — evidence входов, не архив master и не самостоятельный SoT хода задачи.
 
-Порядок публикации: собрать/проверить все входы → временные файлы → atomic replace снимка/sidecar/текста → повторно проверить согласованность → штатная фиксация успешного emit. Несколько файлов не объявляются одной атомарной транзакцией: сбой между шагами не оставляет пригодного успешного маркера. `invoke-role` допускает только целую проверенную пару с соответствующим успешным маркером; осиротевшие файлы не являются допуском. Существующий writer/lock используется коротко, без удержания на время LLM. Пакет не содержит тела master, чата целиком, секретов, `.env`, USER/MEMORY и raw provider-логов.
+Порядок публикации: собрать/проверить все входы → временные файлы → atomic replace снимка/sidecar/текста → повторно проверить согласованность → штатная фиксация успешного emit. Несколько файлов не объявляются одной атомарной транзакцией: сбой между шагами не оставляет пригодного успешного маркера. `invoke-role` допускает только целую проверенную пару с соответствующим успешным маркером; осиротевшие файлы не являются допуском. Файловая публикация/readback предшествует штатному native binding; захваченные identity/revision проверяются повторно, долгий lock на LLM не удерживается. Native binding снаружи packet/1.0 связывает board/task/run/profile/phase/admission_ordinal и packet refs, без добавления полей конверта. Пакет не содержит тела master, чата целиком, секретов, `.env`, USER/MEMORY и raw provider-логов.
 
-Вызов остаётся `emit-prompt --slug --phase --out` → rc=0 → `invoke-role --prompt-file --role --workspace`. Снимок конверта не передаётся модели вместо текста. Запрещены ручной Markdown, подстановка чужого sidecar и fallback на старый текст при ошибке нового формата.
+В managed worker предметный путь остаётся `emit-prompt --slug --phase --out` → rc=0 → `invoke-role --prompt-file --role --workspace`. Снимок конверта не передаётся модели вместо текста. Запрещены ручной Markdown, подстановка чужого sidecar и fallback на старый текст при ошибке нового формата.
 
 ### Б56.3 Поля конверта
 
-Все перечисленные ключи required; дополнительные ключи на каждом уровне запрещены. JSON Schema draft 2020-12 лежит в `Registries/pipeline/schemas/devworkflow-packet-1.0.schema.json` **после `HF:impl`**, валидатор исполняет также семантические проверки Б56.6. Версия схемы пакета независима от версии ТЗ и `devworkflow-state/1.0`.
+Все перечисленные ключи required; дополнительные ключи на каждом уровне запрещены. JSON Schema draft 2020-12 лежит в `Registries/pipeline/schemas/devworkflow-packet-1.0.schema.json` **после `HF:impl`**, валидатор исполняет также семантические проверки Б56.6. Версия схемы пакета независима от версии ТЗ и native execution metadata.
 
 | Поле | JSON-тип / значение | Смысл и источник |
 |---|---|---|
 | `schema` | string, const `devworkflow-packet/1.0` | Точная версия, без угадывания по расширению. |
 | `packet_id` | string, 64 lowercase hex | Hash по Б56.2; проверяется пересчётом. |
 | `emitted_at` | string, ISO-8601 с timezone | Время фактической сборки, не время начала фазы. |
-| `task` | object `{slug,title,case,phase,role}`; все string | Из state; case/phase/role проверяются по recipe/G6, title не заменяет постановку. |
+| `task` | object `{slug,title,case,phase,role}`; все string | Из проверенного native task/phase binding; case/phase/role проверяются по recipe/G6, title не заменяет постановку. |
 | `sources` | object `{digest,canon,glossary,context_rules,master,extract}` | Четыре первых — FileRef. `context_rules` = `references/context.md`; master/extract — структуры ниже. |
 | `sources.master` | object `{status,ref,version,reason}` | status=`present`/`planned`/`absent`; при present ref=FileRef, version=string semver, reason=null; при planned ref=PlannedRef, version=null, reason=`new-tool`; при absent ref/version=null, reason из закрытого перечня ниже. Все четыре ключа required в каждой ветке. |
 | `sources.extract` | object `{status,key,of_tz_version,parts,reason}` | status=`present` или `absent`; key/version — string либо null; parts=array FileRef в порядке частей; reason=null при present, иначе закрытая причина ниже. |
@@ -838,7 +819,7 @@ Evidence хранится раздельно с перекрёстными сс�
 **Единая политика extract (кейс + фаза + история слага).** Проверяется на каждой передаче initial/forward/rework, без отдельного запрета по префиксу HF. Применяется следующий порядок:
 
 1. На самой `TZ:compress`/`HF:compress` extract — выход. Разрешено `status=absent`, `reason=being-produced`, `key/of_tz_version=null`, `parts=[]`, `inline.extract_parts=[]`, в том числе при stale/повреждённом прежнем extract. Старый индекс не используется как актуальный вход, история его производства не стирается. Master должен быть present, оба промпта компрессора обязательны. Следующая потребляющая фаза требует успешно записанный и проверенный extract по Б60.3.2; исключение производства на неё не переносится.
-2. Вне производства, если extract когда-либо производился или есть следы его существования, обязателен `status=present` и весь комплект актуальных файлов/частей и метаданных Б10/Б56.3/Б60: `extract_key`, `extract_sha256`, `extract_of_tz_version`, `extract_chars`, согласованный путь. В конверте `key` равен проверенному `extract_key`, `of_tz_version` — текущей версии master, reason=null. Следы — не только текущий файл: проверяются части, ненулевые метаданные state, успешный compress в phases/journal и ранее принятые снимки пакета. Канонное значение пути `extract.md` при остальных null само по себе следом производства не является. Удаление файла/части/метаданных, изменение recipe или сужение LIGHT не превращает ранее сжатый слаг в никогда не сжатый. Drift ключа/version/mtime/hash, неполные метаданные и противоречивая история дают отказ; нужен штатный compress, а не absent или чужая выжимка.
+2. Вне производства, если extract когда-либо производился или есть следы его существования, обязателен `status=present` и весь комплект актуальных файлов/частей и метаданных Б10/Б56.3/Б60: `extract_key`, `extract_sha256`, `extract_of_tz_version`, `extract_chars`, согласованный путь. В конверте `key` равен проверенному `extract_key`, `of_tz_version` — текущей версии master, reason=null. Следы — не только текущий файл: проверяются части, ненулевые native metadata, успешный compress в runs/events и ранее принятые снимки пакета. Канонное значение пути `extract.md` при остальных null само по себе следом производства не является. Удаление файла/части/метаданных, изменение recipe или сужение LIGHT не превращает ранее сжатый слаг в никогда не сжатый. Drift ключа/version/mtime/hash, неполные метаданные и противоречивая история дают отказ; нужен штатный compress, а не absent или чужая выжимка.
 3. Только если индекс **никогда не производился**, файлов/частей/следов нет и история это подтверждает, разрешён `status=absent` с `key/of_tz_version=null`, `parts=[]`, `inline.extract_parts=[]`. Дополнительно все собственные входы и чтения фазы по Б56.5 должны быть готовы, а среди её обязательных предшественников по канону/фактическому recipe не должно быть незавершённого compress. Если compress в выбранной законной ветке отсутствует, reason=`not-applicable`; отсутствие допустимо на **всех** её передачах и возвратах, включая TZ/REV/HF, MIG и DEC. Если compress предусмотрен только позже текущей фазы, reason=`not-yet-compressed`; это разрешает ранний вход и rework до него, но не переход за него. Optional compress, уже включённый в recipe, обязателен для зависящих от него фаз по Б19. Обязательный compress по кейсу/ветке (в том числе по результату SK:preflight) нельзя объявить optional или убрать ради пакета; неверный recipe отвергается G4/G5. При неполной истории, не позволяющей доказать отсутствие производства, — диагностируемый отказ.
 
 Таким образом, DEV/SKILL-DEV без optional compress, BUGFIX, CHANGE-LIGHT/BUGFIX-LIGHT, MIGRATION и DECOMM без compress проходят свои HF/MIG/DEC-фазы с собственными документами; SKILL-CHANGE следует подтверждённой ветке и preflight. CHANGE с обязательным compress и любой ранее сжатый слаг не получают этого исключения. Никогда не произведённый extract не становится stale от изменения master; каждый новый пакет всё равно сверяет реальные реквизиты master. Б56 не добавляет compress в канонический маршрут ради отсутствующего индекса. Межслаговый reuse запрещён во всех ветках.
@@ -857,7 +838,7 @@ Evidence хранится раздельно с перекрёстными сс�
 
 **Первичная привязка без смены маршрута.** Новый опциональный аргумент **существующего** `emit-prompt --master-tz <ABS>` применим к любой фазе-получателю из Б56.5 при ещё пустой привязке: в том числе initial `BUG:diagnose`, `RS:collect`, `DEC:inventory` и поздней `TZ:patch` после законного absent. Путь должен быть явно назван в принятой постановке, переданной проверенным InputRef; title, сходство имён и произвольный master не основание. Если фаза требует master и `tz_path` пуст, аргумент обязателен. Для законного absent аргумент не нужен, null-привязка сохраняется. Никакого нового аргумента `init`, ручной записи state или отдельной operator-команды не требуется.
 
-Для существующего master обязательны реальные version/mtime/hash и FileRef. Отсутствующий путь допускает только узкий planned выше, иначе отказ. При уже установленном `tz_path` аргумент может лишь подтвердить **тот же** нормализованный абсолютный путь и resolved target; заменить привязку или обойти drift им нельзя. Привязку `tz_path/tz_version/tz_mtime` фиксирует штатный writer только при успешном emit вместе с его контекстом; до проверки/при отказе state не меняется. После разрешённой записи planned → present выполняется следующим emit по тому же пути с фактическими реквизитами, без повторного выбора master. Изменение master разрешённой ролью принимается по Б56.6 п.5. Неполная постановка/путь/входы вызывают диагностируемый отказ. Fallback на DevWorkflow или чужой master, фиктивный planned и поиск «похожего» ТЗ запрещены.
+Для существующего master обязательны реальные version/mtime/hash и FileRef. Отсутствующий путь допускает только узкий planned выше, иначе отказ. При уже установленном `tz_path` аргумент может лишь подтвердить **тот же** нормализованный абсолютный путь и resolved target; заменить привязку или обойти drift им нельзя. Привязку `tz_path/tz_version/tz_mtime` фиксирует штатный native binding только при успешном emit после publication/readback его контекста; до проверки/при отказе accepted metadata не меняются. После разрешённой записи planned → present выполняется следующим emit по тому же пути с фактическими реквизитами, без повторного выбора master. Изменение master разрешённой ролью принимается по Б56.6 п.5. Неполная постановка/путь/входы вызывают диагностируемый отказ. Fallback на DevWorkflow или чужой master, фиктивный planned и поиск «похожего» ТЗ запрещены.
 
 ### Б56.4 Типы ссылок и содержательный контракт
 
@@ -909,7 +890,7 @@ FileRef hash/size считаются по исходным bytes; текстов
 | MIGRATION | TZ-роли → MIG:plan → каждый MIG:block-k и его rework без compress | present freeze master, инвентарь, MIG-план, предыдущие block-accept. |
 | DECOMM | DEC:inventory → DEC:exec и возвраты без compress | present либо законный absent на обеих ролях; подтверждённый объём, инвентарь, GATE:go и backup. |
 | SKILL-DEV | Как DEV без optional compress, если preflight не предписывает compress | Master и документы как DEV; restore остаётся обязательным в хвосте. |
-| SKILL-CHANGE | Только законная ветка: малая CHANGE/LIGHT без compress либо DECOMM; ветка с обязательным compress исключения не имеет | Ветка CHANGE — present и IAC; DECOMM — как строка DECOMM. Результат SK:preflight и подтверждённая ветка обязательны. |
+| SKILL-CHANGE | Только законная ветка: малая CHANGE/LIGHT без compress либо DECOMM; ветка с обязательным compress исключения не имеет | Ветка CHANGE — present и IAC; DECOMM — как строка DECOMM, при любом размере с полным inventory/read без compress/fake master/compress-PASS (Q2). Результат SK:preflight и подтверждённая ветка обязательны. |
 
 Стрелки в таблице показывают передачи **между ролями**, а не сокращённый recipe: все промежуточные гейты/backup/хвосты Б18–Б27 исполняются в своих местах, never-auto не ослабляются. Rework во всех строках добавляет проверенную архивную причину Б55.5 и сохраняет историю слага. Отсутствие compress в текущем recipe не отменяет проверку ранее произведённого extract; включённый optional/обязательный compress проверяется отдельно. Первичная привязка через `--master-tz` доступна и для стартов не с TZ:patch, и при переходе от допустимого absent к фазе с обязательным master.
 
@@ -920,7 +901,7 @@ FileRef hash/size считаются по исходным bytes; текстов
 1. На emit: известная схема/типы/required/no-extra; slug/phase совпадают с заданием, phase есть в recipe, role соответствует G6. Сначала определяются применимость master/extract по Б56.3/56.5 и история производства; затем проверяются все FileRef: пути существуют и читаемы, bytes/hash/mtime/resolved target согласованы. При present master version/mtime и extract_key/все части соответствуют G1; при законном absent или planned не требуют реквизитов несуществующего файла, проверяют закрытую причину, допустимый кейс/фазу, историю и обязательные собственные источники/MUST-read. Неизвестная причина, absent вопреки прежней привязке/истории либо пропущенному обязательному compress, planned вне создания нового инструмента — fail. Для inline — точное совпадение байтов с FileRef; обрезка/замена символов запрещены. Digest не объявляется свежей runtime-аттестацией по одному наличию файла.
 2. Проверяются матрица обязательных входов/чтений/выходов, `handoff.kind`, архивированная причина rework, явное основание границ. Пути слага после resolve остаются внутри его каталога; внешние источники разрешены только утверждёнными путями из постановки/плана/YAML. Подмена соседнего слага, неоднозначная часть extract или несуществующий заголовок — fail, без автоматического поиска «похожего» файла.
 3. Перед spawn invoke заново проверяет снимок/sidecar, packet_id, детерминированный render и hash prompt; текущие slug/phase/G6, источники и существующие G1/G3/occupancy. Все проверки — **до invoke_prepare и платного backend**. Изменившийся source требует нового emit; старый пакет не разрешён по одному прежнему context_used=true. Backend/model/effort берутся из YAML/resolver, не из конверта.
-4. Успешный `context-used:` сохраняет прежние поля и добавляет `packet_schema`, `packet_id`, `packet_path`, `prompt_sha256`, а также `master_status`/`master_reason` и `extract_status`/`extract_reason` из проверенного конверта. Реквизиты отсутствующего источника остаются null/пустыми; G1/G2 принимают их только вместе с допустимой веткой этого конкретного пакета, а не по одному пустому полю. При invoke_prepare штатный writer сохраняет первые четыре поля внутри `phases.<PHASE>.context_packet`; это аддитив optional object схемы state/1.0, не новый root и не state bump. Каждый новый успешный emit дописывает свой маркер; дедуп только по тому же packet_id, не по одному имени фазы. G2 на новых вызовах требует совпадения **slug + phase + packet_id** успешного emit и принятого invoke. Маркер другой фазы/слага или исторический context_used сам по себе не проходит.
+4. Успешный `context-used:` сохраняет прежние поля и добавляет `packet_schema`, `packet_id`, `packet_path`, `prompt_sha256`, а также `master_status`/`master_reason` и `extract_status`/`extract_reason` из проверенного конверта. Реквизиты отсутствующего источника остаются null/пустыми; G1/G2 принимают их только вместе с допустимой веткой этого конкретного пакета, а не по одному пустому полю. На admission/prepare первые четыре поля сохраняются в native invocation evidence вместе с board/task/run/profile/phase/admission_ordinal; схема packet/1.0 не меняется, state/1.0 writer не активный владелец. Каждый новый успешный emit дописывает свой маркер; дедуп только по тому же packet_id, не по одному имени фазы. G2 на новых вызовах требует совпадения **slug + phase + packet_id** успешного emit и принятого invoke. Маркер другой фазы/слага или исторический context_used сам по себе не проходит.
 5. Роль вправе изменить предназначенные для записи master/план/канон. Поэтому complete сверяет входной принятый снимок и output evidence относительно него, а не требует совпадения нового master с его **входным** hash. Изменения вне разрешённого write-set не становятся допустимыми благодаря этому исключению. Следующая фаза получает новый снимок; прежний пакет не редактируется. Исторические адресные исключения Б58/Б59 запрещены к применению; произвольный source drift не разрешён. G2 не означает автоматического APPROVE/complete.
 6. Неверный ввод — exit 2 для CLI-синтаксиса, exit 1 для схемы/контекста; диагностика содержит поле/путь и причину, без секретов. Ни state/phase, ни успешный context-used, ни бюджет вызовов не меняются при отказе **до** публикации/prepare. Сбой фиксации после публикации оставляет недопущенные файлы, но не успешный emit. Неизвестная schema, повреждённый packet или drift не становятся provider_fatal/новым recover-классом; одинаковый ошибочный вызов не повторять.
 
@@ -934,21 +915,23 @@ Hash доказывает целостность/совпадение, не за
 
 Перед фиксацией recipe-add та же проверка применяется к предлагаемому recipe и всем добавляемым роль-фазам: их декларации inputs/outputs/write_scope и канон должны быть согласованы заранее. Проверка структурная: будущий вход может ещё не существовать, но его производитель/путь/назначение уже объявлены; фактический FileRef проверит emit этой фазы. Зависимость должна соответствовать Б56.5 и допустимому маршруту, без цикла и ссылки на результат более поздней фазы. Гейты и фазы оркестратора проверяются по своему рецепту и не получают фиктивного LLM-контракта. Для отказа recipe/state/journal остаются прежними; повторное добавление уже имеющейся фазы остаётся штатным no-op и не заменяет проверку на emit. Незавершённые будущие планы и файлы не требуются для emit иной текущей фазы; старые завершённые фазы не переаттестуются. После set-case и на rework текущая роль-фаза проходит тот же допуск.
 
-Проверка invoke до invoke_prepare повторно сопоставляет текущие recipe/G6 и эффективную проекцию inputs/outputs/write_scope/prohibitions выбранного контракта с неизменяемым packet; изменение относящихся к фазе разрешений или входов после emit требует нового emit, не правки принятого packet. Перед публикацией emit и записью recipe-add штатный writer под существующим коротким lock повторно сверяет захваченные state и источник контракта; drift даёт отказ. Проверка результата после выхода wrapper сохраняется: ранний допуск не доказывает фактические bytes/freshness результата и не ослабляет G2/G3 или occupancy.
+Проверка invoke до invoke_prepare повторно сопоставляет текущие recipe/G6 и эффективную проекцию inputs/outputs/write_scope/prohibitions выбранного контракта с неизменяемым packet; изменение относящихся к фазе разрешений или входов после emit требует нового emit, не правки принятого packet. До publication/readback и штатной native фиксации recipe/emit единый verifier повторно сверяет захваченные revision/identity и источник контракта; drift даёт отказ, orphan files не допускаются. Проверка результата после завершения writers, до собственной terminal-передачи сохраняется: ранний допуск не доказывает фактические bytes/freshness результата и не ослабляет G2/G3 или occupancy.
 
 Несогласованный контракт — context exit 1 с фазой, источником контракта, полем, ожидаемым каноном/путём и конкретной нехваткой разрешения/входа; без секретов. До публикации отказ оставляет packet/sidecar/Markdown, state/journal, успешный context-used, prepare/turn_count/result/receipt без изменений, backend не вызывается. Это дефект допуска, исправляемый владельцем задания/контракта в уже разрешённых границах; не новый Q-n, operator hold, recover или повтор роли на тех же входах. Расширение согласованных прав требует обычного согласования задания, а существующие разрешения не запрашиваются повторно.
 
 Вариант реализации: общая чистая проверка в pipeline_context.py, вызов из существующего cmd_recipe_add до persist, из emit до публикации и из invoke до prepare; прежние post-invoke guards остаются. HF:plan закрепляет точные callers, типы и изолированные fixtures, REV:plan проверяет покрытие AC-PKT-04/06. Чтение контракта и сравнение путей выполняет Python: дополнительные обязательные чтения master/истории, повтор таблицы контракта в prompt и LLM-вызов для preflight не нужны. Стоимость — локальная валидация проекции и повторная сверка источника; экономия — отсутствие оплаченного запуска на детерминированно непригодном допуске. Размер добавления измеряется при согласовании документа; фиксированная экономия токенов или runtime PASS до внедрения не объявляются.
 
+Q1: один verifier вызывается также protected pre-work/pre-send/terminal hooks. Hook failure/exception/timeout — fail closed; own block проверяет identity/reason/evidence причины, не требует фиктивно успешного impl. Controlled manual action и bypass различаются по M1 Б17.3; post-hook не отменяет native transaction. Общие guards Б61 сохраняются; его исторические R0/R1/freeze не становятся текущим W1.
+
 ### Б56.7 Совместимость, включение и откат
 
-Включение выполняется после зелёного изолированного `HF:test`, адресно на `ORCH:shared-state` обновлением единственного сборщика/проверяющего пути и `references/context.md`; новый YAML-флаг/второй dispatcher не нужен. Для текущего CHANGE действует переход R0→R1 по Б61.4: лабораторная проверка R1 предшествует live-включению, оба собственных вызова `HF:test` принимает R0, а live install допустим только после окончательного PASS и `HF:docs-handoff`. PREPARED/partial не является зелёным окончательным тестом. В одном выпуске обновляются emit/check/invoke/G2 и потребители текста. Выполняющийся старый wrapper принимается по своему сохранённому контексту, его не kill/re-emit. Адресное own legacy completion Б59 не применяется. Общий путь не допускает backfill. Первый **новый** invoke после включения требует Б56. Старые завершённые фазы и история `context-used` не переписываются и не объявляются невалидными задним числом; несовершённая старая фаза получает новый emit перед следующим invoke. Исторический результат, требующий reconciliation, не перезапускается ради изготовления пакета: принимается по Б13/Б55 с явным legacy evidence.
+Включение выполняется после зелёного изолированного `HF:test`, адресно на `ORCH:shared-state` обновлением единственного сборщика/проверяющего пути и `references/context.md`; новый YAML-флаг/второй dispatcher не нужен. Для прежнего индивидуального CHANGE Б61.4 сохраняется переход R0→R1 (не текущий W1): лабораторная проверка R1 предшествует live-включению, оба собственных вызова `HF:test` принимает R0, а live install допустим только после окончательного PASS и `HF:docs-handoff`. PREPARED/partial не является зелёным окончательным тестом. В одном выпуске обновляются emit/check/invoke/G2 и потребители текста. Выполняющийся старый wrapper принимается по своему сохранённому контексту, его не kill/re-emit. Адресное own legacy completion Б59 не применяется. Общий путь не допускает backfill. Первый **новый** invoke после включения требует Б56. Старые завершённые фазы и история `context-used` не переписываются и не объявляются невалидными задним числом; несовершённая старая фаза получает новый emit перед следующим invoke. Исторический результат, требующий reconciliation, не перезапускается ради изготовления пакета: принимается по Б13/Б55 с явным legacy evidence.
 
 Пакеты неизвестной версии не «мигрируются» заменой поля schema. После изменения входов/путей/мажорной схемы конверт пересобирается штатным emit из SoT; архивный снимок остаётся прежним. Для последующей несовместимой версии требуется отдельная норма и уведомление локальных потребителей emit/check/invoke/G2/skills. Автоматической миграции state и массового backfill нет.
 
-Handoff Б13.4 переносит snapshot evidence в составе слага, но абсолютные пути **архивного** пакета не переписывает. На приёме пути state разрешаются штатно из YAML, G1 проверяется, затем новый emit создаёт новый packet_id по местным путям. Старый `/tmp/task.md`/sidecar не возят и не исполняют.
+Handoff Б13.4 переносит supported board/tasks/runs/events/attachments и snapshot evidence документов; source quiescent, единственный owner, target mapping/load/check доказаны. Абсолютные пути архивного packet не переписываются; новый emit на target получает новый packet_id по актуальным refs/путям. Старый /tmp/task.md/sidecar не возят. Unknown capability остаётся ENV-06.
 
-Откат — проверенный snapshot кода/скилла до включения; только после выхода текущих wrapper, без рестарта Gateway, reset phase/recover_counts и повторного исполнения side effect. Форматы не смешиваются внутри принятого вызова. История нового пакета остаётся evidence, старый релиз её не объявляет пригодным legacy prompt. При невозможности проверить незавершённый результат — явное ожидание/диагноз; fallback на ручной prompt запрещён.
+Откат — предыдущая проверенная версия skill/profiles/integration после прекращения своих writers при сохранении доски/истории/документов. Не перезапуск legacy dispatcher, не restart Gateway, reset counters или повтор side effect. Принятый invocation не смешивает форматы; новый run имеет новый packet. При непроверяемом результате — ожидание/диагноз, ручной prompt запрещён. W0–W4 означают внедрение НА постоянный канбан: W0 inventory/backup/compatibility; W1 изолированный комплект; W2 ограниченный пилот; W3 перенос функций и незавершённых задач с проверенными требованиями/артефактами/паузами и mapping истории без backfill; W4 единственный предметный owner dev-workflow с сохранённым native tooling и архивом прежней кастомизации после переноса/разрешённой очистки. Ни одна волна не переключает workflow-only/dual-path и не даёт автоматический PASS. P1…P5, load/restore, independent HF:test и release evidence обязательны по Б55/FINAL §11.
 
 ### Б56.8 Проверка и выпуск
 
@@ -969,7 +952,7 @@ HF-plan.md/IAC заранее сопоставляют матрицу входо
 | AC-PKT-09 | Сбой на каждом шаге публикации/фиксации не допускает частичную пару к invoke; не возникает успешного context-used при неуспешном emit. Повторная сборка не повреждает архив. |
 | AC-PKT-10 | Multi-part extract сохраняет порядок/все части/инвентарь имён и прежнюю проверку покрытия; нет молчаливой обрезки, reuse между слагами или UTF-8 replacement. |
 | AC-PKT-11 | Старый завершённый результат/legacy reconciliation принимается без нового side effect; новый invoke после включения требует Б56. Откат и handoff на другой root проверены, старый snapshot не редактируется/не исполняется. |
-| AC-PKT-12 | Существующие G1–G6/REV/provider-fatal/receipt/occupancy/recover/phase-turn тесты зелёные; pid=wrapper, штат Codex/откат Cursor и модели YAML сохранены. Формат пакета не сбрасывает счётчики. |
+| AC-PKT-12 | Существующие G1–G6/REV/provider/receipt/occupancy/phase-turn регрессии сохраняют ID и subject; native identity и quiescent writers заменяют st.pid/legacy recover по D2/D3/D5/D7. Hermes/Codex/Cursor, exact выбранные models/config refs, Б49 и immutable history без reset; P04/P06/P07/P10/P14/P23, IAC-04/05/06. |
 | AC-PKT-13 | Утверждённый IAC покрывает каждый AC-PKT; impl/test раздельны, backup/git-proof/конечная загрузка и restore подтверждены; smoke содержит реальные CLI/файлы и честно отделяет stub от live. |
 | AC-PKT-14 | Baseline-diff показывает только разрешённые файлы; нет новой БД/сервиса/очереди/канала/cron, restart Gateway, массового переписывания state/journal и изменений эко-конфиг/чужих результатов. |
 
@@ -1012,7 +995,7 @@ CAP-R3 и REVPLAN-R2 остаются OPEN; HF:impl не допущен, runtime
 
 ### Б60.3 Закреплённый acceptance и capture до dispatch
 
-Добавить только аддитивное сохранение `pinned.input-checklist` существующей сериализацией PipelineState: `{ref: FileRef, revision: string, basis: FileRef}`. Ref указывает `dev/<slug>/context/acceptance-<sha256>.json`; SHA имени — hash полных canonical JSON bytes, без self-hash в содержимом. Basis — проверяемый immutable источник независимого утверждения **этой** редакции, а не единоличное заявление автора. Pin пишет только штатный pipeline writer. Старое state без pin читается с прежним SHA: отсутствующее поле не добавлять как пустое при round-trip, проверку целостности не ослаблять, массовой миграции нет.
+`pinned.input-checklist` сохраняется как предметный native acceptance binding `{ref: FileRef, revision: string, basis: FileRef}`. Ref указывает immutable dev/<slug>/context/acceptance-<sha256>.json; hash canonical JSON bytes без self-hash. Basis — проверяемое независимое утверждение exact редакции. Только штатная native фиксация после publication/readback и повторной проверки identity/revision; PipelineState serialization больше не владеет этим переходом. Старые snapshots/hashes читаются неизменно, отсутствующий pin не backfill и не пустой round-trip.
 
 Снимок — локальный data-only документ существующего продукта. Нормативный минимум его закрытой структуры:
 
@@ -1028,15 +1011,15 @@ CAP-R3 и REVPLAN-R2 остаются OPEN; HF:impl не допущен, runtime
 
 Первичная фиксация — штатный emit до prepare по полностью определённому маршруту Б60.3.1. Явно названные InputRef: подтверждённый brief и его independent approval basis, либо уже утверждённый acceptance. Python проверяет и копирует содержание; не выводит AC/oracle из extract/текущего master. IAC до HF-плана отсутствует явно. Добавление технических AC/IAC/смена требований требует approved revision и сохранения A. Обычный emit с существующим pin требует точного совпадения ref/revision/basis; молчаливый overwrite запрещён.
 
-Минимальный **compressor-only переход A→B** нужен положительному accepted refresh и входит в этот primitive: новый явно названный acceptance InputRef и immutable независимый approval указывают exact прежний A, новый B и основание изменения. Для master refresh основание содержит проверенный output завершённой роли и штатное открытие существующего producer; для добавления IAC — утверждённый HF-план/REV. Перед prepare emit проверяет эту связь, актуальность B/источников/границ и отсутствие активного старого вызова; сохраняет ref/revision/basis A и approval/основание перехода в context_history, затем атомарно фиксирует B+новый emit binding существующим locked commit. Снимки A/B/старые packet/manifest неизменны. Неполная связь, иной текущий A, неутверждённый B и смешение результатов A/B отказываются, counters не сбрасываются. Полную nested форму transition evidence и отрицательные fixtures закрепляет HF:plan. Это не общий механизм пересмотра всех фаз/финальной биекции lock-поезда.
+Минимальный **compressor-only переход A→B** нужен положительному accepted refresh и входит в этот primitive: новый явно названный acceptance InputRef и immutable независимый approval указывают exact прежний A, новый B и основание изменения. Для master refresh основание содержит проверенный output завершённой роли и штатное открытие существующего producer; для добавления IAC — утверждённый HF-план/REV. Перед prepare emit проверяет эту связь, актуальность B/источников/границ и отсутствие активного старого вызова; сохраняет ref/revision/basis A и approval/основание перехода в context_history, затем штатным native commit фиксирует B+новый emit binding после файловой публикации/readback и повторной сверки run/revision; файлы не часть DB transaction. Снимки A/B/старые packet/manifest неизменны. Неполная связь, иной текущий A, неутверждённый B и смешение результатов A/B отказываются, counters не сбрасываются. Полную nested форму transition evidence и отрицательные fixtures закрепляет HF:plan. Это не общий механизм пересмотра всех фаз/финальной биекции lock-поезда.
 
-Snapshot публикуется и проверяется прежде единого locked commit pin+успешного emit binding. Ошибка оставляет недопущенный orphan, не активный pin/успешный marker. Если pin отсутствует у старого слага, нужен оформленный новый допуск на явно утверждённом документе; автоматического backfill нет. Доказывается закрепление **до данного dispatch**, не историческое наличие pin при init старой задачи. Для данного ремонта собственный документный AC-контракт утверждается до HF:impl; новый программный primitive проверяется на новых изолированных fixtures. Это не заявление, что сломанный старый runtime уже обеспечивал lock его разработки.
+Snapshot публикуется и проверяется прежде штатного native commit pin+успешного emit binding с проверенными run/revision. Ошибка оставляет недопущенный orphan, не активный pin/успешный marker. Если pin отсутствует у старого слага, нужен оформленный новый допуск на явно утверждённом документе; автоматического backfill нет. Доказывается закрепление **до данного dispatch**, не историческое наличие pin при init старой задачи. Для данного ремонта собственный документный AC-контракт утверждается до HF:impl; новый программный primitive проверяется на новых изолированных fixtures. Это не заявление, что сломанный старый runtime уже обеспечивал lock его разработки.
 
 Exact ID сравниваются как полные значения, без substring/ограничения `AC-\d{3}`/`IAC-\d{2}`. Обязательные примеры: `AC-PKT-10`, `AC-SIMP-07`, `AC-PW-01`, `AC-RP-01`, `AC-P1`, `COD-C10`, `IAC-09a`, `IAC-09b`; `IAC-09` не покрывает suffix. Literal coverage индекса проверяется дополнительно по закреплённым source bytes/inventory, сохраняя прежние классы имён. Критерии не восстанавливаются из extract. Смысловую полноту индекса и корректность AC/IAC проверяют архитектор/REV по master. Совокупный inventory больше лимита части размещается положительно по Б60.5; до dispatch проверяется размещаемость каждого неделимого элемента с framing. Невозможный единичный элемент/неполнота источника дают fail-fast проверки выходного размещения. Отдельный обязательный допуск вместимости точного модельного Request задан Б60.3.4; большой inventory сам по себе не заменяет эту проверку и не является её отказом. Урезание и серия неизменных повторов запрещены.
 
-Для обеих backend-веток расширить существующий AcceptedCompressorContext: immutable packet/render bytes+refs/prompt SHA, slug/phase, prepare identity `(wrapper_pid, turn_count, started_at)`, acceptance ref/revision/basis, все принятые источники и захваченные core/overlay/master bytes, полные A/inventory, ModelView и её inverse, error-digest при наличии, capability evidence и exact Request по Б60.3.3/60.3.4. Request digest считает Python по фактически отправляемому содержимому; ответ присоединяется к контексту создавшего его dispatch, а не к identity из модели или заново прочитанного prepare.
+Для обеих backend-веток расширить существующий AcceptedCompressorContext: immutable packet/render bytes+refs/prompt SHA, slug/phase, native prepare/admission identity `(board, task, run, phase, admission_ordinal)` с transport writer/session evidence, acceptance ref/revision/basis, все принятые источники и захваченные core/overlay/master bytes, полные A/inventory, ModelView и её inverse, error-digest при наличии, capability evidence и exact Request по Б60.3.3/60.3.4. Request digest считает Python по фактически отправляемому содержимому; ответ присоединяется к контексту создавшего его dispatch, а не к identity из модели или заново прочитанного prepare.
 
-Перед prepare проверяются schema/G6, source/pin/model/capabilities, допустимость outputs и cleanup в write_scope. Перед replacement и отдельно перед result commit перечитываются state/packet/pin/refs и сравниваются **с захваченным**. Проверяются lexical/resolved path, hash/size/mtime, активная фаза/prepare и фактически прочитанные prompt operands. Исчезнувший master — отказ, не skip coverage. Разрешённый scope не разрешает сжимать другие bytes под прежним packet. Существующий queue lock короткий, без LLM/SDK/send под lock; защиты от произвольного злонамеренного writer/нового global mutex не обещать.
+Перед prepare проверяются schema/G6, source/pin/model/capabilities, допустимость outputs и cleanup в write_scope. Перед replacement и отдельно перед result commit перечитываются native run/admission/revision/packet/pin/refs и сравниваются **с захваченным**. Проверяются lexical/resolved path, hash/size/mtime, активная фаза/prepare и фактически прочитанные prompt operands. Исчезнувший master — отказ, не skip coverage. Разрешённый scope не разрешает сжимать другие bytes под прежним packet. Queue lock не владелец перехода: publication/readback и native commit разделены, до commit повторно проверяется captured identity; LLM/SDK/send под lock запрещены; защиты от произвольного злонамеренного writer/нового global mutex не обещать.
 
 ### Б60.3.1 Первичный A до первого compressor: происхождение и владельцы
 
@@ -1044,7 +1027,7 @@ Exact ID сравниваются как полные значения, без s
 
 Канонический первичный вход — `dev/<slug>/brief.md` плюс immutable сохранённый источник его принятия в существующем `evidence/` с origin, автором/датой/ID исходного сообщения, полными подтверждёнными bytes brief и их SHA-256. Связь exact bytes с исходным запросом/подтверждением проверяется по сохранённому источнику, не по одному полю `approved=true` или утверждению автора brief. Подтверждение относится к исходным требованиям, а не к дописанному позже handoff. Повторная фиксация копирует тот же подтверждённый payload; не требует нового сообщения Саши, если существующий источник достаточен. При отсутствии доказанной связи — именованный missing input до prepare; автоматического утверждения, backfill и пробного compressor нет.
 
-Оркестратор на существующем приёме/закрытии brief (до init, либо механическое сохранение после init по Б18 (закрытый бриф)) сохраняет факты и исходное подтверждение. На `TZ:stabilize` проверяет path/version/mtime и наличие этих входов; не создаёт технические критерии. Для нового полного CHANGE порядок **принятый brief → init → stabilize → emit первого TZ:compress → invoke** сохраняется. Первый emit получает brief/basis через `handoff.inputs` с `phase=null`, строит immutable `context/acceptance-<sha256>.json`, добавляет его полный системный InputRef и полный ReadRef обратимой ModelView по Б60.3.3 в создаваемый packet и одним существующим locked commit фиксирует pin+emit. Snapshot/approval публикуются раньше commit; ни сирene-фаза, ни init не создают invoke роли. Новый CLI, phase/role/gate, перенос REV до compress и изменение recipe не вводятся.
+Оркестратор на существующем приёме/закрытии brief (до init, либо механическое сохранение после init по Б18 (закрытый бриф)) сохраняет факты и исходное подтверждение. На `TZ:stabilize` проверяет path/version/mtime и наличие этих входов; не создаёт технические критерии. Для нового полного CHANGE порядок **принятый brief → init → stabilize → emit первого TZ:compress → invoke** сохраняется. Первый emit получает brief/basis через `handoff.inputs` с `phase=null`, строит immutable `context/acceptance-<sha256>.json`, добавляет его полный системный InputRef и полный ReadRef обратимой ModelView по Б60.3.3 в создаваемый packet и штатным native commit после readback и проверки identity/revision фиксирует pin+emit (файлы вне этой транзакции). Snapshot/approval публикуются раньше commit; ни сирene-фаза, ни init не создают invoke роли. Новый CLI, phase/role/gate, перенос REV до compress и изменение recipe не вводятся.
 
 Проекция A типа `brief-copy` проверяется **пересборкой и побайтным равенством**, а не семантическим выбором Python: полный подтверждённый payload brief остаётся несжатым; явные исходные номера/ID и весь текст пунктов приёмки копируются по порядку вместе с точными byte spans в source. Если явного списка нет, один requirement-text элемент содержит весь подтверждённый payload, без выдумывания AC. Если номера не являются ID, технические ключи строк `BRIEF-01`… задаются детерминированным порядком, не выдаются за утверждённые AC/IAC. Expected — дословный исходный пункт; oracle — заранее установленное этой нормой `review-against-source`, verify отсутствует (`null`), evidence — ссылка на этот source/span. Это требование к смысловой сверке будущими ролями, не изготовленный тест или новый runtime PASS. В A нет отсутствующих IAC/будущих команд. Ни один пункт/запрет/остальной payload не теряется; произвольные changed expected/extra/missing/duplicate/span/order дают отказ пересборки.
 
@@ -1144,9 +1127,9 @@ Codex compressor использует один resolved concrete model/effort: �
 
 Manifest — immutable canonical JSON `context/extract-publication-<publication_id>.json`. Он содержит format, publication_id, slug/phase, packet/prompt/request/response SHA, acceptance ref/revision/basis, source/operand refs, captured prepare identity, ordered parts rows `{index, basename, ref: FileRef, chars}`, alias FileRef и aggregate SHA/total chars. Индекс и basename должны соответствовать друг другу. Manifest дополнительно связывает logical response SHA/число Unicode-символов, ordered payload spans и per-part assignments элементов inventory (индексы/полные значения/хеши). Проверяется точное восстановление payload и exact union эхо без потерь, лишних/повторных assignments. Ordered manifest защищает границы/порядок частей, которые не доказывает одна конкатенация bytes. Publication_id = SHA canonical объекта **без поля publication_id**; внешний FileRef manifest считает полные опубликованные bytes и не включается внутрь самого manifest. Полные nested types/канонизация закрепляются HF:plan до кода; self-reference нет.
 
-После файлов и readback manifest сохраняется без overwrite; publisher под существующим writer фиксирует extract_production с FileRef manifest и captured bindings. Общий post-invoke повторно проверяет их и сохраняет result/receipt одним переходом. Compressor receipt дополнительно связан с publication_id/prepare; одна session_id не делает два turns одним результатом. Конкретная строковая форма compressor receipt закрепляется планом, остальные роли используют прежнюю форму. Старый `write_extract_after_validation` не остаётся production bypass: проверить callers, делегировать единственному validated пути с полным контекстом либо исключить из production. Второго publisher нет.
+После файлов и readback manifest сохраняется без overwrite; publisher через штатный native binding после сверки captured run/admission фиксирует extract_production с FileRef manifest и captured bindings. Общий post-invoke повторно проверяет их и сохраняет result/receipt одним переходом. Compressor receipt дополнительно связан с publication_id/prepare; одна session_id не делает два turns одним результатом. Конкретная строковая форма compressor receipt закрепляется планом, остальные роли используют прежнюю форму. Старый `write_extract_after_validation` не остаётся production bypass: проверить callers, делегировать единственному validated пути с полным контекстом либо исключить из production. Второго publisher нет.
 
-Ошибка до первого replacement оставляет canonical/production прежними. Между replace/unlink/manifest/proof/result возможен физически частичный набор/orphan manifest; crash-атомарность комплекта не заявляется. Но не возникает пригодного успешного result/receipt/done: consumer/check/complete требуют целую цепочку и отказывают. Старый proof не легализует новые bytes; недостающий proof не достраивается. Fault injection каждого шага и rollback существующего state commit обязательны. После publication без result — отказ/диагноз; повторно вызывать publisher из completion запрещено.
+Ошибка до первого replacement оставляет canonical/production прежними. Между replace/unlink/manifest/proof/result возможен физически частичный набор/orphan manifest; crash-атомарность комплекта не заявляется. Но не возникает пригодного успешного result/receipt/done: consumer/check/complete требуют целую цепочку и отказывают. Старый proof не легализует новые bytes; недостающий proof не достраивается. Fault injection каждого шага и отказ/rollback штатного native commit bindings без ложного half success обязательны. После publication без result — отказ/диагноз; повторно вызывать publisher из completion запрещено.
 
 ### Б60.6 Независимый completion, consumer и история
 
@@ -1158,9 +1141,9 @@ Consumer `_extract`, reuse и refresh получают список частей
 
 Законное последовательное замещение `TZ:compress → HF:compress` сохраняет accepted manifest A и его output refs в history, current указывает только B. Повторная проверка исторической A использует сохранённые immutable bytes/ref-свидетельства A и штатную цепочку замещения, а не требует, чтобы mutable canonical всё ещё был A. Для активной B всегда перечитывается canonical; отсутствие/порча активной B не маскируются history. Историческая A без сохранённых bytes/основания не получает PASS и не восстанавливается из B.
 
-Перед новым prepare сохранить **полные** прежние context_packet/prepare/production/result/receipt/manifest bindings в существующей context_history, прежде удаления активных result/receipt. Recover/rework/accepted refresh сохраняют историю и counters; старые proof не принимаются для новой identity. Поздний response A после prepare B отказывает до canonical replacement/writer, даже при той же session/тексте. Повтор доставки уже принятого результата — verified no-op, не второй publisher.
+Перед новым prepare сохранить **полные** прежние context_packet/prepare/production/result/receipt/manifest bindings в immutable history с native refs task/run/admission, прежде удаления активных result/receipt. Recover/rework/accepted refresh сохраняют историю и counters; старые proof не принимаются для новой identity. Поздний response A после prepare B отказывает до canonical replacement/writer, даже при той же session/тексте. Повтор доставки уже принятого результата — verified no-op, не второй publisher.
 
-Для compressor rc=143 не запускает generic artifact-based success/reconcile. Если целая publication/result/receipt уже была сохранена и независимо проверяется после выхода writers, внешний оркестратор использует обычный completion без нового send. Files-only, production без result, conflicting receipt — отказ/диагноз; backfill запрещён. Pre-manifest/старые публикации сохраняются как история; им не присваивается новый manifest по нынешним bytes. Не возникает нового historical exception Б59.
+Для compressor rc=143 не запускает generic artifact-based success/reconcile. Если целая publication/result/receipt уже была сохранена и независимо проверяется после выхода writers, законный managed worker использует собственную штатную terminal-передачу с проверенными identity/gates без нового send. Files-only, production без result, conflicting receipt — отказ/диагноз; backfill запрещён. Pre-manifest/старые публикации сохраняются как история; им не присваивается новый manifest по нынешним bytes. Не возникает нового historical exception Б59.
 
 Accepted master refresh разрешён лишь по проверенному output прежней завершённой роли; источник изменения и сохранность прежней publication доказаны. Новый compressor получает свежий packet и соответствующий acceptance. Если принятой проекции недостаточно/требуется новая редакция pin, нужен предусмотренный утверждённый переход; пока его нет — явный блокер. Старый manifest/packet не исправляется, arbitrary source/prompt drift не проходит. Установка Б60 не снимает one-shot/turn limits и не разрешает второй recover той же пары.
 
@@ -1177,7 +1160,7 @@ Accepted master refresh разрешён лишь по проверенному 
 | Rc≠0/143 | Не публиковать новый ответ; только уже сохранённая целая цепочка отдельно проверяется внешним completion. |
 | Result writer/readback failure | Rc≠0, нет половины success result/receipt; files/manifest не являются accepted result. |
 
-Список FATAL_PATTERNS, non-recoverable provider-fatal, TERMINAL_KILL_RCS, timeout=3600s, session parsing/occupancy/pid=wrapper/G1–G6/MIG guard, пять recover-классов и budgets не ослабляются. Не переносить из старого candidate широкое игнорирование plain stderr при rc=0. Успешные JSONL quotes не fatal; error envelope до/после success и настоящий plain auth/429/503/timeout остаются fatal. Benign models-refresh исключение Б60.7 допускается только с точной воспроизведённой fixture: при её отсутствии NOT_RUN/FAIL, а не придуманная сигнатура или broad suppression.
+Список FATAL_PATTERNS, TERMINAL_KILL_RCS, timeout=3600s, session parsing, G1–G6/MIG guard и Б49 не ослабляются. Native identity/свои writers заменяют legacy pid ownership; пять recover-классов — диагностика, не отдельный lifecycle. D6 передаёт provider failures в actual worker75/78; внутри attempt retry/fallback нет, local rc не worker outcome. ENV-03 NOT_PROVEN. Не переносить из старого candidate широкое игнорирование plain stderr при rc=0. Успешные JSONL quotes не fatal; error envelope до/после success и настоящий plain auth/429/503/timeout остаются fatal. Benign models-refresh исключение Б60.7 допускается только с точной воспроизведённой fixture: при её отсутствии NOT_RUN/FAIL, а не придуманная сигнатура или broad suppression.
 
 ### Б60.8 Проверка, установка и передача
 

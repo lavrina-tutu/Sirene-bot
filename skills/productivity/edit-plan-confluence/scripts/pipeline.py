@@ -1,21 +1,40 @@
 """Orchestration: preview / apply MPP plan to Confluence gantt page."""
 from __future__ import annotations
 
+import hashlib
 import json
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from child_page import create_child_page, default_child_title
-from conf_client import ConfluenceClient
+from conf_client import ConfluenceClient, ConfluenceError
 from env import page_url
-from gantt_attachment import find_gantt_attachment, load_gantt_json, upload_gantt_json
+from gantt_attachment import find_gantt_attachment, load_gantt_json, upload_gantt_json, verify_uploaded
 from gate_diff import build_diff, is_confirmed
-from itogo import apply_itogo, build_itogo_html, compute_itogo_from_csv, compute_itogo_from_gantt
+from itogo import (
+    apply_itogo,
+    build_itogo_html,
+    compute_itogo_from_csv,
+    compute_itogo_from_gantt,
+    record_itogo_observation,
+)
 from macro import build_macro_html, find_macro, macro_span, new_macro_ids
 from mpp_calendar import calendar_from_mpp
 from mpp_convert import copy_parent_gantt, convert_mpp_csv, empty_gantt
 from mpp_input import export_csv
+from plan_archive import resolve_plan_binding, store_artifact
+from plan_receipt import read_receipt, write_receipt
+
+import sys as _sys
+from pathlib import Path as _Path
+
+_MOFS_ROOT = _Path.home() / "USERTOOLS" / "MofsIndex"
+if str(_MOFS_ROOT) not in _sys.path:
+    _sys.path.insert(0, str(_MOFS_ROOT))
+
+from mofs_index.plan import writer as plan_writer  # noqa: E402
 
 SKILL_ROOT = Path(__file__).resolve().parents[1]
 EMPTY_TEMPLATE = SKILL_ROOT / "references" / "empty-gantt-template.json"
@@ -159,6 +178,136 @@ def prepare_apply_diff(
     return page, gantt, diff, warnings
 
 
+def preflight_archive(
+    page_id: str,
+    mpp_path: Path | None,
+    gantt: dict[str, Any],
+    *,
+    project_slug: str | None = None,
+) -> dict[str, Any]:
+    """P1.W1.4: сохранить исходные+подготовленные байты и зафиксировать
+    попытку в SQL **до первого POST/PUT** (R-009 п.5).
+
+    Возвращает контекст попытки (``attempt_id``, ``plan_id``, ``lineage_id``,
+    ``prepared_sha256``) для последующих стадий apply/resume. Ошибка файловой
+    записи или SQL commit останавливает публикацию (исключение всплывает
+    наружу — ни один вызывающий код после этой функции не увидит частично
+    записанного состояния: либо вся preflight-транзакция прошла, либо нет).
+    """
+    binding = resolve_plan_binding(page_id, project_slug)
+    plan_id, lineage_id = binding["plan_id"], binding["lineage_id"]
+
+    prepared_bytes = json.dumps(gantt, ensure_ascii=False).encode("utf-8")
+    prepared_sha256 = hashlib.sha256(prepared_bytes).hexdigest()
+    prepared_artifact_id, _ = store_artifact(
+        prepared_bytes, "prepared_json", project_slug=binding["project_slug"],
+    )
+
+    mpp_artifact_id = None
+    if mpp_path is not None:
+        mpp_artifact_id, _ = store_artifact(
+            Path(mpp_path), "mpp", project_slug=binding["project_slug"],
+        )
+
+    from mofs_index.db import connect_durable
+    conn = connect_durable()
+    try:
+        attempt_id = plan_writer.begin_attempt(
+            conn,
+            plan_writer.AttemptSpec(
+                plan_id=plan_id, lineage_id=lineage_id,
+                source_namespace="confluence:dom.tutu.ru",
+                prepared_sha256=prepared_sha256,
+            ),
+        )
+        event_id = plan_writer.record_event(
+            conn, attempt_id, "archive", "prepared",
+            detail=f"prepared_sha256={prepared_sha256} mpp_artifact={mpp_artifact_id}",
+        )
+    finally:
+        conn.close()
+
+    write_receipt(attempt_id, event_id, {
+        "stage": "archive",
+        "status": "prepared",
+        "page_id": page_id,
+        "prepared_sha256": prepared_sha256,
+        "prepared_artifact_id": prepared_artifact_id,
+        "mpp_artifact_id": mpp_artifact_id,
+    })
+
+    return {
+        "attempt_id": attempt_id,
+        "plan_id": plan_id,
+        "lineage_id": lineage_id,
+        "prepared_sha256": prepared_sha256,
+        "prepared_artifact_id": prepared_artifact_id,
+    }
+
+
+def _connect_plan_db():
+    from mofs_index.db import connect_durable
+
+    return connect_durable()
+
+
+MAX_PUT_409_RETRIES = 3
+
+
+def _patch_fresh_storage(
+    fresh_storage: str,
+    new_macro_html: str | None,
+    d1: str,
+    d2: str,
+    n: int,
+    m: int,
+) -> str:
+    """Применить макрос (если новый)/«Итого» к конкретному телу страницы."""
+    storage = fresh_storage
+    if new_macro_html is not None:
+        storage = storage + new_macro_html
+    span = macro_span(storage)
+    return apply_itogo(storage, d1, d2, n, m, macro_start=span[0] if span else None)
+
+
+def _put_page_with_409_retry(
+    client: ConfluenceClient,
+    page_id: str,
+    new_macro_html: str | None,
+    d1: str,
+    d2: str,
+    n: int,
+    m: int,
+    *,
+    max_attempts: int = MAX_PUT_409_RETRIES,
+) -> tuple[str, int, str]:
+    """P1.W1.6-доб.: узкий retry вокруг ``put_page`` на HTTP 409 (AC-107).
+
+    При конфликте версии (409) делается свежий GET ``body.storage,version`` и
+    повторяется ТОЛЬКО эта стадия (переприменение макроса/«Итого» к новому
+    телу) — не весь ``apply_plan`` (не повторный upload вложения, не повторный
+    preflight-archive). Любая иная ошибка пробрасывается немедленно.
+    Возвращает ``(title, new_version, patched_storage)`` финальной попытки.
+    """
+    last_exc: ConfluenceError | None = None
+    for attempt in range(max_attempts):
+        fresh = client.get_page(page_id, expand="body.storage,version")
+        fresh_storage = fresh["body"]["storage"]["value"]
+        fresh_version = int(fresh["version"]["number"])
+        fresh_title = fresh.get("title")
+        patched_storage = _patch_fresh_storage(fresh_storage, new_macro_html, d1, d2, n, m)
+        try:
+            client.put_page(page_id, fresh_title, patched_storage, fresh_version + 1)
+            return fresh_title, fresh_version + 1, patched_storage
+        except ConfluenceError as exc:
+            if exc.status == 409 and attempt < max_attempts - 1:
+                last_exc = exc
+                continue
+            raise
+    assert last_exc is not None
+    raise last_exc
+
+
 def apply_plan(
     client: ConfluenceClient,
     page_id: str,
@@ -167,6 +316,8 @@ def apply_plan(
     *,
     allow_live_ab: bool = False,
     drop_links: list[tuple[int, int]] | None = None,
+    project_slug: str | None = None,
+    archive: bool = True,
 ) -> ApplyResult:
     if not is_confirmed(confirm):
         raise PermissionError("Запись без подтверждения «лей»/«пиши»/«да» запрещена")
@@ -175,7 +326,6 @@ def apply_plan(
     )
     storage = page["body"]["storage"]["value"]
     macro = find_macro(storage)
-    span = macro_span(storage)
 
     if mpp_path:
         csvs = export_csv(mpp_path)
@@ -183,26 +333,98 @@ def apply_plan(
     else:
         d1, d2, n, m = compute_itogo_from_gantt(gantt)
 
+    # P1.W1.4 — preflight archive ДО первого POST/PUT (R-009 п.5). Только
+    # для боевой записи (archive=True); юнит-тесты без MofsIndex/WorkVault
+    # окружения могут явно отключить (archive=False) для изоляции.
+    attempt_ctx = None
+    if archive:
+        attempt_ctx = preflight_archive(page_id, mpp_path, gantt, project_slug=project_slug)
+
     if macro is None:
         macro_id, param_id, param_hash = new_macro_ids()
-        macro_html = build_macro_html(macro_id, param_id, param_hash)
-        storage = storage + macro_html
-        span = macro_span(storage)
-        storage = apply_itogo(storage, d1, d2, n, m, macro_start=span[0] if span else None)
-        macro = find_macro(storage)
+        new_macro_html = build_macro_html(macro_id, param_id, param_hash)
+        filename = f"gantt-chart-{param_id}.json"
     else:
-        storage = apply_itogo(storage, d1, d2, n, m, macro_start=span[0] if span else None)
+        new_macro_html = None
+        filename = macro.attachment_name
 
     attachments = client.list_attachments(page_id)
     att = find_gantt_attachment(attachments, macro) if macro else None
-    filename = macro.attachment_name if macro else "gantt-chart-unknown.json"
+    prepared_bytes = json.dumps(gantt, ensure_ascii=False).encode("utf-8")
+    expected_sha256 = hashlib.sha256(prepared_bytes).hexdigest()
     new_ver = upload_gantt_json(client, page_id, filename, gantt, att)
 
-    fresh = client.get_page(page_id, expand="version")
-    version = int(fresh["version"]["number"])
-    client.put_page(page_id, page["title"], storage, version + 1)
+    # P1.W1.5 — version-specific GET, не latest; сверка hash (R-009 п.7, AC-105).
+    verified, _raw = verify_uploaded(client, page_id, filename, new_ver, expected_sha256)
+    attachment_conflict = not verified
+    if attempt_ctx:
+        conn = _connect_plan_db()
+        try:
+            event_id = plan_writer.record_event(
+                conn, attempt_ctx["attempt_id"], "attachment_verify",
+                "confirmed" if verified else "conflict",
+                detail=f"attachment_version={new_ver} verified={verified}",
+            )
+        finally:
+            conn.close()
+        write_receipt(attempt_ctx["attempt_id"], event_id, {
+            "stage": "attachment_verify",
+            "status": "confirmed" if verified else "conflict",
+            "attachment_version": new_ver,
+            "expected_sha256": expected_sha256,
+        })
+
+    # P1.W1.6 — fresh-body patch: свежий GET body.storage,version,title
+    # непосредственно перед PUT; патч применяется к свежему body, не к телу
+    # из диффа (R-009 п.8, AC-107). Это исправление прежней ошибки, где
+    # `fresh` запрашивал только версию, а storage бралось из устаревшего
+    # диффа.
+    # P1.W1.6-доб.: обёрнуто узким 409-retry — только эта стадия (fresh GET +
+    # переприменение макроса/«Итого» + put_page), не весь apply (AC-107).
+    fresh_title, new_page_version, fresh_storage = _put_page_with_409_retry(
+        client, page_id, new_macro_html, d1, d2, n, m,
+    )
+
+    if attempt_ctx:
+        conn = _connect_plan_db()
+        try:
+            plan_writer.set_attempt_status(conn, attempt_ctx["attempt_id"], "confirmed")
+            event_id = plan_writer.record_event(
+                conn, attempt_ctx["attempt_id"], "storage_put", "confirmed",
+                detail=f"page_version={new_page_version}",
+            )
+            plan_writer.record_publication(
+                conn,
+                plan_writer.PublicationSpec(
+                    plan_id=attempt_ctx["plan_id"],
+                    lineage_id=attempt_ctx["lineage_id"],
+                    artifact_id=attempt_ctx["prepared_artifact_id"],
+                    source_namespace="confluence:dom.tutu.ru",
+                    attachment_id=att.attach_id if att else filename,
+                    attachment_version=new_ver,
+                    page_id=str(page_id),
+                    filename=filename,
+                    page_version=new_page_version,
+                    raw_sha256=expected_sha256,
+                ),
+            )
+            # P1.W1.doб. (хвост AC-110): каждый apply автоматически пишет
+            # plan_page_observation — не только явный внешний вызов.
+            record_itogo_observation(
+                attempt_ctx["plan_id"], str(page_id),
+                page_version=new_page_version,
+                raw_storage=fresh_storage,
+                conn=conn,
+            )
+        finally:
+            conn.close()
+        write_receipt(attempt_ctx["attempt_id"], event_id, {
+            "stage": "storage_put", "status": "confirmed",
+            "page_version": new_page_version,
+        })
+
     itogo_html = build_itogo_html(d1, d2, n, m)
-    return ApplyResult(page_id, page["title"], page_url(page_id), new_ver, itogo_html)
+    return ApplyResult(page_id, fresh_title, page_url(page_id), new_ver, itogo_html)
 
 
 def prepare_child_diff(
@@ -256,9 +478,14 @@ def create_child_with_plan(
     *,
     allow_live_ab: bool = False,
     drop_links: list[tuple[int, int]] | None = None,
+    attempt_id: str | None = None,
 ) -> ApplyResult:
+    """P1.W1.8: ``attempt_id`` — явный resume-ключ. Повторный вызов с тем же
+    ``attempt_id`` после сбоя между POST страницы и upload вложения
+    переиспользует уже созданную дочку (не плодит вторую, AC-109)."""
     if not is_confirmed(confirm):
         raise PermissionError("Запись без подтверждения «лей»/«пиши»/«да» запрещена")
+    attempt_id = attempt_id or str(uuid.uuid4())
     child_title, gantt, _diff, _ = prepare_child_diff(
         client, parent_id, title, mpp_path,
         allow_live_ab=allow_live_ab, drop_links=drop_links,
@@ -269,9 +496,42 @@ def create_child_with_plan(
     else:
         d1, d2, n, m = compute_itogo_from_gantt(gantt)
     itogo_html = build_itogo_html(d1, d2, n, m)
-    page, macro_id, param_id, _phash = create_child_page(client, parent_id, child_title, itogo_html)
+    page, macro_id, param_id, _phash = create_child_page(
+        client, parent_id, child_title, itogo_html, attempt_id=attempt_id,
+    )
     page_id = str(page["id"])
     # 📌 вложение — по param_id (ac:parameter id), не macro-id
     filename = f"gantt-chart-{param_id}.json"
-    new_ver = upload_gantt_json(client, page_id, filename, gantt, None)
+    new_ver = _upload_child_attachment_with_receipt(
+        client, attempt_id, page_id, filename, gantt,
+    )
     return ApplyResult(page_id, child_title, page_url(page_id), new_ver, itogo_html)
+
+
+def _upload_child_attachment_with_receipt(
+    client: ConfluenceClient,
+    attempt_id: str | None,
+    page_id: str,
+    filename: str,
+    gantt: dict[str, Any],
+) -> int:
+    """P1.W1.8-доб. (вторая половина AC-109): upload дочки обёрнут
+    квитанцией ``child_upload``. Повтор с тем же ``attempt_id`` после сбоя
+    между POST страницы и upload (но уже после успешного upload) не
+    дублирует вложение — переиспользует зафиксированную версию."""
+    if attempt_id:
+        existing = read_receipt(attempt_id, "child_upload")
+        if existing and existing.get("status") == "confirmed":
+            return int(existing["attachment_version"])
+        write_receipt(attempt_id, "child_upload", {
+            "stage": "child_upload", "status": "prepared",
+            "page_id": page_id, "filename": filename,
+        })
+    new_ver = upload_gantt_json(client, page_id, filename, gantt, None)
+    if attempt_id:
+        write_receipt(attempt_id, "child_upload", {
+            "stage": "child_upload", "status": "confirmed",
+            "page_id": page_id, "filename": filename,
+            "attachment_version": new_ver,
+        })
+    return new_ver

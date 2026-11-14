@@ -8,6 +8,8 @@ from pathlib import Path
 
 VENV_PYTHON = Path.home() / "hermes-agent" / ".venv" / "bin" / "python3"
 SYSTEM_PYTHON = Path("/usr/bin/python3")
+# Системный python с mpxj/jpype (RHEL9: python3.9; в python3.11/venv mpxj нет)
+SYSTEM_MPXJ_PYTHON = Path("/usr/bin/python3.9")
 READ_MPP = Path.home() / "USERTOOLS" / "MppReader" / "read_mpp.py"
 
 
@@ -22,6 +24,8 @@ def _pick_python() -> str:
         cands.append(VENV_PYTHON)
     if SYSTEM_PYTHON.is_file():
         cands.append(SYSTEM_PYTHON)
+    if SYSTEM_MPXJ_PYTHON.is_file():
+        cands.append(SYSTEM_MPXJ_PYTHON)
     sp = shutil.which("python3")
     if sp:
         cands.append(Path(sp))

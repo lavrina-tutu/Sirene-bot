@@ -16,7 +16,9 @@ def test_find_macro():
     m = find_macro(SAMPLE)
     assert m is not None
     assert m.macro_id == "25b9de75-cb34-4cc1-a17a-c314457308b2"
-    assert m.attachment_name == "gantt-chart-25b9de75-cb34-4cc1-a17a-c314457308b2.json"
+    # Имя вложения строится от ac:parameter "id" (gantt-chart-<param_id>.json),
+    # не от ac:macro-id — подтверждено на живой AB 519492935.
+    assert m.attachment_name == "gantt-chart-b10931f5a1b24c0d9e8f7a6b5c4d3e2f.json"
 
 
 def test_new_macro_ids_unique():

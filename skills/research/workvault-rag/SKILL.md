@@ -46,6 +46,7 @@ metadata:
 | «Кто реально что сказал про ML?» | 3. Транскрипт | `get_transcript_snippets()` / `get_meeting_body(..., include_transcript=True)` |
 | «Что написано в ТЗ по X?» | ТЗ | `search_docs()` / `get_doc()` |
 | «Что согласовано в протоколе проекта?» | Протокол Confluence | `search_protocols()` |
+| «Что поменялось в плане X?» / «на сколько дней уехал финал?» | План (gantt/mpp) | `diff_versions()` / `task_history()` — см. ниже |
 
 **Импорт:** `sys.path.insert(0, '/home/tkachenkoav/USERTOOLS/MofsIndex')`, затем `from mofs_index import search_meetings, get_meeting_body, get_transcript_snippets, search_docs, get_doc, search_protocols` (полный пример — `references/mofs-index-usage.md`).
 
@@ -117,10 +118,48 @@ Items без разделения "Имя: задача" — общий спис
 встречи совпадает с переговоркой ТУТУ — список `WorkVault/Contacts/meeting-rooms.md`
 (обновляется `orglookup rooms`; проверить `updated:` в frontmatter на актуальность).
 
+## Планы (gantt/mpp)
+
+Архив слепков плана (MofsIndex `mofs_index/plan/`) — SQLite-истина по версиям плана
+проекта (Confluence Gantt JSON + сохранённые MPP), typed query API (`mofs_index/plan/
+query.py`), НЕ свободный SQL. Пилот — проект `zd` (`Entities/zd/Pages/zd.ganttchart.md`,
+рендер из SQL, Q2 решения владельца). Источник истины — SQL; MD-витрина — производная
+(может отставать на один рендер, числа всегда проверять через typed-функции, не только
+по тексту MD).
+
+**Импорт:** `from mofs_index import resolve_plan, list_versions, diff_versions,
+task_history, compare_baseline, explain_finish_change` (после `sys.path.insert(0,
+'/home/tkachenkoav/USERTOOLS/MofsIndex')`). Каждая функция возвращает dict с полем
+`receipt` (план/версии/representation/mapping/calendar/timezone/completeness/known_at)
+— всегда приводить вместе с числом, не только голое число.
+
+**Два представления одной версии** — не путать идентичность: Confluence-публикация
+(Gantt JSON, `{"kind": "publication", "attachment_version": N}`, числовой gantt-id,
+без UID) и MPP-снимок (`{"kind": "snapshot", "snapshot_id": "..."}`, подтверждённый
+`uid`, полный ES/EF/LS/LF). Смешение представлений в одном `diff_versions()` —
+`representation_mismatch`, это честный ответ, не ошибка вызова.
+
+| Русский сценарий (§8.4 ТЗ) | Typed-функция |
+|---|---|
+| «Что поменялось в ZD [между версиями]?» | `list_versions()` → выбрать пару → `diff_versions()` |
+| «На сколько дней уехал финал?» | `diff_versions()` → `result["root"]["finish_delta_calendar_days"]` |
+| «Как менялись сроки у юристов/конкретной задачи?» | `task_history(plan_id, uid)` — по подтверждённому MPP `uid`, не по имени |
+| «Какие связи удалили?» | `diff_versions()` → `result["links_removed"]` |
+| «За счёт каких работ финал сдвинулся?» | `explain_finish_change()` — на паре MPP snapshot даёт `validated_attribution`/честный `observed_diff` с блокерами на паре публикаций (не выдумывает атрибуцию без UID-mapping) |
+| «Что знали на дату X (known_at)?» | `list_versions()` + `receipt.known_at` каждой функции — снимок знания на момент вызова, не "текущая правда задним числом" |
+
+Неоднозначность версии («последняя», «текущая») разрешается `list_versions()` +
+выбором конкретного `attachment_version`/`snapshot_id` ДО вызова `diff_versions`/
+`task_history` — не угадывается по тексту MD-витрины.
+
+Подробные code-snippets, реальные числа ZD (v3→v4, v4→v5, v5→v6) — `references/
+plan-queries.md`.
+
 ## Связанные файлы
 
 - Ограничения contacts-матчера, история отказа от qmd, "связи vs RAG", changelog — `references/known-limits.md`
 - Полное API-руководство `mofs_index` (все режимы, code snippets, grep, проверка индекса) — `references/mofs-index-usage.md`
+- Planы (gantt/mpp) typed query API, реальные числа ZD, 6 сценариев §8.4 — `references/plan-queries.md`
 - Мастер-ТЗ qmd (архивный статус) — `WorkVault/Hermes-Backlog/TZ/QMD-Search/QMD-Search_TZ.md`
 - EntityRegistry↔MOFS/AFM (naming-конфликты слугов, 4 корзины NER) — `about_usr_skills`, секция «EntityRegistry ↔ MOFS/AFM»
 
@@ -146,3 +185,4 @@ Items без разделения "Имя: задача" — общий спис
 - [ ] Вопрос по ТЗ — `search_docs()`/`get_doc()`, не файловый grep+read по `Hermes-Backlog/TZ/`
 - [ ] Запрос про задачи/решения по проекту — вызваны оба источника (`search_meetings` и `search_protocols`), результат подписан по слою («Найдено во встречах (FF, черновик)» / «Найдено в протоколе проекта (Confluence, согласовано)»), не смешан без пометки
 - [ ] Contacts покрывают 93% встреч (`search_meetings(slugs={'contacts': [...]})` — основной путь). Пустой результат/редкое или уменьшительное имя → grep-fallback строго по секции «Участники:» (детали — `references/known-limits.md`), не по всему телу файла
+- [ ] Вопрос про план/gantt/mpp — `diff_versions()`/`task_history()`/`explain_finish_change()` (typed query API `mofs_index/plan/query.py`), не чтение `<slug>.ganttchart.md` как единственного источника и не свободный SQL; версия/snapshot выбраны явно через `list_versions()`, не угаданы; каждое число сопровождено `receipt`; publication (Gantt-id) и snapshot (MPP-uid) не смешаны в одном сравнении

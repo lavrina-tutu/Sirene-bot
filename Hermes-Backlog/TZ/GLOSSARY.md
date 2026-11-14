@@ -1,9 +1,9 @@
 ---
 type: glossary
 title: Глоссарий пайплайна разработки Hermes
-version: 0.2.16
-date: 2026-10-14
-status: active (§0.1 определения; §3 процесс vs содержание + operator-hold S/O/C + аддитив «Не делает» оркестратора v0.2.15; роли = Codex exec / откат roles_cursor v0.2.16 (Б45.4); 10 кейсов закрытый список; guard-ы v0.2.12; поезд v0.2.11; инвариант раннего закрытия корня/rule9 v0.2.13)
+version: 0.3.0
+date: 2026-11-14
+status: active (D1–D9/Q1/Q2; DevWorkflow на штатном канбане; G1–G6; firewall, 10 кейсов, фазы и S/O/C сохранены; runtime NOT_RUN)
 owner: ProcessImprovement
 canonical: ~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md
 source: appendix_chains-and-skills-audit_20260907.md
@@ -14,22 +14,22 @@ source: appendix_chains-and-skills-audit_20260907.md
 Единый язык кейсов, ролей, скиллов, фаз и артефактов. Не процедура и не каталог графов.
 При конфликте с чатом / скиллом / appendix — править этот файл, не плодить синонимы.
 
-> **Активный процесс:** файловый DevWorkflow — `devops/dev-workflow` (master-ТЗ Б55), роли вызываются штатным pipeline после emit-prompt, модели/backend — из YAML `tools.dev_workflow`. Имена 10 кейсов, `PREFIX:фазы`, классы S/O/C и operator-словарь ниже сохраняются без переименования; kanban CLI-процедуры и таблицы запуска исторические/read-only и не являются активным маршрутом.
+> **Активный процесс:** DevWorkflow — предметный процесс на штатном канбане Hermes; devops/dev-workflow — единственный владелец процедуры, recipe задаёт план, исполнение/runs/events принадлежат канбану, master — SoT требований. Роль = assignee-профиль; dispatcher запускает worker, invoke_role — adapter внутри него. EcoConfig хранит пути/роли→профили/рецепты, штатный Hermes config — физически читаемые модели/dispatcher; карточка refs/version, не дубль значений. Имена 10 кейсов, фаз и S/O/C сохраняются. Нормы: [master](DevWorkflow/DevWorkflow_TZ.md), [решения](../dev/pochinka-dev-workflow-20261112/out/DECISIONS-KANBAN-TZ.md), [REV-a-pack-v2](../dev/pochinka-dev-workflow-20261112/out/REV-a-pack-v2.md).
 
 ## 0. Как читать
 
 1. Фаза канбана = `PREFIX:kebab-case`. Без двоеточия PREFIX — не фаза.
 2. Первое упоминание Саше/в appendix: акроним + русская расшифровка; дальше — канон.
 3. Кейс ≠ роль ≠ скилл ≠ документ ≠ фаза ≠ граф. См. §0.1 и §1.
-4. Заголовок карточки = канон из §5. Синонимы (`HF:fix`, `TZ:architect` как бриф) запрещены.
+4. Предметная фаза называется по §5; root/supporting и author/review различаются по §0.1. Синонимы HF:fix/TZ:architect как бриф запрещены.
 5. Инструменты USERTOOLS — имена из `MAIN_TZ_INVENTORY.md`, не из этого файла.
 
 ## 0.1 Определения (граф / карточка / фаза) — «§0.1 Определения»
 
 | Термин | Определение |
 |---|---|
-| **Граф** | При машине **DevWorkflow** — упорядоченный `recipe[]` в `dev/<slug>/_state.json` (файловое SoT). При машине **канбан** (до W4) — развёрнутый пошаговый план на доске: одна задача = один граф (`DEV/<slug>` или `IDEA/<slug>`), фазы по очереди. Строит **оркестратор** со Сашей **на старте** (после выбора кейса §2). |
-| **Карточка** | **Исторический синоним фазы** при канбане: один шаг графа, тип = фаза `PREFIX:фаза` (§5). В DevWorkflow шаг = запись `phases.<PHASE>` в `_state.json`, не отдельная sqlite-карточка. |
+| **Граф** | Экземпляр версии recipe на штатной доске: root запроса/итога, работы и зависимости; строит Сирень по выбранному со Сашей кейсу. Root не предшественник своих фаз; partial graph заблокирован до структурной проверки. |
+| **Карточка** | Штатная task с identity board+task_id: root, phase work или supporting diagnostic. Author/review могут быть одной карточкой с отдельными каноническими фазами/runs и независимым reviewer-профилем. HF:impl/HF:test раздельны; _state.json не владелец карточек. |
 | **Фаза** | Имя шага графа (`PREFIX:kebab-case`). Указывает действие: `TZ:patch` = написать правку ТЗ, `HF:plan` = план разработки и тестирования (IAC), `HF:impl` = написать код, `HF:test` = прогнать тесты плана, `REV:tz` = проверить ТЗ, `GATE:done` = финальная приёмка. |
 
 Кейс ≠ граф: кейс — **тип работы** (§2, закрытый список из 10); граф — конкретная развёртка кейса на доске. Архитектор не выбирает ни кейс, ни состав графа.
@@ -41,15 +41,15 @@ source: appendix_chains-and-skills-audit_20260907.md
 | Кейс | полное имя; коротко только в id | DEV, CHANGE, CHANGE-LIGHT, BUGFIX, BUGFIX-LIGHT, RESEARCH, MIGRATION, DECOMM, SKILL-DEV, SKILL-CHANGE |
 | **Блок** | `ALL-CAPS` / `PREFIX-TAIL` | `PLAN-IMPL-TAIL`, `TZ-WRITE` |
 | Роль | по-русски | оркестратор, архитектор, ревизор, исполнитель |
-| Скилл | backtick-имя | `tz-workflow`, `hermes-feature` |
+| Скилл | backtick-имя | `dev-workflow` и предметные references |
 | Документ | «ТЗ», `master-ТЗ` | не «TZ» |
 | Фаза | `PREFIX:фаза` | `TZ:finalize`, `HF:impl`, `ORCH:shared-state` |
 
-Блок разворачивается в последовательность фаз с parents. **Карточка = только фаза §5, не имя блока.**
+Блок разворачивается в канонические фазы §5. Карточка бывает root/supporting work либо работой, включая author/review пару с отдельными фазами/runs и независимым reviewer. Имя блока не заменяет фазу; HF:impl/HF:test раздельны. D1/D2/D5, FINAL §2.1–2.2/4.2; P01/P04/P33, IAC-03/04.
 
 Особые коллизии:
-- **TZ** — только префикс фазы. Скилл = `tz-workflow`. Документ = «ТЗ».
-- **HF** — только префикс фазы. Скилл = `hermes-feature`.
+- **TZ** — только префикс фазы. Владелец процесса = `dev-workflow`; хранение ТЗ — предметные references. Документ = «ТЗ».
+- **HF** — только префикс фазы. Владелец процесса = `dev-workflow`; implementation/QA — предметные references.
 - **ORCH** — не писать голое. Роль = оркестратор (Сирень). Фаза = `ORCH:shared-state`.
 - **BRF** — и префикс фаз (BRF:…), и блок брифа (как TZ=префикс фазы).
 - **DEV / CHG / BUG / RS / MIG / DEC / SK** — только кейсы, не роли и не фазы.
@@ -67,7 +67,7 @@ source: appendix_chains-and-skills-audit_20260907.md
 | MIGRATION | MIG | миграция | `BRF(light)` → `BRIEF-CLOSE` → `TZ-WRITE(freeze)` → `TAKE-INTO-WORK` → `MIG-TAIL` |
 | DECOMM | DEC | удаление | `BRF(confirm)` → `DEC-PRE` → `DECOMM-TAIL(exec=DEC:exec)` |
 | SKILL-DEV | SK | новый скилл | как DEV {workspace=hermes-workspace/skills, REV ON, ORCH restore} |
-| SKILL-CHANGE | SK | правка/удаление скилла | `SK-PRE` → `CHANGE` \| удаление `SK-PRE` → `DECOMM`; ≤3 файла compress skip, REV OFF |
+| SKILL-CHANGE | SK | правка/удаление скилла | SK-PRE → CHANGE или DECOMM; create/change: strict >15000 байт требует compress независимо числа файлов, ≤15000 и ≤3 implementation-файлов — skip только по канону LIGHT; DECOMM любого размера — полный inventory/read без compress/fake master, delete только go «удаляй» + backup |
 
 Развёртка блоков — в §5.1. Кейс не содержит копию `PLAN-IMPL-TAIL` — только вызов блока.
 
@@ -79,14 +79,14 @@ source: appendix_chains-and-skills-audit_20260907.md
 
 | Роль | Кто | Модель | Делает | Не делает |
 |---|---|---|---|---|
-| Оркестратор | Сирень (default Hermes) | `deepseek-v4-flash-0731` | бриф в TG; **выбор кейса со Сашей на старте**; **создание графа** (`kanban_create`-батч); ведение процесса; structural-preflight после create; `ORCH:shared-state`; сигнал блокера сразу | не придумывает содержание ТЗ/плана; не пишет код; **не предлагает слаги** (`dev/<slug>/` и `entities.task_slug`); **не даёт технические варианты/решения**; не подменяет архитектора; **не даёт собственных мнений/рекомендаций/предложений по слагам, техническим развилкам, судьбе карточек, классификациям и архитектуре при работе по канону** (Саша 15.10, Б16.2 п.6, AC-056) |
-| Архитектор | Codex CLI (`invoke_role --role architect`) | `roles.architect` = `gpt-6.1-sol` (CHANGE-LIGHT ≤3 файла: допустим medium-effort) | исполняет **поставленную** задачу: ТЗ, план разработки **и** тестирования (IAC), риски, исследование, вопросы Саше | **не** решает ход процесса; **не** строит граф; **не** выбирает кейс/LIGHT-skip; **не** разворачивает и не укорачивает фазы |
-| Ревизор | Codex CLI, по умолчанию во всех dev-задачах (`invoke_role --role reviewer`) | `roles.reviewer` = `gpt-6-astra` (РЕВ DEV/CHANGE — xhigh) | слабые места ТЗ/плана; возврат на доработку. Исключение: лёгкие BUGFIX/SKILL-CHANGE ≤3 файла — без ревизора (08.09.2026) | не решает ход процесса; не строит граф |
-| Исполнитель | Codex CLI (`invoke_role --role executor`) | `roles.executor` = `gpt-5.6-terra`; LIGHT — `roles.executor_light` `gpt-6-luna` | код **и** прогон тестов (`HF:test`) по IAC плана архитектора, молча | не пишет ТЗ/план; не выбирает кейс; отдельной роли «тестировщик» нет |
-| Компрессор | оркестратор (Сирень) | `deepseek-v4-flash-0731` (осн. Hermes), без Codex | экстракт ТЗ 3–5 КБ | — |
-| Координатор | Сирень (механика) | `deepseek-v4-flash-0731` (осн. Hermes), без Codex | бэкап, инвентарь, операторка | не содержание ТЗ |
+| Оркестратор | Сирень, default профиль | refs единственного config owner/reader Б14; carrier ≠ executor | бриф в TG; **выбор кейса со Сашей на старте**; **создание графа** (`kanban_create`-батч); ведение процесса; structural-preflight после create; `ORCH:shared-state`; сигнал блокера сразу | не придумывает содержание ТЗ/плана; не пишет код; **не предлагает слаги** (`dev/<slug>/` и `entities.task_slug`); **не даёт технические варианты/решения**; не подменяет архитектора; **не даёт собственных мнений/рекомендаций/предложений по слагам, техническим развилкам, судьбе карточек, классификациям и архитектуре при работе по канону** (Саша 15.10, Б16.2 п.6, AC-056) |
+| Архитектор | Assignee-профиль роли | refs единственного config owner/reader Б14; carrier ≠ executor | исполняет **поставленную** задачу: ТЗ, план разработки **и** тестирования (IAC), риски, исследование, вопросы Саше | **не** решает ход процесса; **не** строит граф; **не** выбирает кейс/LIGHT-skip; **не** разворачивает и не укорачивает фазы |
+| Ревизор | Независимый reviewer-профиль | refs единственного config owner/reader Б14; carrier ≠ executor | слабые места ТЗ/плана; возврат на доработку. Исключение: лёгкие BUGFIX/SKILL-CHANGE ≤3 файла — без ревизора (08.09.2026) | не решает ход процесса; не строит граф |
+| Исполнитель | Assignee-профиль роли | refs единственного config owner/reader Б14; carrier ≠ executor | код **и** прогон тестов (`HF:test`) по IAC плана архитектора, молча | не пишет ТЗ/план; не выбирает кейс; отдельной роли «тестировщик» нет |
+| Компрессор | Assignee-профиль роли | refs resolver/capabilities native или Codex, Б60; carrier отдельно | Содержательная выжимка по Б60; Python — единственный publisher | — |
+| Координатор | Сирень, механика | refs единственного config owner/reader Б14; carrier ≠ executor | бэкап, инвентарь, операторка | не содержание ТЗ |
 
-Один `invoke_role` = одна модель = одна роль. Штатный бэкенд ролей = Codex exec (Б45); откат — `roles_cursor.*` (architect `cursor-grok-4.6-high`, reviewer `claude-sonnet-5-medium`, executor `composer-2.5`; LIGHT на Cursor — `roles_cursor.executor`).
+Один logical invoke — одна роль; carrier+external executor считаются одним invoke Б49. Три backend: Hermes internal/Codex/Cursor; Cursor live availability отдельно от обязательного contract coverage. Exact model/effort/session/branch сохраняются в native accepted run. D6 — master Б13.2/FINAL §4.3: actual worker75 transient/cooldown, worker78 sticky; local rc не worker outcome, ENV-03 NOT_PROVEN, внутри attempt retry/fallback запрещены.
 
 **Процесс vs содержание (v0.2.12, инцидент `DEV/pfs-task-slug-not-created`).** Решения о ходе процесса (какой кейс, какой граф, какие фазы есть/нет) принимают **только Саша и оркестратор, и только на старте** (LIGHT-сужение — оркестратор после объёма, см. §2). Архитектору дают полный контекст (`emit-prompt`); он отдаёт только: ТЗ, или план, или вопросы Саше. `kanban_create` кейсового графа / смена `--case` / skip обязательных фаз §5.2 из карточки архитектора = `protocol_violation`.
 
@@ -104,35 +104,31 @@ source: appendix_chains-and-skills-audit_20260907.md
 
 Default AC = класс S (поезд не ждёт). Класс O — **только** явная строка архитектора в master-ТЗ пакета: `depends: operator:<verb>`. Без строки — не hold. Архитектор **обязан** поставить тег, если AC нельзя закрыть кодом/тестом без глагола Саши. `REV:tz` проверяет покрытие: operator-AC без тега (ложный auto-done) и тег на train-completable AC (ложный hold).
 
-Закрытый словарь operator-глаголов (не расширять без `TZ:patch` DKP): `поднимай` · `ставь кроны` · `удаляй` · `answer:Q-n` · `rollback-to-kanban`. Сторож эти глаголы **не** выполняет (не рестартует gateway, не пишет `jobs.json` кроме своего job).
+Закрытый словарь operator-глаголов (не расширять без `TZ:patch` DevWorkflow): `поднимай` · `ставь кроны` · `удаляй` · `answer:Q-n` · `rollback-to-kanban`. Сторож эти глаголы **не** выполняет (не рестартует gateway, не пишет `jobs.json` кроме своего job). Имя rollback-to-kanban означает откат версии integration при сохранённой доске/истории, не legacy dispatcher.
 
 Снятие hold: оркестратор после **факта** действия пишет на `GATE:done` или корень `operator-done: <verb>` + `evidence:` (ISO + rc/цитата). Фраза Саши без evidence факта ≠ `operator-done`. Reason блока: `review-required: operator-action: <verb>` — fail preflight, не новый never-auto гейт и не «ждать готово».
 
 Есть **две разные** «модели». Их нельзя подставлять одну вместо другой. Формулировка канонизирует `kanban-dev-cases` (прецедент `t_2c8ee3b2`), без жаргона.
 
-- **D1. Модель карточки** — на чём крутится САМА карточка (воркер). Допустимо: не указывать (`NULL`) или родная Hermes (`deepseek-v4-flash-0731` / tutu `vendor/model`). На фазах `TZ:*` / `HF:*` / `REV:*` / `BUG:*` / `IDEA:*` — всегда не указывать. Cursor-модели сюда НЕЛЬЗЯ (карточка падает HTTP 400). Ошибочные места: `kanban_create --model`, `kanban set-model`, аргумент `model=` при create.
-- **D2. Модель работы внутри карточки** — какую модель УЖЕ ЗАПУЩЕННАЯ карточка зовёт для содержательной работы (архитектор / ревизор / исполнитель) через `invoke_role --role …` ВНУТРИ воркера. На этом контуре — Codex exec (`roles.*` по Б6.4/Б45). Здесь также Codex-slug; `roles_cursor.*` (Cursor) — только откат. Карточка D1 при этом не меняется. Роль воркера = default Hermes.
-- **Критерий одной фразой:** неправильно = подменить модель карточки (D1) Cursor-моделью; правильно = карточка на родной Hermes или без указания, а Cursor вызывается изнутри (D2). Источник путаницы — таблица «Модель `agent -p`» в `DevKanbanPipeline_TZ.md`: её столбец читается как `kanban_create --model`, а это не так. Постановщик: `kanban_create` БЕЗ `--model` на фазе-воркере.
+- **D1. Модель карточки (carrier)** — Hermes managed worker из штатного profile config либо обоснованный native override данной работы; external model slug нельзя подставлять в carrier.
+- **D2. Модель работы внутри (executor)** — модель выбранного adapter/backend по единственному owner/resolver Б13/Б14. Codex/Cursor вызывается внутри run без board authority; профиль worker соответствует роли, не произвольный default.
+- D1/D2 здесь — слои модели, не номера решений. Оба effective значения и sources различаются в evidence.
 
-| Слой | Простыми словами | Техническое место | Допустимо | Запрещено | Кто выставляет |
-|---|---|---|---|---|---|
-| **D1. Модель карточки** | На чём крутится сама карточка | `tasks.model_override` → `hermes chat -m` | `NULL` или tutu `vendor/model`; на `TZ:*`/`HF:*`/`REV:*`/`BUG:*`/`IDEA:*` всегда `NULL` | slug без `/` с префиксами `cursor-` / `composer-` / `claude-sonnet-` / `gemini-` | постановщик графа при create |
-| **D2. Модель работы внутри** | Кого карточка зовёт поработать | внутренний `agent -p --model` после старта | `cursor-grok-*` / `claude-sonnet-*` / `composer-*` по §3 и таблице DKP | писать эти slug в D1 | воркер фазы **после** старта, не на create |
+| Слой | Владелец / reader | Проверка |
+|---|---|---|
+| D1 carrier | Штатный config assignee/reviewer, читает Hermes | Совместимая native модель/override и фактическая загрузка |
+| D2 executor | Config выбранной adapter-ветки, Б13.2/Б60.4 | Exact model/effort/session/workspace, missing до send, без чужой ветки/fallback |
 
-Канон «PREFIX:фаза → роль → модель/механизм» — таблица «Фазы ↔ скиллы» в DevKanbanPipeline_TZ.md (v0.3.3).
-Строки «без Cursor» (stabilize, compress, ORCH, SK:preflight, BRF-диалог, GATE HITL Саши) — не agent -p.
-BRF: варианты постановки — только архитектор (agent -p cursor-grok-4.6-high) до ответа Саше; фактология BRF — оркестратор в TG.
+Канон фаза→роль — G6 master Б6. Профиль назначает Сирень, запускает native dispatcher; механические stabilize/SK:preflight/ORCH/гейты без содержательного invoke, compressor — native/Codex по Б60. BRF-факты — Сирень, содержательные варианты — архитектор. Own terminal/review tools worker разрешены после writers и identity/gates; очередь/чужие runs/raw board mutation внешнему executor запрещены. После terminal write запрещён; выход всего Hermes turn не граница.
 
 ## 4. Скиллы пайплайна
 
 | Скилл | За что | Не за что |
 |---|---|---|
-| `tz-workflow` | BRF в TG + TZ-WRITE (stabilize/compress/patch/finalize) | реализация, манифест |
-| `hermes-feature` | DX, PLAN-IMPL-TAIL / HF-TAIL, DECOMM-TAIL, RS-метод, backup, правило ORCH | бриф |
-| `cursor-cli` | вызов `agent -p` | содержание фазы |
-| `cursor-task-context` | digest + экстракт в Cursor | канбан-диспетчер |
+| dev-workflow | Единственный владелец предметного процесса; references: ТЗ/inventory, diagnosis, IAC/QA, backup/ORCH/DECOMM/research | Не второй dispatcher/lifecycle |
+| Штатные kanban tools и sdlc-review | Native execution/review guidance; независимая предметная REV сохраняется | Не подмена master/G1–G6/firewall |
 
-На карточку — **один** скилл фазы. Не грузить на DEV: `kanban-orchestrator`, `kanban-worker` (ядро уже инжектит guidance), `epic-development`, `aggregate-tz-opus-workflow` — **не этот пайплайн** (Cursor через zip/пакет, не `agent -p` канбана).
+Функции tz-workflow/hermes-feature и применимых references переносятся по 41-source map A1-A3/PREP-01 до архивации прежнего owner. Отсутствующие cursor-cli/cursor-task-context не оживлять как обязательные скиллы; external launch — invoke_role adapter. Префиксы TZ/HF сохраняются. Удаление/restore требуют собственного scope; документная доставка не доказывает source/consumer/delete closure.
 
 ## 5. Фазы по префиксам
 
@@ -143,13 +139,13 @@ BRF: варианты постановки — только архитектор
 `GATE:brief-closed` · `GATE:take-into-work` · `GATE:plan-approve` · `GATE:diagnose-review` · `GATE:block-accept` · `GATE:go` · `GATE:done`
 Штатный поезд / любой режим (в т.ч. one-pass): **auto** = `GATE:take-into-work` (`auto-pass: ac-shown` после показа AC-списка в origin), `GATE:plan-approve` (`auto-pass: architect-plan`), `GATE:done` (после preflight exit 0 и отчёта AC в origin), `GATE:diagnose-review` (после артефакта плана: `_fix_plan_*.md` или непустой body `BUG:diagnose`). **Never auto** = `GATE:go`, `GATE:block-accept`. Auto-набор **не** менять: `GATE:done` остаётся auto **после preflight 0**; preflight 0 включает снятие operator-hold (`operator-done:` + evidence) и пустой реестр `open-questions`. Карточки гейтов не skip. **Показ AC ≠ ожидание (класс S).** Выполнение operator-AC ≠ показ (класс O блокирует `GATE:done`, напоминается сторожем). Не skip фаз и не склейка в один `agent -p`. Набор фаз — §5.2. IDEA `blocked` до «разбери» / отказа — HITL бэклога, не DEV-поезд.
 
-### TZ: — запись ТЗ (скилл tz-workflow)
+### TZ: — запись ТЗ (предметный справочник dev-workflow)
 `TZ:stabilize` · `TZ:compress` · `TZ:patch` · `TZ:finalize`
 Не фаза: `TZ:architect` как бриф (бриф уже в TG).
 
-### HF: — hermes-feature
+### HF: — реализация и проверки (предметный справочник dev-workflow)
 `HF:compress` · `HF:plan` · `HF:backup` · `HF:impl` · `HF:test` · `HF:docs-handoff`
-`HF:compress` — опциональный префикс плана (не в PLAN-IMPL-TAIL; skip на stub/BUGFIX/SKILL-CHANGE≤2/DECOMM).
+HF:compress — опциональный префикс плана вне PLAN-IMPL-TAIL; обязательный create/change compress по strict >15000 байт не снимается числом файлов. DECOMM любого размера без compress, с полным inventory/read; остальные skip — по канону кейса.
 
 ### ORCH: — только shared state
 `ORCH:shared-state` — манифест, digest/render, `restore-all-skills.sh`, `.env` / `jobs.json` / `entities.json`. Workspace: `dir:/home/tkachenkoav/WorkVault/Registries`. Исполнитель сюда не пишет.
@@ -160,11 +156,11 @@ BRF: варианты постановки — только архитектор
 `RS:collect` · `RS:analyze`
 `MIG:plan` · `MIG:block-k` · `MIG:exec`
 `DEC:inventory` · `DEC:exec`
-`SK:preflight` (wc -c >15k → compress)
+SK:preflight — wc -c; только create/change strict >15000 байт → compress; DECOMM → полный inventory/read без compress/master fabrication.
 
 ## 5.1 Блоки-компоненты (переиспользуемые)
-Блок = именованная последовательность фаз, не карточка. Карточка = только фаза §5.
-Фазы блока = отдельные карточки и отдельные вызовы `agent -p`. Блок не схлопывается в один промпт.
+Блок разворачивается в канонические фазы §5. Карточка бывает root/supporting work либо работой, включая author/review пару с отдельными фазами/runs и независимым reviewer. Имя блока не заменяет фазу; HF:impl/HF:test раздельны. D1/D2/D5, FINAL §2.1–2.2/4.2; P01/P04/P33, IAC-03/04.
+Фазы сохраняют отдельные роли/runs/packet bindings; author/review пара не склеивает обязанности. Raw agent -p в обход adapter запрещён.
 
 ```
 BRF(mode) · BRIEF-CLOSE · TZ-WRITE(mode) · REV (крючок) · TAKE-INTO-WORK
@@ -199,7 +195,7 @@ RS            = RS:collect → RS:analyze → [REV:report] → GATE:done
 MIG-TAIL      = MIG:plan → GATE:plan-approve → HF:backup → (MIG:block-k → GATE:block-accept)* → ORCH:shared-state → GATE:done
 DEC-PRE       = DEC:inventory → GATE:go (R3 «удаляй»)
 DECOMM-TAIL   = HF:backup → EXEC → ORCH:shared-state → GATE:done; EXEC ∈ {DEC:exec, MIG:exec}
-SK-PRE        = SK:preflight (>15k → compress)
+SK-PRE        = SK:preflight (create/change >15000 байт → compress; DECOMM → inventory/read, без compress)
 ```
 
 Сборка кейсов из блоков — в §2. Модели — §3.
@@ -227,34 +223,35 @@ DX             = BUG:diagnose → GATE:diagnose-review   # только BUGFIX
 | BUGFIX-LIGHT | patch (light) | PLAN-IMPL-TAIL-LIGHT (HF:impl→test→docs→GATE:done) | `HF:plan`/`GATE:plan-approve`/`HF:backup`/`REV:tz`/`ORCH` skip (≤3 файла вне shared-модулей; план на diagnose-review); **всегда** `BUG:diagnose`+`GATE:diagnose-review` |
 | CHANGE-LIGHT | light | PLAN-IMPL-TAIL-LIGHT (HF:impl→test→docs→GATE:done) | `TZ:stabilize`/`TZ:compress`/`REV:tz` skip (≤3 файла вне shared-модулей); `HF:plan`/`HF:backup`/`ORCH` skip; HF:docs версия-bump в том же ходе |
 
-**REV / skip:** `REV:tz` снимается **только** явной фразой Саши → на карточке/скрипте фиксируется как `flag-waived: Sasha` (+ session sonnet, если прогон был). Это легитимный явный skip-путь для **любого** кейса (не только BUGFIX), равнозначный «REV done». Авто-skip `REV:tz` OFF при ≤3 файлах (строка BUGFIX) — отдельное табличное правило, не замена явного waive. Скрипт preflight принимает `REV:tz` done **или** `flag-waived: Sasha`.
+**REV / skip:** `REV:tz` снимается **только** явной фразой Саши → на карточке/скрипте фиксируется как `flag-waived: Sasha` (+ фактический session/run, если прогон был). Это легитимный явный skip-путь для **любого** кейса (не только BUGFIX), равнозначный «REV done». Авто-skip `REV:tz` OFF при ≤3 файлах (строка BUGFIX) — отдельное табличное правило, не замена явного waive. Скрипт preflight принимает `REV:tz` done **или** `flag-waived: Sasha`.
 
 Инварианты:
 1. Полный набор `TZ-WRITE` + `HF-TAIL` (для DEV/CHANGE/BUGFIX). Skip только по таблице или явный `flag-waived: Sasha`.
-2. `HF:impl` ≠ `HF:test` — разные карточки, разные `agent -p`.
-3. Штатный поезд / любой режим: **auto** = `GATE:take-into-work`, `GATE:plan-approve`, `GATE:done`, `GATE:diagnose-review`. **Never auto:** `GATE:go`, `GATE:block-accept`. Показ AC-списка / AC-отчёта в origin ≠ ожидание Саши **(класс S)**: карточка complete воркером после доставки артефакта. Класс O (operator-hold / открытый Q-n) — preflight ≠ 0, `GATE:done` не complete, сторож напоминает; это не never-auto гейт и не «ждать готово». Auto ≠ skip фазы: карточка гейта создаётся и complete'ится; родительская работа фаз не пропускается. Снятие с дашборда / фраза Саши на auto-гейтах — идемпотентный no-op. Хвост §5.2 обязателен; `kanban_complete` корня до `GATE:done` = done запрещён.
+2. HF:impl ≠ HF:test — разные карточки, отдельные native runs/accepted invocations.
+3. Штатный поезд / любой режим: **auto** = `GATE:take-into-work`, `GATE:plan-approve`, `GATE:done`, `GATE:diagnose-review`. **Never auto:** `GATE:go`, `GATE:block-accept`. Показ AC-списка / AC-отчёта в origin ≠ ожидание Саши **(класс S)**: карточка complete воркером после доставки артефакта. Класс O (operator-hold / открытый Q-n) — preflight ≠ 0, `GATE:done` не complete, сторож напоминает; это не never-auto гейт и не «ждать готово». Auto ≠ skip: механический гейт имеет проверенное evidence до downstream; отдельная содержательная LLM-карточка не требуется, родительская работа фаз не пропускается. Снятие с дашборда / фраза Саши на auto-гейтах — идемпотентный no-op. Хвост §5.2 обязателен; `kanban_complete` корня до `GATE:done` = done запрещён.
 4. `ORCH:shared-state` только после `HF:docs-handoff`.
-5. Off-board = исключение: complete + comment `done off-board, session ids`. Не замена графа.
+5. M1: manual CLI/dashboard/API action допустим к предметной приёмке при том же verifier до действия, same revision/identity и независимом post-readback полных evidence без drift. Off-board/retro comment без этого — bypass, даже board=done не accepted; post-hook не отменяет transaction.
 6. `HF:plan` обязателен до `GATE:plan-approve` — общее правило DEV/CHANGE/BUGFIX (§5.1), не специфика CHANGE.
 7. DX (`BUG:diagnose` → `GATE:diagnose-review`) **не** one-pass.
-8. **One-pass не создаёт второй канал исполнения.** Пока граф `DEV/<slug>` диспатчится (есть дети `todo/ready/running`), координатор **не** вызывает `agent -p` на фазы графа. Прямой ручной cursor-cli по слагу = **сначала** выход из диспатча + off-board (comment `dispatch-paused: off-board` + retro-create `done off-board, session ids`), **и только при снятом `GATE:plan-approve`** (для кодосодержащих фаз). Off-board — исключение (см. инвариант 5), не замена графа. Нет живого графа (холодный старт: крон-ошибка, триггер бага без слага) НЕ означает „можно напрямую". Любой баг/ошибка/не работает/почини/разберись → СНАЧАЛА завести канбан-карточку BUG:diagnose (DX), до любого agent -p / cronjob(repeat=1) / delegate на диагностику, план или реализацию.
-9. **Старт ЛЮБОГО BUGFIX = корень `DEV/<slug>` и `BUG:diagnose` в ОДНОМ create-батче** (root-как-контейнер, GLOSSARY §2/§5.2). Ретро-корень запрещён: прецедент 22.09 (pfs-promote-bugfix) — корень заведён ретро, цепочка DX→patch→impl→test, preflight GATE:done красный. Первый tool-шаг при баг-триггере = `kanban_create` корня `DEV/<slug>` **И** DX в том же create, **до** любого agent -p / cronjob(repeat=1) / delegate / cronjob-аутсорсинга. Классификация LIGHT — **после** `GATE:diagnose-review` (не на холодном старте), не генерировать пустые `auto-pass`-флаги (фальшивый audit).
-10. **`kanban_create` / `kanban set-model` на фазе-воркере не несёт Cursor-slug.** D2 ≠ D1. САНКТ — DKP.
-11. **Ход процесса — оркестратор.** Архитектор/исполнитель/ревизор не создают кейсовый граф, не выбирают кейс, не skip обязательных фаз. Находка «LIGHT» ≠ команда укоротить граф.
-12. **Structural-preflight на create.** После `kanban_create`-батча и **до** первого TZ/HF `agent -p` граф должен быть структурно полон по канону кейса (§2 / §5.2). Та же проверка на `GATE:done` (фазы ещё и `done`). Неполный граф на старте → `kanban_block` корня, не «доделать хвост потом».
-13. **Инвариант раннего закрытия корня (guard закрытия корня, DKP v0.4.4).** Корень `DEV/<slug>` → `kanban_complete` / status=done **только** после создания хвоста до `GATE:done` **и** `GATE:done` = done. `kanban_complete` корня до `GATE:done` запрещён (усиление инварианта 3). Нарушение = **раннее закрытие корня** (не «корень как DX-контейнер уже можно закрыть», не допустимый сценарий). `GATE:done` — единственное законное место закрытия корня. Сторож канбана `kanban_stuck_monitor.py` `rule9_bugfix_broken_tail` ловит два класса (не смешивать): корень **жив** + `BUG:diagnose` done без `GATE:diagnose-review` → `review-required: broken-bugfix-tail` (block); корень уже **done** и `GATE:done` нет/не done → `operator-action: premature-close` (needs-operator restore/re-open, **не** nudge). `rule8` (broken-tail по `HF:plan`/`children=[]`) пропускает BUGFIX-LIGHT — обрыв после DX и раннее закрытие ловит именно rule9. Тишина на корректно завершённых графах (корень done + `GATE:done` done) и archived.
+8. One-pass не создаёт второй канал исполнения: native dispatcher запускает профиль; raw agent -p/codex exec вне adapter, cronjob/delegate как второй диспетчер запрещены. BUG-триггер, включая cold start, сначала регистрирует root и диагноз. Manual — M1, retro acceptance не замена допуска.
+9. BUGFIX создаёт root/BUG:diagnose/recipe без runnable partial graph: blocked root/works, зависимости и structural check, затем открытие входа. Root не предшественник своих фаз, повтор create идемпотентен; ретро-корень запрещён. LIGHT только после GATE:diagnose-review; пустой auto-pass не evidence.
+10. External Cursor/Codex slug не подменяет carrier model карточки; D2 ≠ D1, owners/override — §3.
+11. **Ход процесса — оркестратор.** Архитектор/исполнитель/ревизор не создают кейсовый граф, не выбирают кейс, не skip обязательных фаз. Находка «LIGHT» ≠ команда укоротить граф. Own terminal/review передача после writers и identity/gates разрешена, после неё write запрещён; очередь/чужие runs/raw board mutation внешним executor запрещены.
+12. Structural-preflight — до открытия входа созданного графа и содержательной работы/external send; на GATE:done дополнительно проверяется принятие всех фаз. Partial graph недопущен. Q1 не обещает бесплатный первый Hermes turn или перехват всех manual surfaces.
+13. Root DEV/<slug> закрывается только после полного хвоста и принятого GATE:done. Раннее закрытие запрещено. Живой root + диагноз без diagnose-review → review-required: broken-bugfix-tail; done root без done-гейта → operator-action: premature-close и штатная диагностика/reopen законным владельцем, не nudge/backfill. Корректные done/archived не тревожатся. Старые rule8/rule9 watcher-команды не активная процедура: root guard сохраняется в едином verifier, без нового daemon.
 
-## 5.3 Guard-ы процесса (канон DKP v0.4.1)
+## 5.3 Guard-ы процесса
 
-Норматив и CLI — `DevKanbanPipeline_TZ.md` v0.4.1. Здесь — имена, не процедура.
+Норматив — master DevWorkflow Б6/Б17/Б56, один verifier, не второй enum. Protected agent route проверяет до работы/external send и own terminal tools; hook error/exception/timeout — fail closed. Manual/bypass — M1 §5.2.
 
-| Guard | Когда | Fail |
-|---|---|---|
-| G1. Фаза ∈ граф + version/mtime ТЗ | `emit-prompt` / `check` | карточка без корня `DEV/<slug>` (искл. RESEARCH/BRF); drift version/mtime |
-| G2. Контекст использован | `kanban_complete` TZ/HF/BUG/REV | нет маркера `context-used:` / `check` ≠ 0 |
-| G3. Реализация в git | `GATE:done` (+ старт `HF:test`) | `changed_files` из `HF:impl` untracked/uncommitted в git-worktree |
-| G4. Граф полон по кейсу | create-батч **и** `GATE:done` | нет обязательных фаз §2/§5.2 |
-| G5. Архитектор ≠ процесс | любой TZ/HF/BUG воркер | `kanban_create` кейсового графа / смена кейса / skip фаз |
+| Guard | Условие |
+|---|---|
+| G1 | Фаза/recipe и актуальные master/version/mtime/hash/extract applicability |
+| G2 | Immutable packet/render/ReadRef и exact accepted native binding; текстового context-used недостаточно |
+| G3 | Собственный committed write-set и каждый repo proof до test/docs/done |
+| G4 | Полный recipe до допуска и принятый обязательный хвост на done |
+| G5 | Роль не меняет case/recipe/skip и не управляет чужой работой |
+| G6 | Канонические фаза→роль/profile, basename/result и нормализованный slug_source; нет строки → отказ |
 
 ## 6. Артефакты и пути
 
@@ -264,23 +261,23 @@ DX             = BUG:diagnose → GATE:diagnose-review   # только BUGFIX
 | appendix | `TZ/<Tool>/appendix_<тема>_YYYYMMDD.md` |
 | инвентарь | `TZ/MAIN_TZ_INVENTORY.md` |
 | этот глоссарий | `TZ/GLOSSARY.md` |
-| каталог цепочек | секция DevKanbanPipeline_TZ (канон после слияния) / appendix ProcessImprovement |
+| каталог цепочек | master DevWorkflow и references/canon.md, версия recipe; исполняет штатный канбан |
 | research | `Hermes-Backlog/research/` |
 | код инструмента | `USERTOOLS/<Tool>/` |
 | код скилла | `hermes-workspace/skills/` |
 | бэкап | `~/.hermes/_Archives/hermes-backup-YYYYMMDD-HHMMSS/` |
 | манифест | `EcosystemManifest.json`, `restore-all-skills.sh` |
 | digest | `EcosystemManifest.digest.md` |
-| контекст-промпт | `~/WorkVault/Registries/pipeline_context_bundle.py emit-prompt`; обязателен для `BUG:diagnose` / TZ-WRITE / HF-фаз; диск-кэша экстракта нет; обхода (flag-waived/--force) нет; скрипт/check блокируют всегда. v0.2.12: `--card` обязан принадлежать графу; сверка `tz_version`/`tz_mtime`; маркер `context-used:` на complete |
-| structural-preflight | тот же класс, что `pipeline_gate_done_preflight.py`; режим create (фазы **есть**) и done (фазы **done**); `--case` ∈ 10 кейсов §2 |
+| контекст-промпт | Master Б56: immutable packet/1.0 → deterministic render/sidecar, ReadRef/MUST-read и exact native accepted binding; один context owner, без ручного prompt/--force |
+| structural-preflight | Единый verifier master Б6/Б17/Б56: create/admission/terminal, 10 кейсов; pipeline_context_bundle.py/pipeline_gate_done_preflight.py не обязательные активные пути |
 | git-proof реализации | preflight G3: пути из `HF:impl` `changed_files`, лежащие в git-worktree, должны быть закоммичены (не untracked). Не-git деревья (vault ТЗ) — наличие на диске, не git |
 
 ## 7. Запрещённые синонимы
 
 | Нельзя | Вместо |
 |---|---|
-| TZ (про скилл или файл) | `tz-workflow` / «ТЗ» / `TZ:фаза` |
-| HF (про скилл) | `hermes-feature` / `HF:фаза` |
+| TZ (про скилл или файл) | `dev-workflow` / «ТЗ» / `TZ:фаза` |
+| HF (про скилл) | `dev-workflow` / `HF:фаза` |
 | ORCH (голое) | оркестратор / `ORCH:shared-state` |
 | DEV (про человека) | исполнитель / архитектор |
 | `HF:fix` | `HF:impl` или `BUG:diagnose` |
@@ -293,7 +290,7 @@ DX             = BUG:diagnose → GATE:diagnose-review   # только BUGFIX
 | `HF:docs` / «docs» | `HF:docs-handoff` |
 | «backup» без префикса | `HF:backup` |
 | `BRIEF` как синоним BRF | `BRF` / `BRIEF-CLOSE` |
-| «одним заходом» = один `agent -p` | отдельные карточки + отдельные `agent -p`; one-pass = вестигиальный ярлык (не склеивать роли); auto-гейты штатного поезда — §5 GATE |
+| «одним заходом» = один `agent -p` | отдельные канонические фазы/runs/packet bindings; допустимая author/review пара — §0.1; one-pass = вестигиальный ярлык (не склеивать роли); auto-гейты штатного поезда — §5 GATE |
 | «воздух воркера» / «модель воздуха» / «ВОЗДУХ-воркера» | D1 «модель карточки» |
 | «архитектор строит граф» / «архитектор выбрал LIGHT» | оркестратор строит граф; LIGHT-сужение — оркестратор по §2 |
 | роль «тестировщик» | исполнитель на `HF:test` по IAC архитектора |
@@ -302,9 +299,13 @@ DX             = BUG:diagnose → GATE:diagnose-review   # только BUGFIX
 
 Полный список имён — `MAIN_TZ_INVENTORY.md`. Здесь не дублировать. Не выдумывать аббревиатуры инструментов. Исключение протокола выдачи MFE/MFL — в USER.md, не в пайплайне.
 
+## Changelog — доставка 2026-11-14
+
+Адресные D1–D9/Q1/Q2 по A1-A3-TRACE изд.2 после REV-a-pack-v2 APPROVE: штатный канбан, root/work/review, профили/carrier/executor, own terminal, G1–G6/immutable binding, Q2 create/change vs DECOMM. Owner ProcessImprovement, имена фаз, firewall, S/O/C и история сохранены. Версия во frontmatter. [Master](DevWorkflow/DevWorkflow_TZ.md), [решения](../dev/pochinka-dev-workflow-20261112/out/DECISIONS-KANBAN-TZ.md), [REV](../dev/pochinka-dev-workflow-20261112/out/REV-a-pack-v2.md), [exact diff/hash отчёт](../dev/pochinka-dev-workflow-20261112/out/A-FINALIZE-DONE.md). Runtime NOT_RUN, D6 NOT_PROVEN.
+
 ## Исторический changelog (read-only)
 
-Версии ниже сохраняются как история; их kanban CLI-команды (`kanban_create`/`kanban_complete`/`card`/`set-model`) не выдаются за активную процедуру. Активный процесс — файловый DevWorkflow (`devops/dev-workflow`, Б55, YAML `tools.dev_workflow`), см. заголовок.
+Версии ниже — история своих пакетов, не текущий PASS. Активный DevWorkflow — предметный процесс на штатном канбане по master; старые процедуры файловой машины/модели не активный маршрут.
 
 ## v0.2.6 — долг DKP v0.3.2 AC/IAC HITL (2026-09-25)
 1. Слой артефакта: `AC-###` в master-ТЗ пакета; `IAC-##` в `HF:plan` (`path`/`verify`/`depends`/`covers`). Не фазы и не скиллы. Омоним: САНКТ `IAC-01..10` ≠ пайплайнные `IAC-##`.

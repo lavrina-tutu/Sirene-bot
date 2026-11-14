@@ -111,6 +111,25 @@ class ConfluenceClient:
             query={"expand": "version"},
         )
 
+    def list_attachment_versions(self, attachment_id: str | int, limit: int = 200) -> list[dict]:
+        """Полная пагинация истории версий вложения (P1.W1.10/11, R-011)."""
+        out: list[dict] = []
+        start = 0
+        while True:
+            data = self._request(
+                "GET",
+                f"/rest/experimental/content/{attachment_id}/version",
+                query={"limit": str(limit), "start": str(start)},
+            )
+            if not data:
+                break
+            results = data.get("results", [])
+            out.extend(results)
+            if len(results) < limit or not data.get("_links", {}).get("next"):
+                break
+            start += limit
+        return out
+
     def download_attachment(self, page_id: str | int, filename: str, version: int | None = None) -> bytes:
         query = {"api": "v2"}
         if version is not None:

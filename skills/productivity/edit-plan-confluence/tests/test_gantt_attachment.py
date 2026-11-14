@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from unittest.mock import MagicMock
 
-from gantt_attachment import find_gantt_attachment, upload_gantt_json
+from gantt_attachment import find_gantt_attachment, upload_gantt_json, verify_uploaded
 from macro import MacroInfo
 
 
@@ -43,3 +44,22 @@ def test_upload_uses_post_data(monkeypatch):
     assert ver == 5
     assert calls[0][1] == "POST"
     assert "/data?conflictPolicy=override" in calls[0][0]
+
+
+def test_verify_uploaded_matches_version_specific_get():
+    """P1.W1.5/AC-105: version-specific GET, не latest; сверка hash."""
+    payload = b'{"a": 1}'
+    sha = hashlib.sha256(payload).hexdigest()
+    client = MagicMock()
+    client.download_attachment.return_value = payload
+    ok, raw = verify_uploaded(client, "519501810", "gantt-chart-x.json", 3, sha)
+    assert ok is True
+    assert raw == payload
+    client.download_attachment.assert_called_once_with("519501810", "gantt-chart-x.json", 3)
+
+
+def test_verify_uploaded_hash_mismatch_is_conflict_not_crash():
+    client = MagicMock()
+    client.download_attachment.return_value = b"different-bytes"
+    ok, raw = verify_uploaded(client, "519501810", "gantt-chart-x.json", 3, "deadbeef" * 8)
+    assert ok is False

@@ -3,12 +3,17 @@ from __future__ import annotations
 
 import math
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from macro import macro_span
 from mpp_convert import read_csv_rows
+
+_MOFS_ROOT = Path.home() / "USERTOOLS" / "MofsIndex"
+if str(_MOFS_ROOT) not in sys.path:
+    sys.path.insert(0, str(_MOFS_ROOT))
 
 ITOGO_LINE1_RE = re.compile(
     r"(Итого:\s*с\s*)(\d{2}\.\d{2}\.\d{2})(\s*по\s*)(\d{2}\.\d{2}\.\d{2})(\s*-\s*)(\d[\d\s]*)(\s*рабочих дней)",
@@ -117,3 +122,59 @@ def apply_itogo(storage: str, d1: str, d2: str, n_days: int, m_hours: int, macro
         start = span[0] if span is not None else macro_start
         return insert_itogo_above_macro(storage, start, html)
     return html + storage
+
+
+def parse_itogo_text(raw_html_or_text: str) -> tuple[str | None, str | None, int | None]:
+    """Разобрать «Итого: с D1 по D2 - N рабочих дней» из текста/HTML, если
+    строка присутствует. Возвращает (d1, d2, n) или (None, None, None), если
+    строка не найдена — явная неизвестность, не выдуманный «01.01.00»."""
+    m = ITOGO_LINE1_RE.search(raw_html_or_text)
+    if not m:
+        return None, None, None
+    d1, d2, n_raw = m.group(2), m.group(4), m.group(6)
+    n = int(n_raw.replace(" ", "").replace("\xa0", ""))
+    return d1, d2, n
+
+
+def record_itogo_observation(
+    plan_id: str,
+    page_id: str,
+    *,
+    page_version: int | None = None,
+    raw_storage: str | None = None,
+    storage_artifact_id: str | None = None,
+    conn=None,
+) -> str:
+    """P1.W1.9: записать отдельное page observation «Итого»/storage, не
+    привязанное 1:1 к номеру publication (R-015 §7.1, AC-110). Отсутствующий
+    исторический «Итого» помечается ``unknown``, не выдумывается."""
+    from mofs_index.plan import writer as plan_writer
+
+    d1 = d2 = None
+    n = None
+    quality = "unknown"
+    if raw_storage:
+        d1, d2, n = parse_itogo_text(raw_storage)
+        quality = "ok" if d1 else "unknown"
+
+    spec = plan_writer.PageObservationSpec(
+        plan_id=plan_id,
+        page_id=page_id,
+        page_version=page_version,
+        storage_artifact_id=storage_artifact_id,
+        itogo_raw=raw_storage,
+        itogo_text=f"Итого: с {d1} по {d2} - {n} рабочих дней" if d1 else None,
+        itogo_d1=d1,
+        itogo_d2=d2,
+        itogo_n=n,
+        quality=quality,
+    )
+    own_conn = conn is None
+    if own_conn:
+        from mofs_index.db import connect_durable
+        conn = connect_durable()
+    try:
+        return plan_writer.record_page_observation(conn, spec)
+    finally:
+        if own_conn:
+            conn.close()

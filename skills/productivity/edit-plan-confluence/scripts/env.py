@@ -34,3 +34,14 @@ def get_token() -> str:
 
 def page_url(page_id: str | int) -> str:
     return f"{CONFLUENCE_BASE}/pages/viewpage.action?pageId={page_id}"
+
+
+def get_workvault_path() -> Path:
+    """Разрешённый корень архива (R-005..R-007): ``WORKVAULT_PATH`` из
+    ConfluenceSync ``.env``, иначе дефолт ``~/WorkVault`` (P1.W1.2)."""
+    try:
+        env = load_confluence_env()
+    except (FileNotFoundError, RuntimeError):
+        env = {}
+    raw = env.get("WORKVAULT_PATH") or os.environ.get("WORKVAULT_PATH")
+    return Path(raw).expanduser() if raw else Path.home() / "WorkVault"

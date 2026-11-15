@@ -1,9 +1,10 @@
 ---
 type: glossary
 title: Глоссарий пайплайна разработки Hermes
-version: 0.3.0
-date: 2026-11-14
+version: 0.3.1
+date: 2026-11-15
 status: active (D1–D9/Q1/Q2; DevWorkflow на штатном канбане; G1–G6; firewall, 10 кейсов, фазы и S/O/C сохранены; runtime NOT_RUN)
+revision: '2026-11-15 — адресная синхронизация D6/B3 по REV: основной provider worker75/78; внешний invoke block/manual resume; повторная REV требуется, B3 proof NOT_RUN / ENV-03 NOT_PROVEN'
 owner: ProcessImprovement
 canonical: ~/WorkVault/Hermes-Backlog/TZ/GLOSSARY.md
 source: appendix_chains-and-skills-audit_20260907.md
@@ -86,7 +87,7 @@ source: appendix_chains-and-skills-audit_20260907.md
 | Компрессор | Assignee-профиль роли | refs resolver/capabilities native или Codex, Б60; carrier отдельно | Содержательная выжимка по Б60; Python — единственный publisher | — |
 | Координатор | Сирень, механика | refs единственного config owner/reader Б14; carrier ≠ executor | бэкап, инвентарь, операторка | не содержание ТЗ |
 
-Один logical invoke — одна роль; carrier+external executor считаются одним invoke Б49. Три backend: Hermes internal/Codex/Cursor; Cursor live availability отдельно от обязательного contract coverage. Exact model/effort/session/branch сохраняются в native accepted run. D6 — master Б13.2/FINAL §4.3: actual worker75 transient/cooldown, worker78 sticky; local rc не worker outcome, ENV-03 NOT_PROVEN, внутри attempt retry/fallback запрещены.
+Один logical invoke — одна роль; carrier+external executor считаются одним invoke Б49. Три backend: Hermes internal/Codex/Cursor; Cursor live availability отдельно от обязательного contract coverage. Exact model/effort/session/branch сохраняются в native accepted run. D6/B3 — master Б13.2/[FINAL §4.3](../dev/pochinka-dev-workflow-20261112/out/FINAL-TZ-dev-workflow-kanban.md): основной provider-путь Hermes сохраняет actual worker75 transient/cooldown и worker78 terminal_provider/sticky; внешний invoke, включая отдельный SDK native-Компрессора и Codex-Компрессор, — typed transient/terminal failure → устойчивый штатный block собственной задачи без auto-run/resend → manual resume (terminal после исправления причины). Local rc не worker outcome; ENV-03 NOT_PROVEN, B3 proof NOT_RUN, внутри attempt retry/fallback запрещены. Адресная синхронизация по REV 15.11 отражена в [отчёте D6/B3](../dev/pochinka-dev-workflow-20261112/out/D6-B3-DELTA.md); новой REV или runtime PASS эта запись не присваивает.
 
 **Процесс vs содержание (v0.2.12, инцидент `DEV/pfs-task-slug-not-created`).** Решения о ходе процесса (какой кейс, какой граф, какие фазы есть/нет) принимают **только Саша и оркестратор, и только на старте** (LIGHT-сужение — оркестратор после объёма, см. §2). Архитектору дают полный контекст (`emit-prompt`); он отдаёт только: ТЗ, или план, или вопросы Саше. `kanban_create` кейсового графа / смена `--case` / skip обязательных фаз §5.2 из карточки архитектора = `protocol_violation`.
 

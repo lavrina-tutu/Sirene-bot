@@ -2,14 +2,14 @@
 tool: DevWorkflow
 type: infra_plan
 title: "Процесс изменения Hermes/USERTOOLS: одна задача, FIFO и непрерывное продолжение"
-version: 0.11.0
-date: 2026-11-14
+version: 0.12.0
+date: 2026-11-15
 status: draft
 author: архитектор (Codex exec)
 case: CHANGE
 slug: pochinka-dev-workflow-20261112
 previous_slug: adresnyy-remont-publikatsii-extract-v-kompressor
-last-section-added: '2026-11-14 — адресная доставка D1–D9/Q1/Q2, M1–M3; M6 сохранён; A1-A3-TRACE изд.2 / REV-a-pack-v2 APPROVE; runtime NOT_RUN, ENV-03/D6 NOT_PROVEN, CAP-R3 открыт; Б15: state — штатный канбан по D2, immutable files отдельно, без общей файлово-DB транзакции'
+last-section-added: '2026-11-15 — адресная D6/B3 по решению Саши: внешние failures → штатный устойчивый block/manual resume; main-provider rc75/78 сохранён; HF-plan 1.2.0; независимая REV дельты требуется; ENV-03 NOT_PROVEN, B3 proof NOT_RUN; ErrorBus независим, CAP-R3 открыт'
 depends_on:
   - TZ/GLOSSARY.md >= 0.3.0
   - TZ/DevKanbanPipeline/DevKanbanPipeline_TZ.md >= 0.4.4
@@ -228,7 +228,9 @@ Backend/model/effort разрешаются по ссылкам единстве
 
 Provider-fatal классифицируется структурно: валидный успешный JSON не сканируется по содержательному result; error-envelope имеет приоритет, в Codex JSONL проверяются все error-события до/после success. Не-JSON — строгие сигнатуры реального client error, не голые timeout/credits/billing/payment. Цитата HTTP 401/token_expired/Request timed out в успешном result не failure; FATAL_PATTERNS и TERMINAL_KILL_RCS не ослабляются.
 
-D6: временные 429/5xx/timeout/billing/quota → actual Hermes worker rc=75, native rate_limited/возврат/cooldown; credentials401/403, model404, TLS → worker rc=78, native gave_up/sticky blocked с первой попытки до исправления и ручного kanban_unblock. Внутри attempt retry/fallback запрещены. Local adapter rc3/4 и текст tool-result не являются worker75/78; необходим supported path и наблюдаемые task_runs/events. ENV-03 NOT_PROVEN; APPROVE B2-дизайна не доказывает эту передачу, B3 semantics rc не включён.
+D6/B3 — решение Саши 15.11.2026 (`dev/pochinka-dev-workflow-20261112/evidence/owner-decision-b3-20261115.md`; HF-plan §3.1/5.3/11.1). Классы прежние: 429/5xx/timeout/billing/quota — transient; credentials401/403/model404/TLS — terminal. Основной provider-путь самого Hermes agent turn сохраняет actual worker75/rate_limited/cooldown и worker78/gave_up/sticky block. Внешний invoke через adapter/tool, включая обычные adapters и отдельные SDK/CLI Компрессора native/Codex, получает typed failure → устойчивый штатный block собственной задачи → без автоматического повторного запуска/resend → проверка причины и ручной допуск (terminal после исправления). Имя `hermes-internal` отдельного SDK Компрессора не делает его основным provider-путём. Local rc2/3/4 не worker75/78; fake rc/terminal_provider запрещены. Negative-B2 из PREP-B2-ENV03 сохранён, B3 proof NOT_RUN, ENV-03 NOT_PROVEN до нового proof; прежний APPROVE B2 не подтверждает B3.
+
+До принятого success внешний failure запрещает дальнейший invoke, публикацию и успешное завершение. Владелец своего run после quiescence writers вызывает настоящий штатный block с exact task/run/claim/admission и typed reason/evidence, независимо проверяет запись; block/evidence/ack failure не success и не разрешение автоматического resend/run. Lost ack сначала разрешается readback реального состояния/принятой цепочки. После принятого success done не откатывается, публикация не повторяется: intact chain → no-op, corruption → отказ/диагноз без backfill. Late A не меняет current B. Block должен пережить callback, recompute_ready, restart и гонку worker-exit; rc0+protocol_violation из PREP-02 не доказательство. Ручной unblock требует адресного решения оператора, проверки причины/входов/истории/gates/лимитов, нового ordinal без reset. Точный supported kind/kwargs block доказывается ENV-01/03, не новый YAML/SQL контракт. Без устойчивого block B3 FAIL/NOT_PROVEN, live admission закрыт; core patch не разрешён.
 
 Rc124/137/143 сам по себе не provider-fatal, success или retry: сначала lifecycle/writers/receipt. Exhaustion90/90 не success, идёт в ErrorBus и не переименовывается в transient75 без основания. Native технические attempts/breaker отделены от предметных повторов Б55.5; rc75 не объявляется ограниченным max_retries, если native failure counter его не считает. Benign models-refresh исключение — только точная fixture Б60.7, не broad stderr suppression.
 
@@ -318,7 +320,7 @@ REV обязателен там, где предусмотрен полным к
 
 Lifecycle — native claim/heartbeat/reclaim/timeout/failure_limit/max_retries/circuit breaker (D3/D7). Долгие операции используют kanban_heartbeat; собственного reaper/watchdog/claim-lock и kill по возрасту нет. dead-pid/empty-result/rc0-no-complete/model-none остаются диагностическими причинами, не командами самодельного recover. Pre-admission G6/model/context отказ не расходует логический invoke; правильный первый вызов не recovery. Полный canonical и короткий stdout допустимы, missing canonical не success. Rc0 без terminal — protocol_violation. При crash законный следующий владелец сначала сверяет сохранённый effect/receipt, не повторяет его наугад.
 
-D6 применяется по Б13.2: actual worker75/78, не local rc. Старые recover_counts не переносятся в max_retries; нет второго своего технического бюджета. Паузы/holds/CRISIS не снимаются cooldown или диагнозом. Launch/crash/provider failures идут в ErrorBus с безопасным evidence, warn S — в существующий origin.
+D6 применяется по Б13.2: основной provider actual worker75/78, внешний B3 durable block/manual resume; local rc не worker outcome. Старые recover_counts не переносятся в max_retries; нет второго своего технического бюджета. Паузы/holds/CRISIS не снимаются cooldown или диагнозом. Launch/crash/provider failures идут в ErrorBus с безопасным evidence, warn S — в существующий origin.
 
 ### Б16.7 Штатное продолжение
 
@@ -458,7 +460,7 @@ idea=true сохраняет запрос и origin без автостарта.
 - Нет ручной правки process state/journal/queue, accepted packet/sidecar/prepare, backfill proof, reset counters и переписывания чужой истории. Любая запись только штатным writer разрешённой фазы.
 - Нет подмены case/recipe/G6, обязательной ревизии или операторского словаря; нет склейки ролей и HF:impl/HF:test. Разрешены только собственные штатные terminal/review tools managed worker при проверенных identity/gates (D5/Q1); управление очередью, чужими runs и raw board mutation внешним executor запрещены. AC-074/076/078 → P04/P06/P08, IAC-04/05 сохраняются.
 - Нет --force/ручного prompt/--continue, повторного invoke при живом собственном transport/writer, неверного canonical или terminal без проверяемого evidence. Законная terminal-передача после завершения writers не ждёт выхода всего Hermes turn. Native identity не подменяется PID/pgid/external session.
-- Нет безлимитного retry, собственного recover-loop, обхода quota backend/моделью/аккаунтом/slug, перестановки FIFO без указания Саши. Технические attempts — native, recover_counts не импортируются; внутри attempt retry/fallback запрещены. D6 worker75/cooldown и worker78/sticky по Б13.2 не заменяются local rc. Б49 не переносится в agent.max_turns/tool_loop_guardrails.warn_after.
+- Нет безлимитного retry, собственного recover-loop, обхода quota backend/моделью/аккаунтом/slug, перестановки FIFO без указания Саши. Технические attempts — native, recover_counts не импортируются; внутри attempt retry/fallback запрещены. D6 основного provider worker75/cooldown и worker78/sticky; внешнего — B3 block/manual resume по Б13.2. Local rc не worker outcome; external auto-run/resend запрещён. Б49 не переносится в agent.max_turns/tool_loop_guardrails.warn_after.
 - Не считать extract SoT, не обрезать имена/пакет/обязательные секции, не шарить extract между слагами; нет неявного отсутствия ранее произведённого extract.
 - Не переносить recovery/case/phase ownership в cursor-cli, не удалять Cursor rollback. Компрессор использует выбранную YAML ветку по Б60; координатор остаётся sirene.
 - Не возобновлять Б58/Б59, B3/B4/w3/w4 и иные явные паузы; не присваивать исторический candidate/done/approval другой задаче. Runtime FAIL/no-entry не становится PASS по закрытию процесса.
@@ -479,7 +481,7 @@ idea=true сохраняет запрос и origin без автостарта.
 | AC-006 | S | CHANGE: полный recipe Б18, skip только табличный или flag-waived |
 | AC-007 | S | Переход без reason/evidence отказан предметным check; P33, IAC-04. |
 | AC-008 | S | Stale/expired run обслуживает native reclaim, своего reaper нет; P13, IAC-05. |
-| AC-009 | S | Transient75/cooldown и terminal78/sticky; exhaustion90/90 отдельный; P10/P11/P12, IAC-05. ENV-03/D6 NOT_PROVEN; B3 не включён, local rc не worker outcome. |
+| AC-009 | S | Основной provider: transient75/cooldown и terminal78/sticky; внешний: typed failure→B3 штатный устойчивый block/manual resume, auto-run/resend=0; exhaustion90/90 отдельно. P10/P11/P12, IAC-05; block failure/ack/restart/recompute/worker-exit race обязательны. ENV-03 NOT_PROVEN до B3 proof; negative-B2 сохранён. |
 | AC-010 | S | Единственный native dispatcher, нет loops/kill/reaper владельца процесса; P13/P32, IAC-03, IAC-05, IAC-10. |
 | AC-011 | S | G3: changed_files HF:impl в git-worktree закоммичены до HF:test и GATE:done |
 | AC-012 | S | Emit обязателен, --force отсутствует; полный immutable packet, доктрина/MUST-read, exact context-used binding Б56; готовая часть extract ≤5120 Unicode по Б60. |
@@ -538,11 +540,11 @@ idea=true сохраняет запрос и origin без автостарта.
 | AC-089 | S | Codex session/result evidence распарсены структурно без stdout эвристики; P23, IAC-05. |
 | AC-090 | S | Codex ordinary→roles.executor, LIGHT→roles.executor_light; Cursor ordinary/LIGHT→roles_cursor.executor; architect/reviewer своей ветки; различающие values+explicit, source/prepare/argv/accepted-run exact; missing rc2/send0, чужих reads=0, defaults/чужой run неизменны; P22/P23/P23-LIGHT: все 48 subcases §6.1 и внутренние missing/LIGHT-варианты, IAC-02, IAC-05. |
 | AC-092 | S | Нет raw role CLI в active instructions, вызов только approved adapter; P23/P28/P32, IAC-05, IAC-10. |
-| AC-093 | S | External error доходит supported path до worker75/78; tool text недостаточен; P10/P11/P12, IAC-05. ENV-03/D6 NOT_PROVEN; B3 не включён, local rc не worker outcome. |
+| AC-093 | S | External error → exact typed reason + настоящий штатный block своей task/run/admission, устойчивый до manual unblock; block/evidence/ack failure не success, auto-run/resend=0. Late A не меняет B; after-success no-op без rollback/republication. P10/P11/P12, IAC-05; ENV-03 NOT_PROVEN до B3 proof; tool text/local rc не worker outcome. |
 | AC-097 | S | references/context.md для TZ:patch содержит перечень MUST-read Б12 с точной привязкой ReadRef Б56.4; нет единственной обязанности «всегда весь master». Условия полного чтения и чтение выбранных секций без обрезки сохранены. |
 | AC-098 | S | На изолированной фикстуре TZ:patch emit-prompt передаёт полный перечень MUST-read Б12 и ReadRef Б56.4 по принятому заданию; последний БNN/история не подменяют привязку. |
 | AC-099 | S | Evidence фазы показывает чтение полных выбранных секций Б12/Б56.4; при условии обязательного полного master прочитан весь файл без обрезки. Для штатного sections-режима полный файл сверх перечня не требуется. |
-| AC-102 | S | 429/503 в native/Codex/Cursor дают native cooldown, no inner retry; P10/P12, IAC-05. Исходные имена test_http_429_fatal / http 503 сохраняются; новый retry module запрещён. |
+| AC-102 | S | 429/503 основного provider дают native cooldown; внешние native/Codex/Cursor — B3 block/manual resume, no inner retry/fallback. P10/P12, IAC-05. Исходные имена test_http_429_fatal / http 503 сохраняются; новый retry module запрещён. |
 | AC-104 | S | Auto gates проверяются локально, без содержательной роли/extra model turn; P20/P32, IAC-03, IAC-04. |
 | AC-106 | S | Если проверка зелёная с первого раза — impl-дифф по гейтам пуст |
 | AC-108 | S | Б49 phase limits exact; carrier+external=1, ordinal сохраняется; P14/P23-WS, IAC-04, IAC-05. |
@@ -550,7 +552,7 @@ idea=true сохраняет запрос и origin без автостарта.
 | AC-116 | S | Legacy dwka_guard/doorbell absent active closure; native runtime сохранён; P28/P32, IAC-10. |
 | AC-117 | S | LIGHT narrowing graph сохраняет done/history/extract; старый pop/state_sha заменён; K03/K05/P20, IAC-03. |
 | AC-118 | S | LIGHT positive/negative regression: 3/4 paths, shared/новая сущность/cron/env; K03/K05/P20, IAC-03. Исходный путь pipeline/tests/test_set_case_light.py сохраняется; живые чужие _state.json не трогать. |
-| AC-119 | S | Трёхзначный control-flow `_fatal_reason` / `classify_provider_fatal`: (а) валидный JSON `is_error=false`/без error-поля → не provider-fatal, `FATAL_PATTERNS` по `result` не гонять; (б) валидный JSON `is_error=true`/`type=="error"` → fatal, envelope выигрывает у цитат; (в) не-JSON → fallback на строгие сигнатуры (сообщение клиента/парсера). Список `FATAL_PATTERNS` не сокращать; категория provider failure передаётся по D6 в native worker75/78 без внутреннего retry; local classifier не подменяет worker outcome |
+| AC-119 | S | Трёхзначный control-flow `_fatal_reason` / `classify_provider_fatal`: (а) валидный JSON `is_error=false`/без error-поля → не provider-fatal, `FATAL_PATTERNS` по `result` не гонять; (б) валидный JSON `is_error=true`/`type=="error"` → fatal, envelope выигрывает у цитат; (в) не-JSON → fallback на строгие сигнатуры (сообщение клиента/парсера). Список `FATAL_PATTERNS` не сокращать; категория provider failure передаётся по D6: основной provider в native worker75/78, внешний в B3 block/manual resume без внутреннего retry; local classifier не подменяет worker outcome |
 | AC-120 | S | `pytest pipeline/tests/test_invoke_fatal.py`: JSON `{"result":"…Request timed out…","is_error":false}` и тот же result без `is_error` → `classify` False, `_fatal_reason` None, `refuse_clean_exit` False; `{"is_error":true,"error":"Request timed out"}` / `{"type":"error",…}` → True (json-ветка); не-JSON `"Request timed out"` → True (pattern); бытовое `"timeout 120-300s"` JSON и plain → False (регресс AC-065). Существующие AC-065/066/070 не ломать. Проверяемые файлы: `invoke_role.py` + `test_invoke_fatal.py` |
 
 ### Б34.1 Самостоятельные oracle A1–C15
@@ -619,11 +621,11 @@ AC-028 проверяется на изолированных фикстурах
 | Duplicate/late/foreign событие | Принятый целый результат no-op; чужой/старый identity отказан |
 | Потерян completion | Штатный wake обязан реально доставить продолжение; stdout WAKE не proof |
 | Crash/launch failure | Native attempts/reclaim/breaker и ErrorBus, без собственного recover |
-| Transient429/5xx/timeout/billing/quota | Actual worker75 и native cooldown по D6 |
-| Credentials401/403/model404/TLS | Worker78, sticky block до исправления/ручного unblock |
+| Transient429/5xx/timeout/billing/quota | Основной provider actual worker75/native cooldown; внешний typed transient → B3 устойчивый block, ErrorBus, без auto-run/resend до ручного допуска |
+| Credentials401/403/model404/TLS | Основной provider worker78/sticky; внешний typed terminal → B3 устойчивый block без fake rc78/terminal_provider; до исправления/ручного unblock, restart/recompute hold не снимают |
 | Operator/CRISIS/явная пауза | Удержать текущую задачу, не снимать таймером |
 
-24/7 сохраняется; старое окно 19:00–09:00 отменено. Квота не обходится сменой аккаунта/backend/model/slug или reset. Внутри attempt нет retry/fallback; Retry-After/reset и native cooldown подтверждаются реальными событиями, выдуманного срока/серии пробных paid invokes нет. ENV-03/D6 NOT_PROVEN до фактического worker outcome для backend; дизайн B2 не PASS.
+24/7 сохраняется; старое окно 19:00–09:00 отменено. Квота не обходится сменой аккаунта/backend/model/slug или reset. Внутри attempt нет retry/fallback; Retry-After/reset и native cooldown основного provider подтверждаются реальными событиями; внешний B3 ждёт оператора также ночью, выдуманного срока/серии пробных paid invokes нет. ENV-03/D6 NOT_PROVEN до раздельного proof основного worker outcome и внешнего штатного B3 block; negative-B2 не PASS.
 
 На HF:plan/приёмке проверить supported completion/wake и действительное продолжение. Прежнее индивидуальное исключение Б61.4 сохраняется только для своего CHANGE, не допускает текущий W1. Нет механизма/evidence к требуемому сроку — NOT_PROVEN/FAIL соответствующего AC, без нового daemon/cron/канала. Неизменный native tick не вызывает LLM/send; исторические doorbell AC сохраняют предмет wake, а не старую реализацию. Обзор готовых задач использует одну проекцию Б55.6.
 
@@ -633,13 +635,15 @@ AC-028 проверяется на изолированных фикстурах
 
 | Название | Что считается | Предел и действие | Что не является этим повтором |
 |---|---|---|---|
-| **Техническое восстановление** | Штатные attempts после технического отказа | Native retry/cooldown/reclaim/breaker по D3/D6, без своего recover-loop; внутри attempt retry/fallback запрещены | Предметное замечание, изменение требования, verified no-op и pre-admission refusal не являются новым logical invoke |
+| **Техническое восстановление** | Штатные attempts после технического отказа | Native retry/cooldown/reclaim/breaker по D3/D6; внешние B3 failures только после ручного допуска с ref решения, без своего recover-loop; внутри attempt retry/fallback запрещены | Предметное замечание, изменение требования, verified no-op и pre-admission refusal не являются новым logical invoke |
 | **Повтор замечания** | Одна и та же неустранённая ошибка повторяется в двух последовательных проверках ревизора: тот же объект, нарушенный контракт и суть дефекта, даже при другом номере/формулировке | Первый REQUEST-CHANGES — доработка. Второе подряд то же замечание — **до третьего круга** остановка и диагноз: почему исправление не устранило причину. Архитектор с ревизором фиксируют изменившийся способ решения и проверку устранения; только затем содержательная доработка продолжается. | Разные новые замечания; технический сбой доставки; новый ответ Саши, действительно меняющий требование. Произвольное переименование старого замечания повтор не обнуляет. |
 | **Пересмотр требований** | Новое указание Саши меняет принятый контракт, AC или границы объёма | Отдельная запись: источник/дата, что изменилось, затронутые AC/план/тесты/документация и минимальный возврат к нужной фазе. Изменение согласует архитектор с ревизором; оркестратор исполняет. Числовой лимит смен требований Саша не задавал — не изобретать. | Технический retry, неустранённый баг и просьба «доделай» без изменения принятого содержания. |
 
 Перед новым logical invoke указать один регламент, ref предыдущего события и новое основание/evidence. Симптомы одного сбоя не дают отдельных попыток. Native technical history не сбрасывается; явная пауза, живой writer, O/C и исчерпанный Б49 не лечатся повтором.
 
-Повтор того же замечания дважды останавливает до третьего круга: диагноз внутри текущей задачи, без запуска исчерпанного действия; существенная правка возвращается архитектору/ревизору. Смена формулировки, сессии, модели, slug или «доделай» не новый бюджет. D6 transient cooldown допускается только штатным lifecycle, sticky требует устранения причины и ручного unblock; старое правило одного recover и recover_counts superseded D7.
+Повтор того же замечания дважды останавливает до третьего круга: диагноз внутри текущей задачи, без запуска исчерпанного действия; существенная правка возвращается архитектору/ревизору. Смена формулировки, сессии, модели, slug или «доделай» не новый бюджет. D6 transient cooldown основного provider допускается только штатным lifecycle; внешний B3 transient/terminal block ждёт ручного допуска, terminal требует устранения причины; старое правило одного recover и recover_counts superseded D7.
+
+B3 ErrorBus: источники — typed external failure/block своей задачи, block/evidence/ack failures, а также штатные blocked/exited/durable events; один исход связан с exact admission и не дублируется обычными callbacks. Block ack не delivery ack; при отказе доставки durable pending, без снятия block и без task resend. ENV-04/05/W1-10 независимы от ENV-03/W1-09; receipt/source authenticity не ослабляется, E03-6 остаётся отдельным FAIL до собственного исправления/proof.
 
 ### Б55.6 Статусы, завершение и история
 
@@ -698,6 +702,8 @@ AC-028 проверяется на изолированных фикстурах
 Откат исправлений — сохранённые snapshots кода/скиллов/адресных промптов с журналом причины. Не сбрасывать выполненные фазы, пользовательские паузы и бюджеты; не включать старый диспетчер, не рестартовать gateway. Если продолжение после отката не подтверждено, текущая задача остаётся в явном ожидании, очередь не перескакивает.
 
 ### Б55.11 Проверки отказов и пять последовательных пилотных заданий
+
+Адресная B3-метрика: manual resume внешнего failure — техническое восстановление с ref решения оператора, новый invocation/ordinal без reset. Автоматических внешних повторных запусков/resend=0; block→manual unblock — отдельный интервал от cooldown. Readback/ack/duplicate не invocation; база auto-retry и B3 несопоставимы без одинакового workload/policy. Существующая численная fixture проверяет арифметику, не факт B3 PASS.
 
 Сначала выполнить проверки отказов Б55.13, затем **пять последовательных заданий** на штатном канбанном пути в изолированном испытательном контуре (`DEV_STATE_ROOT` — только каталог документов/immutable evidence; способ изоляции определяется планом), с безопасным write-set и восстановлением. Это испытания текущей задачи в `IAC.verify` с передачей управления по Б55.10, а не пять посторонних боевых поездов поверх её живой роли.
 
@@ -771,7 +777,7 @@ PASS AC-RP-17: обе реальные стороны сохранены с ис
 | AC-RP-04 | Три готовых задания с разными временем/именами выбирает оркестратор по FIFO готовности; одинаковое время разрешается стабильно; явная инструкция приоритета имеет источник. Трасса решений загруженной версии процедуры и процессов не содержит второй исполняемой задачи/роли; заданный драйвером порядок не зачёт. Тест не требует глобального CLI-mutex. |
 | AC-RP-05 | При блокере/лимите/межфазовом idle текущей задачи проверяемая процедура сама удерживает её, следующая не стартует; причина и условие продолжения видны. Негативный сценарий зависимости от очереди позади не вызывает скрытой перестановки или второго поезда. Удержание подтверждено решениями оркестратора, а не паузой драйвера. |
 | AC-RP-06 | Completion и отдельно lost-event wake реально доставлены и продолжили процесс без Саши; P09/P31, IAC-08, IAC-11. Неизменный tick не вызывает LLM; native outcome и transport evidence проверяются отдельно. |
-| AC-RP-07 | 24/7, ночью тот же маршрут; старое proof-quota replaced native rc75/cooldown, no probe series; P10/P31/K04, IAC-05, IAC-11. |
+| AC-RP-07 | 24/7, ночью тот же маршрут; основной provider native rc75/cooldown, внешний B3 ждёт ручного допуска также ночью; no probe series; P10/P31/K04, IAC-05, IAC-11. |
 | AC-RP-08 | При обрыве после результата и двух одинаковых completion проверяемая процедура принимает результат однократно: одно выполнение side effect/один переход и согласованные state/journal/artifact; rc=0 без канона не закрывает фазу. Проверены G1/G2, свежесть пути/выжимки и загруженная версия; драйвер не выполняет reconciliation вместо оркестратора. |
 | AC-RP-09 | Старые recover_counts superseded D7; native breaker/attempts без самодельного recovery; P13/P05, IAC-05. |
 | AC-RP-10 | Два последовательных REV с той же сутью замечания вызывают диагноз до третьей доработки; архив предыдущих вердиктов сохранён, канон REV один. Отдельный сценарий нового требования имеет источник, затронутые AC/IAC и минимальный rework без сброса других регламентов. |
@@ -1160,7 +1166,7 @@ Accepted master refresh разрешён лишь по проверенному 
 | Rc≠0/143 | Не публиковать новый ответ; только уже сохранённая целая цепочка отдельно проверяется внешним completion. |
 | Result writer/readback failure | Rc≠0, нет половины success result/receipt; files/manifest не являются accepted result. |
 
-Список FATAL_PATTERNS, TERMINAL_KILL_RCS, timeout=3600s, session parsing, G1–G6/MIG guard и Б49 не ослабляются. Native identity/свои writers заменяют legacy pid ownership; пять recover-классов — диагностика, не отдельный lifecycle. D6 передаёт provider failures в actual worker75/78; внутри attempt retry/fallback нет, local rc не worker outcome. ENV-03 NOT_PROVEN. Не переносить из старого candidate широкое игнорирование plain stderr при rc=0. Успешные JSONL quotes не fatal; error envelope до/после success и настоящий plain auth/429/503/timeout остаются fatal. Benign models-refresh исключение Б60.7 допускается только с точной воспроизведённой fixture: при её отсутствии NOT_RUN/FAIL, а не придуманная сигнатура или broad suppression.
+Список FATAL_PATTERNS, TERMINAL_KILL_RCS, timeout=3600s, session parsing, G1–G6/MIG guard и Б49 не ослабляются. Native identity/свои writers заменяют legacy pid ownership; пять recover-классов — диагностика, не отдельный lifecycle. D6 передаёт основные provider failures в actual worker75/78, внешние — в B3 typed failure + штатный устойчивый block/manual resume; внутри attempt retry/fallback нет, local rc не worker outcome. ENV-03 NOT_PROVEN. Не переносить из старого candidate широкое игнорирование plain stderr при rc=0. Успешные JSONL quotes не fatal; error envelope до/после success и настоящий plain auth/429/503/timeout остаются fatal. Benign models-refresh исключение Б60.7 допускается только с точной воспроизведённой fixture: при её отсутствии NOT_RUN/FAIL, а не придуманная сигнатура или broad suppression.
 
 ### Б60.8 Проверка, установка и передача
 
@@ -1190,7 +1196,7 @@ AC-COMP-01…12 — класс S, обязательны в собственно
 | AC-COMP-06 | Transport/text/I/O/state failure не оставляют пригодный success result/receipt/done. | T06/T10/T11. |
 | AC-COMP-07 | Check/complete независимо перечитывают proof/files; intact duplicate no-op, corrupt already-done отказан. | T12/T13. |
 | AC-COMP-08 | Recover/refresh/rework/rc143 не создают proof задним числом, сохраняют полную историю/counters. | T07/T13/T14. |
-| AC-COMP-09 | Native model/retries/send/rc и остальные роли/guards сохранены; codex concrete model без ENV fallback. | T15/T16. |
+| AC-COMP-09 | Native model/retries/send и local rc2/3/4 сохранены; Codex concrete model без ENV fallback; static failure не provider outcome, empty completion local4/no-publication. Внешний provider failure обеих ветвей → B3 durable block/manual resume без auto-resend; main-provider worker75/78 отдельно. Прочие роли/guards/resolver/источники настроек неизменны. | T15/T16, C01/C08, ENV-03/P10/P11; IAC-07. |
 | AC-COMP-10 | Реальные offline CLI-цепочки от принятого brief/init/stabilize, двух backend × двух producer-фаз до consumer, oversized inventory и accepted refresh. | T01/T02/T14. |
 | AC-COMP-11 | Собственный backup/commit/G3, impl/test раздельны, loaded tested/installed hashes/smoke/rollback/scope доказаны; адресная consumer policy проходит доказательства и границы Б60.8. | T17/T18. |
 | AC-COMP-12 | Abort/candidates/чужие state/budgets сохранены; новый допуск lock из exact brief/basis без цикла/backfill/предварительного сломанного compress. | T18. |

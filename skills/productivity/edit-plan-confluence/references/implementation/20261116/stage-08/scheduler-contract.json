@@ -1,0 +1,6 @@
+{
+  "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/scheduler-capability-matrix.md",
+  "sha256": "d73f342a76586214d462e6f43fac5c86b3b9953825aecd35fee982f1dcac74aa",
+  "changed": false,
+  "usage": "Local scheduler limitations only; not plugin evidence. Stage08 prepared conversion does not run replay/read_mpp."
+}

@@ -1,0 +1,4801 @@
+{
+  "stage": "08",
+  "gate": "passed",
+  "exit_code": 0,
+  "base_commit": "8762e44672c1bc3c1f8313d889f520ed38068086",
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "-c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+    "--acceptance-stage",
+    "08",
+    "--test-root",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage08/stage-08",
+    "-m",
+    "unit or mpp_fixtures or confluence_live",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage08/stage-08/reports/junit.xml"
+  ],
+  "environment": {
+    "python": "/usr/bin/python3.9",
+    "version": "3.9.25",
+    "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage08/stage-08",
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+    "cli_python": "/usr/bin/python3",
+    "mpxj_python": "/usr/bin/python3.9"
+  },
+  "master": {
+    "version": "0.5.0",
+    "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md",
+    "sha256": "ad246fac0a363d2b9d6e9b5c177b76b06dcbe1b8b07d4ea6c9f8c769018dc369"
+  },
+  "plan": {
+    "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md",
+    "normative_prefix_sha256": "a4fe0385b0c365975f75aeaa80b47212b3a00718a55044b499464d17daad39bc"
+  },
+  "migrations": [],
+  "source_files": {
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/cli-contract.md": "9b66f249603c356e9ef613a3b4cf01000cffd1dc21e5e00745d321555f44c91b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/export-contract.md": "78c03ff877dd032dee0daaf908328ac7f2147d183a6bf95bce25f1ce5d77cabd",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/mpp-to-gantt.md": "2c2a18cd8b4bec309370d63ee90da3146df1ae65c672b261bc56329b2e5a8b3c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/operations-and-recovery.md": "95cc26486c7e557041aff8888c8c83c81924f9ec3dc73f4b88d383a9edc1817f",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/profiles/installed-gantt-profile.json": "32a83217082a7a82b0f2708bde7a1026977545c3e2e431ad32e2bc2ed9e0be47",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/profiles/normalization-v1.json": "e1971ad42cb832f04af18b7b730c804b4e672ba40b5477f4fea3431576ce5ee9",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/profiles/plugin-profile.schema.json": "b9df744bdf789128100794e840bd240847aa48824860e63b911250239f9c058c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/profiles/summary-v1.json": "1b702db536cb8ccaa8daa204e039c4e6685477e38b25cbcd1315bd9dca5caa1f",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/batch-decision-result.schema.json": "9a96b216632f11d654ae2dbca18a5123261d29b73d7081a7b45ab748b2e99dca",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/batch-manifest.schema.json": "61d60741f9ec2065a26ad107a70b1fb615d909a195af2d7a56c400d5d1c176aa",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/batch-receipt.schema.json": "9002daf4f82f8eb3c76dca0650ca7f47936fc751ffeaf08d617ff7805c97a993",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/identity-mapping.schema.json": "0cfd299f9db0ebdd7ce73b71222f2a8acad9bf833cbe34dca4a0f9124e04fe08",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/prepared-plan.schema.json": "122481a3cde3921c256fef1ad0ab9de8157d54ec775c57525d213c7321222201",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/settings.schema.json": "183043f984e3f7f603fe563ba7de56ede010d903531a4695e6f7b414ef0910ce",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/single-receipt.schema.json": "2afba9049a4cf899619ad9d4838e47b9538b2fc4c2245c07497b35f56c42e31c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/child_page.py": "99d1b8483ccbb6a1332822d476a09cfd536f7586c6ab073ade66fd279b5bfe9b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py": "8cabecc7e3537bc70dd993012e0fb4c3e1263110c4bb1a3b1bd1552cdf656ad1",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/conf_client.py": "7291583bfd52628db37ba836121873bdb74b0f3efde8459c74e4c4f684810542",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/env.py": "b0fa9ab71b1f09d5a4c52c559dceb95daff9045e7b1b308a49e6fcc334a61ca6",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/gantt_attachment.py": "a6384f593cc71c2bf02e016a71616720ac0e5fbfb419807d0d0555dff1dbdc8e",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/gate_diff.py": "399907e2cfb52f2fbcaae786fda82e9703032f5a70601522573b091ee30d1be4",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/itogo.py": "0ee3b0db5216120066d1abd0a803ced1a9a41811198c2165a6e2744d05e1e659",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/macro.py": "b7dedee2fdf77049acf62e2ff6656935ebdff3cebfa16e4dce01c23f0736325b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/mpp_calendar.py": "2de73ebd8aa4204165100f2936c76988dc66fe6ea0ca82bd12fd431eeebfeccf",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/mpp_convert.py": "88e49c73e397153a69be9927b527ba2446ccdf9b7d0d058135f9912c6d1ed15e",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/mpp_input.py": "308e00189ed1c6df2cc619a50c08c9b615e7f7f27e3a2c6ecf4be747362c3da6",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/pipeline.py": "631750e03a787715811aea58f97f7d4f5909bd0916b4ab485d27dbfdba0a0067",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_archive.py": "084029857ed5b55fff42252d0eb33046c6485e1526b61ff653eb3c3491bb176c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_batch.py": "9f5ed25258cdf0abb21e6865cc5bc3deb4d80ab3a2e9afc1a7ea5300b539fe70",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_cache.py": "9fd1d333aa6a666f599486c7a1396112054291db458475562533731ca34f3ad2",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_context.py": "94f5c311c03460e830a358e45df50db4eb86662ef1794ef2ddb84e018ce83923",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_decision.py": "8290420bcdd84d9bc4148d70c0a74e4287e5b63d25cb46aa8c668b98d3f85610",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_history.py": "0c8555c6a1f4b633bc84752f16ecb8652a9227ee6892dca4233d8011d86198f0",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_identity.py": "e71fcadebed4156cc5f633e4cb7dd9c38d71d1dcb52b3e35e35ff35698d82df2",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_lock.py": "99b0427d37fc4162d9238c65a7ddc3b946c6d16249a4e31f7d0d3f02170e9283",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_manifest.py": "441941b58c8a1bd729df0d7075aaaa753ceda9ba2935a3d988f5ef2d85d47887",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_operation.py": "e23718ef17303c7777ac2953a2e0735fb1b0da016678ea1f1e576a4c7c7d58da",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_queries.py": "782b5b66a5406942d0935e969c07e88079bde93b53d09f5160cd42f18626a4a1",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_receipt.py": "7249c117fd7fc94883f3949013d558ec67da537981f4f3cf8e3594433fc26b0b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_reconcile.py": "aa74991b09c18bd93189972c644f4cd585d382a6f0577096e76a4a85fbafa796",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_save.py": "d5a20790582dfe757f31311a6f11e8e635635e015d1bc2eab0eafc4a9638dd57",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_verify.py": "c40fa19c59c49fc5f42dfc1d22e31a5b73be141564e1e0ee6b9d7f2341a9a7ae",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plugin_profile.py": "9519b00a0e7d1e609350b057ca21f3fc5462547ed4a38f0f94916d8386668bc7",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/prepared_plan.py": "eb6b297bfd0deaa9457206ad901d5a95bb97d772419832b785ee1abab764692e",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/conftest.py": "4d3986267c2051a8e4d22e5fd7a2ead49c1ab7a3396dc7370346d172b213dd0a",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/manifest.json": "adc89ac7795ee7bcf1021939d455c33142df49d7afca4453613672128066fc98",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/plugin-controls-expected.json": "3c45775447a11881e7dd043e078e434a2126265842c008981c1c3f230d17fdbc",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/plugin-controls-method.md": "2fb5f8f0b0bf227ebd5deeb13d43d1ebc2852a4ef2862dcf7420ae7d1593c017",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/plugin-controls.json": "58d113e0fad5646479562be5028d9e35bcc259ca62f780829723ce6d18bcb7f0",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/prepared-unit-gantt.json": "d276e4b75c667231040200882c0bd0f4193451cd6bcf1a7c7936adcb81177bd0",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/prepared-unit-storage.xml": "364a56885eb8a38193ad0dcee071daedb4dffe0503e072741fa46e9c3ed6e6b8",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini": "9e68035ef4b6060d621e65b73e0715c6a10e32602da3e74468bd78306825dbb4",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_batch_decisions.py": "46587ac19a28ae7d054c03c2b14b3f18a7bca4c992a09fb99950a95c644e5df5",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_batch_resume.py": "bd4e53f605ca8cca49f4c68d63499bbef704a985937b44895df8fd7e22b5a716",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_child_page.py": "07b279aa4df0d3c9f9cd5d908861c1720d852ae5f0b15f4a86f68c94da370113",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_cli.py": "1332cbad15dc3542e42d3076479fa2a1149046f8ae2780c8a8682793aede488d",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_env.py": "4df40ae975ce457367c75577deac9073e6b98a1fe2903a2f22502bfd85487080",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py": "3afaf4456ba6a19e6a1101cb1aa3b89a63f61c820c075ad8dbc089693a5ea44a",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gate_diff.py": "b47d05925db9cf9cd20fa3cd22ba030b1641452ab755414c442be3e1e5d61084",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_history_queries.py": "c0716792f0f3c5cd0738159da9210058a3072c461c5be93f66c5b3ef9e470c40",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_import_atomicity.py": "482ca709fe3878c39c9f08b048dd464b354e5b4acfd10db5d29ac2f233bcfdd2",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_itogo.py": "5d7624437c7b9eb2c8aa67e477f4f443ec8a0393d720ec68d865ab6faa41a75d",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_macro.py": "db4488a67c13be418a362c74c66686ae6e733a24fe5921256242cf8e32a00098",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py": "39faa3eca8c68c61a26e9b88cf39ef8562a413a4f3faff164609656db4d3a1c7",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py": "a8c3cf61a9ef1cc8ae035c05fd0946376c2cfef66f8d455e6938bdabef4dad3d",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_input.py": "33f0e8c564d5bb699620fcb578c29ce4e111f3403f31cd26e7f63344a4e4adf1",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_pipeline.py": "b2e8568dbd5c3b2af369a336195a54c1d48970ff195d6304fc5413b0c3f0e6aa",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_archive.py": "449a2bdd60d73ddb5bc6dc6938c25bc1d92394b91b4390b7601ac0fb80855066",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_batch.py": "e8e3b17c7734f1d6857efba5e298d72992816f560808a178fad1714b2729fd47",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_cache.py": "d970d2e87c945b1c27f8a90dbebbe2a8fa74552d389bb205dccf89fa1930a920",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_history.py": "9f8b820ab7075d04954184fab9620470491c611b5ed34082b79fb800d37232a3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_identity.py": "363d0bde8afe6f7681a68d74a8b1a9218a53dd7bc60a15b789a053c52604bec5",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_lock.py": "5f156b2a31c9c28e960a1ea1bd471626dc75e84d37f16c2a1e2697d8d44a171f",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_manifest.py": "486af88d47c89d180aa90ff4795cf603ed478c36ab9aed68a496672875e1453c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py": "bf2d684be09d92efd1902c7b8bea3512f81453615f2237e53a1a91fc55c88647",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_reconcile.py": "6e8952f47a89eca1563e1ca9e3eee48365b73ea5750c13e5a3c22e1fa320d6e0",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_save.py": "eb3a0f2a8196e5a74a762d12ddc7f4fae7824773d4269a1b0e4a98b0110a9d68",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_verify.py": "3caed391c9bcc436e75282a76cea3a3ae3aca35b8a371192ce9335fa891228e5",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_controls_live.py": "182a26a87b8a5ea5f23792dc0843a350703cab347f598f618b727275852c3385",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_profile.py": "9d6cc03e05280d8b84f54ab53f1d7984856697a33f55ae370bccd86248b0bd25",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_prepared_plan.py": "fe783a1a345bd5ac86d1bf69fe1d439abbd1d772b2dd3ed43fd53c80ff6eabaf",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_rest_live.py": "8bfc84dd6a35a48ed7c23c0b97edfa07e3e6c08817ea797d891025eca9b4de70",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_save_e2e.py": "74c318301a7040bdfd7f3af58a6edaa933f7db4acc29bae32d335ab65a1beb95"
+  },
+  "source_tree_sha256": "40059ffc4127a4605c92cae45b1491a19f1691ede599379ea95793cbd9ac38cd",
+  "implemented_files": {
+    "S/scripts/mpp_convert.py": "PreparedPlan converter; source-local tree/resources; profiled dependencies/units/signed lag/basis; explicit losses; deterministic bytes; CSV adapter kept separate",
+    "S/scripts/mpp_calendar.py": "pure prepared calendar conversion, intervals/exceptions/bindings; retained source semantics and explicit unsupported constructs",
+    "S/scripts/itogo.py": "summary-v1; unique/explicit root, Decimal work and coefficients, ceil days, ROUND_HALF_UP display; no work in storage",
+    "S/scripts/gate_diff.py": "independent source/representation/model/observation diagnostics",
+    "S/scripts/plugin_profile.py": "version/schema/evidence-bound profile loading and capability/code lookup; unknown unsupported",
+    "S/scripts/plan_cache.py": "derived cache keyed by normalized/converter/rules/plugin/summary/template/root; integrity checked",
+    "S/references/profiles/": "summary-v1, strict plugin-profile schema, installed profile with hashed live evidence",
+    "S/tests/": "semantic/decimal/MPP work/cache/profile tests and actual browser plugin controls; required test IDs and stage report hook",
+    "S/tests/fixtures/golden/": "versioned plugin input bytes/expected dates and source representation/storage golden contracts",
+    "S/references/cli-contract.md": "internal stage08 contracts and stage09/10 integration boundary"
+  },
+  "config_contract_sha256": "676c5a6f265ad7773bddc57d189cb19b95ad4587b955237fc67335ba727a4b8c",
+  "protected_files_checked": 273,
+  "changed_protected_files": [],
+  "selected": 284,
+  "tests": [
+    {
+      "test_id": "test_child_page.py::test_build_child_storage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00019938702462241054
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[download]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4129918849794194
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[false]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4597561939735897
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6262089599622414
+    },
+    {
+      "test_id": "test_child_page.py::test_child_resume_changed_current_version_rejected",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.3099413990275934
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[attachment]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4677473120391369
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[duplicate]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5183760509826243
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[extra_itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7165774229797535
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[foreign]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.46356702997582033
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.39852125896140933
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[labour]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5469510669936426
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[macro_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4839497419889085
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[param_hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.44956888299202546
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[param_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.39229870098643005
+    },
+    {
+      "test_id": "test_child_page.py::test_create_child_page_resume_reuses_existing_page_id",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.007117460016161203
+    },
+    {
+      "test_id": "test_child_page.py::test_create_child_page_without_attempt_id_always_creates",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0010445649968460202
+    },
+    {
+      "test_id": "test_child_page.py::test_default_child_title",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.000179882044903934
+    },
+    {
+      "test_id": "test_child_page.py::test_old_confirmed_child_upload_receipt_not_proof",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00452394294552505
+    },
+    {
+      "test_id": "test_child_page.py::test_resume_rechecks_actual_bytes",
+      "phase": "call",
+      "status": "passed",
+      "duration": 2.4336537070339546
+    },
+    {
+      "test_id": "test_cli.py::test_cli_apply_without_confirm_exit_2",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7703217359958217
+    },
+    {
+      "test_id": "test_cli.py::test_cli_help",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.07530456001404673
+    },
+    {
+      "test_id": "test_cli.py::test_cli_rejects_unsupported_global_overrides",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5835137189715169
+    },
+    {
+      "test_id": "test_cli.py::test_cli_save_argument_errors_are_single_json",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.202165535010863
+    },
+    {
+      "test_id": "test_cli.py::test_cli_save_parser_global_paths",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.008794224995654076
+    },
+    {
+      "test_id": "test_cli.py::test_cli_save_runtime_failure_is_single_json",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.709953797981143
+    },
+    {
+      "test_id": "test_env.py::test_load_confluence_env_ignores_foreign_keys",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007532950257882476
+    },
+    {
+      "test_id": "test_env.py::test_process_env_priority_and_no_yaml_write",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.011613135051447898
+    },
+    {
+      "test_id": "test_env.py::test_python_selection_fails_closed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.008768177009187639
+    },
+    {
+      "test_id": "test_env.py::test_save_context_resumes_frozen_paths_without_loader",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.44951444398611784
+    },
+    {
+      "test_id": "test_env.py::test_unified_only_credentials_do_not_read_local_env",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.48964055901160464
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_exact_historical_version_even_if_latest_changed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0010023119975812733
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006961870240047574
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[page]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007766789640299976
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[title]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006355189834721386
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[version]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007578519871458411
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_find_gantt_attachment",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00018234201706945896
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_no_fallback_to_unrelated_gantt_attachment",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00021000899141654372
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_upload_missing_identity_fails_closed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002681901038158685
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_upload_uses_post_data",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002977413998451084
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_verify_uploaded_hash_mismatch_is_conflict_not_crash",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002108605985995382
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_verify_uploaded_matches_version_specific_get",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0012600260088220239
+    },
+    {
+      "test_id": "test_gate_diff.py::test_build_diff_contains_warning",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5018132840050384
+    },
+    {
+      "test_id": "test_gate_diff.py::test_four_layers_include_links_calendars_assignments_without_schedule_promotion",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4490596610121429
+    },
+    {
+      "test_id": "test_gate_diff.py::test_four_value_layers_never_promote_model_to_observed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.346344870980829
+    },
+    {
+      "test_id": "test_gate_diff.py::test_is_confirmed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003447550116106868
+    },
+    {
+      "test_id": "test_itogo.py::test_apply_itogo_line2_only_inserts_line1",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007318810094147921
+    },
+    {
+      "test_id": "test_itogo.py::test_apply_itogo_strips_line2_updates_line1",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003419259446673095
+    },
+    {
+      "test_id": "test_itogo.py::test_build_itogo_html",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002563159796409309
+    },
+    {
+      "test_id": "test_itogo.py::test_format_thousands",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002401249948889017
+    },
+    {
+      "test_id": "test_itogo.py::test_insert_itogo_above_macro_no_block",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.000529540004208684
+    },
+    {
+      "test_id": "test_itogo.py::test_itogo_from_csv_080926",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0015807980089448392
+    },
+    {
+      "test_id": "test_itogo.py::test_parse_itogo_text_found",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002583729801699519
+    },
+    {
+      "test_id": "test_itogo.py::test_parse_itogo_text_missing_is_none_not_fabricated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00025091797579079866
+    },
+    {
+      "test_id": "test_itogo.py::test_patch_existing_itogo",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00031084497459232807
+    },
+    {
+      "test_id": "test_itogo.py::test_patch_existing_itogo_line1_only",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005653859698213637
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_multiple_roots_explicit_choice",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3831178569816984
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_source_coefficients_and_timezone",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.19895545399049297
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_summary_ceil[0-0]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4551414630259387
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_summary_ceil[106.875-107]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4652090850286186
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_summary_ceil[76.875-77]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.28268041502451524
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_summary_ceil[84.875-85]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.218096130003687
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[basis]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.14730556902941316
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[date]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.10537959396606311
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[elapsed]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1486989979748614
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[timezone]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.17195398901822045
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[units]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.16085662500699982
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_work_exact_summary_service_milestone_and_timephased",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005728109972551465
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_work_missing_partial_not_zero",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003328039892949164
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_known",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0019401530153118074
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_missing_is_unknown_not_fabricated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0024348209844902158
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_two_observations_not_glued_by_number",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002950555004645139
+    },
+    {
+      "test_id": "test_itogo.py::test_strip_trudozatraty_variants",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002195119741372764
+    },
+    {
+      "test_id": "test_macro.py::test_build_macro_html",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00015005201566964388
+    },
+    {
+      "test_id": "test_macro.py::test_find_macro",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004267910262569785
+    },
+    {
+      "test_id": "test_macro.py::test_new_macro_ids_unique",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004464979865588248
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_base_recurrent_intervals",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002820770023390651
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_prepared_calendar_intervals_exceptions_inheritance_bindings",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.13502058800077066
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_prepared_calendar_source_day_basis_mismatch_is_explicit",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5656821189913899
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_prepared_calendar_unsupported_is_explicit",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1462619070080109
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_convert_task_count",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0027913550147786736
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_copy_and_empty",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4351111139985733
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_fs_dependencies_only",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.003706528979819268
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_id_counter_not_300000",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002802676986902952
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_naim_resource_added",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0025936969905160367
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_only_service_header_raises",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00037431897362694144
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_parse_outline_level",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0001630469923838973
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_dependencies_types_signed_lag_parallel_resources",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4819421020220034
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_golden_bytes_and_storage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.20641800301382318
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_hierarchy_cycle_rejected",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.19475144398165867
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_lag_basis_only_equivalent_calendars",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.43510237900773063
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_no_reader_in_converter_calendar_itogo",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.2023862490314059
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_summary_dependency_and_unrepresented_scheduling",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.2349155840347521
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_tree_uses_parent_keys_all_roots_and_partial_assignment",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.24941322300583124
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[basis]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.2469170459662564
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[elapsed]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.23459172097500414
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[endpoint]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.24001042998861521
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[external]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.31126910902094096
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[lag]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.24085376900620759
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[type]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.29400083899963647
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[unit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.26478163397405297
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_service_header_217_after_root",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.007315844006370753
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_service_header_217_first",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.004855678998865187
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_tree_structure",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.006058409984689206
+    },
+    {
+      "test_id": "test_mpp_input.py::test_freeze_direct_exact_limit_and_missing",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.4038146139937453
+    },
+    {
+      "test_id": "test_mpp_input.py::test_freeze_renamed_container_and_mpp_with_zip_suffix",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8948459799867123
+    },
+    {
+      "test_id": "test_mpp_input.py::test_input_changed_during_copy_is_never_accepted",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4153049269807525
+    },
+    {
+      "test_id": "test_mpp_input.py::test_input_path_replaced_during_copy",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41428678401280195
+    },
+    {
+      "test_id": "test_mpp_input.py::test_multiple_candidates_no_first_selection_preserves_container",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.39053779700770974
+    },
+    {
+      "test_id": "test_mpp_input.py::test_resolve_mpp_from_zip",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4745040340349078
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names0]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3954265160136856
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names1]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.417971512011718
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names2]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4547708739992231
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names3]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.45888500701403245
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[MPP_MAX_BYTES-10-mpp_size_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.49646550801116973
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_BYTES-10-zip_size_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.36706578597659245
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_ENTRIES-1-zip_entries_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.38936700200429186
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_RATIO-1-zip_ratio_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41461234900634736
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_UNPACKED_BYTES-10-zip_unpacked_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.42531601700466126
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_symlink_and_input_symlink_forbidden",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.787936472974252
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[../evil.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4043850530288182
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[./a.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3857352119521238
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[/absolute.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6363921869779006
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[C:/absolute.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4532882539788261
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[C:relative.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.437876358977519
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[a/../../b.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4444817749899812
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[a//b.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4010541439638473
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[a\\\\b.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.39636113902088255
+    },
+    {
+      "test_id": "test_pipeline.py::test_actual_current_attachment_changed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8771258179913275
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_existing_macro_preserves_all_ids",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.1987134759547189
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_preflight_failure_blocks_all_http",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3984833830036223
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_put_409_exhausted_retries_raises",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7183328729588538
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_put_409_retries_only_storage_stage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.244623049045913
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_without_confirm_writes_nothing",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00030061398865655065
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[download]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6694004160235636
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[false]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7028852900257334
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7521908360067755
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[lying_true]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7163720380049199
+    },
+    {
+      "test_id": "test_pipeline.py::test_build_plan_empty",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004976200289092958
+    },
+    {
+      "test_id": "test_pipeline.py::test_get_after_put_failure_is_unconfirmed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.982704101013951
+    },
+    {
+      "test_id": "test_pipeline.py::test_live_ab_guard",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005411250167526305
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[attachment]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7461962519446388
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[duplicate]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7651368210208602
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[extra_itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7420999179594219
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[foreign]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8107729280018248
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6797605790197849
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[labour]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8086063489899971
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[macro_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.758179199998267
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[param_hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8543098740046844
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[param_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7358435759670101
+    },
+    {
+      "test_id": "test_pipeline.py::test_success_records_get_observation_and_actual_id",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.2275358940241858
+    },
+    {
+      "test_id": "test_plan_cache.py::test_atomic_failure_preserves_previous_entry",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.04049608198693022
+    },
+    {
+      "test_id": "test_plan_cache.py::test_cache_deletion_does_not_delete_durable_data",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.17102967901155353
+    },
+    {
+      "test_id": "test_plan_cache.py::test_concurrent_atomic_writes",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1765814329846762
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[checksum]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0501599139533937
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[complete]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.06334103102562949
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[count]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.06956798903411254
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[payload_missing_field]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.07592427101917565
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[reader]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.08339507499476895
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[truncated]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.057043006003368646
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[version]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.04979774000821635
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_source_is_not_read_or_reused",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.022773458971641958
+    },
+    {
+      "test_id": "test_plan_cache.py::test_derived_representation_cache_profile_template_root_and_corruption",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.9059246249962598
+    },
+    {
+      "test_id": "test_plan_cache.py::test_independent_cache_keys",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.32850948197301477
+    },
+    {
+      "test_id": "test_plan_cache.py::test_representation_corruption_rebuilds",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.2347728320164606
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_canonical_order_paths_fields_label_policy_and_saved_defaults",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0016688050236552954
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_inbox_unicode_regular_complete_nonrecursive_diagnostics",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0018008899642154574
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_duplicate_ids_and_json_keys",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007330200169235468
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[expected_sha256-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002567189512774348
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[item_id- ]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00019478803733363748
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[lineage_id-None]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00018237100448459387
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[mode-save]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00021786295110359788
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[page_id-1]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00020050298189744353
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[project_slug-../bad]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00022558000637218356
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[source_version_date-2026-02-30]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00024346495047211647
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[source_version_date-20261116]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00031295401277020574
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[timezone_hint-Not/AZone]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0033396370126865804
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[batch_id-x]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003309110179543495
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[items-None]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00021863996516913176
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[items-value9]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.000180443050339818
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[label-None]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0001772040268406272
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[lineage_id-l]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00020180200226604939
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[mode-publish]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00019413296831771731
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[on_error-None]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00018890498904511333
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[page_id-1]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00017166102770715952
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[project_slug-p]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.000168855010997504
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[schema_version-True]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0001702290028333664
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[timezone_hint-UTC]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00018360401736572385
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_atomic_mirror_failure_keeps_previous_json",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.006291438010521233
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[Authorization: Basic c2VjcmV0]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00027513998793438077
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[Bearer s3cr3t]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00017999799456447363
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[CONFLUENCE_TOKEN=s3cr3t]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0001901540090329945
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[token: s3cr3t]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00019830401288345456
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_secrets_bearer_string_anywhere",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002072000061161816
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_secrets_by_key",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00017376703908666968
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_read_receipt_missing_returns_none",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00046583404764533043
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_read_receipt_roundtrip",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.004174489004071802
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_receipt_rejects_path_escape[../escape-save]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00023030402371659875
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_receipt_rejects_path_escape[op-../save]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002447890001349151
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_all_required_nullable_fields",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.3457643670262769
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[attachment_version-2]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.03070917195873335
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[external_effect-storage_written]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.03018506697844714
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[page_id-123]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.03080512396991253
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[page_url-https://invalid]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.03130981500726193
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[published-True]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.031114998972043395
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_write_receipt_idempotent_path",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.011392928019631654
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_write_receipt_no_secrets_on_disk",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002998899028170854
+    },
+    {
+      "test_id": "test_plan_verify.py::test_attachment_sha_is_independent_of_macro_hash",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003380900016054511
+    },
+    {
+      "test_id": "test_plan_verify.py::test_exact_page_version_required",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0014055970241315663
+    },
+    {
+      "test_id": "test_plan_verify.py::test_find_macro_cannot_hide_duplicate_or_incomplete_target",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005678010056726635
+    },
+    {
+      "test_id": "test_plan_verify.py::test_nested_and_reordered_macro_enumerated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00032827595714479685
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><ac:structured-macro ac:name=\"gantt-chart-planner\" />]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008042770205065608
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008303449722006917
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008047270239330828
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><strong>\\u0422\\u0440\\u0443\\u0434\\u043e\\u0437\\u0430\\u0442\\u0440\\u0430\\u0442\\u044b</strong>: 10 \\u0447-\\u0447</p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007576299831271172
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p>\\u0422\\u0440\\u0443\\u0434\\u043e\\u0437\\u0430\\u0442\\u0440\\u0430\\u0442\\u044b: 10 \\u0447\\u0435\\u043b\\u043e\\u0432\\u0435\\u043a\\u043e-\\u0447\\u0430\\u0441\\u043e\\u0432</p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007388310041278601
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">wrong</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008311530109494925
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">wrong</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0009891699883155525
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"wrong\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007800289895385504
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005873180343769491
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 3 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008931180345825851
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u043f\\u043e\\u0442\\u0435\\u0440\\u044f\\u043d</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008020809618756175
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_positive_and_xml_attribute_order",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0019040059996768832
+    },
+    {
+      "test_id": "test_plan_verify.py::test_test_root_rejects_production_symlink",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0009989099926315248
+    },
+    {
+      "test_id": "test_plan_verify.py::test_unit_network_is_disabled",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00038755498826503754
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_context_installed_profiles_from_registry",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4088202529819682
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_installed_profile_has_only_evidence_bound_claims",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.37146795802982524
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_codes_only_verified_capabilities",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.011696033005136997
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[claim]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.006148741987999529
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[code]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00838671496603638
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[evidence]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.008463014964945614
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.008998428995255381
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[shape]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.007905375969130546
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[version]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0097297279862687
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_calendar_intervals_exceptions_inheritance_and_bindings",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.20927875599591061
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_context_unified_settings_cli_overrides_and_no_secrets",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4970656189834699
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_fixtures_manifest_integrity",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.007834862975869328
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[collection]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0018057209672406316
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[count]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005457290099002421
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[field_reason]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004445189842954278
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[nan]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.004312529054004699
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[null_zero]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004167520091868937
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[task_key]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00035446399124339223
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[version]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003934930427931249
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_normalization_profile_and_timezone_change_identity",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.2645350969978608
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_prepared_load_rejects_changed_data",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.15782795997802168
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_quality_missing_getter_errors_are_preserved",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0906406560097821
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_relations_keep_signed_elapsed_and_known_zero",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0839655949966982
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_semantic_hash_excludes_execution_provenance",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.18884164904011413
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[HTTP_RETRY_LIMIT]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4418868900393136
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[HTTP_TIMEOUT_SECONDS]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4606289629591629
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[MPP_MAX_BYTES]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4509519679704681
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[MPP_READ_TIMEOUT_SECONDS]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4263417749898508
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_BYTES]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41384920896962285
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_ENTRIES]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.44186884799273685
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_RATIO]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.40165911900112405
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_UNPACKED_BYTES]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3863906280021183
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[HTTP_RETRY_LIMIT-11]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.36409388401079923
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[HTTP_TIMEOUT_SECONDS-86401]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4048588069854304
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[MPP_MAX_BYTES--1]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.34999678103486076
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[MPP_READ_TIMEOUT_SECONDS-0]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.38744540099287406
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[NORMALIZATION_PROFILE-../../bad]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.44104913796763867
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[ZIP_MAX_ENTRIES-1.2]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4130881979945116
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[ZIP_MAX_RATIO-0]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5496781549882144
+    },
+    {
+      "test_id": "test_cli.py::test_cli_convert_offline",
+      "phase": "call",
+      "status": "passed",
+      "duration": 5.954777058970649
+    },
+    {
+      "test_id": "test_itogo.py::test_real_prepared_work_tolerance[A-1576]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 4.943172133993357
+    },
+    {
+      "test_id": "test_itogo.py::test_real_prepared_work_tolerance[B-2096]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 3.947141336975619
+    },
+    {
+      "test_id": "test_itogo.py::test_real_prepared_work_tolerance[C-2088]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 3.648351637995802
+    },
+    {
+      "test_id": "test_itogo.py::test_real_prepared_work_tolerance[D-3136]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 4.177860018971842
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_calendar_from_mpp_fixture",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.3431228860281408
+    },
+    {
+      "test_id": "test_pipeline.py::test_build_plan_from_mpp_offline",
+      "phase": "call",
+      "status": "passed",
+      "duration": 2.8667777170194313
+    },
+    {
+      "test_id": "test_plan_batch.py::test_real_batch_cli_native_copies[inbox]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 25.50219237501733
+    },
+    {
+      "test_id": "test_plan_batch.py::test_real_batch_cli_native_copies[manifest]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 26.64855753298616
+    },
+    {
+      "test_id": "test_plan_batch.py::test_real_batch_cli_native_copies[mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 54.60343366098823
+    },
+    {
+      "test_id": "test_plan_batch.py::test_real_batch_cli_native_copies[named-risks]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 27.409845590009354
+    },
+    {
+      "test_id": "test_plan_cache.py::test_real_parse_cache_one_read_same_bytes_different_names",
+      "phase": "call",
+      "status": "passed",
+      "duration": 5.432525031035766
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_cache_corruption_rebuilds_once",
+      "phase": "call",
+      "status": "passed",
+      "duration": 9.210083532962017
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_corrupt_mpp_is_failed_not_empty_plan",
+      "phase": "call",
+      "status": "passed",
+      "duration": 3.113640369963832
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_zip_intake_inside_save",
+      "phase": "call",
+      "status": "passed",
+      "duration": 4.786865593981929
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_zip_multiple_candidates_retains_list",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.5808075750246644
+    },
+    {
+      "test_id": "test_save_e2e.py::test_real_cli_cold_warm_save[E-78-84]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 13.317458434030414
+    },
+    {
+      "test_id": "test_save_e2e.py::test_real_cli_cold_warm_save[F-86-93]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 12.682454348017927
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "phase": "call",
+      "status": "passed",
+      "duration": 53.68260423804168
+    },
+    {
+      "test_id": "test_rest_live.py::test_live_apply_plan_ok",
+      "phase": "call",
+      "status": "skipped",
+      "duration": 0.00034236296778544784
+    },
+    {
+      "test_id": "test_rest_live.py::test_live_get_test_page",
+      "phase": "call",
+      "status": "skipped",
+      "duration": 0.00020241300808265805
+    }
+  ],
+  "mandatory_test_ids": [
+    "test_gate_diff.py::test_four_layers_include_links_calendars_assignments_without_schedule_promotion",
+    "test_gate_diff.py::test_four_value_layers_never_promote_model_to_observed",
+    "test_itogo.py::test_prepared_multiple_roots_explicit_choice",
+    "test_itogo.py::test_prepared_source_coefficients_and_timezone",
+    "test_itogo.py::test_prepared_summary_ceil",
+    "test_itogo.py::test_prepared_summary_ceil[0-0]",
+    "test_itogo.py::test_prepared_summary_ceil[106.875-107]",
+    "test_itogo.py::test_prepared_summary_ceil[76.875-77]",
+    "test_itogo.py::test_prepared_summary_ceil[84.875-85]",
+    "test_itogo.py::test_prepared_unknown_basis_blocks_summary",
+    "test_itogo.py::test_prepared_unknown_basis_blocks_summary[basis]",
+    "test_itogo.py::test_prepared_unknown_basis_blocks_summary[date]",
+    "test_itogo.py::test_prepared_unknown_basis_blocks_summary[elapsed]",
+    "test_itogo.py::test_prepared_unknown_basis_blocks_summary[timezone]",
+    "test_itogo.py::test_prepared_unknown_basis_blocks_summary[units]",
+    "test_itogo.py::test_prepared_work_exact_summary_service_milestone_and_timephased",
+    "test_itogo.py::test_prepared_work_missing_partial_not_zero",
+    "test_itogo.py::test_real_prepared_work_tolerance",
+    "test_itogo.py::test_real_prepared_work_tolerance[A-1576]",
+    "test_itogo.py::test_real_prepared_work_tolerance[B-2096]",
+    "test_itogo.py::test_real_prepared_work_tolerance[C-2088]",
+    "test_itogo.py::test_real_prepared_work_tolerance[D-3136]",
+    "test_mpp_calendar.py::test_prepared_calendar_intervals_exceptions_inheritance_bindings",
+    "test_mpp_calendar.py::test_prepared_calendar_source_day_basis_mismatch_is_explicit",
+    "test_mpp_calendar.py::test_prepared_calendar_unsupported_is_explicit",
+    "test_mpp_convert.py::test_prepared_dependencies_types_signed_lag_parallel_resources",
+    "test_mpp_convert.py::test_prepared_golden_bytes_and_storage",
+    "test_mpp_convert.py::test_prepared_hierarchy_cycle_rejected",
+    "test_mpp_convert.py::test_prepared_lag_basis_only_equivalent_calendars",
+    "test_mpp_convert.py::test_prepared_no_reader_in_converter_calendar_itogo",
+    "test_mpp_convert.py::test_prepared_summary_dependency_and_unrepresented_scheduling",
+    "test_mpp_convert.py::test_prepared_tree_uses_parent_keys_all_roots_and_partial_assignment",
+    "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero",
+    "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[basis]",
+    "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[elapsed]",
+    "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[endpoint]",
+    "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[external]",
+    "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[lag]",
+    "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[type]",
+    "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[unit]",
+    "test_plan_cache.py::test_derived_representation_cache_profile_template_root_and_corruption",
+    "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+    "test_plugin_profile.py::test_context_installed_profiles_from_registry",
+    "test_plugin_profile.py::test_installed_profile_has_only_evidence_bound_claims",
+    "test_plugin_profile.py::test_profile_codes_only_verified_capabilities",
+    "test_plugin_profile.py::test_profile_rejects_unverified_contract",
+    "test_plugin_profile.py::test_profile_rejects_unverified_contract[claim]",
+    "test_plugin_profile.py::test_profile_rejects_unverified_contract[code]",
+    "test_plugin_profile.py::test_profile_rejects_unverified_contract[evidence]",
+    "test_plugin_profile.py::test_profile_rejects_unverified_contract[hash]",
+    "test_plugin_profile.py::test_profile_rejects_unverified_contract[shape]",
+    "test_plugin_profile.py::test_profile_rejects_unverified_contract[version]"
+  ],
+  "optional_skips": [
+    {
+      "test_id": "test_rest_live.py::test_live_apply_plan_ok",
+      "phase": "call",
+      "status": "skipped",
+      "duration": 0.00034236296778544784
+    },
+    {
+      "test_id": "test_rest_live.py::test_live_get_test_page",
+      "phase": "call",
+      "status": "skipped",
+      "duration": 0.00020241300808265805
+    }
+  ],
+  "real_cases": {
+    "A": {
+      "case": "A",
+      "source_sha256": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89",
+      "expected_hours": "1576",
+      "actual_hours": "1576",
+      "absolute_delta_hours": "0",
+      "tolerance_hours": "0.001",
+      "summary": {
+        "profile": "summary-v1",
+        "profile_fingerprint": "716c94354368c0642f1284f48213e6de246ec92f0024b5b533c45f4c3f1abc70",
+        "root_candidates": [
+          "uid:164"
+        ],
+        "root_task_key": "uid:164",
+        "explicit_root_choice": false,
+        "start": "2026-04-23T09:00",
+        "finish": "2026-08-24T18:00",
+        "d1": "23.04.26",
+        "d2": "24.08.26",
+        "n_days": 85,
+        "duration_working_days": "84.875",
+        "source_duration": {
+          "value": "84.875 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "84.875",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "coefficients": {
+          "minutes_per_day": "480"
+        },
+        "work": {
+          "hours": "1576",
+          "display_hours": "1576",
+          "quality": "partial",
+          "known_assignments": 44,
+          "missing_assignments": 0,
+          "excluded_assignments": 0,
+          "reasons": [],
+          "per_task": {
+            "uid:373": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:375": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:377": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:508": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:346": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:342": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:496": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:497": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:507": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:498": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:337": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:343": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:292": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:378": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:314": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:511": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:510": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:323": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:324": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:512": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:513": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:326": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:327": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:329": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:330": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:331": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:332": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:334": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:335": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:514": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:339": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:341": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:515": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:344": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 2,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:347": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:348": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:321": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:517": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:518": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:519": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:520": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:521": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:532": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            }
+          }
+        },
+        "counts": {
+          "task_count": 58,
+          "archive_task_count": 58,
+          "service_task_count": 1,
+          "display_task_count": 57,
+          "dependency_count": 53,
+          "external_dependency_count": 0,
+          "task_extraction_errors": 0
+        },
+        "reasons": [],
+        "publishable": true,
+        "storage_html": "<p><strong>Итого: с 23.04.26 по 24.08.26 - 85 рабочих дней</strong></p>"
+      },
+      "archive_task_count": 58,
+      "service_task_count": 1,
+      "display_task_count": 57,
+      "MPXJ_read": 1
+    },
+    "B": {
+      "case": "B",
+      "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+      "expected_hours": "2096",
+      "actual_hours": "2096",
+      "absolute_delta_hours": "0",
+      "tolerance_hours": "0.001",
+      "summary": {
+        "profile": "summary-v1",
+        "profile_fingerprint": "716c94354368c0642f1284f48213e6de246ec92f0024b5b533c45f4c3f1abc70",
+        "root_candidates": [
+          "uid:164"
+        ],
+        "root_task_key": "uid:164",
+        "explicit_root_choice": false,
+        "start": "2026-04-23T09:00",
+        "finish": "2026-08-24T18:00",
+        "d1": "23.04.26",
+        "d2": "24.08.26",
+        "n_days": 85,
+        "duration_working_days": "84.875",
+        "source_duration": {
+          "value": "84.875 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "84.875",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "coefficients": {
+          "minutes_per_day": "480"
+        },
+        "work": {
+          "hours": "2096",
+          "display_hours": "2096",
+          "quality": "partial",
+          "known_assignments": 49,
+          "missing_assignments": 0,
+          "excluded_assignments": 0,
+          "reasons": [],
+          "per_task": {
+            "uid:373": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:375": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:377": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:508": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:346": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:342": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:496": {
+              "known_hours": "176",
+              "missing": 0,
+              "known": 1,
+              "hours": "176",
+              "quality": "partial"
+            },
+            "uid:497": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:507": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:498": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:337": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 2,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:343": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:292": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:378": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:511": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:510": {
+              "known_hours": "152",
+              "missing": 0,
+              "known": 1,
+              "hours": "152",
+              "quality": "partial"
+            },
+            "uid:323": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:324": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:512": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:513": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:326": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:327": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:329": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:330": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:331": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:332": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:334": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:335": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:514": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:339": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:341": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:515": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:344": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 2,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:347": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:348": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:321": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:517": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:518": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:519": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:520": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:521": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:532": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:533": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:314": {
+              "known_hours": "200",
+              "missing": 0,
+              "known": 1,
+              "hours": "200",
+              "quality": "partial"
+            },
+            "uid:534": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:535": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:536": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            }
+          }
+        },
+        "counts": {
+          "task_count": 62,
+          "archive_task_count": 62,
+          "service_task_count": 1,
+          "display_task_count": 61,
+          "dependency_count": 60,
+          "external_dependency_count": 0,
+          "task_extraction_errors": 0
+        },
+        "reasons": [],
+        "publishable": true,
+        "storage_html": "<p><strong>Итого: с 23.04.26 по 24.08.26 - 85 рабочих дней</strong></p>"
+      },
+      "archive_task_count": 62,
+      "service_task_count": 1,
+      "display_task_count": 61,
+      "MPXJ_read": 1
+    },
+    "C": {
+      "case": "C",
+      "source_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+      "expected_hours": "2088",
+      "actual_hours": "2088",
+      "absolute_delta_hours": "0",
+      "tolerance_hours": "0.001",
+      "summary": {
+        "profile": "summary-v1",
+        "profile_fingerprint": "716c94354368c0642f1284f48213e6de246ec92f0024b5b533c45f4c3f1abc70",
+        "root_candidates": [
+          "uid:164"
+        ],
+        "root_task_key": "uid:164",
+        "explicit_root_choice": false,
+        "start": "2026-04-23T09:00",
+        "finish": "2026-08-12T18:00",
+        "d1": "23.04.26",
+        "d2": "12.08.26",
+        "n_days": 77,
+        "duration_working_days": "76.875",
+        "source_duration": {
+          "value": "76.875 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "76.875",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "coefficients": {
+          "minutes_per_day": "480"
+        },
+        "work": {
+          "hours": "2088",
+          "display_hours": "2088",
+          "quality": "partial",
+          "known_assignments": 49,
+          "missing_assignments": 0,
+          "excluded_assignments": 0,
+          "reasons": [],
+          "per_task": {
+            "uid:373": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:375": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:377": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:508": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:346": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:342": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:496": {
+              "known_hours": "176",
+              "missing": 0,
+              "known": 1,
+              "hours": "176",
+              "quality": "partial"
+            },
+            "uid:497": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:507": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:498": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:337": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 2,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:343": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:292": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:378": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:511": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:510": {
+              "known_hours": "152",
+              "missing": 0,
+              "known": 1,
+              "hours": "152",
+              "quality": "partial"
+            },
+            "uid:323": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:324": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:512": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:513": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:326": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:327": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:329": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:330": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:331": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:332": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:334": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:335": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:514": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:339": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:341": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:515": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:344": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 2,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:347": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:348": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:321": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:517": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:518": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:519": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:520": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:521": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:532": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:533": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:314": {
+              "known_hours": "232",
+              "missing": 0,
+              "known": 1,
+              "hours": "232",
+              "quality": "partial"
+            },
+            "uid:534": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:535": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:536": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            }
+          }
+        },
+        "counts": {
+          "task_count": 62,
+          "archive_task_count": 62,
+          "service_task_count": 1,
+          "display_task_count": 61,
+          "dependency_count": 61,
+          "external_dependency_count": 0,
+          "task_extraction_errors": 0
+        },
+        "reasons": [],
+        "publishable": true,
+        "storage_html": "<p><strong>Итого: с 23.04.26 по 12.08.26 - 77 рабочих дней</strong></p>"
+      },
+      "archive_task_count": 62,
+      "service_task_count": 1,
+      "display_task_count": 61,
+      "MPXJ_read": 1
+    },
+    "D": {
+      "case": "D",
+      "source_sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+      "expected_hours": "3136",
+      "actual_hours": "3136",
+      "absolute_delta_hours": "0",
+      "tolerance_hours": "0.001",
+      "summary": {
+        "profile": "summary-v1",
+        "profile_fingerprint": "716c94354368c0642f1284f48213e6de246ec92f0024b5b533c45f4c3f1abc70",
+        "root_candidates": [
+          "uid:164"
+        ],
+        "root_task_key": "uid:164",
+        "explicit_root_choice": false,
+        "start": "2026-03-30T09:00",
+        "finish": "2026-08-28T18:00",
+        "d1": "30.03.26",
+        "d2": "28.08.26",
+        "n_days": 107,
+        "duration_working_days": "106.875",
+        "source_duration": {
+          "value": "106.875 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "106.875",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "coefficients": {
+          "minutes_per_day": "480"
+        },
+        "work": {
+          "hours": "3136",
+          "display_hours": "3136",
+          "quality": "partial",
+          "known_assignments": 61,
+          "missing_assignments": 0,
+          "excluded_assignments": 0,
+          "reasons": [],
+          "per_task": {
+            "uid:373": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:375": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:377": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:508": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:346": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:342": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:496": {
+              "known_hours": "176",
+              "missing": 0,
+              "known": 1,
+              "hours": "176",
+              "quality": "partial"
+            },
+            "uid:497": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:507": {
+              "known_hours": "72",
+              "missing": 0,
+              "known": 1,
+              "hours": "72",
+              "quality": "partial"
+            },
+            "uid:498": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:337": {
+              "known_hours": "320",
+              "missing": 0,
+              "known": 2,
+              "hours": "320",
+              "quality": "partial"
+            },
+            "uid:343": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:292": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:378": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:510": {
+              "known_hours": "152",
+              "missing": 0,
+              "known": 1,
+              "hours": "152",
+              "quality": "partial"
+            },
+            "uid:323": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:324": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:512": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:513": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:326": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:327": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:329": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:330": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:331": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:332": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:334": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:335": {
+              "known_hours": "56",
+              "missing": 0,
+              "known": 1,
+              "hours": "56",
+              "quality": "partial"
+            },
+            "uid:514": {
+              "known_hours": "72",
+              "missing": 0,
+              "known": 1,
+              "hours": "72",
+              "quality": "partial"
+            },
+            "uid:339": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:341": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:515": {
+              "known_hours": "24",
+              "missing": 0,
+              "known": 1,
+              "hours": "24",
+              "quality": "partial"
+            },
+            "uid:344": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 2,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:347": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:348": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:321": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:517": {
+              "known_hours": "128",
+              "missing": 0,
+              "known": 1,
+              "hours": "128",
+              "quality": "partial"
+            },
+            "uid:518": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:519": {
+              "known_hours": "160",
+              "missing": 0,
+              "known": 1,
+              "hours": "160",
+              "quality": "partial"
+            },
+            "uid:520": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:521": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:532": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:533": {
+              "known_hours": "0",
+              "missing": 0,
+              "known": 1,
+              "hours": "0",
+              "quality": "partial"
+            },
+            "uid:314": {
+              "known_hours": "328",
+              "missing": 0,
+              "known": 1,
+              "hours": "328",
+              "quality": "partial"
+            },
+            "uid:534": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:535": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:536": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:537": {
+              "known_hours": "8",
+              "missing": 0,
+              "known": 1,
+              "hours": "8",
+              "quality": "partial"
+            },
+            "uid:538": {
+              "known_hours": "96",
+              "missing": 0,
+              "known": 1,
+              "hours": "96",
+              "quality": "partial"
+            },
+            "uid:539": {
+              "known_hours": "56",
+              "missing": 0,
+              "known": 1,
+              "hours": "56",
+              "quality": "partial"
+            },
+            "uid:540": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 1,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:541": {
+              "known_hours": "56",
+              "missing": 0,
+              "known": 1,
+              "hours": "56",
+              "quality": "partial"
+            },
+            "uid:542": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 2,
+              "hours": "32",
+              "quality": "partial"
+            },
+            "uid:543": {
+              "known_hours": "16",
+              "missing": 0,
+              "known": 2,
+              "hours": "16",
+              "quality": "partial"
+            },
+            "uid:544": {
+              "known_hours": "40",
+              "missing": 0,
+              "known": 1,
+              "hours": "40",
+              "quality": "partial"
+            },
+            "uid:545": {
+              "known_hours": "80",
+              "missing": 0,
+              "known": 1,
+              "hours": "80",
+              "quality": "partial"
+            },
+            "uid:546": {
+              "known_hours": "88",
+              "missing": 0,
+              "known": 1,
+              "hours": "88",
+              "quality": "partial"
+            },
+            "uid:547": {
+              "known_hours": "32",
+              "missing": 0,
+              "known": 1,
+              "hours": "32",
+              "quality": "partial"
+            }
+          }
+        },
+        "counts": {
+          "task_count": 72,
+          "archive_task_count": 72,
+          "service_task_count": 1,
+          "display_task_count": 71,
+          "dependency_count": 76,
+          "external_dependency_count": 0,
+          "task_extraction_errors": 0
+        },
+        "reasons": [],
+        "publishable": true,
+        "storage_html": "<p><strong>Итого: с 30.03.26 по 28.08.26 - 107 рабочих дней</strong></p>"
+      },
+      "archive_task_count": 72,
+      "service_task_count": 1,
+      "display_task_count": 71,
+      "MPXJ_read": 1
+    }
+  },
+  "live": {
+    "status": "passed",
+    "test_parent": "519501810",
+    "POST": 11,
+    "PUT": 0,
+    "cases": [
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-09T18:00:00",
+            "duration": 3,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-09T09:00:00",
+            "finish": "2026-01-09T18:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day"
+          }
+        ],
+        "resources": [],
+        "assignments": [],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "FS",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 83,
+        "input_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+        "received_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-07T18:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 0,
+            "lag": 0,
+            "lagUnit": "day"
+          }
+        ],
+        "resources": [],
+        "assignments": [],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "SS",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 84,
+        "input_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+        "received_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-08T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 3,
+            "lag": 0,
+            "lagUnit": "day"
+          }
+        ],
+        "resources": [],
+        "assignments": [],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "FF",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 85,
+        "input_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+        "received_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-06T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 3,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-06T09:00:00",
+            "finish": "2026-01-07T09:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 1,
+            "lag": 0,
+            "lagUnit": "day"
+          }
+        ],
+        "resources": [],
+        "assignments": [],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "SF",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 86,
+        "input_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+        "received_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-13T18:00:00",
+            "duration": 5,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-13T09:00:00",
+            "finish": "2026-01-13T18:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 2,
+            "lag": 2,
+            "lagUnit": "day"
+          }
+        ],
+        "resources": [],
+        "assignments": [],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "positive-lag",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 87,
+        "input_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+        "received_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-08T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 2,
+            "lag": -1,
+            "lagUnit": "day"
+          }
+        ],
+        "resources": [],
+        "assignments": [],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "negative-lag",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 88,
+        "input_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+        "received_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-12T11:00:00",
+            "duration": 3.25,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-09T11:00:00",
+            "finish": "2026-01-12T11:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 2,
+            "lag": 2,
+            "lagUnit": "hour"
+          }
+        ],
+        "resources": [],
+        "assignments": [],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "hour-lag",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 89,
+        "input_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+        "received_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "case": "elapsed-lag",
+        "page_id": "537571938",
+        "status": "not_verified",
+        "reason": "attempted_eday_encoding_has_no_verified_schedule",
+        "tasks": [],
+        "runtime_errors": [
+          "generateDropDownMenu is not defined",
+          "Conversion unit not provided"
+        ],
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 90,
+        "input_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+        "received_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-12T18:00:00",
+            "duration": 3,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-12T09:00:00",
+            "finish": "2026-01-12T18:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day"
+          }
+        ],
+        "resources": [],
+        "assignments": [],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "calendar-exception",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 91,
+        "input_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+        "received_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-12T17:00:00",
+            "duration": 3,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-09T10:00:00",
+            "finish": "2026-01-12T17:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day"
+          }
+        ],
+        "resources": [],
+        "assignments": [],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "calendar-working-exception",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 92,
+        "input_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+        "received_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710"
+      },
+      {
+        "build": "H6u7SQymvwxeyojc1ur6Z",
+        "engine_version": "5.4.1",
+        "relation_codes": {
+          "StartToStart": 0,
+          "StartToEnd": 1,
+          "EndToStart": 2,
+          "EndToEnd": 3
+        },
+        "hours_per_day": 8,
+        "dependency_calendar": "ToEvent",
+        "tasks": [
+          {
+            "id": 1,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-09T18:00:00",
+            "duration": 3,
+            "duration_unit": "day"
+          },
+          {
+            "id": 2,
+            "start": "2026-01-07T09:00:00",
+            "finish": "2026-01-08T18:00:00",
+            "duration": 2,
+            "duration_unit": "day"
+          },
+          {
+            "id": 3,
+            "start": "2026-01-09T09:00:00",
+            "finish": "2026-01-09T18:00:00",
+            "duration": 1,
+            "duration_unit": "day"
+          }
+        ],
+        "dependencies": [
+          {
+            "id": 4,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day"
+          }
+        ],
+        "resources": [
+          {
+            "id": 5,
+            "name": "Same name"
+          },
+          {
+            "id": 6,
+            "name": "Same name"
+          }
+        ],
+        "assignments": [
+          {
+            "id": 7,
+            "event": 2,
+            "resource": 5,
+            "units": 0
+          },
+          {
+            "id": 8,
+            "event": 3,
+            "resource": 6,
+            "units": 50
+          }
+        ],
+        "calendars": [
+          {
+            "id": "general",
+            "name": "General",
+            "parentId": null
+          }
+        ],
+        "case": "resources-assignments",
+        "page_id": "537571938",
+        "page_version": 1,
+        "attachment_id": "537571940",
+        "attachment_version": 93,
+        "input_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+        "received_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+        "confluence_version": "8.9.4",
+        "browser_received_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be"
+      }
+    ],
+    "observed_at": "2026-11-16T15:02:34.870262+00:00",
+    "page_id": "537571938",
+    "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe"
+  },
+  "plugin_profile": {
+    "schema_version": 1,
+    "id": "installed-gantt-profile",
+    "version": "1.0.0",
+    "plugin": {
+      "key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
+      "version": "frontend-build:H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe"
+    },
+    "confluence_version": "8.9.4",
+    "codes": {
+      "relation": {
+        "FS": 2,
+        "SS": 0,
+        "FF": 3,
+        "SF": 1
+      },
+      "lag_unit": {
+        "DAYS": "day",
+        "HOURS": "hour"
+      }
+    },
+    "capabilities": {
+      "relation:FS": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "Exact installed frontend build, single dependency; dates observed in live engine. Parallel rows preserved by converter; parallel driving semantics not inferred."
+      },
+      "relation:SS": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__SS__input_json",
+          "profile-controls__SS__observation_json",
+          "profile-controls__SS__received_json",
+          "profile-controls__SS__render_png",
+          "profile-controls__SS__storage_xml"
+        ],
+        "scope": "Exact installed frontend build, single dependency; dates observed in live engine. Parallel rows preserved by converter; parallel driving semantics not inferred."
+      },
+      "relation:FF": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FF__input_json",
+          "profile-controls__FF__observation_json",
+          "profile-controls__FF__received_json",
+          "profile-controls__FF__render_png",
+          "profile-controls__FF__storage_xml"
+        ],
+        "scope": "Exact installed frontend build, single dependency; dates observed in live engine. Parallel rows preserved by converter; parallel driving semantics not inferred."
+      },
+      "relation:SF": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__SF__input_json",
+          "profile-controls__SF__observation_json",
+          "profile-controls__SF__received_json",
+          "profile-controls__SF__render_png",
+          "profile-controls__SF__storage_xml"
+        ],
+        "scope": "Exact installed frontend build, single dependency; dates observed in live engine. Parallel rows preserved by converter; parallel driving semantics not inferred."
+      },
+      "lag_unit:DAYS": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__positive-lag__input_json",
+          "profile-controls__positive-lag__observation_json",
+          "profile-controls__positive-lag__received_json",
+          "profile-controls__positive-lag__render_png",
+          "profile-controls__positive-lag__storage_xml"
+        ],
+        "scope": "Working time; shared endpoint/project calendar only."
+      },
+      "lag_unit:HOURS": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__hour-lag__input_json",
+          "profile-controls__hour-lag__observation_json",
+          "profile-controls__hour-lag__received_json",
+          "profile-controls__hour-lag__render_png",
+          "profile-controls__hour-lag__storage_xml"
+        ],
+        "scope": "Working time; shared endpoint/project calendar only."
+      },
+      "lag:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "FS controls with shared endpoint/project calendar; other type/lag combinations remain unverified."
+      },
+      "lag:positive": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__positive-lag__input_json",
+          "profile-controls__positive-lag__observation_json",
+          "profile-controls__positive-lag__received_json",
+          "profile-controls__positive-lag__render_png",
+          "profile-controls__positive-lag__storage_xml"
+        ],
+        "scope": "FS controls with shared endpoint/project calendar; other type/lag combinations remain unverified."
+      },
+      "lag:negative": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__negative-lag__input_json",
+          "profile-controls__negative-lag__observation_json",
+          "profile-controls__negative-lag__received_json",
+          "profile-controls__negative-lag__render_png",
+          "profile-controls__negative-lag__storage_xml"
+        ],
+        "scope": "FS controls with shared endpoint/project calendar; other type/lag combinations remain unverified."
+      },
+      "lag_unit:ELAPSED_DAYS": {
+        "status": "not_verified",
+        "evidence": [
+          "profile-controls__elapsed-lag__input_json",
+          "profile-controls__elapsed-lag__observation_json",
+          "profile-controls__elapsed-lag__received_json",
+          "profile-controls__elapsed-lag__render_png",
+          "profile-controls__elapsed-lag__storage_xml"
+        ],
+        "scope": "Attempted eday encoding produced Conversion unit not provided. No alternate elapsed encoding verified."
+      },
+      "lag_basis:equal_endpoint_calendars": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "Plugin dependenciesCalendar=ToEvent. PREDECESSOR/SUCCESSOR/PROJECT only equivalent when both effective task calendars equal project calendar."
+      },
+      "calendar:uniform_weekdays": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__hour-lag__input_json",
+          "profile-controls__hour-lag__observation_json",
+          "profile-controls__hour-lag__received_json",
+          "profile-controls__hour-lag__render_png",
+          "profile-controls__hour-lag__storage_xml"
+        ],
+        "scope": "Same two daily working intervals, weekday calendar expressed as recurrent nonworking complements. Varied daily intervals not verified."
+      },
+      "calendar:project_id_general": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "Installed wrapper selects project calendar id general."
+      },
+      "calendar:exceptions": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__calendar-exception__input_json",
+          "profile-controls__calendar-exception__observation_json",
+          "profile-controls__calendar-exception__received_json",
+          "profile-controls__calendar-exception__render_png",
+          "profile-controls__calendar-exception__storage_xml",
+          "profile-controls__calendar-working-exception__input_json",
+          "profile-controls__calendar-working-exception__observation_json",
+          "profile-controls__calendar-working-exception__received_json",
+          "profile-controls__calendar-working-exception__render_png",
+          "profile-controls__calendar-working-exception__storage_xml"
+        ],
+        "scope": "Date ranges are exclusive-end; negative override priority20 and working window priority30. Working-window witness is separately included."
+      },
+      "calendar:bindings:project": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "General project calendar only."
+      },
+      "calendar:intervals": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:inheritance": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:recurrence": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:work_weeks": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:bindings:tasks": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:bindings:resources": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:bindings:assignments": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "resource:identity": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__resources-assignments__input_json",
+          "profile-controls__resources-assignments__observation_json",
+          "profile-controls__resources-assignments__received_json",
+          "profile-controls__resources-assignments__render_png",
+          "profile-controls__resources-assignments__storage_xml"
+        ],
+        "scope": "Two distinct resource IDs with identical names retained by live engine."
+      },
+      "assignment:units": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__resources-assignments__input_json",
+          "profile-controls__resources-assignments__observation_json",
+          "profile-controls__resources-assignments__received_json",
+          "profile-controls__resources-assignments__render_png",
+          "profile-controls__resources-assignments__storage_xml"
+        ],
+        "scope": "FixedDuration assignments preserve explicit 0 and 50 units, associated by numeric resource/task IDs. Work/contours not claimed."
+      },
+      "dependency:FS:DAYS:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:SS:DAYS:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__SS__input_json",
+          "profile-controls__SS__observation_json",
+          "profile-controls__SS__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:FF:DAYS:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FF__input_json",
+          "profile-controls__FF__observation_json",
+          "profile-controls__FF__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:SF:DAYS:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__SF__input_json",
+          "profile-controls__SF__observation_json",
+          "profile-controls__SF__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:FS:DAYS:positive": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__positive-lag__input_json",
+          "profile-controls__positive-lag__observation_json",
+          "profile-controls__positive-lag__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:FS:DAYS:negative": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__negative-lag__input_json",
+          "profile-controls__negative-lag__observation_json",
+          "profile-controls__negative-lag__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:FS:HOURS:positive": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__hour-lag__input_json",
+          "profile-controls__hour-lag__observation_json",
+          "profile-controls__hour-lag__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      }
+    },
+    "evidence": {
+      "installed-metadata_json": {
+        "path": "references/implementation/20261116/stage-08/live/installed-metadata.json",
+        "sha256": "eca09ebea5f90fb66a3146156defa56baca2da773bcef4a16d6a5c69c3e9b6f8"
+      },
+      "profile-controls__FF__initial-load-errors_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/initial-load-errors.json",
+        "sha256": "7621e860c8568ff7a146be16f8fbd65e333582ec7e2d6a41a04ad94fe81c0f29"
+      },
+      "profile-controls__FF__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/input.json",
+        "sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e"
+      },
+      "profile-controls__FF__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/observation.json",
+        "sha256": "03fed92b937f3505a025243f5544bbc8f4ed4939219ace963eb391d002c7adfa"
+      },
+      "profile-controls__FF__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/received.json",
+        "sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e"
+      },
+      "profile-controls__FF__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/render.png",
+        "sha256": "bf06d626851fb518abf1c9f5901181ad7bce0cf8f5068e337bf64aa4cf26b1f5"
+      },
+      "profile-controls__FF__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__FS__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/input.json",
+        "sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d"
+      },
+      "profile-controls__FS__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/observation.json",
+        "sha256": "0236121c5cea5681f5793de786566abe495fe4fd786fb9bbeff7204cf9dce7ef"
+      },
+      "profile-controls__FS__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/received.json",
+        "sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d"
+      },
+      "profile-controls__FS__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/render.png",
+        "sha256": "6be17851ea3fdcadf2676d7b556a9d30f7c92bece4b5061e22f2b649ba627334"
+      },
+      "profile-controls__FS__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__SF__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/input.json",
+        "sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518"
+      },
+      "profile-controls__SF__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/observation.json",
+        "sha256": "5de0badce1b909fa606b4ecb33a350cc0b0b8253b68ca28c61a66ce0900f89f4"
+      },
+      "profile-controls__SF__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/received.json",
+        "sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518"
+      },
+      "profile-controls__SF__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/render.png",
+        "sha256": "4a24abf08c440fa05acdbc53e3935f13bc684904b9a202a6ea9ac4ee799c9b1a"
+      },
+      "profile-controls__SF__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__SS__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/input.json",
+        "sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175"
+      },
+      "profile-controls__SS__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/observation.json",
+        "sha256": "62bdeb7fa5844b7415f937a241ddf510d59e4fe9010a400c8073a235bb12160a"
+      },
+      "profile-controls__SS__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/received.json",
+        "sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175"
+      },
+      "profile-controls__SS__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/render.png",
+        "sha256": "8c2fd2f4eb9868582496ea606bc2187543fdd567621d5089e0a9b3d2476fcbb8"
+      },
+      "profile-controls__SS__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__calendar-exception__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/input.json",
+        "sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07"
+      },
+      "profile-controls__calendar-exception__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/observation.json",
+        "sha256": "cc9916397858b3e1d139d99b2f2c4d419d5a2a899ec382eaaaab7aff04e6c934"
+      },
+      "profile-controls__calendar-exception__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/received.json",
+        "sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07"
+      },
+      "profile-controls__calendar-exception__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/render.png",
+        "sha256": "e3820cc29e267dea951dcbfa68e14881cc32b4b108c75eb6de749bafe8e7c75c"
+      },
+      "profile-controls__calendar-exception__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__calendar-working-exception__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/input.json",
+        "sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710"
+      },
+      "profile-controls__calendar-working-exception__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/observation.json",
+        "sha256": "9c21efcb2003ca451494348210774a4745c5a0a29c68586b46e7de0a40645c9d"
+      },
+      "profile-controls__calendar-working-exception__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/received.json",
+        "sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710"
+      },
+      "profile-controls__calendar-working-exception__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/render.png",
+        "sha256": "dd92a180b229c7482605568f475eb90698ca098b0613e0db097c4503368c3fbd"
+      },
+      "profile-controls__calendar-working-exception__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__elapsed-lag__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/input.json",
+        "sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842"
+      },
+      "profile-controls__elapsed-lag__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/observation.json",
+        "sha256": "5fb39fbce9ee801531885edf5c5dcf58bf9c1809a980a951d572fc5f0434452e"
+      },
+      "profile-controls__elapsed-lag__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/received.json",
+        "sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842"
+      },
+      "profile-controls__elapsed-lag__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/render.png",
+        "sha256": "7c42233fc1bdde1e8a9755f645e3a4e520468c92d63b48ea610b71cb7693cf2e"
+      },
+      "profile-controls__elapsed-lag__rendered-text_txt": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/rendered-text.txt",
+        "sha256": "53da63a1f70a0961e43f962dbfac44d32fa2026458559322fe77738bd73ce949"
+      },
+      "profile-controls__elapsed-lag__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__hour-lag__initial-load-errors_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/initial-load-errors.json",
+        "sha256": "7621e860c8568ff7a146be16f8fbd65e333582ec7e2d6a41a04ad94fe81c0f29"
+      },
+      "profile-controls__hour-lag__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/input.json",
+        "sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b"
+      },
+      "profile-controls__hour-lag__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/observation.json",
+        "sha256": "5e08cdb08fb54c82e2c7ebedd2db4aaecaa7d8cab0cfb32e4f78d0061355fa15"
+      },
+      "profile-controls__hour-lag__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/received.json",
+        "sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b"
+      },
+      "profile-controls__hour-lag__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/render.png",
+        "sha256": "89e3f5794a9866034c8239f78fac834bbc7f7be7c9fb2438c3ee59bdf7553ca2"
+      },
+      "profile-controls__hour-lag__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__negative-lag__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/input.json",
+        "sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194"
+      },
+      "profile-controls__negative-lag__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/observation.json",
+        "sha256": "fc4aba0aaf16e0603580d49154e09bf4460080b68575bc9d55f8a8dc1cfb9b9d"
+      },
+      "profile-controls__negative-lag__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/received.json",
+        "sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194"
+      },
+      "profile-controls__negative-lag__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/render.png",
+        "sha256": "05cc5da25bf1572060bee86f92ff993b4764b01de00d33d73dba244e6dd5a33d"
+      },
+      "profile-controls__negative-lag__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__positive-lag__initial-load-errors_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/initial-load-errors.json",
+        "sha256": "7621e860c8568ff7a146be16f8fbd65e333582ec7e2d6a41a04ad94fe81c0f29"
+      },
+      "profile-controls__positive-lag__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/input.json",
+        "sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f"
+      },
+      "profile-controls__positive-lag__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/observation.json",
+        "sha256": "a854354e851aa65329288b5cdd3c845c0d14be96cac6217e947f4183391f3a97"
+      },
+      "profile-controls__positive-lag__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/received.json",
+        "sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f"
+      },
+      "profile-controls__positive-lag__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/render.png",
+        "sha256": "282ce55eb858692b211cb94c856f5ff516767ac455353133aad1194e52759f74"
+      },
+      "profile-controls__positive-lag__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__resources-assignments__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/input.json",
+        "sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be"
+      },
+      "profile-controls__resources-assignments__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/observation.json",
+        "sha256": "fcb28c0f001e70ccf46dba29f7368f8781824c8420020c64c088dcd261437a66"
+      },
+      "profile-controls__resources-assignments__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/received.json",
+        "sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be"
+      },
+      "profile-controls__resources-assignments__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/render.png",
+        "sha256": "f12ad5c566ad2c6330be699940d4f6a55ab8400ea1de0776814d5a4db3ec6972"
+      },
+      "profile-controls__resources-assignments__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      }
+    },
+    "limitations": [
+      "Version pins installed frontend build plus engine asset SHA-256, not an inferred server release number; UPM release metadata is inaccessible (401).",
+      "Bryntum Gantt engine observed as 5.4.1. Local MppReader scheduler results are not plugin evidence.",
+      "Only the stated control scopes are verified. Type+nonzero lag combinations other than FS have no live proof.",
+      "Elapsed eday encoding failed; other elapsed encodings, varied daily intervals, inheritance/workweeks/recurrences and task/resource/assignment calendar bindings remain not_verified.",
+      "Representation conversion does not establish schedule equality for arbitrary source plans. Exact source dates and per-task comparison remain separate.",
+      "Work is displayed in diagnostics only; no work block is published in storage."
+    ]
+  },
+  "counters": {
+    "derived_cache": {
+      "counters": {
+        "cache_miss": 5,
+        "cache_hit": 1
+      },
+      "MPXJ_read": 0,
+      "source": "pure prepared conversion; reader forbidden by separate instrumentation test"
+    },
+    "prepared_converter_calendar_itogo_reader_calls": 0,
+    "real_A_D_MPXJ_read": 4,
+    "all_legacy_reader_calls": null,
+    "live_POST": 11,
+    "live_PUT": 0,
+    "fake_regression": {
+      "MPXJ_read": 2,
+      "cache_hit": 1,
+      "cache_miss": 2,
+      "attachment_POST_fake": 33,
+      "page_POST_fake": 14,
+      "page_PUT_fake": 18,
+      "live_POST": 11,
+      "live_PUT": 0
+    }
+  },
+  "covered_requirements": [
+    "§20/AC-02 prepared branch",
+    "§20/AC-06",
+    "parts of §20/AC-08",
+    "§20.7.5"
+  ],
+  "limitations": [
+    "Только этап 08. Подключение к первичному архиву/admission diff/publish — этап 09; сетевые стадии — этап 10.",
+    "Legacy CSV adapter/старый pipeline сохранены совместимыми; новый converter/calendar/itogo работают только с PreparedPlan.",
+    "Installed profile pins exact frontend build and asset hash; server marketing release version is unavailable to this account (UPM 401).",
+    "Unknown plugin capabilities remain not_verified; local scheduler capability matrix does not prove plugin behavior.",
+    "A–D work known sum matches reference; extraction quality partial because exporter reports unsupported timephased getters. Missing totals never become zero.",
+    "Legacy test_rest_live GET/apply harness is optional in stage08 (EDITPLAN_LIVE unset); required dedicated controls ran separately without mocks.",
+    "Production DB/WorkVault, plan pages A–D/AB, Gateway and schedules were not modified. No migrations or R/E changes.",
+    "ownCloud sync not confirmed. Test-only browser packages and browser binary remain under the isolated test root."
+  ],
+  "generated_at": "2026-11-16T15:03:28.766787+00:00"
+}

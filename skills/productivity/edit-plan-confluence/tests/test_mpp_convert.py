@@ -220,3 +220,109 @@ def test_copy_and_empty(gantt_test_template):
     copied = copy_parent_gantt(parent)
     assert copied["idCounter"] != 300000
     assert copied["idCounter"] == compute_id_counter(copied)
+
+
+from prepared_plan import PreparedPlan
+from mpp_convert import convert_prepared_plan, representation_bytes
+
+
+def test_prepared_dependencies_types_signed_lag_parallel_resources(stage08_export,stage08_profile):
+    prepared=PreparedPlan.from_export(stage08_export,timezone_hint='Europe/Moscow')
+    before=prepared.semantic_bytes()
+    result=convert_prepared_plan(prepared,plugin_profile=stage08_profile)
+    deps=result['gantt']['dependenciesData']
+    assert [d['type'] for d in deps]==[12,10,13,11,12]
+    assert [d['lag'] for d in deps]==[0,-1,2,0.5,1]
+    assert deps[2]['lagUnit']=='eday'
+    assert len(result['gantt']['resourcesData'])==2
+    resources=result['mappings']['resources']
+    assert resources['r1']!=resources['r2']
+    asns=result['gantt']['assignmentsData']
+    assert any(a['units']==0 and a['resource']==resources['r1'] for a in asns)
+    assert all(n['id']!=0 for n in flatten_events(result['gantt']['eventsData'][0]).values())
+    assert len(result['source_semantics']['tasks'])==4
+    assert prepared.semantic_bytes()==before
+    assert representation_bytes(result)==representation_bytes(convert_prepared_plan(prepared,plugin_profile=stage08_profile))
+
+
+@pytest.mark.parametrize('kind',['type','lag','unit','elapsed','basis','endpoint','external'])
+def test_prepared_unknown_dependency_never_fs_zero(stage08_export,stage08_profile,kind):
+    d=stage08_export['dependencies'][0]
+    if kind=='type':d['link_type']=None
+    if kind=='lag':d['lag_value']={'value':None,'quality':'missing','reason':'not_set'}
+    if kind=='unit':d['lag_value']['value']['units']='FORTNIGHT'
+    if kind=='elapsed':d['lag_value']['value']['elapsed']=True
+    if kind=='basis':d['project_lag_calendar']['value']='UNKNOWN'
+    if kind=='endpoint':d['successor_task_key']='nonexistent'
+    if kind=='external':d['external']=True
+    result=convert_prepared_plan(PreparedPlan.from_export(stage08_export),plugin_profile=stage08_profile)
+    assert len(result['gantt']['dependenciesData'])==4
+    assert not result['publishable']
+    assert any(x.get('entity')=='dep0' for x in result['diagnostics'])
+    assert result['source_semantics']['dependencies'][0]==d
+
+
+def test_prepared_tree_uses_parent_keys_all_roots_and_partial_assignment(stage08_export,stage08_profile):
+    stage08_export['tasks'][3]['parent_task_key']={'value':None,'quality':'missing','reason':'not_set'}
+    stage08_export['assignments'][0]['units']={'value':None,'quality':'missing','reason':'not_set'}
+    p=PreparedPlan.from_export(stage08_export)
+    result=convert_prepared_plan(p,plugin_profile=stage08_profile)
+    assert len(result['gantt']['eventsData'])==2
+    assert not any(a['units']==100 and a['event']==2 for a in result['gantt']['assignmentsData'])
+    assert any(d['code']=='assignment_partial' for d in result['diagnostics'])
+    assert result['gantt']['eventsData'][0]['children'][0]['parentId']==1
+
+
+def test_prepared_no_reader_in_converter_calendar_itogo(stage08_export,stage08_profile,monkeypatch):
+    import mpp_calendar,mpp_input,subprocess
+    def forbidden(*a,**k):raise AssertionError('reader/CSV/JVM forbidden')
+    monkeypatch.setattr(subprocess,'run',forbidden)
+    monkeypatch.setattr(mpp_input,'export_csv',forbidden)
+    monkeypatch.setattr(mpp_calendar,'_ensure_jvm',forbidden)
+    monkeypatch.setattr('mpp_convert.read_csv_rows',forbidden)
+    result=convert_prepared_plan(PreparedPlan.from_export(stage08_export,timezone_hint='Europe/Moscow'),plugin_profile=stage08_profile)
+    assert result['summary']['n_days']==85
+
+
+def test_prepared_hierarchy_cycle_rejected(stage08_export,stage08_profile):
+    stage08_export['tasks'][1]['parent_task_key']={'value':'a','quality':'ok','reason':None}
+    with pytest.raises(ValueError,match='cyclic_task_hierarchy'):
+        convert_prepared_plan(PreparedPlan.from_export(stage08_export),plugin_profile=stage08_profile)
+
+
+def test_prepared_lag_basis_only_equivalent_calendars(stage08_export,stage08_profile):
+    from copy import deepcopy
+    stage08_profile.document['capabilities']['lag_basis:PREDECESSOR']['status']='not_verified'
+    cap=deepcopy(stage08_profile.document['capabilities']['lag:zero'])
+    stage08_profile.document['capabilities']['lag_basis:equal_endpoint_calendars']=cap
+    p=PreparedPlan.from_export(stage08_export)
+    out=convert_prepared_plan(p,plugin_profile=stage08_profile)
+    assert len(out['gantt']['dependenciesData'])==5
+    stage08_export['tasks'][3]['effective_calendar_key']['value']='different'
+    out=convert_prepared_plan(PreparedPlan.from_export(stage08_export),plugin_profile=stage08_profile)
+    assert len(out['gantt']['dependenciesData'])==0
+    assert any(d['code']=='dependency_calendar_basis_unsupported' for d in out['diagnostics'])
+
+
+def test_prepared_golden_bytes_and_storage(stage08_export,stage08_profile):
+    import hashlib,json
+    golden=Path(__file__).parent/'fixtures/golden'
+    for item in json.loads((golden/'manifest.json').read_text())['fixtures']:
+        assert hashlib.sha256((golden/item['path']).read_bytes()).hexdigest()==item['sha256']
+    result=convert_prepared_plan(PreparedPlan.from_export(stage08_export,timezone_hint='Europe/Moscow'),plugin_profile=stage08_profile)
+    assert representation_bytes(result)==(golden/'prepared-unit-gantt.json').read_bytes()
+    assert result['summary']['storage_html']==(golden/'prepared-unit-storage.xml').read_text()
+    assert 'Трудозатраты' not in result['summary']['storage_html']
+    assert 'work' not in result['summary']['storage_html']
+
+
+
+def test_prepared_summary_dependency_and_unrepresented_scheduling(stage08_export,stage08_profile):
+    stage08_export['dependencies'][0]['predecessor_task_key']='root'
+    stage08_export['tasks'][2]['active']={'value':False,'quality':'ok','reason':None}
+    stage08_export['tasks'][2]['leveling_delay']['quantity']['amount']='1'
+    out=convert_prepared_plan(PreparedPlan.from_export(stage08_export),plugin_profile=stage08_profile)
+    codes={d['code'] for d in out['diagnostics']}
+    assert {'summary_dependency_unverified','inactive_task_unverified','leveling_delay_unrepresented'}<=codes
+    assert out['source_semantics']['dependencies'][0]['predecessor_task_key']=='root'
+    assert not out['publishable']

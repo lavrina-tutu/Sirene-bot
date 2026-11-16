@@ -186,3 +186,32 @@ def test_real_parse_cache_one_read_same_bytes_different_names(tmp_path, request)
                     "source_sha256": key["source_sha256"], "semantic_sha256": first.semantic_hash,
                     "scope": "new prepared branch only; legacy calendar/CSV paths are stage 08"}
         (root / "reports/cache-read-evidence.json").write_text(json.dumps(evidence, indent=2) + "\n")
+
+
+def test_derived_representation_cache_profile_template_root_and_corruption(stage08_export,stage08_profile,tmp_path,monkeypatch,request):
+    from prepared_plan import PreparedPlan
+    from mpp_convert import representation_bytes
+    import mpp_convert
+    p=PreparedPlan.from_export(stage08_export,timezone_hint='Europe/Moscow')
+    counters={}
+    cache=RepresentationCache(tmp_path/'cache',counters=counters)
+    first=cache.convert_prepared(p,plugin_profile=stage08_profile)
+    assert counters=={'cache_miss':1}
+    builder=mpp_convert.convert_prepared_plan
+    def no_build(*a,**k):raise AssertionError('derived cache hit must not rebuild')
+    monkeypatch.setattr(mpp_convert,'convert_prepared_plan',no_build)
+    again=cache.convert_prepared(p,plugin_profile=stage08_profile)
+    assert representation_bytes(first)==representation_bytes(again) and counters['cache_hit']==1
+    monkeypatch.setattr(mpp_convert,'convert_prepared_plan',builder)
+    path=next(cache.root.glob('*.json'));path.write_bytes(b'truncated')
+    assert representation_bytes(cache.convert_prepared(p,plugin_profile=stage08_profile))==representation_bytes(first)
+    assert counters['cache_miss']==2
+    stage08_profile.document['version']='unit-v2'
+    cache.convert_prepared(p,plugin_profile=stage08_profile)
+    assert counters['cache_miss']==3
+    cache.convert_prepared(p,plugin_profile=stage08_profile,root_task_key='root')
+    assert counters['cache_miss']==4
+    cache.convert_prepared(p,plugin_profile=stage08_profile,template_json={'eventsData':[],'macroConfig':{'x':1}})
+    assert counters['cache_miss']==5
+    root=getattr(request.config,'_acceptance_root',tmp_path)
+    (root/'reports/stage08-cache.json').write_text(json.dumps({'counters':counters,'MPXJ_read':0,'source':'pure prepared conversion; reader forbidden by separate instrumentation test'},indent=2))

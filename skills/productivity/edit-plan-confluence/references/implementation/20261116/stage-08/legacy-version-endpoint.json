@@ -1,0 +1,8 @@
+{
+  "scope": "Read-only observation of unchanged legacy helper; stage08 controls use checked current metadata plus exact version download and browser bytes.",
+  "page_id": "537571938",
+  "attachment_id": "537571940",
+  "version": 93,
+  "http_status": 400,
+  "message": "{\"statusCode\":400,\"data\":{\"authorized\":false,\"valid\":true,\"allowedInReadOnlyMode\":true,\"errors\":[],\"successful\":false},\"message\":\"Only historical content can be fetched by version ('status=trashed' cannot be used with 'version' parameter)\",\"reason\":\"Bad Request\"}"
+}

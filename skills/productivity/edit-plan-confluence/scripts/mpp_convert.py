@@ -1,4 +1,4 @@
-"""MPP CSV → gantt-chart-planner JSON (no idCounter=300000)."""
+"""PreparedPlan → versioned Gantt representation; legacy CSV adapter is separate."""
 from __future__ import annotations
 
 import ast
@@ -162,7 +162,7 @@ def build_resources(
     return plugin_res, name_to_id
 
 
-def build_dependencies(rows, flat, start_id, drop_links=None):
+def _csv_dependencies(rows, flat, start_id, drop_links=None):
     deps: list[dict[str, Any]] = []
     warnings: list[str] = []
     dep_id = start_id
@@ -197,9 +197,11 @@ def build_dependencies(rows, flat, start_id, drop_links=None):
 
 
 def critical_path_days(gantt: dict[str, Any]) -> float:
-    """Срок проекта, как его пересчитает плагин: сумма длительностей
-    по самой длинной цепочке зависимостей (FS, type==2). Плагин игнорирует
-    готовые start/end в JSON и считает критический путь сам."""
+    """Legacy FS/zero-lag longest-path heuristic, never a plugin observation.
+
+    No calendar/resource/constraint support. Do not use for schedule verification
+    or automatic link removal. The prepared branch does not call this function.
+    """
     def walk(nodes):
         for n in nodes:
             yield n
@@ -227,7 +229,7 @@ def critical_path_days(gantt: dict[str, Any]) -> float:
     return max(longest(nid) for nid in nodes)
 
 
-def build_assignments(
+def _csv_assignments(
     assignments: list[dict[str, str]],
     flat: dict[int, dict[str, Any]],
     name_to_id: dict[str, int],
@@ -318,9 +320,9 @@ def convert_mpp_csv(
         + ([int(x) for x in flat] if flat else [0]),
         default=0,
     )
-    deps, _warn = build_dependencies(rows, flat, max_used + 1, drop_links=drop_links)
+    deps, _warn = _csv_dependencies(rows, flat, max_used + 1, drop_links=drop_links)
     max_used = max(max_used, max((d["id"] for d in deps), default=0))
-    asn_out, _ = build_assignments(asns, flat, name_to_id, max_used + 1)
+    asn_out, _ = _csv_assignments(asns, flat, name_to_id, max_used + 1)
 
     out = deepcopy(tmpl)
     preserve_meta_keys(tmpl, out)
@@ -365,3 +367,231 @@ def count_tasks(root: dict[str, Any]) -> int:
 
     walk(root)
     return n
+
+
+CONVERTER_VERSION = 'prepared-gantt-v1'
+
+
+def _number(value):
+    """Plugin JSON numbers: reject precision loss, retain exact source in evidence."""
+    from itogo import decimal_value
+    amount = decimal_value(value)
+    if amount is None:
+        return None
+    out = int(amount) if amount == amount.to_integral_value() else float(amount)
+    return out if decimal_value(out) == amount else None
+
+
+def build_dependencies(rows, task_mapping, start_id, *, plugin_profile, diagnostics, project, task_calendars=None):
+    from itogo import field_value, decimal_value
+    deps = []
+    for index, row in enumerate(rows):
+        key = row.get('dependency_key',f'row:{index}')
+        problems = []
+        pred = task_mapping.get(row.get('predecessor_task_key'))
+        succ = task_mapping.get(row.get('successor_task_key'))
+        if 'error' in row or pred is None or succ is None or pred == succ or row.get('external'):
+            problems.append('dependency_endpoint_invalid')
+        typ = row.get('link_type')
+        code = plugin_profile.code('relation',typ)
+        if code is None:
+            problems.append('dependency_type_unsupported')
+        lag = field_value(row.get('lag_value'))
+        amount = _number(lag.get('amount')) if isinstance(lag,dict) else None
+        unit = lag.get('units') if isinstance(lag,dict) else None
+        unit_code = plugin_profile.code('lag_unit',unit)
+        elapsed = lag.get('elapsed') if isinstance(lag,dict) else None
+        if unit_code is None or type(elapsed) is not bool or elapsed != str(unit).startswith('ELAPSED_'):
+            problems.append('dependency_lag_unit_unsupported')
+        if amount is None:
+            problems.append('dependency_lag_missing_or_imprecise')
+        if amount is not None:
+            sign = 'negative' if amount < 0 else 'positive' if amount > 0 else 'zero'
+            if not plugin_profile.supports('lag:'+sign):
+                problems.append('dependency_lag_sign_unsupported')
+            if not plugin_profile.supports('dependency:'+str(typ)+':'+str(unit)+':'+sign):
+                problems.append('dependency_combination_unverified')
+        basis = field_value(row.get('lag_calendar')) or field_value(row.get('project_lag_calendar'))
+        if basis is None:
+            basis = field_value(project.get('relationship_lag_calendar'))
+        supported_basis = plugin_profile.supports('lag_basis:'+str(basis))
+        if not supported_basis and basis in ('PREDECESSOR','SUCCESSOR','PROJECT') and task_calendars:
+            pred_cal = task_calendars.get(row.get('predecessor_task_key'))
+            succ_cal = task_calendars.get(row.get('successor_task_key'))
+            default_cal = field_value(project.get('default_calendar_key'))
+            supported_basis = (plugin_profile.supports('lag_basis:equal_endpoint_calendars')
+                               and pred_cal is not None and pred_cal == succ_cal == default_cal)
+        if not supported_basis:
+            problems.append('dependency_calendar_basis_unsupported')
+        if problems:
+            diagnostics.extend({'code':p,'entity':key,'source':deepcopy(row),'represented':None} for p in problems)
+            continue
+        deps.append({'id':start_id+index,'from':pred,'to':succ,'type':code,
+                     'lag':amount,'lagUnit':unit_code,'active':True})
+    return deps
+
+
+def build_assignments(assignments, task_mapping, resource_mapping, start_id, *, diagnostics, excluded_task_keys=()):
+    from itogo import field_value
+    out = []
+    for index,a in enumerate(assignments):
+        if a.get('task_key') in excluded_task_keys:
+            continue
+        task, resource = task_mapping.get(a.get('task_key')), resource_mapping.get(a.get('resource_key'))
+        units = _number(field_value(a.get('units')))
+        if task is None or resource is None or units is None or 'error' in a:
+            diagnostics.append({'code':'assignment_partial','entity':a.get('assignment_key'),
+                                'source':deepcopy(a),'represented':None})
+            continue
+        out.append({'id':start_id+index,'event':task,'resource':resource,'units':units})
+    return out
+
+
+def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, root_task_key=None):
+    """Pure conversion result with publishable bytes and explicit semantic losses.
+
+    Diagnostics stay outside plugin JSON. Unsupported rows remain in source_semantics;
+    publishable=False prevents a caller treating omitted/partial data as admitted.
+    Admission, archival and network execution belong to the subsequent stage.
+    """
+    from decimal import localcontext
+    from itogo import compute_itogo_from_prepared, field_value, quantity_minutes, decimal_value
+    from mpp_calendar import calendar_from_prepared
+    from plugin_profile import PluginProfile
+    prepared.validate()
+    profile = plugin_profile or PluginProfile.load()
+    profile.validate()
+    data = prepared.normalized_data
+    tmpl = deepcopy(template_json if template_json is not None else json.loads(EMPTY_TEMPLATE.read_text()))
+    summary = compute_itogo_from_prepared(prepared,root_task_key=root_task_key)
+    cal = calendar_from_prepared(prepared,plugin_profile=profile)
+    diagnostics = cal['diagnostics'][:]
+    diagnostics.extend({'code':r,'entity':'summary','source':summary['source_duration'],'represented':None} for r in summary['reasons'])
+    tasks = [t for t in data['tasks'] if 'error' not in t and t.get('id') != 0]
+    task_mapping = {}
+    # Source-local keys define identity; ID collisions never merge tasks.
+    source_ids = [t.get('id') for t in tasks]
+    used_ids = set()
+    for i,t in enumerate(tasks):
+        sid = t.get('id')
+        ident = sid if type(sid) is int and sid > 0 and source_ids.count(sid) == 1 else max([0,*[x for x in source_ids if type(x) is int],*used_ids])+1
+        task_mapping[t['task_key']] = ident; used_ids.add(ident)
+    nodes = {}
+    with localcontext() as ctx:
+        ctx.prec = 80
+        for t in tasks:
+            key=t['task_key']
+            node=_base_event({})
+            node.update(id=task_mapping[key],name=t.get('name'),startDate=field_value(t.get('start')),
+                        endDate=field_value(t.get('finish')),rollup=t.get('summary'),children=[])
+            minutes,_,reason=quantity_minutes(t.get('duration'),data['project'],working_only=True)
+            day=decimal_value(field_value(data['project'].get('minutes_per_day')))
+            duration=_number(minutes/day) if minutes is not None and day is not None and day > 0 else None
+            if duration is not None and duration < 0:
+                reason='task_duration_negative'
+            if reason or duration is None:
+                diagnostics.append({'code':reason or 'task_duration_basis_missing','entity':key,'source':t.get('duration'),'represented':None})
+            node['duration']=duration
+            if node['startDate'] is None or node['endDate'] is None:
+                diagnostics.append({'code':'task_dates_missing','entity':key,'source':deepcopy(t),'represented':None})
+            node['percentDone']=_number(field_value(t.get('percent_complete')))
+            mode=field_value(t.get('task_mode'))
+            if mode in ('AUTO_SCHEDULED','Auto Scheduled','AUTO'):
+                node['manuallyScheduled']=False
+            else:
+                diagnostics.append({'code':'task_mode_unverified','entity':key,'source':t.get('task_mode'),'represented':None})
+            if field_value(t.get('active')) is False:
+                diagnostics.append({'code':'inactive_task_unverified','entity':key,'source':t.get('active'),'represented':None})
+            leveling = t.get('leveling_delay',{}).get('quantity')
+            if leveling and decimal_value(leveling.get('amount')) != 0:
+                diagnostics.append({'code':'leveling_delay_unrepresented','entity':key,'source':t.get('leveling_delay'),'represented':None})
+            if t.get('milestone') is True and duration != 0:
+                diagnostics.append({'code':'milestone_duration_nonzero','entity':key,'source':t.get('duration'),'represented':None})
+            node['calendar']=None
+            binding=field_value(t.get('effective_calendar_key'))
+            if profile.supports('calendar:bindings:tasks') and binding in cal['mapping']:
+                node['calendar']=cal['mapping'][binding]
+            metric=summary['work']['per_task'].get(key)
+            node['effort']=_number(metric['hours']) if metric and metric['quality']=='complete' else None
+            nodes[key]=node
+            # Never silently assert support for planning fields outside the proven profile.
+            for field in ('constraint_type','constraint_date','secondary_constraint_type','secondary_constraint_date','deadline',
+                          'task_type','segments','ignore_resource_calendar','effort_driven'):
+                value=field_value(t.get(field))
+                harmless = value in (None,False,[], 'AS_SOON_AS_POSSIBLE','As Soon As Possible','FIXED_DURATION')
+                if not harmless:
+                    diagnostics.append({'code':'task_semantics_unrepresented:'+field,'entity':key,'source':deepcopy(t.get(field)),'represented':None})
+    roots=[]
+    source_tasks={t['task_key']:t for t in data['tasks'] if 'error' not in t}
+    for t in tasks:
+        key=t['task_key']; parent=field_value(t.get('parent_task_key')); seen={key}
+        while parent in source_tasks and source_tasks[parent].get('id')==0:
+            if parent in seen:
+                raise ValueError('cyclic_task_hierarchy')
+            seen.add(parent);parent=field_value(source_tasks[parent].get('parent_task_key'))
+        check=parent
+        while check in nodes:
+            if check in seen:
+                raise ValueError('cyclic_task_hierarchy')
+            seen.add(check);check=field_value(source_tasks[check].get('parent_task_key'))
+        if parent in nodes:
+            nodes[parent]['children'].append(nodes[key])
+        else:
+            roots.append(nodes[key])
+            if parent is not None:
+                diagnostics.append({'code':'task_parent_missing','entity':key,'source':parent,'represented':None})
+    for i,node in enumerate(roots):
+        fill_parent_fields(node,parent_index=i)
+    resources=[];resource_mapping={};next_id=max(used_ids,default=0)+1
+    for r in data['resources']:
+        if 'error' in r:
+            diagnostics.append({'code':'resource_partial','entity':r.get('resource_key'),'source':r,'represented':None});continue
+        key=r['resource_key'];resource_mapping[key]=next_id
+        node={'id':next_id,'parentId':None,'name':r.get('name'),'resourceType':'custom','eventColor':'red'}
+        binding=field_value(r.get('calendar_key')) or field_value(r.get('base_calendar_key'))
+        if profile.supports('calendar:bindings:resources') and binding in cal['mapping']:
+            node['calendar']=cal['mapping'][binding]
+        resources.append(node);next_id+=1
+    for dependency in data['dependencies']:
+        endpoints = [source_tasks.get(dependency.get(k),{}) for k in ('predecessor_task_key','successor_task_key')]
+        if any(t.get('summary') is True for t in endpoints) and not profile.supports('dependency:summary_endpoint'):
+            diagnostics.append({'code':'summary_dependency_unverified','entity':dependency.get('dependency_key'),
+                                'source':deepcopy(dependency),'represented':None})
+    dependency_start = next_id
+    deps=build_dependencies(data['dependencies'],task_mapping,next_id,plugin_profile=profile,diagnostics=diagnostics,project=data['project'],
+                            task_calendars={t['task_key']:field_value(t.get('effective_calendar_key')) for t in tasks})
+    next_id+=len(data['dependencies'])
+    assignment_start = next_id
+    assignments=build_assignments(data['assignments'],task_mapping,resource_mapping,next_id,diagnostics=diagnostics,
+                                  excluded_task_keys={t['task_key'] for t in data['tasks'] if t.get('id') == 0})
+    for name in ('tasks','dependencies','external_dependencies','resources','assignments'):
+        if data['collections'][name]['status']!='complete':
+            diagnostics.append({'code':'source_collection_incomplete','entity':name,'source':data['collections'][name],'represented':None})
+    graph=data['diagnose_graph']
+    for name in ('cycles','self_references','dangling_dependencies','external_dependencies'):
+        if graph.get(name):
+            diagnostics.append({'code':'graph_problem:'+name,'entity':'graph','source':graph[name],'represented':None})
+    out=deepcopy(tmpl)
+    out.update(eventsData=roots,resourcesData=resources,dependenciesData=deps,assignmentsData=assignments,calendarsData=cal['calendarsData'])
+    default_cal=cal['bindings']['project']
+    if profile.supports('calendar:bindings:project') and default_cal in cal['mapping']:
+        out['calendar']=cal['mapping'][default_cal]
+    else:
+        out.pop('calendar',None)
+    if summary['start']:
+        out['startDate']=summary['start']
+    out['idCounter']=compute_id_counter(out)
+    source_semantics={k:deepcopy(data[k]) for k in ('tasks','dependencies','external_dependencies','resources','assignments','calendars','project','collections','diagnose_graph')}
+    return {'converter_version':CONVERTER_VERSION,'normalized_sha256':prepared.semantic_hash,
+            'plugin_profile_fingerprint':profile.fingerprint,'summary':summary,'gantt':out,
+            'mappings':{'tasks':task_mapping,'resources':resource_mapping,'calendars':cal['mapping'],
+                        'dependencies':{r.get('dependency_key',f'row:{i}'):dependency_start+i for i,r in enumerate(data['dependencies']) if any(d['id']==dependency_start+i for d in deps)},
+                        'assignments':{r.get('assignment_key',f'row:{i}'):assignment_start+i for i,r in enumerate(data['assignments']) if any(a['id']==assignment_start+i for a in assignments)}},
+            'source_semantics':source_semantics,'diagnostics':diagnostics,'publishable':not diagnostics,
+            'schedule':{'status':'not_verified','source':'no_model_replay_or_live_observation'}}
+
+
+def representation_bytes(result):
+    """Only plugin data is published, never diagnostics, work summary or provenance."""
+    from prepared_plan import canonical_bytes
+    return canonical_bytes(result['gantt'])

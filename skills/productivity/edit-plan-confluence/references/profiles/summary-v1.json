@@ -1,0 +1,14 @@
+{
+  "id": "summary-v1",
+  "version": "1.0.0",
+  "root": "unique_top_level_nonservice_summary_or_explicit_task_key",
+  "days": "ceil_root_working_duration_using_source_minutes_per_unit",
+  "elapsed_duration": "unsupported_without_explicit_transformation",
+  "dates": "source_local_in_resolved_timezone;convert_offset_dates_to_resolved_timezone",
+  "work": "unique_assignments_of_nonservice_nonsummary_tasks_including_milestones",
+  "timephased": "never_add_to_assignment_work",
+  "missing": "known_sum_partial;never_zero_total",
+  "arithmetic": "Decimal;no_per_task_rounding",
+  "display": {"decimal_places": 3, "rounding": "ROUND_HALF_UP", "trim_zeroes": true},
+  "storage_work": false
+}

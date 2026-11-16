@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from macro import macro_span
-from mpp_convert import read_csv_rows
+
 
 _MOFS_ROOT = Path.home() / "USERTOOLS" / "MofsIndex"
 if str(_MOFS_ROOT) not in sys.path:
@@ -45,6 +45,7 @@ def format_date_ddmmyy(dt: str | None) -> str:
 
 
 def compute_itogo_from_csv(tasks_csv: Path, assignments_csv: Path) -> tuple[str, str, int, int]:
+    from mpp_convert import read_csv_rows
     tasks = read_csv_rows(tasks_csv)
     root = next((r for r in tasks if r.get("outline_level") == "1" and r.get("id") != "0"), None)
     if not root:
@@ -197,3 +198,195 @@ def verify_itogo(storage: str, d1: str, d2: str, n_days: int) -> dict[str, bool]
         "itogo_above_macro": bool(ITOGO_LINE1_RE.search(prefix)),
         "no_trudozatraty": not bool(re.search(r"Трудозатрат", text, re.I)),
     }
+
+
+# Prepared branch: pure computation from an already parsed immutable source.
+from decimal import Decimal, InvalidOperation, ROUND_CEILING, ROUND_HALF_UP, localcontext
+from zoneinfo import ZoneInfo
+import json
+
+
+def field_value(field):
+    if isinstance(field, dict):
+        return field.get('value') if field.get('quality') == 'ok' else None
+    return field
+
+
+def decimal_value(value):
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        number = Decimal(str(value))
+        return number if number.is_finite() else None
+    except InvalidOperation:
+        return None
+
+
+def quantity_minutes(field, project, *, working_only=False):
+    """Exact minutes plus the explicit source coefficients; never assume 8h/day."""
+    if not isinstance(field, dict) or field.get('quality') != 'ok':
+        return None, {}, 'quantity_missing'
+    q = field.get('quantity') or field.get('value')
+    if not isinstance(q, dict):
+        return None, {}, 'quantity_missing'
+    amount = decimal_value(q.get('amount'))
+    unit = q.get('units')
+    elapsed = q.get('elapsed')
+    if amount is None or not isinstance(unit, str) or type(elapsed) is not bool:
+        return None, {}, 'quantity_invalid'
+    if elapsed != unit.startswith('ELAPSED_'):
+        return None, {}, 'elapsed_unit_conflict'
+    if elapsed and working_only:
+        return None, {}, 'elapsed_to_working_undefined'
+    unit = unit.removeprefix('ELAPSED_')
+    coefficients = {'MINUTES': Decimal(1), 'HOURS': Decimal(60)}
+    parameters = {}
+    if unit in ('DAYS', 'WEEKS', 'MONTHS', 'YEARS'):
+        if elapsed:
+            # Months/years have no fixed elapsed length.
+            factor = {'DAYS': Decimal(1440), 'WEEKS': Decimal(10080)}.get(unit)
+        else:
+            key = 'minutes_per_' + {'DAYS':'day','WEEKS':'week','MONTHS':'month','YEARS':'year'}[unit]
+            factor = decimal_value(field_value(project.get(key)))
+            parameters[key] = str(factor) if factor is not None else None
+        if factor is None or factor <= 0:
+            return None, parameters, 'source_unit_basis_missing'
+    else:
+        factor = coefficients.get(unit)
+    if factor is None:
+        return None, parameters, 'unknown_quantity_units'
+    return amount * factor, parameters, None
+
+
+def summary_roots(data):
+    tasks = {t['task_key']: t for t in data['tasks'] if 'error' not in t}
+    roots = []
+    for key, task in tasks.items():
+        if task.get('id') == 0 or task.get('summary') is not True or not task.get('name'):
+            continue
+        parent = field_value(task.get('parent_task_key'))
+        seen = {key}
+        while parent in tasks and tasks[parent].get('id') == 0:
+            if parent in seen:
+                raise ValueError('cyclic_task_hierarchy')
+            seen.add(parent)
+            parent = field_value(tasks[parent].get('parent_task_key'))
+        if parent is None:
+            roots.append(key)
+    return roots
+
+
+def format_work_hours(value):
+    if value is None:
+        return None
+    with localcontext() as ctx:
+        ctx.prec = max(50, len(Decimal(value).as_tuple().digits) + 10)
+        out = format(Decimal(value).quantize(Decimal('0.001'), rounding=ROUND_HALF_UP), 'f')
+    return out.rstrip('0').rstrip('.') if '.' in out else out
+
+
+def work_metrics(data):
+    tasks = {t['task_key']:t for t in data['tasks'] if 'error' not in t}
+    total = Decimal(0)
+    known = missing = excluded = 0
+    seen = {}
+    per_task = {}
+    reasons = []
+    with localcontext() as ctx:
+        ctx.prec = 80
+        for a in data['assignments']:
+            key = a.get('assignment_key')
+            if key in seen:
+                if seen[key] != a:
+                    missing += 1; reasons.append('conflicting_assignment_identity')
+                continue
+            if key is not None:
+                seen[key] = a
+            t = tasks.get(a.get('task_key'))
+            if t and (t.get('id') == 0 or t.get('summary') is True):
+                excluded += 1
+                continue
+            if not t or 'error' in a or t.get('summary') is None or t.get('id') is None or key is None:
+                missing += 1; reasons.append('assignment_scope_unknown'); continue
+            minutes, _, reason = quantity_minutes(a.get('work'), data['project'])
+            task_total = per_task.setdefault(t['task_key'], {'known_hours': Decimal(0), 'missing': 0, 'known': 0})
+            if reason:
+                missing += 1; task_total['missing'] += 1; reasons.append(reason); continue
+            hours = minutes / Decimal(60)
+            total += hours; known += 1
+            task_total['known_hours'] += hours; task_total['known'] += 1
+    status = data['collections']['assignments']['status']
+    complete = status == 'complete' and missing == 0
+    value = str(total) if known or complete else None
+    return {'hours':value, 'display_hours':format_work_hours(value),
+            'quality':'complete' if complete else 'partial' if known else status if status != 'complete' else 'missing',
+            'known_assignments':known, 'missing_assignments':missing, 'excluded_assignments':excluded,
+            'reasons':sorted(set(reasons)),
+            'per_task':{key:{**v,'known_hours':str(v['known_hours']),
+                             'hours':str(v['known_hours']) if v['known'] or complete else None,
+                             'quality':'partial' if v['missing'] or status != 'complete' else 'complete'}
+                        for key,v in per_task.items()}}
+
+
+def compute_itogo_from_prepared(prepared, *, root_task_key=None, summary_profile=None):
+    from prepared_plan import ROOT, fingerprint
+    prepared.validate()
+    data = prepared.normalized_data
+    expected = json.loads((ROOT / 'references/profiles/summary-v1.json').read_text())
+    profile = summary_profile or expected
+    if profile != expected:
+        raise ValueError('unsupported_summary_profile')
+    candidates = summary_roots(data)
+    if root_task_key is None:
+        chosen = candidates[0] if len(candidates) == 1 else None
+    elif root_task_key not in candidates:
+        raise ValueError('invalid_summary_root_choice')
+    else:
+        chosen = root_task_key
+    reasons = []
+    out = {'profile':profile['id'], 'profile_fingerprint':fingerprint(profile), 'root_candidates':candidates,
+           'root_task_key':chosen, 'explicit_root_choice':root_task_key is not None,
+           'start':None, 'finish':None, 'd1':None, 'd2':None, 'n_days':None,
+           'duration_working_days':None,'source_duration':None,'coefficients':{}, 'work':work_metrics(data)}
+    if chosen is None:
+        reasons.append('summary_root_choice_required' if candidates else 'summary_root_missing')
+    else:
+        root = next(t for t in data['tasks'] if t.get('task_key') == chosen)
+        out.update(start=field_value(root.get('start')), finish=field_value(root.get('finish')), source_duration=root.get('duration'))
+        with localcontext() as ctx:
+            ctx.prec = 80
+            minutes, coefficients, reason = quantity_minutes(root.get('duration'), data['project'], working_only=True)
+            per_day = decimal_value(field_value(data['project'].get('minutes_per_day')))
+            coefficients['minutes_per_day'] = str(per_day) if per_day is not None else None
+            out['coefficients'] = coefficients
+            if reason or per_day is None or per_day <= 0 or minutes is None or minutes < 0:
+                reasons.append(reason or 'source_day_basis_missing')
+            else:
+                days = minutes / per_day
+                out['duration_working_days'] = str(days)
+                out['n_days'] = int(days.to_integral_value(rounding=ROUND_CEILING))
+        tz = data.get('resolved_timezone')
+        if not tz:
+            reasons.append('summary_timezone_unresolved')
+        for src, dst in [('start','d1'),('finish','d2')]:
+            if out[src] is None:
+                reasons.append('summary_date_missing'); continue
+            try:
+                dt = datetime.fromisoformat(out[src].replace('Z','+00:00'))
+                if tz and dt.tzinfo:
+                    dt = dt.astimezone(ZoneInfo(tz))
+                if tz:
+                    out[dst] = dt.strftime('%d.%m.%y')
+            except ValueError:
+                reasons.append('summary_date_invalid')
+    valid_tasks = [t for t in data['tasks'] if 'error' not in t]
+    out['counts'] = {'task_count':len(valid_tasks),'archive_task_count':len(valid_tasks),
+                     'service_task_count':sum(t.get('id') == 0 for t in valid_tasks),
+                     'display_task_count':sum(t.get('id') != 0 for t in valid_tasks),
+                     'dependency_count':sum('error' not in d for d in data['dependencies']),
+                     'external_dependency_count':sum('error' not in d for d in data['external_dependencies']),
+                     'task_extraction_errors':sum('error' in t for t in data['tasks'])}
+    out['reasons'] = sorted(set(reasons))
+    out['publishable'] = not reasons
+    out['storage_html'] = build_itogo_html(out['d1'],out['d2'],out['n_days'],0) if not reasons else None
+    return out

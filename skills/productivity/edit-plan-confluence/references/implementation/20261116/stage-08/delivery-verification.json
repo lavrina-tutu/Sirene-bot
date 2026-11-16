@@ -1,0 +1,20 @@
+{
+  "gate": "passed",
+  "pytest_rc": 0,
+  "passed": 282,
+  "optional_legacy_skips": 2,
+  "mandatory_skips": 0,
+  "protected_files_checked": 273,
+  "changed_protected_files": [],
+  "source_freeze_verified": true,
+  "report_source_hashes_verified": true,
+  "junit_failures": 0,
+  "junit_errors": 0,
+  "credential_scan_matches": 0,
+  "plugin_evidence_verified": true,
+  "live_controls": 11,
+  "browser_bytes_verified": true,
+  "external_components_modified": [],
+  "R_matrix_used_unchanged": true,
+  "legacy_helper_http_status": 400
+}

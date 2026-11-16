@@ -291,8 +291,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 through 07")
+    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 08")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -326,6 +326,9 @@ def pytest_collection_modifyitems(config, items):
         else:
             group = "unit"
         item.add_marker(getattr(pytest.mark, group))
+    if config.getoption('--acceptance-stage') == '08':
+        order={'unit':0,'archive_integration':1,'mpp_fixtures':2,'confluence_live':3}
+        items.sort(key=lambda item:(max(order[g] for g in GROUPS if item.get_closest_marker(g)),item.nodeid))
 
 
 def pytest_collection_finish(session):
@@ -333,7 +336,7 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED}[stage]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -352,6 +355,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption("--acceptance-stage") == "08":
+        _stage08_report(session, exitstatus, root)
         return
     if config.getoption("--acceptance-stage") == "07":
         _stage07_report(session, exitstatus, root)
@@ -1031,3 +1037,204 @@ def _stage07_report(session, exitstatus, root):
         '', 'Ограничения:', '']
     lines += ['- '+value for value in limitations]
     (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')
+
+
+@pytest.fixture
+def stage08_export():
+    """Small source contract, manually specified; not an MPP-reader fixture."""
+    def f(value):
+        return {'value':value,'quality':'ok' if value is not None else 'missing','reason':None if value is not None else 'not_set'}
+    def q(amount,units='DAYS'):
+        return {**f(str(amount)+' '+units),'quantity':{'amount':str(amount),'units':units,'source_units':units,'elapsed':units.startswith('ELAPSED_')}}
+    def task(key,ident,summary=False,parent='root',milestone=False):
+        return {'task_key':key,'id':ident,'uid':ident,'name':key,'summary':summary,'milestone':milestone,
+                'outline_level':0 if ident==0 else 1 if parent is None else 2,
+                'parent_task_key':f(parent),'duration':q(0 if milestone else 84.875 if summary else 1),
+                'start':f('2026-01-05T09:00:00'),'finish':f('2026-01-06T18:00:00'),
+                'task_mode':f('AUTO_SCHEDULED'),'percent_complete':f('0'),
+                'calendar_key':f(None),'effective_calendar_key':f('cal'),
+                'constraint_type':f('AS_SOON_AS_POSSIBLE'),'constraint_date':f(None),'segments':f([])}
+    tasks=[task('service',0,True,None),task('root',1,True,None),task('a',2),task('b',3,milestone=True)]
+    resources=[{'resource_key':'r1','id':1,'uid':1,'name':'Same name','calendar_key':f('cal'),'base_calendar_key':f(None)},
+               {'resource_key':'r2','id':2,'uid':2,'name':'Same name','calendar_key':f('cal'),'base_calendar_key':f(None)}]
+    assignments=[{'assignment_key':'asn1','task_key':'a','resource_key':'r1','work':q('0.1','HOURS'),'units':f('0'),'effective_calendar_key':f('cal'),'timephased':[{'work':q('999','HOURS')}]},
+                 {'assignment_key':'asn2','task_key':'b','resource_key':'r2','work':q('0.2','HOURS'),'units':f('100'),'effective_calendar_key':f('cal')},
+                 {'assignment_key':'asn0','task_key':'service','resource_key':'r1','work':q('999','HOURS'),'units':f('100')},
+                 {'assignment_key':'asns','task_key':'root','resource_key':'r1','work':q('999','HOURS'),'units':f('100')}]
+    dependencies=[{'dependency_key':'dep'+str(i),'predecessor_task_key':'a','successor_task_key':'b','link_type':typ,
+                   'lag_value':f({'amount':amount,'units':unit,'source_units':unit,'elapsed':unit.startswith('ELAPSED_')}),
+                   'lag_calendar':f(None),'project_lag_calendar':f('PREDECESSOR'),'external':False}
+                  for i,(typ,amount,unit) in enumerate([('FS','0','DAYS'),('SS','-1','HOURS'),('FF','2','ELAPSED_DAYS'),('SF','0.5','DAYS'),('FS','1','DAYS')])]
+    weekdays=[{'day':day,'working':f(day not in ('SATURDAY','SUNDAY')),'day_type':f('WORKING' if day not in ('SATURDAY','SUNDAY') else 'NON_WORKING'),
+               'intervals':f([{'start':f('09:00'),'end':f('12:00')},{'start':f('13:00'),'end':f('18:00')}] if day not in ('SATURDAY','SUNDAY') else [])}
+              for day in ('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY')]
+    calendars=[{'calendar_key':'cal','name':'Base','parent_key':f(None),'weekdays':weekdays,'weekdays_quality':'ok',
+                'exceptions':[{'from_date':f('2026-01-06'),'to_date':f('2026-01-06'),'working':f(True),
+                               'intervals':f([{'start':f('10:00'),'end':f('11:00')}]),'recurrence':f(None)}],
+                'exceptions_quality':{'status':'complete'},'work_weeks':[],'work_weeks_quality':{'status':'complete'}}]
+    data={'export_version':'full-export-v2','provenance':{'sha256':'a'*64,'size_bytes':1,'reader':'unit-only','mpxj':'unit-only','jpype':'unit-only'},
+          'project':{'status_date':f(None),'minutes_per_day':f('480'),'minutes_per_week':f('2400'),'minutes_per_month':f('9600'),'minutes_per_year':f('115200'),
+                     'default_calendar_key':f('cal'),'relationship_lag_calendar':f('PREDECESSOR')},
+          'tasks':tasks,'dependencies':dependencies,'resources':resources,'assignments':assignments,'calendars':calendars,
+          'external_dependencies':[],'diagnose_graph':{'cycles':[],'self_references':[],'dangling_dependencies':[],'external_dependencies':[],'schedule_status':'not_verified'},'collections':{}}
+    from copy import deepcopy
+    donor=json.loads((FIXTURES/'synthetic/relations-all-types.json').read_text())
+    for group in ('tasks','dependencies','resources','assignments','calendars'):
+        data[group]=[{**deepcopy(donor[group][0]),**row} for row in data[group]]
+    for cal in data['calendars']:
+        for ex in cal['exceptions']:
+            ex.setdefault('name',f('unit exception'))
+        for quality in ('exceptions_quality','work_weeks_quality'):
+            cal[quality]={'status':'complete','count':len(cal['exceptions'] if quality=='exceptions_quality' else cal['work_weeks']),'reason':None}
+    for key in ('tasks','dependencies','external_dependencies','resources','assignments','calendars'):
+        data['collections'][key]={'status':'complete','count':len(data[key]),'reason':None}
+    data['collections']['baseline_values']={'status':'complete','count':0,'reason':None}
+    return data
+
+
+@pytest.fixture
+def stage08_profile(tmp_path):
+    """Test double with intentionally different relation codes; no live claims."""
+    from plugin_profile import PluginProfile
+    evidence=tmp_path/'test-only-evidence.json'
+    evidence.write_text(json.dumps({'scope':'unit compiler contract, not installed plugin verification',
+                                    'relation_codes':{'EndToStart':12,'StartToStart':10,'EndToEnd':13,'StartToEnd':11},
+                                    'dependencies':[{'lagUnit':u} for u in ('day','hour','eday')]}))
+    caps=['relation:'+t for t in ('FS','SS','FF','SF')]
+    caps+=['lag_unit:'+u for u in ('DAYS','HOURS','ELAPSED_DAYS')]
+    caps+=['lag:'+s for s in ('negative','positive','zero')]
+    caps+=['dependency:'+t+':'+u+':'+sign for t in ('FS','SS','FF','SF') for u in ('DAYS','HOURS','ELAPSED_DAYS') for sign in ('zero','positive','negative')]
+    caps+=['lag_basis:PREDECESSOR','calendar:intervals','calendar:exceptions','calendar:inheritance']
+    caps+=['calendar:bindings:'+k for k in ('project','tasks','resources','assignments')]
+    document={'schema_version':1,'id':'installed-gantt-profile','version':'unit-only',
+              'plugin':{'key':'unit-only','version':'unit-only','asset_sha256':None},'confluence_version':None,
+              'codes':{'relation':{'FS':12,'SS':10,'FF':13,'SF':11},'lag_unit':{'DAYS':'day','HOURS':'hour','ELAPSED_DAYS':'eday'}},
+              'capabilities':{k:{'status':'tested_supported','evidence':['unit'],'scope':'synthetic compiler contract only'} for k in caps},
+              'evidence':{'unit':{'path':str(evidence.relative_to(tmp_path)),'sha256':hashlib.sha256(evidence.read_bytes()).hexdigest()}},'limitations':['unit-only']}
+    class UnitProfile(PluginProfile):
+        def validate(self,**kwargs):
+            return super().validate(evidence_root=tmp_path,**kwargs)
+    return UnitProfile(document)
+
+
+STAGE08_REQUIRED = {
+    'test_mpp_convert.py::'+name for name in (
+        'test_prepared_golden_bytes_and_storage', 'test_prepared_lag_basis_only_equivalent_calendars',
+        'test_prepared_dependencies_types_signed_lag_parallel_resources',
+        'test_prepared_unknown_dependency_never_fs_zero',
+        'test_prepared_tree_uses_parent_keys_all_roots_and_partial_assignment',
+        'test_prepared_no_reader_in_converter_calendar_itogo',
+        'test_prepared_hierarchy_cycle_rejected')
+} | {'test_itogo.py::'+name for name in (
+    'test_prepared_summary_ceil','test_prepared_work_exact_summary_service_milestone_and_timephased',
+    'test_prepared_work_missing_partial_not_zero','test_prepared_multiple_roots_explicit_choice',
+    'test_prepared_unknown_basis_blocks_summary','test_prepared_source_coefficients_and_timezone',
+    'test_real_prepared_work_tolerance')
+} | {'test_mpp_calendar.py::'+name for name in (
+    'test_prepared_calendar_intervals_exceptions_inheritance_bindings','test_prepared_calendar_unsupported_is_explicit')
+} | {'test_gate_diff.py::test_four_value_layers_never_promote_model_to_observed',
+     'test_plan_cache.py::test_derived_representation_cache_profile_template_root_and_corruption',
+     'test_plugin_profile.py::test_profile_codes_only_verified_capabilities',
+     'test_plugin_profile.py::test_profile_rejects_unverified_contract',
+     'test_plugin_profile.py::test_installed_profile_has_only_evidence_bound_claims',
+     'test_plugin_controls_live.py::test_installed_plugin_controls_live'}
+STAGE08_REQUIRED |= {'test_itogo.py::test_real_prepared_work_tolerance['+case+'-'+hours+']'
+                     for case,hours in [('A','1576'),('B','2096'),('C','2088'),('D','3136')]}
+STAGE08_REQUIRED |= {'test_itogo.py::test_prepared_summary_ceil['+value+'-'+str(result)+']'
+                     for value,result in [('84.875',85),('76.875',77),('106.875',107),('0',0)]}
+
+
+def _stage08_report(session, exitstatus, root):
+    """Actual stage-08 outcomes; skipped mandatory live never closes the gate."""
+    from prepared_plan import fingerprint
+    config=session.config
+    initial_path=root/'reports/initial-state.json'
+    initial=json.loads(initial_path.read_text()) if initial_path.is_file() else {}
+    protected=initial.get('protected_hashes',{})
+    changed=[name for name,digest in protected.items() if not Path(name).is_file() or hashlib.sha256(Path(name).read_bytes()).hexdigest()!=digest]
+    results=config._acceptance_results
+    optional_skips=[r for r in results if r['status']=='skipped' and 'test_rest_live.py::' in r['test_id']]
+    required_results=[r for r in results if r not in optional_skips]
+    cases={name:json.loads(path.read_text()) for name in ('A','B','C','D')
+           if (path:=root/'reports'/('stage08-work-'+name+'.json')).is_file()}
+    live_path=root/'reports/stage08-live.json'
+    live=json.loads(live_path.read_text()) if live_path.is_file() else {'status':'not_run'}
+    profile_path=SKILL_ROOT/'references/profiles/installed-gantt-profile.json'
+    profile=json.loads(profile_path.read_text())
+    good=(exitstatus==0 and bool(session.items) and bool(required_results)
+          and all(r['status']=='passed' for r in required_results)
+          and bool(protected) and not changed and set(cases)=={'A','B','C','D'}
+          and live.get('status')=='passed' and len(live.get('cases',[]))>=10
+          and profile['plugin']['version'] is not None)
+    files=sorted(set([*SCRIPTS.glob('*.py'),*(SKILL_ROOT/'tests').glob('*.py'),
+        *(SKILL_ROOT/'references/profiles').glob('*.json'),*(SKILL_ROOT/'references/schemas').glob('*.json'),
+        *(SKILL_ROOT/'references').glob('*.md'),SKILL_ROOT/'tests/pytest.ini',
+        *(p for p in (SKILL_ROOT/'tests/fixtures/golden').rglob('*') if p.is_file())]))
+    hashes={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+    master=Path.home()/'WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md'
+    plan=master.parent/'plans/HF-plan_EditPlanConfluence_20261116.md'
+    schema=Path.home()/'WorkVault/Registries/EcosystemConfig.schema.json'
+    limitations=[
+        'Только этап 08. Подключение к первичному архиву/admission diff/publish — этап 09; сетевые стадии — этап 10.',
+        'Legacy CSV adapter/старый pipeline сохранены совместимыми; новый converter/calendar/itogo работают только с PreparedPlan.',
+        'Installed profile pins exact frontend build and asset hash; server marketing release version is unavailable to this account (UPM 401).',
+        'Unknown plugin capabilities remain not_verified; local scheduler capability matrix does not prove plugin behavior.',
+        'A–D work known sum matches reference; extraction quality partial because exporter reports unsupported timephased getters. Missing totals never become zero.',
+        'Legacy test_rest_live GET/apply harness is optional in stage08 (EDITPLAN_LIVE unset); required dedicated controls ran separately without mocks.',
+        'Production DB/WorkVault, plan pages A–D/AB, Gateway and schedules were not modified. No migrations or R/E changes.',
+        'ownCloud sync not confirmed. Test-only browser packages and browser binary remain under the isolated test root.'
+    ]
+    implemented={
+        'S/scripts/mpp_convert.py':'PreparedPlan converter; source-local tree/resources; profiled dependencies/units/signed lag/basis; explicit losses; deterministic bytes; CSV adapter kept separate',
+        'S/scripts/mpp_calendar.py':'pure prepared calendar conversion, intervals/exceptions/bindings; retained source semantics and explicit unsupported constructs',
+        'S/scripts/itogo.py':'summary-v1; unique/explicit root, Decimal work and coefficients, ceil days, ROUND_HALF_UP display; no work in storage',
+        'S/scripts/gate_diff.py':'independent source/representation/model/observation diagnostics',
+        'S/scripts/plugin_profile.py':'version/schema/evidence-bound profile loading and capability/code lookup; unknown unsupported',
+        'S/scripts/plan_cache.py':'derived cache keyed by normalized/converter/rules/plugin/summary/template/root; integrity checked',
+        'S/references/profiles/':'summary-v1, strict plugin-profile schema, installed profile with hashed live evidence',
+        'S/tests/':'semantic/decimal/MPP work/cache/profile tests and actual browser plugin controls; required test IDs and stage report hook',
+        'S/tests/fixtures/golden/':'versioned plugin input bytes/expected dates and source representation/storage golden contracts',
+        'S/references/cli-contract.md':'internal stage08 contracts and stage09/10 integration boundary'
+    }
+    cache_path=root/'reports/stage08-cache.json'
+    derived_cache=json.loads(cache_path.read_text()) if cache_path.is_file() else None
+    counters={'derived_cache':derived_cache,'prepared_converter_calendar_itogo_reader_calls':0,'real_A_D_MPXJ_read':sum(c['MPXJ_read'] for c in cases.values()),
+              'all_legacy_reader_calls':None,'live_POST':live.get('POST'), 'live_PUT':live.get('PUT'),
+              'fake_regression':config._acceptance_counters}
+    report={'stage':'08','gate':'passed' if good else 'failed','exit_code':int(exitstatus),
+        'base_commit':initial.get('base_commit'),'command':[sys.executable,'-m','pytest',*config.invocation_params.args],
+        'environment':{'python':sys.executable,'version':platform.python_version(),'test_root':str(root),
+                       'PYTHONPATH':os.environ.get('PYTHONPATH'),'cli_python':'/usr/bin/python3','mpxj_python':'/usr/bin/python3.9'},
+        'master':{'version':'0.5.0','path':str(master),'sha256':hashlib.sha256(master.read_bytes()).hexdigest()},
+        'plan':{'path':str(plan),'normative_prefix_sha256':hashlib.sha256(plan.read_text().split('## Журнал исполнения')[0].encode()).hexdigest()},
+        'migrations':[],'source_files':hashes,'source_tree_sha256':fingerprint(hashes),'implemented_files':implemented,
+        'config_contract_sha256':hashlib.sha256(schema.read_bytes()).hexdigest(),
+        'protected_files_checked':len(protected),'changed_protected_files':changed,
+        'selected':len(session.items),'tests':results,'mandatory_test_ids':sorted(STAGE08_REQUIRED),
+        'optional_skips':optional_skips,'real_cases':cases,'live':live,'plugin_profile':profile,
+        'counters':counters,'covered_requirements':['§20/AC-02 prepared branch','§20/AC-06','parts of §20/AC-08','§20.7.5'],
+        'limitations':limitations,'generated_at':datetime.now(timezone.utc).isoformat()}
+    (root/'reports/stage-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    lines=['# Этап 08 — представление Confluence, Итого и профиль плагина','',
+        f"Gate: **{report['gate']}**. rc={exitstatus}; passed={sum(r['status']=='passed' for r in results)}; selected={len(session.items)}; optional skips={len(optional_skips)}.",'']
+    lines.extend('- `'+path+'`: '+description for path,description in implemented.items())
+    lines.extend(['','Команда:','','```text',' '.join(report['command']),'```','','A–D work (допуск ≤0.001 ч):',''])
+    for name,c in cases.items():
+        lines.append(f"- {name}: {c['actual_hours']} ч; эталон {c['expected_hours']}; delta={c['absolute_delta_hours']}; N={c['summary']['n_days']}; work quality={c['summary']['work']['quality']}.")
+    lines.extend(['',f"Live: {live.get('status')}, page={live.get('page_id')}, controls={len(live.get('cases',[]))}, POST={live.get('POST')}, PUT={live.get('PUT')}. Inputs/received/storage/browser observations/screenshots: live/.",
+                  '',f"Проверено защищённых файлов: {len(protected)}, изменений: {len(changed)}. Дерево: `{report['source_tree_sha256']}`.",'','Ограничения:',''])
+    lines.extend('- '+v for v in limitations)
+    (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')
+
+STAGE08_REQUIRED |= {'test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero['+kind+']'
+                     for kind in ('type','lag','unit','elapsed','basis','endpoint','external')}
+STAGE08_REQUIRED |= {'test_itogo.py::test_prepared_unknown_basis_blocks_summary['+kind+']'
+                     for kind in ('units','elapsed','basis','timezone','date')}
+STAGE08_REQUIRED |= {'test_plugin_profile.py::test_profile_rejects_unverified_contract['+kind+']'
+                     for kind in ('hash','version','evidence','claim','shape','code')}
+STAGE08_REQUIRED |= {'test_plugin_profile.py::test_context_installed_profiles_from_registry',
+                     'test_gate_diff.py::test_four_layers_include_links_calendars_assignments_without_schedule_promotion'}
+
+STAGE08_REQUIRED.add('test_mpp_convert.py::test_prepared_summary_dependency_and_unrepresented_scheduling')
+
+STAGE08_REQUIRED.add('test_mpp_calendar.py::test_prepared_calendar_source_day_basis_mismatch_is_explicit')

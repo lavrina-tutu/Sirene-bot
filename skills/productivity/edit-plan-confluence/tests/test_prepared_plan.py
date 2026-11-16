@@ -114,6 +114,12 @@ def test_fixtures_manifest_integrity():
 def test_context_unified_settings_cli_overrides_and_no_secrets(tmp_path, monkeypatch):
     import env
     from plan_context import PlanContext
+    # Preserve the stage02 absent-profile scenario after stage08 installs profiles.
+    import plan_context
+    profile_root = tmp_path / 'stage02-profiles'
+    profile_root.mkdir()
+    (profile_root / 'normalization-v1.json').write_bytes((plan_context.PROFILES / 'normalization-v1.json').read_bytes())
+    monkeypatch.setattr(plan_context, 'PROFILES', profile_root)
     # Credentials must never be consulted by the archive context.
     monkeypatch.setattr(env, "load_confluence_env", lambda *a, **k: pytest.fail("credentials requested"))
     monkeypatch.delenv("CONFLUENCE_TOKEN", raising=False)

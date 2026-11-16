@@ -1,0 +1,22 @@
+{
+  "plugin_key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
+  "version_kind": "installed_frontend_build",
+  "frontend_build": "H6u7SQymvwxeyojc1ur6Z",
+  "engine_version": "5.4.1",
+  "server_release_version": null,
+  "server_release_reason": "UPM REST /rest/plugins/1.0/ returned HTTP 401 for current account",
+  "confluence_version": "8.9.4",
+  "asset_url": "https://dom.tutu.ru/download/resources/com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence:gantt-chart-resources/resources/_next/static/chunks/7b1ccf34.b54da94330ce3dd5.js",
+  "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+  "asset_size_bytes": 2324259,
+  "relation_codes": {
+    "StartToStart": 0,
+    "StartToEnd": 1,
+    "EndToStart": 2,
+    "EndToEnd": 3
+  },
+  "dependency_calendar": "ToEvent",
+  "test_page_id": "537571938",
+  "test_parent_id": "519501810",
+  "observed_at": "2026-11-16T14:28:16.598153+00:00"
+}

@@ -1,0 +1,82 @@
+"""Versioned, evidence-bound installed-plugin contract; no CLI or network."""
+from __future__ import annotations
+
+import hashlib
+import json
+from dataclasses import dataclass
+from pathlib import Path
+
+from prepared_plan import ROOT, fingerprint
+
+
+@dataclass(frozen=True)
+class PluginProfile:
+    document: dict
+
+    @classmethod
+    def load(cls, path=None, *, evidence_root=None, installed_version=None):
+        if path is None:
+            from env import load_settings
+            selected = load_settings().values.get('PLUGIN_PROFILE')
+            if selected != 'installed-gantt-profile':
+                raise ValueError('unknown_plugin_profile_selection')
+            path = ROOT / 'references/profiles' / (selected + '.json')
+        profile = cls(json.loads(Path(path).read_text()))
+        profile.validate(evidence_root=evidence_root, installed_version=installed_version)
+        return profile
+
+    def validate(self, *, evidence_root=None, installed_version=None):
+        import jsonschema
+        schema = json.loads((ROOT / 'references/profiles/plugin-profile.schema.json').read_text())
+        jsonschema.validate(self.document, schema)
+        d = self.document
+        if installed_version is not None and d['plugin']['version'] != installed_version:
+            raise ValueError('installed_plugin_version_mismatch')
+        root = Path(evidence_root or ROOT).resolve()
+        evidence = d['evidence']
+        documents = {}
+        for key, item in evidence.items():
+            p = (root / item['path']).resolve()
+            if root not in p.parents or not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest() != item['sha256']:
+                raise ValueError('plugin_evidence_integrity:' + key)
+            if p.suffix == '.json':
+                documents[key] = json.loads(p.read_text())
+        for cap in d['capabilities'].values():
+            if cap['status'] == 'tested_supported':
+                if not d['plugin']['version'] or not cap['evidence']:
+                    raise ValueError('supported_capability_without_version_or_evidence')
+            if any(key not in evidence for key in cap['evidence']):
+                raise ValueError('unknown_capability_evidence')
+        if d['plugin']['key'] == 'com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence':
+            matching = [w for w in documents.values() if w.get('frontend_build')
+                        and 'frontend-build:'+w['frontend_build'] == d['plugin']['version']
+                        and w.get('asset_sha256') == d['plugin']['asset_sha256']
+                        and w.get('confluence_version') == d['confluence_version']]
+            if not matching:
+                raise ValueError('installed_version_without_matching_metadata_evidence')
+        relation_names = {'FS':'EndToStart','SS':'StartToStart','FF':'EndToEnd','SF':'StartToEnd'}
+        for kind, codes in d['codes'].items():
+            for name, code in codes.items():
+                capability = d['capabilities'].get(kind+':'+name,{})
+                if capability.get('status') != 'tested_supported':
+                    continue
+                witnesses = [documents[key] for key in capability['evidence'] if key in documents]
+                if kind == 'relation':
+                    supported = any(w.get('relation_codes',{}).get(relation_names[name]) == code for w in witnesses)
+                else:
+                    supported = any(any(dep.get('lagUnit') == code for dep in w.get('dependencies',[])) for w in witnesses)
+                if not supported:
+                    raise ValueError('plugin_code_without_matching_observation:'+kind+':'+name)
+        return self
+
+    @property
+    def fingerprint(self):
+        return fingerprint(self.document)
+
+    def supports(self, name):
+        return self.document['capabilities'].get(name, {}).get('status') == 'tested_supported'
+
+    def code(self, kind, name):
+        if not isinstance(name, str) or not self.supports(kind + ':' + name):
+            return None
+        return self.document['codes'].get(kind, {}).get(name)

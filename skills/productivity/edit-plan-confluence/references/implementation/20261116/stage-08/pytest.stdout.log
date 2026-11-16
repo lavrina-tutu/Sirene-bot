@@ -1,0 +1,69 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests
+configfile: pytest.ini
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 437 items / 153 deselected / 284 selected
+
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_child_page.py . [  0%]
+..................                                                       [  6%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_cli.py . [  7%]
+.....                                                                    [  8%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_env.py . [  9%]
+....                                                                     [ 10%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py . [ 10%]
+..........                                                               [ 14%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gate_diff.py . [ 14%]
+...                                                                      [ 15%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_itogo.py . [ 16%]
+..........................                                               [ 25%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_macro.py . [ 25%]
+..                                                                       [ 26%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py . [ 26%]
+...                                                                      [ 27%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py . [ 28%]
+.......................                                                  [ 36%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_input.py . [ 36%]
+.......................                                                  [ 44%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_pipeline.py . [ 45%]
+......................                                                   [ 52%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_cache.py . [ 53%]
+.............                                                            [ 57%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_manifest.py . [ 58%]
+......................                                                   [ 65%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py . [ 66%]
+..................                                                       [ 72%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_verify.py . [ 72%]
+.................                                                        [ 78%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_profile.py . [ 79%]
+........                                                                 [ 82%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_prepared_plan.py . [ 82%]
+.............................                                            [ 92%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_cli.py . [ 92%]
+                                                                         [ 92%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_itogo.py . [ 93%]
+...                                                                      [ 94%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py . [ 94%]
+                                                                         [ 94%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_pipeline.py . [ 95%]
+                                                                         [ 95%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_batch.py . [ 95%]
+...                                                                      [ 96%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_cache.py . [ 96%]
+                                                                         [ 96%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_save_e2e.py . [ 97%]
+.....                                                                    [ 98%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_controls_live.py . [ 99%]
+                                                                         [ 99%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_rest_live.py s [ 99%]
+s                                                                        [100%]
+
+=============================== warnings summary ===============================
+test_mpp_input.py::test_zip_collisions[names0]
+  /usr/lib64/python3.9/zipfile.py:1535: UserWarning: Duplicate name: 'x.mpp'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage08/stage-08/reports/junit.xml -
+==== 282 passed, 2 skipped, 153 deselected, 1 warning in 336.62s (0:05:36) =====

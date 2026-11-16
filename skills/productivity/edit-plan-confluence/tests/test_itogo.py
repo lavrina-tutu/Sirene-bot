@@ -186,3 +186,117 @@ def test_record_itogo_observation_two_observations_not_glued_by_number(plan_conn
     assert obs1 != obs2
     count = conn.execute("SELECT COUNT(*) FROM plan_page_observation").fetchone()[0]
     assert count == 2
+
+
+from copy import deepcopy
+from decimal import Decimal
+from itogo import compute_itogo_from_prepared, format_work_hours, work_metrics
+from prepared_plan import PreparedPlan
+
+
+@pytest.mark.parametrize('duration,expected',[('84.875',85),('76.875',77),('106.875',107),('0',0)])
+def test_prepared_summary_ceil(stage08_export,duration,expected):
+    stage08_export['tasks'][1]['duration']['quantity']['amount']=duration
+    result=compute_itogo_from_prepared(PreparedPlan.from_export(stage08_export,timezone_hint='Europe/Moscow'))
+    assert result['n_days']==expected
+    assert result['publishable']
+    assert result['duration_working_days']==duration
+    assert 'ч-ч' not in result['storage_html'] and 'Трудозатраты' not in result['storage_html']
+    assert result['work']['hours']=='0.3'
+
+
+def test_prepared_work_exact_summary_service_milestone_and_timephased(stage08_export):
+    result=work_metrics(stage08_export)
+    assert result['hours']=='0.3' and result['quality']=='complete'
+    assert result['known_assignments']==2 and result['excluded_assignments']==2
+    assert format_work_hours('1.2345')=='1.235'
+    assert format_work_hours('1.2344')=='1.234'
+    assert format_work_hours('1576.000')=='1576'
+    assert format_work_hours(None) is None
+    # A repeated serialized record is not a second actual assignment.
+    stage08_export['assignments'].append(deepcopy(stage08_export['assignments'][0]))
+    assert work_metrics(stage08_export)['hours']=='0.3'
+
+
+def test_prepared_work_missing_partial_not_zero(stage08_export):
+    a=stage08_export['assignments'][0]
+    a['work']={'value':None,'quantity':None,'quality':'missing','reason':'not_set'}
+    result=work_metrics(stage08_export)
+    assert result['hours']=='0.2' and result['quality']=='partial'
+    stage08_export['assignments'][1]['work']=deepcopy(a['work'])
+    result=work_metrics(stage08_export)
+    assert result['hours'] is None and result['quality']=='missing'
+    stage08_export['assignments']=[]
+    stage08_export['collections']['assignments']['status']='missing'
+    assert work_metrics(stage08_export)['hours'] is None
+
+
+def test_prepared_multiple_roots_explicit_choice(stage08_export):
+    other=deepcopy(stage08_export['tasks'][1]);other.update(task_key='other',id=7,uid=7)
+    stage08_export['tasks'].append(other);stage08_export['collections']['tasks']['count']+=1
+    p=PreparedPlan.from_export(stage08_export,timezone_hint='Europe/Moscow')
+    result=compute_itogo_from_prepared(p)
+    assert result['root_task_key'] is None and 'summary_root_choice_required' in result['reasons']
+    assert result['storage_html'] is None
+    assert compute_itogo_from_prepared(p,root_task_key='other')['root_task_key']=='other'
+    with pytest.raises(ValueError,match='invalid_summary_root'):
+        compute_itogo_from_prepared(p,root_task_key='service')
+
+
+@pytest.mark.parametrize('kind',['units','elapsed','basis','timezone','date'])
+def test_prepared_unknown_basis_blocks_summary(stage08_export,kind):
+    root=stage08_export['tasks'][1]
+    if kind=='units':root['duration']['quantity']['units']='FORTNIGHTS'
+    if kind=='elapsed':root['duration']['quantity'].update(units='ELAPSED_DAYS',elapsed=True)
+    if kind=='basis':stage08_export['project']['minutes_per_day']={'value':None,'quality':'missing','reason':'not_set'}
+    if kind=='date':root['start']={'value':None,'quality':'missing','reason':'not_set'}
+    p=PreparedPlan.from_export(stage08_export,timezone_hint=None if kind=='timezone' else 'Europe/Moscow')
+    result=compute_itogo_from_prepared(p)
+    assert not result['publishable'] and result['storage_html'] is None
+    if kind in ('units','elapsed','basis'):assert result['n_days'] is None
+
+
+def test_prepared_source_coefficients_and_timezone(stage08_export):
+    root=stage08_export['tasks'][1]
+    root['duration']['quantity'].update(amount='510',units='MINUTES')
+    stage08_export['project']['minutes_per_day']['value']='300'
+    root['start']['value']='2026-01-04T23:00:00Z'
+    p=PreparedPlan.from_export(stage08_export,timezone_hint='Europe/Moscow')
+    result=compute_itogo_from_prepared(p)
+    assert result['duration_working_days']=='1.7' and result['n_days']==2
+    assert result['d1']=='05.01.26'
+    stage08_export['assignments'][0]['work']['quantity'].update(amount='1.5',units='DAYS')
+    assert work_metrics(stage08_export)['hours']=='7.7'
+
+
+@pytest.mark.mpp_fixtures
+@pytest.mark.parametrize('case,expected',[('A','1576'),('B','2096'),('C','2088'),('D','3136')])
+def test_real_prepared_work_tolerance(case,expected,tmp_path,request):
+    import hashlib,json,shutil,subprocess
+    fixtures=Path(__file__).parent/'fixtures/real'
+    manifest=json.loads((fixtures/'manifest.json').read_text())
+    records=manifest.get('fixtures',manifest)
+    if isinstance(records,list):entry=next(r for r in records if r.get('case')==case or r.get('id')==case)
+    else:entry=records[case]
+    digest=entry.get('sha256',entry.get('source_sha256'))
+    source=fixtures/(digest+'.mpp')
+    target=tmp_path/source.name;shutil.copyfile(source,target)
+    assert hashlib.sha256(target.read_bytes()).hexdigest()==digest
+    proc=subprocess.run(['/usr/bin/python3.9','/home/tkachenkoav/USERTOOLS/MppReader/plan_export.py',str(target)],capture_output=True,text=True,timeout=120)
+    assert proc.returncode==0,proc.stderr
+    export=json.loads(proc.stdout[proc.stdout.index('{'):])
+    p=PreparedPlan.from_export(export,timezone_hint='Europe/Moscow')
+    out=compute_itogo_from_prepared(p)
+    delta=abs(Decimal(out['work']['hours'])-Decimal(expected))
+    assert delta<=Decimal('0.001')
+    expected_counts={'A':(58,57,53),'B':(62,61,60),'C':(62,61,61),'D':(72,71,76)}
+    counts=out['counts']
+    assert (counts['archive_task_count'],counts['display_task_count'],counts['dependency_count'])==expected_counts[case]
+    assert export['telemetry']['MPXJ_read']==1
+    evidence={'case':case,'source_sha256':digest,'expected_hours':expected,'actual_hours':out['work']['hours'],
+              'absolute_delta_hours':str(delta),'tolerance_hours':'0.001','summary':out,
+              'archive_task_count':len(export['tasks']),'service_task_count':sum(t.get('id')==0 for t in export['tasks']),
+              'display_task_count':sum(t.get('id')!=0 for t in export['tasks']),
+              'MPXJ_read':export['telemetry']['MPXJ_read']}
+    root=getattr(request.config,'_acceptance_root',tmp_path)
+    (root/'reports'/('stage08-work-'+case+'.json')).write_text(json.dumps(evidence,ensure_ascii=False,indent=2))

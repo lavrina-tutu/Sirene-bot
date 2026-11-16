@@ -1,0 +1,7 @@
+{
+  "owner": "WorkVault/Registries/EcosystemConfig.yaml tools.edit_plan_confluence",
+  "changed": false,
+  "SUMMARY_PROFILE": "summary-v1",
+  "PLUGIN_PROFILE": "installed-gantt-profile",
+  "credentials": "Existing explicit allowlisted ConfluenceSync .env adapter; token never persisted in evidence."
+}

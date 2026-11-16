@@ -147,6 +147,14 @@ class RepresentationCache(_Cache):
         if not isinstance(payload, dict) or payload.get("normalized_sha256") != material["normalized_sha256"] or "representation" not in payload:
             raise ValueError("invalid_representation_payload")
         canonical_bytes(payload)
+        representation = payload['representation']
+        if isinstance(representation, dict) and 'published_bytes_sha256' in representation:
+            from mpp_convert import representation_bytes
+            import hashlib
+            if (representation.get('plugin_profile_fingerprint') != material['plugin_profile']
+                    or representation.get('normalized_sha256') != material['normalized_sha256']
+                    or representation['published_bytes_sha256'] != hashlib.sha256(representation_bytes(representation)).hexdigest()):
+                raise ValueError('derived_representation_integrity_failed')
 
     def get_or_build(self, prepared: PreparedPlan, material, builder):
         prepared.validate()
@@ -157,3 +165,27 @@ class RepresentationCache(_Cache):
             payload = {"normalized_sha256": prepared.semantic_hash, "representation": builder(prepared)}
             self.store(material, payload)
         return payload["representation"]
+
+    def convert_prepared(self, prepared, *, plugin_profile, template_json=None, root_task_key=None,
+                         rules_revision='none-v1'):
+        """The full derived result is disposable; profile/template/root invalidate it.
+
+        No original MPP path, reader, network client, or archive writer is required.
+        """
+        from mpp_convert import CONVERTER_VERSION, EMPTY_TEMPLATE, convert_prepared_plan, representation_bytes
+        from itogo import compute_itogo_from_prepared
+        plugin_profile.validate()
+        template = template_json if template_json is not None else json.loads(EMPTY_TEMPLATE.read_text())
+        summary = compute_itogo_from_prepared(prepared,root_task_key=root_task_key)
+        material=self.material(prepared.semantic_hash,converter_version=CONVERTER_VERSION,
+                               rules_revision=rules_revision,plugin_profile=plugin_profile.fingerprint,
+                               template_parameters={'template_sha256':fingerprint(template),
+                                                    'root_task_key':root_task_key,'summary_profile':summary['profile_fingerprint']})
+        def build(plan):
+            result=convert_prepared_plan(plan,plugin_profile=plugin_profile,template_json=template,root_task_key=root_task_key)
+            result['published_bytes_sha256']=__import__('hashlib').sha256(representation_bytes(result)).hexdigest()
+            return result
+        result=self.get_or_build(prepared,material,build)
+        if result['plugin_profile_fingerprint'] != plugin_profile.fingerprint or result['published_bytes_sha256'] != __import__('hashlib').sha256(representation_bytes(result)).hexdigest():
+            raise ValueError('derived_representation_integrity_failed')
+        return result

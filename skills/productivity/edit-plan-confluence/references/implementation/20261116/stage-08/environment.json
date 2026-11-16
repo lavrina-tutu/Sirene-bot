@@ -1,0 +1,8 @@
+{
+  "test_python": "Python 3.9.25",
+  "cli_python": "Python 3.9.25",
+  "java": "openjdk version \"17.0.17\" 2025-10-21 LTS\nOpenJDK Runtime Environment (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS)\nOpenJDK 64-Bit Server VM (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS, mixed mode, sharing)",
+  "pytest": "pytest 8.4.2",
+  "mpxj": "16.4.0 (also recorded in real source-export provenance)",
+  "browser": "Playwright 1.60.0 / Chromium 148.0.7778.96 (isolated test dependencies)"
+}

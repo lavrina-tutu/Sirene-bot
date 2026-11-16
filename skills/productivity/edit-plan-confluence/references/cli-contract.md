@@ -284,3 +284,33 @@ mapping_revision_id, evidence_id/evidence_sha256, published:false, error:null.
 требуемые сущности, историю проверок и nullable выбранные revision/evidence.
 Публичное исполнение publish/resume с правилами B/C добавляется этапом 09;
 существующий batch-item resume сохраняет ограничения этапа 06.
+
+### Этап 08: внутреннее представление (без нового CLI)
+
+`convert_prepared_plan(PreparedPlan, plugin_profile=..., template_json=...,
+root_task_key=...)` строит `gantt`, `summary`, `mappings`, `source_semantics`,
+`diagnostics`, `publishable` и независимый `schedule:not_verified`. Только
+`representation_bytes(result)` сериализует публикуемый JSON детерминированно.
+CSV остаётся отдельным совместимым `convert_mpp_csv`-адаптером; prepared-путь
+не вызывает CSV, JVM или reader. Публичное подключение к archive/admission
+`diff/publish` выполняется этапом 09, сетевое исполнение — этапом 10.
+
+`compute_itogo_from_prepared` использует профиль `summary-v1`, исходный summary
+корень и параметры источника. Неоднозначность возвращает список кандидатов и
+`summary_root_choice_required`; выбор передаётся по source-local `root_task_key`.
+Неизвестные units, elapsed→working или timezone не дают storage-строки.
+Work — десятичная известная сумма назначений обычных задач и вех, без ID=0,
+summary и timephased-дубля; качество и missing сохраняются отдельно.
+Отображение — до 3 знаков, `ROUND_HALF_UP`. В storage work отсутствует.
+
+`calendar_from_prepared` сохраняет исходные календари/привязки и сообщает
+неподдержанную семантику; ограничения локального scheduler из MppReader не
+доказывают возможностей плагина. `representation_diagnostics` раздельно
+показывает source / represented / model / observed. Локальный longest-path
+остаётся ограниченной legacy-эвристикой, не наблюдением плагина.
+
+Профиль выбирается существующими `SUMMARY_PROFILE` и `PLUGIN_PROFILE` в
+Registries; evidence paths/hashes проверяются при загрузке профиля. Кэш
+производного представления дополнительно зависит от converter/rules/plugin/
+summary fingerprints, параметров шаблона и явного выбора корня. Кэш можно
+удалить; он не заменяет долговечный архив или свежую проверку Confluence.

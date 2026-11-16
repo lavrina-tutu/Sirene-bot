@@ -1,0 +1,1282 @@
+[
+  {
+    "case": "test_actual_current_attachment0",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_actual_current_attachment0/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_52a40576f0d8453db6ce18a2019d1fb5",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_2f98e2cc047841ba92deacefece4abfe"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-053256e10be04daab693868bb0a85b9b.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"current attachment differs from uploaded ID/version\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_actual_current_attachmentcurrent",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_actual_current_attachmentcurrent/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_52a40576f0d8453db6ce18a2019d1fb5",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_2f98e2cc047841ba92deacefece4abfe"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-053256e10be04daab693868bb0a85b9b.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"current attachment differs from uploaded ID/version\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_apply_existing_macro_pres0",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_apply_existing_macro_pres0/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_9a07ffb5a48c4ea8a98657adf3b13ae3",
+        "status": "confirmed",
+        "historical_status": null
+      }
+    ],
+    "publications": [
+      {
+        "publication_id": "pub_3680cbb27d20498ea0914331f6bfbb8f",
+        "attachment_id": "actual-attachment-id",
+        "attachment_version": 1,
+        "trust": "legacy_unverified"
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "obs_352e3ad563b74741a4477f4c7a4efd3e",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:35+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"stable-mid\"><ac:parameter ac:name=\"id\">stable-id</ac:parameter><ac:parameter ac:name=\"hash\">stable-hash</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verified_observation",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": true, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": true}, \"errors\": [], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "1d661ce121fd87b5143bb093ddbcc01bb4ad0832d21fbd9ca0e96945d6c33370"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_85d09144e460425b84cb4e7dc4598dea"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-stable-id.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "confirmed",
+        "detail": "{\"page_version\": 4, \"observation_id\": \"obs_352e3ad563b74741a4477f4c7a4efd3e\", \"scope\": \"current_state\", \"published\": null, \"external_effect\": \"partial\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_apply_existing_macro_prescurrent",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_apply_existing_macro_prescurrent/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_9a07ffb5a48c4ea8a98657adf3b13ae3",
+        "status": "confirmed",
+        "historical_status": null
+      }
+    ],
+    "publications": [
+      {
+        "publication_id": "pub_3680cbb27d20498ea0914331f6bfbb8f",
+        "attachment_id": "actual-attachment-id",
+        "attachment_version": 1,
+        "trust": "legacy_unverified"
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "obs_352e3ad563b74741a4477f4c7a4efd3e",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:35+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"stable-mid\"><ac:parameter ac:name=\"id\">stable-id</ac:parameter><ac:parameter ac:name=\"hash\">stable-hash</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verified_observation",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": true, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": true}, \"errors\": [], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "1d661ce121fd87b5143bb093ddbcc01bb4ad0832d21fbd9ca0e96945d6c33370"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_85d09144e460425b84cb4e7dc4598dea"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-stable-id.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "confirmed",
+        "detail": "{\"page_version\": 4, \"observation_id\": \"obs_352e3ad563b74741a4477f4c7a4efd3e\", \"scope\": \"current_state\", \"published\": null, \"external_effect\": \"partial\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_apply_plan_put_409_exhaus0",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_apply_plan_put_409_exhaus0/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_4797228054394bb3a5b0204d06b66c98",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_27d6ffc9f42747b8b88b22fdcd846b14"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-dd2caf446f7f44e488196bd65b6d5992.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"Confluence HTTP 409: simulated conflict\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_apply_plan_put_409_exhauscurrent",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_apply_plan_put_409_exhauscurrent/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_4797228054394bb3a5b0204d06b66c98",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_27d6ffc9f42747b8b88b22fdcd846b14"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-dd2caf446f7f44e488196bd65b6d5992.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"Confluence HTTP 409: simulated conflict\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_apply_plan_put_409_retrie0",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_apply_plan_put_409_retrie0/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_86496b7f866147ec9313fe3b4b4e539f",
+        "status": "confirmed",
+        "historical_status": null
+      }
+    ],
+    "publications": [
+      {
+        "publication_id": "pub_0cf7a080351d438cb679dce2bdf90398",
+        "attachment_id": "actual-attachment-id",
+        "attachment_version": 1,
+        "trust": "legacy_unverified"
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "obs_01701b3bde4d4f51a451a8edc90fd4a3",
+        "page_id": "test-page",
+        "page_version": 5,
+        "fetched_at": "2026-11-16T10:33:35+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p>Правка соседа</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"c81d9593-158b-47c9-966a-ca206762e885\"><ac:parameter ac:name=\"id\">b9aff19010be44e5a78b266436573b5b</ac:parameter><ac:parameter ac:name=\"hash\">390ac25d3cdb483d8af53997376d13e4</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verified_observation",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": true, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": true}, \"errors\": [], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "1182715529352bf9f45cb1f426fd7521f6aeadc554ba8e410b41cca1114d2fd5"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_62f05453545f47fc991a9384f2870983"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-b9aff19010be44e5a78b266436573b5b.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "confirmed",
+        "detail": "{\"page_version\": 5, \"observation_id\": \"obs_01701b3bde4d4f51a451a8edc90fd4a3\", \"scope\": \"current_state\", \"published\": null, \"external_effect\": \"partial\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_apply_plan_put_409_retriecurrent",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_apply_plan_put_409_retriecurrent/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_86496b7f866147ec9313fe3b4b4e539f",
+        "status": "confirmed",
+        "historical_status": null
+      }
+    ],
+    "publications": [
+      {
+        "publication_id": "pub_0cf7a080351d438cb679dce2bdf90398",
+        "attachment_id": "actual-attachment-id",
+        "attachment_version": 1,
+        "trust": "legacy_unverified"
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "obs_01701b3bde4d4f51a451a8edc90fd4a3",
+        "page_id": "test-page",
+        "page_version": 5,
+        "fetched_at": "2026-11-16T10:33:35+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p>Правка соседа</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"c81d9593-158b-47c9-966a-ca206762e885\"><ac:parameter ac:name=\"id\">b9aff19010be44e5a78b266436573b5b</ac:parameter><ac:parameter ac:name=\"hash\">390ac25d3cdb483d8af53997376d13e4</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verified_observation",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": true, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": true}, \"errors\": [], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "1182715529352bf9f45cb1f426fd7521f6aeadc554ba8e410b41cca1114d2fd5"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_62f05453545f47fc991a9384f2870983"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-b9aff19010be44e5a78b266436573b5b.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "confirmed",
+        "detail": "{\"page_version\": 5, \"observation_id\": \"obs_01701b3bde4d4f51a451a8edc90fd4a3\", \"scope\": \"current_state\", \"published\": null, \"external_effect\": \"partial\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_attachment_failure_blocks0",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_attachment_failure_blocks0/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_66f83814cbc54efeaadcae55d3eddf4d",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_7372b9bf07c04e408b4c43963dc990f3"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-b3a6928153b346aa8fd7ee50b9865acf.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"uploaded attachment verification failed\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_attachment_failure_blocks1",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_attachment_failure_blocks1/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_514e31ecfd104d6f9c207e978309f4e2",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_b8857102c86e4f7581708d928316b46e"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-7e84d532fdf04a3a97198e8a24510f73.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"uploaded attachment verification failed\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_attachment_failure_blocks2",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_attachment_failure_blocks2/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_6dbe8075a8d04a62b1209511939d5726",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_9ac6d144d4e44975882e2ca05920312e"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-045da79ac241411b8ebc5e7e9cf115cf.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"download after POST failed\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_attachment_failure_blocks3",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_attachment_failure_blocks3/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_34e39e24a9744f98936d5785b9ab5188",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_9ec37681411647e58c48ecb84c6ac00c"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-1a009733e6fa4b48849bb3bb8dbadb03.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"uploaded attachment verification failed\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_attachment_failure_blockscurrent",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_attachment_failure_blockscurrent/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_34e39e24a9744f98936d5785b9ab5188",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_9ec37681411647e58c48ecb84c6ac00c"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-1a009733e6fa4b48849bb3bb8dbadb03.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"uploaded attachment verification failed\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_get_after_put_failure_is_0",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_get_after_put_failure_is_0/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_cf809e6f33ea49e8ac7610f8802e9779",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_e2aa2dfa438a48fabc07dd241dc86083"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-5c65af91f7e341d18aec41cc34644dab.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"GET after PUT\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_get_after_put_failure_is_current",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_get_after_put_failure_is_current/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_cf809e6f33ea49e8ac7610f8802e9779",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_e2aa2dfa438a48fabc07dd241dc86083"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-5c65af91f7e341d18aec41cc34644dab.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"GET after PUT\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_0",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_0/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_efdb07c3106f450f8a09695b38ca92f1",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_c47749d7035b44179a2125003078e8fd",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:33+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"93e7f051-8666-4459-969f-f74a4446313c\"><ac:parameter ac:name=\"id\">06c75910714644a9bc3cfbc1041f64fb</ac:parameter><ac:parameter ac:name=\"hash\">45c03ad9ecb64645917968a621858408</ac:parameter></ac:structured-macro></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"other\"><ac:parameter ac:name=\"id\">other</ac:parameter><ac:parameter ac:name=\"hash\">other</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": false, \"page_version\": true, \"one_gantt_macro\": false, \"macro_id\": false, \"param_id\": false, \"param_hash\": false, \"attachment_name\": false, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": false, \"no_trudozatraty\": true, \"storage_preserved\": false}, \"errors\": [\"skeleton_macro_count\", \"one_gantt_macro\", \"macro_id\", \"param_id\", \"param_hash\", \"attachment_name\", \"itogo_above_macro\", \"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "f18c981ef2866ea4b8c96ab720fadf4d3a27c35e4bb46444f1165dd39816540a"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_836e881c6c1f480ea79ffe8ffb410338"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-06c75910714644a9bc3cfbc1041f64fb.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: skeleton_macro_count, one_gantt_macro, macro_id, param_id, param_hash, attachment_name, itogo_above_macro, storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_1",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_1/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_b41323e9fe5e44eeb4ddaebb8151dd54",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_c4020b165c02480e87b6f4bcdcb97dcb",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:33+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"changed-macro_id\"><ac:parameter ac:name=\"id\">98fc483be3284d48a433fcd995688e17</ac:parameter><ac:parameter ac:name=\"hash\">5c6c7d617f2d40a8ac4d16b5226554bc</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": false, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": false}, \"errors\": [\"macro_id\", \"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "70755dc76fb1bfe9a3dd240d4ea610b09da5bd549ee98e844689b95f25d49949"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_603833c8d5f34bcf8f2014bcee4461c0"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-98fc483be3284d48a433fcd995688e17.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: macro_id, storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_2",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_2/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_98cff913a4f64708a3ca8d3c9ef374e9",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_2e2612f16a584e21a2556fcc678008e1",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:33+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"c55902e0-1e4d-4b87-84b0-0b35179e9397\"><ac:parameter ac:name=\"id\">changed-param_id</ac:parameter><ac:parameter ac:name=\"hash\">3bb7df750e7e4bc3b0ca1a9d40354b55</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": false, \"param_hash\": true, \"attachment_name\": false, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": false}, \"errors\": [\"param_id\", \"attachment_name\", \"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "67ef5a8a7e410416fbd5973a7e9d0f7c6778d16b9f0a44c249eb541985d358aa"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_2394df93344546ab8c290645fb451bbf"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-f4a2af9b950d4783ad40a752ef7fec3f.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: param_id, attachment_name, storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_3",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_3/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_29cb898b420649a78a41257b22c260c2",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_c0f8516ffb6348aaa863cc3f7b38f127",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:33+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"f41705e6-98fb-43e2-9e0a-bb0f38a856b8\"><ac:parameter ac:name=\"id\">ae53400f761e4bf3a516ea776c43af90</ac:parameter><ac:parameter ac:name=\"hash\">changed-param_hash</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": false, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": false}, \"errors\": [\"param_hash\", \"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "a6140dec1a5a04d67e240580c6ef861be9e6a82f67eed59f8f8f4c826a8f76d9"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_63702fdd76414a4083107b62f570c0d4"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-ae53400f761e4bf3a516ea776c43af90.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: param_hash, storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_4",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_4/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_7b831111fd684caeabd73d699dd83b56",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_573a6b5db1b04cd09d3bb76a13a45d0d",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:34+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"bdf2f339-aa88-4028-a6a4-c9e2964443ac\"><ac:parameter ac:name=\"id\">wrong-attachment</ac:parameter><ac:parameter ac:name=\"hash\">025925b911dd4666bdfb869e2bd6a70f</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": false, \"param_hash\": true, \"attachment_name\": false, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": false}, \"errors\": [\"param_id\", \"attachment_name\", \"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "0c1ab04e316108fc51f3de8dec48f681c0880e53820f17bebce39272f5a92c26"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_0a2b56cb92c2418c99744958448ef851"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-23cb696c74264ec7a1efbbcf957617fc.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: param_id, attachment_name, storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_5",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_5/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_9c67303e4f634f00b90f90d8da808d1d",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_db2e71a0804b4712a4ab5ca0b04a51b0",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:34+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 01.01.00 вместо 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"59564cc0-2311-403b-ac3a-530ef87a40f3\"><ac:parameter ac:name=\"id\">cf0fb555f0c8453c9ce305777e1c0081</ac:parameter><ac:parameter ac:name=\"hash\">65c23ca13cae465a92aae4bbc59730cd</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": false, \"itogo_values\": false, \"itogo_above_macro\": false, \"no_trudozatraty\": true, \"storage_preserved\": false}, \"errors\": [\"one_itogo\", \"itogo_values\", \"itogo_above_macro\", \"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "f5066467456db9857073b147f7a3e3e8d4d95cfa29265a9b86da109877c9d6fc"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_2bf1800ba12740dc91d0dd93c7cb2e70"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-cf0fb555f0c8453c9ce305777e1c0081.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: one_itogo, itogo_values, itogo_above_macro, storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_6",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_6/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_acb8824ca095499cab8aba952d9726eb",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_4aa6af75fad8495ba1256ebc8da2a377",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:34+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"53a5097e-eb4a-475c-971a-0103f87cfba8\"><ac:parameter ac:name=\"id\">b8775364da5d476aa594466b0e171c84</ac:parameter><ac:parameter ac:name=\"hash\">9767ae51e17241c7ab995e336a371b02</ac:parameter></ac:structured-macro></p><p>Итого: с 01.01.26 по 02.01.26 - 2 рабочих дней</p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": false, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": false}, \"errors\": [\"one_itogo\", \"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "c1f5977d94490e115d899ac59bc7bc56cf82d88b3fc9c3e7a3945af713499081"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_5d038fe05a8e42ad9966a0ad0d7c7e4e"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-b8775364da5d476aa594466b0e171c84.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: one_itogo, storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_7",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_7/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_50477e90382b4e4a9c71617d9a6b2daf",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_b7d7294202ce4b709e2276fb2830b7ab",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:34+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"bcf0fadc-6f1e-484c-ae0e-5e04672dfa34\"><ac:parameter ac:name=\"id\">6d44bc781f784084ba4cae6ff0a47f82</ac:parameter><ac:parameter ac:name=\"hash\">00c9c9cce9b0491b9293aa598d1b15c4</ac:parameter></ac:structured-macro></p><p><strong>Трудозатраты:</strong> 123 ч-ч</p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": false, \"storage_preserved\": false}, \"errors\": [\"no_trudozatraty\", \"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "0652cd5b27799720437495ee7e57aedb6411ab2dba18f6de582624cdf513c694"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_62ba1b0ebfa249a9a47d57e1b473c023"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-6d44bc781f784084ba4cae6ff0a47f82.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: no_trudozatraty, storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_8",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_8/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_e00e1c0407524a0d98b3e103f1b84fa6",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_af5aaec836604f8084ffb8709b13f0c1",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:34+00:00",
+        "itogo_raw": "<p>потерянный блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"38ebbf72-9dc1-4c99-8b06-6b576dcdc8aa\"><ac:parameter ac:name=\"id\">0d9649d796ac4c9db39b1559af2d5ecf</ac:parameter><ac:parameter ac:name=\"hash\">a2b9a073a346482397683f5d360ab20b</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": false}, \"errors\": [\"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "8ca6104490f8f7bcd1f2b9a8d412b61c15a7f61e9e64dd041f7492e4cc2f4c8d"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_2bf57e538fc24034a1e52917f8c60eea"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-0d9649d796ac4c9db39b1559af2d5ecf.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_storage_readback_rejects_current",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_storage_readback_rejects_current/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_e00e1c0407524a0d98b3e103f1b84fa6",
+        "status": "failed",
+        "historical_status": null
+      }
+    ],
+    "publications": [],
+    "observations": [
+      {
+        "observation_id": "obs_af5aaec836604f8084ffb8709b13f0c1",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:34+00:00",
+        "itogo_raw": "<p>потерянный блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"38ebbf72-9dc1-4c99-8b06-6b576dcdc8aa\"><ac:parameter ac:name=\"id\">0d9649d796ac4c9db39b1559af2d5ecf</ac:parameter><ac:parameter ac:name=\"hash\">a2b9a073a346482397683f5d360ab20b</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verification_failed",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": false, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": false}, \"errors\": [\"storage_preserved\"], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "8ca6104490f8f7bcd1f2b9a8d412b61c15a7f61e9e64dd041f7492e4cc2f4c8d"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_2bf57e538fc24034a1e52917f8c60eea"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-0d9649d796ac4c9db39b1559af2d5ecf.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "failed",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\", \"error\": \"storage read-back failed: storage_preserved\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_success_records_get_obser0",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_success_records_get_obser0/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_ecb2ef78526c403c98b3f1fa7057a597",
+        "status": "confirmed",
+        "historical_status": null
+      }
+    ],
+    "publications": [
+      {
+        "publication_id": "pub_3ca185c41b7b491aaaa8abb7410c12ac",
+        "attachment_id": "actual-attachment-id",
+        "attachment_version": 1,
+        "trust": "legacy_unverified"
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "obs_dd0818b14363430f84668b6069ec187c",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:33+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"e7be8f40-30e5-4a8e-919d-dbf93199d7ee\"><ac:parameter ac:name=\"id\">ead27df5e60f48f580645c3c8d17a8ac</ac:parameter><ac:parameter ac:name=\"hash\">b5923c949fe04eb992b8efe0fdb187b2</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verified_observation",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": true, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": true}, \"errors\": [], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "13224a5ba8e9a08add2ca511d1e4c82b7db3dcdec9dba46d90167c03a3bef71a"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_65b30acb03fe4ed6a7c81c3e47bcc9c6"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-ead27df5e60f48f580645c3c8d17a8ac.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "confirmed",
+        "detail": "{\"page_version\": 4, \"observation_id\": \"obs_dd0818b14363430f84668b6069ec187c\", \"scope\": \"current_state\", \"published\": null, \"external_effect\": \"partial\"}"
+      }
+    ]
+  },
+  {
+    "case": "test_success_records_get_obsercurrent",
+    "database_under_test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/pytest-tmp/test_success_records_get_obsercurrent/plan_index.sqlite",
+    "attempts": [
+      {
+        "attempt_id": "attempt_ecb2ef78526c403c98b3f1fa7057a597",
+        "status": "confirmed",
+        "historical_status": null
+      }
+    ],
+    "publications": [
+      {
+        "publication_id": "pub_3ca185c41b7b491aaaa8abb7410c12ac",
+        "attachment_id": "actual-attachment-id",
+        "attachment_version": 1,
+        "trust": "legacy_unverified"
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "obs_dd0818b14363430f84668b6069ec187c",
+        "page_id": "test-page",
+        "page_version": 4,
+        "fetched_at": "2026-11-16T10:33:33+00:00",
+        "itogo_raw": "<p>Соседний блок</p><p><p><strong>Итого: с 28.09.26 по 18.05.27 - 154 рабочих дней</strong></p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"e7be8f40-30e5-4a8e-919d-dbf93199d7ee\"><ac:parameter ac:name=\"id\">ead27df5e60f48f580645c3c8d17a8ac</ac:parameter><ac:parameter ac:name=\"hash\">b5923c949fe04eb992b8efe0fdb187b2</ac:parameter></ac:structured-macro></p>",
+        "verification_status": "verified_observation",
+        "verification_scope": "current_state",
+        "verification_profile": "stage01-readback-v1",
+        "verification_json": "{\"ok\": true, \"checks\": {\"skeleton_version\": true, \"skeleton_macro_count\": true, \"page_version\": true, \"one_gantt_macro\": true, \"macro_id\": true, \"param_id\": true, \"param_hash\": true, \"attachment_name\": true, \"one_itogo\": true, \"itogo_values\": true, \"itogo_above_macro\": true, \"no_trudozatraty\": true, \"storage_preserved\": true}, \"errors\": [], \"expected_sha256\": null, \"actual_sha256\": null, \"scope\": \"current_state\", \"profile\": \"stage01-readback-v1\", \"attachment\": {\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"actual_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\"}}",
+        "storage_sha256": "13224a5ba8e9a08add2ca511d1e4c82b7db3dcdec9dba46d90167c03a3bef71a"
+      }
+    ],
+    "events": [
+      {
+        "stage": "archive",
+        "status": "prepared",
+        "detail": "prepared_sha256=4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd mpp_artifact=artifact_65b30acb03fe4ed6a7c81c3e47bcc9c6"
+      },
+      {
+        "stage": "attachment_post",
+        "status": "prepared",
+        "detail": "{\"page_id\": \"test-page\", \"filename\": \"gantt-chart-ead27df5e60f48f580645c3c8d17a8ac.json\", \"published\": null, \"external_effect\": \"unknown\"}"
+      },
+      {
+        "stage": "attachment_verify",
+        "status": "confirmed",
+        "detail": "{\"attachment_id\": \"actual-attachment-id\", \"attachment_version\": 1, \"expected_sha256\": \"4ce5f65e27c17df0c1f46745a83f3744fdc0e871de6f4899ec962dcbe53174fd\", \"published\": null, \"external_effect\": \"partial\", \"scope\": \"attachment_version\"}"
+      },
+      {
+        "stage": "storage_put",
+        "status": "prepared",
+        "detail": "{\"published\": null, \"external_effect\": \"partial\"}"
+      },
+      {
+        "stage": "storage_verify",
+        "status": "confirmed",
+        "detail": "{\"page_version\": 4, \"observation_id\": \"obs_dd0818b14363430f84668b6069ec187c\", \"scope\": \"current_state\", \"published\": null, \"external_effect\": \"partial\"}"
+      }
+    ]
+  }
+]

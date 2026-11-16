@@ -1,0 +1,14 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/USERTOOLS/MofsIndex
+configfile: pyproject.toml
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 36 items
+
+tests/plan/test_migrate.py .....                                         [ 13%]
+tests/plan/test_writer.py .....................                          [ 72%]
+tests/plan/test_query.py ..........                                      [100%]
+
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/mofs-required-junit.xml -
+============================== 36 passed in 2.68s ==============================

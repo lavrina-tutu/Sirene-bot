@@ -1,0 +1,8 @@
+{
+  "exact_transfer_after_heading_and_reference_mapping": true,
+  "appendix_matches_snapshot_source": true,
+  "all_sections_and_both_revision_histories": true,
+  "numeric_hash_evidence_preserved": true,
+  "single_inventory_row": true,
+  "new_reviewer_approve_claimed": false
+}

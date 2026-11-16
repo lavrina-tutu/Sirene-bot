@@ -62,6 +62,8 @@ def create_child_page(
     if attempt_id:
         write_receipt(attempt_id, "page_create", {
             "stage": "page_create", "status": "confirmed",
+            "published": None, "external_effect": "partial", "scope": "page_create_response",
+            "page_version": page.get("version", {}).get("number"),
             "parent_id": str(parent_id), "title": title,
             "page_id": str(page["id"]),
             "macro_id": macro_id, "param_id": param_id, "param_hash": param_hash,

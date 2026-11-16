@@ -1,0 +1,112 @@
+{
+  "component": "MofsIndex",
+  "source_root": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+  "runtime_imports_from_evidence": "forbidden",
+  "files": [
+    {
+      "relative_path": "mofs_index/plan/schema.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py",
+      "action": "modified",
+      "before_sha256": "f95a85f3c4cd865d99970d034f3a01b6aaac9ec290cf0bea34df17d240c55c37",
+      "after_sha256": "748f4509aed5194f008c8196b682bb220cf5c2cc7d6a6a300d5f95afbe0435b7",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "mofs_index/plan/migrate.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/migrate.py",
+      "action": "modified",
+      "before_sha256": "6e3c47fb1fe82225ae2c02a2976bebc163193a3d2d26ebca15a6039aeaddb199",
+      "after_sha256": "a4fa2761083ec3e091e5205f0f40170096d942ebbcef489a28255ae6d27bcd8a",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "mofs_index/plan/writer.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py",
+      "action": "modified",
+      "before_sha256": "14d154efdbfa549c83fefd013d32df2b42a908db7a75b330d98ad4aa4a72efae",
+      "after_sha256": "9a0f0cebd6e1feeaa02258a2239a3314603c2515b70411d3cdb879fc82abe0a4",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "mofs_index/plan/query.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py",
+      "action": "modified",
+      "before_sha256": "46902b92deb35211b2c640d75dd7f729355812981c10567a49ab5eceb36ea0e0",
+      "after_sha256": "ce7327c4d78934afd164cf1f8cf62cef98b091847a7e38f0f8e1027324bfb5eb",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "mofs_index/plan/render.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/render.py",
+      "action": "modified",
+      "before_sha256": "daabc29464440f38b2adc1b5a4025ad5e876159df266c561a564c2dfe91ceb56",
+      "after_sha256": "c7b33e96147a47f4f9f0c62f7a94dbd74c9024bb244b33f381bcadb432492e77",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "tests/plan/test_migrate.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py",
+      "action": "modified",
+      "before_sha256": "b6dd40476702c49fe288d6b50937698fc64ffe4adce5f15aeb645a0748dae55a",
+      "after_sha256": "17ecd2ebd343122e8bd5a78f8784b7cb2263c1b0f766073f7692e4dfe558138f",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "tests/plan/test_writer.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer.py",
+      "action": "modified",
+      "before_sha256": "f964d65c779530b9456f885f8fb0162742ccb56479708f72544d2f2728608459",
+      "after_sha256": "36576556d98c1b43b1d7fbf5c640f79ce6aff0d010aff965719af7b733115d52",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "tests/plan/test_query.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_query.py",
+      "action": "modified",
+      "before_sha256": "0d174621c16267bc7f2c369198538359c311a136e325d5dfe3dde180168820a0",
+      "after_sha256": "4b90840f8d5be1e1a72f8550cee8e2f4ce65eb9ab95dcdc1ba9c12419c980f4c",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "tests/plan/conftest.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/conftest.py",
+      "action": "created",
+      "before_sha256": null,
+      "after_sha256": "7f45c7ca866a7c878e4e4a7cc719a7937a81e59126c75fc506bf09919390b7f4",
+      "before_mode": null,
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    }
+  ],
+  "patch_sha256": "817cc1f04e1f5ae45172caec19748694a144c5255f4a22c386adabb2ec4059e8",
+  "restoration": {
+    "status": "passed",
+    "command": [
+      "patch",
+      "-p1",
+      "--batch",
+      "-i",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-01/usertools/MofsIndex/changes.patch"
+    ],
+    "cwd": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/usertools-restore-zero/MofsIndex",
+    "rc": 0,
+    "all_after_hashes_match": true
+  },
+  "existing_migrations_0001_0005_unchanged": true
+}

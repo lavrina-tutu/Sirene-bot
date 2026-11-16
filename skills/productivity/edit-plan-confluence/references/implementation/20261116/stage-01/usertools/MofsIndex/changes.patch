@@ -1,0 +1,312 @@
+--- a/mofs_index/plan/schema.py
++++ b/mofs_index/plan/schema.py
+@@ -756,0 +757,19 @@
++    Migration(
++        migration_id="0006_publication_trust",
++        statements=(
++            "ALTER TABLE plan_publication ADD COLUMN trust TEXT NOT NULL DEFAULT 'legacy_unverified' "
++            "CHECK (trust IN ('legacy_unverified','verified_observation','verified_v1','verification_failed'))",
++            "ALTER TABLE plan_publication ADD COLUMN historical_status TEXT",
++            # The old table had no status column. 'registered' describes the
++            # existing row, not an invented historical confirmation.
++            "UPDATE plan_publication SET historical_status = 'registered'",
++            "ALTER TABLE plan_import_attempt ADD COLUMN historical_status TEXT",
++            "UPDATE plan_import_attempt SET historical_status = status",
++            "ALTER TABLE plan_page_observation ADD COLUMN verification_status TEXT NOT NULL DEFAULT 'not_verified' "
++            "CHECK (verification_status IN ('not_verified','verified_observation','verification_failed'))",
++            "ALTER TABLE plan_page_observation ADD COLUMN verification_scope TEXT",
++            "ALTER TABLE plan_page_observation ADD COLUMN verification_profile TEXT",
++            "ALTER TABLE plan_page_observation ADD COLUMN verification_json TEXT",
++            "ALTER TABLE plan_page_observation ADD COLUMN storage_sha256 TEXT",
++        ),
++    ),
+--- a/mofs_index/plan/migrate.py
++++ b/mofs_index/plan/migrate.py
+@@ -47,0 +48,6 @@
++            stored = conn.execute(
++                "SELECT checksum FROM plan_schema_migration WHERE migration_id=?",
++                (migration.migration_id,),
++            ).fetchone()[0]
++            if stored != _checksum(migration):
++                raise ValueError(f"applied migration checksum mismatch: {migration.migration_id}")
+--- a/mofs_index/plan/writer.py
++++ b/mofs_index/plan/writer.py
+@@ -15,0 +16,2 @@
++import json
++import hashlib
+@@ -270,0 +273,3 @@
++    trust: str = "legacy_unverified"
++    historical_status: str | None = None
++    observation_id: str | None = None
+@@ -281,0 +287,11 @@
++    # Stage 01 repairs read-back only. Full admission/snapshot/schedule
++    # evidence belongs to the later pipeline; no caller can promote it here.
++    if spec.trust != "legacy_unverified":
++        raise PlanWriterError("publication trust promotion requires the complete new pipeline")
++    if spec.observation_id:
++        obs = conn.execute(
++            "SELECT plan_id, page_id, page_version, verification_status FROM plan_page_observation "
++            "WHERE observation_id = ?", (spec.observation_id,),
++        ).fetchone()
++        if (not obs or tuple(obs) != (spec.plan_id, spec.page_id, spec.page_version, "verified_observation")):
++            raise PlanWriterError("publication observation scope mismatch")
+@@ -294,0 +311,4 @@
++        if spec.observation_id:
++            link_publication_page(conn, existing_id, spec.observation_id,
++                                  link_kind="current_state_readback", confidence="confirmed",
++                                  evidence="stage01-readback-v1; historical status unchanged")
+@@ -303 +323 @@
+-            "page_version, raw_sha256) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
++            "page_version, raw_sha256, trust, historical_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+@@ -307 +327,2 @@
+-             spec.observed_at, _now(), spec.page_version, spec.raw_sha256),
++             spec.observed_at, _now(), spec.page_version, spec.raw_sha256,
++             spec.trust, spec.historical_status),
+@@ -315,0 +337,4 @@
++    if spec.observation_id:
++        link_publication_page(conn, publication_id, spec.observation_id,
++                              link_kind="current_state_readback", confidence="confirmed",
++                              evidence="stage01-readback-v1; schedule not verified")
+@@ -332,0 +358,5 @@
++    verification_status: str = "not_verified"
++    verification_scope: str | None = None
++    verification_profile: str | None = None
++    verification: dict | None = None
++    storage_sha256: str | None = None
+@@ -337,0 +368,17 @@
++    if spec.verification_status not in ("not_verified", "verified_observation", "verification_failed"):
++        raise PlanWriterError("invalid observation verification status")
++    if spec.verification_status == "verified_observation":
++        evidence = spec.verification or {}
++        checks = evidence.get("checks", {})
++        attachment = evidence.get("attachment", {})
++        required_checks = {"skeleton_version", "skeleton_macro_count", "page_version", "one_gantt_macro",
++                           "macro_id", "param_id", "param_hash", "attachment_name", "one_itogo",
++                           "itogo_values", "itogo_above_macro", "no_trudozatraty", "storage_preserved"}
++        if (not required_checks.issubset(checks) or spec.verification_scope not in ("current_state", "historical_version")
++                or not spec.verification_profile or not spec.page_version or not spec.itogo_raw
++                or not checks or not all(value is True for value in checks.values())
++                or not attachment.get("attachment_id") or not attachment.get("attachment_version")
++                or attachment.get("expected_sha256") != attachment.get("actual_sha256")
++                or not attachment.get("actual_sha256")
++                or hashlib.sha256(spec.itogo_raw.encode()).hexdigest() != spec.storage_sha256):
++            raise PlanWriterError("incomplete read-back observation evidence")
+@@ -344,2 +391,3 @@
+-            "itogo_d1, itogo_d2, itogo_n, itogo_m, quality) "
+-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
++            "itogo_d1, itogo_d2, itogo_n, itogo_m, quality, verification_status, "
++            "verification_scope, verification_profile, verification_json, storage_sha256) "
++            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+@@ -348 +396,4 @@
+-             spec.itogo_d1, spec.itogo_d2, spec.itogo_n, spec.itogo_m, spec.quality),
++             spec.itogo_d1, spec.itogo_d2, spec.itogo_n, spec.itogo_m, spec.quality,
++             spec.verification_status, spec.verification_scope, spec.verification_profile,
++             json.dumps(spec.verification, ensure_ascii=False) if spec.verification else None,
++             spec.storage_sha256),
+@@ -368,0 +420,7 @@
++    pair = conn.execute(
++        "SELECT p.plan_id, p.page_id, o.plan_id, o.page_id FROM plan_publication p "
++        "JOIN plan_page_observation o ON o.observation_id=? WHERE p.publication_id=?",
++        (observation_id, publication_id),
++    ).fetchone()
++    if not pair or pair[0] != pair[2] or (pair[1] is not None and pair[1] != pair[3]):
++        raise PlanWriterError("cross-plan/page publication observation link")
+--- a/mofs_index/plan/query.py
++++ b/mofs_index/plan/query.py
+@@ -82 +82 @@
+-        "recorded_at, observed_at, published_at FROM plan_publication "
++        "recorded_at, observed_at, published_at, trust, historical_status FROM plan_publication "
+@@ -94 +94 @@
+-    for pub_id, ver, sha, filename, recorded_at, observed_at, published_at in publications:
++    for pub_id, ver, sha, filename, recorded_at, observed_at, published_at, trust, historical_status in publications:
+@@ -97,0 +98,3 @@
++            "trust": trust,
++            "historical_status": historical_status,
++            "publication_verified": trust == "verified_v1",
+@@ -135 +138 @@
+-        "SELECT p.publication_id, p.raw_sha256, a.path, p.recorded_at "
++        "SELECT p.publication_id, p.raw_sha256, a.path, p.recorded_at, p.trust, p.historical_status "
+@@ -142 +145 @@
+-    publication_id, sha256, path, recorded_at = row
++    publication_id, sha256, path, recorded_at, trust, historical_status = row
+@@ -145,0 +149,3 @@
++        "trust": trust,
++        "historical_status": historical_status,
++        "publication_verified": trust == "verified_v1",
+@@ -262,0 +269,2 @@
++                "trust_a": a["trust"], "trust_b": b["trust"],
++                "publication_verified": a["publication_verified"] and b["publication_verified"],
+@@ -328,0 +337,2 @@
++                "trust_a": a["trust"], "trust_b": b["trust"],
++                "publication_verified": a["publication_verified"] and b["publication_verified"],
+--- a/mofs_index/plan/render.py
++++ b/mofs_index/plan/render.py
+@@ -79 +79 @@
+-        lines.append("## Свежая публикация")
++        lines.append("## Последняя регистрация публикации")
+@@ -81,0 +82,2 @@
++        lines.append(f"- Доверие: {latest['trust']}; подтверждение полным конвейером: {latest['publication_verified']}")
++        lines.append("- Регистрация и текущее read-back-наблюдение не доказывают историческую публикацию.")
+@@ -88,2 +90,2 @@
+-    lines.append("| Версия | Hash | Записано |")
+-    lines.append("|---|---|---|")
++    lines.append("| Версия | Hash | Записано | Доверие |")
++    lines.append("|---|---|---|---|")
+@@ -91 +93 @@
+-        lines.append(f"| {p['attachment_version']} | `{p['raw_sha256'][:12]}…` | {_fmt_dt(p['recorded_at'])} |")
++        lines.append(f"| {p['attachment_version']} | `{(p['raw_sha256'] or '')[:12]}…` | {_fmt_dt(p['recorded_at'])} | {p['trust']} |")
+--- a/tests/plan/test_migrate.py
++++ b/tests/plan/test_migrate.py
+@@ -34 +34 @@
+-        "0004_phase3_analysis", "0005_phase3_fts",
++        "0004_phase3_analysis", "0005_phase3_fts", "0006_publication_trust",
+@@ -42 +42 @@
+-    assert len(rows) == 5
++    assert len(rows) == 6
+@@ -58,0 +59,46 @@
++
++
++def test_legacy_false_confirmed_preserves_history_and_downgrades_trust(conn, monkeypatch):
++    import mofs_index.plan.migrate as migrate
++    from mofs_index.plan import writer as w
++    all_migrations = migrate.MIGRATIONS
++    monkeypatch.setattr(migrate, "MIGRATIONS", all_migrations[:5])
++    ensure_plan_schema(conn)
++    plan = w.ensure_plan(conn, "legacy-test")
++    lineage = w.ensure_lineage(conn, plan, "confluence", page_id="test-page")
++    attempt = w.begin_attempt(conn, w.AttemptSpec(plan_id=plan, lineage_id=lineage))
++    w.set_attempt_status(conn, attempt, "confirmed")
++    w.record_event(conn, attempt, "storage_put", "confirmed", detail="legacy false success fixture")
++    artifact = w.record_artifact(conn, "a" * 64, "prepared_json", "fixture.json")
++    conn.execute("INSERT INTO plan_publication(publication_id,plan_id,lineage_id,artifact_id,source_namespace,attachment_id,attachment_version,page_id,recorded_at,raw_sha256) VALUES ('legacy-pub',?,?,?,?,?,1,'test-page','2026-01-01',?)",
++                 (plan,lineage,artifact,"confluence","actual-id","a" * 64))
++    conn.execute("INSERT INTO plan_page_observation(observation_id,plan_id,page_id,page_version,fetched_at,itogo_raw,quality) VALUES ('legacy-obs',?,'test-page',1,'2026-01-01','unverified PUT body','ok')",(plan,))
++    conn.commit()
++    w.link_publication_page(conn,"legacy-pub","legacy-obs",confidence="confirmed")
++    snap = w.ingest_snapshot(conn, w.SnapshotSpec(plan_id=plan,lineage_id=lineage,representation="mpp"))
++    w.select_snapshot_baseline(conn,lineage,snap,is_explicit=True,basis="owner")
++    w.select_plan_baseline(conn,plan,snap,0,is_explicit=True,basis="owner")
++    preserved = ("plan_attempt_event","plan_publication_page_link","plan_snapshot","plan_snapshot_selection","plan_baseline_selection","plan_artifact")
++    before = {name:[tuple(r) for r in conn.execute("SELECT * FROM " + name)] for name in preserved}
++    publication_before = tuple(conn.execute("SELECT * FROM plan_publication").fetchone())
++    attempt_before = tuple(conn.execute("SELECT * FROM plan_import_attempt").fetchone())
++    monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations)
++    assert ensure_plan_schema(conn) == ["0006_publication_trust"]
++    for name, rows in before.items():
++        assert [tuple(r) for r in conn.execute("SELECT * FROM " + name)] == rows
++    assert tuple(conn.execute("SELECT * FROM plan_publication").fetchone())[:len(publication_before)] == publication_before
++    assert tuple(conn.execute("SELECT * FROM plan_import_attempt").fetchone())[:len(attempt_before)] == attempt_before
++    assert tuple(conn.execute("SELECT trust,historical_status FROM plan_publication").fetchone()) == ("legacy_unverified","registered")
++    assert tuple(conn.execute("SELECT status,historical_status FROM plan_import_attempt").fetchone()) == ("confirmed","confirmed")
++    assert conn.execute("SELECT verification_status FROM plan_page_observation").fetchone()[0] == "not_verified"
++    assert ensure_plan_schema(conn) == []
++    assert conn.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
++    assert not conn.execute("PRAGMA foreign_key_check").fetchall()
++
++
++def test_applied_migration_checksum_mismatch_rejected(conn):
++    ensure_plan_schema(conn)
++    conn.execute("UPDATE plan_schema_migration SET checksum='wrong' WHERE migration_id='0006_publication_trust'")
++    conn.commit()
++    with pytest.raises(ValueError,match="checksum mismatch"):
++        ensure_plan_schema(conn)
+--- a/tests/plan/test_writer.py
++++ b/tests/plan/test_writer.py
+@@ -189,0 +190,39 @@
++
++
++@pytest.mark.parametrize("trust", ["verified_v1", "verified_observation", "verification_failed", "invented"])
++def test_partial_legacy_writer_cannot_promote_publication(conn, trust):
++    plan = w.ensure_plan(conn, "test")
++    with pytest.raises(w.PlanWriterError):
++        w.record_publication(conn, w.PublicationSpec(plan_id=plan, source_namespace="test",
++                            attachment_id="actual-id", attachment_version=1, trust=trust))
++    assert conn.execute("SELECT COUNT(*) FROM plan_publication").fetchone()[0] == 0
++
++
++def test_observation_without_full_readback_evidence_is_not_verified(conn):
++    plan = w.ensure_plan(conn, "test")
++    with pytest.raises(w.PlanWriterError):
++        w.record_page_observation(conn, w.PageObservationSpec(plan_id=plan, page_id="test-page",
++                                  verification_status="verified_observation", verification_scope="current_state"))
++
++
++def test_publication_default_trust_is_legacy_unverified(conn):
++    plan = w.ensure_plan(conn, "test")
++    pub = w.record_publication(conn, w.PublicationSpec(plan_id=plan, source_namespace="test",
++                               attachment_id="actual-id", attachment_version=1))
++    assert conn.execute("SELECT trust FROM plan_publication WHERE publication_id=?", (pub,)).fetchone()[0] == "legacy_unverified"
++
++
++def test_cross_project_observation_link_rejected(conn):
++    a, b = w.ensure_plan(conn,"a"), w.ensure_plan(conn,"b")
++    pub = w.record_publication(conn,w.PublicationSpec(plan_id=a,source_namespace="test",attachment_id="actual",attachment_version=1))
++    obs = w.record_page_observation(conn,w.PageObservationSpec(plan_id=b,page_id="test-page"))
++    with pytest.raises(w.PlanWriterError):
++        w.link_publication_page(conn,pub,obs,confidence="confirmed")
++
++
++def test_registration_cannot_link_unverified_observation(conn):
++    plan = w.ensure_plan(conn,"a")
++    obs = w.record_page_observation(conn,w.PageObservationSpec(plan_id=plan,page_id="test-page",page_version=1))
++    with pytest.raises(w.PlanWriterError):
++        w.record_publication(conn,w.PublicationSpec(plan_id=plan,source_namespace="test",attachment_id="actual",
++                             attachment_version=1,page_id="test-page",page_version=1,observation_id=obs))
+--- a/tests/plan/test_query.py
++++ b/tests/plan/test_query.py
+@@ -167,0 +168,19 @@
++
++
++def test_legacy_registration_is_not_new_verified_confirmation(conn, tmp_path):
++    plan = w.ensure_plan(conn,"legacy")
++    lineage = w.ensure_lineage(conn,plan,"test",page_id="p1")
++    pub = _publish_json(conn,plan,lineage,1,{"eventsData":[]},tmp_path=tmp_path)
++    versions = q.list_versions(conn,plan)["versions"]
++    assert versions[0]["publication_id"] == pub
++    assert versions[0]["trust"] == "legacy_unverified"
++    assert versions[0]["publication_verified"] is False
++    loaded = q._load_publication(conn,plan,1)
++    assert loaded["trust"] == "legacy_unverified"
++    assert loaded["publication_verified"] is False
++    from mofs_index.plan.render import _build_markdown
++    meta = q.resolve_plan(conn,"legacy")
++    md = _build_markdown(conn,plan,meta,1)
++    assert "legacy_unverified" in md
++    assert "Последняя регистрация" in md
++    assert "подтверждение полным конвейером: False" in md
+--- /dev/null
++++ b/tests/plan/conftest.py
+@@ -0,0 +1,33 @@
++"""Isolated plan API tests: deny network and SQLite outside pytest's root."""
++from pathlib import Path
++import socket
++import sqlite3
++
++import pytest
++
++
++@pytest.fixture(autouse=True)
++def isolated_plan_environment(tmp_path, tmp_path_factory, monkeypatch):
++    root = tmp_path_factory.getbasetemp().resolve()
++    protected = (Path.home() / "WorkVault", Path.home() / "USERTOOLS/MofsIndex/state", Path.home() / ".hermes")
++    if any(root == path.resolve() or path.resolve() in root.parents or root in path.resolve().parents for path in protected):
++        raise AssertionError("production test root forbidden")
++    original_connect = sqlite3.connect
++    def connect(path, *args, **kwargs):
++        raw = str(path)
++        if raw != ":memory:":
++            candidate = Path(raw.removeprefix("file:").split("?")[0]).resolve()
++            if root not in candidate.parents:
++                raise AssertionError(f"SQLite outside isolated root: {candidate}")
++        return original_connect(path, *args, **kwargs)
++    def no_network(*args, **kwargs):
++        raise AssertionError("network forbidden in MofsIndex plan tests")
++    monkeypatch.setattr(sqlite3, "connect", connect)
++    monkeypatch.setattr(socket.socket, "connect", no_network)
++    monkeypatch.setattr(socket, "create_connection", no_network)
++    wv = tmp_path / "WorkVault"
++    cache = tmp_path / "cache"
++    wv.mkdir()
++    cache.mkdir()
++    monkeypatch.setenv("WORKVAULT_PATH", str(wv))
++    monkeypatch.setenv("TMPDIR", str(cache))

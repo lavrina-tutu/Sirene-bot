@@ -6,12 +6,8 @@ import uuid
 from dataclasses import dataclass
 
 
-MACRO_RE = re.compile(
-    r'<ac:structured-macro[^>]*ac:name="gantt-chart-planner"[^>]*ac:macro-id="([^"]+)"[^>]*>'
-    r'.*?<ac:parameter ac:name="id">([^<]+)</ac:parameter>'
-    r'.*?<ac:parameter ac:name="hash">([^<]+)</ac:parameter>',
-    re.DOTALL,
-)
+_MACRO_TAG = re.compile(r"</?ac:structured-macro\b[^>]*>", re.DOTALL)
+_ATTR = re.compile(r"([\w:-]+)\s*=\s*([\"'])(.*?)\2", re.DOTALL)
 
 
 @dataclass
@@ -20,33 +16,67 @@ class MacroInfo:
     param_id: str
     param_hash: str
     attachment_name: str
+    _span: tuple[int, int] | None = None
 
     @property
     def span(self) -> tuple[int, int] | None:
-        return None
+        return self._span
+
+
+def find_macros(storage: str) -> list[MacroInfo]:
+    """Enumerate every target, including nested macros; malformed targets fail closed."""
+    from xml.etree import ElementTree as ET
+    from html import unescape
+
+    stack = []
+    targets = []
+    for match in _MACRO_TAG.finditer(storage):
+        tag = match.group()
+        if tag.startswith("</"):
+            if not stack:
+                raise ValueError("unbalanced structured-macro")
+            start, attrs = stack.pop()
+            if attrs.get("ac:name") != "gantt-chart-planner":
+                continue
+            fragment = storage[start:match.end()]
+            try:
+                root = ET.fromstring('<root xmlns:ac="urn:ac" xmlns:ri="urn:ri">' + fragment + '</root>')[0]
+                params = {}
+                for child in root:
+                    if child.tag == "{urn:ac}parameter":
+                        key = child.get("{urn:ac}name")
+                        if key in params:
+                            raise ValueError("duplicate Gantt parameter")
+                        params[key] = child.text or ""
+                mid = attrs.get("ac:macro-id")
+                pid, phash = params.get("id"), params.get("hash")
+                if not all((mid, pid, phash)):
+                    raise ValueError("incomplete Gantt macro identifiers")
+            except ET.ParseError as exc:
+                raise ValueError("malformed Gantt macro") from exc
+            targets.append(MacroInfo(mid, pid, phash, f"gantt-chart-{pid}.json", (start, match.end())))
+        else:
+            attrs = {k: unescape(v) for k, _, v in _ATTR.findall(tag)}
+            if tag.endswith("/>"):
+                if attrs.get("ac:name") == "gantt-chart-planner":
+                    raise ValueError("incomplete self-closing Gantt macro")
+                continue
+            stack.append((match.start(), attrs))
+    if stack:
+        raise ValueError("unclosed structured-macro")
+    return sorted(targets, key=lambda target: target.span[0])
 
 
 def find_macro(storage: str) -> MacroInfo | None:
-    m = MACRO_RE.search(storage)
-    if not m:
-        return None
-    macro_id = m.group(1)
-    param_id = m.group(2)
-    return MacroInfo(
-        macro_id=macro_id,
-        param_id=param_id,
-        param_hash=m.group(3),
-        # 📌 Имя вложения плагин gantt-chart-planner строит от ac:parameter "id",
-        # НЕ от ac:macro-id (проверено на живой AB 519492935: вложение gantt-chart-<param_id>.json).
-        attachment_name=f"gantt-chart-{param_id}.json",
-    )
+    targets = find_macros(storage)
+    if len(targets) > 1:
+        raise ValueError(f"ambiguous Gantt target: {len(targets)} macros")
+    return targets[0] if targets else None
 
 
 def macro_span(storage: str) -> tuple[int, int] | None:
-    m = MACRO_RE.search(storage)
-    if not m:
-        return None
-    return m.start(), m.end()
+    target = find_macro(storage)
+    return target.span if target else None
 
 
 def build_macro_html(macro_id: str, param_id: str, param_hash: str) -> str:

@@ -59,7 +59,7 @@ def _prep_attempt(conn, expected_sha256: str, page_id: str = "537561928") -> str
     ))
 
 
-def test_reconcile_single_candidate_confirms(conn):
+def test_reconcile_single_candidate_does_not_confirm_operation(conn):
     payload = b'{"ok": true}'
     sha = hashlib.sha256(payload).hexdigest()
     attempt_id = _prep_attempt(conn, sha)
@@ -68,8 +68,10 @@ def test_reconcile_single_candidate_confirms(conn):
         blobs={("gantt-chart-x.json", 2): payload},
     )
     outcome = pr.reconcile_attempt(client, attempt_id, conn=conn)
-    assert outcome.status == "confirmed"
+    assert outcome.status == "unknown"
     assert outcome.attachment_id == "A1"
+    assert conn.execute("SELECT COUNT(*) FROM plan_publication").fetchone()[0] == 0
+    assert conn.execute("SELECT status FROM plan_import_attempt WHERE attempt_id=?", (attempt_id,)).fetchone()[0] != "confirmed"
 
 
 def test_reconcile_two_candidates_same_version_gives_unknown(conn):

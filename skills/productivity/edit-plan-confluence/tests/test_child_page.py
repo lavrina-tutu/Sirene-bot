@@ -56,3 +56,83 @@ def test_create_child_page_resume_reuses_existing_page_id():
     assert page2["id"] == page1["id"] == "999"
     assert macro_id2 == macro_id1
     assert param_id2 == param_id1
+
+
+@pytest.mark.parametrize("failure", ["false", "hash", "download"])
+def test_child_rejects_attachment_failure(failure, fake_confluence, prepared_input, monkeypatch):
+    import pipeline
+    from gantt_attachment import UploadVerificationConflict
+    from plan_receipt import read_receipt
+    client = fake_confluence
+    if failure == "false":
+        monkeypatch.setattr(pipeline, "verify_uploaded", lambda *a, **k: (False, b""))
+    elif failure == "hash":
+        monkeypatch.setattr(pipeline, "verify_uploaded", lambda *a, **k: (True, b"wrong"))
+    else:
+        client.download_error = TimeoutError("after child POST")
+    with pytest.raises((UploadVerificationConflict, TimeoutError)):
+        pipeline.create_child_with_plan(client, "test-page", "лей", mpp_path=prepared_input, attempt_id="child-fail")
+    assert not any(c[0] == "PUT" for c in client.calls)
+    assert read_receipt("child-fail", "child_complete") is None
+    failure_receipt = read_receipt("child-fail", "failure-child_upload")
+    assert failure_receipt["published"] is None
+    assert failure_receipt["external_effect"] == "partial"
+
+
+@pytest.mark.parametrize("kind", ["duplicate", "macro_id", "param_id", "param_hash", "attachment", "itogo", "extra_itogo", "labour", "foreign"])
+def test_child_storage_corruption(kind, fake_confluence, prepared_input):
+    import pipeline
+    from plan_receipt import read_receipt
+    from plan_verify import PublicationVerificationError
+    from test_pipeline import _corrupt
+    client = fake_confluence
+    def mutate(page):
+        if page["id"] == "test-child":
+            storage = page["body"]["storage"]["value"]
+            # Child has no neighboring paragraph; add an unexpected foreign block.
+            page["body"]["storage"]["value"] = storage + "<p>unexpected</p>" if kind == "foreign" else _corrupt(storage, kind)
+        return page
+    client.mutate_get = mutate
+    with pytest.raises(PublicationVerificationError):
+        pipeline.create_child_with_plan(client, "test-page", "лей", mpp_path=prepared_input, attempt_id="child-storage")
+    assert read_receipt("child-storage", "child_complete") is None
+    assert read_receipt("child-storage", "failure-storage_verify")["published"] is None
+
+
+def test_resume_rechecks_actual_bytes(fake_confluence, prepared_input):
+    import pipeline
+    from gantt_attachment import UploadVerificationConflict
+    client = fake_confluence
+    first = pipeline.create_child_with_plan(client, "test-page", "лей", mpp_path=prepared_input, attempt_id="child-resume")
+    second = pipeline.create_child_with_plan(client, "test-page", "лей", mpp_path=prepared_input, attempt_id="child-resume")
+    assert first.attachment_version == second.attachment_version
+    assert sum(c[0] == "POST_PAGE" for c in client.calls) == 1
+    assert sum(c[0] == "POST_ATTACHMENT" for c in client.calls) == 1
+    client.blobs[(client.uploaded.filename, client.uploaded.version)] = b"corrupt after receipt"
+    with pytest.raises(UploadVerificationConflict):
+        pipeline.create_child_with_plan(client, "test-page", "лей", mpp_path=prepared_input, attempt_id="child-resume")
+    assert sum(c[0] == "POST_ATTACHMENT" for c in client.calls) == 1
+
+
+def test_child_resume_changed_current_version_rejected(fake_confluence, prepared_input):
+    import pipeline
+    from gantt_attachment import UploadVerificationConflict
+    client = fake_confluence
+    pipeline.create_child_with_plan(client, "test-page", "лей", mpp_path=prepared_input, attempt_id="child-latest")
+    client.uploaded.version += 1
+    client.blobs[(client.uploaded.filename, client.uploaded.version)] = b"foreign latest"
+    with pytest.raises(UploadVerificationConflict):
+        pipeline.create_child_with_plan(client, "test-page", "лей", mpp_path=prepared_input, attempt_id="child-latest")
+    assert sum(c[0] == "POST_ATTACHMENT" for c in client.calls) == 1
+
+
+def test_old_confirmed_child_upload_receipt_not_proof(fake_confluence, prepared_input):
+    import pipeline
+    from plan_receipt import write_receipt
+    from gantt_attachment import UploadVerificationConflict
+    write_receipt("old-child", "child_upload", {
+        "status": "confirmed", "page_id": "test-child", "filename": "gantt-chart-old.json", "attachment_version": 1,
+    })
+    with pytest.raises(UploadVerificationConflict):
+        pipeline._upload_child_attachment_with_receipt(fake_confluence, "old-child", "test-child", "gantt-chart-old.json", {})
+    assert not fake_confluence.calls

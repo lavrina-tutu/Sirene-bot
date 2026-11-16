@@ -1,0 +1,1271 @@
+{
+  "stage": "01",
+  "gate": "passed",
+  "scope": "Stage 01 only; mandatory S and M sets passed; no stages 02–13",
+  "exit_code": 0,
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "-c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+    "--acceptance-stage",
+    "01",
+    "--test-root",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01",
+    "-m",
+    "unit or archive_integration",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/junit.xml"
+  ],
+  "environment": {
+    "python": "/usr/bin/python3.9",
+    "version": "3.9.25",
+    "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01",
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+  },
+  "source_tree_sha256": "f6476717560305d3ee5da02a3778eb98867a97cbd321d62cb12f1920b58398e6",
+  "source_files": {
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/__init__.py": "a9c6ee0da76f83686f8c1ec2ac62230198286b792de824a1ce3071a232d3aad9",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/backup.py": "32aa1954c47d7cb5d1b4fffa6b51baaa4dd11a6098e20b4571b648b8a12ed99d",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/ingest_mpp.py": "6e9e1dccfc00eb1fd2e859fd777c8febcca0133a1002f3d6884548052dc83ca4",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/migrate.py": "a4fa2761083ec3e091e5205f0f40170096d942ebbcef489a28255ae6d27bcd8a",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py": "ce7327c4d78934afd164cf1f8cf62cef98b091847a7e38f0f8e1027324bfb5eb",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/render.py": "c7b33e96147a47f4f9f0c62f7a94dbd74c9024bb244b33f381bcadb432492e77",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py": "748f4509aed5194f008c8196b682bb220cf5c2cc7d6a6a300d5f95afbe0435b7",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py": "9a0f0cebd6e1feeaa02258a2239a3314603c2515b70411d3cdb879fc82abe0a4",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/conftest.py": "7f45c7ca866a7c878e4e4a7cc719a7937a81e59126c75fc506bf09919390b7f4",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_backup.py": "94b6fed0cf1af575bf00ece287de66954f0c034a17c57d0e31e7b4b2637f2da4",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py": "17ecd2ebd343122e8bd5a78f8784b7cb2263c1b0f766073f7692e4dfe558138f",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_query.py": "4b90840f8d5be1e1a72f8550cee8e2f4ce65eb9ab95dcdc1ba9c12419c980f4c",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_render.py": "c730a5eff7e6e871ab82451a1e05d53e90b879437163077b1856ff8fdabc211e",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_schema.py": "4b0cd7a58de2953028e264d472f024b842df975381a9fbcd23adfad00aea9546",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer.py": "36576556d98c1b43b1d7fbf5c640f79ce6aff0d010aff965719af7b733115d52",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer_analysis.py": "233c0843effc1bdc70bc0a3192ac5a8a827286424489b9f60b194d91817c0f67",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer_snapshot.py": "52d2943887dff9710a7141ba6bb8706a8d8e67767b30c60b7bd3a9e9da24c076",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/child_page.py": "99d1b8483ccbb6a1332822d476a09cfd536f7586c6ab073ade66fd279b5bfe9b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py": "5882839c0a684b25055ffd0638b0f66ba68fa502233afd72ff0efb150f87a318",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/conf_client.py": "7291583bfd52628db37ba836121873bdb74b0f3efde8459c74e4c4f684810542",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/env.py": "7ed70b42c7bf83a55dade5825142266b0befc1d539c8cd77143be97f8da46483",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/gantt_attachment.py": "a6384f593cc71c2bf02e016a71616720ac0e5fbfb419807d0d0555dff1dbdc8e",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/gate_diff.py": "6e247dfe852c80a9e48bab160be5af7f503a6bd3dd17932b3f3230cbb5215b13",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/itogo.py": "4f6e52341056dfe84d7a81f28a8f7f52173bae8c7d8d5307fd83a03c91482f3a",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/macro.py": "b7dedee2fdf77049acf62e2ff6656935ebdff3cebfa16e4dce01c23f0736325b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/mpp_calendar.py": "4e24ea4d9053e6c6f03220d3cc67a0a5fd381bbff56395d7d5eaf1bfce532ced",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/mpp_convert.py": "df5780ffd9b0aa83f0c643d79d3a638e86dac3ce1a1c39f59d9834a697774cfd",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/mpp_input.py": "bd9c1c137622bdfae19aa0d9eaa309cb71c86a419aa3dff178fdbae5e50ee3fa",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/pipeline.py": "631750e03a787715811aea58f97f7d4f5909bd0916b4ab485d27dbfdba0a0067",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_archive.py": "0828cc85e359bd78fc09bbad11f4c316e22be5498af4cc63d82e22b43dcf6888",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_history.py": "0c8555c6a1f4b633bc84752f16ecb8652a9227ee6892dca4233d8011d86198f0",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_receipt.py": "21874182efcb23a605ba4ef6d26d86249df34965c2b70512bba38a6f2507358c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_reconcile.py": "41abf8f0e7a10d7ba9964fa0b530ef4d24b69f5a29132c4444d03b3d0f89fc87",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_save.py": "33e99e764738e4da81749601d8a20e7c91165bfa9c46fcec7170267ae7587957",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_verify.py": "c40fa19c59c49fc5f42dfc1d22e31a5b73be141564e1e0ee6b9d7f2341a9a7ae",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/conftest.py": "1d676fc75c77a222409d5d56928cb321008c3c7897b06cf4936a6cb23aaeb980",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini": "9e68035ef4b6060d621e65b73e0715c6a10e32602da3e74468bd78306825dbb4",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_child_page.py": "07b279aa4df0d3c9f9cd5d908861c1720d852ae5f0b15f4a86f68c94da370113",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_cli.py": "0743a7f1973e799520563dea033b254d634f30fab4643e112d1d21af3f8fe1ad",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_env.py": "ff4eac066781fb83ed34d977f00d281d01df62b36396bab14275993d5527fdef",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py": "3afaf4456ba6a19e6a1101cb1aa3b89a63f61c820c075ad8dbc089693a5ea44a",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gate_diff.py": "ced8085b6ff7aaef7e3c4bfb0852151e14a7df37ea67e7957d106411ac126987",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_itogo.py": "7ca90b890f946c18edd3e61b292f7f89d7e5fdef86cb2425d5aec38ecc4ba175",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_macro.py": "db4488a67c13be418a362c74c66686ae6e733a24fe5921256242cf8e32a00098",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py": "0b7a2332c20e96859aedfdf2dc9260fe147bde13640b465dfb093191abc10382",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py": "9c89f03f676795f59355288e6244fddee35a1f6c6801a39c4a79c2cd27f3589b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_input.py": "e8692f302523f6607121792c4308994018e43c5bd0c4ce50e654e10066370684",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_pipeline.py": "b2e8568dbd5c3b2af369a336195a54c1d48970ff195d6304fc5413b0c3f0e6aa",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_archive.py": "d8adcdcefa569744218231890a79cf4d154f1cf206b8c4081ca574ce1c18c082",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_history.py": "9f8b820ab7075d04954184fab9620470491c611b5ed34082b79fb800d37232a3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py": "28dbbf80f6cd7436c27785fbb2a6e2bb7f031d51393368190cea041728133e0b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_reconcile.py": "cfae0ac41c2cc1d58cf46aac23fb096039ecdee06dcbe4c2b95f3c9fbb8247dd",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_save.py": "37832f2643b9850db264359f2b897636d3744b6b5fdf26fd20768cfa937ba2a8",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_verify.py": "3caed391c9bcc436e75282a76cea3a3ae3aca35b8a371192ce9335fa891228e5",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_rest_live.py": "8bfc84dd6a35a48ed7c23c0b97edfa07e3e6c08817ea797d891025eca9b4de70"
+  },
+  "config_contract_sha256": "fde8820f018818f92e5b520d6423339ea9c933779ee52edc16a4490e796a4ec4",
+  "tests": [
+    {
+      "test_id": "test_child_page.py::test_default_child_title",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006608880066778511
+    },
+    {
+      "test_id": "test_child_page.py::test_build_child_storage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00018213200382888317
+    },
+    {
+      "test_id": "test_child_page.py::test_create_child_page_without_attempt_id_always_creates",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.001190306997159496
+    },
+    {
+      "test_id": "test_child_page.py::test_create_child_page_resume_reuses_existing_page_id",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.012453692994313315
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[false]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.05690168199362233
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.018139980995329097
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[download]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.012388428003760055
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[duplicate]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.027346018003299832
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[macro_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.016021008981624618
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[param_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.016136794991325587
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[param_hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.017861387983430177
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[attachment]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.025734449009178206
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.019032747019082308
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[extra_itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.018511809001211077
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[labour]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.027944695990299806
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[foreign]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.02040398700046353
+    },
+    {
+      "test_id": "test_child_page.py::test_resume_rechecks_actual_bytes",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.04046700400067493
+    },
+    {
+      "test_id": "test_child_page.py::test_child_resume_changed_current_version_rejected",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.023778138012858108
+    },
+    {
+      "test_id": "test_child_page.py::test_old_confirmed_child_upload_receipt_not_proof",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002370778995100409
+    },
+    {
+      "test_id": "test_cli.py::test_cli_help",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.20247787100379355
+    },
+    {
+      "test_id": "test_cli.py::test_cli_apply_without_confirm_exit_2",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.2281383409863338
+    },
+    {
+      "test_id": "test_env.py::test_load_confluence_env_ignores_foreign_keys",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007078890048433095
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_find_gantt_attachment",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002887719892896712
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_upload_uses_post_data",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0025914990110322833
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_verify_uploaded_matches_version_specific_get",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0009009100031107664
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_verify_uploaded_hash_mismatch_is_conflict_not_crash",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006609509873669595
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006306990107987076
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[title]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005793960008304566
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[version]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005195859994273633
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[page]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004733760142698884
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_exact_historical_version_even_if_latest_changed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008392200106754899
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_no_fallback_to_unrelated_gantt_attachment",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0001787779910955578
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_upload_missing_identity_fails_closed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0018978340085595846
+    },
+    {
+      "test_id": "test_gate_diff.py::test_is_confirmed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00028748498880304396
+    },
+    {
+      "test_id": "test_gate_diff.py::test_build_diff_contains_warning",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00028393202228471637
+    },
+    {
+      "test_id": "test_itogo.py::test_itogo_from_csv_080926",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0010267370089422911
+    },
+    {
+      "test_id": "test_itogo.py::test_format_thousands",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00026343599893152714
+    },
+    {
+      "test_id": "test_itogo.py::test_build_itogo_html",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00019723200239241123
+    },
+    {
+      "test_id": "test_itogo.py::test_patch_existing_itogo",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.000444204022642225
+    },
+    {
+      "test_id": "test_itogo.py::test_patch_existing_itogo_line1_only",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00022022597840987146
+    },
+    {
+      "test_id": "test_itogo.py::test_insert_itogo_above_macro_no_block",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00045632399269379675
+    },
+    {
+      "test_id": "test_itogo.py::test_apply_itogo_strips_line2_updates_line1",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00031140699866227806
+    },
+    {
+      "test_id": "test_itogo.py::test_apply_itogo_line2_only_inserts_line1",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004369950038380921
+    },
+    {
+      "test_id": "test_itogo.py::test_strip_trudozatraty_variants",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00017614601529203355
+    },
+    {
+      "test_id": "test_itogo.py::test_parse_itogo_text_found",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00023945601424202323
+    },
+    {
+      "test_id": "test_itogo.py::test_parse_itogo_text_missing_is_none_not_fabricated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00026078999508172274
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_known",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.004948118003085256
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_missing_is_unknown_not_fabricated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.004131148016313091
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_two_observations_not_glued_by_number",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.003150864999042824
+    },
+    {
+      "test_id": "test_macro.py::test_find_macro",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00031021900940686464
+    },
+    {
+      "test_id": "test_macro.py::test_new_macro_ids_unique",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003557650197762996
+    },
+    {
+      "test_id": "test_macro.py::test_build_macro_html",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00023031100863590837
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_base_recurrent_intervals",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00045908900210633874
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_convert_task_count",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0028060719778295606
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_id_counter_not_300000",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0025387100176885724
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_fs_dependencies_only",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0024971029779408127
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_naim_resource_added",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.003913676016964018
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_tree_structure",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002900635008700192
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_service_header_217_first",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.003353392006829381
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_service_header_217_after_root",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.005670253012795001
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_parse_outline_level",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002747640246525407
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_only_service_header_raises",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00041711798985488713
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_copy_and_empty",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002377513999817893
+    },
+    {
+      "test_id": "test_mpp_input.py::test_resolve_mpp_from_zip",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.006032959005096927
+    },
+    {
+      "test_id": "test_pipeline.py::test_build_plan_empty",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004390929825603962
+    },
+    {
+      "test_id": "test_pipeline.py::test_live_ab_guard",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002147599880117923
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_without_confirm_writes_nothing",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.000281289016129449
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[false]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1604385600076057
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1317995179852005
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[download]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.12879815802443773
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[lying_true]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.15654397002072074
+    },
+    {
+      "test_id": "test_pipeline.py::test_success_records_get_observation_and_actual_id",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.18760760899749584
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[duplicate]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.16885660798288882
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[macro_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.19750277401180938
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[param_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.2116749639972113
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[param_hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.18493899700115435
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[attachment]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.17240646301070228
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1593722230172716
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[extra_itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.17754266198608093
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[labour]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.18533462498453446
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[foreign]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.15603995902347378
+    },
+    {
+      "test_id": "test_pipeline.py::test_actual_current_attachment_changed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1805015639984049
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_existing_macro_preserves_all_ids",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.19878372398670763
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_put_409_retries_only_storage_stage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1748317889869213
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_put_409_exhausted_retries_raises",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.16737729700980708
+    },
+    {
+      "test_id": "test_pipeline.py::test_get_after_put_failure_is_unconfirmed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.16212676599388942
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_preflight_failure_blocks_all_http",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0024915389949455857
+    },
+    {
+      "test_id": "test_plan_archive.py::test_resolve_plan_binding_requires_slug_for_new_page",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005765630048699677
+    },
+    {
+      "test_id": "test_plan_archive.py::test_resolve_plan_binding_creates_and_is_idempotent",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0049778530083131045
+    },
+    {
+      "test_id": "test_plan_archive.py::test_resolve_plan_binding_different_pages_different_lineage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.005949143000179902
+    },
+    {
+      "test_id": "test_plan_archive.py::test_store_artifact_dedup_survives_tmp_deletion",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.003344196011312306
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_six_events_four_unique_hashes",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.028297261014813557
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_repeat_does_not_increase_counts",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0568426150130108
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_distinguishes_403_404_timeout",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.03556386800482869
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_resume_attempt_id_does_not_duplicate_attempt",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.05527239400544204
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_without_resume_key_creates_new_attempt_each_call",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.04947082401486114
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_missing_version_recorded_in_quality_issue",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.04188909800723195
+    },
+    {
+      "test_id": "test_plan_history.py::test_find_mpp_by_hash_missing_file_not_fabricated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005108269979245961
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_secrets_by_key",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0001858759787864983
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_secrets_bearer_string_anywhere",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00016470198170281947
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_write_receipt_no_secrets_on_disk",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0031379080028273165
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_write_receipt_idempotent_path",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.007884699007263407
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_read_receipt_roundtrip",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0021494920074474066
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_read_receipt_missing_returns_none",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0001941800001077354
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_single_candidate_does_not_confirm_operation",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.009230497991666198
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_two_candidates_same_version_gives_unknown",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.009794596990104765
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_no_candidate_gives_unknown",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.011927487998036668
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_writes_event_and_receipt",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.011678305978421122
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_creates_snapshot_without_page_id",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.06981564802117646
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_twice_does_not_publish_and_appends_second_snapshot",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.07592054200358689
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_requires_project_slug_without_page_id",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.05620147901936434
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_with_page_id_reuses_existing_lineage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.07875029899878427
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_rejects_missing_mpp",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00040130599518306553
+    },
+    {
+      "test_id": "test_plan_verify.py::test_attachment_sha_is_independent_of_macro_hash",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00023612598306499422
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_positive_and_xml_attribute_order",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.001308832986978814
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0009033970127347857
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"wrong\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007312720117624849
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">wrong</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007363439945038408
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">wrong</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007863350037951022
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 3 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006655709876213223
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007413560233544558
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p>\\u0422\\u0440\\u0443\\u0434\\u043e\\u0437\\u0430\\u0442\\u0440\\u0430\\u0442\\u044b: 10 \\u0447\\u0435\\u043b\\u043e\\u0432\\u0435\\u043a\\u043e-\\u0447\\u0430\\u0441\\u043e\\u0432</p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007989860023371875
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><strong>\\u0422\\u0440\\u0443\\u0434\\u043e\\u0437\\u0430\\u0442\\u0440\\u0430\\u0442\\u044b</strong>: 10 \\u0447-\\u0447</p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008071539923548698
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u043f\\u043e\\u0442\\u0435\\u0440\\u044f\\u043d</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006647319823969156
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005137620028108358
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><ac:structured-macro ac:name=\"gantt-chart-planner\" />]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007280079880729318
+    },
+    {
+      "test_id": "test_plan_verify.py::test_exact_page_version_required",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0014459830126725137
+    },
+    {
+      "test_id": "test_plan_verify.py::test_find_macro_cannot_hide_duplicate_or_incomplete_target",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004932529991492629
+    },
+    {
+      "test_id": "test_plan_verify.py::test_nested_and_reordered_macro_enumerated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003164180088788271
+    },
+    {
+      "test_id": "test_plan_verify.py::test_test_root_rejects_production_symlink",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006429530039895326
+    },
+    {
+      "test_id": "test_plan_verify.py::test_unit_network_is_disabled",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003365430166013539
+    },
+    {
+      "test_id": "test_plan_verify.py::test_archive_client_construction_is_disabled",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00032321299659088254
+    }
+  ],
+  "selected": 132,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "attachment_POST_fake": 33,
+    "page_POST_fake": 14,
+    "page_PUT_fake": 18,
+    "live_POST": 0,
+    "live_PUT": 0
+  },
+  "covered_requirements": [
+    "§20/AC-10",
+    "§20/AC-11",
+    "parts of §20/AC-12,13,27"
+  ],
+  "limitations": [
+    "Full admission/prepared snapshot/schedule verification and verified_v1 belong to later stages; repaired legacy publication registrations remain legacy_unverified, with separate current_state observations.",
+    "No live Confluence calls: REST contracts validated with fakes; installed plugin behaviour not accepted in stage 01.",
+    "Storage comparison uses canonical XML and rejects every unexpected content/whitespace change conservatively.",
+    "Production docs index left unchanged under user prohibition; incremental docs indexing verified in isolated database only.",
+    "ownCloud synchronization has not been verified.",
+    "Active skill library registration/synchronization is reserved for plan stage 12; Gateway and schedules untouched."
+  ],
+  "generated_at": "2026-11-16T10:33:37.427237+00:00",
+  "specification": {
+    "master_version": "0.5.0",
+    "master_path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md",
+    "master_sha256": "ad246fac0a363d2b9d6e9b5c177b76b06dcbe1b8b07d4ea6c9f8c769018dc369",
+    "agreed_source_sha256": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697",
+    "prior_master_version": "0.4.0",
+    "documentation_manifest": "documentation-manifest.json"
+  },
+  "code_base_commit": "3770a64bf6b5dfeff0a4c3e29ac132b5f8760849",
+  "commit_binding": {
+    "subject": "edit-plan-confluence: stage 01",
+    "strategy": "code, tests, this report and USERTOOLS bundle in the same commit; SHA appended to canonical plan after commit"
+  },
+  "changed_files_H": [
+    "skills/productivity/edit-plan-confluence/scripts/child_page.py",
+    "skills/productivity/edit-plan-confluence/scripts/conf_client.py",
+    "skills/productivity/edit-plan-confluence/scripts/gantt_attachment.py",
+    "skills/productivity/edit-plan-confluence/scripts/itogo.py",
+    "skills/productivity/edit-plan-confluence/scripts/macro.py",
+    "skills/productivity/edit-plan-confluence/scripts/pipeline.py",
+    "skills/productivity/edit-plan-confluence/scripts/plan_receipt.py",
+    "skills/productivity/edit-plan-confluence/scripts/plan_reconcile.py",
+    "skills/productivity/edit-plan-confluence/scripts/plan_verify.py",
+    "skills/productivity/edit-plan-confluence/tests/conftest.py",
+    "skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "skills/productivity/edit-plan-confluence/tests/test_child_page.py",
+    "skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py",
+    "skills/productivity/edit-plan-confluence/tests/test_pipeline.py",
+    "skills/productivity/edit-plan-confluence/tests/test_plan_reconcile.py",
+    "skills/productivity/edit-plan-confluence/tests/test_plan_verify.py"
+  ],
+  "external_component_files": [
+    {
+      "relative_path": "mofs_index/plan/schema.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py",
+      "action": "modified",
+      "before_sha256": "f95a85f3c4cd865d99970d034f3a01b6aaac9ec290cf0bea34df17d240c55c37",
+      "after_sha256": "748f4509aed5194f008c8196b682bb220cf5c2cc7d6a6a300d5f95afbe0435b7",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "mofs_index/plan/migrate.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/migrate.py",
+      "action": "modified",
+      "before_sha256": "6e3c47fb1fe82225ae2c02a2976bebc163193a3d2d26ebca15a6039aeaddb199",
+      "after_sha256": "a4fa2761083ec3e091e5205f0f40170096d942ebbcef489a28255ae6d27bcd8a",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "mofs_index/plan/writer.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py",
+      "action": "modified",
+      "before_sha256": "14d154efdbfa549c83fefd013d32df2b42a908db7a75b330d98ad4aa4a72efae",
+      "after_sha256": "9a0f0cebd6e1feeaa02258a2239a3314603c2515b70411d3cdb879fc82abe0a4",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "mofs_index/plan/query.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py",
+      "action": "modified",
+      "before_sha256": "46902b92deb35211b2c640d75dd7f729355812981c10567a49ab5eceb36ea0e0",
+      "after_sha256": "ce7327c4d78934afd164cf1f8cf62cef98b091847a7e38f0f8e1027324bfb5eb",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "mofs_index/plan/render.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/render.py",
+      "action": "modified",
+      "before_sha256": "daabc29464440f38b2adc1b5a4025ad5e876159df266c561a564c2dfe91ceb56",
+      "after_sha256": "c7b33e96147a47f4f9f0c62f7a94dbd74c9024bb244b33f381bcadb432492e77",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "tests/plan/test_migrate.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py",
+      "action": "modified",
+      "before_sha256": "b6dd40476702c49fe288d6b50937698fc64ffe4adce5f15aeb645a0748dae55a",
+      "after_sha256": "17ecd2ebd343122e8bd5a78f8784b7cb2263c1b0f766073f7692e4dfe558138f",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "tests/plan/test_writer.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer.py",
+      "action": "modified",
+      "before_sha256": "f964d65c779530b9456f885f8fb0162742ccb56479708f72544d2f2728608459",
+      "after_sha256": "36576556d98c1b43b1d7fbf5c640f79ce6aff0d010aff965719af7b733115d52",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "tests/plan/test_query.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_query.py",
+      "action": "modified",
+      "before_sha256": "0d174621c16267bc7f2c369198538359c311a136e325d5dfe3dde180168820a0",
+      "after_sha256": "4b90840f8d5be1e1a72f8550cee8e2f4ce65eb9ab95dcdc1ba9c12419c980f4c",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    },
+    {
+      "relative_path": "tests/plan/conftest.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/conftest.py",
+      "action": "created",
+      "before_sha256": null,
+      "after_sha256": "7f45c7ca866a7c878e4e4a7cc719a7937a81e59126c75fc506bf09919390b7f4",
+      "before_mode": null,
+      "after_mode": "0o644",
+      "basis": "approved plan §3 stage 01; publication trust and isolated acceptance"
+    }
+  ],
+  "migrations": {
+    "new": [
+      "0006_publication_trust"
+    ],
+    "existing_0001_to_0005_unchanged": true,
+    "historical_publication_status": "old schema had no status column; historical_status=registered records that fact",
+    "historical_attempt_status": "original status retained and copied to historical_status",
+    "database_scope": "isolated test databases only; production not opened"
+  },
+  "commands": [
+    {
+      "name": "s-acceptance",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "-c",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+        "--acceptance-stage",
+        "01",
+        "--test-root",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01",
+        "-m",
+        "unit or archive_integration",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/junit.xml"
+      ],
+      "cwd": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence",
+      "rc": 0,
+      "stdout": "s-acceptance.stdout.log",
+      "stderr": "s-acceptance.stderr.log",
+      "environment": {
+        "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+        "WORKVAULT_PATH": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/WorkVault",
+        "TMPDIR": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/cache"
+      }
+    },
+    {
+      "name": "mofs-required",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "tests/plan/test_migrate.py",
+        "tests/plan/test_writer.py",
+        "tests/plan/test_query.py",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/mofs-required",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/mofs-required-junit.xml"
+      ],
+      "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+      "rc": 0,
+      "stdout": "mofs-required.stdout.log",
+      "stderr": "mofs-required.stderr.log",
+      "environment": {
+        "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+        "WORKVAULT_PATH": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/WorkVault",
+        "TMPDIR": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/cache"
+      }
+    },
+    {
+      "name": "mofs-plan-regression",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "tests/plan",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/mofs-regression",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/mofs-plan-junit.xml"
+      ],
+      "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+      "rc": 0,
+      "stdout": "mofs-plan-regression.stdout.log",
+      "stderr": "mofs-plan-regression.stderr.log"
+    },
+    {
+      "name": "mpp-reader-smoke",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "-c",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+        "--test-root",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/mpp-reader-smoke",
+        "-m",
+        "mpp_fixtures",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/mpp-reader-junit.xml"
+      ],
+      "cwd": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence",
+      "rc": 0,
+      "stdout": "mpp-reader-smoke.stdout.log",
+      "stderr": "mpp-reader-smoke.stderr.log"
+    }
+  ],
+  "junit_summaries": [
+    {
+      "tests": 132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "junit.xml"
+    },
+    {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "mofs-required-junit.xml"
+    },
+    {
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "mofs-plan-junit.xml"
+    },
+    {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit": "mpp-reader-junit.xml"
+    }
+  ],
+  "test_matrix": {
+    "attachment_false_hash_download_failure": "test_pipeline.py::test_attachment_failure_blocks_put; test_child_page.py::test_child_rejects_attachment_failure",
+    "readback_storage_all_ids_duplicates_summary_labour_neighbors": "test_pipeline.py::test_storage_readback_rejects_corruption; test_child_page.py::test_child_storage_corruption; test_plan_verify.py::test_storage_negative_cases",
+    "exact_and_current_attachment_versions": "test_gantt_attachment.py::test_download_requires_exact_metadata; test_pipeline.py::test_actual_current_attachment_changed; test_child_page.py::test_child_resume_changed_current_version_rejected",
+    "receipt_not_proof": "test_child_page.py::test_resume_rechecks_actual_bytes; test_child_page.py::test_old_confirmed_child_upload_receipt_not_proof",
+    "reconciliation_partial_scope": "test_plan_reconcile.py::test_reconcile_single_candidate_does_not_confirm_operation",
+    "migration_and_history": "M/tests/plan/test_migrate.py::test_legacy_false_confirmed_preserves_history_and_downgrades_trust",
+    "typed_trust_and_query": "M/tests/plan/test_writer.py::test_partial_legacy_writer_cannot_promote_publication; M/tests/plan/test_query.py::test_legacy_registration_is_not_new_verified_confirmation"
+  },
+  "counters_scope": "FakeConfluence fixture in mandatory S run; legacy MagicMock-only tests excluded; no live requests",
+  "real_mpp_reader": {
+    "python": "/usr/bin/python3.9",
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+    "validation": "3 real binary MPP/JVM regression tests passed; subprocess MPXJ-read count not instrumented at stage 01",
+    "MPXJ_read_count": null,
+    "junit": "mpp-reader-junit.xml"
+  },
+  "documentation": {
+    "source_sha256": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697",
+    "appendix_exact_copy": true,
+    "master_version": "0.5.0",
+    "owncloud_sync": "not_verified",
+    "docs_index": {
+      "scope": "isolated database only; production DB prohibited by user",
+      "database": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/state/docs-index.sqlite",
+      "first": {
+        "scanned": 1,
+        "upserted": 1,
+        "unchanged": 0,
+        "deleted": 0,
+        "errors": 0,
+        "error_details": []
+      },
+      "second": {
+        "scanned": 1,
+        "upserted": 0,
+        "unchanged": 1,
+        "deleted": 0,
+        "errors": 0,
+        "error_details": []
+      },
+      "plan_tables_unchanged": true,
+      "production_index_updated": false
+    },
+    "files": [
+      {
+        "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md",
+        "sha256": "ad246fac0a363d2b9d6e9b5c177b76b06dcbe1b8b07d4ea6c9f8c769018dc369",
+        "size": 337627
+      },
+      {
+        "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/appendix_unified-pipeline-source_20261116.md",
+        "sha256": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697",
+        "size": 212195
+      },
+      {
+        "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md",
+        "sha256": "1772fe0e05dc1efdaac3897feeedbc9e70aebd0d5b0d73d0a1fbac48cdbcea64",
+        "size": 166236
+      },
+      {
+        "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md",
+        "sha256": "2f8ce1dfc1da0163588d7248445b22ee01e5170e498189ef89f36228062d31a4",
+        "size": 134629
+      },
+      {
+        "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/edit-plan-confluence-eadinyi-konveer-16.11.26.md",
+        "sha256": "64a13411eacf6d06f16ea5733abf5778cfe08f01b5355671f1c00335e1239423",
+        "size": 537
+      },
+      {
+        "path": "/home/tkachenkoav/WorkVault_backup/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ_snapshots-20261116-1318.tgz",
+        "sha256": "d20b396631cc4f9543bb93cd9d2648289324e95b818c8ee90d4ada75c6f9e09e",
+        "size": 206556
+      }
+    ],
+    "plan_hash_scope": "normative content before appended execution journal; commit SHA is recorded afterward outside git",
+    "verification": {
+      "exact_transfer_after_heading_and_reference_mapping": true,
+      "appendix_matches_snapshot_source": true,
+      "all_sections_and_both_revision_histories": true,
+      "numeric_hash_evidence_preserved": true,
+      "single_inventory_row": true,
+      "new_reviewer_approve_claimed": false
+    }
+  },
+  "usertools_restoration": {
+    "status": "passed",
+    "command": [
+      "patch",
+      "-p1",
+      "--batch",
+      "-i",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-01/usertools/MofsIndex/changes.patch"
+    ],
+    "cwd": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/usertools-restore-zero/MofsIndex",
+    "rc": 0,
+    "all_after_hashes_match": true
+  },
+  "evidence": "publication-evidence.json",
+  "gate_reasons": [
+    "mandatory negative scenarios reject success",
+    "attachment failure blocks PUT",
+    "new GET is used for storage evidence",
+    "child receipt is reverified against exact/current attachment",
+    "reconciliation attachment evidence never confirms whole operation",
+    "old registrations are not verified_v1",
+    "mandatory S/M tests and isolated migration passed",
+    "external changes reconstruct correctly",
+    "normative documentation transferred completely"
+  ],
+  "external_references": [
+    {
+      "purpose": "Confluence content GET supports status=any and an exact version; returned metadata is still checked",
+      "url": "https://docs.atlassian.com/ConfluenceServer/rest/7.19.9/#content-getContentById"
+    }
+  ]
+}

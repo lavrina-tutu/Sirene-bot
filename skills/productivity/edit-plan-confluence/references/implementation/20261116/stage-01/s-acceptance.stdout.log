@@ -1,0 +1,28 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests
+configfile: pytest.ini
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 137 items / 5 deselected / 132 selected
+
+tests/test_child_page.py ...................                             [ 14%]
+tests/test_cli.py ..                                                     [ 15%]
+tests/test_env.py .                                                      [ 16%]
+tests/test_gantt_attachment.py ...........                               [ 25%]
+tests/test_gate_diff.py ..                                               [ 26%]
+tests/test_itogo.py ..............                                       [ 37%]
+tests/test_macro.py ...                                                  [ 39%]
+tests/test_mpp_calendar.py .                                             [ 40%]
+tests/test_mpp_convert.py ..........                                     [ 47%]
+tests/test_mpp_input.py .                                                [ 48%]
+tests/test_pipeline.py .......................                           [ 65%]
+tests/test_plan_archive.py ....                                          [ 68%]
+tests/test_plan_history.py .......                                       [ 74%]
+tests/test_plan_receipt.py ......                                        [ 78%]
+tests/test_plan_reconcile.py ....                                        [ 81%]
+tests/test_plan_save.py .....                                            [ 85%]
+tests/test_plan_verify.py ...................                            [100%]
+
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/junit.xml -
+====================== 132 passed, 5 deselected in 6.78s =======================

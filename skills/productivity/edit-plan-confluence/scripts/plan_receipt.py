@@ -5,6 +5,8 @@ AC-123). Квитанции пишутся до и после каждого с�
 """
 from __future__ import annotations
 
+import os
+import tempfile
 import json
 import re
 from pathlib import Path
@@ -50,7 +52,17 @@ def write_receipt(attempt_id: str, event_id: str, payload: dict[str, Any]) -> Pa
     d = receipts_dir(attempt_id)
     d.mkdir(parents=True, exist_ok=True)
     path = d / f"{event_id}.json"
-    path.write_text(json.dumps(masked, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+    # A crash must not turn a receipt into truncated JSON.
+    fd, temporary = tempfile.mkstemp(prefix=".receipt-", dir=d)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            json.dump(masked, stream, ensure_ascii=False, indent=2, default=str)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
     return path
 
 
@@ -59,3 +71,12 @@ def read_receipt(attempt_id: str, event_id: str) -> dict[str, Any] | None:
     if not path.is_file():
         return None
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def write_failure_receipt(attempt_id: str, stage: str, error: Exception, *, external_effect: str) -> Path:
+    """Unknown/partial remote writes never become published:false or success."""
+    return write_receipt(attempt_id, "failure-" + stage, {
+        "stage": stage, "status": "failed", "published": None,
+        "external_effect": external_effect, "error": str(error),
+        "schedule": "not_verified",
+    })

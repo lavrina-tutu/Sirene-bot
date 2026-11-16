@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "command": [
+    "patch",
+    "-p1",
+    "--batch",
+    "-i",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-01/usertools/MofsIndex/changes.patch"
+  ],
+  "cwd": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/usertools-restore-zero/MofsIndex",
+  "rc": 0,
+  "all_after_hashes_match": true
+}

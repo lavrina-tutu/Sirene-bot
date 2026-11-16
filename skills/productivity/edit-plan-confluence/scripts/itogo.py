@@ -178,3 +178,22 @@ def record_itogo_observation(
     finally:
         if own_conn:
             conn.close()
+
+
+def verify_itogo(storage: str, d1: str, d2: str, n_days: int) -> dict[str, bool]:
+    """One current summary, above Gantt, and no service labour block."""
+    from html import unescape
+    text = unescape(re.sub(r"<[^>]+>", "", storage))
+    matches = list(ITOGO_LINE1_RE.finditer(text))
+    values = parse_itogo_text(text)
+    try:
+        span = macro_span(storage)
+    except ValueError:
+        span = None
+    prefix = unescape(re.sub(r"<[^>]+>", "", storage[:span[0]])) if span else ""
+    return {
+        "one_itogo": len(matches) == 1 and len(re.findall(r"Итого\s*:", text, re.I)) == 1,
+        "itogo_values": values == (d1, d2, n_days),
+        "itogo_above_macro": bool(ITOGO_LINE1_RE.search(prefix)),
+        "no_trudozatraty": not bool(re.search(r"Трудозатрат", text, re.I)),
+    }

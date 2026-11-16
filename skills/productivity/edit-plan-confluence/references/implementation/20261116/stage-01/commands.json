@@ -1,0 +1,86 @@
+[
+  {
+    "name": "s-acceptance",
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "-c",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+      "--acceptance-stage",
+      "01",
+      "--test-root",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01",
+      "-m",
+      "unit or archive_integration",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/junit.xml"
+    ],
+    "cwd": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence",
+    "rc": 0,
+    "stdout": "s-acceptance.stdout.log",
+    "stderr": "s-acceptance.stderr.log",
+    "environment": {
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+      "WORKVAULT_PATH": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/WorkVault",
+      "TMPDIR": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/cache"
+    }
+  },
+  {
+    "name": "mofs-required",
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "tests/plan/test_migrate.py",
+      "tests/plan/test_writer.py",
+      "tests/plan/test_query.py",
+      "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/mofs-required",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/mofs-required-junit.xml"
+    ],
+    "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+    "rc": 0,
+    "stdout": "mofs-required.stdout.log",
+    "stderr": "mofs-required.stderr.log",
+    "environment": {
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+      "WORKVAULT_PATH": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/WorkVault",
+      "TMPDIR": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/cache"
+    }
+  },
+  {
+    "name": "mofs-plan-regression",
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "tests/plan",
+      "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/mofs-regression",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/mofs-plan-junit.xml"
+    ],
+    "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+    "rc": 0,
+    "stdout": "mofs-plan-regression.stdout.log",
+    "stderr": "mofs-plan-regression.stderr.log"
+  },
+  {
+    "name": "mpp-reader-smoke",
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "-c",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+      "--test-root",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/mpp-reader-smoke",
+      "-m",
+      "mpp_fixtures",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/mpp-reader-junit.xml"
+    ],
+    "cwd": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence",
+    "rc": 0,
+    "stdout": "mpp-reader-smoke.stdout.log",
+    "stderr": "mpp-reader-smoke.stderr.log"
+  }
+]

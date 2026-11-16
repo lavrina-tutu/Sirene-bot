@@ -89,8 +89,8 @@ def reconcile_attempt(
         if len(candidates) == 1:
             attach_id, version = candidates[0]
             outcome = ReconcileOutcome(
-                attempt_id, "confirmed",
-                "ровно один кандидат с совпадающим hash",
+                attempt_id, "unknown",
+                "вложение найдено; storage/admission не проверены, вся операция не подтверждена",
                 attachment_id=attach_id, attachment_version=version,
             )
         elif len(candidates) == 0:
@@ -102,12 +102,14 @@ def reconcile_attempt(
             )
 
         event_id = plan_writer.record_event(
-            c, attempt_id, "attachment_verify", outcome.status,
+            c, attempt_id, "attachment_verify", "confirmed" if len(candidates) == 1 else "unknown",
             detail=outcome.reason,
         )
         write_receipt(attempt_id, event_id, {
             "stage": "attachment_verify",
-            "status": outcome.status,
+            "status": "confirmed" if len(candidates) == 1 else "unknown",
+            "operation_status": outcome.status, "published": None,
+            "scope": "attachment_version", "external_effect": "partial" if candidates else "unknown",
             "reason": outcome.reason,
             "attachment_id": outcome.attachment_id,
             "attachment_version": outcome.attachment_version,

@@ -1,0 +1,19 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/USERTOOLS/MofsIndex
+configfile: pyproject.toml
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 65 items
+
+tests/plan/test_backup.py .......                                        [ 10%]
+tests/plan/test_migrate.py .....                                         [ 18%]
+tests/plan/test_query.py ..........                                      [ 33%]
+tests/plan/test_render.py ....                                           [ 40%]
+tests/plan/test_schema.py ....                                           [ 46%]
+tests/plan/test_writer.py .....................                          [ 78%]
+tests/plan/test_writer_analysis.py ....                                  [ 84%]
+tests/plan/test_writer_snapshot.py ..........                            [100%]
+
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/reports/mofs-plan-junit.xml -
+============================== 65 passed in 5.27s ==============================

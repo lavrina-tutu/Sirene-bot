@@ -1,0 +1,69 @@
+{
+  "source_sha256": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697",
+  "appendix_exact_copy": true,
+  "master_version": "0.5.0",
+  "owncloud_sync": "not_verified",
+  "docs_index": {
+    "scope": "isolated database only; production DB prohibited by user",
+    "database": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116T101802Z/stage-01/state/docs-index.sqlite",
+    "first": {
+      "scanned": 1,
+      "upserted": 1,
+      "unchanged": 0,
+      "deleted": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    "second": {
+      "scanned": 1,
+      "upserted": 0,
+      "unchanged": 1,
+      "deleted": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    "plan_tables_unchanged": true,
+    "production_index_updated": false
+  },
+  "files": [
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md",
+      "sha256": "ad246fac0a363d2b9d6e9b5c177b76b06dcbe1b8b07d4ea6c9f8c769018dc369",
+      "size": 337627
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/appendix_unified-pipeline-source_20261116.md",
+      "sha256": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697",
+      "size": 212195
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md",
+      "sha256": "1772fe0e05dc1efdaac3897feeedbc9e70aebd0d5b0d73d0a1fbac48cdbcea64",
+      "size": 166236
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md",
+      "sha256": "2f8ce1dfc1da0163588d7248445b22ee01e5170e498189ef89f36228062d31a4",
+      "size": 134629
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/edit-plan-confluence-eadinyi-konveer-16.11.26.md",
+      "sha256": "64a13411eacf6d06f16ea5733abf5778cfe08f01b5355671f1c00335e1239423",
+      "size": 537
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault_backup/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ_snapshots-20261116-1318.tgz",
+      "sha256": "d20b396631cc4f9543bb93cd9d2648289324e95b818c8ee90d4ada75c6f9e09e",
+      "size": 206556
+    }
+  ],
+  "plan_hash_scope": "normative content before appended execution journal; commit SHA is recorded afterward outside git",
+  "verification": {
+    "exact_transfer_after_heading_and_reference_mapping": true,
+    "appendix_matches_snapshot_source": true,
+    "all_sections_and_both_revision_histories": true,
+    "numeric_hash_evidence_preserved": true,
+    "single_inventory_row": true,
+    "new_reviewer_approve_claimed": false
+  }
+}

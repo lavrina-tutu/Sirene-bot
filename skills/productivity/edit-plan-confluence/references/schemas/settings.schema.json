@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "edit-plan-confluence settings v1",
+  "type": "object",
+  "required": [
+    "MPP_READ_TIMEOUT_SECONDS",
+    "HTTP_TIMEOUT_SECONDS",
+    "HTTP_RETRY_LIMIT",
+    "MPP_MAX_BYTES",
+    "ZIP_MAX_BYTES",
+    "ZIP_MAX_ENTRIES",
+    "ZIP_MAX_UNPACKED_BYTES",
+    "ZIP_MAX_RATIO",
+    "CACHE_DIR",
+    "MPXJ_PYTHON",
+    "NORMALIZATION_PROFILE",
+    "SUMMARY_PROFILE",
+    "PLUGIN_PROFILE",
+    "WORKVAULT_PATH",
+    "CONFLUENCE_URL"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "MPP_READ_TIMEOUT_SECONDS": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 86400
+    },
+    "HTTP_TIMEOUT_SECONDS": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 86400
+    },
+    "HTTP_RETRY_LIMIT": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "MPP_MAX_BYTES": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1099511627776
+    },
+    "ZIP_MAX_BYTES": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1099511627776
+    },
+    "ZIP_MAX_ENTRIES": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+    },
+    "ZIP_MAX_UNPACKED_BYTES": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1099511627776
+    },
+    "ZIP_MAX_RATIO": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+    },
+    "CACHE_DIR": {
+      "type": "string",
+      "minLength": 1
+    },
+    "MPXJ_PYTHON": {
+      "type": "string",
+      "minLength": 1
+    },
+    "NORMALIZATION_PROFILE": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9.-]*$"
+    },
+    "SUMMARY_PROFILE": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9.-]*$"
+    },
+    "PLUGIN_PROFILE": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9.-]*$"
+    },
+    "WORKVAULT_PATH": {
+      "type": "string",
+      "minLength": 1
+    },
+    "CONFLUENCE_URL": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

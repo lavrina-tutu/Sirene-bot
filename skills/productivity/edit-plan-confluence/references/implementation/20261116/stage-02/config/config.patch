@@ -1,0 +1,18 @@
+--- EcosystemConfig.yaml.before
++++ EcosystemConfig.yaml.after
+@@ -34,2 +34,15 @@
+     enabled: true
++    CACHE_DIR: ~/.cache/edit-plan-confluence
++    MPXJ_PYTHON: /usr/bin/python3.9
++    MPP_READ_TIMEOUT_SECONDS: 180
++    HTTP_TIMEOUT_SECONDS: 120
++    HTTP_RETRY_LIMIT: 1
++    MPP_MAX_BYTES: 67108864
++    ZIP_MAX_BYTES: 67108864
++    ZIP_MAX_ENTRIES: 128
++    ZIP_MAX_UNPACKED_BYTES: 268435456
++    ZIP_MAX_RATIO: 100
++    NORMALIZATION_PROFILE: normalization-v1
++    SUMMARY_PROFILE: summary-v1
++    PLUGIN_PROFILE: installed-gantt-profile
+   entities_migration:

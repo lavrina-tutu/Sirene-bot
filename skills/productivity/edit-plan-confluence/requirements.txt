@@ -1,0 +1,4 @@
+# CLI/config and PreparedPlan JSON Schema validation (Python >=3.9).
+PyYAML==6.0.3
+jsonschema==4.25.1
+# MPXJ/JPype run in the separately selected interpreter; existing installation.

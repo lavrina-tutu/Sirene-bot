@@ -1,0 +1,5 @@
+........................................................................ [ 44%]
+........................................................................ [ 89%]
+.................                                                        [100%]
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/reports/junit.xml -
+161 passed, 23 deselected in 52.00s

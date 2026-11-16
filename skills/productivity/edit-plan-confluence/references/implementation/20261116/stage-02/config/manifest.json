@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "target_root": "/home/tkachenkoav/WorkVault/Registries",
+  "backup": "/home/tkachenkoav/.hermes/_Archives/hermes-backup-20261116-134215",
+  "files": [
+    {
+      "path": "/home/tkachenkoav/WorkVault/Registries/EcosystemConfig.yaml",
+      "before_sha256": "638418979e80496b492e948715ae59d411009bb70d246571773d9af2a098f21f",
+      "after_sha256": "b1640dd5b7088a579bc1f2b27d1f77cc2de15b69da3d6e164915a7c5b9fa58b6"
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault/Registries/EcosystemConfig.schema.json",
+      "before_sha256": "fde8820f018818f92e5b520d6423339ea9c933779ee52edc16a4490e796a4ec4",
+      "after_sha256": "676c5a6f265ad7773bddc57d189cb19b95ad4587b955237fc67335ba727a4b8c"
+    }
+  ],
+  "stored_in_git": "minimal non-secret config.patch, schema.patch, settings-contract.json; no credentials or full deployment YAML"
+}

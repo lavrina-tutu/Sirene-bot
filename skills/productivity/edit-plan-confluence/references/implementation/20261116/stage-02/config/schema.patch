@@ -1,0 +1,113 @@
+--- EcosystemConfig.schema.json.before
++++ EcosystemConfig.schema.json.after
+@@ -26,6 +26,9 @@
+       "properties": {
+         "dev_workflow": {
+           "type": "object"
++        },
++        "edit_plan_confluence": {
++          "$ref": "#/definitions/edit_plan_confluence_settings"
+         }
+       }
+     }
+@@ -217,6 +220,100 @@
+       "additionalProperties": {
+         "type": "string"
+       }
++    },
++    "edit_plan_confluence_settings": {
++      "type": "object",
++      "required": [
++        "enabled",
++        "CACHE_DIR",
++        "MPXJ_PYTHON",
++        "MPP_READ_TIMEOUT_SECONDS",
++        "HTTP_TIMEOUT_SECONDS",
++        "HTTP_RETRY_LIMIT",
++        "MPP_MAX_BYTES",
++        "ZIP_MAX_BYTES",
++        "ZIP_MAX_ENTRIES",
++        "ZIP_MAX_UNPACKED_BYTES",
++        "ZIP_MAX_RATIO",
++        "NORMALIZATION_PROFILE",
++        "SUMMARY_PROFILE",
++        "PLUGIN_PROFILE"
++      ],
++      "additionalProperties": false,
++      "propertyNames": {
++        "$ref": "#/definitions/secret_key_pattern"
++      },
++      "properties": {
++        "enabled": {
++          "type": "boolean"
++        },
++        "llm": {
++          "type": "string"
++        },
++        "CACHE_DIR": {
++          "type": "string",
++          "minLength": 1
++        },
++        "MPXJ_PYTHON": {
++          "type": "string",
++          "minLength": 1
++        },
++        "MPP_READ_TIMEOUT_SECONDS": {
++          "type": "integer",
++          "minimum": 1,
++          "maximum": 86400
++        },
++        "HTTP_TIMEOUT_SECONDS": {
++          "type": "integer",
++          "minimum": 1,
++          "maximum": 86400
++        },
++        "HTTP_RETRY_LIMIT": {
++          "type": "integer",
++          "minimum": 0,
++          "maximum": 10
++        },
++        "MPP_MAX_BYTES": {
++          "type": "integer",
++          "minimum": 1,
++          "maximum": 1099511627776
++        },
++        "ZIP_MAX_BYTES": {
++          "type": "integer",
++          "minimum": 1,
++          "maximum": 1099511627776
++        },
++        "ZIP_MAX_ENTRIES": {
++          "type": "integer",
++          "minimum": 1,
++          "maximum": 1000000
++        },
++        "ZIP_MAX_UNPACKED_BYTES": {
++          "type": "integer",
++          "minimum": 1,
++          "maximum": 1099511627776
++        },
++        "ZIP_MAX_RATIO": {
++          "type": "integer",
++          "minimum": 1,
++          "maximum": 1000000
++        },
++        "NORMALIZATION_PROFILE": {
++          "type": "string",
++          "minLength": 1,
++          "pattern": "^[a-z0-9][a-z0-9.-]*$"
++        },
++        "SUMMARY_PROFILE": {
++          "type": "string",
++          "minLength": 1,
++          "pattern": "^[a-z0-9][a-z0-9.-]*$"
++        },
++        "PLUGIN_PROFILE": {
++          "type": "string",
++          "minLength": 1,
++          "pattern": "^[a-z0-9][a-z0-9.-]*$"
++        }
++      }
+     }
+   }
+-}+}

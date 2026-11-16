@@ -108,6 +108,35 @@ STAGE01_REQUIRED = {
 }
 
 
+STAGE02_REQUIRED = {
+    "test_prepared_plan.py::test_semantic_hash_excludes_execution_provenance",
+    "test_prepared_plan.py::test_normalization_profile_and_timezone_change_identity",
+    "test_prepared_plan.py::test_relations_keep_signed_elapsed_and_known_zero",
+    "test_prepared_plan.py::test_calendar_intervals_exceptions_inheritance_and_bindings",
+    "test_prepared_plan.py::test_quality_missing_getter_errors_are_preserved",
+    "test_prepared_plan.py::test_invalid_export_is_rejected",
+    "test_prepared_plan.py::test_context_unified_settings_cli_overrides_and_no_secrets",
+    "test_prepared_plan.py::test_fixtures_manifest_integrity",
+    "test_plan_cache.py::test_independent_cache_keys",
+    "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source",
+    "test_plan_cache.py::test_cache_deletion_does_not_delete_durable_data",
+    "test_plan_cache.py::test_atomic_failure_preserves_previous_entry",
+    "test_plan_cache.py::test_real_parse_cache_one_read_same_bytes_different_names",
+    "test_env.py::test_unified_only_credentials_do_not_read_local_env",
+    "test_env.py::test_python_selection_fails_closed",
+    "test_env.py::test_process_env_priority_and_no_yaml_write",
+    "test_prepared_plan.py::test_prepared_load_rejects_changed_data",
+    "test_prepared_plan.py::test_settings_reject_invalid_ranges",
+    "test_prepared_plan.py::test_settings_numeric_contract_boundaries",
+    "test_plan_cache.py::test_corrupt_source_is_not_read_or_reused",
+    "test_plan_cache.py::test_concurrent_atomic_writes",
+    "test_plan_cache.py::test_representation_corruption_rebuilds",
+    "test_cli.py::test_cli_convert_offline",
+    "test_mpp_calendar.py::test_calendar_from_mpp_fixture",
+    "test_pipeline.py::test_build_plan_from_mpp_offline",
+}
+
+
 def pytest_addoption(parser):
     parser.addoption("--acceptance-stage", default=None)
     parser.addoption("--test-root", default=None)
@@ -124,8 +153,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage != "01":
-        raise pytest.UsageError("this acceptance contour currently implements stage 01 only")
+    if stage and stage not in ("01", "02"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 and 02")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -164,9 +193,11 @@ def pytest_collection_modifyitems(config, items):
 def pytest_collection_finish(session):
     if session.config.getoption("--acceptance-stage"):
         selected = {item.nodeid.split("[")[0].split("/")[-1] for item in session.items}
-        missing = sorted(STAGE01_REQUIRED - selected)
+        stage = session.config.getoption("--acceptance-stage")
+        required = STAGE01_REQUIRED if stage == "01" else STAGE02_REQUIRED
+        missing = sorted(required - selected)
         if missing:
-            raise pytest.UsageError("mandatory stage-01 tests not selected: " + ", ".join(missing))
+            raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
 
 
 @pytest.hookimpl(hookwrapper=True)
@@ -182,6 +213,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption("--acceptance-stage") == "02":
+        _stage02_report(session, exitstatus, root)
         return
     results = config._acceptance_results
     good = exitstatus == 0 and bool(session.items) and bool(results) and all(r["status"] == "passed" for r in results)
@@ -353,3 +387,89 @@ def prepared_input(tmp_path, tasks_csv, assignments_csv, resources_csv, monkeypa
     monkeypatch.setattr(pipeline, "export_csv", lambda *a, **k: paths)
     monkeypatch.setattr(pipeline, "upload_gantt_json", fake_confluence.upload)
     return source
+
+
+def _stage02_report(session, exitstatus, root):
+    """Stage-02 aggregate stays in the existing pytest hook, external rc is evidence."""
+    config = session.config
+    external_path = root / "reports/external-checks.json"
+    external = json.loads(external_path.read_text()) if external_path.exists() else {}
+    results = config._acceptance_results
+    good = (exitstatus == 0 and bool(session.items) and bool(results)
+            and all(r["status"] == "passed" for r in results)
+            and external.get("gate") == "passed")
+    reader = Path.home() / "USERTOOLS/MppReader"
+    files = sorted(list(SCRIPTS.glob("*.py")) + list((SKILL_ROOT / "tests").glob("*.py"))
+                   + list((SKILL_ROOT / "references/schemas").glob("*.json"))
+                   + list((SKILL_ROOT / "references/profiles").glob("*.json"))
+                   + list((SKILL_ROOT / "tests/fixtures").rglob("manifest.json"))
+                   + [reader / "plan_export.py", reader / "read_mpp.py", reader / "tests/test_plan_export.py",
+                      reader / "tests/test_read_mpp_regression.py", reader / "tests/conftest.py",
+                      SKILL_ROOT / "requirements.txt", SKILL_ROOT / "tests/pytest.ini",
+                      SKILL_ROOT / "tests/fixtures/synthetic/binary_recipe.py"]
+                   + list((SKILL_ROOT / "references").glob("*.md")))
+    hashes = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+    schema = Path.home() / "WorkVault/Registries/EcosystemConfig.schema.json"
+    master = Path.home() / "WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md"
+    plan = master.parent / "plans/HF-plan_EditPlanConfluence_20261116.md"
+    counters = dict(config._acceptance_counters)
+    # Legacy calendar/CSV paths are outside the new branch (adaptation stage 08).
+    # Their complete read count is not measured, so do not present it as zero.
+    counters["MPXJ_read_prepared_branch"] = counters.pop("MPXJ_read")
+    counters["MPXJ_read_total_including_legacy"] = None
+    counters["new_prepared_branch"] = json.loads((root / "reports/cache-read-evidence.json").read_text()) if (root / "reports/cache-read-evidence.json").exists() else None
+    report = {"stage": "02", "gate": "passed" if good else "failed", "exit_code": int(exitstatus),
+              "command": [sys.executable, "-m", "pytest", *config.invocation_params.args],
+              "environment": {"python": sys.executable, "version": platform.python_version(), "test_root": str(root),
+                              "PYTHONPATH": os.environ.get("PYTHONPATH")},
+              "master": {"version": "0.5.0", "path": str(master), "sha256": hashlib.sha256(master.read_bytes()).hexdigest()},
+              "plan": {"path": str(plan), "normative_prefix_sha256": hashlib.sha256(plan.read_text().split("## Журнал исполнения")[0].encode()).hexdigest()},
+              "source_tree_sha256": hashlib.sha256(json.dumps(hashes, sort_keys=True).encode()).hexdigest(), "source_files": hashes,
+              "config_contract_sha256": hashlib.sha256(schema.read_bytes()).hexdigest(),
+              "migrations": [], "tests": results, "selected": len(session.items), "counters": counters,
+              "external_checks": external, "covered_requirements": ["foundations of §20/AC-01,02,06,07,08,16"],
+              "limitations": ["Only stage 02; public save/publish wiring belongs to later stages",
+                              "No schedule verification or live Confluence", "summary-v1 and installed plugin profile are stage 08",
+                              "ZIP enforcement is stage 03; HTTP settings consumption is stage 10",
+                              "MPXJ may filter invalid MPP relation records before exposing ProjectFile; see export-contract.md",
+                              "ownCloud sync not confirmed"],
+              "generated_at": datetime.now(timezone.utc).isoformat()}
+    report["implemented_files"] = {
+        "R/plan_export.py": "full-export-v2: fields/quality, structured signed lag/elapsed, calendar intervals/exceptions/inheritance/bindings, graph diagnostics",
+        "R/read_mpp.py": "shared instrumented read_project_file boundary; CSV/JSON contract preserved",
+        "S/scripts/prepared_plan.py": "PreparedPlan v1, NormalizationProfile, validation and deterministic semantic SHA",
+        "S/scripts/plan_cache.py": "independent ParseCache/RepresentationCache, atomic write, checksum/completeness/version and source verification",
+        "S/scripts/plan_context.py": "Manifest paths, typed settings, explicit overrides, non-secret context snapshot/fingerprints",
+        "S/scripts/env.py": "unified loader adapter; archive settings separate from credentials; checked MPXJ Python/JVM selection",
+        "S/scripts/mpp_input.py": "_pick_python delegates to checked runtime; no success fallback on failure",
+        "E/EcosystemConfig.yaml + schema": "15 effective settings including shared paths/URL; tool-specific types/ranges; backup and minimal non-secret diff",
+        "S/references/schemas + profiles": "prepared-plan/schema, settings/schema, normalization-v1; export/operations contracts",
+        "R/tests + S/tests + fixtures": "real binary/CSV tests, normalization/cache/context tests, isolation and stage-02 acceptance hook; verified A-F/D-risks and synthetic manifests",
+    }
+    report["export_contract"] = {"version": "full-export-v2", "prepared": "v1", "collection_quality": ["complete", "partial", "missing", "unsupported"],
+                                 "missing": "null + reason", "known_zero": "ok + 0", "raw_mpp_relation_enumeration": "unsupported; MPXJ filters invalid records", "schedule": "not_verified"}
+    report["cache_contract"] = {"parse_key": "source SHA + reader/MPXJ/JPype + export version + export parameters",
+                                "representation_key": "semantic SHA + converter + rules revision + plugin fingerprint + template parameters",
+                                "integrity": "namespace/version/material/key/complete/byte count/payload SHA + export validation; fsync/atomic replace",
+                                "recovery": "corruption is a miss; rebuild from verified durable bytes; invalid source fails closed"}
+    context_path = root / "reports/effective-context.json"
+    report["config_changes"] = json.loads(context_path.read_text()) if context_path.exists() else {"status": "not_recorded"}
+    (root / "reports/stage-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+    lines = ["# Этап 02", "", f"Gate: **{report['gate']}**. S rc={exitstatus}, "
+             f"passed={sum(r['status'] == 'passed' for r in results)}; "
+             f"R passed={external.get('reader', {}).get('passed')}, optional skips={external.get('reader', {}).get('optional_skips')}; "
+             f"archive regression passed={external.get('archive_regression', {}).get('passed')}.", "",
+             f"Base commit: 8b04ce1945b88409fae036b4a0f0d69a52dfceea. Проверенное дерево: `{report['source_tree_sha256']}`.", "",
+             "Реализованные файлы:", ""]
+    lines.extend(f"- `{path}`: {description}." for path, description in report["implemented_files"].items())
+    lines.extend(["", "Экспорт/кэш:", "", "- " + json.dumps(report["export_contract"], ensure_ascii=False),
+                  "- " + json.dumps(report["cache_contract"], ensure_ascii=False), "", "Команды:", "",
+                  "```text", " ".join(report["command"]), " ".join(external.get("reader", {}).get("command", {}).get("command", [])),
+                  " ".join(external.get("archive_regression", {}).get("command", {}).get("command", [])), "```", "",
+                  "Все три rc=0 обязательны для passed. SQL-миграций нет. Settings/sources/profiles: effective-context.json; "
+                  "версии: environment.json; восстановление R и неизменность этапа 01: external-checks.json. "
+                  "Несекретный config/schema diff и backup manifest: config/. Коммит связывает код и этот отчёт; SHA после коммита — в журнале канонического плана.", "",
+                  "Ограничения:", ""])
+    lines.extend("- " + item for item in report["limitations"])
+    lines.append("- Optional skip относится только к старому ZD-тесту §19: исходные MPP отсутствуют. Обязательные тесты этапа 02 не пропущены.")
+    (root / "reports/stage-report.md").write_text("\n".join(lines) + "\n")

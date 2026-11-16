@@ -1,0 +1,13 @@
+{
+  "id": "normalization-v1",
+  "version": "1.0.0",
+  "normalizer_version": "prepared-v1",
+  "export_version": "full-export-v2",
+  "dates": {"policy": "preserve_source_local_precision", "unknown_timezone": null, "timezone_hint": "IANA-explicit-only"},
+  "numbers": {"quantities": "decimal_strings", "rounding": "none"},
+  "identity": {"scope": "source-local-only", "fallback": "source_collection_position", "cross_file_mapping": "unknown"},
+  "ordering": "preserve_source_rows_and_parallel_relations",
+  "semantic_exclusions": ["provenance_except_source_identity", "source", "telemetry", "operation_id", "work_dir", "read_at"],
+  "quality": {"collection": ["complete", "partial", "missing", "unsupported"], "null": "missing:not_set", "zero": "ok:0", "unsupported": "explicit_reason"},
+  "summary": "preserve_inputs_only;calculation_is_stage_08"
+}

@@ -1,0 +1,4727 @@
+{
+  "export_version": "full-export-v2",
+  "source": "fixture://mpp14calendar.mpp plus task calendar binding JSON edit",
+  "provenance": {
+    "source_path": "fixture://mpp14calendar.mpp plus task calendar binding JSON edit",
+    "original_name": "mpp14calendar.mpp",
+    "source_origin": "local_file",
+    "sha256": "98c8a0fb569be058c0a76ec61d2918f4d81a2a6af9cdcc3ffd1e5640b888e8ec",
+    "size_bytes": 188416,
+    "read_at": "fixture-generation",
+    "reader": "read-mpp-v2",
+    "mpxj": "16.4.0",
+    "jpype": "1.7.1"
+  },
+  "timezone_hint": null,
+  "project": {
+    "name": "MPP12 Test",
+    "author": "Wade Golden",
+    "company": "Steelray Software",
+    "start_date": "2006-08-23T08:00",
+    "finish_date": "2006-08-23T17:00",
+    "status_date": {
+      "value": null,
+      "quality": "missing",
+      "reason": "not_set"
+    },
+    "default_calendar": {
+      "value": "Standard",
+      "quality": "ok",
+      "reason": null
+    },
+    "default_calendar_key": {
+      "value": "uid:1",
+      "quality": "ok",
+      "reason": null
+    },
+    "field_quality": {
+      "name": {
+        "value": "MPP12 Test",
+        "quality": "ok",
+        "reason": null
+      },
+      "author": {
+        "value": "Wade Golden",
+        "quality": "ok",
+        "reason": null
+      },
+      "company": {
+        "value": "Steelray Software",
+        "quality": "ok",
+        "reason": null
+      },
+      "start_date": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "finish_date": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      }
+    },
+    "minutes_per_day": {
+      "value": "480",
+      "quality": "ok",
+      "reason": null
+    },
+    "minutes_per_week": {
+      "value": "2400",
+      "quality": "ok",
+      "reason": null
+    },
+    "minutes_per_month": {
+      "value": "9600",
+      "quality": "ok",
+      "reason": null
+    },
+    "minutes_per_year": {
+      "value": "115200",
+      "quality": "ok",
+      "reason": null
+    },
+    "days_per_month": {
+      "value": "20",
+      "quality": "ok",
+      "reason": null
+    },
+    "default_duration_units": {
+      "value": "d",
+      "quality": "ok",
+      "reason": null
+    },
+    "default_work_units": {
+      "value": "h",
+      "quality": "ok",
+      "reason": null
+    },
+    "schedule_from": {
+      "value": "0",
+      "quality": "ok",
+      "reason": null
+    },
+    "relationship_lag_calendar": {
+      "value": "PREDECESSOR",
+      "quality": "ok",
+      "reason": null
+    },
+    "default_start_time": {
+      "value": "09:00",
+      "quality": "ok",
+      "reason": null
+    },
+    "default_end_time": {
+      "value": "17:00",
+      "quality": "ok",
+      "reason": null
+    },
+    "split_in_progress_tasks": {
+      "value": "True",
+      "quality": "ok",
+      "reason": null
+    }
+  },
+  "collections": {
+    "tasks": {
+      "status": "complete",
+      "count": 2,
+      "reason": null,
+      "error_count": 0,
+      "record_count": 2
+    },
+    "resources": {
+      "status": "complete",
+      "count": 3,
+      "reason": null,
+      "error_count": 0,
+      "record_count": 3
+    },
+    "assignments": {
+      "status": "partial",
+      "count": 1,
+      "reason": "read_errors:0;items_with_field_issues:1",
+      "error_count": 0,
+      "record_count": 1
+    },
+    "calendars": {
+      "status": "complete",
+      "count": 8,
+      "reason": null,
+      "error_count": 0,
+      "record_count": 8
+    },
+    "dependencies": {
+      "status": "partial",
+      "count": 0,
+      "reason": "MPXJ_ConstraintFactory_filters_self_and_dangling_MPP_records_before_ProjectFile",
+      "error_count": 0,
+      "record_count": 0
+    },
+    "external_dependencies": {
+      "status": "complete",
+      "count": 0,
+      "reason": null,
+      "error_count": 0,
+      "record_count": 0
+    },
+    "baseline_values": {
+      "status": "complete",
+      "count": 22,
+      "reason": null,
+      "error_count": 0,
+      "record_count": 22
+    }
+  },
+  "tasks": [
+    {
+      "task_key": "uid:0",
+      "identity_quality": {
+        "value": "uid:0",
+        "quality": "ok",
+        "reason": null
+      },
+      "id": 0,
+      "uid": 0,
+      "wbs": "0",
+      "name": "MPP12 Test",
+      "outline_level": 0,
+      "outline_number": "0",
+      "milestone": false,
+      "summary": true,
+      "field_quality": {
+        "id": {
+          "value": 0,
+          "quality": "ok",
+          "reason": null
+        },
+        "uid": {
+          "value": 0,
+          "quality": "ok",
+          "reason": null
+        },
+        "wbs": {
+          "value": "0",
+          "quality": "ok",
+          "reason": null
+        },
+        "name": {
+          "value": "MPP12 Test",
+          "quality": "ok",
+          "reason": null
+        },
+        "outline_level": {
+          "value": 0,
+          "quality": "ok",
+          "reason": null
+        },
+        "outline_number": {
+          "value": "0",
+          "quality": "ok",
+          "reason": null
+        },
+        "milestone": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "summary": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        }
+      },
+      "start": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "finish": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "early_start": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "early_finish": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "late_start": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "late_finish": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "constraint_type": {
+        "value": "AS_SOON_AS_POSSIBLE",
+        "quality": "ok",
+        "reason": null
+      },
+      "constraint_date": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "secondary_constraint_type": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "secondary_constraint_date": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "actual_start": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "actual_finish": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "deadline": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "task_mode": {
+        "value": "AUTO_SCHEDULED",
+        "quality": "ok",
+        "reason": null
+      },
+      "task_type": {
+        "value": "FIXED_DURATION",
+        "quality": "ok",
+        "reason": null
+      },
+      "stop": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "resume": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "scheduled_start": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "scheduled_finish": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "notes": {
+        "value": "",
+        "quality": "ok",
+        "reason": null
+      },
+      "external_project": {
+        "value": "False",
+        "quality": "ok",
+        "reason": null
+      },
+      "subproject_file": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "duration": {
+        "value": "1 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "1",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "actual_duration": {
+        "value": "0 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "remaining_duration": {
+        "value": "1 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "1",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "manual_duration": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set",
+        "quantity": null
+      },
+      "scheduled_duration": {
+        "value": "1 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "1",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "work": {
+        "value": "0 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "actual_work": {
+        "value": "0 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "remaining_work": {
+        "value": "0 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "leveling_delay": {
+        "value": "0 ed",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "ELAPSED_DAYS",
+          "source_units": "ed",
+          "elapsed": true
+        }
+      },
+      "total_slack": {
+        "value": "0 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "free_slack": {
+        "value": "0 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "percent_complete": {
+        "value": "0",
+        "quality": "ok",
+        "reason": null
+      },
+      "percent_work_complete": {
+        "value": "0",
+        "quality": "ok",
+        "reason": null
+      },
+      "effort_driven": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "ignore_resource_calendar": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "active": {
+        "value": true,
+        "quality": "ok",
+        "reason": null
+      },
+      "external_task": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "estimated": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "leveling_can_split": {
+        "value": true,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_task_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "child_task_keys": {
+        "value": [
+          "uid:2"
+        ],
+        "quality": "ok",
+        "reason": null
+      },
+      "calendar_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "effective_calendar_key": {
+        "value": "uid:1",
+        "quality": "ok",
+        "reason": null
+      },
+      "calendar_uid": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "segments": {
+        "value": [],
+        "quality": "ok",
+        "reason": null
+      },
+      "segments_quality": "ok",
+      "baseline_values": [
+        {
+          "slot": 0,
+          "start": null,
+          "finish": null,
+          "duration": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          },
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": {
+                "amount": "0",
+                "units": "DAYS",
+                "source_units": "d",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 1,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 2,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 3,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 4,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 5,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 6,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 7,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 8,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 9,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 10,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        }
+      ],
+      "quality_issues": []
+    },
+    {
+      "task_key": "uid:2",
+      "identity_quality": {
+        "value": "uid:2",
+        "quality": "ok",
+        "reason": null
+      },
+      "id": 1,
+      "uid": 2,
+      "wbs": "1",
+      "name": "Test Task",
+      "outline_level": 1,
+      "outline_number": "1",
+      "milestone": false,
+      "summary": false,
+      "field_quality": {
+        "id": {
+          "value": 1,
+          "quality": "ok",
+          "reason": null
+        },
+        "uid": {
+          "value": 2,
+          "quality": "ok",
+          "reason": null
+        },
+        "wbs": {
+          "value": "1",
+          "quality": "ok",
+          "reason": null
+        },
+        "name": {
+          "value": "Test Task",
+          "quality": "ok",
+          "reason": null
+        },
+        "outline_level": {
+          "value": 1,
+          "quality": "ok",
+          "reason": null
+        },
+        "outline_number": {
+          "value": "1",
+          "quality": "ok",
+          "reason": null
+        },
+        "milestone": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "summary": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        }
+      },
+      "start": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "finish": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "early_start": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "early_finish": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "late_start": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "late_finish": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "constraint_type": {
+        "value": "AS_SOON_AS_POSSIBLE",
+        "quality": "ok",
+        "reason": null
+      },
+      "constraint_date": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "secondary_constraint_type": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "secondary_constraint_date": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "actual_start": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "actual_finish": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "deadline": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "task_mode": {
+        "value": "AUTO_SCHEDULED",
+        "quality": "ok",
+        "reason": null
+      },
+      "task_type": {
+        "value": "FIXED_UNITS",
+        "quality": "ok",
+        "reason": null
+      },
+      "stop": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "resume": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "scheduled_start": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "scheduled_finish": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "notes": {
+        "value": "",
+        "quality": "ok",
+        "reason": null
+      },
+      "external_project": {
+        "value": "False",
+        "quality": "ok",
+        "reason": null
+      },
+      "subproject_file": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "duration": {
+        "value": "1 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "1",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "actual_duration": {
+        "value": "0 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "remaining_duration": {
+        "value": "1 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "1",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "manual_duration": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set",
+        "quantity": null
+      },
+      "scheduled_duration": {
+        "value": "1 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "1",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "work": {
+        "value": "0 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "actual_work": {
+        "value": "0 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "remaining_work": {
+        "value": "0 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "leveling_delay": {
+        "value": "0 ed",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "ELAPSED_DAYS",
+          "source_units": "ed",
+          "elapsed": true
+        }
+      },
+      "total_slack": {
+        "value": "0 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "free_slack": {
+        "value": "0 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "percent_complete": {
+        "value": "0",
+        "quality": "ok",
+        "reason": null
+      },
+      "percent_work_complete": {
+        "value": "0",
+        "quality": "ok",
+        "reason": null
+      },
+      "effort_driven": {
+        "value": true,
+        "quality": "ok",
+        "reason": null
+      },
+      "ignore_resource_calendar": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "active": {
+        "value": true,
+        "quality": "ok",
+        "reason": null
+      },
+      "external_task": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "estimated": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "leveling_can_split": {
+        "value": true,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_task_key": {
+        "value": "uid:0",
+        "quality": "ok",
+        "reason": null
+      },
+      "child_task_keys": {
+        "value": [],
+        "quality": "ok",
+        "reason": null
+      },
+      "calendar_key": {
+        "value": "uid:9",
+        "quality": "ok",
+        "reason": null
+      },
+      "effective_calendar_key": {
+        "value": "uid:1",
+        "quality": "ok",
+        "reason": null
+      },
+      "calendar_uid": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "segments": {
+        "value": [
+          {
+            "start": {
+              "value": "2006-08-23T08:00",
+              "quality": "ok",
+              "reason": null
+            },
+            "end": {
+              "value": "2006-08-23T17:00",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        ],
+        "quality": "ok",
+        "reason": null
+      },
+      "segments_quality": "ok",
+      "baseline_values": [
+        {
+          "slot": 0,
+          "start": null,
+          "finish": null,
+          "duration": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          },
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": {
+                "amount": "0",
+                "units": "DAYS",
+                "source_units": "d",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 1,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 2,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 3,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 4,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 5,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 6,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 7,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 8,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 9,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        },
+        {
+          "slot": 10,
+          "start": null,
+          "finish": null,
+          "duration": null,
+          "work": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          },
+          "cost": "0",
+          "field_quality": {
+            "start": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "finish": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "duration": {
+              "value": null,
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "work": {
+              "value": {
+                "amount": "0",
+                "units": "HOURS",
+                "source_units": "h",
+                "elapsed": false
+              },
+              "quality": "ok",
+              "reason": null
+            },
+            "cost": {
+              "value": "0",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        }
+      ],
+      "quality_issues": []
+    }
+  ],
+  "dependencies": [],
+  "external_dependencies": [],
+  "resources": [
+    {
+      "resource_key": "uid:0",
+      "identity_quality": {
+        "value": "uid:0",
+        "quality": "ok",
+        "reason": null
+      },
+      "id": 0,
+      "field_quality": {
+        "id": {
+          "value": 0,
+          "quality": "ok",
+          "reason": null
+        },
+        "uid": {
+          "value": 0,
+          "quality": "ok",
+          "reason": null
+        },
+        "name": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "type": {
+          "value": "WORK",
+          "quality": "ok",
+          "reason": null
+        },
+        "email": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "group": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        }
+      },
+      "uid": 0,
+      "name": null,
+      "type": "WORK",
+      "email": null,
+      "group": null,
+      "max_units": {
+        "value": "100",
+        "quality": "ok",
+        "reason": null
+      },
+      "std_rate": {
+        "value": "0.0h",
+        "quality": "ok",
+        "reason": null
+      },
+      "cost_per_use": {
+        "value": "0",
+        "quality": "ok",
+        "reason": null
+      },
+      "calendar_key": {
+        "value": "uid:2",
+        "quality": "ok",
+        "reason": null
+      },
+      "base_calendar_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "calendar_uid": {
+        "value": 2,
+        "quality": "ok",
+        "reason": null
+      },
+      "start": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "finish": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "availability": [
+        {
+          "available_from": {
+            "value": "1984-01-01T00:00",
+            "quality": "ok",
+            "reason": null
+          },
+          "available_to": {
+            "value": "2049-12-31T23:59",
+            "quality": "ok",
+            "reason": null
+          },
+          "max_units": {
+            "value": "100",
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "availability_quality": {
+        "status": "complete",
+        "count": 1,
+        "reason": null
+      },
+      "quality_issues": []
+    },
+    {
+      "resource_key": "uid:2",
+      "identity_quality": {
+        "value": "uid:2",
+        "quality": "ok",
+        "reason": null
+      },
+      "id": 1,
+      "field_quality": {
+        "id": {
+          "value": 1,
+          "quality": "ok",
+          "reason": null
+        },
+        "uid": {
+          "value": 2,
+          "quality": "ok",
+          "reason": null
+        },
+        "name": {
+          "value": "Test Resource 1",
+          "quality": "ok",
+          "reason": null
+        },
+        "type": {
+          "value": "WORK",
+          "quality": "ok",
+          "reason": null
+        },
+        "email": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "group": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        }
+      },
+      "uid": 2,
+      "name": "Test Resource 1",
+      "type": "WORK",
+      "email": null,
+      "group": null,
+      "max_units": {
+        "value": "100",
+        "quality": "ok",
+        "reason": null
+      },
+      "std_rate": {
+        "value": "0.0h",
+        "quality": "ok",
+        "reason": null
+      },
+      "cost_per_use": {
+        "value": "0",
+        "quality": "ok",
+        "reason": null
+      },
+      "calendar_key": {
+        "value": "uid:4",
+        "quality": "ok",
+        "reason": null
+      },
+      "base_calendar_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "calendar_uid": {
+        "value": 4,
+        "quality": "ok",
+        "reason": null
+      },
+      "start": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "finish": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "availability": [
+        {
+          "available_from": {
+            "value": "1984-01-01T00:00",
+            "quality": "ok",
+            "reason": null
+          },
+          "available_to": {
+            "value": "2049-12-31T23:59",
+            "quality": "ok",
+            "reason": null
+          },
+          "max_units": {
+            "value": "100",
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "availability_quality": {
+        "status": "complete",
+        "count": 1,
+        "reason": null
+      },
+      "quality_issues": []
+    },
+    {
+      "resource_key": "uid:3",
+      "identity_quality": {
+        "value": "uid:3",
+        "quality": "ok",
+        "reason": null
+      },
+      "id": 2,
+      "field_quality": {
+        "id": {
+          "value": 2,
+          "quality": "ok",
+          "reason": null
+        },
+        "uid": {
+          "value": 3,
+          "quality": "ok",
+          "reason": null
+        },
+        "name": {
+          "value": "Test Resource 2",
+          "quality": "ok",
+          "reason": null
+        },
+        "type": {
+          "value": "WORK",
+          "quality": "ok",
+          "reason": null
+        },
+        "email": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "group": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        }
+      },
+      "uid": 3,
+      "name": "Test Resource 2",
+      "type": "WORK",
+      "email": null,
+      "group": null,
+      "max_units": {
+        "value": "100",
+        "quality": "ok",
+        "reason": null
+      },
+      "std_rate": {
+        "value": "0.0h",
+        "quality": "ok",
+        "reason": null
+      },
+      "cost_per_use": {
+        "value": "0",
+        "quality": "ok",
+        "reason": null
+      },
+      "calendar_key": {
+        "value": "uid:8",
+        "quality": "ok",
+        "reason": null
+      },
+      "base_calendar_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "calendar_uid": {
+        "value": 8,
+        "quality": "ok",
+        "reason": null
+      },
+      "start": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "finish": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "availability": [
+        {
+          "available_from": {
+            "value": "1984-01-01T00:00",
+            "quality": "ok",
+            "reason": null
+          },
+          "available_to": {
+            "value": "2049-12-31T23:59",
+            "quality": "ok",
+            "reason": null
+          },
+          "max_units": {
+            "value": "100",
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "availability_quality": {
+        "status": "complete",
+        "count": 1,
+        "reason": null
+      },
+      "quality_issues": []
+    }
+  ],
+  "assignments": [
+    {
+      "assignment_key": "uid:2",
+      "identity_quality": {
+        "value": "uid:2",
+        "quality": "ok",
+        "reason": null
+      },
+      "uid": {
+        "value": 2,
+        "quality": "ok",
+        "reason": null
+      },
+      "task_key": "uid:2",
+      "resource_key": null,
+      "task_uid": {
+        "value": 2,
+        "quality": "ok",
+        "reason": null
+      },
+      "resource_uid": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "endpoint_quality": {
+        "task": {
+          "quality": "ok",
+          "reason": null
+        },
+        "resource": {
+          "quality": "missing",
+          "reason": "not_set"
+        }
+      },
+      "start": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "finish": {
+        "value": "2006-08-23T17:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "actual_start": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "actual_finish": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "stop": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "resume": {
+        "value": "2006-08-23T08:00",
+        "quality": "ok",
+        "reason": null
+      },
+      "work_contour": {
+        "value": "FLAT",
+        "quality": "ok",
+        "reason": null
+      },
+      "work": {
+        "value": "8 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "8",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "actual_work": {
+        "value": "0 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "remaining_work": {
+        "value": "8 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "8",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "overtime_work": {
+        "value": "0 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "delay": {
+        "value": "0 h",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "HOURS",
+          "source_units": "h",
+          "elapsed": false
+        }
+      },
+      "leveling_delay": {
+        "value": "0 d",
+        "quality": "ok",
+        "reason": null,
+        "quantity": {
+          "amount": "0",
+          "units": "DAYS",
+          "source_units": "d",
+          "elapsed": false
+        }
+      },
+      "units": {
+        "value": "100",
+        "quality": "ok",
+        "reason": null
+      },
+      "effective_calendar_key": {
+        "value": "uid:1",
+        "quality": "ok",
+        "reason": null
+      },
+      "segments": {
+        "value": [
+          {
+            "start": {
+              "value": "2006-08-23T08:00",
+              "quality": "ok",
+              "reason": null
+            },
+            "end": {
+              "value": "2006-08-23T17:00",
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        ],
+        "quality": "ok",
+        "reason": null
+      },
+      "timephased": [],
+      "timephased_quality": {
+        "status": "missing",
+        "count": 0,
+        "reason": "getter_failed:getTimephasedWork:TypeError"
+      },
+      "quality_issues": [
+        {
+          "field": "timephased_quality",
+          "quality": "missing",
+          "reason": "getter_failed:getTimephasedWork:TypeError"
+        }
+      ]
+    }
+  ],
+  "calendars": [
+    {
+      "calendar_key": "uid:1",
+      "identity_quality": {
+        "value": "uid:1",
+        "quality": "ok",
+        "reason": null
+      },
+      "name": "Standard",
+      "uid": {
+        "value": 1,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_uid": null,
+      "parent_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "type": {
+        "value": "GLOBAL",
+        "quality": "ok",
+        "reason": null
+      },
+      "personal": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_day": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_week": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_month": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_year": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "weekdays": [
+        {
+          "day": "MONDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "TUESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "WEDNESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "THURSDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "FRIDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SATURDAY",
+          "day_type": {
+            "value": "NON_WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SUNDAY",
+          "day_type": {
+            "value": "NON_WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [],
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "weekdays_quality": "ok",
+      "exceptions": [],
+      "exceptions_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "work_weeks": [],
+      "work_weeks_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "quality_issues": []
+    },
+    {
+      "calendar_key": "uid:2",
+      "identity_quality": {
+        "value": "uid:2",
+        "quality": "ok",
+        "reason": null
+      },
+      "name": "Unnamed Resource",
+      "uid": {
+        "value": 2,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_uid": 1,
+      "parent_key": {
+        "value": "uid:1",
+        "quality": "ok",
+        "reason": null
+      },
+      "type": {
+        "value": "RESOURCE",
+        "quality": "ok",
+        "reason": null
+      },
+      "personal": {
+        "value": true,
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_day": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_week": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_month": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_year": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "weekdays": [
+        {
+          "day": "MONDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "TUESDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "WEDNESDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "THURSDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "FRIDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "SATURDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "SUNDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        }
+      ],
+      "weekdays_quality": "ok",
+      "exceptions": [],
+      "exceptions_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "work_weeks": [],
+      "work_weeks_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "quality_issues": []
+    },
+    {
+      "calendar_key": "uid:4",
+      "identity_quality": {
+        "value": "uid:4",
+        "quality": "ok",
+        "reason": null
+      },
+      "name": "Test Resource 1",
+      "uid": {
+        "value": 4,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_uid": 1,
+      "parent_key": {
+        "value": "uid:1",
+        "quality": "ok",
+        "reason": null
+      },
+      "type": {
+        "value": "RESOURCE",
+        "quality": "ok",
+        "reason": null
+      },
+      "personal": {
+        "value": true,
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_day": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_week": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_month": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_year": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "weekdays": [
+        {
+          "day": "MONDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "TUESDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "WEDNESDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "THURSDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "FRIDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "SATURDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "SUNDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        }
+      ],
+      "weekdays_quality": "ok",
+      "exceptions": [
+        {
+          "name": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          },
+          "from_date": {
+            "value": "2006-10-30",
+            "quality": "ok",
+            "reason": null
+          },
+          "to_date": {
+            "value": "2006-10-30",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [],
+            "quality": "ok",
+            "reason": null
+          },
+          "recurrence": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        }
+      ],
+      "exceptions_quality": {
+        "status": "complete",
+        "count": 1,
+        "reason": null
+      },
+      "work_weeks": [],
+      "work_weeks_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "quality_issues": []
+    },
+    {
+      "calendar_key": "uid:5",
+      "identity_quality": {
+        "value": "uid:5",
+        "quality": "ok",
+        "reason": null
+      },
+      "name": "Test Calendar",
+      "uid": {
+        "value": 5,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_uid": null,
+      "parent_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "type": {
+        "value": "GLOBAL",
+        "quality": "ok",
+        "reason": null
+      },
+      "personal": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_day": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_week": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_month": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_year": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "weekdays": [
+        {
+          "day": "MONDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "TUESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "WEDNESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "THURSDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "FRIDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SATURDAY",
+          "day_type": {
+            "value": "NON_WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SUNDAY",
+          "day_type": {
+            "value": "NON_WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [],
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "weekdays_quality": "ok",
+      "exceptions": [],
+      "exceptions_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "work_weeks": [],
+      "work_weeks_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "quality_issues": []
+    },
+    {
+      "calendar_key": "uid:6",
+      "identity_quality": {
+        "value": "uid:6",
+        "quality": "ok",
+        "reason": null
+      },
+      "name": "24 Hours",
+      "uid": {
+        "value": 6,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_uid": null,
+      "parent_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "type": {
+        "value": "GLOBAL",
+        "quality": "ok",
+        "reason": null
+      },
+      "personal": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_day": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_week": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_month": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_year": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "weekdays": [
+        {
+          "day": "MONDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "TUESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "WEDNESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "THURSDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "FRIDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SATURDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SUNDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "weekdays_quality": "ok",
+      "exceptions": [],
+      "exceptions_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "work_weeks": [],
+      "work_weeks_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "quality_issues": []
+    },
+    {
+      "calendar_key": "uid:7",
+      "identity_quality": {
+        "value": "uid:7",
+        "quality": "ok",
+        "reason": null
+      },
+      "name": "Night Shift",
+      "uid": {
+        "value": 7,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_uid": null,
+      "parent_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "type": {
+        "value": "GLOBAL",
+        "quality": "ok",
+        "reason": null
+      },
+      "personal": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_day": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_week": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_month": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_year": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "weekdays": [
+        {
+          "day": "MONDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "23:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "TUESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "03:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "04:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "23:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "WEDNESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "03:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "04:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "23:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "THURSDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "03:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "04:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "23:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "FRIDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "03:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "04:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "23:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SATURDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "00:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "03:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "04:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SUNDAY",
+          "day_type": {
+            "value": "NON_WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [],
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "weekdays_quality": "ok",
+      "exceptions": [],
+      "exceptions_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "work_weeks": [],
+      "work_weeks_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "quality_issues": []
+    },
+    {
+      "calendar_key": "uid:8",
+      "identity_quality": {
+        "value": "uid:8",
+        "quality": "ok",
+        "reason": null
+      },
+      "name": "Test Resource 2",
+      "uid": {
+        "value": 8,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_uid": 1,
+      "parent_key": {
+        "value": "uid:1",
+        "quality": "ok",
+        "reason": null
+      },
+      "type": {
+        "value": "RESOURCE",
+        "quality": "ok",
+        "reason": null
+      },
+      "personal": {
+        "value": true,
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_day": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_week": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_month": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_year": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "weekdays": [
+        {
+          "day": "MONDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "TUESDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "WEDNESDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "THURSDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "FRIDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "SATURDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        },
+        {
+          "day": "SUNDAY",
+          "day_type": {
+            "value": "DEFAULT",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        }
+      ],
+      "weekdays_quality": "ok",
+      "exceptions": [
+        {
+          "name": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          },
+          "from_date": {
+            "value": "2006-10-31",
+            "quality": "ok",
+            "reason": null
+          },
+          "to_date": {
+            "value": "2006-10-31",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [],
+            "quality": "ok",
+            "reason": null
+          },
+          "recurrence": {
+            "value": null,
+            "quality": "missing",
+            "reason": "not_set"
+          }
+        }
+      ],
+      "exceptions_quality": {
+        "status": "complete",
+        "count": 1,
+        "reason": null
+      },
+      "work_weeks": [],
+      "work_weeks_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "quality_issues": []
+    },
+    {
+      "calendar_key": "uid:9",
+      "identity_quality": {
+        "value": "uid:9",
+        "quality": "ok",
+        "reason": null
+      },
+      "name": "Test Calendar 2",
+      "uid": {
+        "value": 9,
+        "quality": "ok",
+        "reason": null
+      },
+      "parent_uid": null,
+      "parent_key": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "type": {
+        "value": "GLOBAL",
+        "quality": "ok",
+        "reason": null
+      },
+      "personal": {
+        "value": false,
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_day": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_week": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_month": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_year": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "weekdays": [
+        {
+          "day": "MONDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "09:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "TUESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "WEDNESDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:10",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "THURSDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:20",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "FRIDAY",
+          "day_type": {
+            "value": "WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [
+              {
+                "start": {
+                  "value": "08:30",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "12:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              },
+              {
+                "start": {
+                  "value": "13:00",
+                  "quality": "ok",
+                  "reason": null
+                },
+                "end": {
+                  "value": "17:00",
+                  "quality": "ok",
+                  "reason": null
+                }
+              }
+            ],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SATURDAY",
+          "day_type": {
+            "value": "NON_WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [],
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "day": "SUNDAY",
+          "day_type": {
+            "value": "NON_WORKING",
+            "quality": "ok",
+            "reason": null
+          },
+          "working": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "intervals": {
+            "value": [],
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "weekdays_quality": "ok",
+      "exceptions": [],
+      "exceptions_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "work_weeks": [],
+      "work_weeks_quality": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "quality_issues": []
+    }
+  ],
+  "diagnose_graph": {
+    "roots": [
+      "uid:2"
+    ],
+    "multiple_roots": false,
+    "service_rows": [
+      "uid:0"
+    ],
+    "has_service_row": true,
+    "cycles": [],
+    "has_cycle": false,
+    "self_references": [],
+    "dangling_dependencies": [],
+    "external_dependencies": [],
+    "external_records": [],
+    "schedule_status": "not_verified",
+    "raw_relation_enumeration": {
+      "value": null,
+      "quality": "unsupported",
+      "reason": "MPXJ_ConstraintFactory_filters_self_and_dangling_MPP_records_before_ProjectFile"
+    }
+  },
+  "summary_inputs": {
+    "root_candidates": [
+      "uid:2"
+    ],
+    "rule": "source-values-only;summary-v1 deferred to stage-08",
+    "computed": {
+      "value": null,
+      "quality": "unsupported",
+      "reason": "summary_profile_not_applied"
+    }
+  },
+  "telemetry": {
+    "MPXJ_read": 1
+  }
+}

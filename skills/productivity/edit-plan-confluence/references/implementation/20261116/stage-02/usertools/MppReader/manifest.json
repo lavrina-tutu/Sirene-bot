@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "component": "MppReader",
+  "target_root": "/home/tkachenkoav/USERTOOLS/MppReader",
+  "base_commit": "8b04ce1945b88409fae036b4a0f0d69a52dfceea",
+  "runtime_imports_from_package": false,
+  "files": [
+    {
+      "path": "plan_export.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MppReader/plan_export.py",
+      "action": "modified",
+      "before_sha256": "51058ebb7f92107e2a6dd057c41c709c7c9b26d582cccd0024bfe5e2858e3bb5",
+      "after_sha256": "c59402f8e059c4b282f751439e1c43a2b745d2bc64facaa6574f3e6c17925128",
+      "mode": "0o644",
+      "basis": "agreed stage 02, plan §4; complete export, one-read boundary and binary/CSV regression"
+    },
+    {
+      "path": "read_mpp.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MppReader/read_mpp.py",
+      "action": "modified",
+      "before_sha256": "ccbd745e30d509bf4c6914038aa7617b37fb0266dfc92620b493e56e949353dd",
+      "after_sha256": "e269c1e46f0d203261684823a71b3111da7946963873d1b6d09b26563b357095",
+      "mode": "0o711",
+      "basis": "agreed stage 02, plan §4; complete export, one-read boundary and binary/CSV regression"
+    },
+    {
+      "path": "tests/test_plan_export.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MppReader/tests/test_plan_export.py",
+      "action": "modified",
+      "before_sha256": "85398f3077c2739104cf71cfc9489aff0c74e72c71aea31e596a61dc0f6e22fb",
+      "after_sha256": "008958087b9405933e8df640da7749b1ff1037bffbf932b8c9d32d5a5168d12a",
+      "mode": "0o644",
+      "basis": "agreed stage 02, plan §4; complete export, one-read boundary and binary/CSV regression"
+    },
+    {
+      "path": "tests/test_read_mpp_regression.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MppReader/tests/test_read_mpp_regression.py",
+      "action": "modified",
+      "before_sha256": "6df6cc3d2f511b8c531c80df55b3bcb53db91bac48b17e16deadab0966cb6484",
+      "after_sha256": "ff62fc55adee4974eb5f4d7df77b13b4f48ecec535287b2f8082e358e963817e",
+      "mode": "0o644",
+      "basis": "agreed stage 02, plan §4; complete export, one-read boundary and binary/CSV regression"
+    },
+    {
+      "path": "tests/conftest.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MppReader/tests/conftest.py",
+      "action": "created",
+      "before_sha256": null,
+      "after_sha256": "0433dccd1d53248e072b930fecf79013ff4db4e4fc84d6b10e7cfce444fd383a",
+      "mode": "0o644",
+      "basis": "agreed stage 02, plan §4; complete export, one-read boundary and binary/CSV regression"
+    }
+  ]
+}

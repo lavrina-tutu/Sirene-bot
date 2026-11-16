@@ -1,0 +1,2 @@
+........s................                                                [100%]
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/reports/mpp-reader-junit.xml -

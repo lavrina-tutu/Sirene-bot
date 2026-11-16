@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "tool": "edit_plan_confluence",
+  "values": {
+    "CACHE_DIR": "~/.cache/edit-plan-confluence",
+    "MPXJ_PYTHON": "/usr/bin/python3.9",
+    "MPP_READ_TIMEOUT_SECONDS": 180,
+    "HTTP_TIMEOUT_SECONDS": 120,
+    "HTTP_RETRY_LIMIT": 1,
+    "MPP_MAX_BYTES": 67108864,
+    "ZIP_MAX_BYTES": 67108864,
+    "ZIP_MAX_ENTRIES": 128,
+    "ZIP_MAX_UNPACKED_BYTES": 268435456,
+    "ZIP_MAX_RATIO": 100,
+    "NORMALIZATION_PROFILE": "normalization-v1",
+    "SUMMARY_PROFILE": "summary-v1",
+    "PLUGIN_PROFILE": "installed-gantt-profile"
+  },
+  "schema": {
+    "type": "object",
+    "required": [
+      "enabled",
+      "CACHE_DIR",
+      "MPXJ_PYTHON",
+      "MPP_READ_TIMEOUT_SECONDS",
+      "HTTP_TIMEOUT_SECONDS",
+      "HTTP_RETRY_LIMIT",
+      "MPP_MAX_BYTES",
+      "ZIP_MAX_BYTES",
+      "ZIP_MAX_ENTRIES",
+      "ZIP_MAX_UNPACKED_BYTES",
+      "ZIP_MAX_RATIO",
+      "NORMALIZATION_PROFILE",
+      "SUMMARY_PROFILE",
+      "PLUGIN_PROFILE"
+    ],
+    "additionalProperties": false,
+    "propertyNames": {
+      "$ref": "#/definitions/secret_key_pattern"
+    },
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      },
+      "llm": {
+        "type": "string"
+      },
+      "CACHE_DIR": {
+        "type": "string",
+        "minLength": 1
+      },
+      "MPXJ_PYTHON": {
+        "type": "string",
+        "minLength": 1
+      },
+      "MPP_READ_TIMEOUT_SECONDS": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 86400
+      },
+      "HTTP_TIMEOUT_SECONDS": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 86400
+      },
+      "HTTP_RETRY_LIMIT": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10
+      },
+      "MPP_MAX_BYTES": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1099511627776
+      },
+      "ZIP_MAX_BYTES": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1099511627776
+      },
+      "ZIP_MAX_ENTRIES": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000000
+      },
+      "ZIP_MAX_UNPACKED_BYTES": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1099511627776
+      },
+      "ZIP_MAX_RATIO": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000000
+      },
+      "NORMALIZATION_PROFILE": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-z0-9][a-z0-9.-]*$"
+      },
+      "SUMMARY_PROFILE": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-z0-9][a-z0-9.-]*$"
+      },
+      "PLUGIN_PROFILE": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-z0-9][a-z0-9.-]*$"
+      }
+    }
+  },
+  "basis": {
+    "MPP_READ_TIMEOUT_SECONDS": "existing run_export_full timeout 180s",
+    "HTTP_TIMEOUT_SECONDS": "existing ConfluenceClient timeout 120s",
+    "HTTP_RETRY_LIMIT": "existing single conflict retry",
+    "size_limits": "selected operational policy; boundary validation tested, not measured performance or reader capacity",
+    "deferred_consumers": "ZIP enforcement stage 03; HTTP/retry application stage 10; summary/plugin profiles stage 08"
+  }
+}

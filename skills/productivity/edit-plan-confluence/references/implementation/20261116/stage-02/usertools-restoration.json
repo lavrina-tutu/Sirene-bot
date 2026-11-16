@@ -1,0 +1,48 @@
+{
+  "gate": "passed",
+  "command": [
+    "patch",
+    "-p1",
+    "--batch",
+    "--forward",
+    "-i",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-02/usertools/MppReader/changes.patch"
+  ],
+  "cwd": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/restoration/MppReader",
+  "rc": 0,
+  "stdout": "patching file plan_export.py\npatching file read_mpp.py\npatching file tests/test_plan_export.py\npatching file tests/test_read_mpp_regression.py\npatching file tests/conftest.py\n",
+  "stderr": "",
+  "files": [
+    {
+      "path": "plan_export.py",
+      "matches_after": true,
+      "matches_live": true,
+      "mode_matches": true
+    },
+    {
+      "path": "read_mpp.py",
+      "matches_after": true,
+      "matches_live": true,
+      "mode_matches": true
+    },
+    {
+      "path": "tests/test_plan_export.py",
+      "matches_after": true,
+      "matches_live": true,
+      "mode_matches": true
+    },
+    {
+      "path": "tests/test_read_mpp_regression.py",
+      "matches_after": true,
+      "matches_live": true,
+      "mode_matches": true
+    },
+    {
+      "path": "tests/conftest.py",
+      "matches_after": true,
+      "matches_live": true,
+      "mode_matches": true
+    }
+  ],
+  "manifest_sha256": "8e80668dd5f946ef534e39ef7237a81f97cb1d1ad35d7e5150b852e525743ff4"
+}

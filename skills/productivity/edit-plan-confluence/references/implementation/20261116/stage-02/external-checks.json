@@ -1,0 +1,152 @@
+{
+  "gate": "passed",
+  "reader": {
+    "command": {
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "tests/test_plan_export.py",
+        "tests/test_read_mpp_regression.py",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/reader-pytest",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/reports/mpp-reader-junit.xml",
+        "-q"
+      ],
+      "cwd": "/home/tkachenkoav/USERTOOLS/MppReader",
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+      "rc": 0
+    },
+    "tests": 25,
+    "passed": 24,
+    "optional_skips": [
+      "test_export_full_zd_hashes_match_r036"
+    ],
+    "optional_skip_reason": "legacy §19 ZD binaries missing; not required stage02 A-F fixtures; no mandatory skip",
+    "failures": [],
+    "missing_required": [],
+    "junit": "mpp-reader-junit.xml"
+  },
+  "checks": {
+    "config": {
+      "gate": "passed",
+      "whole_ecosystem_schema_errors": 0,
+      "settings_count": 15,
+      "config_schema_sha256": "676c5a6f265ad7773bddc57d189cb19b95ad4587b955237fc67335ba727a4b8c"
+    },
+    "restoration": {
+      "gate": "passed",
+      "command": [
+        "patch",
+        "-p1",
+        "--batch",
+        "--forward",
+        "-i",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-02/usertools/MppReader/changes.patch"
+      ],
+      "cwd": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/restoration/MppReader",
+      "rc": 0,
+      "stdout": "patching file plan_export.py\npatching file read_mpp.py\npatching file tests/test_plan_export.py\npatching file tests/test_read_mpp_regression.py\npatching file tests/conftest.py\n",
+      "stderr": "",
+      "files": [
+        {
+          "path": "plan_export.py",
+          "matches_after": true,
+          "matches_live": true,
+          "mode_matches": true
+        },
+        {
+          "path": "read_mpp.py",
+          "matches_after": true,
+          "matches_live": true,
+          "mode_matches": true
+        },
+        {
+          "path": "tests/test_plan_export.py",
+          "matches_after": true,
+          "matches_live": true,
+          "mode_matches": true
+        },
+        {
+          "path": "tests/test_read_mpp_regression.py",
+          "matches_after": true,
+          "matches_live": true,
+          "mode_matches": true
+        },
+        {
+          "path": "tests/conftest.py",
+          "matches_after": true,
+          "matches_live": true,
+          "mode_matches": true
+        }
+      ],
+      "manifest_sha256": "8e80668dd5f946ef534e39ef7237a81f97cb1d1ad35d7e5150b852e525743ff4"
+    },
+    "stage01": {
+      "gate": "passed",
+      "mofs_files_unchanged": 18,
+      "mofs_source_hashes": {
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/__init__.py": "a9c6ee0da76f83686f8c1ec2ac62230198286b792de824a1ce3071a232d3aad9",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/backup.py": "32aa1954c47d7cb5d1b4fffa6b51baaa4dd11a6098e20b4571b648b8a12ed99d",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/ingest_mpp.py": "6e9e1dccfc00eb1fd2e859fd777c8febcca0133a1002f3d6884548052dc83ca4",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/migrate.py": "a4fa2761083ec3e091e5205f0f40170096d942ebbcef489a28255ae6d27bcd8a",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py": "ce7327c4d78934afd164cf1f8cf62cef98b091847a7e38f0f8e1027324bfb5eb",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/render.py": "c7b33e96147a47f4f9f0c62f7a94dbd74c9024bb244b33f381bcadb432492e77",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py": "748f4509aed5194f008c8196b682bb220cf5c2cc7d6a6a300d5f95afbe0435b7",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py": "9a0f0cebd6e1feeaa02258a2239a3314603c2515b70411d3cdb879fc82abe0a4",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/conftest.py": "7f45c7ca866a7c878e4e4a7cc719a7937a81e59126c75fc506bf09919390b7f4",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_backup.py": "94b6fed0cf1af575bf00ece287de66954f0c034a17c57d0e31e7b4b2637f2da4",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py": "17ecd2ebd343122e8bd5a78f8784b7cb2263c1b0f766073f7692e4dfe558138f",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_query.py": "4b90840f8d5be1e1a72f8550cee8e2f4ce65eb9ab95dcdc1ba9c12419c980f4c",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_render.py": "c730a5eff7e6e871ab82451a1e05d53e90b879437163077b1856ff8fdabc211e",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_schema.py": "4b0cd7a58de2953028e264d472f024b842df975381a9fbcd23adfad00aea9546",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer.py": "36576556d98c1b43b1d7fbf5c640f79ce6aff0d010aff965719af7b733115d52",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer_analysis.py": "233c0843effc1bdc70bc0a3192ac5a8a827286424489b9f60b194d91817c0f67",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer_snapshot.py": "52d2943887dff9710a7141ba6bb8706a8d8e67767b30c60b7bd3a9e9da24c076"
+      },
+      "stage01_git_artifacts_unchanged": true
+    }
+  },
+  "archive_regression": {
+    "command": {
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "-c",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/archive-pytest",
+        "-m",
+        "archive_integration",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/reports/archive-regression-junit.xml",
+        "-q"
+      ],
+      "cwd": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence",
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+      "rc": 0
+    },
+    "passed": 21,
+    "junit": "archive-regression-junit.xml"
+  },
+  "environment": {
+    "cli_python": "/usr/bin/python3",
+    "cli_python_resolved": "/usr/bin/python3.9",
+    "test_python": "/usr/bin/python3",
+    "python_version": "3.9.25 (main, Nov 10 2025, 00:00:00) \n[GCC 11.5.0 20240719 (Red Hat 11.5.0-11)]",
+    "mpxj_python": "/usr/bin/python3.9",
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+    "java": "openjdk version \"17.0.17\" 2025-10-21 LTS\nOpenJDK Runtime Environment (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS)\nOpenJDK 64-Bit Server VM (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS, mixed mode, sharing)",
+    "jsonschema": "4.25.1",
+    "PyYAML": "6.0.3",
+    "reader": "read-mpp-v2",
+    "mpxj": "16.4.0",
+    "jpype": "1.7.1",
+    "export": "full-export-v2",
+    "normalizer": "prepared-v1",
+    "normalization_profile": "normalization-v1/1.0.0",
+    "cache_format": 1,
+    "summary_profile": "not_installed/stage08",
+    "plugin_profile": "not_installed/stage08"
+  }
+}

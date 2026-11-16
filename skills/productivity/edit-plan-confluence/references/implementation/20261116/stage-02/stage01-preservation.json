@@ -1,0 +1,25 @@
+{
+  "gate": "passed",
+  "mofs_files_unchanged": 18,
+  "mofs_source_hashes": {
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/__init__.py": "a9c6ee0da76f83686f8c1ec2ac62230198286b792de824a1ce3071a232d3aad9",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/backup.py": "32aa1954c47d7cb5d1b4fffa6b51baaa4dd11a6098e20b4571b648b8a12ed99d",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/ingest_mpp.py": "6e9e1dccfc00eb1fd2e859fd777c8febcca0133a1002f3d6884548052dc83ca4",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/migrate.py": "a4fa2761083ec3e091e5205f0f40170096d942ebbcef489a28255ae6d27bcd8a",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py": "ce7327c4d78934afd164cf1f8cf62cef98b091847a7e38f0f8e1027324bfb5eb",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/render.py": "c7b33e96147a47f4f9f0c62f7a94dbd74c9024bb244b33f381bcadb432492e77",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py": "748f4509aed5194f008c8196b682bb220cf5c2cc7d6a6a300d5f95afbe0435b7",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py": "9a0f0cebd6e1feeaa02258a2239a3314603c2515b70411d3cdb879fc82abe0a4",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/conftest.py": "7f45c7ca866a7c878e4e4a7cc719a7937a81e59126c75fc506bf09919390b7f4",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_backup.py": "94b6fed0cf1af575bf00ece287de66954f0c034a17c57d0e31e7b4b2637f2da4",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py": "17ecd2ebd343122e8bd5a78f8784b7cb2263c1b0f766073f7692e4dfe558138f",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_query.py": "4b90840f8d5be1e1a72f8550cee8e2f4ce65eb9ab95dcdc1ba9c12419c980f4c",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_render.py": "c730a5eff7e6e871ab82451a1e05d53e90b879437163077b1856ff8fdabc211e",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_schema.py": "4b0cd7a58de2953028e264d472f024b842df975381a9fbcd23adfad00aea9546",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer.py": "36576556d98c1b43b1d7fbf5c640f79ce6aff0d010aff965719af7b733115d52",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer_analysis.py": "233c0843effc1bdc70bc0a3192ac5a8a827286424489b9f60b194d91817c0f67",
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer_snapshot.py": "52d2943887dff9710a7141ba6bb8706a8d8e67767b30c60b7bd3a9e9da24c076"
+  },
+  "stage01_git_artifacts_unchanged": true
+}

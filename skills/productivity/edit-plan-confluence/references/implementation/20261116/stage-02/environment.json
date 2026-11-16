@@ -1,0 +1,20 @@
+{
+  "cli_python": "/usr/bin/python3",
+  "cli_python_resolved": "/usr/bin/python3.9",
+  "test_python": "/usr/bin/python3",
+  "python_version": "3.9.25 (main, Nov 10 2025, 00:00:00) \n[GCC 11.5.0 20240719 (Red Hat 11.5.0-11)]",
+  "mpxj_python": "/usr/bin/python3.9",
+  "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+  "java": "openjdk version \"17.0.17\" 2025-10-21 LTS\nOpenJDK Runtime Environment (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS)\nOpenJDK 64-Bit Server VM (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS, mixed mode, sharing)",
+  "jsonschema": "4.25.1",
+  "PyYAML": "6.0.3",
+  "reader": "read-mpp-v2",
+  "mpxj": "16.4.0",
+  "jpype": "1.7.1",
+  "export": "full-export-v2",
+  "normalizer": "prepared-v1",
+  "normalization_profile": "normalization-v1/1.0.0",
+  "cache_format": 1,
+  "summary_profile": "not_installed/stage08",
+  "plugin_profile": "not_installed/stage08"
+}

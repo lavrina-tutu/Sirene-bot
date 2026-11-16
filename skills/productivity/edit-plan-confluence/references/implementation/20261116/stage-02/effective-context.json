@@ -1,0 +1,61 @@
+{
+  "paths": {
+    "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/state/index.sqlite",
+    "workvault": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/WorkVault",
+    "cache_dir": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/cache",
+    "mpp_reader": "/home/tkachenkoav/USERTOOLS/MppReader"
+  },
+  "settings": {
+    "WORKVAULT_PATH": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/WorkVault",
+    "CONFLUENCE_URL": "https://dom.tutu.ru",
+    "CACHE_DIR": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/cache",
+    "MPXJ_PYTHON": "/usr/bin/python3.9",
+    "MPP_READ_TIMEOUT_SECONDS": 180,
+    "HTTP_TIMEOUT_SECONDS": 120,
+    "HTTP_RETRY_LIMIT": 1,
+    "MPP_MAX_BYTES": 67108864,
+    "ZIP_MAX_BYTES": 67108864,
+    "ZIP_MAX_ENTRIES": 128,
+    "ZIP_MAX_UNPACKED_BYTES": 268435456,
+    "ZIP_MAX_RATIO": 100,
+    "NORMALIZATION_PROFILE": "normalization-v1",
+    "SUMMARY_PROFILE": "summary-v1",
+    "PLUGIN_PROFILE": "installed-gantt-profile"
+  },
+  "sources": {
+    "WORKVAULT_PATH": "cli_override",
+    "CONFLUENCE_URL": "shared",
+    "CACHE_DIR": "cli_override",
+    "MPXJ_PYTHON": "ecosystem_config",
+    "MPP_READ_TIMEOUT_SECONDS": "ecosystem_config",
+    "HTTP_TIMEOUT_SECONDS": "ecosystem_config",
+    "HTTP_RETRY_LIMIT": "ecosystem_config",
+    "MPP_MAX_BYTES": "ecosystem_config",
+    "ZIP_MAX_BYTES": "ecosystem_config",
+    "ZIP_MAX_ENTRIES": "ecosystem_config",
+    "ZIP_MAX_UNPACKED_BYTES": "ecosystem_config",
+    "ZIP_MAX_RATIO": "ecosystem_config",
+    "NORMALIZATION_PROFILE": "ecosystem_config",
+    "SUMMARY_PROFILE": "ecosystem_config",
+    "PLUGIN_PROFILE": "ecosystem_config",
+    "db": "cli_override"
+  },
+  "profiles": {
+    "NORMALIZATION_PROFILE": {
+      "id": "normalization-v1",
+      "sha256": "e1971ad42cb832f04af18b7b730c804b4e672ba40b5477f4fea3431576ce5ee9",
+      "status": "available"
+    },
+    "SUMMARY_PROFILE": {
+      "id": "summary-v1",
+      "sha256": null,
+      "status": "not_installed"
+    },
+    "PLUGIN_PROFILE": {
+      "id": "installed-gantt-profile",
+      "sha256": null,
+      "status": "not_installed"
+    }
+  },
+  "fingerprint": "90c4f841fb461a6efbecea3ed9dd69c84759149d69ecf9cd52f85586f19c2b71"
+}

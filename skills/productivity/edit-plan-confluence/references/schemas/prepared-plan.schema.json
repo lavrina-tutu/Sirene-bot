@@ -1,0 +1,902 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PreparedPlan v1",
+  "description": "Full export v2 normalized without execution provenance; source-local identity only.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "normalized_data": {
+      "type": "object",
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/task"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/dependency"
+          }
+        },
+        "external_dependencies": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/resource"
+          }
+        },
+        "assignments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/assignment"
+          }
+        },
+        "calendars": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/calendar"
+          }
+        },
+        "project": {
+          "type": "object",
+          "required": [
+            "default_calendar_key",
+            "minutes_per_day",
+            "minutes_per_week",
+            "status_date"
+          ]
+        },
+        "collections": {
+          "type": "object",
+          "properties": {
+            "tasks": {
+              "$ref": "#/definitions/collection"
+            },
+            "dependencies": {
+              "$ref": "#/definitions/collection"
+            },
+            "external_dependencies": {
+              "$ref": "#/definitions/collection"
+            },
+            "resources": {
+              "$ref": "#/definitions/collection"
+            },
+            "assignments": {
+              "$ref": "#/definitions/collection"
+            },
+            "calendars": {
+              "$ref": "#/definitions/collection"
+            },
+            "baseline_values": {
+              "$ref": "#/definitions/collection"
+            }
+          },
+          "required": [
+            "tasks",
+            "dependencies",
+            "external_dependencies",
+            "resources",
+            "assignments",
+            "calendars",
+            "baseline_values"
+          ],
+          "additionalProperties": false
+        },
+        "diagnose_graph": {
+          "type": "object",
+          "required": [
+            "cycles",
+            "self_references",
+            "dangling_dependencies",
+            "external_dependencies",
+            "schedule_status"
+          ],
+          "properties": {
+            "schedule_status": {
+              "const": "not_verified"
+            }
+          }
+        },
+        "summary_inputs": {
+          "type": "object"
+        },
+        "export_version": {
+          "const": "full-export-v2"
+        },
+        "source_identity": {
+          "type": "object",
+          "properties": {
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "size_bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "reader": {
+              "type": "string",
+              "minLength": 1
+            },
+            "mpxj": {
+              "type": "string",
+              "minLength": 1
+            },
+            "jpype": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sha256",
+            "size_bytes",
+            "reader",
+            "mpxj",
+            "jpype"
+          ],
+          "additionalProperties": false
+        },
+        "normalization": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "normalization-v1"
+            },
+            "version": {
+              "type": "string"
+            },
+            "normalizer_version": {
+              "const": "prepared-v1"
+            },
+            "fingerprint": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "id",
+            "version",
+            "normalizer_version",
+            "fingerprint"
+          ],
+          "additionalProperties": false
+        },
+        "resolved_timezone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "tasks",
+        "dependencies",
+        "external_dependencies",
+        "resources",
+        "assignments",
+        "calendars",
+        "project",
+        "collections",
+        "diagnose_graph",
+        "summary_inputs",
+        "export_version",
+        "source_identity",
+        "normalization",
+        "resolved_timezone"
+      ],
+      "additionalProperties": false
+    },
+    "semantic_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provenance": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "normalized_data",
+    "semantic_sha256",
+    "provenance"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "field": {
+      "type": "object",
+      "required": [
+        "value",
+        "quality",
+        "reason"
+      ],
+      "properties": {
+        "value": {},
+        "quality": {
+          "enum": [
+            "ok",
+            "missing",
+            "unsupported",
+            "partial"
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quantity": {}
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "quality": {
+                "const": "ok"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              },
+              "reason": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "collection": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "complete",
+            "partial",
+            "missing",
+            "unsupported"
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "error_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "record_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "status",
+        "count",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "pattern": "obj:|object at 0x"
+      }
+    },
+    "quantity": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+        },
+        "units": {
+          "type": "string"
+        },
+        "source_units": {
+          "type": "string"
+        },
+        "elapsed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "amount",
+        "units",
+        "source_units",
+        "elapsed"
+      ],
+      "additionalProperties": false
+    },
+    "task": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "properties": {
+            "task_key": {
+              "$ref": "#/definitions/identity"
+            },
+            "id": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uid": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "wbs": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "outline_level": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "summary": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "milestone": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "identity_quality": {
+              "$ref": "#/definitions/field"
+            },
+            "parent_task_key": {
+              "$ref": "#/definitions/field"
+            },
+            "child_task_keys": {
+              "$ref": "#/definitions/field"
+            },
+            "calendar_key": {
+              "$ref": "#/definitions/field"
+            },
+            "effective_calendar_key": {
+              "$ref": "#/definitions/field"
+            },
+            "start": {
+              "$ref": "#/definitions/field"
+            },
+            "finish": {
+              "$ref": "#/definitions/field"
+            },
+            "duration": {
+              "$ref": "#/definitions/field"
+            },
+            "early_start": {
+              "$ref": "#/definitions/field"
+            },
+            "early_finish": {
+              "$ref": "#/definitions/field"
+            },
+            "late_start": {
+              "$ref": "#/definitions/field"
+            },
+            "late_finish": {
+              "$ref": "#/definitions/field"
+            },
+            "constraint_type": {
+              "$ref": "#/definitions/field"
+            },
+            "constraint_date": {
+              "$ref": "#/definitions/field"
+            },
+            "task_mode": {
+              "$ref": "#/definitions/field"
+            },
+            "actual_start": {
+              "$ref": "#/definitions/field"
+            },
+            "actual_finish": {
+              "$ref": "#/definitions/field"
+            },
+            "actual_duration": {
+              "$ref": "#/definitions/field"
+            },
+            "actual_work": {
+              "$ref": "#/definitions/field"
+            },
+            "remaining_duration": {
+              "$ref": "#/definitions/field"
+            },
+            "segments": {
+              "$ref": "#/definitions/field"
+            },
+            "ignore_resource_calendar": {
+              "$ref": "#/definitions/field"
+            },
+            "baseline_values": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "required": [
+            "task_key",
+            "id",
+            "uid",
+            "name",
+            "wbs",
+            "outline_level",
+            "summary",
+            "milestone",
+            "identity_quality",
+            "parent_task_key",
+            "child_task_keys",
+            "calendar_key",
+            "effective_calendar_key",
+            "start",
+            "finish",
+            "duration",
+            "early_start",
+            "early_finish",
+            "late_start",
+            "late_finish",
+            "constraint_type",
+            "constraint_date",
+            "task_mode",
+            "actual_start",
+            "actual_finish",
+            "actual_duration",
+            "actual_work",
+            "remaining_duration",
+            "segments",
+            "ignore_resource_calendar",
+            "baseline_values"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    },
+    "dependency": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "properties": {
+            "dependency_key": {
+              "$ref": "#/definitions/identity"
+            },
+            "predecessor_task_key": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "successor_task_key": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "link_type": {
+              "enum": [
+                "FS",
+                "SS",
+                "FF",
+                "SF",
+                null
+              ]
+            },
+            "lag": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lag_value": {
+              "$ref": "#/definitions/field"
+            },
+            "lag_calendar": {
+              "$ref": "#/definitions/field"
+            },
+            "project_lag_calendar": {
+              "$ref": "#/definitions/field"
+            },
+            "source_link_type": {
+              "$ref": "#/definitions/field"
+            },
+            "type_quality": {
+              "$ref": "#/definitions/field"
+            },
+            "external": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "dependency_key",
+            "predecessor_task_key",
+            "successor_task_key",
+            "link_type",
+            "lag",
+            "lag_value",
+            "lag_calendar",
+            "project_lag_calendar",
+            "source_link_type",
+            "type_quality",
+            "external"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    },
+    "calendar": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "properties": {
+            "calendar_key": {
+              "$ref": "#/definitions/identity"
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parent_key": {
+              "$ref": "#/definitions/field"
+            },
+            "parent_uid": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "minutes_per_day": {
+              "$ref": "#/definitions/field"
+            },
+            "minutes_per_week": {
+              "$ref": "#/definitions/field"
+            },
+            "weekdays": {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "day": {
+                    "type": "string"
+                  },
+                  "day_type": {
+                    "$ref": "#/definitions/field"
+                  },
+                  "working": {
+                    "$ref": "#/definitions/field"
+                  },
+                  "intervals": {
+                    "$ref": "#/definitions/field"
+                  }
+                },
+                "required": [
+                  "day",
+                  "day_type",
+                  "working",
+                  "intervals"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "exceptions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "$ref": "#/definitions/field"
+                  },
+                  "from_date": {
+                    "$ref": "#/definitions/field"
+                  },
+                  "to_date": {
+                    "$ref": "#/definitions/field"
+                  },
+                  "working": {
+                    "$ref": "#/definitions/field"
+                  },
+                  "intervals": {
+                    "$ref": "#/definitions/field"
+                  },
+                  "recurrence": {
+                    "$ref": "#/definitions/field"
+                  }
+                },
+                "required": [
+                  "name",
+                  "from_date",
+                  "to_date",
+                  "working",
+                  "intervals",
+                  "recurrence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "exceptions_quality": {
+              "$ref": "#/definitions/collection"
+            },
+            "work_weeks": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "work_weeks_quality": {
+              "$ref": "#/definitions/collection"
+            }
+          },
+          "required": [
+            "calendar_key",
+            "name",
+            "parent_key",
+            "parent_uid",
+            "minutes_per_day",
+            "minutes_per_week",
+            "weekdays",
+            "exceptions",
+            "exceptions_quality",
+            "work_weeks",
+            "work_weeks_quality"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    },
+    "resource": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "properties": {
+            "resource_key": {
+              "$ref": "#/definitions/identity"
+            },
+            "id": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uid": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "max_units": {
+              "$ref": "#/definitions/field"
+            },
+            "calendar_key": {
+              "$ref": "#/definitions/field"
+            },
+            "base_calendar_key": {
+              "$ref": "#/definitions/field"
+            },
+            "calendar_uid": {
+              "$ref": "#/definitions/field"
+            },
+            "availability": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "availability_quality": {
+              "$ref": "#/definitions/collection"
+            }
+          },
+          "required": [
+            "resource_key",
+            "id",
+            "uid",
+            "name",
+            "max_units",
+            "calendar_key",
+            "base_calendar_key",
+            "calendar_uid",
+            "availability",
+            "availability_quality"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    },
+    "assignment": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "properties": {
+            "assignment_key": {
+              "$ref": "#/definitions/identity"
+            },
+            "task_key": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "resource_key": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "uid": {
+              "$ref": "#/definitions/field"
+            },
+            "units": {
+              "$ref": "#/definitions/field"
+            },
+            "work": {
+              "$ref": "#/definitions/field"
+            },
+            "actual_work": {
+              "$ref": "#/definitions/field"
+            },
+            "remaining_work": {
+              "$ref": "#/definitions/field"
+            },
+            "start": {
+              "$ref": "#/definitions/field"
+            },
+            "finish": {
+              "$ref": "#/definitions/field"
+            },
+            "effective_calendar_key": {
+              "$ref": "#/definitions/field"
+            },
+            "segments": {
+              "$ref": "#/definitions/field"
+            },
+            "timephased": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "timephased_quality": {
+              "$ref": "#/definitions/collection"
+            }
+          },
+          "required": [
+            "assignment_key",
+            "task_key",
+            "resource_key",
+            "uid",
+            "units",
+            "work",
+            "actual_work",
+            "remaining_work",
+            "start",
+            "finish",
+            "effective_calendar_key",
+            "segments",
+            "timephased",
+            "timephased_quality"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    }
+  }
+}

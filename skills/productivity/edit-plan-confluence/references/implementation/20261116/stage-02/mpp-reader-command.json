@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "tests/test_plan_export.py",
+    "tests/test_read_mpp_regression.py",
+    "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/reader-pytest",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage02-134215/stage-02/reports/mpp-reader-junit.xml",
+    "-q"
+  ],
+  "cwd": "/home/tkachenkoav/USERTOOLS/MppReader",
+  "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+  "rc": 0
+}

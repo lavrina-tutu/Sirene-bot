@@ -5,6 +5,7 @@ import hashlib
 import json
 import uuid
 from dataclasses import asdict, dataclass
+from contextlib import ExitStack
 from pathlib import Path
 from typing import Any
 
@@ -618,12 +619,25 @@ def _upload_child_attachment_with_receipt(
             attach_id = str(matches[0]["id"])
         uploaded = AttachmentInfo(attach_id, filename, int(existing["attachment_version"]), filename)
     else:
+        # A lost upload response must be reconciled by exact bytes before a
+        # second POST, including the preserved non-MPP child adapter.
+        pending=None
+        if existing:
+            if (existing.get('page_id')!=page_id or existing.get('filename')!=filename
+                    or existing.get('expected_sha256')!=expected_sha256):
+                raise UploadVerificationConflict('child upload intent incomplete or changed')
+            pending=find_gantt_attachment(client.list_attachments(page_id),
+                type('ChildTarget',(),{'attachment_name':filename})())
+            if pending:
+                _verify_written_attachment(client,page_id,pending,expected_sha256)
+                verify_current_attachment(client,page_id,pending,expected_sha256)
         if attempt_id:
             write_receipt(attempt_id, "child_upload", {
                 "stage": "child_upload", "status": "prepared", "published": None,
                 "external_effect": "partial", "page_id": page_id, "filename": filename,
+                'expected_sha256':expected_sha256,
             })
-        uploaded = upload_gantt_json(client, page_id, filename, gantt, None)
+        uploaded = pending or upload_gantt_json(client, page_id, filename, gantt, None)
         if not isinstance(uploaded, AttachmentInfo):
             raise UploadVerificationConflict("missing actual child attachment identity")
         if attempt_id:
@@ -631,6 +645,7 @@ def _upload_child_attachment_with_receipt(
                 "stage": "child_upload", "status": "prepared", "published": None,
                 "external_effect": "partial", "page_id": page_id, "filename": filename,
                 "attachment_id": uploaded.attach_id, "attachment_version": uploaded.version,
+                'expected_sha256':expected_sha256,
             })
     _verify_written_attachment(client, page_id, uploaded, expected_sha256)
     verify_current_attachment(client, page_id, uploaded, expected_sha256)
@@ -674,6 +689,7 @@ def _publish_error(receipt, code, rc=5):
 def _current_target(client, page_id):
     from prepared_plan import fingerprint
     from dataclasses import asdict
+    from plan_verify import managed_state
     page=client.get_page(page_id)
     if str(page.get('id'))!=str(page_id):
         raise ValueError('target_page_mismatch')
@@ -682,6 +698,7 @@ def _current_target(client, page_id):
     att=find_gantt_attachment(attachments,macro) if macro else None
     target={'page_id':str(page_id),'page_version':int(page['version']['number']),
             'storage_sha256':hashlib.sha256(storage.encode()).hexdigest(),
+            'managed':managed_state(storage),
             'macro':asdict(macro) if macro else None,'attachment':asdict(att) if att else None}
     target['sha256']=fingerprint(target)
     return page,target
@@ -791,15 +808,30 @@ def prepare_publish(client=None, page_id=None, mpp_path=None, *, project_slug=No
             _check_paths(saved,workvault=workvault,cache_dir=cache_dir)
             if str(context.db)!=str(Path(db_path).resolve()) if db_path is not None else False:
                 raise ValueError('operation_context_conflict')
-            request=dict(previous['request'] if previous else saved['publish'])
+            request=dict(previous['request'] if previous else saved.get('publish') or {})
+            if not request.get('page_id'):
+                raise ValueError('operation_context_incomplete')
             if not request.get('project_slug') and not op['plan_id']:
                 raise ValueError('operation_context_incomplete')
             operation=ImportOperation(operation_id,item['item_id'],plan_writer.begin_operation_attempt(conn,operation_id,item['item_id']))
+            outcome.operation=operation
+            receipt.update(operation_id=operation_id,item_id=item['item_id'],snapshot_id=previous['snapshot_id'] if previous else item['snapshot_id'],
+                project_slug=request.get('project_slug'))
             if q.publish_external_effect(conn,operation_id):
-                # Stage 10 owns reconciliation after network effects.
-                return PublishPreparation(_publish_error({**receipt,'operation_id':operation_id,'item_id':item['item_id'],
-                    'snapshot_id':previous['snapshot_id'] if previous else item['snapshot_id'],
-                    'published':None,'external_effect':'unknown'},'network_reconciliation_required',5),counters,context,operation)
+                receipt.update(published=None,external_effect='unknown')
+            _guard_page(request['page_id'],allow_live_ab)
+            binding=resolve_plan_binding(request['page_id'],request.get('project_slug'),
+                lineage_id=request.get('lineage_id'),conn=conn)
+            if not request.get('project_slug') or binding['plan_id']!=op['plan_id']:
+                raise ValueError('operation_context_incomplete')
+            last=q.get_preparation_result(conn,operation_id)
+            if last and last['state']=='admitted' and not any((timezone_hint,mapping_revision,accept_proposal)):
+                # Reconciliation uses the admitted immutable result, not a new
+                # preparation based on the already changed remote state.
+                return PublishPreparation(last['result']['receipt'],counters,context,operation,last['result_id'],
+                                          target=last['result']['target'])
+            if q.publish_external_effect(conn,operation_id):
+                raise ValueError('operation_context_incomplete')
         else:
             request=dict(page_id=str(page_id),project_slug=project_slug,lineage_id=lineage_id,
                          timezone_hint=timezone_hint,drop_links=drop_links or [],child=child,title=title)
@@ -1000,6 +1032,9 @@ def prepare_publish(client=None, page_id=None, mpp_path=None, *, project_slug=No
                     receipt['snapshot_id']=receipt['snapshot_id'] or item['snapshot_id']
                     if not item['snapshot_id']:
                         plan_writer.fail_import_item(conn,item['item_id'],outcome.operation.attempt_id,receipt['error']['code'])
+                plan_writer.record_operation_event(conn,outcome.operation.attempt_id,'publish_preparation_error',status='failed',
+                    detail=json.dumps({'exception_type':type(exc).__name__,'http_status':getattr(exc,'status',None),
+                                       'errno':getattr(exc,'errno',None)}))
                 plan_writer.record_operation_event(conn,outcome.operation.attempt_id,'publish_preparation_failed',status='failed',detail=json.dumps(receipt))
                 write_receipt(outcome.operation.operation_id,'publish-failed',receipt,workvault=context.workvault)
             except Exception:pass # Original failure remains; never starts the network.
@@ -1012,140 +1047,412 @@ def prepare_publish(client=None, page_id=None, mpp_path=None, *, project_slug=No
 
 
 def _upload_prepared_bytes(client,page_id,filename,raw,existing):
-    from gantt_attachment import _create_attachment, _post_attachment_data
-    return (_post_attachment_data(client,page_id,existing.attach_id,filename,raw) if existing else
-            _create_attachment(client,page_id,filename,raw))
+    from gantt_attachment import upload_prepared_bytes
+    return upload_prepared_bytes(client,page_id,filename,raw,existing,hashlib.sha256(raw).hexdigest())
 
 
 def _verify_stage09_attachment(client,page_id,uploaded,expected):
-    """Current metadata + exact version download: avoids the known status=any 400.
-
-    Fail closed if that exact version is no longer current. Historical-version
-    reconciliation belongs to stage 10; latest bytes are never substituted.
-    """
+    """Compatibility hook: exact recorded version plus independent current ID/version."""
     current=find_gantt_attachment(client.list_attachments(page_id),
         type('AttachmentTarget',(),{'attachment_name':uploaded.filename})())
     if not current or (current.attach_id,current.version)!=(uploaded.attach_id,uploaded.version):
-        raise UploadVerificationConflict('current attachment identity/version changed')
-    raw=client.download_attachment(page_id,uploaded.filename,uploaded.version)
+        from plan_reconcile import PublishConflict
+        raise PublishConflict('attachment_target_conflict')
+    raw=client.download_attachment_version(page_id,uploaded.attach_id,uploaded.filename,uploaded.version)
     check=verify_attachment_bytes(raw,expected)
     if not check.ok:raise UploadVerificationConflict('exact attachment bytes mismatch')
+    current=find_gantt_attachment(client.list_attachments(page_id),
+        type('AttachmentTarget',(),{'attachment_name':uploaded.filename})())
+    if not current or (current.attach_id,current.version)!=(uploaded.attach_id,uploaded.version):
+        from plan_reconcile import PublishConflict
+        raise PublishConflict('attachment_target_conflict')
     return check
 
 
 def publish_prepared(client, preparation, *, allow_live_ab=False):
-    """Execute the existing network primitives only after durable admission.
-
-    This stage supplies the admission boundary. Recovery/idempotency/target locks
-    and verified_v1 publication trust are the work of stage 10.
-    """
+    """Reconcile each effect from fresh reads; confirm only the complete pipeline."""
     from copy import deepcopy
     from mofs_index.db import connect_durable
     from mofs_index.plan import query as q
+    from plan_lock import target_lock
+    from plan_operation import publication_journal, publish_event, PUBLISH_STAGES
+    from plan_reconcile import (PublishConflict, PublishUnknown, reconcile_publish_page,
+                                reconcile_publish_attachment)
+    from plan_verify import managed_state
+    from plan_receipt import validate_single_receipt, mask_secrets
+    from macro import MacroInfo
+    from prepared_plan import canonical_bytes
+    from child_page import reconcile_created_child
     receipt=deepcopy(preparation.receipt)
-    if receipt['exit_code'] or 'admitted' not in receipt['completed_stages']:return preparation
-    conn=connect_durable(preparation.context.db)
+    if receipt['exit_code'] or 'admitted' not in receipt['completed_stages']:
+        return preparation
+    context=preparation.context; operation=preparation.operation
+    conn=connect_durable(context.db)
+    stage=None
+    def event(kind, data):
+        return publish_event(conn,operation,context,kind,data)
+    def completed(name, **details):
+        nonlocal stage
+        stage=name
+        event('publish_stage',{'stage':name,**details})
+        if name not in receipt['completed_stages']:
+            receipt['completed_stages'].append(name)
     try:
-        result=q.get_preparation_result(conn,preparation.operation.operation_id)
+        result=q.get_preparation_result(conn,operation.operation_id)
+        prep=q.get_preparation(conn,operation.operation_id)
         if not result or result['result_id']!=preparation.result_id or result['state']!='admitted':
             raise ValueError('durable_admission_required')
-        raw_path=plan_writer.verify_artifact(conn,result['representation_artifact_id'])
-        raw=Path(raw_path).read_bytes();expected=hashlib.sha256(raw).hexdigest()
-        plan_writer.verify_artifact(conn,result['evidence_artifact_id'])
-        prep=q.get_preparation(conn,preparation.operation.operation_id)
-        for requirement in q.get_identity_requirements(conn,preparation.operation.operation_id):
+        # Preserve uncertainty even if an archive/profile read fails before
+        # remote reconciliation. Past network effects cannot become false.
+        journal=publication_journal(conn,operation.operation_id)
+        receipt['completed_stages']=list(dict.fromkeys(receipt['completed_stages']+journal['stages']))
+        if q.publish_external_effect(conn,operation.operation_id):
+            receipt.update(published=None,external_effect='unknown')
+        request=prep['request']; parent_id=request['page_id']
+        _guard_page(parent_id,allow_live_ab)
+        binding=resolve_plan_binding(parent_id,request.get('project_slug'),lineage_id=request.get('lineage_id'),conn=conn)
+        if binding['plan_id']!=q.get_operation(conn,operation.operation_id)['plan_id']:
+            raise PublishConflict('operation_context_incomplete')
+        slug=binding['project_slug'];receipt['project_slug']=slug
+        if hasattr(client,'configure_transport'):
+            client.configure_transport(context.settings)
+        _load_publish_prepared(conn,prep)
+        _publish_readback(conn,prep['snapshot_id'])
+        raw=Path(plan_writer.verify_artifact(conn,result['representation_artifact_id'])).read_bytes()
+        expected=hashlib.sha256(raw).hexdigest()
+        admission=json.loads(Path(plan_writer.verify_artifact(conn,result['evidence_artifact_id'])).read_text())
+        if admission['representation_sha256']!=expected or admission['admission']!=result['admission']:
+            raise ValueError('admission_evidence_mismatch')
+        # Persisted evidence fixes versions of all policies and profiles. Resume
+        # does not re-convert with whichever defaults happen to be installed.
+        for requirement in q.get_identity_requirements(conn,operation.operation_id):
             if requirement['preparation_revision']==prep['revision']:
                 choice=plan_writer.select_operation_identity(conn,plan_writer.IdentityChoiceSpec(
-                    preparation.operation.operation_id,requirement['requirement_id'],requirement['mapping_revision_id']))
-                if choice['exit_code']:raise ValueError('identity_confirmation_required')
-        _publish_readback(conn,prep['snapshot_id'])
-        page_id=prep['request']['page_id'];_guard_page(page_id,allow_live_ab)
-        page,target=_current_target(client,page_id)
-        if target!=result['result']['target']:
-            return PublishPreparation(_publish_error(receipt,'target_conflict',4),preparation.counters)
-        macro=find_macro(page['body']['storage']['value'])
-        new_macro=build_macro_html(*new_macro_ids()) if macro is None else None
-        expected_macro=macro or find_macro(new_macro)
-        if prep['request'].get('child'):
-            new_macro=build_macro_html(*new_macro_ids())
-            expected_macro=find_macro(new_macro)
-        att=find_gantt_attachment(client.list_attachments(page_id),expected_macro)
-        # Durable admission includes profiles/rules/context before this intent.
-        plan_writer.record_operation_event(conn,preparation.operation.attempt_id,'publish_network_intent',detail=json.dumps(
-            {'preparation_result_id':result['result_id'],'page_id':page_id,'child':prep['request'].get('child',False),
-             'macro':asdict(expected_macro)}))
-        receipt.update(published=None,external_effect='unknown')
-        summary=result['result']['summary']; d1,d2,n=summary['d1'],summary['d2'],summary['n_days']
-        if prep['request'].get('child'):
-            # Reuse the existing child naming/macro/HTTP contracts after the
-            # same primary archive and admission. Recovery remains stage 10.
-            storage=build_itogo_html(d1,d2,n,0)+build_macro_html(
-                expected_macro.macro_id,expected_macro.param_id,expected_macro.param_hash)
-            preparation.counters['POST']+=1
-            created=client.create_page(prep['request'].get('title') or default_child_title(page['title']),
-                page['space']['key'],storage,page_id)
-            page_id=str(created['id']);receipt.update(page_id=page_id,page_url=page_url(page_id),external_effect='partial')
-            preparation.counters['POST']+=1
-            uploaded=_upload_prepared_bytes(client,page_id,expected_macro.attachment_name,raw,None)
+                    operation.operation_id,requirement['requirement_id'],requirement['mapping_revision_id']))
+                if choice['exit_code']:
+                    raise PublishConflict('identity_confirmation_required')
+        from urllib.parse import urlsplit
+        namespace='confluence:'+urlsplit(context.settings['CONFLUENCE_URL']).netloc.lower()
+        summary=result['result']['summary'];itogo=(summary['d1'],summary['d2'],summary['n_days'])
+        saved=q.get_publish_confirmation(conn,operation.operation_id)
+        journal=publication_journal(conn,operation.operation_id)
+        network=journal['plan']
+        for old_event in q.get_operation_events(conn,operation.operation_id):
+            if old_event['event_kind']=='publish_network_result':
+                old_receipt=json.loads(old_event['detail'])
+                if old_receipt['verification']['schedule']['status']=='mismatch':
+                    receipt=deepcopy(old_receipt)
+                    raise ValueError('schedule_mismatch')
+        lock_macro=(network or {}).get('macro',{}).get('macro_id')
+        with ExitStack() as lock_scope:
+            lock_scope.enter_context(target_lock(context.workvault,namespace,parent_id,lock_macro))
+            if network is None:
+                if q.publish_external_effect(conn,operation.operation_id):
+                    # Old partial operations did not retain enough write intent.
+                    raise PublishConflict('operation_context_incomplete')
+                page,target=_current_target(client,parent_id)
+                old=result['result']['target']
+                if (target['managed']!=old.get('managed') or target['attachment']!=old['attachment']
+                        or target['page_version']<old['page_version']):
+                    raise PublishConflict()
+                if request.get('child'):
+                    macro_html=build_macro_html(*new_macro_ids());macro=find_macro(macro_html)
+                    storage=build_itogo_html(*itogo,0)+macro_html
+                    before=None
+                else:
+                    macro=find_macro(page['body']['storage']['value'])
+                    macro_html=None if macro else build_macro_html(*new_macro_ids())
+                    macro=macro or find_macro(macro_html)
+                    storage=apply_itogo(page['body']['storage']['value']+(macro_html or ''),*itogo,0)
+                    before=target['attachment']
+                # A new preparation may correct its own old summary. It cannot
+                # legitimize a third party's changed macro/summary/attachment.
+                prior=q.latest_target_confirmation(conn,namespace,parent_id) if not request.get('child') else None
+                if prior:
+                    proof=json.loads(Path(plan_writer.verify_artifact(conn,prior['evidence_artifact_id'])).read_text())
+                    if (target['managed']!=proof['final_managed'] or before is None
+                            or (before['attach_id'],before['version'])!=(proof['attachment']['attachment_id'],proof['attachment']['attachment_version'])):
+                        raise PublishConflict()
+                    actual=client.download_attachment_version(parent_id,before['attach_id'],before['filename'],before['version'])
+                    if hashlib.sha256(actual).hexdigest()!=proof['attachment']['actual_sha256']:
+                        raise PublishConflict('attachment_target_conflict')
+                before_sha=None
+                if before:
+                    before_sha=hashlib.sha256(client.download_attachment_version(parent_id,before['attach_id'],before['filename'],before['version'])).hexdigest()
+                network={'result_id':result['result_id'],'representation_sha256':expected,'namespace':namespace,
+                    'parent_id':parent_id,'child':bool(request.get('child')),'macro':asdict(macro),
+                    'new_macro_html':macro_html,'base_managed':target['managed'],'base_version':target['page_version'],
+                    'before_attachment':before,'before_attachment_sha256':before_sha,'intended_storage':storage,
+                    'intended_managed':managed_state(storage),
+                    'title':request.get('title') or default_child_title(page['title']),
+                    'space_key':page['space']['key']}
+                event('publish_network_plan',network)
+            elif network['result_id']!=result['result_id'] or network['representation_sha256']!=expected or network['namespace']!=namespace:
+                raise PublishConflict('operation_context_incomplete')
+            macro=MacroInfo(**network['macro'])
+            if macro._span is not None:
+                macro._span=tuple(macro._span)
+            receipt['verification'].update(attachment='not_verified',storage='not_verified')
+            receipt['completed_stages']=list(dict.fromkeys(receipt['completed_stages']+journal['stages']))
+            # Recover pessimistic external-effect state before performing reads.
+            if journal['intents']:
+                receipt.update(published=None,external_effect='unknown')
+            page_id=parent_id
+            if network['child']:
+                parent=client.get_page(parent_id)
+                reconcile_publish_page(parent,base_state=network['base_managed'],
+                    intended_state=network['base_managed'],minimum_version=network['base_version'])
+                created=journal['observations'].get('create')
+                create_intent=journal['intents'].get('create')
+                if created:
+                    page=client.get_page(created['page_id'],expand='body.storage,version,space,ancestors')
+                    if str(page['id'])!=created['page_id']:
+                        raise PublishConflict('child_target_conflict')
+                    if not page.get('ancestors') or str(page['ancestors'][-1]['id'])!=str(parent_id):
+                        raise PublishConflict('child_target_conflict')
+                elif create_intent:
+                    page=reconcile_created_child(client,parent_id,network['title'],network['intended_storage'])
+                else:
+                    page=None
+                if page is None:
+                    # A complete parent/title lookup is mandatory on every retry.
+                    count=(create_intent or {}).get('attempt',0)+1
+                    if count>int(context.settings['HTTP_RETRY_LIMIT'])+1:
+                        raise ValueError('page_create_retry_exhausted')
+                    event('publish_network_intent',{'effect':'create','attempt':count,'parent_id':parent_id,
+                        'title':network['title'],'storage_sha256':hashlib.sha256(network['intended_storage'].encode()).hexdigest()})
+                    receipt.update(published=None,external_effect='unknown')
+                    preparation.counters['POST']+=1
+                    try:
+                        page=client.create_page(network['title'],network['space_key'],network['intended_storage'],parent_id)
+                    except Exception:
+                        page=reconcile_created_child(client,parent_id,network['title'],network['intended_storage'])
+                        if page is None:
+                            raise PublishUnknown()
+                    receipt['external_effect']='storage_written'
+                    event('publish_observation',{'effect':'create','page_id':str(page['id']),'version':page['version']['number']})
+                page_id=str(page['id']);receipt.update(published=None,external_effect='storage_written')
+                base_state=network['intended_managed'];minimum_version=1
+            else:
+                base_state=network['base_managed'];minimum_version=network['base_version']
+            _guard_page(page_id,allow_live_ab)
+            if page_id!=parent_id:
+                lock_scope.enter_context(target_lock(context.workvault,namespace,page_id,macro.macro_id))
+            receipt.update(page_id=page_id,page_url=page_url(page_id))
+            # A previously confirmed operation is read-only. Never repair it.
+            if saved:
+                proof=json.loads(Path(plan_writer.verify_artifact(conn,saved['evidence_artifact_id'])).read_text())
+                current=client.get_page(page_id)
+                if str(current['id'])!=page_id or managed_state(current['body']['storage']['value'])!=proof['final_managed']:
+                    raise PublishConflict()
+                recorded=proof['attachment']
+                uploaded=AttachmentInfo(recorded['attachment_id'],network['macro']['attachment_name'],
+                    recorded['attachment_version'],network['macro']['attachment_name'])
+                verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
+                if not getattr(verified,'ok',False):
+                    raise PublishConflict('attachment_target_conflict')
+                receipt=deepcopy(saved['receipt']);receipt.update(status='unchanged',external_effect='none')
+                event('publish_network_result',receipt)
+                write_receipt(operation.operation_id,'publish',receipt,workvault=context.workvault)
+                preparation.receipt=receipt
+                return preparation
+            page=client.get_page(page_id)
+            if str(page['id'])!=page_id:
+                raise PublishConflict()
+            put_intent=journal['intents'].get('put')
+            reconcile_publish_page(page,base_state=base_state,intended_state=network['intended_managed'],
+                minimum_version=minimum_version,allow_written=bool(put_intent))
+            upload_observation=journal['observations'].get('upload')
+            uploaded,matches=reconcile_publish_attachment(client,page_id,macro,network['before_attachment'],expected,
+                intent=journal['intents'].get('upload'),observed=upload_observation['attachment'] if upload_observation else None)
+            if not matches:
+                # With the same ID/version, an unexpected change of immutable
+                # bytes is a conflict too; do not overwrite that evidence.
+                if uploaded and network['before_attachment_sha256']:
+                    current=client.download_attachment_version(page_id,uploaded.attach_id,uploaded.filename,uploaded.version)
+                    if hashlib.sha256(current).hexdigest()!=network['before_attachment_sha256']:
+                        raise PublishConflict('attachment_target_conflict')
+                count=(journal['intents'].get('upload') or {}).get('attempt',0)+1
+                if count>int(context.settings['HTTP_RETRY_LIMIT'])+1:
+                    raise ValueError('attachment_retry_exhausted')
+                event('publish_network_intent',{'effect':'upload','attempt':count,'page_id':page_id,
+                    'before':asdict(uploaded) if uploaded else None,'expected_sha256':expected})
+                receipt.update(published=None,external_effect='unknown')
+                preparation.counters['POST']+=1
+                try:
+                    uploaded=_upload_prepared_bytes(client,page_id,macro.attachment_name,raw,uploaded)
+                except Exception:
+                    uploaded,matches=reconcile_publish_attachment(client,page_id,macro,network['before_attachment'],expected,intent=True)
+                    if not matches:
+                        raise PublishUnknown()
+                receipt.update(published=None,external_effect='attachment_written' if not network['child'] else 'storage_written')
+                event('publish_observation',{'effect':'upload','attachment':asdict(uploaded)})
+            elif journal['intents'].get('upload'):
+                receipt.update(published=None,external_effect='attachment_written' if not network['child'] else 'storage_written')
+                if not upload_observation:
+                    event('publish_observation',{'effect':'upload','attachment':asdict(uploaded),'reconciled':True})
             receipt['attachment_version']=uploaded.version
+            completed('attachment_uploaded',attachment=asdict(uploaded),reused=matches)
+            stage='attachment_verify'
             verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
-            if getattr(verified,'ok',False) is not True or verified.actual_sha256!=expected:
-                raise UploadVerificationConflict('child exact attachment verification returned false')
+            if not getattr(verified,'ok',False) or verified.actual_sha256!=expected:
+                raise UploadVerificationConflict('exact attachment verification returned false')
+            receipt['verification']['attachment']='verified'
+            completed('attachment_verified',attachment=asdict(uploaded),sha256=expected)
+            # GET again even after an apparently successful POST. Each PUT uses
+            # a new addressable patch; a 409 never enables an override.
+            writes=(journal['intents'].get('put') or {}).get('attempt',0);did_put=False
+            while True:
+                page=client.get_page(page_id)
+                if str(page['id'])!=page_id:
+                    raise PublishConflict()
+                state=reconcile_publish_page(page,base_state=base_state,intended_state=network['intended_managed'],
+                    minimum_version=minimum_version,allow_written=bool(put_intent))
+                verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
+                if not getattr(verified,'ok',False) or verified.actual_sha256!=expected:
+                    raise UploadVerificationConflict('current attachment verification returned false')
+                storage=page['body']['storage']['value']
+                desired=apply_itogo(storage+(network['new_macro_html'] or '' if find_macro(storage) is None else ''),*itogo,0)
+                if managed_state(storage)==network['intended_managed']:
+                    # Already matches, including PUT with a lost local event.
+                    if put_intent:
+                        receipt.update(published=None,external_effect='storage_written')
+                    completed('storage_written',page_version=page['version']['number'],reconciled=True)
+                    break
+                if state=='written':
+                    raise PublishConflict()
+                writes+=1
+                if writes>int(context.settings['HTTP_RETRY_LIMIT'])+1:
+                    raise ValueError('storage_retry_exhausted')
+                put_intent={'effect':'put','attempt':writes,'page_id':page_id,'version':int(page['version']['number'])+1,
+                    'before_version':int(page['version']['number']),'before_storage_sha256':hashlib.sha256(storage.encode()).hexdigest(),
+                    'storage':desired,'storage_sha256':hashlib.sha256(desired.encode()).hexdigest()}
+                event('publish_network_intent',put_intent)
+                receipt.update(published=None,external_effect='unknown');preparation.counters['PUT']+=1
+                try:
+                    client.put_page(page_id,page['title'],desired,put_intent['version'])
+                except ConfluenceError as exc:
+                    if exc.status!=409:
+                        # Resolve every uncertain transport response by reading.
+                        observed=client.get_page(page_id)
+                        outcome=reconcile_publish_page(observed,base_state=base_state,
+                            intended_state=network['intended_managed'],minimum_version=put_intent['before_version'],allow_written=True)
+                        if outcome!='written':
+                            raise PublishUnknown()
+                    else:
+                        # Next iteration first checks fresh managed state AND
+                        # current attachment, then rebuilds the patch.
+                        continue
+                except Exception:
+                    observed=client.get_page(page_id)
+                    outcome=reconcile_publish_page(observed,base_state=base_state,intended_state=network['intended_managed'],
+                        minimum_version=put_intent['before_version'],allow_written=True)
+                    if outcome!='written':
+                        raise PublishUnknown()
+                receipt.update(published=None,external_effect='storage_written');did_put=True
+                event('publish_observation',{'effect':'put','page_id':page_id,'version':put_intent['version']})
+                completed('storage_written',page_version=put_intent['version'])
+                break
+            stage='storage_verify'
             observed=client.get_page(page_id)
-            check=verify_storage_observation(observed['body']['storage']['value'],expected_storage=storage,
-                expected_macro=expected_macro,expected_itogo=(d1,d2,n),expected_version=int(created['version']['number']),
-                actual_version=int(observed['version']['number']))
-            if not check.ok:raise PublicationVerificationError('child storage read-back failed')
+            if str(observed['id'])!=page_id:
+                raise PublishConflict()
+            observed_storage=observed['body']['storage']['value'];version=int(observed['version']['number'])
+            if managed_state(observed_storage)!=network['intended_managed']:
+                raise PublishConflict()
+            expected_storage=put_intent['storage'] if did_put else observed_storage
+            expected_version=put_intent['version'] if did_put else version
+            check=verify_storage_observation(observed_storage,expected_storage=expected_storage,expected_macro=macro,
+                expected_itogo=itogo,expected_version=expected_version,actual_version=version)
+            if not check.ok:
+                raise PublicationVerificationError('storage read-back failed')
             verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
-            if getattr(verified,'ok',False) is not True or verified.actual_sha256!=expected:
-                raise UploadVerificationConflict('child current attachment verification returned false')
-            receipt['verification'].update(attachment='verified',storage='verified')
-            receipt['completed_stages']+=['attachment_uploaded','attachment_verified','storage_written','storage_verified']
-            receipt.update(published=True,external_effect='confirmed',status='published_with_warnings',exit_code=0,error=None)
-            plan_writer.record_operation_event(conn,preparation.operation.attempt_id,'publish_network_result',detail=json.dumps(receipt))
-            write_receipt(preparation.operation.operation_id,'publish',receipt,workvault=preparation.context.workvault)
-            preparation.receipt=receipt
-            return preparation
-        preparation.counters['POST']+=1
-        uploaded=_upload_prepared_bytes(client,page_id,expected_macro.attachment_name,raw,att)
-        receipt['external_effect']='partial';receipt['attachment_version']=uploaded.version
-        verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
-        if getattr(verified,'ok',False) is not True or verified.actual_sha256!=expected:
-            raise UploadVerificationConflict('exact attachment verification returned false')
-        receipt['verification']['attachment']='verified';receipt['completed_stages']+=['attachment_uploaded','attachment_verified']
-        fresh=client.get_page(page_id)
-        if fresh['body']['storage']['value']!=page['body']['storage']['value'] or fresh['version']!=page['version']:
-            _publish_error(receipt,'target_conflict',4);return PublishPreparation(receipt,preparation.counters)
-        # Insert a whole paragraph at a block boundary. The legacy helper puts
-        # it inside a <p>-wrapped macro; Confluence then rewrites invalid nested
-        # paragraphs and exact storage read-back correctly rejects the result.
-        storage=fresh['body']['storage']['value']+(new_macro or '')
-        storage=apply_itogo(storage,d1,d2,n,0)
-        preparation.counters['PUT']+=1
-        client.put_page(page_id,fresh['title'],storage,int(fresh['version']['number'])+1)
-        receipt['completed_stages'].append('storage_written')
-        observed=client.get_page(page_id)
-        check=verify_storage_observation(observed['body']['storage']['value'],expected_storage=storage,
-            expected_macro=expected_macro,expected_itogo=(d1,d2,n),expected_version=int(fresh['version']['number'])+1,
-            actual_version=int(observed['version']['number']))
-        if not check.ok:raise PublicationVerificationError('storage read-back failed')
-        verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
-        if getattr(verified,'ok',False) is not True or verified.actual_sha256!=expected:
-            raise UploadVerificationConflict('current attachment verification returned false')
-        receipt['verification']['storage']='verified';receipt['completed_stages'].append('storage_verified')
-        receipt.update(published=True,external_effect='confirmed',status='published_with_warnings',exit_code=0,
-                       page_id=page_id,page_url=page_url(page_id),error=None)
-        # No verified_v1 registration before stage 10's full network lifecycle.
-        plan_writer.record_operation_event(conn,preparation.operation.attempt_id,'publish_network_result',detail=json.dumps(receipt))
-        write_receipt(preparation.operation.operation_id,'publish',receipt,workvault=preparation.context.workvault)
+            if not getattr(verified,'ok',False) or verified.actual_sha256!=expected:
+                raise UploadVerificationConflict('current attachment verification returned false')
+            receipt['verification']['storage']='verified'
+            completed('storage_verified',page_version=version,storage_sha256=hashlib.sha256(observed_storage.encode()).hexdigest())
+            # Optional actual plugin observation is a separate source, never a
+            # local schedule model disguised as the installed plugin.
+            schedule=_observe_publish_schedule(client,page_id,admission,receipt['verification']['schedule'])
+            receipt['verification']['schedule']=schedule
+            if schedule['status']=='mismatch':
+                raise ValueError('schedule_mismatch')
+            attachment={'attachment_id':uploaded.attach_id,'attachment_version':uploaded.version,
+                'expected_sha256':expected,'actual_sha256':verified.actual_sha256}
+            storage_artifact,storage_sha=store_artifact(observed_storage.encode(),'storage_snapshot',ext='html',
+                project_slug=slug,conn=conn,workvault=context.workvault)
+            proof={'operation_id':operation.operation_id,'result_id':result['result_id'],'snapshot_id':prep['snapshot_id'],
+                'admission_evidence_id':result['evidence_artifact_id'],'profiles':admission['profiles'],
+                'diagnostics':admission['diagnostics'],'schedule':schedule,'attachment':attachment,'checks':check.checks,
+                'page_id':page_id,'page_version':version,'storage_sha256':storage_sha,'final_managed':managed_state(observed_storage),
+                'macro_id':macro.macro_id,'filename':macro.attachment_name}
+            proof_artifact,_=store_artifact(canonical_bytes(proof),'publication_evidence',ext='json',
+                project_slug=slug,conn=conn,workvault=context.workvault)
+            observation=plan_writer.PageObservationSpec(plan_id=binding['plan_id'],page_id=page_id,page_version=version,
+                storage_artifact_id=storage_artifact,itogo_raw=observed_storage,itogo_d1=itogo[0],itogo_d2=itogo[1],itogo_n=itogo[2],
+                quality='ok',verification_status='verified_observation',verification_scope='current_state',
+                verification_profile='publish-v1',verification={'checks':check.checks,'attachment':attachment},storage_sha256=storage_sha)
+            unchanged=receipt['external_effect']=='none'
+            receipt.update(status='unchanged' if unchanged else 'published_with_warnings' if receipt['warnings'] or schedule['status']=='not_verified' else 'published',
+                published=True,exit_code=0,error=None)
+            receipt['completed_stages']=list(PUBLISH_STAGES)
+            validate_single_receipt(receipt)
+            plan_writer.confirm_publish(conn,plan_writer.PublishConfirmationSpec(operation.operation_id,operation.attempt_id,
+                result['result_id'],namespace,uploaded.attach_id,uploaded.version,macro.macro_id,macro.attachment_name,
+                proof_artifact,observation,receipt))
+            # SQL confirmation is authoritative. A failed mirror remains an
+            # explicit failure for this invocation; resume repairs it by GET.
+            stage='receipt_mirror'
+            write_receipt(operation.operation_id,'publish',receipt,workvault=context.workvault)
     except Exception as exc:
-        _publish_error(receipt,'attachment_verification_failed' if isinstance(exc,UploadVerificationConflict) else
-                       'storage_verification_failed' if isinstance(exc,PublicationVerificationError) else 'publication_failed')
-        plan_writer.record_operation_event(conn,preparation.operation.attempt_id,'publish_network_result',status='failed',detail=json.dumps(receipt))
-        write_receipt(preparation.operation.operation_id,'publish-failed',receipt,workvault=preparation.context.workvault)
-    finally:conn.close()
-    preparation.receipt=receipt
+        code=getattr(exc,'code',None) or ('attachment_verification_failed' if isinstance(exc,UploadVerificationConflict) else
+            'storage_verification_failed' if isinstance(exc,PublicationVerificationError) else str(exc) if isinstance(exc,ValueError) else 'publication_failed')
+        rc=getattr(exc,'exit_code',5)
+        if isinstance(exc,ValueError) and (str(exc)=='target_conflict' or str(exc).startswith(('ambiguous Gantt','unbalanced structured-macro',
+                'unclosed structured-macro','incomplete Gantt','malformed Gantt','duplicate Gantt'))):
+            code='target_conflict';rc=4
+        if receipt['external_effect']!='none' or receipt['published'] is True:
+            receipt['published']=None
+        receipt['completed_stages']=[s for s in receipt['completed_stages'] if s!='confirmed']
+        _publish_error(receipt,code,rc)
+        from urllib.error import URLError
+        if isinstance(exc,PublishUnknown) or (isinstance(exc,(TimeoutError,URLError,ConnectionError)) and receipt['external_effect']!='none'):
+            receipt['status']='unknown'
+        if stage=='attachment_verify':receipt['verification']['attachment']='failed'
+        if stage=='storage_verify':receipt['verification']['storage']='failed'
+        receipt['error']['retryable']=rc!=4
+        if code=='schedule_mismatch':
+            receipt['error'].update(retryable=False,next_action='Разобрать наблюдение расписания; новая подготовка после адресного решения, без rollback')
+        elif rc==4:
+            receipt['error']['next_action']='Проверить конфликт цели; новая операция diff --project-slug '+str(receipt['project_slug'])
+        else:
+            receipt['error']['next_action']='Восстановить доступ к архиву/журналу/Confluence и выполнить resume --operation-id '+operation.operation_id
+        try:
+            event('publish_network_error',{'exception_type':type(exc).__name__,'http_status':getattr(exc,'status',None),
+                'errno':getattr(exc,'errno',None),'stage':stage})
+            event('publish_network_result',receipt)
+            write_receipt(operation.operation_id,'publish-failed',receipt,workvault=context.workvault)
+        except Exception:
+            # A logging failure must never replace an error with false success.
+            receipt['error']['next_action']='Восстановить журнал/зеркало и выполнить resume; исход сетевых записей проверить чтением'
+    finally:
+        conn.close()
+    preparation.receipt=mask_secrets(receipt)
     return preparation
+
+
+def _observe_publish_schedule(client,page_id,admission,saved_schedule):
+    """No observation available is honest not_verified; never promote by bytes."""
+    from copy import deepcopy
+    schedule=deepcopy(saved_schedule)
+    observer=getattr(client,'observe_plan_schedule',None)
+    if observer is not None:
+        observation=observer(page_id,admission)
+        if observation:
+            schedule['checks'].append(observation)
+            if observation.get('status')=='mismatch':
+                schedule['status']='mismatch'
+    return schedule
 
 
 def publish_plan(client=None, **kwargs):

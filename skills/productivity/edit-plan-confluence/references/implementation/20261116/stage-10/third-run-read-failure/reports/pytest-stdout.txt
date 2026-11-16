@@ -1,0 +1,172 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests
+configfile: pytest.ini
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 582 items / 13 deselected / 569 selected
+
+skills/productivity/edit-plan-confluence/tests/test_admission.py ....... [  1%]
+..............................................                           [  9%]
+skills/productivity/edit-plan-confluence/tests/test_child_page.py ...... [ 10%]
+...............                                                          [ 13%]
+skills/productivity/edit-plan-confluence/tests/test_cli.py ......        [ 14%]
+skills/productivity/edit-plan-confluence/tests/test_env.py .....         [ 14%]
+skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py . [ 15%]
+..........                                                               [ 16%]
+skills/productivity/edit-plan-confluence/tests/test_gate_diff.py ....    [ 17%]
+skills/productivity/edit-plan-confluence/tests/test_identity_resume_e2e.py . [ 17%]
+.........                                                                [ 19%]
+skills/productivity/edit-plan-confluence/tests/test_itogo.py ........... [ 21%]
+................                                                         [ 24%]
+skills/productivity/edit-plan-confluence/tests/test_macro.py ...         [ 24%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py .... [ 25%]
+                                                                         [ 25%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py ..... [ 26%]
+...................                                                      [ 29%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_input.py ....... [ 30%]
+.................                                                        [ 33%]
+skills/productivity/edit-plan-confluence/tests/test_pipeline.py ........ [ 35%]
+...............                                                          [ 37%]
+skills/productivity/edit-plan-confluence/tests/test_plan_cache.py ...... [ 38%]
+........                                                                 [ 40%]
+skills/productivity/edit-plan-confluence/tests/test_plan_manifest.py ... [ 40%]
+....................                                                     [ 44%]
+skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py .... [ 44%]
+...............                                                          [ 47%]
+skills/productivity/edit-plan-confluence/tests/test_plan_rules.py ...... [ 48%]
+...                                                                      [ 49%]
+skills/productivity/edit-plan-confluence/tests/test_plan_verify.py ..... [ 50%]
+.............                                                            [ 52%]
+skills/productivity/edit-plan-confluence/tests/test_plugin_profile.py .. [ 52%]
+.......                                                                  [ 53%]
+skills/productivity/edit-plan-confluence/tests/test_prepared_plan.py ... [ 54%]
+...........................                                              [ 59%]
+skills/productivity/edit-plan-confluence/tests/test_publish_conflicts.py . [ 59%]
+...........                                                              [ 61%]
+skills/productivity/edit-plan-confluence/tests/test_publish_idempotency.py . [ 61%]
+...                                                                      [ 62%]
+skills/productivity/edit-plan-confluence/tests/test_publish_prepare.py . [ 62%]
+..............                                                           [ 64%]
+skills/productivity/edit-plan-confluence/tests/test_publish_resume.py .. [ 65%]
+............................                                             [ 69%]
+skills/productivity/edit-plan-confluence/tests/test_batch_decisions.py . [ 70%]
+................                                                         [ 72%]
+skills/productivity/edit-plan-confluence/tests/test_batch_resume.py .... [ 73%]
+..............                                                           [ 76%]
+skills/productivity/edit-plan-confluence/tests/test_history_queries.py . [ 76%]
+....................                                                     [ 79%]
+skills/productivity/edit-plan-confluence/tests/test_import_atomicity.py . [ 79%]
+.............                                                            [ 82%]
+skills/productivity/edit-plan-confluence/tests/test_plan_archive.py .... [ 82%]
+....                                                                     [ 83%]
+skills/productivity/edit-plan-confluence/tests/test_plan_batch.py ...... [ 84%]
+............                                                             [ 86%]
+skills/productivity/edit-plan-confluence/tests/test_plan_history.py .... [ 87%]
+...                                                                      [ 88%]
+skills/productivity/edit-plan-confluence/tests/test_plan_identity.py ... [ 88%]
+...............                                                          [ 91%]
+skills/productivity/edit-plan-confluence/tests/test_plan_lock.py ..      [ 91%]
+skills/productivity/edit-plan-confluence/tests/test_plan_reconcile.py .. [ 91%]
+...                                                                      [ 92%]
+skills/productivity/edit-plan-confluence/tests/test_plan_save.py ....... [ 93%]
+.................                                                        [ 96%]
+skills/productivity/edit-plan-confluence/tests/test_plan_verify.py .     [ 96%]
+skills/productivity/edit-plan-confluence/tests/test_identity_resume_e2e.py . [ 97%]
+..                                                                       [ 97%]
+skills/productivity/edit-plan-confluence/tests/test_plan_batch.py ....   [ 98%]
+skills/productivity/edit-plan-confluence/tests/test_plan_cache.py .      [ 98%]
+skills/productivity/edit-plan-confluence/tests/test_plugin_controls_live.py . [ 98%]
+                                                                         [ 98%]
+skills/productivity/edit-plan-confluence/tests/test_publish_live.py .    [ 98%]
+skills/productivity/edit-plan-confluence/tests/test_publish_resume.py .. [ 98%]
+....                                                                     [ 99%]
+skills/productivity/edit-plan-confluence/tests/test_rest_live.py .F      [100%]
+
+=================================== FAILURES ===================================
+_______________ test_stage10_live_recovery_idempotency_and_child _______________
+
+tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/pytest-tmp/test_stage10_live_recovery_ide0')
+request = <FixtureRequest for <Function test_stage10_live_recovery_idempotency_and_child>>
+stage09_export = {'assignments': [], 'calendars': [{'calendar_key': 'cal', 'exceptions': [], 'exceptions_quality': {'count': 0, 'reason...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4bda2b9910>
+
+    @pytest.mark.confluence_live
+    def test_stage10_live_recovery_idempotency_and_child(tmp_path, request, stage09_export, monkeypatch):
+        """Real REST on newly created acceptance targets; no production A–D/AB."""
+        import copy
+        import hashlib
+        import json
+        from pathlib import Path
+        from datetime import datetime, timezone
+        from urllib.parse import urlsplit
+        import pipeline, conf_client, gantt_attachment
+        from conf_client import ConfluenceClient
+        from env import load_confluence_env
+        from plan_context import PlanContext
+        from mofs_index.db import connect_durable
+        from mofs_index.plan import query as q, writer as w
+        from prepared_plan import canonical_bytes
+        from plan_archive import store_artifact
+        from macro import find_macro
+        from test_publish_resume import ProcessDeath
+        root=getattr(request.config,'_acceptance_root',tmp_path)
+        folder=root/'live-stage10';folder.mkdir(exist_ok=True)
+        calls=[];status={'status':'not_run','parent_id':'519501810','calls':calls,
+            'source':'explicit synthetic parsed export; no binary reader measurement', 'schedule':'not_verified'}
+        def trace(original):
+            def invoke(req,*args,**kwargs):
+                calls.append({'method':req.get_method(),'path':urlsplit(req.full_url).path,'query':urlsplit(req.full_url).query})
+                return original(req,*args,**kwargs)
+            return invoke
+        monkeypatch.setattr(conf_client,'urlopen',trace(conf_client.urlopen))
+        monkeypatch.setattr(gantt_attachment,'urlopen',trace(gantt_attachment.urlopen))
+        def writes():return sum(c['method'] in ('POST','PUT') for c in calls)
+        token=load_confluence_env(Path.home()/'USERTOOLS/ConfluenceSync/.env')['CONFLUENCE_TOKEN']
+        client=ConfluenceClient(token=token)
+        context=PlanContext.resolve(db=tmp_path/'state/index.sqlite',workvault=tmp_path/'WorkVault',cache_dir=tmp_path/'cache')
+        source=tmp_path/'synthetic.mpp';source.write_bytes(b'Stage 10 synthetic parsed plan; no claim of MPP extraction')
+        data=copy.deepcopy(stage09_export);data['provenance'].update(sha256=hashlib.sha256(source.read_bytes()).hexdigest(),size_bytes=source.stat().st_size)
+        conn=None
+        try:
+            parent=client.get_page('519501810')
+            created=client.create_page('EditPlanConfluence stage 10 '+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f'),
+                parent['space']['key'],'<p>Stage 10 acceptance neighbour</p>','519501810')
+            page_id=str(created['id']);status['page_id']=page_id
+            assert page_id not in ('519501810','519492935','496600693','506248940')
+            def prepare(**kwargs):
+                return pipeline.prepare_publish(client,page_id,source,project_slug='stage10-live-test',timezone_hint='Europe/Moscow',
+                    context=context,export=data,**kwargs)
+            def resume(operation):
+                p=pipeline.prepare_publish(client,operation_id=operation,db_path=context.db,workvault=context.workvault,cache_dir=context.cache_dir)
+                assert p.exit_code==0,p.receipt
+                return pipeline.publish_prepared(client,p)
+            first=prepare();assert first.exit_code==0,first.receipt
+            upload=pipeline._upload_prepared_bytes
+            def lose_upload(*args):
+                upload(*args)
+                raise ProcessDeath()
+            monkeypatch.setattr(pipeline,'_upload_prepared_bytes',lose_upload)
+            with pytest.raises(ProcessDeath):pipeline.publish_prepared(client,first)
+            monkeypatch.setattr(pipeline,'_upload_prepared_bytes',upload)
+            count=writes();published=resume(first.receipt['operation_id'])
+            assert published.exit_code==0 and published.counters['POST']==0 and published.counters['PUT']==1,published.receipt
+            assert writes()==count+1
+            status['post_recovery']=published.receipt
+            count=writes();again=pipeline.publish_prepared(client,prepare())
+>           assert again.exit_code==0 and again.receipt['status']=='unchanged' and writes()==count,again.receipt
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived', 'admitted'], 'dependency_count': 1, 'display_task_count': 3, ...}
+E           assert (5 == 0)
+E            +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_915fd283aa014f8fb594494fe3dbadf1', 'item_i...cc59115e6e914af59015bf3f1ee3f05d.json'}, 'sha256': '5264a6319ad7cbc7b79a9f814f61814afb7450fb6e56a2ed9464dc3870089a6f'}).exit_code
+
+skills/productivity/edit-plan-confluence/tests/test_rest_live.py:84: AssertionError
+=============================== warnings summary ===============================
+test_mpp_input.py::test_zip_collisions[names0]
+  /usr/lib64/python3.9/zipfile.py:1535: UserWarning: Duplicate name: 'x.mpp'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/reports/junit.xml -
+=========================== short test summary info ============================
+FAILED skills/productivity/edit-plan-confluence/tests/test_rest_live.py::test_stage10_live_recovery_idempotency_and_child
+===== 1 failed, 568 passed, 13 deselected, 1 warning in 723.82s (0:12:03) ======

@@ -5,7 +5,6 @@ import json
 from dataclasses import dataclass
 from typing import Any
 from urllib.error import HTTPError
-from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from conf_client import ConfluenceClient, ConfluenceError
@@ -78,6 +77,14 @@ def upload_gantt_json(
     return _create_attachment(client, page_id, filename, payload)
 
 
+def upload_prepared_bytes(client, page_id, filename, raw: bytes, existing, expected_sha256):
+    """Send the archived representation verbatim; never reserialize parsed JSON."""
+    if not isinstance(raw, bytes) or not verify_attachment_bytes(raw, expected_sha256).ok:
+        raise UploadVerificationConflict('prepared bytes SHA-256 mismatch')
+    return (_post_attachment_data(client, page_id, existing.attach_id, filename, raw)
+            if existing else _create_attachment(client, page_id, filename, raw))
+
+
 def verify_uploaded(
     client: ConfluenceClient,
     page_id: str | int,
@@ -128,10 +135,7 @@ def _post_attachment_data(
     content: bytes,
 ) -> AttachmentInfo:
     body, ctype = _multipart_body(filename, content, "application/json")
-    url = (
-        f"{client.base_url}/rest/api/content/{page_id}/child/attachment/{attach_id}/data"
-        f"?{urlencode({'conflictPolicy': 'override'})}"
-    )
+    url = f"{client.base_url}/rest/api/content/{page_id}/child/attachment/{attach_id}/data"
     req = Request(
         url,
         data=body,
@@ -143,7 +147,7 @@ def _post_attachment_data(
         method="POST",
     )
     try:
-        with urlopen(req, timeout=120) as resp:
+        with urlopen(req, timeout=client.timeout) as resp:
             raw = resp.read()
     except HTTPError as exc:
         raise ConfluenceError(exc.code, exc.read().decode("utf-8", errors="replace")) from exc
@@ -171,7 +175,7 @@ def _create_attachment(client: ConfluenceClient, page_id: str | int, filename: s
         method="POST",
     )
     try:
-        with urlopen(req, timeout=120) as resp:
+        with urlopen(req, timeout=client.timeout) as resp:
             raw = resp.read()
     except HTTPError as exc:
         raise ConfluenceError(exc.code, exc.read().decode("utf-8", errors="replace")) from exc

@@ -1,0 +1,13 @@
+{
+  "change": "Restored the exact pre-stage-10 documentation prefix; stage-10 content appended below it. Executable sources unchanged.",
+  "path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/operations-and-recovery.md",
+  "old_prefix_sha256": "c0e3ea74be222c0713d98463f7e22cad9ee5ed9cb2d95b58f23fe51c696a2599",
+  "new_sha256": "460104609116ffaf5012ea06ed2a968dbface87ca5ce8fa967a7c20cb7a6b761",
+  "first_run": {
+    "S_passed": 569,
+    "M_passed": 147,
+    "gate": "passed",
+    "report": "first-passed-run/reports/stage-report.json"
+  },
+  "next_check": "Full required S acceptance rerun on the final documentation/source tree"
+}

@@ -1,0 +1,57 @@
+{
+  "final_S": {
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "-c",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+      "--acceptance-stage",
+      "10",
+      "--test-root",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10",
+      "-m",
+      "unit or archive_integration or confluence_live",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/reports/junit.xml"
+    ],
+    "rc": 0,
+    "counts": {
+      "tests": 571,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "environment": {
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+      "EDITPLAN_LIVE": "1"
+    }
+  },
+  "M": {
+    "name": "MofsIndex plan regression",
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "-q",
+      "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan",
+      "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/mofs-final",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/reports/mofs-junit.xml"
+    ],
+    "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+    "environment": {
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+    },
+    "rc": 0,
+    "junit": "mofs-junit.xml",
+    "counts": {
+      "tests": 147,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "stdout": "mofs-stdout.txt",
+    "stderr": "mofs-stderr.txt"
+  },
+  "scope": "Final acceptance; earlier failed/interrupted/development runs are retained separately"
+}

@@ -141,7 +141,7 @@ def show_operation(operation_id, *, db_path=None, workvault=None, cache_dir=None
                 'reasons':latest['admission']['blockers'] if latest else [],
                 'proposals':proposals,'decisions':[p for p in proposals if p['decision_id']],
                 'identity_requirements':identity_requirements(conn,operation_id),
-                'admission':latest['admission'] if latest else None,'events':events,
+                'admission':latest['admission'] if latest else None,'events':compact_publish_events(events),
                 'published':result['published'] if result else False,'error':None}
         from plan_reconcile import saved_operation_receipt
         saved = saved_operation_receipt(conn, operation_id)
@@ -171,3 +171,67 @@ def identity_requirements(conn, operation_id):
 def select_identity(conn, operation_id, requirement_id, mapping_revision_id=None):
     """Internal preparation hook; no B/C execution, publication or resume here."""
     return w.select_operation_identity(conn,w.IdentityChoiceSpec(operation_id,requirement_id,mapping_revision_id))
+
+
+PUBLISH_STAGES = ('prepared', 'archived', 'admitted', 'attachment_uploaded',
+                  'attachment_verified', 'storage_written', 'storage_verified', 'confirmed')
+
+
+def compact_publish_events(events):
+    """Public operation show never prints the saved page or repeated receipts.
+
+    The opaque event ID addresses the complete typed journal and its receipt
+    mirror. Recovery continues to read the original events, not this view.
+    """
+    allowed={'result_id','preparation_result_id','page_id','parent_id','child','effect','attempt','stage',
+             'version','before_version','page_version','representation_sha256','expected_sha256',
+             'before_storage_sha256','storage_sha256','attachment','sha256','reconciled','reused',
+             'exception_type','http_status','errno','status','exit_code','published','external_effect',
+             'attachment_version','completed_stages','error'}
+    out=[]
+    for event in events:
+        if event['event_kind'] in ('publish_network_plan','publish_network_intent','publish_observation',
+                'publish_stage','publish_network_result','publish_network_error'):
+            detail=json.loads(event['detail'])
+            summary={k:v for k,v in detail.items() if k in allowed}
+            summary['journal_event_id']=event['event_id']
+            out.append({**event,'detail':json.dumps(summary,ensure_ascii=False,sort_keys=True)})
+        else:
+            out.append(event)
+    return out
+
+
+def publication_journal(conn, operation_id):
+    """Projection of append-only typed events; receipt files are only mirrors."""
+    state = {'plan': None, 'intents': {}, 'observations': {}, 'stages': []}
+    for event in q.get_operation_events(conn, operation_id):
+        kind = event['event_kind']
+        if kind not in ('publish_network_plan','publish_network_intent','publish_observation','publish_stage'):
+            continue
+        data = json.loads(event['detail'])
+        if kind == 'publish_network_plan':
+            if state['plan'] is not None and state['plan'] != data:
+                raise w.PlanWriterError('network_plan_conflict')
+            state['plan'] = data
+        elif kind == 'publish_network_intent':
+            state['intents'][data['effect']] = data
+        elif kind == 'publish_observation':
+            state['observations'][data['effect']] = data
+        elif data['stage'] not in state['stages']:
+            state['stages'].append(data['stage'])
+    return state
+
+
+def publish_event(conn, operation, context, kind, payload):
+    """Both durable stores must accept an intent before the external call."""
+    from plan_receipt import write_receipt, mask_secrets
+    payload = mask_secrets(payload)
+    status='confirmed'
+    if kind=='publish_network_error':
+        status='failed'
+    if kind=='publish_network_result' and payload.get('exit_code'):
+        status=payload['status'] if payload['status'] in ('unknown','conflict') else 'failed'
+    event_id = w.record_operation_event(conn, operation.attempt_id, kind,
+        detail=json.dumps(payload, ensure_ascii=False, sort_keys=True),status=status)
+    write_receipt(operation.operation_id, event_id, payload, workvault=context.workvault)
+    return event_id

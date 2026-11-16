@@ -148,6 +148,60 @@ def saved_operation_receipt(conn, operation_id: str) -> dict | None:
     return None
 
 
+class PublishConflict(RuntimeError):
+    exit_code = 4
+    def __init__(self, code='target_conflict'):
+        super().__init__(code)
+        self.code = code
+
+
+class PublishUnknown(RuntimeError):
+    code = 'network_outcome_unknown'
+    exit_code = 5
+
+
+def reconcile_publish_attachment(client, page_id, macro, before, expected_sha256, *, intent=None, observed=None):
+    """Fresh identity/version + exact bytes before deciding whether POST is safe.
+
+    An unobserved POST can account for at most one version. A later version is
+    a conflict even when it happens to contain the same bytes.
+    """
+    from dataclasses import asdict
+    from gantt_attachment import find_gantt_attachment
+    from plan_verify import verify_attachment_bytes
+    current = find_gantt_attachment(client.list_attachments(page_id), macro)
+    if observed:
+        if not current or asdict(current) != observed:
+            raise PublishConflict('attachment_target_conflict')
+    elif current:
+        same_before = before and (current.attach_id, current.version) == (before['attach_id'], before['version'])
+        if not same_before:
+            if not intent or (before and (current.attach_id != before['attach_id'] or current.version != before['version'] + 1)) or (not before and current.version != 1):
+                raise PublishConflict('attachment_target_conflict')
+    elif before or observed:
+        raise PublishConflict('attachment_target_conflict')
+    if not current:
+        return None, False
+    raw = client.download_attachment_version(page_id, current.attach_id, current.filename, current.version)
+    matches = verify_attachment_bytes(raw, expected_sha256).ok
+    if observed or (intent and (not before or current.version != before['version'])):
+        if not matches:
+            raise PublishConflict('attachment_target_conflict')
+    return current, matches
+
+
+def reconcile_publish_page(page, *, base_state, intended_state, minimum_version, allow_written=False):
+    from plan_verify import managed_state
+    current = managed_state(page['body']['storage']['value'])
+    if int(page['version']['number']) < minimum_version:
+        raise PublishConflict()
+    if current == base_state:
+        return 'before'
+    if allow_written and current == intended_state:
+        return 'written'
+    raise PublishConflict()
+
+
 def frozen_batch_input(item):
     """Verify registered frozen locators only. Never refreeze an original path."""
     from mpp_input import FrozenInput, InputError

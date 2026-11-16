@@ -101,6 +101,15 @@ def validate_single_receipt(payload):
     import jsonschema
     schema = Path(__file__).resolve().parents[1] / "references/schemas/single-receipt.schema.json"
     jsonschema.validate(payload, json.loads(schema.read_text()))
+    if payload['mode'] == 'publish':
+        if payload['status'] in ('published','published_with_warnings','unchanged'):
+            if (payload['published'] is not True or payload['exit_code'] != 0
+                    or any(payload['verification'][k] != 'verified' for k in ('archive','attachment','storage'))):
+                raise ValueError('published receipt requires complete read-back')
+        elif payload['published'] is True:
+            raise ValueError('unconfirmed operation cannot claim published')
+        if payload['external_effect'] != 'none' and payload['published'] is False:
+            raise ValueError('unconfirmed external effect requires published:null')
 
 
 def batch_counts(items):

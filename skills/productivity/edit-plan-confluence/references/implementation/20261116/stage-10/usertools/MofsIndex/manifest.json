@@ -1,0 +1,81 @@
+{
+  "stage": "10",
+  "component": "MofsIndex",
+  "files": [
+    {
+      "path": "mofs_index/plan/query.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py",
+      "before_sha256": "e91cdb870d0a0e8c94ea751d3b489c4f58ee9487f53b7d0b28bacc21da29f91e",
+      "after_sha256": "29a2a4da0ea163d0d6b13ce9ffe848d4b46abd8e376f7e079131e76984b9e090",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "action": "modified",
+      "reason": "stage 10 atomic publication confirmation, typed reads and migration/confirmation validation"
+    },
+    {
+      "path": "mofs_index/plan/schema.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py",
+      "before_sha256": "d2355a1d94e3fce1f4c76040846f272d9be371b7d90ff4b8100ec5f86eb023fd",
+      "after_sha256": "fc8bd4da2e8d5bfa68cd0b732fe337b84668201ddb230678856b65e05ae4f038",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "action": "modified",
+      "reason": "stage 10 atomic publication confirmation, typed reads and migration/confirmation validation"
+    },
+    {
+      "path": "mofs_index/plan/writer.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py",
+      "before_sha256": "520c95b3cfaf17ac7fa75e60e144bdeea74ae2806a6446bd4b3721e244796df0",
+      "after_sha256": "911e83d180860227c66c3ade61a7e2715ef964cdcd9cf05ca846e5d01d9259d7",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "action": "modified",
+      "reason": "stage 10 atomic publication confirmation, typed reads and migration/confirmation validation"
+    },
+    {
+      "path": "tests/plan/test_confirmation.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_confirmation.py",
+      "before_sha256": null,
+      "after_sha256": "c6dd59da748602632f18b3d8456782477b2c933274b833c34c41558c29b29e6a",
+      "before_mode": null,
+      "after_mode": "0o644",
+      "action": "created",
+      "reason": "stage 10 atomic publication confirmation, typed reads and migration/confirmation validation"
+    },
+    {
+      "path": "tests/plan/test_identity.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_identity.py",
+      "before_sha256": "83bb25586e9be0ddb9b05a94e95d2015f6e6fd86aabe853fba97a6ca40d94c71",
+      "after_sha256": "79939838a578e60e27efababc28d243f1bb5440581e57fe23e37f0edc12337e7",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "action": "modified",
+      "reason": "stage 10 atomic publication confirmation, typed reads and migration/confirmation validation"
+    },
+    {
+      "path": "tests/plan/test_migrate.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py",
+      "before_sha256": "e0972eff00d07fde9e3a0c9fc424f216fa4214ee245b522ef8d6af64d943d11d",
+      "after_sha256": "1855da1b4d8bb7c588f9a4e51035868f9fbc656242d13fe58146c3171a99044a",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "action": "modified",
+      "reason": "stage 10 atomic publication confirmation, typed reads and migration/confirmation validation"
+    },
+    {
+      "path": "tests/plan/test_preparation.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_preparation.py",
+      "before_sha256": "49b3e164b7b0bc735d4433b15c5ff67736bcb18c48bb8123a61da5f73880e13e",
+      "after_sha256": "736d1b2ea3ec742f4683e4e7389470439013e61587981da7aaa7566aceb25dbd",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "action": "modified",
+      "reason": "stage 10 atomic publication confirmation, typed reads and migration/confirmation validation"
+    }
+  ],
+  "patch_sha256": "570197ec94b7e851a8951f9c02da66ac5921e41ee02b79591890b692ce4971fd",
+  "restore_patch_rc": 0,
+  "restore_patch_verified": true,
+  "restore_after_copy_verified": true,
+  "runtime_imports_from_delivery": false
+}

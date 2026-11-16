@@ -1,0 +1,365 @@
+--- a/mofs_index/plan/query.py
++++ b/mofs_index/plan/query.py
+@@ -912,3 +912,20 @@
+         if event['event_kind']=='publish_network_intent':return True
+         if event['event_kind']=='publish_network_result' and json.loads(event['detail']).get('external_effect')!='none':return True
+     return False
++
++
++def get_publish_confirmation(conn, operation_id):
++    rows = _records(conn, 'SELECT * FROM plan_publish_confirmation WHERE operation_id=?', (operation_id,))
++    if not rows:
++        return None
++    row = rows[0]
++    row['receipt'] = json.loads(row.pop('receipt_json'))
++    row['schedule'] = json.loads(row.pop('schedule_json'))
++    return row
++
++
++def latest_target_confirmation(conn, namespace, page_id):
++    rows = _records(conn, 'SELECT c.operation_id FROM plan_publish_confirmation c '
++        'JOIN plan_publication p ON p.publication_id=c.publication_id '
++        'WHERE p.source_namespace=? AND p.page_id=? ORDER BY c.rowid DESC LIMIT 1', (namespace, str(page_id)))
++    return get_publish_confirmation(conn, rows[0]['operation_id']) if rows else None
+--- a/mofs_index/plan/schema.py
++++ b/mofs_index/plan/schema.py
+@@ -1031,6 +1031,28 @@
+ )
+ MIGRATIONS += (Migration('0011_publish_preparation', PREPARATION_DDL),)
+ 
++# Stage 10: one atomic confirmation per operation, reusing publication identity
++# for a storage-only correction or a second arrival of the same representation.
++CONFIRMATION_DDL = (
++    """CREATE TABLE plan_publish_confirmation (
++        operation_id TEXT PRIMARY KEY REFERENCES plan_operation(operation_id),
++        result_id TEXT NOT NULL REFERENCES plan_preparation_result(result_id),
++        publication_id TEXT NOT NULL REFERENCES plan_publication(publication_id),
++        observation_id TEXT NOT NULL REFERENCES plan_page_observation(observation_id),
++        snapshot_id TEXT NOT NULL REFERENCES plan_snapshot(snapshot_id),
++        evidence_artifact_id TEXT NOT NULL REFERENCES plan_artifact(artifact_id),
++        verification_profile TEXT NOT NULL, schedule_json TEXT NOT NULL,
++        receipt_json TEXT NOT NULL, confirmed_at TEXT NOT NULL)""",
++) + tuple(
++    f"CREATE TRIGGER immutable_publish_confirmation_{action.lower()} BEFORE {action} ON plan_publish_confirmation "
++    "BEGIN SELECT RAISE(ABORT,'append_only'); END" for action in ('UPDATE','DELETE')
++) + tuple(
++    f"CREATE TRIGGER immutable_confirmation_artifact_{action.lower()} BEFORE {action} ON plan_artifact "
++    "WHEN EXISTS(SELECT 1 FROM plan_publish_confirmation WHERE evidence_artifact_id=OLD.artifact_id) "
++    "BEGIN SELECT RAISE(ABORT,'append_only'); END" for action in ('UPDATE','DELETE')
++)
++MIGRATIONS += (Migration('0012_publish_confirmation', CONFIRMATION_DDL),)
++
+ 
+ def all_plan_table_names() -> tuple[str, ...]:
+     """Имена всех таблиц, которые когда-либо вводятся этим пакетом.
+@@ -1040,6 +1062,7 @@
+     `mofs_index.db.drop_all()`/`drop_docs()`.
+     """
+     return (
++        "plan_publish_confirmation",
+         "plan_preparation", "plan_project_rule", "plan_publish_proposal",
+         "plan_publish_decision", "plan_preparation_result",
+         "plan_mapping_event", "plan_identity_requirement", "plan_operation_mapping", "plan_identity_check",
+--- a/mofs_index/plan/writer.py
++++ b/mofs_index/plan/writer.py
+@@ -349,9 +349,7 @@
+     storage_sha256: str | None = None
+ 
+ 
+-def record_page_observation(conn: sqlite3.Connection, spec: PageObservationSpec) -> str:
+-    """Записать наблюдение страницы («Итого»/storage), не привязанное 1:1 к
+-    номеру публикации (R-015 §7.1, AC-110)."""
++def _validate_page_observation(spec: PageObservationSpec):
+     if spec.verification_status not in ("not_verified", "verified_observation", "verification_failed"):
+         raise PlanWriterError("invalid observation verification status")
+     if spec.verification_status == "verified_observation":
+@@ -369,6 +367,11 @@
+                 or not attachment.get("actual_sha256")
+                 or hashlib.sha256(spec.itogo_raw.encode()).hexdigest() != spec.storage_sha256):
+             raise PlanWriterError("incomplete read-back observation evidence")
++
++
++def record_page_observation(conn: sqlite3.Connection, spec: PageObservationSpec) -> str:
++    """Записать независимое наблюдение страницы, без повышения trust."""
++    _validate_page_observation(spec)
+     observation_id = spec.observation_id or _new_id("obs")
+     conn.execute("BEGIN")
+     try:
+@@ -2168,3 +2171,112 @@
+             (rid,spec.operation_id,spec.revision,'admitted' if admitted else 'blocked',
+              spec.representation_artifact_id,spec.evidence_artifact_id,_json(spec.admission),_json(spec.result),_now()))
+     return rid
++
++
++@dataclass(frozen=True)
++class PublishConfirmationSpec:
++    operation_id: str
++    attempt_id: str
++    result_id: str
++    source_namespace: str
++    attachment_id: str
++    attachment_version: int
++    macro_id: str
++    filename: str
++    evidence_artifact_id: str
++    observation: PageObservationSpec
++    receipt: dict
++
++
++def confirm_publish(conn, spec: PublishConfirmationSpec):
++    """Atomic observation + publication + snapshot/evidence links + result event.
++
++    The legacy record_publication API cannot promote trust. This entry point
++    requires the admitted preparation and the full current read-back evidence.
++    All checks and inserts share BEGIN IMMEDIATE; journal failure rolls back.
++    """
++    from . import query as q
++    with _transaction(conn):
++        existing = q.get_publish_confirmation(conn, spec.operation_id)
++        if existing:
++            if existing['result_id'] != spec.result_id:
++                raise PlanWriterError('confirmation_context_conflict')
++            return existing['publication_id']
++        prep = q.get_preparation(conn, spec.operation_id)
++        result = q.get_preparation_result(conn, spec.operation_id)
++        operation = q.get_operation(conn, spec.operation_id)
++        attempt = conn.execute('SELECT operation_id FROM plan_import_attempt WHERE attempt_id=?', (spec.attempt_id,)).fetchone()
++        if (not prep or not result or result['result_id'] != spec.result_id or result['state'] != 'admitted'
++                or not attempt or attempt[0] != spec.operation_id or not operation or operation['action'] != 'publish'):
++            raise PlanWriterError('durable_admission_required')
++        obs = spec.observation
++        _validate_page_observation(obs)
++        verify_snapshot(conn, prep['snapshot_id'])
++        snapshot = q.get_snapshot(conn, prep['snapshot_id'])
++        if (obs.plan_id != snapshot['plan_id'] or obs.verification_status != 'verified_observation'
++                or obs.verification_profile != 'publish-v1' or obs.verification_scope != 'current_state'
++                or type(spec.attachment_version) is not int or spec.attachment_version < 1):
++            raise PlanWriterError('confirmation_scope_mismatch')
++        representation = q.get_artifact(conn, result['representation_artifact_id'])
++        verify_artifact(conn, representation['artifact_id'])
++        admission = json.loads(Path(verify_artifact(conn, result['evidence_artifact_id'])).read_text())
++        evidence = json.loads(Path(verify_artifact(conn, spec.evidence_artifact_id)).read_text())
++        raw_storage = Path(verify_artifact(conn, obs.storage_artifact_id)).read_text()
++        expected_attachment = {'attachment_id': spec.attachment_id, 'attachment_version': spec.attachment_version,
++            'expected_sha256': representation['raw_sha256'], 'actual_sha256': representation['raw_sha256']}
++        stages = ['prepared', 'archived', 'admitted', 'attachment_uploaded', 'attachment_verified',
++                  'storage_written', 'storage_verified', 'confirmed']
++        receipt = spec.receipt
++        schedule = receipt['verification']['schedule']
++        if (raw_storage != obs.itogo_raw or evidence.get('operation_id') != spec.operation_id
++                or evidence.get('result_id') != spec.result_id or evidence.get('snapshot_id') != prep['snapshot_id']
++                or evidence.get('admission_evidence_id') != result['evidence_artifact_id']
++                or evidence.get('profiles') != admission['profiles'] or evidence.get('diagnostics') != admission['diagnostics']
++                or evidence.get('schedule') != schedule or schedule.get('status') == 'mismatch'
++                or evidence.get('checks') != obs.verification['checks']
++                or evidence.get('attachment') != expected_attachment or obs.verification['attachment'] != expected_attachment
++                or evidence.get('storage_sha256') != obs.storage_sha256
++                or evidence.get('page_id') != obs.page_id or evidence.get('page_version') != obs.page_version
++                or evidence.get('macro_id') != spec.macro_id or evidence.get('filename') != spec.filename
++                or receipt.get('snapshot_id') != prep['snapshot_id'] or receipt.get('operation_id') != spec.operation_id
++                or receipt.get('page_id') != obs.page_id or receipt.get('attachment_version') != spec.attachment_version
++                or receipt.get('published') is not True or receipt.get('exit_code') != 0
++                or any(receipt['verification'].get(k) != 'verified' for k in ('archive','attachment','storage'))
++                or not all(stage in receipt.get('completed_stages', []) for stage in stages)):
++            raise PlanWriterError('incomplete_confirmation_evidence')
++        journal = q.get_operation_events(conn, spec.operation_id)
++        if not any(e['event_kind'] == 'publish_stage' and json.loads(e['detail']).get('stage') == 'storage_verified' for e in journal):
++            raise PlanWriterError('verification_journal_required')
++        now = _now()
++        observation_id = _new_id('obs')
++        conn.execute('INSERT INTO plan_page_observation(observation_id,plan_id,page_id,page_version,fetched_at,'
++            'storage_artifact_id,itogo_raw,itogo_text,itogo_d1,itogo_d2,itogo_n,quality,verification_status,'
++            'verification_scope,verification_profile,verification_json,storage_sha256) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
++            (observation_id,obs.plan_id,obs.page_id,obs.page_version,now,obs.storage_artifact_id,obs.itogo_raw,obs.itogo_text,
++             obs.itogo_d1,obs.itogo_d2,obs.itogo_n,obs.quality,obs.verification_status,obs.verification_scope,
++             obs.verification_profile,_json(obs.verification),obs.storage_sha256))
++        old = conn.execute('SELECT publication_id,raw_sha256,plan_id,page_id,macro_id,trust FROM plan_publication '
++            'WHERE source_namespace=? AND attachment_id=? AND attachment_version=?',
++            (spec.source_namespace,spec.attachment_id,spec.attachment_version)).fetchone()
++        if old:
++            if tuple(old)[1:] != (representation['raw_sha256'],obs.plan_id,obs.page_id,spec.macro_id,'verified_v1'):
++                raise PlanWriterError('publication_identity_conflict')
++            publication_id = old[0]
++        else:
++            publication_id = _new_id('pub')
++            conn.execute('INSERT INTO plan_publication(publication_id,plan_id,lineage_id,artifact_id,source_namespace,'
++                'attachment_id,attachment_version,page_id,macro_id,filename,observed_at,recorded_at,page_version,raw_sha256,trust) '
++                'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
++                (publication_id,obs.plan_id,snapshot['lineage_id'],representation['artifact_id'],spec.source_namespace,
++                 spec.attachment_id,spec.attachment_version,obs.page_id,spec.macro_id,spec.filename,now,now,
++                 obs.page_version,representation['raw_sha256'],'verified_v1'))
++        conn.execute('INSERT INTO plan_publication_page_link VALUES (?,?,?,?,?,?,?,?)',
++            (_new_id('link'),publication_id,observation_id,'publish-v1','confirmed',spec.evidence_artifact_id,None,now))
++        conn.execute('INSERT INTO plan_publication_snapshot VALUES (?,?,?,?,?,?)',
++            (_new_id('link'),publication_id,prep['snapshot_id'],'confirmed',spec.evidence_artifact_id,now))
++        conn.execute('INSERT INTO plan_publish_confirmation VALUES (?,?,?,?,?,?,?,?,?,?)',
++            (spec.operation_id,spec.result_id,publication_id,observation_id,prep['snapshot_id'],spec.evidence_artifact_id,
++             'publish-v1',_json(schedule),_json(receipt),now))
++        _operation_event(conn,spec.attempt_id,'publish_network_result',None,_json(receipt))
++        conn.execute("UPDATE plan_import_attempt SET status='confirmed' WHERE attempt_id=?", (spec.attempt_id,))
++        return publication_id
+--- /dev/null
++++ b/tests/plan/test_confirmation.py
+@@ -0,0 +1,91 @@
++"""New confirmation API: immutable evidence, scope and transactional closure."""
++from dataclasses import replace
++from pathlib import Path
++from unittest.mock import patch
++import hashlib
++import importlib.util
++import json
++import sqlite3
++import sys
++
++import pytest
++
++from mofs_index.plan import query as q, writer as w
++from mofs_index.plan.schema import MIGRATIONS
++from mofs_index.plan.migrate import ensure_plan_schema, _checksum
++from mofs_index.db import connect, initialize
++from .test_preparation import prepared, result, canonical
++
++
++@pytest.fixture
++def confirmation(prepared):
++    d=prepared;c=d['c'];spec=result(d,allowed=True);rid=w.record_preparation_result(c,spec)
++    digest=hashlib.sha256(b'{}').hexdigest()
++    storage='<p>verified storage observation</p>';storage_hash=hashlib.sha256(storage.encode()).hexdigest()
++    storage_id=d['artifact'](storage.encode(),'storage_snapshot')
++    checks={k:True for k in ('skeleton_version','skeleton_macro_count','page_version','one_gantt_macro',
++        'macro_id','param_id','param_hash','attachment_name','one_itogo','itogo_values','itogo_above_macro','no_trudozatraty','storage_preserved')}
++    attachment={'attachment_id':'att','attachment_version':1,'expected_sha256':digest,'actual_sha256':digest}
++    schedule={'status':'not_verified','checks':[],'limitations':['No concrete plugin observation'],'evidence_ids':[]}
++    receipt={'operation_id':d['op'],'snapshot_id':d['sid'],'published':True,'exit_code':0,'page_id':'page','attachment_version':1,
++        'verification':{'archive':'verified','attachment':'verified','storage':'verified','schedule':schedule},
++        'completed_stages':['prepared','archived','admitted','attachment_uploaded','attachment_verified','storage_written','storage_verified','confirmed']}
++    proof={'operation_id':d['op'],'result_id':rid,'snapshot_id':d['sid'],'admission_evidence_id':spec.evidence_artifact_id,
++        'profiles':{},'diagnostics':{},'schedule':schedule,'checks':checks,'attachment':attachment,'storage_sha256':storage_hash,
++        'page_id':'page','page_version':2,'macro_id':'macro','filename':'plan.json'}
++    proof_id=d['artifact'](canonical(proof).encode(),'publication_evidence')
++    obs=w.PageObservationSpec(d['prep'].context.get('plan_id') or q.get_snapshot(c,d['sid'])['plan_id'],'page',page_version=2,
++        storage_artifact_id=storage_id,itogo_raw=storage,verification_status='verified_observation',verification_scope='current_state',
++        verification_profile='publish-v1',verification={'checks':checks,'attachment':attachment},storage_sha256=storage_hash)
++    w.record_operation_event(c,d['attempt'],'publish_stage',detail=canonical({'stage':'storage_verified'}))
++    d.update(spec=w.PublishConfirmationSpec(d['op'],d['attempt'],rid,'test','att',1,'macro','plan.json',proof_id,obs,receipt),proof=proof)
++    return d
++
++
++def test_confirmation_atomic_links_and_idempotent(confirmation):
++    d=confirmation;c=d['c'];spec=d['spec']
++    pub=w.confirm_publish(c,spec)
++    assert w.confirm_publish(c,spec)==pub
++    assert q.get_publish_confirmation(c,d['op'])['publication_id']==pub
++    assert c.execute('SELECT trust FROM plan_publication').fetchone()[0]=='verified_v1'
++    for table in ('plan_publication','plan_page_observation','plan_publication_page_link','plan_publication_snapshot','plan_publish_confirmation'):
++        assert c.execute('SELECT count(*) FROM '+table).fetchone()[0]==1
++    assert c.execute('PRAGMA integrity_check').fetchone()[0]=='ok'
++    assert not c.execute('PRAGMA foreign_key_check').fetchall()
++    with pytest.raises(sqlite3.IntegrityError):c.execute('DELETE FROM plan_publish_confirmation')
++    c.rollback()
++
++
++@pytest.mark.parametrize('field',['operation_id','result_id','snapshot_id','admission_evidence_id','profiles','diagnostics','schedule','checks','attachment','page_id','page_version','macro_id','filename','storage_sha256'])
++def test_confirmation_rejects_missing_or_foreign_evidence_without_rows(confirmation,field):
++    d=confirmation;c=d['c'];proof=dict(d['proof']);proof.pop(field)
++    aid=d['artifact'](canonical(proof).encode(),'publication_evidence')
++    with pytest.raises(w.PlanWriterError):w.confirm_publish(c,replace(d['spec'],evidence_artifact_id=aid))
++    for table in ('plan_publication','plan_page_observation','plan_publication_page_link','plan_publication_snapshot','plan_publish_confirmation'):
++        assert c.execute('SELECT count(*) FROM '+table).fetchone()[0]==0
++
++
++def test_confirmation_event_failure_rolls_back_every_link(confirmation,monkeypatch):
++    d=confirmation;c=d['c']
++    monkeypatch.setattr(w,'_operation_event',lambda *a,**k:(_ for _ in ()).throw(OSError('event failed')))
++    with pytest.raises(OSError):w.confirm_publish(c,d['spec'])
++    for table in ('plan_publication','plan_page_observation','plan_publication_page_link','plan_publication_snapshot','plan_publish_confirmation'):
++        assert c.execute('SELECT count(*) FROM '+table).fetchone()[0]==0
++
++
++def test_0012_preserves_0011_definitions_history_and_repeat(tmp_path):
++    path=Path.home()/'hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-09/usertools/MofsIndex/after/mofs_index/plan/schema.py'
++    spec=importlib.util.spec_from_file_location('_confirmation_old_schema',path)
++    old=importlib.util.module_from_spec(spec);sys.modules[spec.name]=old;spec.loader.exec_module(old)
++    assert [(m.migration_id,_checksum(m)) for m in MIGRATIONS[:11]]==[(m.migration_id,_checksum(m)) for m in old.MIGRATIONS]
++    c=connect(tmp_path/'old.sqlite',durable=True);initialize(c)
++    with patch('mofs_index.plan.migrate.MIGRATIONS',MIGRATIONS[:11]):
++        ensure_plan_schema(c);w.ensure_plan(c,'old-project')
++    names=[r[0] for r in c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'plan_%'")]
++    before={name:[tuple(r) for r in c.execute('SELECT * FROM '+name)] for name in names if name!='plan_schema_migration'}
++    assert ensure_plan_schema(c)==['0012_publish_confirmation']
++    assert ensure_plan_schema(c)==[]
++    assert all([tuple(r) for r in c.execute('SELECT * FROM '+name)]==rows for name,rows in before.items())
++    assert c.execute('PRAGMA integrity_check').fetchone()[0]=='ok'
++    assert not c.execute('PRAGMA foreign_key_check').fetchall()
++    c.close()
+--- a/tests/plan/test_identity.py
++++ b/tests/plan/test_identity.py
+@@ -295,7 +295,7 @@
+         conn.commit()
+     finally:
+         migrate.MIGRATIONS=original
+-    assert ensure_plan_schema(conn)==['0010_identity_revisions','0011_publish_preparation']
++    assert ensure_plan_schema(conn)==['0010_identity_revisions','0011_publish_preparation','0012_publish_confirmation']
+     assert ensure_plan_schema(conn)==[]
+     assert conn.execute('SELECT count(*) FROM plan_identity_mapping').fetchone()[0]==2
+     assert not conn.execute('PRAGMA foreign_key_check').fetchall()
+--- a/tests/plan/test_migrate.py
++++ b/tests/plan/test_migrate.py
+@@ -33,7 +33,7 @@
+     assert first == [
+         "0001_phase0_baseline", "0002_phase1_core", "0003_phase2_snapshot",
+         "0004_phase3_analysis", "0005_phase3_fts", "0006_publication_trust",
+-        "0007_durable_imports", "0008_snapshot_semantics", "0009_batch_decisions", "0010_identity_revisions", "0011_publish_preparation",
++        "0007_durable_imports", "0008_snapshot_semantics", "0009_batch_decisions", "0010_identity_revisions", "0011_publish_preparation", "0012_publish_confirmation",
+     ]
+     assert second == []
+ 
+@@ -41,7 +41,7 @@
+ def test_applied_migrations_records_checksum(conn):
+     ensure_plan_schema(conn)
+     rows = applied_migrations(conn)
+-    assert len(rows) == 11
++    assert len(rows) == 12
+     migration_id, applied_at, checksum = rows[0]
+     assert migration_id == "0001_phase0_baseline"
+     assert applied_at  # не пусто
+@@ -85,7 +85,7 @@
+     publication_before = tuple(conn.execute("SELECT * FROM plan_publication").fetchone())
+     attempt_before = tuple(conn.execute("SELECT * FROM plan_import_attempt").fetchone())
+     monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations)
+-    assert ensure_plan_schema(conn) == ["0006_publication_trust","0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions","0011_publish_preparation"]
++    assert ensure_plan_schema(conn) == ["0006_publication_trust","0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions","0011_publish_preparation","0012_publish_confirmation"]
+     for name, rows in before.items():
+         assert [tuple(r)[:len(rows[i])] for i,r in enumerate(conn.execute("SELECT * FROM " + name))] == rows
+     assert tuple(conn.execute("SELECT * FROM plan_publication").fetchone())[:len(publication_before)] == publication_before
+@@ -125,7 +125,7 @@
+     assert conn.execute("SELECT count(*) FROM plan_attempt_event").fetchone()[0]==1
+     assert conn.execute("SELECT count(*) FROM plan_schema_migration").fetchone()[0]==6
+     monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations)
+-    assert ensure_plan_schema(conn)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions","0011_publish_preparation"]
++    assert ensure_plan_schema(conn)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions","0011_publish_preparation","0012_publish_confirmation"]
+     assert conn.execute("SELECT attempt_id FROM plan_attempt_event").fetchone()[0]==attempt
+     assert not conn.execute("PRAGMA foreign_key_check").fetchall()
+ 
+@@ -161,7 +161,7 @@
+     assert backup_to(backup,origin).ok and verify_backup(backup).ok
+     copy=connect(backup,durable=True)
+     monkeypatch.setattr(migrate,"MIGRATIONS",migrations)
+-    assert ensure_plan_schema(copy)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions","0011_publish_preparation"]
++    assert ensure_plan_schema(copy)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions","0011_publish_preparation","0012_publish_confirmation"]
+     for table,rows in before.items():
+         actual=[tuple(row) for row in copy.execute("SELECT * FROM "+table+" ORDER BY rowid")]
+         assert len(actual)==len(rows)
+--- a/tests/plan/test_preparation.py
++++ b/tests/plan/test_preparation.py
+@@ -107,7 +107,9 @@
+     with patch('mofs_index.plan.migrate.MIGRATIONS',MIGRATIONS[:10]):
+         ensure_plan_schema(c)
+         pid=w.ensure_plan(c,'preserved')
+-    assert ensure_plan_schema(c)==['0011_publish_preparation']
++    with patch('mofs_index.plan.migrate.MIGRATIONS',MIGRATIONS[:11]):
++        assert ensure_plan_schema(c)==['0011_publish_preparation']
++    assert ensure_plan_schema(c)==['0012_publish_confirmation']
+     assert ensure_plan_schema(c)==[]
+     assert q.resolve_plan(c,'preserved')['plan_id']==pid
+     assert c.execute('PRAGMA integrity_check').fetchone()[0]=='ok'

@@ -1,0 +1,622 @@
+{
+  "operation_id": "operation_839f47d5478240a7813cd08144c9e52e",
+  "preparation": {
+    "operation_id": "operation_839f47d5478240a7813cd08144c9e52e",
+    "revision": 1,
+    "snapshot_id": "snapshot_f14bc36eb774441cb87e0489fe4af794",
+    "prepared_artifact_id": "artifact_85b998cb93fa49749e9920d343195fc4",
+    "created_at": "2026-11-16T18:04:19+00:00",
+    "context": {
+      "fingerprint": "0a4c42008fc27b4c88588ea4d0078a44f75836d43143fa9004f5b4afc3979e0e",
+      "paths": {
+        "cache_dir": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/pytest-tmp/test_stage10_live_recovery_ide0/cache",
+        "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/pytest-tmp/test_stage10_live_recovery_ide0/state/index.sqlite",
+        "mpp_reader": "/home/tkachenkoav/USERTOOLS/MppReader",
+        "workvault": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/pytest-tmp/test_stage10_live_recovery_ide0/WorkVault"
+      },
+      "profiles": {
+        "NORMALIZATION_PROFILE": {
+          "id": "normalization-v1",
+          "sha256": "e1971ad42cb832f04af18b7b730c804b4e672ba40b5477f4fea3431576ce5ee9",
+          "status": "available"
+        },
+        "PLUGIN_PROFILE": {
+          "id": "installed-gantt-profile",
+          "sha256": "32a83217082a7a82b0f2708bde7a1026977545c3e2e431ad32e2bc2ed9e0be47",
+          "status": "available"
+        },
+        "SUMMARY_PROFILE": {
+          "id": "summary-v1",
+          "sha256": "1b702db536cb8ccaa8daa204e039c4e6685477e38b25cbcd1315bd9dca5caa1f",
+          "status": "available"
+        }
+      },
+      "settings": {
+        "CACHE_DIR": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/pytest-tmp/test_stage10_live_recovery_ide0/cache",
+        "CONFLUENCE_URL": "https://dom.tutu.ru",
+        "HTTP_RETRY_LIMIT": 1,
+        "HTTP_TIMEOUT_SECONDS": 120,
+        "MPP_MAX_BYTES": 67108864,
+        "MPP_READ_TIMEOUT_SECONDS": 180,
+        "MPXJ_PYTHON": "/usr/bin/python3.9",
+        "NORMALIZATION_PROFILE": "normalization-v1",
+        "PLUGIN_PROFILE": "installed-gantt-profile",
+        "SUMMARY_PROFILE": "summary-v1",
+        "WORKVAULT_PATH": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/pytest-tmp/test_stage10_live_recovery_ide0/WorkVault",
+        "ZIP_MAX_BYTES": 67108864,
+        "ZIP_MAX_ENTRIES": 128,
+        "ZIP_MAX_RATIO": 100,
+        "ZIP_MAX_UNPACKED_BYTES": 268435456
+      },
+      "sources": {
+        "CACHE_DIR": "cli_override",
+        "CONFLUENCE_URL": "shared",
+        "HTTP_RETRY_LIMIT": "ecosystem_config",
+        "HTTP_TIMEOUT_SECONDS": "ecosystem_config",
+        "MPP_MAX_BYTES": "ecosystem_config",
+        "MPP_READ_TIMEOUT_SECONDS": "ecosystem_config",
+        "MPXJ_PYTHON": "ecosystem_config",
+        "NORMALIZATION_PROFILE": "ecosystem_config",
+        "PLUGIN_PROFILE": "ecosystem_config",
+        "SUMMARY_PROFILE": "ecosystem_config",
+        "WORKVAULT_PATH": "cli_override",
+        "ZIP_MAX_BYTES": "ecosystem_config",
+        "ZIP_MAX_ENTRIES": "ecosystem_config",
+        "ZIP_MAX_RATIO": "ecosystem_config",
+        "ZIP_MAX_UNPACKED_BYTES": "ecosystem_config",
+        "db": "cli_override"
+      }
+    },
+    "request": {
+      "child": true,
+      "drop_links": [],
+      "lineage_id": "lineage_73cb483bc7874083b84a2b633b0d6526",
+      "page_id": "537572835",
+      "project_slug": "stage10-live-test",
+      "publication_profiles": {
+        "project-rules-v1.json": "81e82baacec090c71bf6d738ccc25c7557be4ac139cc324505e155f15e9243db",
+        "publication-policy-v1.json": "38172646a541a4e4d2c075a5ec1b796fbfdf03d22f617b72a734413e92dd0c0d"
+      },
+      "rule_revisions": [],
+      "timezone_hint": "Europe/Moscow",
+      "title": "EditPlanConfluence stage 10 child 180418984288"
+    }
+  },
+  "admission_result": {
+    "result_id": "preparation_result_b9791c0ea4804b1b932dea7cd887eba0",
+    "operation_id": "operation_839f47d5478240a7813cd08144c9e52e",
+    "preparation_revision": 1,
+    "state": "admitted",
+    "representation_artifact_id": "artifact_bf009dc984684962abe5f68d243065ca",
+    "evidence_artifact_id": "artifact_cc35df89e0104819a8c42d2f32eea8a6",
+    "created_at": "2026-11-16T18:04:19+00:00",
+    "admission": {
+      "allowed": true,
+      "blockers": [],
+      "checks": [
+        {
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "entity": "model",
+          "finding_sha256": "346c0b491f627540345e4669dac37935391128234694e5233087e04ea87c0820",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 5,
+          "source": null
+        },
+        {
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "entity": "plugin",
+          "finding_sha256": "4629a102822b74610f5a393cf708b1f81049f68fce5022497e908cd0c0db74a3",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 6,
+          "source": null
+        }
+      ],
+      "exit_code": 0,
+      "policy_revision": "publication-admission-v1",
+      "schedule": {
+        "checks": [
+          {
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "entity": "model",
+            "finding_sha256": "346c0b491f627540345e4669dac37935391128234694e5233087e04ea87c0820",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 5,
+            "source": null
+          },
+          {
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "entity": "plugin",
+            "finding_sha256": "4629a102822b74610f5a393cf708b1f81049f68fce5022497e908cd0c0db74a3",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 6,
+            "source": null
+          }
+        ],
+        "evidence_ids": [],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "status": "not_verified"
+      },
+      "status": "prepared",
+      "warnings": [
+        {
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "entity": "model",
+          "finding_sha256": "346c0b491f627540345e4669dac37935391128234694e5233087e04ea87c0820",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 5,
+          "source": null
+        },
+        {
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "entity": "plugin",
+          "finding_sha256": "4629a102822b74610f5a393cf708b1f81049f68fce5022497e908cd0c0db74a3",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 6,
+          "source": null
+        }
+      ]
+    },
+    "result": {
+      "basis_sha256": "91ca9932ce98bc9bb5df317401f91baa05ee90501a751ef3dd4562c3e2ab1368",
+      "receipt": {
+        "attachment_version": null,
+        "completed_stages": [
+          "input_frozen",
+          "prepared",
+          "archived",
+          "admitted"
+        ],
+        "dependency_count": 1,
+        "display_task_count": 3,
+        "error": null,
+        "exceptions": [],
+        "exit_code": 0,
+        "external_effect": "none",
+        "item_id": "item_d618e176250f4b0e9471a93188f5264f",
+        "mode": "publish",
+        "operation_id": "operation_839f47d5478240a7813cd08144c9e52e",
+        "page_id": null,
+        "page_url": null,
+        "project_slug": "stage10-live-test",
+        "published": false,
+        "schema_version": 1,
+        "snapshot_id": "snapshot_f14bc36eb774441cb87e0489fe4af794",
+        "source": {
+          "name": "synthetic.mpp",
+          "sha256": "461ed6e4eb493b97e49c93af0d8b79154c379bc51b6b4357b25662c8a2d2c58a",
+          "size_bytes": 58
+        },
+        "status": "prepared",
+        "task_count": 3,
+        "verification": {
+          "archive": "verified",
+          "attachment": "not_applicable",
+          "schedule": {
+            "checks": [
+              {
+                "accepted_deviation": false,
+                "category": "local_unsupported",
+                "code": "local_scheduler_prepared_unsupported",
+                "count": 1,
+                "example_entities": [
+                  "model"
+                ],
+                "exit_code": 0,
+                "row": 5
+              },
+              {
+                "accepted_deviation": false,
+                "category": "plugin_unobserved",
+                "code": "specific_plan_plugin_result_not_verified",
+                "count": 1,
+                "example_entities": [
+                  "plugin"
+                ],
+                "exit_code": 0,
+                "row": 6
+              }
+            ],
+            "evidence_ids": [
+              "artifact_cc35df89e0104819a8c42d2f32eea8a6"
+            ],
+            "limitations": [
+              "local_scheduler_not_run",
+              "plan_plugin_result_not_verified"
+            ],
+            "status": "not_verified"
+          },
+          "storage": "not_applicable"
+        },
+        "warnings": [
+          {
+            "code": "local_scheduler_prepared_unsupported",
+            "details_ref": "artifact:artifact_cc35df89e0104819a8c42d2f32eea8a6",
+            "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+          },
+          {
+            "code": "specific_plan_plugin_result_not_verified",
+            "details_ref": "artifact:artifact_cc35df89e0104819a8c42d2f32eea8a6",
+            "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+          }
+        ]
+      },
+      "summary": {
+        "coefficients": {
+          "minutes_per_day": "480"
+        },
+        "counts": {
+          "archive_task_count": 3,
+          "dependency_count": 1,
+          "display_task_count": 3,
+          "external_dependency_count": 0,
+          "service_task_count": 0,
+          "task_count": 3,
+          "task_extraction_errors": 0
+        },
+        "d1": "05.01.26",
+        "d2": "05.01.26",
+        "duration_working_days": "1",
+        "explicit_root_choice": false,
+        "finish": "2026-01-05T18:00:00",
+        "n_days": 1,
+        "profile": "summary-v1",
+        "profile_fingerprint": "716c94354368c0642f1284f48213e6de246ec92f0024b5b533c45f4c3f1abc70",
+        "publishable": true,
+        "reasons": [],
+        "root_candidates": [
+          "uid:1"
+        ],
+        "root_task_key": "uid:1",
+        "source_duration": {
+          "quality": "ok",
+          "quantity": {
+            "amount": "1",
+            "elapsed": false,
+            "source_units": "DAYS",
+            "units": "DAYS"
+          },
+          "reason": null,
+          "value": "1 DAYS"
+        },
+        "start": "2026-01-05T09:00:00",
+        "storage_html": "<p><strong>Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней</strong></p>",
+        "work": {
+          "display_hours": "0",
+          "excluded_assignments": 0,
+          "hours": "0",
+          "known_assignments": 0,
+          "missing_assignments": 0,
+          "per_task": {},
+          "quality": "complete",
+          "reasons": []
+        }
+      },
+      "target": {
+        "attachment": {
+          "attach_id": "537572836",
+          "filename": "gantt-chart-9703cf3f5bb14f92ad39f3db5b07e5ee.json",
+          "title": "gantt-chart-9703cf3f5bb14f92ad39f3db5b07e5ee.json",
+          "version": 2
+        },
+        "macro": {
+          "_span": [
+            109,
+            405
+          ],
+          "attachment_name": "gantt-chart-9703cf3f5bb14f92ad39f3db5b07e5ee.json",
+          "macro_id": "34b4198b-9b1f-4cfd-8249-0a8975c81c57",
+          "param_hash": "bd688eacbd79439bbdf4cbda3352826b",
+          "param_id": "9703cf3f5bb14f92ad39f3db5b07e5ee"
+        },
+        "managed": {
+          "blocks": [
+            "<p><strong>Итого: с 05.01.26 по 05.01.26 - 2 рабочих дней</strong></p>"
+          ],
+          "macro": "<root><ac:structured-macro xmlns:ac=\"http://atlassian.com/content\" ac:macro-id=\"34b4198b-9b1f-4cfd-8249-0a8975c81c57\" ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\"><ac:parameter ac:name=\"id\">9703cf3f5bb14f92ad39f3db5b07e5ee</ac:parameter><ac:parameter ac:name=\"hash\">bd688eacbd79439bbdf4cbda3352826b</ac:parameter></ac:structured-macro></root>",
+          "marker_texts": [
+            "Итого: с 05.01.26 по 05.01.26 - 2 рабочих дней"
+          ],
+          "sha256": "b27921b7e9b7d048b7fa6a3e6357e5c51bf39e1f3a7f18a8e6e6fa543ab01959",
+          "summary_above_macro": true
+        },
+        "page_id": "537572835",
+        "page_version": 3,
+        "sha256": "7a8b32170a3f4d2154f8a91f06f03fbe4d55b0c1d5fcd45111cc2b52e4db8bf4",
+        "storage_sha256": "f101cae33f508f0da6afa343dda0b148f756486a95e56b444dfb3643da12dc87"
+      }
+    }
+  },
+  "events": [
+    {
+      "event_id": "event_e802ff0dae734712bd9dc7862e9ad950",
+      "attempt_id": "attempt_66856a36a2054cca8b5b9d7754bd44d8",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "item_d618e176250f4b0e9471a93188f5264f",
+      "created_at": "2026-11-16T18:04:18+00:00",
+      "event_kind": "attempt_started",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_c64a8294290a49caaf94333be786130d",
+      "attempt_id": "attempt_66856a36a2054cca8b5b9d7754bd44d8",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "item_d618e176250f4b0e9471a93188f5264f",
+      "created_at": "2026-11-16T18:04:19+00:00",
+      "event_kind": "input_frozen",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "snapshot_committed:item_d618e176250f4b0e9471a93188f5264f",
+      "attempt_id": "attempt_66856a36a2054cca8b5b9d7754bd44d8",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "item_d618e176250f4b0e9471a93188f5264f",
+      "created_at": "2026-11-16T18:04:19+00:00",
+      "event_kind": "snapshot_committed",
+      "snapshot_id": "snapshot_f14bc36eb774441cb87e0489fe4af794"
+    },
+    {
+      "event_id": "event_4d7e923dbccf4924ada71438d58186df",
+      "attempt_id": "attempt_66856a36a2054cca8b5b9d7754bd44d8",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "preparation_result_b9791c0ea4804b1b932dea7cd887eba0",
+      "created_at": "2026-11-16T18:04:19+00:00",
+      "event_kind": "publish_preparation",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_aac5843e7c7448699e89ff3e969f3c52",
+      "attempt_id": "attempt_66856a36a2054cca8b5b9d7754bd44d8",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "{\"base_managed\": {\"blocks\": [\"<p><strong>Итого: с 05.01.26 по 05.01.26 - 2 рабочих дней</strong></p>\"], \"macro\": \"<root><ac:structured-macro xmlns:ac=\\\"http://atlassian.com/content\\\" ac:macro-id=\\\"34b4198b-9b1f-4cfd-8249-0a8975c81c57\\\" ac:name=\\\"gantt-chart-planner\\\" ac:schema-version=\\\"1\\\"><ac:parameter ac:name=\\\"id\\\">9703cf3f5bb14f92ad39f3db5b07e5ee</ac:parameter><ac:parameter ac:name=\\\"hash\\\">bd688eacbd79439bbdf4cbda3352826b</ac:parameter></ac:structured-macro></root>\", \"marker_texts\": [\"Итого: с 05.01.26 по 05.01.26 - 2 рабочих дней\"], \"sha256\": \"b27921b7e9b7d048b7fa6a3e6357e5c51bf39e1f3a7f18a8e6e6fa543ab01959\", \"summary_above_macro\": true}, \"base_version\": 3, \"before_attachment\": null, \"before_attachment_sha256\": null, \"child\": true, \"intended_managed\": {\"blocks\": [\"<p><strong>Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней</strong></p>\"], \"macro\": \"<root><ac:structured-macro xmlns:ac=\\\"http://atlassian.com/content\\\" ac:macro-id=\\\"2ac48f40-5005-44f4-9942-e5cd4f5b847e\\\" ac:name=\\\"gantt-chart-planner\\\" ac:schema-version=\\\"1\\\"><ac:parameter ac:name=\\\"id\\\">5f1a7f75d0cf4e11b363a40f0dc38cc1</ac:parameter><ac:parameter ac:name=\\\"hash\\\">14a258ffa90a4ad39608c67a40690805</ac:parameter></ac:structured-macro></root>\", \"marker_texts\": [\"Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней\"], \"sha256\": \"10e57bd79981c1f9aded11a3dd082bc8064166a0481565764c367e986efb9517\", \"summary_above_macro\": true}, \"intended_storage\": \"<p><strong>Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней</strong></p><p><ac:structured-macro ac:name=\\\"gantt-chart-planner\\\" ac:schema-version=\\\"1\\\" ac:macro-id=\\\"2ac48f40-5005-44f4-9942-e5cd4f5b847e\\\"><ac:parameter ac:name=\\\"id\\\">5f1a7f75d0cf4e11b363a40f0dc38cc1</ac:parameter><ac:parameter ac:name=\\\"hash\\\">14a258ffa90a4ad39608c67a40690805</ac:parameter></ac:structured-macro></p>\", \"macro\": {\"_span\": [3, 299], \"attachment_name\": \"gantt-chart-5f1a7f75d0cf4e11b363a40f0dc38cc1.json\", \"macro_id\": \"2ac48f40-5005-44f4-9942-e5cd4f5b847e\", \"param_hash\": \"14a258ffa90a4ad39608c67a40690805\", \"param_id\": \"5f1a7f75d0cf4e11b363a40f0dc38cc1\"}, \"namespace\": \"confluence:dom.tutu.ru\", \"new_macro_html\": \"<p><ac:structured-macro ac:name=\\\"gantt-chart-planner\\\" ac:schema-version=\\\"1\\\" ac:macro-id=\\\"2ac48f40-5005-44f4-9942-e5cd4f5b847e\\\"><ac:parameter ac:name=\\\"id\\\">5f1a7f75d0cf4e11b363a40f0dc38cc1</ac:parameter><ac:parameter ac:name=\\\"hash\\\">14a258ffa90a4ad39608c67a40690805</ac:parameter></ac:structured-macro></p>\", \"parent_id\": \"537572835\", \"representation_sha256\": \"d805ab00d512d8a3b9339939424a52a4381414ee94129e974f3e1c4bd5079bfc\", \"result_id\": \"preparation_result_b9791c0ea4804b1b932dea7cd887eba0\", \"space_key\": \"~tkachenkoav\", \"title\": \"EditPlanConfluence stage 10 child 180418984288\"}",
+      "created_at": "2026-11-16T18:04:19+00:00",
+      "event_kind": "publish_network_plan",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_ece5362827c847878b092171322958a5",
+      "attempt_id": "attempt_66856a36a2054cca8b5b9d7754bd44d8",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "{\"attempt\": 1, \"effect\": \"create\", \"parent_id\": \"537572835\", \"storage_sha256\": \"afa6488c9a596b70a469bbba74703e95c6e636bbd03ada3b76af9328e4cef2a8\", \"title\": \"EditPlanConfluence stage 10 child 180418984288\"}",
+      "created_at": "2026-11-16T18:04:19+00:00",
+      "event_kind": "publish_network_intent",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_46e0c98a614343ccae39c2b4506422bc",
+      "attempt_id": "attempt_9d2ff95abcfa4c18a57590c9e925d77c",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "item_d618e176250f4b0e9471a93188f5264f",
+      "created_at": "2026-11-16T18:04:20+00:00",
+      "event_kind": "attempt_started",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_004e6052c07d4440ab692e8a2b6771a8",
+      "attempt_id": "attempt_9d2ff95abcfa4c18a57590c9e925d77c",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "{\"attempt\": 1, \"before\": null, \"effect\": \"upload\", \"expected_sha256\": \"d805ab00d512d8a3b9339939424a52a4381414ee94129e974f3e1c4bd5079bfc\", \"page_id\": \"537572840\"}",
+      "created_at": "2026-11-16T18:04:20+00:00",
+      "event_kind": "publish_network_intent",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_66815bc378a44ea39edf38abbc05c169",
+      "attempt_id": "attempt_9d2ff95abcfa4c18a57590c9e925d77c",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "{\"attachment\": {\"attach_id\": \"537572841\", \"filename\": \"gantt-chart-5f1a7f75d0cf4e11b363a40f0dc38cc1.json\", \"title\": \"gantt-chart-5f1a7f75d0cf4e11b363a40f0dc38cc1.json\", \"version\": 1}, \"effect\": \"upload\"}",
+      "created_at": "2026-11-16T18:04:21+00:00",
+      "event_kind": "publish_observation",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_b0c3decd08e3458ba707c810b2f33828",
+      "attempt_id": "attempt_9d2ff95abcfa4c18a57590c9e925d77c",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "{\"attachment\": {\"attach_id\": \"537572841\", \"filename\": \"gantt-chart-5f1a7f75d0cf4e11b363a40f0dc38cc1.json\", \"title\": \"gantt-chart-5f1a7f75d0cf4e11b363a40f0dc38cc1.json\", \"version\": 1}, \"reused\": false, \"stage\": \"attachment_uploaded\"}",
+      "created_at": "2026-11-16T18:04:21+00:00",
+      "event_kind": "publish_stage",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_dde73f4d7d654a1eb0b3c3c4e5328220",
+      "attempt_id": "attempt_9d2ff95abcfa4c18a57590c9e925d77c",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "{\"attachment\": {\"attach_id\": \"537572841\", \"filename\": \"gantt-chart-5f1a7f75d0cf4e11b363a40f0dc38cc1.json\", \"title\": \"gantt-chart-5f1a7f75d0cf4e11b363a40f0dc38cc1.json\", \"version\": 1}, \"sha256\": \"d805ab00d512d8a3b9339939424a52a4381414ee94129e974f3e1c4bd5079bfc\", \"stage\": \"attachment_verified\"}",
+      "created_at": "2026-11-16T18:04:21+00:00",
+      "event_kind": "publish_stage",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_182a41f9b6c944278ad0f1c6a7cd39cc",
+      "attempt_id": "attempt_9d2ff95abcfa4c18a57590c9e925d77c",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "{\"page_version\": 1, \"reconciled\": true, \"stage\": \"storage_written\"}",
+      "created_at": "2026-11-16T18:04:21+00:00",
+      "event_kind": "publish_stage",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_c141346cd6254382b23c86427094b198",
+      "attempt_id": "attempt_9d2ff95abcfa4c18a57590c9e925d77c",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "{\"page_version\": 1, \"stage\": \"storage_verified\", \"storage_sha256\": \"afa6488c9a596b70a469bbba74703e95c6e636bbd03ada3b76af9328e4cef2a8\"}",
+      "created_at": "2026-11-16T18:04:21+00:00",
+      "event_kind": "publish_stage",
+      "snapshot_id": null
+    },
+    {
+      "event_id": "event_6bb96b852b1347bbbcf1a0400c769c06",
+      "attempt_id": "attempt_9d2ff95abcfa4c18a57590c9e925d77c",
+      "stage": "archive",
+      "status": "confirmed",
+      "detail": "{\"attachment_version\":1,\"completed_stages\":[\"prepared\",\"archived\",\"admitted\",\"attachment_uploaded\",\"attachment_verified\",\"storage_written\",\"storage_verified\",\"confirmed\"],\"dependency_count\":1,\"display_task_count\":3,\"error\":null,\"exceptions\":[],\"exit_code\":0,\"external_effect\":\"storage_written\",\"item_id\":\"item_d618e176250f4b0e9471a93188f5264f\",\"mode\":\"publish\",\"operation_id\":\"operation_839f47d5478240a7813cd08144c9e52e\",\"page_id\":\"537572840\",\"page_url\":\"https://dom.tutu.ru/pages/viewpage.action?pageId=537572840\",\"project_slug\":\"stage10-live-test\",\"published\":true,\"schema_version\":1,\"snapshot_id\":\"snapshot_f14bc36eb774441cb87e0489fe4af794\",\"source\":{\"name\":\"synthetic.mpp\",\"sha256\":\"461ed6e4eb493b97e49c93af0d8b79154c379bc51b6b4357b25662c8a2d2c58a\",\"size_bytes\":58},\"status\":\"published_with_warnings\",\"task_count\":3,\"verification\":{\"archive\":\"verified\",\"attachment\":\"verified\",\"schedule\":{\"checks\":[{\"accepted_deviation\":false,\"category\":\"local_unsupported\",\"code\":\"local_scheduler_prepared_unsupported\",\"count\":1,\"example_entities\":[\"model\"],\"exit_code\":0,\"row\":5},{\"accepted_deviation\":false,\"category\":\"plugin_unobserved\",\"code\":\"specific_plan_plugin_result_not_verified\",\"count\":1,\"example_entities\":[\"plugin\"],\"exit_code\":0,\"row\":6}],\"evidence_ids\":[\"artifact_cc35df89e0104819a8c42d2f32eea8a6\"],\"limitations\":[\"local_scheduler_not_run\",\"plan_plugin_result_not_verified\"],\"status\":\"not_verified\"},\"storage\":\"verified\"},\"warnings\":[{\"code\":\"local_scheduler_prepared_unsupported\",\"details_ref\":\"artifact:artifact_cc35df89e0104819a8c42d2f32eea8a6\",\"message\":\"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\"},{\"code\":\"specific_plan_plugin_result_not_verified\",\"details_ref\":\"artifact:artifact_cc35df89e0104819a8c42d2f32eea8a6\",\"message\":\"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\"}]}",
+      "created_at": "2026-11-16T18:04:21+00:00",
+      "event_kind": "publish_network_result",
+      "snapshot_id": null
+    }
+  ],
+  "confirmation": {
+    "operation_id": "operation_839f47d5478240a7813cd08144c9e52e",
+    "result_id": "preparation_result_b9791c0ea4804b1b932dea7cd887eba0",
+    "publication_id": "pub_dc9a70ff151c4f3cb3843c7079f9e0a3",
+    "observation_id": "obs_cbd8a4bed8a14d9bbd7fc25fbeb6023e",
+    "snapshot_id": "snapshot_f14bc36eb774441cb87e0489fe4af794",
+    "evidence_artifact_id": "artifact_79b364582777420993c501a0e78dcc07",
+    "verification_profile": "publish-v1",
+    "confirmed_at": "2026-11-16T18:04:21+00:00",
+    "receipt": {
+      "attachment_version": 1,
+      "completed_stages": [
+        "prepared",
+        "archived",
+        "admitted",
+        "attachment_uploaded",
+        "attachment_verified",
+        "storage_written",
+        "storage_verified",
+        "confirmed"
+      ],
+      "dependency_count": 1,
+      "display_task_count": 3,
+      "error": null,
+      "exceptions": [],
+      "exit_code": 0,
+      "external_effect": "storage_written",
+      "item_id": "item_d618e176250f4b0e9471a93188f5264f",
+      "mode": "publish",
+      "operation_id": "operation_839f47d5478240a7813cd08144c9e52e",
+      "page_id": "537572840",
+      "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537572840",
+      "project_slug": "stage10-live-test",
+      "published": true,
+      "schema_version": 1,
+      "snapshot_id": "snapshot_f14bc36eb774441cb87e0489fe4af794",
+      "source": {
+        "name": "synthetic.mpp",
+        "sha256": "461ed6e4eb493b97e49c93af0d8b79154c379bc51b6b4357b25662c8a2d2c58a",
+        "size_bytes": 58
+      },
+      "status": "published_with_warnings",
+      "task_count": 3,
+      "verification": {
+        "archive": "verified",
+        "attachment": "verified",
+        "schedule": {
+          "checks": [
+            {
+              "accepted_deviation": false,
+              "category": "local_unsupported",
+              "code": "local_scheduler_prepared_unsupported",
+              "count": 1,
+              "example_entities": [
+                "model"
+              ],
+              "exit_code": 0,
+              "row": 5
+            },
+            {
+              "accepted_deviation": false,
+              "category": "plugin_unobserved",
+              "code": "specific_plan_plugin_result_not_verified",
+              "count": 1,
+              "example_entities": [
+                "plugin"
+              ],
+              "exit_code": 0,
+              "row": 6
+            }
+          ],
+          "evidence_ids": [
+            "artifact_cc35df89e0104819a8c42d2f32eea8a6"
+          ],
+          "limitations": [
+            "local_scheduler_not_run",
+            "plan_plugin_result_not_verified"
+          ],
+          "status": "not_verified"
+        },
+        "storage": "verified"
+      },
+      "warnings": [
+        {
+          "code": "local_scheduler_prepared_unsupported",
+          "details_ref": "artifact:artifact_cc35df89e0104819a8c42d2f32eea8a6",
+          "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+        },
+        {
+          "code": "specific_plan_plugin_result_not_verified",
+          "details_ref": "artifact:artifact_cc35df89e0104819a8c42d2f32eea8a6",
+          "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+        }
+      ]
+    },
+    "schedule": {
+      "checks": [
+        {
+          "accepted_deviation": false,
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "count": 1,
+          "example_entities": [
+            "model"
+          ],
+          "exit_code": 0,
+          "row": 5
+        },
+        {
+          "accepted_deviation": false,
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "count": 1,
+          "example_entities": [
+            "plugin"
+          ],
+          "exit_code": 0,
+          "row": 6
+        }
+      ],
+      "evidence_ids": [
+        "artifact_cc35df89e0104819a8c42d2f32eea8a6"
+      ],
+      "limitations": [
+        "local_scheduler_not_run",
+        "plan_plugin_result_not_verified"
+      ],
+      "status": "not_verified"
+    }
+  }
+}

@@ -291,8 +291,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08", "09"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 through 09")
+    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 10")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -310,6 +310,8 @@ def pytest_configure(config):
             config.option.basetemp = str(root / "pytest-tmp")
     if stage=='09':
         config._acceptance_start_hashes=_stage09_sources()
+    if stage=='10':
+        config._acceptance_start_hashes=_stage10_sources()
 
 
 @pytest.hookimpl(tryfirst=True)
@@ -328,7 +330,7 @@ def pytest_collection_modifyitems(config, items):
         else:
             group = "unit"
         item.add_marker(getattr(pytest.mark, group))
-    if config.getoption('--acceptance-stage') in ('08','09'):
+    if config.getoption('--acceptance-stage') in ('08','09','10'):
         order={'unit':0,'archive_integration':1,'mpp_fixtures':2,'confluence_live':3}
         items.sort(key=lambda item:(max(order[g] for g in GROUPS if item.get_closest_marker(g)),item.nodeid))
 
@@ -338,7 +340,7 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED, "09": STAGE09_REQUIRED}[stage]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED, "09": STAGE09_REQUIRED, "10": STAGE10_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -357,6 +359,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption('--acceptance-stage') == '10':
+        _stage10_report(session,exitstatus,root)
         return
     if config.getoption('--acceptance-stage') == '09':
         _stage09_report(session,exitstatus,root)
@@ -509,8 +514,13 @@ def fake_confluence(request):
             self.calls.append(("POST_PAGE", str(parent_id)))
             request.config._acceptance_counters["page_POST_fake"] += 1
             self.child = {"id": "test-child", "title": title, "version": {"number": 1},
+                          'ancestors':[{'id':str(parent_id)}],
                           "body": {"storage": {"value": storage}}}
             return deepcopy(self.child)
+
+        def find_child_pages(self, parent_id, title):
+            self.calls.append(('GET_CHILDREN', str(parent_id)))
+            return [deepcopy(self.child)] if self.child and self.child['title'] == title else []
 
         def list_attachments(self, page_id):
             if self.uploaded is None:
@@ -1410,3 +1420,128 @@ def _stage09_sources():
     return {str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
 STAGE09_REQUIRED.add('test_plan_rules.py::test_changed_hierarchy_blocks_even_when_wbs_and_uid_match')
 STAGE09_REQUIRED.add('test_identity_resume_e2e.py::test_real_binary_bootstrap_identity_resume_without_preliminary_save')
+
+
+STAGE10_REQUIRED = STAGE01_REQUIRED | {
+    'test_publish_resume.py::test_resume_rechecks_ab_flag_after_effect',
+    'test_publish_resume.py::test_schedule_mismatch_after_write_is_durable_without_rollback',
+    'test_publish_resume.py::test_legacy_operation_without_slug_or_binding_cannot_resume',
+    'test_publish_idempotency.py::test_same_source_profile_target_no_upload_put_or_duplicate_publication',
+    'test_publish_idempotency.py::test_new_expected_itogo_is_storage_only',
+    'test_publish_idempotency.py::test_confirmed_operation_never_repairs_changed_target',
+    'test_publish_idempotency.py::test_full_confirmation_links_and_legacy_writer_cannot_promote',
+    'test_publish_idempotency.py::test_operation_show_omits_storage_from_network_journal',
+    'test_publish_conflicts.py::test_foreign_attachment_version_after_exact_verification_blocks_put',
+    'test_publish_conflicts.py::test_409_changed_owned_macro_never_retries_patch',
+    'test_publish_conflicts.py::test_new_operation_same_source_cannot_overwrite_foreign_target',
+    'test_publish_conflicts.py::test_target_live_owner_across_process_and_release_after_kill',
+    'test_publish_conflicts.py::test_pending_child_title_cannot_be_adopted_from_foreign_macro',
+    'test_publish_prepare.py::test_archive_failure_never_writes_network',
+    'test_publish_prepare.py::test_false_attachment_verifier_blocks_put',
+    'test_publish_prepare.py::test_prepared_artifact_corruption_never_uploads',
+    'test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker',
+    'test_plugin_controls_live.py::test_installed_plugin_controls_live',
+    'test_rest_live.py::test_stage10_live_recovery_idempotency_and_child',
+} | {'test_publish_resume.py::test_effect_boundary_recovers_without_duplicate['+failure+'-'+when+'-'+effect+']'
+     for failure in ('crash','timeout') for when in ('before','after') for effect in ('upload','put','create')}
+STAGE10_REQUIRED |= {'test_publish_resume.py::test_journal_failure_has_no_false_success_and_resumes['+boundary+']'
+    for boundary in ('intent','upload_observation','put_observation','confirmation','mirror')}
+STAGE10_REQUIRED |= {'test_publish_resume.py::test_missing_or_corrupt_archive_blocks_every_effect['+artifact+']'
+    for artifact in ('representation_artifact_id','evidence_artifact_id','prepared_artifact_id','source')}
+STAGE10_REQUIRED |= {'test_publish_resume.py::test_real_process_death_http_reconciliation['+boundary+']'
+    for boundary in ('before_post','after_post','before_put','after_put','after_confirmation','hold_post')}
+STAGE10_REQUIRED |= {'test_publish_conflicts.py::test_foreign_managed_change_after_upload_is_conflict['+change+']'
+    for change in ('macro','summary','attachment','duplicate_macro')}
+STAGE10_REQUIRED |= {'test_publish_conflicts.py::test_bounded_409_preserves_unmanaged_neighbours['+str(n)+']' for n in (1,2,100)}
+STAGE10_REQUIRED |= {'test_publish_resume.py::test_transport_retries_only_get_with_configured_timeout['+method+']' for method in ('GET','POST','PUT')}
+STAGE10_REQUIRED |= {'test_child_page.py::test_legacy_child_lost_response_is_read_before_replay['+effect+']' for effect in ('page','attachment')}
+STAGE10_REQUIRED.add('test_publish_resume.py::test_archive_failure_after_post_retains_unknown_external_effect')
+STAGE10_REQUIRED.add('test_publish_resume.py::test_network_error_retains_safe_type_and_status')
+STAGE10_REQUIRED |= {'test_publish_resume.py::test_unobserved_effect_does_not_authorize_foreign_summary['+value+']' for value in ('False','True')}
+
+
+def _stage10_sources():
+    files=sorted(set([*SCRIPTS.glob('*.py'),*(SKILL_ROOT/'tests').glob('*.py'),
+        *(SKILL_ROOT/'references/profiles').glob('*.json'),*(SKILL_ROOT/'references/schemas').glob('*.json'),
+        *(MOFS_INDEX_ROOT/'mofs_index/plan').glob('*.py'),*(MOFS_INDEX_ROOT/'tests/plan').glob('*.py'),
+        SKILL_ROOT/'references/cli-contract.md',SKILL_ROOT/'references/operations-and-recovery.md',SKILL_ROOT/'tests/pytest.ini',
+        *(p for p in FIXTURES.rglob('*') if p.is_file() and '__pycache__' not in p.parts)]))
+    return {str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files if p.is_file()}
+
+
+def _stage10_report(session,exitstatus,root):
+    config=session.config
+    def read(name):
+        p=root/'reports'/name
+        return json.loads(p.read_text()) if p.is_file() else {}
+    initial=read('initial-state.json');external=read('external-checks.json');live=read('stage10-live.json')
+    controls=read('stage08-live.json');previous_live=read('stage09-live.json')
+    processes={b:read('stage10-process-'+b+'.json') for b in ('before_post','after_post','before_put','after_put','after_confirmation','hold_post')}
+    protected=initial.get('protected_hashes',{})
+    changed=[p for p,h in protected.items() if not Path(p).is_file() or hashlib.sha256(Path(p).read_bytes()).hexdigest()!=h]
+    hashes=_stage10_sources()
+    changed_during_run=sorted(set(hashes)^set(config._acceptance_start_hashes) | {
+        p for p,h in hashes.items() if config._acceptance_start_hashes.get(p)!=h})
+    results=config._acceptance_results
+    optional='test_rest_live.py::test_live_get_test_page'
+    passed=lambda r:r['status']=='passed' or (r['status']=='skipped' and r['test_id'].endswith(optional))
+    good=(int(exitstatus)==0 and bool(session.items) and bool(results) and all(passed(r) for r in results)
+        and bool(protected) and not changed and not changed_during_run and external.get('gate')=='passed'
+        and live.get('status')=='passed' and controls.get('status')=='passed' and previous_live.get('status')=='passed'
+        and all(p.get('POST')==p.get('PUT')==1 for p in processes.values()))
+    master=Path.home()/'WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md'
+    plan=master.parent/'plans/HF-plan_EditPlanConfluence_20261116.md'
+    schema=Path.home()/'WorkVault/Registries/EcosystemConfig.schema.json'
+    implemented={
+        'S/scripts/pipeline.py':'admitted lifecycle, intent before effects, exact/current read-back, resume, bounded 409 patch, unchanged/storage-only, child, AB guard, sticky schedule mismatch',
+        'S/scripts/plan_operation.py':'typed append-only network plan/intents/observations/stages with atomic receipt mirrors',
+        'S/scripts/plan_reconcile.py':'current page/attachment versions and managed fingerprints before replay; uncertain POST/PUT resolved by reads',
+        'S/scripts/plan_lock.py':'namespace/page/macro flock, live owner, release after process death',
+        'S/scripts/conf_client.py':'frozen timeout/retry, bounded GET-only retries, exact version=N without status, parent/title child lookup',
+        'S/scripts/gantt_attachment.py':'archived deterministic bytes, exact ID/version and timeout, no override',
+        'S/scripts/plan_verify.py':'canonical full macro and summary fingerprint; preservation checks',
+        'S/scripts/child_page.py':'exact parent/title/managed-state reconciliation after uncertain creation',
+        'S/scripts/plan_receipt.py':'validated published true/false/null and external-effect semantics',
+        'M/mofs_index/plan/schema.py':'only new 0012_publish_confirmation; previous definitions unchanged',
+        'M/mofs_index/plan/writer.py + query.py':'atomic verified_v1 observation/publication/snapshot/admission/profile/schedule links and result event; scoped read API',
+        'S/tests + M/tests/plan':'fault matrix, actual os._exit/SIGKILL over HTTP, concurrency, integrity/atomicity, live dedicated pages',
+        'S/references/operations-and-recovery.md + cli-contract.md':'numeric settings and recovery contract'}
+    limitations=[
+        'Only stage 10; stages 11–13 and full §20 acceptance are not claimed.',
+        'Live admitted plan is an explicit synthetic parsed fixture. Real binary MPP extraction limitations remain; schedule:not_verified. No arbitrary-plan schedule equality is claimed.',
+        'Flock protects processes sharing the configured WorkVault on this host; external writers are detected by fresh version/hash checks, not a distributed transaction.',
+        'Confirmation describes the exact versions at observation time. A later foreign edit can change the page.',
+        'Post-write schedule mismatch is retained as an error and never rolled back automatically.',
+        'The on-disk master is 0.5.1 with a separate §21; stage 10 follows agreed §20. Master/§21 were not edited and that separate BUGFIX is not declared accepted.',
+        'OwnCloud sync is not confirmed. Production DB/A–D/AB pages, Gateway, configs, crons, watchers and schedules were not changed.']
+    report={'stage':'10','gate':'passed' if good else 'failed','exit_code':int(exitstatus),
+        'base_commit':initial.get('base_commit'),'command':[sys.executable,'-m','pytest',*config.invocation_params.args],
+        'environment':{'python':sys.executable,'version':platform.python_version(),'cli_python':'/usr/bin/python3',
+            'PYTHONPATH':os.environ.get('PYTHONPATH'),'test_root':str(root)},
+        'master':{'path':str(master),'version':'0.5.1','sha256':hashlib.sha256(master.read_bytes()).hexdigest(),
+            'section20_sha256':hashlib.sha256(master.read_text().split('## 20. ')[1].split('## 21. ')[0].encode()).hexdigest()},
+        'plan':{'path':str(plan),'normative_prefix_sha256':hashlib.sha256(plan.read_text().split('## Журнал исполнения')[0].encode()).hexdigest()},
+        'config_contract_sha256':hashlib.sha256(schema.read_bytes()).hexdigest(),
+        'source_files':hashes,'source_tree_sha256':hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),
+        'implemented_files':implemented,'migrations':['0012_publish_confirmation'],'previous_migrations':'0001–0011 checksum equality tested',
+        'protected_files_checked':len(protected),'changed_protected_files':changed,'changed_during_test_run':changed_during_run,
+        'tests':results,'selected':len(session.items),'mandatory_test_ids':sorted(STAGE10_REQUIRED),'external_checks':external,
+        'live_evidence':'stage10-live.json','process_evidence':list(processes),'plugin_controls_evidence':'stage08-live.json',
+        'counters':{'live_stage10':{k:live.get(k) for k in ('POST','PUT','GET')},
+            'live_stage09':{k:previous_live.get(k) for k in ('POST','PUT')},'controls':{k:controls.get(k) for k in ('POST','PUT')},
+            'loopback_processes':{k:{name:v.get(name) for name in ('POST','PUT','GET')} for k,v in processes.items()},
+            'regression':config._acceptance_counters,'all_legacy_reader_calls':None},
+        'covered_requirements':['§20/AC-03','§20/AC-10…16','stage-10 network closure of §20/AC-04/09','confirmation part of §20/AC-27'],
+        'limitations':limitations,'generated_at':datetime.now(timezone.utc).isoformat()}
+    (root/'reports/stage-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    lines=['# Этап 10 — сетевые стадии, идемпотентность и восстановление','',
+        f"Gate: **{report['gate']}**; S rc={exitstatus}; selected={len(session.items)}; passed={sum(r['status']=='passed' for r in results)}.",'',
+        'prepared → archived → admitted → attachment_uploaded → attachment_verified → storage_written → storage_verified → confirmed.','']
+    lines+=['- `'+name+'`: '+value+'.' for name,value in implemented.items()]
+    lines+=['','Команда S:','','```text',' '.join(report['command']),'```','',
+        'Команды/rc/JUnit MofsIndex и восстановление внешнего комплекта: external-checks.json.',
+        'HTTP dedicated pages: stage10-live.json; plugin controls: stage08-live.json; реальный process-death/HTTP: stage10-process-*.json.',
+        '',f"Live stage10: {report['counters']['live_stage10']}. Проверенное дерево: `{report['source_tree_sha256']}`.",
+        '',f'Защищённых файлов: {len(protected)}, изменено: {len(changed)}. canon.md исключён из поставки; hash проверен.',
+        '', 'Ограничения:','']+['- '+value for value in limitations]
+    (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')

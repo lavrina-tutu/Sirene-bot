@@ -1,0 +1,17 @@
+[
+  {
+    "attempt": 1,
+    "verified": true,
+    "actual_sha256": "d805ab00d512d8a3b9339939424a52a4381414ee94129e974f3e1c4bd5079bfc"
+  },
+  {
+    "attempt": 2,
+    "verified": true,
+    "actual_sha256": "d805ab00d512d8a3b9339939424a52a4381414ee94129e974f3e1c4bd5079bfc"
+  },
+  {
+    "attempt": 3,
+    "verified": true,
+    "actual_sha256": "d805ab00d512d8a3b9339939424a52a4381414ee94129e974f3e1c4bd5079bfc"
+  }
+]

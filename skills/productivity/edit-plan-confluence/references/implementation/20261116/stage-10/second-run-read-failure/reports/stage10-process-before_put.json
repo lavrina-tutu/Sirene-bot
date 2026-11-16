@@ -1,0 +1,228 @@
+{
+  "boundary": "before_put",
+  "child_rc": 73,
+  "calls": [
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "POST",
+      "/rest/api/content/test-page/child/attachment"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/att?expand=version%2Ccontainer&version=1"
+    ],
+    [
+      "GET",
+      "/download/attachments/test-page/gantt-chart-b362d99436884d44b457c01efb2d32a3.json?api=v2&version=1"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/att?expand=version%2Ccontainer&version=1"
+    ],
+    [
+      "GET",
+      "/download/attachments/test-page/gantt-chart-b362d99436884d44b457c01efb2d32a3.json?api=v2&version=1"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/att?expand=version%2Ccontainer&version=1"
+    ],
+    [
+      "GET",
+      "/download/attachments/test-page/gantt-chart-b362d99436884d44b457c01efb2d32a3.json?api=v2&version=1"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/att?expand=version%2Ccontainer&version=1"
+    ],
+    [
+      "GET",
+      "/download/attachments/test-page/gantt-chart-b362d99436884d44b457c01efb2d32a3.json?api=v2&version=1"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/att?expand=version%2Ccontainer&version=1"
+    ],
+    [
+      "GET",
+      "/download/attachments/test-page/gantt-chart-b362d99436884d44b457c01efb2d32a3.json?api=v2&version=1"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "PUT",
+      "/rest/api/content/test-page"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/att?expand=version%2Ccontainer&version=1"
+    ],
+    [
+      "GET",
+      "/download/attachments/test-page/gantt-chart-b362d99436884d44b457c01efb2d32a3.json?api=v2&version=1"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ]
+  ],
+  "receipt": {
+    "attachment_version": 1,
+    "completed_stages": [
+      "prepared",
+      "archived",
+      "admitted",
+      "attachment_uploaded",
+      "attachment_verified",
+      "storage_written",
+      "storage_verified",
+      "confirmed"
+    ],
+    "dependency_count": 1,
+    "display_task_count": 3,
+    "error": null,
+    "exceptions": [],
+    "exit_code": 0,
+    "external_effect": "storage_written",
+    "item_id": "item_694888312b8a4f73b6f68f59f7023d36",
+    "mode": "publish",
+    "operation_id": "operation_27b9a7c49be2425b948ad16d386846f0",
+    "page_id": "test-page",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=test-page",
+    "project_slug": "test",
+    "published": true,
+    "schema_version": 1,
+    "snapshot_id": "snapshot_8480b03f33bd4bb9b3551c322ce5af52",
+    "source": {
+      "name": "synthetic-source.mpp",
+      "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+      "size_bytes": 57
+    },
+    "status": "published_with_warnings",
+    "task_count": 3,
+    "verification": {
+      "archive": "verified",
+      "attachment": "verified",
+      "schedule": {
+        "checks": [
+          {
+            "accepted_deviation": false,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "count": 1,
+            "example_entities": [
+              "model"
+            ],
+            "exit_code": 0,
+            "row": 5
+          },
+          {
+            "accepted_deviation": false,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ],
+            "exit_code": 0,
+            "row": 6
+          }
+        ],
+        "evidence_ids": [
+          "artifact_b4ee0295f72e486788f6a9c60d50ca14"
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "status": "not_verified"
+      },
+      "storage": "verified"
+    },
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "details_ref": "artifact:artifact_b4ee0295f72e486788f6a9c60d50ca14",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "details_ref": "artifact:artifact_b4ee0295f72e486788f6a9c60d50ca14",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+      }
+    ]
+  },
+  "busy": null,
+  "POST": 1,
+  "PUT": 1,
+  "GET": 31
+}

@@ -1,0 +1,117 @@
+{
+  "gate": "passed",
+  "checks": [
+    {
+      "name": "MofsIndex plan regression",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "-q",
+        "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/mofs-final",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/reports/mofs-junit.xml"
+      ],
+      "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+      "environment": {
+        "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+      },
+      "rc": 0,
+      "junit": "mofs-junit.xml",
+      "counts": {
+        "tests": 147,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "stdout": "mofs-stdout.txt",
+      "stderr": "mofs-stderr.txt"
+    }
+  ],
+  "delivery": {
+    "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-10/usertools/MofsIndex/manifest.json",
+    "files": 7,
+    "restore_patch_rc": 0,
+    "restore_patch_verified": true,
+    "restore_after_copy_verified": true,
+    "before_matches_stage09_delivery": true
+  },
+  "previous_migrations": "0001–0011 unchanged; checked by 0012 migration test",
+  "production_migration": false,
+  "counter_scope": {
+    "regression": "Raw pytest harness counters only; MPXJ_read/cache_hit/cache_miss zero entries are not measured totals of real subprocess readers. The total legacy reader count is unknown/null.",
+    "live_stage10_MPXJ_read": 0,
+    "live_stage10_source": "explicit synthetic parsed export; no MPXJ reader",
+    "per_binary_evidence": [
+      "stage09-real-diff.json",
+      "stage09-real-publish.json",
+      "stage09-real-bootstrap.json",
+      "stage09-live.json"
+    ],
+    "global_real_MPXJ_reads": null,
+    "global_real_cache_hits": null,
+    "global_real_cache_misses": null
+  },
+  "exploratory_live_probe": {
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "-q",
+      "-c",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "--test-root",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/live-probe"
+    ],
+    "rc": 0,
+    "passed": 1,
+    "POST": 5,
+    "PUT": 2,
+    "GET": 106,
+    "evidence": "probes/stage10-live.json",
+    "gate_scope": "exploratory earlier source state; final gate uses main run"
+  },
+  "previous_full_run": {
+    "rc": 0,
+    "passed": 569,
+    "gate": "passed",
+    "reason_for_rerun": "documentation preservation; executable code unchanged",
+    "report": "first-passed-run/reports/stage-report.json",
+    "tested_document": "first-passed-run/operations-tested.md",
+    "live_stage10": {
+      "POST": 5,
+      "PUT": 2,
+      "GET": 120
+    },
+    "controls": {
+      "POST": 12,
+      "PUT": 0
+    },
+    "stage09": {
+      "POST": 2,
+      "PUT": 1
+    }
+  },
+  "intermediate_live_read_failure": {
+    "full_run_rc": 1,
+    "passed": 568,
+    "failed": 1,
+    "source_tree_sha256": "57e4320d285a891e33609a167d636fd6deaa5fd791771dfae82863166d71734b",
+    "report": "second-run-read-failure/reports/stage-report.json",
+    "observed": "Correction stopped before injected PUT, attachment read-back unconfirmed. No false success. A separate retry then stopped during first target GET. Original underlying transport exception was not retained; no HTTP status is inferred.",
+    "read_only_diagnosis": "live-read-diagnosis.json",
+    "exact_version_checks_passed": 3,
+    "diagnosed_retry": {
+      "rc": 0,
+      "passed": 1,
+      "seconds": 17.18,
+      "report": "live-diagnosed/reports/junit.xml",
+      "transport": "live-diagnosed/reports/transport.json",
+      "POST": 5,
+      "PUT": 2,
+      "GET": 120
+    },
+    "sources_changed": false
+  }
+}

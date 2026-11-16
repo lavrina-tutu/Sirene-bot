@@ -1,0 +1,5 @@
+........................................................................ [ 48%]
+........................................................................ [ 97%]
+...                                                                      [100%]
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/reports/mofs-junit.xml -
+147 passed in 27.79s

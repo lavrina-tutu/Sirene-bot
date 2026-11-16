@@ -48,7 +48,9 @@ def test_create_child_page_resume_reuses_existing_page_id():
     )
     assert client.create_page.call_count == 1
 
-    client.get_page.return_value = {"id": "999"}  # resume GET of created page
+    # A receipt alone is not proof: resume must receive actual macro/storage.
+    storage=client.create_page.call_args.args[2]
+    client.get_page.return_value = {"id": "999",'version':{'number':1},'body':{'storage':{'value':storage}}}
     page2, macro_id2, param_id2, _ = create_child_page(
         client, "1", "Title", "<p>itogo</p>", attempt_id="attempt-resume-1",
     )
@@ -136,3 +138,22 @@ def test_old_confirmed_child_upload_receipt_not_proof(fake_confluence, prepared_
     with pytest.raises(UploadVerificationConflict):
         pipeline._upload_child_attachment_with_receipt(fake_confluence, "old-child", "test-child", "gantt-chart-old.json", {})
     assert not fake_confluence.calls
+
+
+@pytest.mark.parametrize('effect',['page','attachment'])
+def test_legacy_child_lost_response_is_read_before_replay(fake_confluence, prepared_input, monkeypatch, effect):
+    import pipeline
+    from test_publish_resume import ProcessDeath
+    client=fake_confluence
+    owner,name=(client,'create_page') if effect=='page' else (pipeline,'upload_gantt_json')
+    original=getattr(owner,name)
+    def lose(*args,**kwargs):
+        original(*args,**kwargs)
+        raise ProcessDeath()
+    monkeypatch.setattr(owner,name,lose)
+    with pytest.raises(ProcessDeath):
+        pipeline.create_child_with_plan(client,'test-page','лей',mpp_path=prepared_input,attempt_id='legacy-lost')
+    monkeypatch.setattr(owner,name,original)
+    result=pipeline.create_child_with_plan(client,'test-page','лей',mpp_path=prepared_input,attempt_id='legacy-lost')
+    assert result.page_id=='test-child'
+    assert sum(c[0]=='POST_PAGE' for c in client.calls)==sum(c[0]=='POST_ATTACHMENT' for c in client.calls)==1

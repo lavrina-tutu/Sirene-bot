@@ -1,0 +1,14 @@
+[
+  {
+    "pid": 273443,
+    "phase": "archive regression",
+    "open_fds": 17,
+    "memory": [
+      "VmRSS:\t   62708 kB",
+      "Threads:\t1"
+    ],
+    "open_files_limit": [
+      "Max open files            524288               524288               files     "
+    ]
+  }
+]

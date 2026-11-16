@@ -1,0 +1,27 @@
+{
+  "status": "not_run",
+  "parent_id": "519501810",
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/rest/api/content/519501810",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572739",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    }
+  ],
+  "source": "explicit synthetic parsed export; no binary reader measurement",
+  "schedule": "not_verified",
+  "page_id": "537572739",
+  "POST": 1,
+  "PUT": 0,
+  "GET": 2
+}

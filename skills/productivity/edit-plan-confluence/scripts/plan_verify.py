@@ -57,6 +57,43 @@ def _canonical_storage(storage: str) -> str:
     return ET.canonicalize(wrapped.replace("&nbsp;", "&#160;"))
 
 
+def managed_state(storage: str) -> dict:
+    """Fingerprint only the owned macro and summary blocks, never the neighbour.
+
+    XML canonicalization tolerates the server's serialization. The complete
+    macro (not just its three identifiers) and summary markup are protected.
+    """
+    from html import unescape
+    macro = find_macros(storage)
+    if len(macro) > 1:
+        raise ValueError('target_conflict')
+    fragment = storage[slice(*macro[0].span)] if macro else ''
+    root = ET.fromstring('<root xmlns:ac="http://atlassian.com/content" '
+        'xmlns:ri="http://atlassian.com/resource/identifier">' + storage.replace('&nbsp;', '&#160;') + '</root>')
+    blocks = []
+    def collect(node):
+        text = ''.join(node.itertext())
+        if not re.search(r'Итого\s*:|Трудозатрат', unescape(text), re.I):
+            return
+        # The outer paragraph/block owns its formatting as well as its values.
+        if node.tag.split('}')[-1] in ('p', 'h1', 'h2', 'h3', 'li', 'td') or not list(node):
+            copy = ET.fromstring(ET.tostring(node, encoding='unicode'))
+            copy.tail = None
+            blocks.append(ET.canonicalize(ET.tostring(copy, encoding='unicode')))
+        else:
+            for child in node:
+                collect(child)
+    collect(root)
+    prefix = storage[:macro[0].span[0]] if macro else ''
+    # Also guard unwrapped/raw text markers; a malformed legacy summary is
+    # owned content too and must not be silently overwritten on resume.
+    marker_texts = [text.strip() for node in root.iter() for text in (node.text,node.tail)
+                    if text and re.search(r'Итого\s*:|Трудозатрат',unescape(text),re.I)]
+    value = {'macro': _canonical_storage(fragment), 'blocks': blocks,'marker_texts':marker_texts,
+             'summary_above_macro': bool(re.search(r'Итого\s*:', prefix, re.I))}
+    return {**value, 'sha256': hashlib.sha256(__import__('json').dumps(value, sort_keys=True).encode()).hexdigest()}
+
+
 def verify_storage_observation(
     storage: str,
     *,

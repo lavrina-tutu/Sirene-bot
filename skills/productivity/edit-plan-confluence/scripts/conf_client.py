@@ -2,12 +2,13 @@
 from __future__ import annotations
 
 import json
+import time
 from typing import Any
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
-from env import CONFLUENCE_BASE, get_token
+from env import CONFLUENCE_BASE, get_token, load_settings
 
 
 class ConfluenceError(RuntimeError):
@@ -18,9 +19,34 @@ class ConfluenceError(RuntimeError):
 
 
 class ConfluenceClient:
-    def __init__(self, token: str | None = None, base_url: str = CONFLUENCE_BASE):
+    def __init__(self, token: str | None = None, base_url: str = CONFLUENCE_BASE,
+                 *, timeout=None, retry_limit=None):
         self.base_url = base_url.rstrip("/")
         self.token = token or get_token()
+        settings = load_settings().values
+        self.configure_transport(settings, timeout=timeout, retry_limit=retry_limit)
+
+    def configure_transport(self, settings, *, timeout=None, retry_limit=None):
+        self.timeout = float(timeout if timeout is not None else settings['HTTP_TIMEOUT_SECONDS'])
+        self.retry_limit = int(retry_limit if retry_limit is not None else settings['HTTP_RETRY_LIMIT'])
+        if not 1 <= self.timeout <= 86400 or not 0 <= self.retry_limit <= 10:
+            raise ValueError('invalid HTTP timeout/retry limit')
+
+    def _read(self, req):
+        """Only safe reads retry here. POST/PUT uncertainty belongs to reconcile."""
+        for attempt in range(self.retry_limit + 1):
+            try:
+                with urlopen(req, timeout=self.timeout) as resp:
+                    return resp.read()
+            except HTTPError as exc:
+                error = ConfluenceError(exc.code, exc.read().decode('utf-8', errors='replace'))
+                retry = exc.code in (408, 429, 500, 502, 503, 504)
+                if req.get_method() != 'GET' or not retry or attempt == self.retry_limit:
+                    raise error from exc
+            except (URLError, TimeoutError, OSError):
+                if req.get_method() != 'GET' or attempt == self.retry_limit:
+                    raise
+            time.sleep(min(0.25 * (attempt + 1), 1))
 
     def _request(
         self,
@@ -41,12 +67,7 @@ class ConfluenceClient:
         if headers:
             hdrs.update(headers)
         req = Request(url, data=data, headers=hdrs, method=method)
-        try:
-            with urlopen(req, timeout=120) as resp:
-                raw = resp.read()
-        except HTTPError as exc:
-            body = exc.read().decode("utf-8", errors="replace")
-            raise ConfluenceError(exc.code, body) from exc
+        raw = self._read(req)
         if not raw:
             return None
         return json.loads(raw.decode("utf-8"))
@@ -119,9 +140,7 @@ class ConfluenceClient:
         if version is not None:
             if type(version) is not int or version < 1:
                 raise ValueError("exact attachment version required")
-            # `any` includes the just-written current version as well as
-            # historical content. The returned version is checked below.
-            query.update({"status": "any", "version": str(version)})
+            query['version'] = str(version)
         return self._request(
             "GET", f"/rest/api/content/{attach_id}", query=query,
             headers={"Cache-Control": "no-cache"},
@@ -166,9 +185,19 @@ class ConfluenceClient:
         if query:
             url = f"{url}?{urlencode(query)}"
         req = Request(url, headers={"Authorization": f"Bearer {self.token}", "Cache-Control": "no-cache"}, method="GET")
-        try:
-            with urlopen(req, timeout=120) as resp:
-                return resp.read()
-        except HTTPError as exc:
-            body = exc.read().decode("utf-8", errors="replace")
-            raise ConfluenceError(exc.code, body) from exc
+        return self._read(req)
+
+    def find_child_pages(self, parent_id, title):
+        """Exact parent/title lookup after an uncertain page creation, all pages."""
+        out, start = [], 0
+        while True:
+            data = self._request('GET', f'/rest/api/content/{parent_id}/child/page',
+                query={'limit':'200', 'start':str(start), 'expand':'body.storage,version,space,ancestors'},
+                headers={'Cache-Control':'no-cache'})
+            rows = data.get('results', [])
+            out.extend(row for row in rows if row.get('title') == title)
+            if not data.get('_links', {}).get('next'):
+                return out
+            if not rows:
+                raise ValueError('child pagination did not advance')
+            start += len(rows)

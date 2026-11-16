@@ -1,0 +1,3 @@
+...                                                                      [100%]
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/live-sequence/reports/junit.xml -
+3 passed in 75.03s (0:01:15)

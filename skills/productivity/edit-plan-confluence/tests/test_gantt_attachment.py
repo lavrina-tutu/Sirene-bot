@@ -45,7 +45,7 @@ def test_upload_uses_post_data(monkeypatch):
     assert ver.version == 5
     assert ver.attach_id == "9"
     assert calls[0][1] == "POST"
-    assert "/data?conflictPolicy=override" in calls[0][0]
+    assert calls[0][0].endswith('/data') and 'conflictPolicy' not in calls[0][0]
 
 
 def test_verify_uploaded_matches_version_specific_get():
@@ -95,7 +95,7 @@ def test_download_exact_historical_version_even_if_latest_changed(monkeypatch):
     monkeypatch.setattr(client, "download_attachment", download)
     assert client.download_attachment_version("P1", "A1", "gantt.json", 3) == b"version 3"
     assert request.call_args.kwargs["query"]["version"] == "3"
-    assert request.call_args.kwargs["query"]["status"] == "any"
+    assert 'status' not in request.call_args.kwargs['query']
     download.assert_called_once_with("P1", "gantt.json", 3)
 
 

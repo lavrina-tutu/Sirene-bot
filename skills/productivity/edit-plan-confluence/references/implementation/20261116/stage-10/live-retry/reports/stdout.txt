@@ -1,0 +1,69 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________ test_stage10_live_recovery_idempotency_and_child _______________
+
+tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/live-retry/pytest-tmp/test_stage10_live_recovery_ide0')
+request = <FixtureRequest for <Function test_stage10_live_recovery_idempotency_and_child>>
+stage09_export = {'assignments': [], 'calendars': [{'calendar_key': 'cal', 'exceptions': [], 'exceptions_quality': {'count': 0, 'reason...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc101ec9820>
+
+    @pytest.mark.confluence_live
+    def test_stage10_live_recovery_idempotency_and_child(tmp_path, request, stage09_export, monkeypatch):
+        """Real REST on newly created acceptance targets; no production A–D/AB."""
+        import copy
+        import hashlib
+        import json
+        from pathlib import Path
+        from datetime import datetime, timezone
+        from urllib.parse import urlsplit
+        import pipeline, conf_client, gantt_attachment
+        from conf_client import ConfluenceClient
+        from env import load_confluence_env
+        from plan_context import PlanContext
+        from mofs_index.db import connect_durable
+        from mofs_index.plan import query as q, writer as w
+        from prepared_plan import canonical_bytes
+        from plan_archive import store_artifact
+        from macro import find_macro
+        from test_publish_resume import ProcessDeath
+        root=getattr(request.config,'_acceptance_root',tmp_path)
+        folder=root/'live-stage10';folder.mkdir(exist_ok=True)
+        calls=[];status={'status':'not_run','parent_id':'519501810','calls':calls,
+            'source':'explicit synthetic parsed export; no binary reader measurement', 'schedule':'not_verified'}
+        def trace(original):
+            def invoke(req,*args,**kwargs):
+                calls.append({'method':req.get_method(),'path':urlsplit(req.full_url).path,'query':urlsplit(req.full_url).query})
+                return original(req,*args,**kwargs)
+            return invoke
+        monkeypatch.setattr(conf_client,'urlopen',trace(conf_client.urlopen))
+        monkeypatch.setattr(gantt_attachment,'urlopen',trace(gantt_attachment.urlopen))
+        def writes():return sum(c['method'] in ('POST','PUT') for c in calls)
+        token=load_confluence_env(Path.home()/'USERTOOLS/ConfluenceSync/.env')['CONFLUENCE_TOKEN']
+        client=ConfluenceClient(token=token)
+        context=PlanContext.resolve(db=tmp_path/'state/index.sqlite',workvault=tmp_path/'WorkVault',cache_dir=tmp_path/'cache')
+        source=tmp_path/'synthetic.mpp';source.write_bytes(b'Stage 10 synthetic parsed plan; no claim of MPP extraction')
+        data=copy.deepcopy(stage09_export);data['provenance'].update(sha256=hashlib.sha256(source.read_bytes()).hexdigest(),size_bytes=source.stat().st_size)
+        conn=None
+        try:
+            parent=client.get_page('519501810')
+            created=client.create_page('EditPlanConfluence stage 10 '+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f'),
+                parent['space']['key'],'<p>Stage 10 acceptance neighbour</p>','519501810')
+            page_id=str(created['id']);status['page_id']=page_id
+            assert page_id not in ('519501810','519492935','496600693','506248940')
+            def prepare(**kwargs):
+                return pipeline.prepare_publish(client,page_id,source,project_slug='stage10-live-test',timezone_hint='Europe/Moscow',
+                    context=context,export=data,**kwargs)
+            def resume(operation):
+                p=pipeline.prepare_publish(client,operation_id=operation,db_path=context.db,workvault=context.workvault,cache_dir=context.cache_dir)
+                assert p.exit_code==0,p.receipt
+                return pipeline.publish_prepared(client,p)
+>           first=prepare();assert first.exit_code==0,first.receipt
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared'], 'dependency_count': None, 'display_task_count': None, ...}
+E           assert 5 == 0
+E            +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_a2ec3563fb2d4dfaa2e19edb468a8e95', 'item_i...b79cd716975fd6f', attempt_id='attempt_fb2fc39dc1d248fdb36df47996ece16f'), result_id=None, conversion=None, target=None).exit_code
+
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_rest_live.py:71: AssertionError
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/live-retry/reports/junit.xml -
+=========================== short test summary info ============================
+FAILED hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_rest_live.py::test_stage10_live_recovery_idempotency_and_child
+1 failed in 2.09s

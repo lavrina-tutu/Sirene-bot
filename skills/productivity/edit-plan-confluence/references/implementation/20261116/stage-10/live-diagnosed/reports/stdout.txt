@@ -1,0 +1,4 @@
+.                                                                        [100%]
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage10-20261116T193250/stage-10/live-diagnosed/reports/junit.xml -
+1 passed in 17.18s
+{"rc": 0, "exceptions": []}

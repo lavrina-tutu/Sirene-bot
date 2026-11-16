@@ -134,3 +134,58 @@ versions['receipt']['known_at']  # момент вызова — снимок з
 - `plan_fts` (R-027) разрешает "последний" через typed SQL `list_versions`/
   `diff_versions`, не через FTS rank — FTS используется только для
   полнотекстового поиска по MD-телу, не для разрешения версии.
+
+## История поступлений, snapshot и публикаций (§20, этап 06)
+
+«Покажи хронологию планов» и «какие файлы загрузили сегодня» — история
+**поступлений**, включая повторные байты, ошибки и незавершённые элементы.
+Использовать тот же typed API `mofs_index.plan.history`, что и CLI скилла
+edit-plan-confluence. `plan_history.py` по-прежнему импортирует историю вложений;
+его `import_history()` не является запросом истории поступлений.
+
+```python
+from mofs_index.plan.history import history, HistoryRequest
+answer = history(conn, HistoryRequest(
+    project_slug='trisigma', view='files', time_field='received',
+    since='2026-11-16T00:00:00+03:00', until='2026-11-17T00:00:00+03:00',
+    limit=100,
+))
+# Следующая страница: тот же запрос, cursor=answer['result']['next_cursor'].
+```
+
+CLI (глобальные пути перед подкомандой):
+
+```text
+/usr/bin/python3 /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py history --project-slug trisigma --view files --time-field received --since 2026-11-16T00:00:00+03:00 --until 2026-11-17T00:00:00+03:00
+```
+
+Для «сегодня» вычислять локальные границы суток пользователя (Europe/Moscow,
+если пользователь не задал другую зону), сохраняя offset. Период — **[since, until)**;
+дата без времени/offset отклоняется. `files` по умолчанию фильтруется по
+`received`, `snapshots` — по `recorded`, `publications` — по `published`.
+`--order source` меняет только сортировку; фильтр остаётся прежним.
+
+Различать received/observed, frozen, recorded, source_version_date, status_date,
+published и verified. Ни имя файла, ни время импорта не восстанавливают дату
+версии или исторической публикации. Явная дата версии сравнивается на календарной
+шкале UTC с полуночью; это не устанавливает таймзону задач MPP.
+
+`result.unknown_time_count` — количество записей с неизвестным выбранным временем
+в области проекта/lineage; при фильтре они исключены. При source-сортировке
+`records` содержит известные даты, `unknown_source_dates` — отдельную часть той же
+страницы с неизвестными датами; `unknown_source_date_count` — их общее количество
+после фильтра. Для полного обхода читать обе части каждой страницы и непрозрачный
+`next_cursor`. Cursor сохраняет границу набора и ключ последней записи, требует
+неизменных фильтров/порядка; новые поступления не сдвигают страницы старого обхода.
+
+Поступления содержат имена, locator, hash, времена, item/operation/batch/snapshot ID,
+результат и ошибку. Snapshot не дублируется при повторном поступлении. Публикации
+содержат точный publication ID, page/attachment/version, observed/published/recorded
+и сохранённый trust. NULL `snapshot.published_at` не доказывает отсутствие связанной
+публикации. Без нового наблюдения страницы формулировать «последняя известная
+регистрация на момент …», явно указывая trust; не объявлять её текущей подтверждённой.
+
+«Что не загрузилось в пакете?» → `batch show --batch-id ID --view errors`;
+«почему нужно решение?» → `operation show --operation-id ID`. Принятие proposal
+только регистрирует решение; обработку запускает явный `batch resume --retry-decisions`.
+История не подтверждает идентичность UID и не запускает reader/сеть/публикацию.

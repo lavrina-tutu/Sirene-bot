@@ -108,3 +108,35 @@ def finish_archive_operation(conn, operation: ImportOperation, receipt: dict, *,
         w.record_operation_event(conn, operation.attempt_id, "receipt_written", detail="save.json")
     w.set_attempt_status(conn, operation.attempt_id, "confirmed" if receipt["exit_code"] == 0 else "failed")
     return receipt
+
+
+def show_operation(operation_id, *, db_path=None, workvault=None, cache_dir=None):
+    from plan_batch import _connect, _db, _check_paths, _decision_details
+    from plan_decision import action_error
+    conn = None
+    try:
+        conn = _connect(_db(db_path=db_path))
+        operation = q.get_operation(conn, operation_id)
+        item = q.get_operation_item(conn, operation_id)
+        if not operation or not item:
+            return action_error('show_operation', 'operation_not_found', operation_id=operation_id)
+        context = json.loads(operation['context_json'])
+        _check_paths(context, workvault=workvault, cache_dir=cache_dir)
+        events = q.get_operation_events(conn, operation_id)
+        from plan_reconcile import saved_operation_receipt
+        saved = saved_operation_receipt(conn, operation_id)
+        completed = saved['completed_stages'] if saved else (['input_frozen'] if item['frozen_at'] else [])
+        if not saved and item['snapshot_id']:
+            completed.append('snapshot_committed')
+        state = _decision_details(conn, operation_id) if item['batch_id'] else {'reasons': [], 'proposals': [], 'decisions': [], 'decision_ready': False}
+        return {'schema_version': 1, 'action': 'show_operation', 'exit_code': 0,
+                'operation_id': operation_id, 'item_id': item['item_id'], 'batch_id': item['batch_id'],
+                'source_mpp_sha256': item['source_mpp_sha256'], 'snapshot_id': item['snapshot_id'],
+                'status': item['status'], 'preparation_revision': None, 'identity_requirements': [],
+                'completed_stages': completed,
+                **state, 'events': events, 'published': False, 'error': None}
+    except Exception as exc:
+        return action_error('show_operation', getattr(exc, 'code', 'archive_unavailable'), getattr(exc, 'exit_code', 5), operation_id=operation_id)
+    finally:
+        if conn is not None:
+            conn.close()

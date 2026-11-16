@@ -162,3 +162,83 @@ not_started; saved_with_warnings входит в saved. Приоритет ко�
 Нет сети, новых сервисов, registry.json, БД, кронов или наблюдателей.
 Регистрация/потребление решений batch-item и `--retry-decisions` относятся к этапу 06
 и пока не принимаются CLI. Состояние needs_decision при обычном resume сохраняется.
+
+## Этап 06: решения batch-item и история
+
+Все глобальные пути `--db`, `--workvault`, `--cache-dir` стоят перед подкомандой.
+
+```text
+operation show --operation-id ID
+resume --operation-id ID --accept-proposal PROPOSAL [--rule-scope once] --reason TEXT
+batch resume --batch-id ID [--retry-failed] [--retry-decisions]
+history --project-slug SLUG [--view files|snapshots|publications]
+        [--order ingested|source] [--lineage-id ID]
+        [--since ISO-TIMESTAMP] [--until ISO-TIMESTAMP]
+        [--time-field received|recorded|source|published] [--limit N] [--cursor CURSOR]
+```
+
+`operation show` — read-only состояние: operation/item/batch/source/snapshot,
+completed_stages, preparation_revision (null до подготовки публикации),
+identity_requirements (пока []), reasons, unresolved_reasons, proposals, decisions,
+decision_ready и события. Старые proposals остаются в списке с active=false.
+`batch show --view errors` включает failed/needs_decision/not_started, proposals,
+решения и decision_ready.
+
+Единственные причины batch needs_decision:
+`archive_project_confirmation_required`, `archive_lineage_confirmation_required`.
+Только явные неподтверждённые противоречащие provenance-сведения дают proposal.
+Подтверждённые противоречия дают failed/binding_conflict; неподходящая lineage
+также не согласуется общим согласием. Новизна MPP, неизвестные mapping/таймзона,
+неполнота расписания не создают proposal. Подтверждение lineage не устанавливает
+соответствие UID.
+
+Регистрация берёт ту же flock-блокировку, проверяет frozen bytes, manifest и
+контекст. В одной транзакции записываются решение с автором/источником/временем/
+непустым основанием и событие decision_registered. Reader, snapshot-вставка и
+сеть не запускаются, item остаётся needs_decision. Отдельный результат v1:
+`action:register_batch_decision`, `status:decision_registered`, `exit_code:0`,
+batch_id/item_id/operation_id/proposal_id/decision_id/manifest_sha256,
+`decision_ready`, `published:false`, `error:null`. Код 0 означает регистрацию.
+Повтор с тем же содержанием/основанием возвращает тот же decision_id без события.
+Изменение основания — `decision_conflict / 4`; чужой/устаревший proposal —
+`proposal_context_mismatch / 4`; живой обработчик — `batch_busy / 4`.
+
+Обычный одиночный resume, --timezone-hint, --mapping-revision и --rule-scope project
+для batch-item: `batch_context_immutable / 4`, next_action — новый пакет.
+Сочетание взаимоисключающих форм или пустое основание — 2.
+Только `batch resume --retry-decisions` проверяет актуальность и потребляет
+зарегистрированные решения в исходном порядке. Без всех нужных решений item
+остаётся needs_decision. Новое свидетельство создаёт новый proposal; прежние
+решение/события сохраняются. Обычный batch resume решение не потребляет.
+Все изменения frozen контекста требуют нового batch ID; изменённый запрос со
+старым ID — `batch_manifest_conflict / 4`. Общие коды batch 2/4/5/6/0 сохраняются.
+
+History возвращает результат запроса v1 (`action:history`, parameters, result,
+quality, error), без квитанции записи. Defaults time-field: files=received,
+snapshots=recorded, publications=published. Период [since, until), timestamps
+обязательно с Z/offset, since < until; limit 1..1000 (default 100).
+Некорректные запрос/период/cursor — 2; недоступная история — 5.
+Фильтрация и порядок независимы. source_version_date — явно указанная календарная
+дата на шкале UTC (00:00), без утверждения о таймзоне расписания. status_date и
+имя файла её не заменяют. Неизвестное выбранное время исключено при фильтре и
+посчитано в result.unknown_time_count. При order=source неизвестные даты идут
+отдельно в result.unknown_source_dates, известные — в records; обе части составляют
+одну страницу. unknown_source_date_count — общее число после фильтра.
+
+Cursor — непрозрачный ключ с версией, fingerprint фильтров/порядка, границей
+набора по таблицам и последним ключом (время/ordinal/точный ID). Следующая страница
+требует того же запроса; limit можно менять. Поздние backdated-поступления не
+включаются в начатый обход. Новый запрос видит их. При параллельном завершении
+элементов текущее состояние может уточняться; cursor фиксирует состав, а не полную
+копию меняющегося состояния. История читает SQLite одной read-транзакцией.
+
+Files сохраняет повторные поступления и ошибки, snapshots выдаёт уникальные
+снимки, publications — отдельные регистрации с trust и точными ID. Публикации
+снимка определяются через связи, а не NULL snapshot.published_at. Время импорта
+не подставляется вместо неизвестного published_at. История не повышает trust.
+`plan_history.py` остаётся владельцем archive-history/import_history.
+
+Для files `recorded_at` — время собственного события snapshot_committed данного
+поступления, включая дедупликацию; `snapshot_recorded_at` — время создания
+переиспользованного snapshot. Эти времена могут различаться. Публикационные
+связи возвращают confidence/evidence отдельно от trust публикации.

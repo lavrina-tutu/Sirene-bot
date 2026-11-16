@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "tests/plan",
+    "--basetemp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage06/stage-06/mofs-tmp",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage06/stage-06/reports/mofs-junit.xml",
+    "-q",
+    "--tb=short"
+  ],
+  "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+  "rc": 0,
+  "tests": 90,
+  "passed": 90,
+  "failures_errors": 0,
+  "skipped": 0,
+  "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+}

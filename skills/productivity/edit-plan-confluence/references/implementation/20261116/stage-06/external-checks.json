@@ -1,0 +1,82 @@
+{
+  "mofs_tests": {
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "tests/plan",
+      "--basetemp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage06/stage-06/mofs-tmp",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage06/stage-06/reports/mofs-junit.xml",
+      "-q",
+      "--tb=short"
+    ],
+    "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+    "rc": 0,
+    "tests": 90,
+    "passed": 90,
+    "failures_errors": 0,
+    "skipped": 0,
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+  },
+  "q_tests": {
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "-c",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_history_queries.py::test_q_history_integration_uses_same_api",
+      "--test-root",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage06/stage-06/q-contour",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage06/stage-06/reports/q-junit.xml",
+      "-q",
+      "--tb=short"
+    ],
+    "cwd": "/home/tkachenkoav/hermes-workspace/skills/research/workvault-rag",
+    "rc": 0,
+    "tests": 1,
+    "passed": 1,
+    "failures_errors": 0,
+    "skipped": 0,
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+    "scope": "Q has no independent suite; execute its actual history snippet on isolated typed API fixtures in S"
+  },
+  "restoration": [
+    {
+      "component": "MofsIndex",
+      "files": 6,
+      "patch_command": [
+        "patch",
+        "--batch",
+        "-p1",
+        "-i",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-06/usertools/MofsIndex/changes.patch"
+      ],
+      "patch_rc": 0,
+      "patch_restore_verified": true,
+      "after_copy_verified": true,
+      "working_after_match": true,
+      "stdout": "patching file mofs_index/plan/history.py\npatching file mofs_index/plan/query.py\npatching file mofs_index/plan/schema.py\npatching file mofs_index/plan/writer.py\npatching file tests/plan/test_batch_decisions.py\npatching file tests/plan/test_migrate.py\n",
+      "stderr": ""
+    },
+    {
+      "component": "workvault-rag",
+      "files": 2,
+      "patch_command": [
+        "patch",
+        "--batch",
+        "-p1",
+        "-i",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-06/usertools/workvault-rag/changes.patch"
+      ],
+      "patch_rc": 0,
+      "patch_restore_verified": true,
+      "after_copy_verified": true,
+      "working_after_match": true,
+      "stdout": "patching file SKILL.md\npatching file references/plan-queries.md\n",
+      "stderr": ""
+    }
+  ],
+  "gate": "passed"
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Successful batch-item decision registration (not a save receipt)",
+  "type": "object",
+  "required": ["schema_version", "action", "status", "exit_code", "batch_id", "item_id", "operation_id", "proposal_id", "decision_id", "manifest_sha256", "decision_ready", "published", "error"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "action": {"const": "register_batch_decision"},
+    "status": {"const": "decision_registered"},
+    "exit_code": {"const": 0},
+    "batch_id": {"type": "string", "minLength": 1},
+    "item_id": {"type": "string", "minLength": 1},
+    "operation_id": {"type": "string", "minLength": 1},
+    "proposal_id": {"type": "string", "minLength": 1},
+    "decision_id": {"type": "string", "minLength": 1},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "decision_ready": {"type": "boolean"},
+    "published": {"const": false},
+    "error": {"type": "null"}
+  }
+}

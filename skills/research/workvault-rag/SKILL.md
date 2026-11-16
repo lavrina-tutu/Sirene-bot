@@ -120,6 +120,17 @@ Items без разделения "Имя: задача" — общий спис
 
 ## Планы (gantt/mpp)
 
+Для «хронология планов», «какие файлы загрузили сегодня» использовать
+`from mofs_index.plan.history import history, HistoryRequest` — тот же typed API,
+что `edit-plan-confluence history`. По умолчанию view=files (все поступления,
+включая дубликаты/ошибки), snapshots — уникальные снимки, publications — регистрации
+с сохранённым trust. Разделять received/recorded/source/published; «сегодня» задавать
+локальными границами суток с offset, полуинтервалом [since, until). Порядок source
+не меняет поле фильтра. Неизвестные времена и даты выводятся отдельно; cursor
+передавать непрозрачно. Примеры и поля ответа — `references/plan-queries.md`,
+раздел «История поступлений». Сеть/reader для запроса истории не нужны.
+
+
 Архив слепков плана (MofsIndex `mofs_index/plan/`) — SQLite-истина по версиям плана
 проекта (Confluence Gantt JSON + сохранённые MPP), typed query API (`mofs_index/plan/
 query.py`), НЕ свободный SQL. Пилот — проект `zd` (`Entities/zd/Pages/zd.ganttchart.md`,

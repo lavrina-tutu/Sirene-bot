@@ -1,0 +1,717 @@
+--- /dev/null
++++ b/mofs_index/plan/history.py
+@@ -0,0 +1,212 @@
++"""Typed, read-only history. Arrivals, unique snapshots and publications stay distinct.
++
++Dates explicitly supplied by the user are calendar dates on the UTC date scale
++for source filtering; this does not assert a timezone for task dates. Status dates
++and filenames are never substituted for a missing source version date.
++"""
++from __future__ import annotations
++
++import base64
++import hashlib
++import json
++from dataclasses import dataclass
++from datetime import date, datetime, timezone
++
++from . import query as q
++
++
++class HistoryQueryError(ValueError):
++    pass
++
++
++def timestamp(value):
++    if not isinstance(value, str) or 'T' not in value:
++        raise HistoryQueryError('timezone_aware_timestamp_required')
++    try:
++        result = datetime.fromisoformat(value.replace('Z', '+00:00'))
++        if result.utcoffset() is None:
++            raise ValueError()
++    except ValueError as exc:
++        raise HistoryQueryError('timezone_aware_timestamp_required') from exc
++    return result.astimezone(timezone.utc).isoformat(timespec='microseconds')
++
++
++def _time(value, *, source=False):
++    if value is None:
++        return None
++    try:
++        if source and len(value) == 10:
++            value = date.fromisoformat(value).isoformat() + 'T00:00:00+00:00'
++        return timestamp(value)
++    except (ValueError, TypeError):
++        return None  # Historical unknown/naive time is not invented.
++
++
++@dataclass(frozen=True)
++class HistoryRequest:
++    project_slug: str
++    view: str = 'files'
++    order: str = 'ingested'
++    lineage_id: str | None = None
++    since: str | None = None
++    until: str | None = None
++    time_field: str | None = None
++    limit: int = 100
++    cursor: str | None = None
++
++
++def _encode(value):
++    return base64.urlsafe_b64encode(json.dumps(value, sort_keys=True, separators=(',', ':')).encode()).decode()
++
++
++def _decode(value):
++    try:
++        if len(value) > 16384:
++            raise ValueError()
++        data = json.loads(base64.b64decode(value.encode(), altchars=b'-_', validate=True))
++        if not isinstance(data, dict) or data.get('version') != 1:
++            raise ValueError()
++        return data
++    except (ValueError, TypeError, UnicodeError) as exc:
++        raise HistoryQueryError('invalid_history_cursor') from exc
++
++
++def _load(conn, slug, view, marks):
++    """One arrival per item; one snapshot per snapshot; one publication per ID."""
++    publications = q._records(conn, 'SELECT u.rowid AS sequence,u.* FROM plan_publication u JOIN plan p USING(plan_id) '
++        'WHERE u.rowid<=? AND p.project_slug=?', (marks['publications'], slug))
++    links = q._records(conn, 'SELECT l.* FROM plan_publication_snapshot l JOIN plan_publication u USING(publication_id) '
++        'JOIN plan p ON p.plan_id=u.plan_id WHERE l.rowid<=? AND p.project_slug=?', (marks['links'], slug))
++    commits = q._records(conn, 'SELECT a.item_id,e.created_at FROM plan_attempt_event e '
++        "JOIN plan_import_attempt a USING(attempt_id) WHERE e.event_kind='snapshot_committed' AND e.rowid<=?",
++        (marks['events'],))
++    recorded = {row['item_id']: row['created_at'] for row in commits}
++    items = q._records(conn, 'SELECT i.rowid AS sequence,i.*,o.context_json,p.project_slug FROM plan_import_item i '
++        'JOIN plan_operation o USING(operation_id) LEFT JOIN plan p ON p.plan_id=i.plan_id '
++        'WHERE i.rowid<=? AND (p.project_slug=? OR i.plan_id IS NULL)', (marks['files'], slug))
++    for row in items:
++        context = json.loads(row.pop('context_json'))
++        saved = context.get('save', {})
++        row['project_slug'] = row['project_slug'] or saved.get('project_slug')
++        row['lineage_id'] = row['lineage_id'] or saved.get('lineage_id')
++    # Metadata history never loads full normalized project JSON into memory.
++    columns = [row[1] for row in conn.execute('PRAGMA table_info(plan_snapshot)') if row[1] != 'source_json']
++    snapshots = q._records(conn, 'SELECT s.rowid AS sequence,' + ','.join('s.'+name for name in columns) + ',p.project_slug FROM plan_snapshot s '
++        'JOIN plan p USING(plan_id) WHERE s.rowid<=? AND p.project_slug=?', (marks['snapshots'], slug))
++    by_snapshot = {}
++    for link in links:
++        group = by_snapshot.setdefault(link['snapshot_id'], [])
++        for publication in publications:
++            if publication['publication_id'] != link['publication_id']:
++                continue
++            existing = next((p for p in group if p['publication_id'] == publication['publication_id']), None)
++            if existing is None:
++                existing = {**publication, 'link_evidence': []}
++                group.append(existing)
++            existing['link_evidence'].append({key: link[key] for key in ('link_id', 'confidence', 'evidence')})
++    def enrich(row):
++        pubs = by_snapshot.get(row.get('snapshot_id'), [])
++        known = [p['published_at'] for p in pubs if _time(p['published_at'])]
++        row['publications'] = [{'publication_id': p['publication_id'], 'published_at': p['published_at'],
++                                'trust': p['trust'], 'observed_at': p['observed_at'], 'link_evidence': p['link_evidence']} for p in pubs]
++        # A source snapshot's NULL published_at does not deny linked publications.
++        row['published_at'] = min(known, key=_time) if known else None
++        return row
++    snap_map = {row['snapshot_id']: row for row in snapshots}
++    if view == 'files':
++        rows = []
++        for row in items:
++            if row['project_slug'] != slug:
++                continue
++            snap = snap_map.get(row['snapshot_id'], {})
++            row['recorded_at'] = recorded.get(row['item_id'])
++            row['snapshot_recorded_at'] = snap.get('recorded_at')
++            row['status_date'] = snap.get('status_date')
++            rows.append(enrich(row))
++        return rows, 'item_id'
++    if view == 'snapshots':
++        rows = []
++        for row in snapshots:
++            if row['project_slug'] != slug:
++                continue
++            arrivals = [i for i in items if i['snapshot_id'] == row['snapshot_id']]
++            row['received_at'] = min((i['received_at'] for i in arrivals if _time(i['received_at'])), key=_time, default=None)
++            dates = sorted({i['source_version_date'] for i in arrivals if i['source_version_date']})
++            row['source_version_dates'] = dates
++            # Multiple distinct labels do not become one invented version date.
++            row['source_version_date'] = dates[0] if len(dates) == 1 else None
++            row.pop('source_json', None)
++            rows.append(enrich(row))
++        return rows, 'snapshot_id'
++    plan = q.resolve_plan(conn, slug)
++    plan_id = plan.get('plan_id') if plan else None
++    rows = []
++    for row in publications:
++        if row['plan_id'] != plan_id:
++            continue
++        row['snapshot_ids'] = [link['snapshot_id'] for link in links if link['publication_id'] == row['publication_id']]
++        row['received_at'] = row['observed_at']
++        row['source_version_date'] = None  # An import time is not a historical version date.
++        rows.append(row)
++    return rows, 'publication_id'
++
++
++def history(conn, request: HistoryRequest):
++    if request.view not in ('files', 'snapshots', 'publications') or request.order not in ('ingested', 'source'):
++        raise HistoryQueryError('invalid_history_arguments')
++    if isinstance(request.limit, bool) or not isinstance(request.limit, int) or not 1 <= request.limit <= 1000:
++        raise HistoryQueryError('invalid_history_limit')
++    field = request.time_field or {'files': 'received', 'snapshots': 'recorded', 'publications': 'published'}[request.view]
++    if field not in ('received', 'recorded', 'source', 'published'):
++        raise HistoryQueryError('invalid_history_time_field')
++    since = timestamp(request.since) if request.since is not None else None
++    until = timestamp(request.until) if request.until is not None else None
++    if since and until and since >= until:
++        raise HistoryQueryError('invalid_history_period')
++    params = {'project_slug': request.project_slug, 'view': request.view, 'order': request.order,
++              'lineage_id': request.lineage_id, 'since': since, 'until': until, 'time_field': field}
++    fingerprint = hashlib.sha256(json.dumps(params, sort_keys=True).encode()).hexdigest()
++    cursor = _decode(request.cursor) if request.cursor else None
++    if cursor and cursor.get('query') != fingerprint:
++        raise HistoryQueryError('history_cursor_context_mismatch')
++    if conn.in_transaction:
++        raise HistoryQueryError('caller_transaction_forbidden')
++    conn.execute('BEGIN')
++    try:
++        tables = {'files': 'plan_import_item', 'snapshots': 'plan_snapshot', 'publications': 'plan_publication', 'links': 'plan_publication_snapshot', 'events': 'plan_attempt_event'}
++        marks = {name: conn.execute('SELECT coalesce(max(rowid),0) FROM ' + table).fetchone()[0] for name, table in tables.items()}
++        if cursor:
++            marks = cursor.get('watermarks')
++            if not isinstance(marks, dict) or set(marks) != set(tables) or any(type(v) is not int or v < 0 for v in marks.values()):
++                raise HistoryQueryError('invalid_history_cursor')
++        rows, identity = _load(conn, request.project_slug, request.view, marks)
++        if request.lineage_id:
++            rows = [row for row in rows if row['lineage_id'] == request.lineage_id]
++        column = {'received': 'received_at', 'recorded': 'recorded_at', 'source': 'source_version_date', 'published': 'published_at'}[field]
++        unknown = sum(_time(row.get(column), source=field == 'source') is None for row in rows)
++        if since or until:
++            rows = [row for row in rows if (value := _time(row.get(column), source=field == 'source')) is not None
++                    and (not since or value >= since) and (not until or value < until)]
++        unknown_source = sum(row.get('source_version_date') is None for row in rows)
++        def key(row):
++            value = _time(row.get('source_version_date'), source=True) if request.order == 'source' else _time(
++                row.get('received_at') if request.view == 'files' else row.get('recorded_at'))
++            return [int(value is None), value or '', row.get('ordinal', 0), row[identity]]
++        rows.sort(key=key)
++        total = len(rows)
++        if cursor:
++            last = cursor.get('after')
++            if not isinstance(last, list) or len(last) != 4 or type(last[0]) is not int or not isinstance(last[1], str) or type(last[2]) is not int or not isinstance(last[3], str):
++                raise HistoryQueryError('invalid_history_cursor')
++            rows = [row for row in rows if key(row) > last]
++        page = rows[:request.limit]
++        next_cursor = _encode({'version': 1, 'query': fingerprint, 'watermarks': marks, 'after': key(page[-1])}) if len(rows) > request.limit else None
++        unknown_page = [row for row in page if row.get('source_version_date') is None] if request.order == 'source' else []
++        main_page = [row for row in page if row.get('source_version_date') is not None] if request.order == 'source' else page
++        return {'schema_version': 1, 'action': 'history', 'exit_code': 0, 'parameters': {**params, 'limit': request.limit},
++                'result': {'records': main_page, 'unknown_source_dates': unknown_page, 'unknown_source_date_count': unknown_source,
++                           'unknown_time_count': unknown, 'total': total, 'next_cursor': next_cursor},
++                'quality': {'time_interval': '[since,until)', 'source_date_scale': 'UTC calendar date; no task timezone inference',
++                            'identity': 'not_evaluated', 'publication_trust': 'preserved'}, 'error': None}
++    finally:
++        conn.execute('ROLLBACK')
+--- a/mofs_index/plan/query.py
++++ b/mofs_index/plan/query.py
+@@ -746,3 +746,95 @@
+                 "results": {item["operation_id"]: get_batch_item_result(conn, item["operation_id"]) for item in items}}
+     finally:
+         conn.execute("ROLLBACK")
++
++
++# Stage 06. These projections are shared by the CLI and typed writer guards.
++BATCH_REASONS = ('archive_project_confirmation_required', 'archive_lineage_confirmation_required')
++
++
++def _records(conn, sql, args=()):
++    cursor = conn.execute(sql, args)
++    names = [column[0] for column in cursor.description]
++    return [dict(zip(names, row)) for row in cursor]
++
++
++def get_source_provenance(conn, source_mpp_sha256):
++    return _records(conn, 'SELECT * FROM plan_provenance WHERE source_mpp_sha256=? ORDER BY evidence_id', (source_mpp_sha256,))
++
++
++def get_batch_proposals(conn, operation_id):
++    rows = _records(conn, 'SELECT * FROM plan_batch_proposal WHERE operation_id=? ORDER BY rowid', (operation_id,))
++    return [{**row, 'content': json.loads(row['content_json'])} for row in rows]
++
++
++def get_batch_decisions(conn, operation_id):
++    rows = _records(conn, 'SELECT d.* FROM plan_batch_decision d JOIN plan_batch_proposal p USING(proposal_id) '
++                    'WHERE p.operation_id=? ORDER BY d.rowid', (operation_id,))
++    return [{**row, 'content': json.loads(row['decision_json'])} for row in rows]
++
++
++def batch_proposal_contents(conn, operation_id):
++    """Recompute exact current grounds without changing any record.
++
++    No proposal is inferred from missing mapping/timezone/history or new bytes.
++    Confirmed contradictions cannot be waived by an archive-placement approval.
++    """
++    import hashlib
++    from .writer import _json, normalize_timezone
++    item = get_operation_item(conn, operation_id)
++    operation = get_operation(conn, operation_id)
++    if not item or not item['batch_id']:
++        raise PlanQueryError('batch_context_immutable')
++    batch = get_import_batch(conn, item['batch_id'])
++    context = json.loads(operation['context_json'])
++    save = context['save']
++    project, lineage = save['project_slug'], save['lineage_id']
++    plan = conn.execute('SELECT plan_id FROM plan WHERE project_slug=?', (project,)).fetchone()
++    line = get_lineage(conn, lineage)
++    if not plan or not line or line['plan_id'] != plan[0]:
++        raise PlanQueryError('binding_conflict')
++    if hashlib.sha256(_json(json.loads(batch['manifest_json'])).encode()).hexdigest() != batch['manifest_sha256']:
++        raise PlanQueryError('proposal_context_mismatch')
++    evidence = get_source_provenance(conn, item['source_mpp_sha256'])
++    conflicts = [row for row in evidence if row['project_slug'] != project or
++                 (row['lineage_id'] is not None and row['lineage_id'] != lineage)]
++    if any(row['quality'] == 'confirmed' for row in conflicts):
++        raise PlanQueryError('binding_conflict')
++    fingerprint = hashlib.sha256(_json([context, json.loads(batch['context_json'])]).encode()).hexdigest()
++    policy = {'version': 'archive-placement-v1', 'on_error': batch['on_error']}
++    base = {'batch_id': item['batch_id'], 'item_id': item['item_id'], 'operation_id': operation_id,
++            'manifest_sha256': batch['manifest_sha256'], 'source_mpp_sha256': item['source_mpp_sha256'],
++            'context_sha256': fingerprint, 'project_slug': project, 'lineage_id': lineage,
++            'normalization_profile': context['profiles']['NORMALIZATION_PROFILE'],
++            'resolved_timezone': normalize_timezone(save.get('timezone_hint')), 'source_version_date': item['source_version_date'],
++            'policy': policy, 'policy_sha256': hashlib.sha256(_json(policy).encode()).hexdigest(),
++            'context_unchanged': True, 'rule_scope': 'once',
++            'all_contradicting_evidence': [{'evidence_id': row['evidence_id'], 'sha256': row['evidence_sha256'],
++                'quality': row['quality']} for row in conflicts]}
++    result = []
++    for reason in BATCH_REASONS:
++        matching = [row for row in conflicts if (row['project_slug'] != project if reason == BATCH_REASONS[0]
++                    else row['project_slug'] == project and row['lineage_id'] != lineage)]
++        if matching:
++            result.append({**base, 'reason_code': reason,
++                'type': 'confirm_archive_project' if reason == BATCH_REASONS[0] else 'confirm_archive_lineage',
++                'evidence': matching, 'action': 'Archive in the frozen project and lineage; no UID continuity confirmation',
++                'consequences': 'Only archive placement is approved; source and batch context remain unchanged'})
++    return result
++
++
++def batch_decision_state(conn, operation_id):
++    import hashlib
++    from .writer import _json
++    contents = batch_proposal_contents(conn, operation_id)
++    current = {hashlib.sha256(_json(content).encode()).hexdigest() for content in contents}
++    proposals = [{**row, 'active': row['proposal_sha256'] in current} for row in get_batch_proposals(conn, operation_id)]
++    decisions = get_batch_decisions(conn, operation_id)
++    accepted = {row['proposal_id'] for row in decisions}
++    active = [row for row in proposals if row['active']]
++    closed = {row['reason_code'] for row in active if row['proposal_id'] in accepted}
++    reasons = [content['reason_code'] for content in contents]
++    missing = [reason for reason in reasons if reason not in closed]
++    materialized = {row['proposal_sha256'] for row in active} == current
++    return {'proposals': proposals, 'decisions': decisions, 'reasons': reasons,
++            'unresolved_reasons': missing, 'decision_ready': bool(current) and materialized and not missing}
+--- a/mofs_index/plan/schema.py
++++ b/mofs_index/plan/schema.py
+@@ -882,6 +882,43 @@
+ )
+ 
+ 
++# Stage 06: append-only provenance and exact, immutable batch approvals.
++BATCH_DECISION_DDL = (
++    """CREATE TABLE plan_provenance (
++        evidence_id TEXT PRIMARY KEY, source_mpp_sha256 TEXT NOT NULL,
++        project_slug TEXT NOT NULL, lineage_id TEXT REFERENCES plan_lineage(lineage_id),
++        quality TEXT NOT NULL CHECK(quality IN ('unconfirmed','confirmed')),
++        evidence_json TEXT NOT NULL, evidence_sha256 TEXT NOT NULL,
++        source TEXT NOT NULL, reason TEXT NOT NULL, recorded_at TEXT NOT NULL
++    )""",
++    "CREATE INDEX idx_plan_provenance_source ON plan_provenance(source_mpp_sha256)",
++    """CREATE TABLE plan_batch_proposal (
++        proposal_id TEXT PRIMARY KEY, operation_id TEXT NOT NULL REFERENCES plan_operation(operation_id),
++        item_id TEXT NOT NULL REFERENCES plan_import_item(item_id),
++        batch_id TEXT NOT NULL REFERENCES plan_import_batch(batch_id),
++        reason_code TEXT NOT NULL CHECK(reason_code IN
++          ('archive_project_confirmation_required','archive_lineage_confirmation_required')),
++        proposal_sha256 TEXT NOT NULL UNIQUE, content_json TEXT NOT NULL, created_at TEXT NOT NULL
++    )""",
++    """CREATE TABLE plan_batch_decision (
++        decision_id TEXT PRIMARY KEY, proposal_id TEXT NOT NULL UNIQUE REFERENCES plan_batch_proposal(proposal_id),
++        decision_json TEXT NOT NULL, decision_sha256 TEXT NOT NULL, registered_at TEXT NOT NULL
++    )""",
++) + tuple(
++    f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
++    "BEGIN SELECT RAISE(ABORT,'append_only'); END"
++    for table in ('plan_provenance','plan_batch_proposal','plan_batch_decision') for action in ('UPDATE','DELETE')
++) + (
++    """CREATE TRIGGER immutable_decision_event_update BEFORE UPDATE ON plan_attempt_event
++       WHEN OLD.event_kind IN ('decision_registered','proposal_created','provenance_recorded','decision_consumed')
++       BEGIN SELECT RAISE(ABORT,'append_only'); END""",
++    """CREATE TRIGGER immutable_decision_event_delete BEFORE DELETE ON plan_attempt_event
++       WHEN OLD.event_kind IN ('decision_registered','proposal_created','provenance_recorded','decision_consumed')
++       BEGIN SELECT RAISE(ABORT,'append_only'); END""",
++)
++MIGRATIONS += (Migration('0009_batch_decisions', BATCH_DECISION_DDL),)
++
++
+ def all_plan_table_names() -> tuple[str, ...]:
+     """Имена всех таблиц, которые когда-либо вводятся этим пакетом.
+ 
+@@ -890,6 +927,9 @@
+     `mofs_index.db.drop_all()`/`drop_docs()`.
+     """
+     return (
++        "plan_provenance",
++        "plan_batch_proposal",
++        "plan_batch_decision",
+         "plan_operation",
+         "plan_import_batch",
+         "plan_import_item",
+--- a/mofs_index/plan/writer.py
++++ b/mofs_index/plan/writer.py
+@@ -1569,6 +1569,10 @@
+     status = result["status"]
+     if status not in ("saved", "saved_with_warnings", "unchanged", "failed", "needs_decision"):
+         raise PlanWriterError("invalid_batch_item_result")
++    if status == "needs_decision":
++        from .query import BATCH_REASONS
++        if (result.get("error") or {}).get("code") not in BATCH_REASONS:
++            raise PlanWriterError("invalid_batch_decision_reason")
+     with _transaction(conn):
+         row = conn.execute("SELECT i.snapshot_id FROM plan_import_item i JOIN plan_import_attempt a USING(item_id) "
+                            "WHERE i.item_id=? AND a.attempt_id=? AND i.operation_id=a.operation_id", (item_id, attempt_id)).fetchone()
+@@ -1594,3 +1598,155 @@
+             raise PlanWriterError("inputs_not_frozen")
+         conn.execute("UPDATE plan_import_batch SET status=?,stop_reason=?,completed_at=? WHERE batch_id=?",
+                      (status, stop_reason, _now(), batch_id))
++
++
++@dataclass(frozen=True)
++class ProvenanceSpec:
++    source_mpp_sha256: str
++    project_slug: str
++    evidence_json: str
++    source: str
++    reason: str
++    lineage_id: str | None = None
++    quality: str = 'unconfirmed'
++    evidence_id: str | None = None
++
++
++def record_source_provenance(conn, spec: ProvenanceSpec):
++    """Append explicit evidence; never manufacture a task identity assertion."""
++    import re
++    if not re.fullmatch('[0-9a-f]{64}', spec.source_mpp_sha256) or not spec.project_slug or not spec.source.strip() or not spec.reason.strip():
++        raise PlanWriterError('invalid_provenance')
++    if spec.quality not in ('unconfirmed', 'confirmed'):
++        raise PlanWriterError('invalid_provenance')
++    evidence = json.loads(spec.evidence_json)
++    values = {**asdict(spec), 'evidence_id': spec.evidence_id or _new_id('evidence'), 'evidence_json': _json(evidence)}
++    digest = hashlib.sha256(_json({key: value for key, value in values.items() if key != 'evidence_id'}).encode()).hexdigest()
++    with _transaction(conn):
++        if spec.lineage_id:
++            row = conn.execute('SELECT p.project_slug FROM plan_lineage l JOIN plan p USING(plan_id) WHERE lineage_id=?', (spec.lineage_id,)).fetchone()
++            if not row or row[0] != spec.project_slug:
++                raise PlanWriterError('binding_conflict')
++        existing = conn.execute('SELECT evidence_sha256 FROM plan_provenance WHERE evidence_id=?', (values['evidence_id'],)).fetchone()
++        if existing:
++            if existing[0] != digest:
++                raise PlanWriterError('provenance_conflict')
++            return values['evidence_id']
++        values.update(evidence_sha256=digest, recorded_at=_now())
++        conn.execute('INSERT INTO plan_provenance('+','.join(values)+') VALUES ('+','.join('?' for _ in values)+')', tuple(values.values()))
++        attempts = conn.execute('SELECT a.attempt_id FROM plan_import_attempt a JOIN plan_import_item i USING(operation_id) '
++            'WHERE i.source_mpp_sha256=? AND a.rowid=(SELECT max(rowid) FROM plan_import_attempt WHERE operation_id=i.operation_id)',
++            (spec.source_mpp_sha256,)).fetchall()
++        for attempt in attempts:
++            _operation_event(conn, attempt[0], 'provenance_recorded', None, values['evidence_id'])
++    return values['evidence_id']
++
++
++def refresh_batch_proposals(conn, operation_id, attempt_id):
++    from . import query as q
++    with _transaction(conn):
++        item = q.get_operation_item(conn, operation_id)
++        attempt = q.get_attempt(conn, attempt_id)
++        if not item or not attempt or attempt['operation_id'] != operation_id:
++            raise PlanWriterError('operation_attempt_mismatch')
++        if not q.get_import_batch(conn, item['batch_id'])['inputs_frozen_at']:
++            raise PlanWriterError('inputs_not_frozen')
++        for content in q.batch_proposal_contents(conn, operation_id):
++            digest = hashlib.sha256(_json(content).encode()).hexdigest()
++            proposal_id = 'proposal-' + digest
++            if not conn.execute('SELECT 1 FROM plan_batch_proposal WHERE proposal_id=?', (proposal_id,)).fetchone():
++                conn.execute('INSERT INTO plan_batch_proposal VALUES (?,?,?,?,?,?,?,?)',
++                    (proposal_id, operation_id, item['item_id'], item['batch_id'], content['reason_code'], digest, _json(content), _now()))
++                _operation_event(conn, attempt_id, 'proposal_created', None, proposal_id)
++        return q.batch_decision_state(conn, operation_id)
++
++
++@dataclass(frozen=True)
++class BatchDecisionSpec:
++    operation_id: str
++    proposal_id: str
++    reason: str
++    author: str = 'user'
++    source: str = 'cli:resume'
++    rule_scope: str = 'once'
++
++
++def register_batch_decision(conn, spec: BatchDecisionSpec):
++    """Decision and event commit atomically. Caller holds the owning batch flock."""
++    from . import query as q
++    if spec.rule_scope != 'once':
++        raise PlanWriterError('batch_context_immutable')
++    if not spec.reason.strip() or not spec.author.strip() or not spec.source.strip():
++        raise PlanWriterError('invalid_decision_reason')
++    with _transaction(conn):
++        item = q.get_operation_item(conn, spec.operation_id)
++        if not item or not item['batch_id'] or item['status'] != 'needs_decision':
++            raise PlanWriterError('proposal_context_mismatch')
++        batch = q.get_import_batch(conn, item['batch_id'])
++        if not batch['inputs_frozen_at']:
++            raise PlanWriterError('inputs_not_frozen')
++        state = q.batch_decision_state(conn, spec.operation_id)
++        proposal = next((row for row in state['proposals'] if row['proposal_id'] == spec.proposal_id and row['active']), None)
++        if not proposal:
++            raise PlanWriterError('proposal_context_mismatch')
++        values = {**asdict(spec), 'proposal_sha256': proposal['proposal_sha256'],
++                  'manifest_sha256': batch['manifest_sha256'], 'context_sha256': proposal['content']['context_sha256'],
++                  'policy_sha256': proposal['content']['policy_sha256'],
++                  'source_mpp_sha256': item['source_mpp_sha256'], 'item_id': item['item_id'], 'batch_id': item['batch_id']}
++        document = _json(values)
++        digest = hashlib.sha256(document.encode()).hexdigest()
++        existing = conn.execute('SELECT decision_id,decision_sha256 FROM plan_batch_decision WHERE proposal_id=?', (spec.proposal_id,)).fetchone()
++        if existing:
++            if existing[1] != digest:
++                raise PlanWriterError('decision_conflict')
++            decision_id = existing[0]
++        else:
++            decision_id = _new_id('decision')
++            conn.execute('INSERT INTO plan_batch_decision VALUES (?,?,?,?,?)', (decision_id, spec.proposal_id, document, digest, _now()))
++            attempt = q.get_operation_attempts(conn, spec.operation_id)[-1]
++            _operation_event(conn, attempt['attempt_id'], 'decision_registered', None, _json({'decision_id': decision_id, **values}))
++        state = q.batch_decision_state(conn, spec.operation_id)
++        ready = state['decision_ready']
++        if state['unresolved_reasons']:
++            reason_code = state['unresolved_reasons'][0]
++            previous = q.get_batch_item_result(conn, spec.operation_id)
++            if previous and (previous.get('error') or {}).get('code') != reason_code:
++                updated = {**previous, 'error': {**previous['error'], 'code': reason_code}}
++                conn.execute('UPDATE plan_import_item SET error_code=? WHERE item_id=?', (reason_code, item['item_id']))
++                attempt = q.get_operation_attempts(conn, spec.operation_id)[-1]
++                _operation_event(conn, attempt['attempt_id'], 'batch_item_result', None, _json(updated), 'failed')
++        return {'schema_version': 1, 'action': 'register_batch_decision', 'status': 'decision_registered', 'exit_code': 0,
++                'batch_id': item['batch_id'], 'item_id': item['item_id'], 'operation_id': spec.operation_id,
++                'proposal_id': spec.proposal_id, 'decision_id': decision_id, 'manifest_sha256': batch['manifest_sha256'],
++                'decision_ready': ready, 'published': False, 'error': None}
++
++
++def consume_batch_decisions(conn, operation_id, attempt_id):
++    from . import query as q
++    with _transaction(conn):
++        state = q.batch_decision_state(conn, operation_id)
++        if not state['decision_ready']:
++            raise PlanWriterError('proposal_context_mismatch')
++        if q.get_attempt(conn, attempt_id)['operation_id'] != operation_id:
++            raise PlanWriterError('operation_attempt_mismatch')
++        _operation_event(conn, attempt_id, 'decision_consumed', None,
++                         _json([row['proposal_id'] for row in state['proposals'] if row['active']]))
++
++
++def link_publication_snapshot(conn, publication_id, snapshot_id, *, confidence='unknown', evidence=None):
++    """Append a scoped archive link, preserving publication trust unchanged."""
++    if confidence not in ('confirmed', 'inferred', 'unknown') or not evidence:
++        raise PlanWriterError('invalid_publication_snapshot_evidence')
++    with _transaction(conn):
++        row = conn.execute('SELECT p.plan_id,s.plan_id FROM plan_publication p,plan_snapshot s '
++                           'WHERE p.publication_id=? AND s.snapshot_id=?', (publication_id, snapshot_id)).fetchone()
++        if not row or row[0] != row[1]:
++            raise PlanWriterError('selector_project_mismatch')
++        existing = conn.execute('SELECT link_id FROM plan_publication_snapshot WHERE publication_id=? AND snapshot_id=? '
++                                'AND confidence=? AND evidence=?', (publication_id, snapshot_id, confidence, evidence)).fetchone()
++        if existing:
++            return existing[0]
++        link_id = _new_id('pubsnap')
++        conn.execute('INSERT INTO plan_publication_snapshot VALUES (?,?,?,?,?,?)',
++                     (link_id, publication_id, snapshot_id, confidence, evidence, _now()))
++        return link_id
+--- /dev/null
++++ b/tests/plan/test_batch_decisions.py
+@@ -0,0 +1,121 @@
++"""Stage 06 direct typed API: immutable evidence, atomic decisions, migration."""
++import hashlib
++import json
++from dataclasses import replace
++from pathlib import Path
++import sqlite3
++
++import pytest
++from mofs_index.db import connect_durable, drop_all, initialize
++from mofs_index.plan import query as q, writer as w
++from mofs_index.plan.migrate import ensure_plan_schema
++from mofs_index.plan.schema import MIGRATIONS
++from mofs_index.plan.history import HistoryRequest, history, HistoryQueryError
++
++
++@pytest.fixture
++def decision_case(tmp_path):
++    c = connect_durable(tmp_path/'index.sqlite'); ensure_plan_schema(c)
++    plan = w.ensure_plan(c, 'p')
++    lineage = w.ensure_lineage(c, plan, 'local-archive-v1')
++    context = {'save': {'project_slug':'p','lineage_id':lineage,'timezone_hint':None},
++               'profiles':{'NORMALIZATION_PROFILE':{'sha256':'a'*64,'name':'normalization-v1'}}}
++    manifest = {'schema_version':1,'on_error':'continue','items':[{'item_id':'one','path':'/one.mpp'}]}
++    content = w._json(manifest)
++    spec = w.ImportBatchSpec('batch',1,content,hashlib.sha256(content.encode()).hexdigest(),'mpp','{}')
++    w.create_batch_with_items(c,spec,(w.BatchItemSpec('one','/one.mpp',w._json(context)),))
++    row = q.get_batch_items(c,'batch')[0]
++    source=tmp_path/'frozen.mpp';source.write_bytes(b'fixture')
++    digest=hashlib.sha256(source.read_bytes()).hexdigest()
++    w.freeze_import_item(c,row['item_id'],frozen_locator=str(source),source_mpp_sha256=digest,size_bytes=7,frozen_at='2026-11-16T00:00:00Z')
++    w.finalize_batch_freeze(c,'batch')
++    evidence=w.ProvenanceSpec(digest,'other','{"explicit":"unconfirmed fixture"}','synthetic','not identity',evidence_id='ev')
++    w.record_source_provenance(c,evidence)
++    attempt=w.start_batch_item(c,row['item_id'])
++    state=w.refresh_batch_proposals(c,row['operation_id'],attempt)
++    w.finish_batch_item(c,row['item_id'],attempt,w._json({'status':'needs_decision','error':{'code':q.BATCH_REASONS[0]}}))
++    yield c,row,state['proposals'][0],evidence
++    c.close()
++
++
++def test_typed_register_idempotence_context_and_immutability(decision_case):
++    c,row,proposal,evidence=decision_case
++    spec=w.BatchDecisionSpec(row['operation_id'],proposal['proposal_id'],'User explicitly confirms')
++    first=w.register_batch_decision(c,spec)
++    assert first['decision_ready'] and w.register_batch_decision(c,spec)['decision_id']==first['decision_id']
++    assert q.get_import_item(c,row['item_id'])['status']=='needs_decision'
++    assert w.record_source_provenance(c,evidence)=='ev'
++    for table in ('plan_batch_decision','plan_batch_proposal','plan_provenance'):
++        with pytest.raises(sqlite3.IntegrityError,match='append_only'):
++            c.execute('DELETE FROM '+table)
++        c.rollback()
++    with pytest.raises(w.PlanWriterError,match='decision_conflict'):
++        w.register_batch_decision(c,replace(spec,reason='Different reason'))
++    with pytest.raises(w.PlanWriterError,match='batch_context_immutable'):
++        w.register_batch_decision(c,replace(spec,rule_scope='project'))
++    w.record_source_provenance(c,replace(evidence,evidence_id='new',evidence_json='{"new":true}'))
++    assert not q.batch_decision_state(c,row['operation_id'])['decision_ready']
++    with pytest.raises(w.PlanWriterError,match='proposal_context_mismatch'):
++        w.register_batch_decision(c,spec)
++    assert len(q.get_batch_decisions(c,row['operation_id']))==1
++    assert not c.execute('PRAGMA foreign_key_check').fetchall()
++
++
++def test_decision_event_failure_rolls_back_insert(decision_case,monkeypatch):
++    c,row,proposal,_=decision_case
++    original=w._operation_event
++    def fail(conn,attempt,kind,*args,**kwargs):
++        if kind=='decision_registered': raise RuntimeError('event write failed')
++        return original(conn,attempt,kind,*args,**kwargs)
++    monkeypatch.setattr(w,'_operation_event',fail)
++    with pytest.raises(RuntimeError):
++        w.register_batch_decision(c,w.BatchDecisionSpec(row['operation_id'],proposal['proposal_id'],'Confirm'))
++    assert not q.get_batch_decisions(c,row['operation_id'])
++
++
++def test_migration_0009_preserves_preceding_definitions_and_rows(tmp_path,monkeypatch):
++    import mofs_index.plan.migrate as migrate
++    approved=Path('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-03/usertools/MofsIndex/after/mofs_index/plan/schema.py')
++    current=Path(__file__).resolve().parents[2]/'mofs_index/plan/schema.py'
++    assert approved.read_text().split('\n\ndef all_plan_table_names')[0] == current.read_text().split('\n\n# Stage 06:')[0]
++    c=connect_durable(tmp_path/'old.sqlite')
++    monkeypatch.setattr(migrate,'MIGRATIONS',MIGRATIONS[:8]);ensure_plan_schema(c)
++    p=w.ensure_plan(c,'populated');l=w.ensure_lineage(c,p,'local')
++    snap=w.ingest_snapshot(c,w.SnapshotSpec(plan_id=p,lineage_id=l,representation='mpp'))
++    w.select_snapshot_baseline(c,l,snap,is_explicit=True,basis='existing')
++    before={t:[tuple(row) for row in c.execute('SELECT * FROM '+t)] for t in ('plan','plan_lineage','plan_snapshot','plan_snapshot_selection','plan_schema_migration')}
++    monkeypatch.setattr(migrate,'MIGRATIONS',MIGRATIONS)
++    assert ensure_plan_schema(c)==['0009_batch_decisions']
++    assert ensure_plan_schema(c)==[]
++    for t,rows in before.items():
++        after=[tuple(row) for row in c.execute('SELECT * FROM '+t)]
++        assert after[:len(rows)]==rows
++    drop_all(c);initialize(c)
++    assert c.execute('PRAGMA integrity_check').fetchone()[0]=='ok'
++    assert not c.execute('PRAGMA foreign_key_check').fetchall()
++    c.close()
++
++
++def test_typed_history_unknown_and_boundary_without_skill(tmp_path):
++    c=connect_durable(tmp_path/'index.sqlite');ensure_plan_schema(c)
++    p=w.ensure_plan(c,'p')
++    w.record_publication(c,w.PublicationSpec(p,'fixture','attachment',1,published_at='2026-11-16T03:00:00+03:00'))
++    w.record_publication(c,w.PublicationSpec(p,'fixture','attachment',2,published_at='2026-11-17T00:00:00Z'))
++    w.record_publication(c,w.PublicationSpec(p,'fixture','attachment',3))
++    r=history(c,HistoryRequest('p',view='publications',since='2026-11-16T00:00:00Z',until='2026-11-17T00:00:00Z'))
++    assert r['result']['total']==1 and r['result']['unknown_time_count']==1
++    assert r['result']['records'][0]['attachment_version']==1
++    first=history(c,HistoryRequest('p',view='publications',limit=1))['result']
++    assert first['next_cursor']
++    second=history(c,HistoryRequest('p',view='publications',limit=2,cursor=first['next_cursor']))['result']
++    assert len(second['records'])==2
++    assert not ({r['publication_id'] for r in first['records']} & {r['publication_id'] for r in second['records']})
++    c.close()
++
++
++def test_typed_writer_rejects_artificial_batch_reason(decision_case):
++    c,row,_,_=decision_case
++    attempt=q.get_operation_attempts(c,row['operation_id'])[-1]['attempt_id']
++    with pytest.raises(w.PlanWriterError,match='invalid_batch_decision_reason'):
++        w.finish_batch_item(c,row['item_id'],attempt,w._json({'status':'needs_decision','error':{'code':'unknown_timezone'}}))
++    assert q.get_import_item(c,row['item_id'])['error_code']==q.BATCH_REASONS[0]
+--- a/tests/plan/test_migrate.py
++++ b/tests/plan/test_migrate.py
+@@ -33,7 +33,7 @@
+     assert first == [
+         "0001_phase0_baseline", "0002_phase1_core", "0003_phase2_snapshot",
+         "0004_phase3_analysis", "0005_phase3_fts", "0006_publication_trust",
+-        "0007_durable_imports", "0008_snapshot_semantics",
++        "0007_durable_imports", "0008_snapshot_semantics", "0009_batch_decisions",
+     ]
+     assert second == []
+ 
+@@ -41,7 +41,7 @@
+ def test_applied_migrations_records_checksum(conn):
+     ensure_plan_schema(conn)
+     rows = applied_migrations(conn)
+-    assert len(rows) == 8
++    assert len(rows) == 9
+     migration_id, applied_at, checksum = rows[0]
+     assert migration_id == "0001_phase0_baseline"
+     assert applied_at  # не пусто
+@@ -85,7 +85,7 @@
+     publication_before = tuple(conn.execute("SELECT * FROM plan_publication").fetchone())
+     attempt_before = tuple(conn.execute("SELECT * FROM plan_import_attempt").fetchone())
+     monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations)
+-    assert ensure_plan_schema(conn) == ["0006_publication_trust","0007_durable_imports","0008_snapshot_semantics"]
++    assert ensure_plan_schema(conn) == ["0006_publication_trust","0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions"]
+     for name, rows in before.items():
+         assert [tuple(r)[:len(rows[i])] for i,r in enumerate(conn.execute("SELECT * FROM " + name))] == rows
+     assert tuple(conn.execute("SELECT * FROM plan_publication").fetchone())[:len(publication_before)] == publication_before
+@@ -125,7 +125,7 @@
+     assert conn.execute("SELECT count(*) FROM plan_attempt_event").fetchone()[0]==1
+     assert conn.execute("SELECT count(*) FROM plan_schema_migration").fetchone()[0]==6
+     monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations)
+-    assert ensure_plan_schema(conn)==["0007_durable_imports","0008_snapshot_semantics"]
++    assert ensure_plan_schema(conn)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions"]
+     assert conn.execute("SELECT attempt_id FROM plan_attempt_event").fetchone()[0]==attempt
+     assert not conn.execute("PRAGMA foreign_key_check").fetchall()
+ 
+@@ -153,14 +153,14 @@
+     attempt=w.begin_attempt(conn,w.AttemptSpec(plan,lineage_id=lineage))
+     w.record_event(conn,attempt,"archive","confirmed")
+     from mofs_index.plan.schema import all_plan_table_names
+-    tables=[t for t in all_plan_table_names() if t not in {"plan_operation","plan_import_batch","plan_import_item","plan_schema_migration","plan_fts"}]
++    tables=[t for t in all_plan_table_names() if t not in {"plan_operation","plan_import_batch","plan_import_item","plan_schema_migration","plan_fts", "plan_provenance", "plan_batch_proposal", "plan_batch_decision"}]
+     before={t:[tuple(row) for row in conn.execute("SELECT * FROM "+t+" ORDER BY rowid")] for t in tables}
+     origin=Path(conn.execute("PRAGMA database_list").fetchone()[2])
+     backup=tmp_path/"old-backup.sqlite"
+     assert backup_to(backup,origin).ok and verify_backup(backup).ok
+     copy=connect(backup,durable=True)
+     monkeypatch.setattr(migrate,"MIGRATIONS",migrations)
+-    assert ensure_plan_schema(copy)==["0007_durable_imports","0008_snapshot_semantics"]
++    assert ensure_plan_schema(copy)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions"]
+     for table,rows in before.items():
+         actual=[tuple(row) for row in copy.execute("SELECT * FROM "+table+" ORDER BY rowid")]
+         assert len(actual)==len(rows)

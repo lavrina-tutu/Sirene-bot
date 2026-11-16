@@ -1,0 +1,18 @@
+{
+  "cold_MPXJ_read": 1,
+  "repeat_MPXJ_read": 0,
+  "corruption_rebuild_MPXJ_read": 1,
+  "boundary_counts": [
+    1,
+    1
+  ],
+  "python": "/usr/bin/python3.9",
+  "versions": {
+    "reader": "read-mpp-v2",
+    "mpxj": "16.4.0",
+    "jpype": "1.7.1"
+  },
+  "source_sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+  "semantic_sha256": "2a828ef30205111f4e2c0a7c548e3b8ffaaf6e05f9448ab71f61921d82b0533b",
+  "scope": "new prepared branch only; legacy calendar/CSV paths are stage 08"
+}

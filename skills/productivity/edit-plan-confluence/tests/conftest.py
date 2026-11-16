@@ -238,6 +238,31 @@ STAGE05_REQUIRED |= {"test_batch_resume.py::test_journaling_failure_stops_after_
                      "test_batch_resume.py::test_missing_mirror_recovery_verifies_committed_artifacts"}
 
 
+# Stage 06 deliberately uses unit/archive groups; real-reader regression stays
+# in earlier gates, plus the new actual-MPP decision CLI journey below.
+STAGE06_REQUIRED = {name for name in STAGE05_REQUIRED
+    if not name.startswith('test_save_e2e.py::')
+    and not name.startswith('test_plan_batch.py::test_real_batch_cli_native_copies')
+    and name not in {'test_plan_cache.py::test_real_parse_cache_one_read_same_bytes_different_names',
+                    'test_cli.py::test_cli_convert_offline',
+                    'test_mpp_calendar.py::test_calendar_from_mpp_fixture',
+                    'test_pipeline.py::test_build_plan_from_mpp_offline'}}
+STAGE06_REQUIRED |= {'test_batch_decisions.py::'+name for name in (
+    'test_ac19_continue_registration_and_explicit_consumption',
+    'test_ac19_lineage_two_reasons_and_stop', 'test_ac19_foreign_stale_and_changed_grounds',
+    'test_ac19_context_immutable', 'test_ac19_registration_batch_busy',
+    'test_ac19_proved_conflict_is_item_failure', 'test_ac19_no_artificial_decisions',
+    'test_ac19_process_death_after_registration_and_commit', 'test_ac19_registration_transaction_rollback',
+    'test_ac19_real_cli_registration_and_retry')}
+STAGE06_REQUIRED |= {'test_history_queries.py::'+name for name in (
+    'test_history_views_and_defaults', 'test_history_half_open_timezone_and_equal_timestamps',
+    'test_history_filter_fields_are_distinct_order_source_does_not_change_filter',
+    'test_history_unknown_time_separate_count', 'test_history_cursor_stable_ties_unknowns_and_new_backdated_arrival',
+    'test_history_invalid_parameters_fail_closed', 'test_history_cursor_cannot_change_filter',
+    'test_history_project_lineage_scope_and_failed_arrivals', 'test_history_cli_matches_typed_api',
+    'test_q_history_integration_uses_same_api', 'test_history_all_views_paginate_without_duplicates')}
+
+
 def pytest_addoption(parser):
     parser.addoption("--acceptance-stage", default=None)
     parser.addoption("--test-root", default=None)
@@ -254,8 +279,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03", "04", "05"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 through 05")
+    if stage and stage not in ("01", "02", "03", "04", "05", "06"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 06")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -296,7 +321,7 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED}[stage]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -315,6 +340,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption("--acceptance-stage") == "06":
+        _stage06_report(session, exitstatus, root)
         return
     if config.getoption("--acceptance-stage") == "05":
         _stage05_report(session, exitstatus, root)
@@ -825,4 +853,88 @@ def _stage05_report(session, exitstatus, root):
                   '', f"Дерево исходников: `{report['source_tree_sha256']}`. Master 0.5.0 и контракты захэшированы в JSON. SHA финального коммита записывается после commit в журнал канонического плана.",
                   '', 'Ограничения:', ''])
     lines.extend('- '+value for value in limitations)
+    (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')
+
+
+def _stage06_report(session, exitstatus, root):
+    """Gate is derived from pytest, external checks and protected source hashes."""
+    config = session.config
+    results = config._acceptance_results
+    def read(name):
+        path = root/'reports'/name
+        return json.loads(path.read_text()) if path.exists() else {}
+    initial, external, journey = read('initial-state.json'), read('external-checks.json'), read('batch-decisions-cli.json')
+    protected = initial.get('protected_hashes', {})
+    changed = [name for name, digest in protected.items()
+               if not Path(name).is_file() or hashlib.sha256(Path(name).read_bytes()).hexdigest() != digest]
+    good = (int(exitstatus) == 0 and bool(session.items) and bool(results)
+            and all(result['status'] == 'passed' for result in results)
+            and bool(protected) and not changed and external.get('gate') == 'passed'
+            and bool(journey.get('calls')) and journey['calls'][-1]['rc'] == 0)
+    qroot = SKILL_ROOT.parents[1]/'research/workvault-rag'
+    files = sorted(set([*SCRIPTS.glob('*.py'), *(SKILL_ROOT/'tests').glob('*.py'),
+        *(SKILL_ROOT/'references/schemas').glob('*.json'), *(SKILL_ROOT/'references/profiles').glob('*.json'),
+        *(SKILL_ROOT/'references').glob('*.md'), *(MOFS_INDEX_ROOT/'mofs_index/plan').glob('*.py'),
+        *(MOFS_INDEX_ROOT/'tests/plan').glob('*.py'), SKILL_ROOT/'tests/pytest.ini',
+        qroot/'SKILL.md', qroot/'references/plan-queries.md',
+        *(p for p in (SKILL_ROOT/'tests/fixtures/synthetic/batch-decision-registration').rglob('*') if p.is_file())]))
+    hashes = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
+    master = Path.home()/'WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md'
+    plan = master.parent/'plans/HF-plan_EditPlanConfluence_20261116.md'
+    schema = Path.home()/'WorkVault/Registries/EcosystemConfig.schema.json'
+    implemented = {
+        'M/mofs_index/plan/schema.py': 'добавлена только 0009_batch_decisions; append-only provenance/proposals/decisions и защита событий решений',
+        'M/mofs_index/plan/writer.py': 'typed provenance; атомарные proposals/решение+событие; идемпотентность и конфликты; scoped связь publication/snapshot',
+        'M/mofs_index/plan/query.py': 'общая проекция оснований, точного контекста, решений и decision_ready',
+        'M/mofs_index/plan/history.py': 'files/snapshots/publications; timezone-aware [since,until), defaults, unknown counts, source order, keyset cursor с границей набора',
+        'S/scripts/plan_decision.py': 'внутренний Proposal/адаптер; подтверждение только двух причин под общей блокировкой, без reader/архива/сети',
+        'S/scripts/plan_batch.py': 'проверка provenance до reader; потребление только retry-decisions, неизменный контекст; errors с решениями',
+        'S/scripts/plan_operation.py': 'read-only operation show с причинами, proposals, решениями, стадиями и identity_requirements=[]',
+        'S/scripts/plan_queries.py': 'адаптер одного typed history API; import_history остаётся в plan_history.py',
+        'S/scripts/cli.py': 'operation show; batch-item resume регистрации; batch retry-decisions; history',
+        'S/references/cli-contract.md + schemas/batch-decision-result.schema.json': 'команды, отдельная схема результата регистрации, коды, времена и cursor',
+        'Q/SKILL.md + Q/references/plan-queries.md': 'русские запросы поступлений/сегодня через тот же typed API, разделение времён и trust',
+        'S/tests/test_batch_decisions.py + test_history_queries.py': 'все девять подслучаев AC-19, реальные CLI/MPP, process-death, времена/границы/cursor/Q',
+        'S/tests/fixtures/synthetic/batch-decision-registration/': 'версионированное неподтверждённое provenance; используется только typed writer',
+        'M/tests/plan/test_batch_decisions.py + test_migrate.py': 'прямой typed API, rollback, append-only, сохранность миграций 0001–0008/строк и обновлённый ожидаемый список',
+        'S/tests/conftest.py': 'обязательные test ID этапа 06; прежние карты/отчёты сохранены; gate из фактических результатов',
+    }
+    limitations = ['Реализован только этап 06; identity/mapping, B/C, scheduler и публикация остаются этапам 07–13',
+        'schedule:not_verified; live Confluence не запускался, trust истории не повышается',
+        'source_version_date — календарная шкала UTC (полночь); таймзона задач из неё не выводится',
+        'Cursor фиксирует состав и порядок, а не полную копию изменяемого состояния обработки; новый запрос видит новые поступления',
+        'POSIX flock локален хосту; process-death не моделирует отказ ОС/питания',
+        'OwnCloud sync не подтверждён; production-БД/страницы/настройки/baseline, Gateway и расписания не менялись']
+    report = {'stage':'06', 'gate':'passed' if good else 'failed', 'exit_code':int(exitstatus),
+        'base_commit':initial.get('base_commit'), 'command':[sys.executable,'-m','pytest',*config.invocation_params.args],
+        'environment':{'python':sys.executable,'version':platform.python_version(),'cli_python':'/usr/bin/python3',
+                       'mpxj_python':'/usr/bin/python3.9','PYTHONPATH':os.environ.get('PYTHONPATH'),'test_root':str(root)},
+        'master':{'version':'0.5.0','path':str(master),'sha256':hashlib.sha256(master.read_bytes()).hexdigest()},
+        'plan':{'path':str(plan),'normative_prefix_sha256':hashlib.sha256(plan.read_text().split('## Журнал исполнения')[0].encode()).hexdigest()},
+        'config_contract_sha256':hashlib.sha256(schema.read_bytes()).hexdigest(),
+        'source_files':hashes,'source_tree_sha256':hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),
+        'migrations':['0009_batch_decisions'],'previous_migrations':'0001–0008 definitions unchanged; tested against approved stage-03 prefix',
+        'protected_files_checked':len(protected),'changed_protected_files':changed,
+        'implemented_files':implemented,'tests':results,'selected':len(session.items),'mandatory_test_ids':sorted(STAGE06_REQUIRED),
+        'external_checks':external,'cli_journey':'batch-decisions-cli.json',
+        'counters':{'decision_cli':journey.get('metrics',{}),'live_POST':0,'live_PUT':0,
+                    'legacy_reader_total':None,'publication_fake_regression':config._acceptance_counters},
+        'covered_requirements':['§20/AC-19 all nine registration subcases','§20/AC-23','§20/AC-26','batch portions of §20/AC-20,22'],
+        'invariants':{'manifest':'unchanged at registration/consumption','baseline':'exact populated rows preserved',
+            'decisions':'append-only, no reader/archive at registration; consumption only retry-decisions','published':False},
+        'limitations':limitations,'generated_at':datetime.now(timezone.utc).isoformat()}
+    (root/'reports/stage-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    lines = ['# Этап 06 — решения batch-item и базовая история','',
+        f"Gate: **{report['gate']}**; S rc={exitstatus}; selected={len(session.items)}; passed={sum(r['status']=='passed' for r in results)}.",'',
+        'Реализовано:','']
+    lines.extend('- `'+name+'`: '+value+'.' for name,value in implemented.items())
+    lines += ['', 'AC-19: continue/stop; обе причины; retry до регистрации; регистрация без обработки; повтор/замена основания; обычный resume; чужой/stale proposal и новые основания; busy; immutable context/новый batch; падение после регистрации и snapshot commit; обычные новые MPP без искусственного proposal. Baseline и mapping-таблицы сохранены.',
+        '', 'История: полуинтервал [since,until), timezone-aware границы; received/recorded/source/published различаются. Source-порядок не меняет фильтр, неизвестные времена посчитаны, неизвестные даты отдельно. Cursor с ключом и границей набора проверен на равных timestamps, limit=1 и позднем backdated поступлении.',
+        '', 'Q: тот же mofs_index.plan.history.history(HistoryRequest); отдельная проверка в external-checks.json.',
+        '', 'Команда S:', '', '```text', ' '.join(report['command']), '```', '',
+        'M/Q, команды/rc/JUnit/stdout/stderr и восстановление комплектов: external-checks.json. Полный CLI-проход с реальным E: batch-decisions-cli.json.',
+        '', f"Проверено защищённых файлов: {len(protected)}; изменено: {len(changed)}. Дерево исходников: `{report['source_tree_sha256']}`.",
+        '', 'Комплекты: usertools/MofsIndex/ и usertools/workvault-rag/ — before/after/changes.patch/manifest.json. SHA завершающего коммита записывается после commit в журнал плана.',
+        '', 'Ограничения:', '']
+    lines += ['- '+value for value in limitations]
     (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')

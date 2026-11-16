@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "-c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_history_queries.py::test_q_history_integration_uses_same_api",
+    "--test-root",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage06/stage-06/q-contour",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage06/stage-06/reports/q-junit.xml",
+    "-q",
+    "--tb=short"
+  ],
+  "cwd": "/home/tkachenkoav/hermes-workspace/skills/research/workvault-rag",
+  "rc": 0,
+  "tests": 1,
+  "passed": 1,
+  "failures_errors": 0,
+  "skipped": 0,
+  "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+  "scope": "Q has no independent suite; execute its actual history snippet on isolated typed API fixtures in S"
+}

@@ -147,17 +147,47 @@ def cmd_batch(args: argparse.Namespace) -> int:
             project_slug=args.project_slug, lineage_id=args.lineage_id, timezone_hint=args.timezone_hint,
             batch_id=args.batch_id, on_error=args.on_error, **paths)
     elif args.batch_command == "resume":
-        result = resume_batch(args.batch_id, retry_failed=args.retry_failed, **paths)
+        result = resume_batch(args.batch_id, retry_failed=args.retry_failed, retry_decisions=args.retry_decisions, **paths)
     else:
         result = show_batch(args.batch_id, view=args.view, **paths)
     print(json.dumps(result, ensure_ascii=False))
     return result["exit_code"]
 
 
+def cmd_operation(args):
+    from plan_operation import show_operation
+    result = show_operation(args.operation_id, db_path=args.db, workvault=args.workvault, cache_dir=args.cache_dir)
+    print(json.dumps(result, ensure_ascii=False))
+    return result['exit_code']
+
+
+def cmd_resume(args):
+    from plan_decision import register_decision
+    result = register_decision(args.operation_id, args.accept_proposal, reason=args.reason,
+        rule_scope=args.rule_scope, timezone_hint=args.timezone_hint, mapping_revision=args.mapping_revision,
+        db_path=args.db, workvault=args.workvault, cache_dir=args.cache_dir)
+    print(json.dumps(result, ensure_ascii=False))
+    return result['exit_code']
+
+
+def cmd_history(args):
+    from plan_queries import query_history
+    result = query_history(db_path=args.db, workvault=args.workvault, cache_dir=args.cache_dir,
+        **{name: getattr(args, name) for name in ('project_slug', 'view', 'order', 'lineage_id',
+                                                'since', 'until', 'time_field', 'limit', 'cursor')})
+    print(json.dumps(result, ensure_ascii=False))
+    return result['exit_code']
+
+
 class JsonArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         # Stable error; argument strings can contain secrets. Details go to stderr.
         print("Ошибка аргументов CLI", file=sys.stderr)
+        action = getattr(self, 'result_action', None)
+        if action:
+            print(json.dumps({'schema_version': 1, 'action': action, 'exit_code': 2,
+                'result': None, 'error': {'code': 'invalid_arguments', 'message': 'Некорректные аргументы CLI'}}, ensure_ascii=False))
+            raise SystemExit(2)
         from plan_receipt import single_receipt, batch_receipt
         receipt = batch_receipt(argument_error=True) if getattr(self, "batch_parser", False) or "batch" in sys.argv[1:] else single_receipt()
         receipt.update(exit_code=2, error={"code": "invalid_arguments", "message": "Некорректные аргументы CLI",
@@ -257,12 +287,42 @@ def build_parser() -> argparse.ArgumentParser:
     br.batch_parser = True
     br.add_argument("--batch-id", required=True)
     br.add_argument("--retry-failed", action="store_true")
+    br.add_argument("--retry-decisions", action="store_true")
     br.set_defaults(func=cmd_batch)
     bv = commands.add_parser("show", help="Read current batch state")
     bv.batch_parser = True
     bv.add_argument("--batch-id", required=True)
     bv.add_argument("--view", choices=("all", "errors"), default="all")
     bv.set_defaults(func=cmd_batch)
+
+    operation = sub.add_parser('operation', help='Read saved operation state')
+    oc = operation.add_subparsers(dest='operation_command', required=True)
+    show = oc.add_parser('show')
+    show.result_action = 'show_operation'
+    show.add_argument('--operation-id', required=True)
+    show.set_defaults(func=cmd_operation)
+    resume = sub.add_parser('resume', help='Register a batch-item decision without processing')
+    resume.result_action = 'register_batch_decision'
+    resume.add_argument('--operation-id', required=True)
+    form = resume.add_mutually_exclusive_group()
+    form.add_argument('--accept-proposal')
+    form.add_argument('--timezone-hint')
+    form.add_argument('--mapping-revision')
+    resume.add_argument('--rule-scope', choices=('once', 'project'), default='once')
+    resume.add_argument('--reason')
+    resume.set_defaults(func=cmd_resume)
+    history = sub.add_parser('history', help='Typed arrivals/snapshots/publications history')
+    history.result_action = 'history'
+    history.add_argument('--project-slug', required=True)
+    history.add_argument('--view', choices=('files', 'snapshots', 'publications'), default='files')
+    history.add_argument('--order', choices=('ingested', 'source'), default='ingested')
+    history.add_argument('--lineage-id')
+    history.add_argument('--since')
+    history.add_argument('--until')
+    history.add_argument('--time-field', choices=('received', 'recorded', 'source', 'published'))
+    history.add_argument('--limit', type=int, default=100)
+    history.add_argument('--cursor')
+    history.set_defaults(func=cmd_history)
 
     sc = sub.add_parser("convert", help="Offline MPP→JSON convert")
     sc.add_argument("--mpp", required=True)
@@ -279,7 +339,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.command:
         parser.print_help()
         return 0
-    if args.command not in ("save", "batch") and any((args.db, args.workvault, args.cache_dir)):
+    if args.command not in ("save", "batch", "operation", "resume", "history") and any((args.db, args.workvault, args.cache_dir)):
         parser.error("path overrides are supported for save and batch")
     return args.func(args)
 

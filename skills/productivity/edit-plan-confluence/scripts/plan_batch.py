@@ -220,7 +220,7 @@ def _mirror_batch(conn, batch_id, context):
     return receipt
 
 
-def _run_batch(conn, batch_id, *, context, retry_failed=False, tracker=None):
+def _run_batch(conn, batch_id, *, context, retry_failed=False, retry_decisions=False, tracker=None):
     batch = q.get_import_batch(conn, batch_id)
     if not batch["inputs_frozen_at"]:
         raise BatchError("inputs_not_frozen", exit_code=4)
@@ -252,7 +252,7 @@ def _run_batch(conn, batch_id, *, context, retry_failed=False, tracker=None):
             attempt_id = q.get_operation_attempts(conn, row["operation_id"])[-1]["attempt_id"]
             compact = _record_result(conn, row, attempt_id, {"status": "failed", "exit_code": 5,
                 "error": _error(row["error_code"]), "warnings": []}, context)
-        elif compact["status"] == "needs_decision" or (compact["status"] == "failed" and
+        elif (compact["status"] == "needs_decision" and not retry_decisions) or (compact["status"] == "failed" and
                 (not row["frozen_locator"] or not retry_failed or not (compact["error"] or {}).get("retryable"))):
             pass
         else:
@@ -262,7 +262,10 @@ def _run_batch(conn, batch_id, *, context, retry_failed=False, tracker=None):
             attempt_id = w.start_batch_item(conn, row["item_id"])
             operation = ImportOperation(row["operation_id"], row["item_id"], attempt_id)
             frozen = frozen_batch_input(row)
-            result = save_frozen_input(frozen, sha256=frozen.sha256, context=context, operation=operation)
+            from plan_decision import check_batch_item
+            pending = check_batch_item(conn, operation, retry_decisions=retry_decisions)
+            result = pending if pending is not None else save_frozen_input(
+                frozen, sha256=frozen.sha256, context=context, operation=operation)
             compact = _record_result(conn, row, attempt_id, result, context)
         if tracker is not None:
             tracker["receipt"] = _current(conn, batch_id)
@@ -357,13 +360,13 @@ def create_batch(*, mpp=None, manifest=None, inbox=None, project_slug=None, line
         return mask_secrets(_failure(exc, batch_id=batch_id))
 
 
-def resume_batch(batch_id, *, retry_failed=False, context=None, db_path=None, workvault=None, cache_dir=None):
+def resume_batch(batch_id, *, retry_failed=False, retry_decisions=False, context=None, db_path=None, workvault=None, cache_dir=None):
     def action(conn, tracker):
         tracker["receipt"] = _current(conn, batch_id)
         batch = q.get_import_batch(conn, batch_id)
         snapshot = json.loads(batch["context_json"])["execution"]
         _check_paths(snapshot, context=context, workvault=workvault, cache_dir=cache_dir)
-        return _run_batch(conn, batch_id, context=PlanContext.from_snapshot(snapshot), retry_failed=retry_failed, tracker=tracker)
+        return _run_batch(conn, batch_id, context=PlanContext.from_snapshot(snapshot), retry_failed=retry_failed, retry_decisions=retry_decisions, tracker=tracker)
     return _locked_batch(_db(context, db_path), batch_id, action)
 
 
@@ -384,7 +387,8 @@ def show_batch(batch_id, *, view="all", context=None, db_path=None, workvault=No
         if view == "errors":
             return {"schema_version": 1, "action": "show_batch", "batch_id": batch_id, "view": view, "exit_code": 0,
                     "result": {**{key:receipt[key] for key in ("status", "exit_code", "counts", "error", "manifest_sha256", "inputs_frozen_at")},
-                               "items": [item for item in receipt["items"] if item["status"] not in SUCCESS]},
+                               "items": [{**item, **_decision_details(conn, item["operation_id"])}
+                                         for item in receipt["items"] if item["status"] not in SUCCESS]},
                     "published": False, "error": None}
         if view != "all":
             raise ManifestError("invalid_batch_view")
@@ -394,3 +398,12 @@ def show_batch(batch_id, *, view="all", context=None, db_path=None, workvault=No
     finally:
         if conn is not None:
             conn.close()
+
+
+def _decision_details(conn, operation_id):
+    try:
+        return q.batch_decision_state(conn, operation_id)
+    except q.PlanQueryError as exc:
+        return {"decision_ready": False, "reasons": [str(exc)],
+                "proposals": q.get_batch_proposals(conn, operation_id),
+                "decisions": q.get_batch_decisions(conn, operation_id)}

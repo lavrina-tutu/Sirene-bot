@@ -1,0 +1,248 @@
+--- a/mofs_index/plan/writer.py
++++ b/mofs_index/plan/writer.py
+@@ -1482,3 +1482,115 @@
+                      (spec.plan_id,spec.lineage_id,attempt_id))
+         _operation_event(conn,attempt_id,"snapshot_committed",snapshot_id,item_id)
+         return ImportCommitResult(item_id,snapshot_id,status)
++
++
++# Stage 05. Batch lifecycle uses the existing tables and operation event log.
++@dataclass(frozen=True)
++class BatchItemSpec:
++    item_id: str  # external ID, unique within this batch
++    path: str
++    context_json: str
++    source_version_date: str | None = None
++
++
++def create_batch_with_items(conn, spec: ImportBatchSpec, items: tuple[BatchItemSpec, ...]):
++    """Atomically register the immutable request and *all* arrivals, once."""
++    manifest = json.loads(spec.manifest_json)
++    if hashlib.sha256(_json(manifest).encode()).hexdigest() != spec.manifest_sha256:
++        raise PlanWriterError("batch_manifest_hash_mismatch")
++    if not items or len({item.item_id for item in items}) != len(items):
++        raise PlanWriterError("invalid_batch_items")
++    if spec.manifest_version != 1 or spec.status != "freezing_inputs" or spec.on_error != manifest.get("on_error"):
++        raise PlanWriterError("invalid_batch_context")
++    if [item.item_id for item in items] != [item["item_id"] for item in manifest["items"]]:
++        raise PlanWriterError("batch_items_manifest_mismatch")
++    with _transaction(conn):
++        existing = conn.execute("SELECT manifest_sha256,context_json FROM plan_import_batch WHERE batch_id=?", (spec.batch_id,)).fetchone()
++        if existing:
++            if tuple(existing) != (spec.manifest_sha256, spec.context_json):
++                raise PlanWriterError("batch_manifest_conflict")
++            return False
++        values = {**asdict(spec), "manifest_json": _json(manifest), "created_at": _now()}
++        conn.execute("INSERT INTO plan_import_batch(" + ",".join(values) + ") VALUES (" + ",".join("?" for _ in values) + ")", tuple(values.values()))
++        for ordinal, item in enumerate(items, 1):
++            identity = hashlib.sha256(_json([spec.batch_id, item.item_id]).encode()).hexdigest()
++            internal_id, operation_id = "batch-item-" + identity, "batch-op-" + identity
++            conn.execute("INSERT INTO plan_operation(operation_id,action,context_json,created_at) VALUES (?,'save',?,?)",
++                         (operation_id, item.context_json, _now()))
++            conn.execute("INSERT INTO plan_import_item(item_id,operation_id,batch_id,ordinal,original_name,original_locator,"
++                         "transport_json,source_version_date,source_version_basis,received_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
++                         (internal_id, operation_id, spec.batch_id, ordinal, Path(item.path).name, item.path,
++                          _json({"manifest_item_id": item.item_id}), item.source_version_date,
++                          "explicit_user" if item.source_version_date else None, _now()))
++    return True
++
++
++def finalize_batch_freeze(conn, batch_id: str):
++    """Publish the barrier only when each arrival has bytes or a terminal error."""
++    with _transaction(conn):
++        batch = conn.execute("SELECT manifest_json,inputs_frozen_at FROM plan_import_batch WHERE batch_id=?", (batch_id,)).fetchone()
++        if not batch:
++            raise PlanWriterError("batch_missing")
++        if batch[1]:
++            return batch[1]
++        rows = conn.execute("SELECT frozen_locator,source_mpp_sha256,frozen_at,status,error_code,retryable FROM plan_import_item WHERE batch_id=? ORDER BY ordinal", (batch_id,)).fetchall()
++        if len(rows) != len(json.loads(batch[0])["items"]) or any(
++                not (r[0] and r[1] and r[2]) and not (r[3] == "failed" and r[4] and not r[5]) for r in rows):
++            raise PlanWriterError("inputs_not_frozen")
++        now = _now()
++        conn.execute("UPDATE plan_import_batch SET inputs_frozen_at=?,status='ready' WHERE batch_id=?", (now, batch_id))
++        return now
++
++
++def start_batch_item(conn, item_id: str):
++    """Persist processing intent/attempt before the shared save can read MPP."""
++    with _transaction(conn):
++        row = conn.execute("SELECT i.operation_id,i.frozen_locator,b.inputs_frozen_at,i.snapshot_id FROM plan_import_item i "
++                           "JOIN plan_import_batch b USING(batch_id) WHERE i.item_id=?", (item_id,)).fetchone()
++        if not row or not row[2]:
++            raise PlanWriterError("inputs_not_frozen")
++        if not row[1]:
++            raise PlanWriterError("input_freeze_failed")
++        if conn.execute("SELECT 1 FROM plan_import_item WHERE batch_id=(SELECT batch_id FROM plan_import_item WHERE item_id=?) "
++                        "AND item_id<>? AND status='processing'", (item_id, item_id)).fetchone():
++            raise PlanWriterError("batch_item_processing")
++        attempt_id = _new_id("attempt")
++        conn.execute("INSERT INTO plan_import_attempt(attempt_id,operation_id,item_id,status,created_at) VALUES (?,?,?,'prepared',?)",
++                     (attempt_id, row[0], item_id, _now()))
++        if not row[3]:
++            conn.execute("UPDATE plan_import_item SET status='processing',error_code=NULL,retryable=0 WHERE item_id=?", (item_id,))
++        _operation_event(conn, attempt_id, "batch_processing", None, item_id)
++        return attempt_id
++
++
++def finish_batch_item(conn, item_id: str, attempt_id: str, result_json: str):
++    """Current result plus append-only event. A commit link is never erased."""
++    result = json.loads(result_json)
++    status = result["status"]
++    if status not in ("saved", "saved_with_warnings", "unchanged", "failed", "needs_decision"):
++        raise PlanWriterError("invalid_batch_item_result")
++    with _transaction(conn):
++        row = conn.execute("SELECT i.snapshot_id FROM plan_import_item i JOIN plan_import_attempt a USING(item_id) "
++                           "WHERE i.item_id=? AND a.attempt_id=? AND i.operation_id=a.operation_id", (item_id, attempt_id)).fetchone()
++        if not row:
++            raise PlanWriterError("operation_attempt_mismatch")
++        if status in ("saved", "saved_with_warnings", "unchanged") and not row[0]:
++            raise PlanWriterError("snapshot_missing")
++        error = result.get("error") or {}
++        if not row[0]:
++            conn.execute("UPDATE plan_import_item SET status=?,error_code=?,retryable=? WHERE item_id=?",
++                         (status, error.get("code"), int(error.get("retryable", False)), item_id))
++        _operation_event(conn, attempt_id, "batch_item_result", None, _json(result), "confirmed" if not error else "failed")
++
++
++def finish_import_batch(conn, batch_id: str, *, status: str, stop_reason: str | None = None):
++    if status not in ("completed", "completed_with_errors", "stopped", "infrastructure_stopped"):
++        raise PlanWriterError("invalid_batch_status")
++    with _transaction(conn):
++        row = conn.execute("SELECT inputs_frozen_at FROM plan_import_batch WHERE batch_id=?", (batch_id,)).fetchone()
++        if not row:
++            raise PlanWriterError("batch_missing")
++        if not row[0]:
++            raise PlanWriterError("inputs_not_frozen")
++        conn.execute("UPDATE plan_import_batch SET status=?,stop_reason=?,completed_at=? WHERE batch_id=?",
++                     (status, stop_reason, _now(), batch_id))
+--- a/mofs_index/plan/query.py
++++ b/mofs_index/plan/query.py
+@@ -710,3 +710,39 @@
+     cursor = conn.execute("SELECT l.lineage_id,l.plan_id,p.project_slug FROM plan_lineage l JOIN plan p USING(plan_id) "
+                           "WHERE l.page_id=? AND l.source_namespace=?",(page_id,namespace))
+     return [dict(zip(("lineage_id","plan_id","project_slug"),row)) for row in cursor]
++
++
++def get_batch_items(conn: sqlite3.Connection, batch_id: str) -> list[dict[str, Any]]:
++    """One ordered read; external item IDs are scoped by their owning batch."""
++    cursor = conn.execute("SELECT * FROM plan_import_item WHERE batch_id=? ORDER BY ordinal", (batch_id,))
++    names = [column[0] for column in cursor.description]
++    return [dict(zip(names, row)) for row in cursor]
++
++
++def get_batch_item_result(conn: sqlite3.Connection, operation_id: str) -> dict[str, Any] | None:
++    for event in reversed(get_operation_events(conn, operation_id)):
++        if event["event_kind"] == "batch_item_result":
++            return json.loads(event["detail"])
++    return None
++
++
++def get_operation_attempts(conn: sqlite3.Connection, operation_id: str) -> list[dict[str, Any]]:
++    cursor = conn.execute("SELECT * FROM plan_import_attempt WHERE operation_id=? ORDER BY created_at,rowid", (operation_id,))
++    names = [column[0] for column in cursor.description]
++    return [dict(zip(names, row)) for row in cursor]
++
++
++def read_batch_state(conn: sqlite3.Connection, batch_id: str) -> dict[str, Any]:
++    """Coherent read-only projection while a separate process changes results."""
++    if conn.in_transaction:
++        raise PlanQueryError("caller_transaction_forbidden")
++    conn.execute("BEGIN")
++    try:
++        batch = get_import_batch(conn, batch_id)
++        if batch is None:
++            raise PlanQueryError("batch_not_found")
++        items = get_batch_items(conn, batch_id)
++        return {"batch": batch, "items": items,
++                "results": {item["operation_id"]: get_batch_item_result(conn, item["operation_id"]) for item in items}}
++    finally:
++        conn.execute("ROLLBACK")
+--- /dev/null
++++ b/tests/plan/test_batch.py
+@@ -0,0 +1,85 @@
++"""Stage 05 typed batch lifecycle on isolated databases; no skill-side SQL."""
++import hashlib
++import json
++from pathlib import Path
++
++import pytest
++
++from mofs_index.db import connect_durable
++from mofs_index.plan.migrate import ensure_plan_schema
++from mofs_index.plan import query as q, writer as w
++
++
++def canonical(value):
++    return json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(",", ":"))
++
++
++@pytest.fixture
++def batch_case(tmp_path):
++    c=connect_durable(tmp_path/"index.sqlite"); ensure_plan_schema(c)
++    manifest={"schema_version":1,"on_error":"continue","items":[{"item_id":"e","path":"/e.mpp"},{"item_id":"f","path":"/f.mpp"}]}
++    content=canonical(manifest)
++    spec=w.ImportBatchSpec("batch",1,content,hashlib.sha256(content.encode()).hexdigest(),"manifest","{}")
++    entries=tuple(w.BatchItemSpec(item["item_id"],item["path"],"{}") for item in manifest["items"])
++    yield c,spec,entries
++    c.close()
++
++
++def test_atomic_creation_idempotence_and_external_ids_scoped_to_batch(batch_case):
++    from dataclasses import replace
++    c,spec,entries=batch_case
++    assert w.create_batch_with_items(c,spec,entries) is True
++    rows=q.get_batch_items(c,"batch")
++    assert [json.loads(r["transport_json"])["manifest_item_id"] for r in rows] == ["e","f"]
++    assert [r["ordinal"] for r in rows] == [1,2]
++    assert w.create_batch_with_items(c,spec,entries) is False
++    assert len(q.get_batch_items(c,"batch")) == 2
++    assert w.create_batch_with_items(c,replace(spec,batch_id="second"),entries)
++    assert len({r["item_id"] for b in ("batch","second") for r in q.get_batch_items(c,b)}) == 4
++    with pytest.raises(w.PlanWriterError,match="batch_manifest_conflict"):
++        w.create_batch_with_items(c,replace(spec,context_json='{"changed":true}'),entries)
++    assert q.read_batch_state(c,"batch")["batch"]["inputs_frozen_at"] is None
++
++
++def test_creation_rolls_back_all_records_on_intermediate_sql_failure(batch_case):
++    c,spec,entries=batch_case
++    class FailingConnection:
++        def __getattr__(self,name): return getattr(c,name)
++        def execute(self,sql,params=()):
++            if sql.startswith("INSERT INTO plan_import_item") and params[3] == 2:
++                raise RuntimeError("test boundary after second operation")
++            return c.execute(sql,params)
++    with pytest.raises(RuntimeError):
++        w.create_batch_with_items(FailingConnection(),spec,entries)
++    for table in ("plan_import_batch","plan_import_item","plan_operation"):
++        assert c.execute("SELECT * FROM "+table).fetchall() == []
++
++
++def test_freeze_barrier_blocks_processing_until_all_bytes_or_errors(batch_case,tmp_path):
++    c,spec,entries=batch_case
++    w.create_batch_with_items(c,spec,entries)
++    rows=q.get_batch_items(c,"batch")
++    with pytest.raises(w.PlanWriterError,match="inputs_not_frozen"):
++        w.start_batch_item(c,rows[0]["item_id"])
++    with pytest.raises(w.PlanWriterError,match="inputs_not_frozen"):
++        w.finalize_batch_freeze(c,"batch")
++    source=tmp_path/"source.mpp"; source.write_bytes(b"frozen")
++    w.freeze_import_item(c,rows[0]["item_id"],frozen_locator=str(source),source_mpp_sha256=hashlib.sha256(b"frozen").hexdigest(),
++                         size_bytes=6,frozen_at="2026-11-16T10:00:00Z")
++    with pytest.raises(w.PlanWriterError,match="inputs_not_frozen"):
++        w.finalize_batch_freeze(c,"batch")
++    attempt=w.begin_operation_attempt(c,rows[1]["operation_id"],rows[1]["item_id"])
++    w.fail_import_item(c,rows[1]["item_id"],attempt,"input_missing",retryable=False)
++    when=w.finalize_batch_freeze(c,"batch")
++    assert w.finalize_batch_freeze(c,"batch") == when
++    processing=w.start_batch_item(c,rows[0]["item_id"])
++    assert q.get_attempt(c,processing)["item_id"] == rows[0]["item_id"]
++    with pytest.raises(w.PlanWriterError,match="input_freeze_failed"):
++        w.start_batch_item(c,rows[1]["item_id"])
++    result={"status":"failed","error":{"code":"mpp_read_timeout","retryable":True},"warnings":[]}
++    w.finish_batch_item(c,rows[0]["item_id"],processing,canonical(result))
++    assert q.get_batch_item_result(c,rows[0]["operation_id"]) == result
++    w.finish_import_batch(c,"batch",status="infrastructure_stopped",stop_reason=canonical(result["error"]))
++    assert q.get_import_batch(c,"batch")["completed_at"]
++    assert not c.execute("PRAGMA foreign_key_check").fetchall()
++    assert c.execute("PRAGMA integrity_check").fetchone()[0] == "ok"

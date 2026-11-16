@@ -1,0 +1,60 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests
+configfile: pytest.ini
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 334 items / 2 deselected / 332 selected
+
+skills/productivity/edit-plan-confluence/tests/test_batch_resume.py .... [  1%]
+..............                                                           [  5%]
+skills/productivity/edit-plan-confluence/tests/test_child_page.py ...... [  7%]
+.............                                                            [ 11%]
+skills/productivity/edit-plan-confluence/tests/test_cli.py .......       [ 13%]
+skills/productivity/edit-plan-confluence/tests/test_env.py .....         [ 14%]
+skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py . [ 15%]
+..........                                                               [ 18%]
+skills/productivity/edit-plan-confluence/tests/test_gate_diff.py ..      [ 18%]
+skills/productivity/edit-plan-confluence/tests/test_import_atomicity.py . [ 18%]
+.............                                                            [ 22%]
+skills/productivity/edit-plan-confluence/tests/test_itogo.py ........... [ 26%]
+...                                                                      [ 27%]
+skills/productivity/edit-plan-confluence/tests/test_macro.py ...         [ 28%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py ..   [ 28%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py ..... [ 30%]
+.....                                                                    [ 31%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_input.py ....... [ 33%]
+.................                                                        [ 38%]
+skills/productivity/edit-plan-confluence/tests/test_pipeline.py ........ [ 41%]
+................                                                         [ 46%]
+skills/productivity/edit-plan-confluence/tests/test_plan_archive.py .... [ 47%]
+....                                                                     [ 48%]
+skills/productivity/edit-plan-confluence/tests/test_plan_batch.py ...... [ 50%]
+................                                                         [ 55%]
+skills/productivity/edit-plan-confluence/tests/test_plan_cache.py ...... [ 56%]
+........                                                                 [ 59%]
+skills/productivity/edit-plan-confluence/tests/test_plan_history.py .... [ 60%]
+...                                                                      [ 61%]
+skills/productivity/edit-plan-confluence/tests/test_plan_lock.py ..      [ 62%]
+skills/productivity/edit-plan-confluence/tests/test_plan_manifest.py ... [ 62%]
+....................                                                     [ 68%]
+skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py .... [ 70%]
+...............                                                          [ 74%]
+skills/productivity/edit-plan-confluence/tests/test_plan_reconcile.py .. [ 75%]
+...                                                                      [ 76%]
+skills/productivity/edit-plan-confluence/tests/test_plan_save.py ....... [ 78%]
+.................                                                        [ 83%]
+skills/productivity/edit-plan-confluence/tests/test_plan_verify.py ..... [ 84%]
+..............                                                           [ 89%]
+skills/productivity/edit-plan-confluence/tests/test_prepared_plan.py ... [ 90%]
+...........................                                              [ 98%]
+skills/productivity/edit-plan-confluence/tests/test_save_e2e.py ......   [100%]
+
+=============================== warnings summary ===============================
+test_mpp_input.py::test_zip_collisions[names0]
+  /usr/lib64/python3.9/zipfile.py:1535: UserWarning: Duplicate name: 'x.mpp'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage05-152031/stage-05/reports/junit.xml -
+=========== 332 passed, 2 deselected, 1 warning in 325.28s (0:05:25) ===========

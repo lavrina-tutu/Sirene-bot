@@ -139,12 +139,27 @@ def cmd_save(args: argparse.Namespace) -> int:
     return result.exit_code
 
 
+def cmd_batch(args: argparse.Namespace) -> int:
+    from plan_batch import create_batch, resume_batch, show_batch
+    paths = dict(db_path=args.db, workvault=args.workvault, cache_dir=args.cache_dir)
+    if args.batch_command == "save":
+        result = create_batch(mpp=args.mpp, manifest=args.manifest, inbox=args.inbox,
+            project_slug=args.project_slug, lineage_id=args.lineage_id, timezone_hint=args.timezone_hint,
+            batch_id=args.batch_id, on_error=args.on_error, **paths)
+    elif args.batch_command == "resume":
+        result = resume_batch(args.batch_id, retry_failed=args.retry_failed, **paths)
+    else:
+        result = show_batch(args.batch_id, view=args.view, **paths)
+    print(json.dumps(result, ensure_ascii=False))
+    return result["exit_code"]
+
+
 class JsonArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         # Stable error; argument strings can contain secrets. Details go to stderr.
         print("Ошибка аргументов CLI", file=sys.stderr)
-        from plan_receipt import single_receipt
-        receipt = single_receipt()
+        from plan_receipt import single_receipt, batch_receipt
+        receipt = batch_receipt(argument_error=True) if getattr(self, "batch_parser", False) or "batch" in sys.argv[1:] else single_receipt()
         receipt.update(exit_code=2, error={"code": "invalid_arguments", "message": "Некорректные аргументы CLI",
                                           "retryable": False, "next_action": "Проверить --help"})
         print(json.dumps(receipt, ensure_ascii=False))
@@ -223,6 +238,32 @@ def build_parser() -> argparse.ArgumentParser:
     sv.add_argument("--source-version-date", default=None, help="Explicit source version date YYYY-MM-DD")
     sv.set_defaults(func=cmd_save)
 
+    batch = sub.add_parser("batch", help="Sequential archive batch; no Confluence")
+    batch.batch_parser = True
+    commands = batch.add_subparsers(dest="batch_command", required=True)
+    bs = commands.add_parser("save", help="Freeze all inputs, then save sequentially")
+    bs.batch_parser = True
+    inputs = bs.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--mpp", action="append")
+    inputs.add_argument("--manifest", type=Path)
+    inputs.add_argument("--inbox", type=Path)
+    bs.add_argument("--project-slug")
+    bs.add_argument("--lineage-id")
+    bs.add_argument("--timezone-hint")
+    bs.add_argument("--batch-id")
+    bs.add_argument("--on-error", choices=("continue", "stop"))
+    bs.set_defaults(func=cmd_batch)
+    br = commands.add_parser("resume", help="Continue frozen inputs and context")
+    br.batch_parser = True
+    br.add_argument("--batch-id", required=True)
+    br.add_argument("--retry-failed", action="store_true")
+    br.set_defaults(func=cmd_batch)
+    bv = commands.add_parser("show", help="Read current batch state")
+    bv.batch_parser = True
+    bv.add_argument("--batch-id", required=True)
+    bv.add_argument("--view", choices=("all", "errors"), default="all")
+    bv.set_defaults(func=cmd_batch)
+
     sc = sub.add_parser("convert", help="Offline MPP→JSON convert")
     sc.add_argument("--mpp", required=True)
     sc.add_argument("--out")
@@ -238,8 +279,8 @@ def main(argv: list[str] | None = None) -> int:
     if not args.command:
         parser.print_help()
         return 0
-    if args.command != "save" and any((args.db, args.workvault, args.cache_dir)):
-        parser.error("path overrides are supported for save only in stage 04")
+    if args.command not in ("save", "batch") and any((args.db, args.workvault, args.cache_dir)):
+        parser.error("path overrides are supported for save and batch")
     return args.func(args)
 
 

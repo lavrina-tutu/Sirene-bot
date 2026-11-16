@@ -1,0 +1,21 @@
+{
+  "patch": {
+    "rc": 0,
+    "stdout": "patching file mofs_index/plan/writer.py\npatching file mofs_index/plan/query.py\npatching file tests/plan/test_batch.py\n",
+    "stderr": "",
+    "hashes": {
+      "mofs_index/plan/writer.py": "0bfdfd74bcd7d50fb9234edd498aa477e9f70ed955da2666e0a0da1246fe09db",
+      "mofs_index/plan/query.py": "c6254681ce1655a427b05715c1891d1abb0a70a08874de9b62bc27b1088488ac",
+      "tests/plan/test_batch.py": "a38e57e44de3bb161b0b1d0aad5606b8361853d451efa5018ea2cb72ed4722e2"
+    }
+  },
+  "after-copy": {
+    "rc": 0,
+    "hashes": {
+      "mofs_index/plan/writer.py": "0bfdfd74bcd7d50fb9234edd498aa477e9f70ed955da2666e0a0da1246fe09db",
+      "mofs_index/plan/query.py": "c6254681ce1655a427b05715c1891d1abb0a70a08874de9b62bc27b1088488ac",
+      "tests/plan/test_batch.py": "a38e57e44de3bb161b0b1d0aad5606b8361853d451efa5018ea2cb72ed4722e2"
+    }
+  },
+  "working_after_match": true
+}

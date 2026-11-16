@@ -1,0 +1,36 @@
+{
+  "python_test": {
+    "command": [
+      "/usr/bin/python3.9",
+      "--version"
+    ],
+    "rc": 0,
+    "stdout": "Python 3.9.25\n",
+    "stderr": ""
+  },
+  "python_cli": {
+    "command": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "rc": 0,
+    "stdout": "Python 3.9.25\n",
+    "stderr": ""
+  },
+  "java": {
+    "command": [
+      "java",
+      "-version"
+    ],
+    "rc": 0,
+    "stdout": "",
+    "stderr": "openjdk version \"17.0.17\" 2025-10-21 LTS\nOpenJDK Runtime Environment (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS)\nOpenJDK 64-Bit Server VM (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS, mixed mode, sharing)\n"
+  },
+  "test_environment": {
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+    "cli": "/usr/bin/python3",
+    "MPXJ_PYTHON": "/usr/bin/python3.9",
+    "network": "denied by pytest fixtures and CLI/subprocess sitecustomize",
+    "ConfluenceClient": "forbidden for archive scenarios"
+  }
+}

@@ -210,6 +210,34 @@ STAGE04_REQUIRED = STAGE03_REQUIRED | STAGE02_REQUIRED | {
 }
 
 
+STAGE05_REQUIRED = STAGE04_REQUIRED | {
+    "test_plan_manifest.py::" + name for name in (
+        "test_manifest_rejects_unknown_null_and_common_fields", "test_manifest_item_validation",
+        "test_manifest_duplicate_ids_and_json_keys", "test_canonical_order_paths_fields_label_policy_and_saved_defaults",
+        "test_inbox_unicode_regular_complete_nonrecursive_diagnostics")
+} | {"test_plan_batch.py::" + name for name in (
+    "test_freeze_all_before_first_reader_and_mutated_second_source", "test_corrupt_middle_continue_stop_freeze_whole_list",
+    "test_infrastructure_after_success_has_priority_and_retains_counts", "test_duplicates_within_across_batches_and_same_names_different_bytes",
+    "test_structural_errors_precede_arrivals", "test_existing_batch_same_request_only_state_changed_manifest_conflicts",
+    "test_inbox_late_file_excluded_diagnostics_and_sources_preserved", "test_receipt_balance_and_priority",
+    "test_missing_input_and_expected_hash_known_before_first_parse", "test_foreign_lineage_is_local_failure_and_new_mpp_needs_no_decision",
+    "test_same_bytes_different_timezone_and_profile_new_scope", "test_fixtures_batch_hashes_and_manifest_cases",
+    "test_batch_cli_argument_errors_single_json")
+} | {"test_batch_resume.py::" + name for name in (
+    "test_resume_stop_retries_only_explicit_retryable_same_bytes", "test_freeze_failure_never_accepts_new_bytes_under_same_id",
+    "test_lost_frozen_artifact_infrastructure_only_identical_repair", "test_mirror_failure_preserves_commit_and_restores_without_reader",
+    "test_process_death_freeze_commit_receipt_boundaries", "test_resume_rejects_changed_frozen_context")
+} | {"test_plan_lock.py::test_lock_busy_independent_process_and_release_after_death",
+     "test_plan_lock.py::test_two_batch_handlers_busy_without_duplicate_arrivals"}
+STAGE05_REQUIRED |= {"test_plan_batch.py::test_real_batch_cli_native_copies[" + mode + "]"
+                     for mode in ("mpp", "manifest", "inbox", "named-risks")}
+STAGE05_REQUIRED |= {"test_batch_resume.py::test_process_death_freeze_commit_receipt_boundaries[" + boundary + "]"
+                     for boundary in ("after_first_freeze", "before_freeze_barrier", "after_freeze_barrier", "before_snapshot_commit",
+                                      "after_snapshot_commit", "before_save_receipt", "after_item_result", "before_batch_receipt")}
+STAGE05_REQUIRED |= {"test_batch_resume.py::test_journaling_failure_stops_after_confirmed_success",
+                     "test_batch_resume.py::test_missing_mirror_recovery_verifies_committed_artifacts"}
+
+
 def pytest_addoption(parser):
     parser.addoption("--acceptance-stage", default=None)
     parser.addoption("--test-root", default=None)
@@ -226,8 +254,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03", "04"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 through 04")
+    if stage and stage not in ("01", "02", "03", "04", "05"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 05")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -268,7 +296,7 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED}[stage]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -287,6 +315,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption("--acceptance-stage") == "05":
+        _stage05_report(session, exitstatus, root)
         return
     if config.getoption("--acceptance-stage") == "04":
         _stage04_report(session, exitstatus, root)
@@ -697,3 +728,101 @@ def _stage04_report(session, exitstatus, root):
                   "", "Ограничения:", ""])
     lines.extend("- "+value for value in limitations)
     (root/"reports/stage-report.md").write_text("\n".join(lines)+"\n")
+
+
+def _stage05_report(session, exitstatus, root):
+    """Actual batch gate, external delivery/pytest results and immutable evidence."""
+    config = session.config
+    results = config._acceptance_results
+    initial_path = root / 'reports/initial-state.json'
+    initial = json.loads(initial_path.read_text()) if initial_path.exists() else {}
+    external_path = root / 'reports/external-checks.json'
+    external = json.loads(external_path.read_text()) if external_path.exists() else {}
+    protected = initial.get('protected_hashes', {})
+    changed = [name for name,digest in protected.items()
+               if not Path(name).is_file() or hashlib.sha256(Path(name).read_bytes()).hexdigest() != digest]
+    cases = {mode:json.loads(path.read_text()) for mode in ('mpp','manifest','inbox','named-risks')
+             if (path := root / 'reports' / ('batch-real-'+mode+'.json')).is_file()}
+    good = (exitstatus == 0 and bool(session.items) and bool(results)
+            and all(result['status'] == 'passed' for result in results)
+            and bool(protected) and not changed and external.get('gate') == 'passed'
+            and set(cases) == {'mpp','manifest','inbox','named-risks'}
+            and all(case['rc'] == case['repeat_rc'] == 0 for case in cases.values()))
+    files = sorted(set([*SCRIPTS.glob('*.py'), *(SKILL_ROOT/'tests').glob('*.py'),
+                       *(SKILL_ROOT/'references/schemas').glob('*.json'), *(SKILL_ROOT/'references/profiles').glob('*.json'),
+                       *(SKILL_ROOT/'references').glob('*.md'), *(MOFS_INDEX_ROOT/'mofs_index/plan').glob('*.py'),
+                       *(MOFS_INDEX_ROOT/'tests/plan').glob('*.py'), SKILL_ROOT/'tests/pytest.ini',
+                       *(p for p in (SKILL_ROOT/'tests/fixtures/batch').rglob('*') if p.is_file())]))
+    hashes = {str(path):hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
+    master = Path.home()/'WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md'
+    plan = master.parent/'plans/HF-plan_EditPlanConfluence_20261116.md'
+    schema = Path.home()/'WorkVault/Registries/EcosystemConfig.schema.json'
+    implemented = {
+        'S/scripts/plan_manifest.py':'строгие поля/null/ID/date/IANA/SHA; канонизация порядка/путей/label/on_error с сохранёнными defaults; Inbox без рекурсии, Unicode и диагностика исключений',
+        'S/scripts/plan_batch.py':'три входа; неизменяемый запрос и контекст; freeze-all barrier до reader; последовательные continue/stop; idempotent save, frozen resume, явный retry-failed; общий инфраструктурный stop',
+        'S/scripts/plan_lock.py':'межпроцессный nonblocking flock по реальной БД и batch ID; стабильный inode, автоматическое освобождение при смерти процесса',
+        'S/scripts/cli.py':'batch save/resume/show; взаимоисключающие входы; глобальные пути; машинный JSON без клиента/сети',
+        'S/scripts/plan_receipt.py':'полная пакетная квитанция v1, баланс, saved_with_warnings внутри saved; приоритет 2/4/5/6/0',
+        'S/scripts/plan_reconcile.py':'проверка только frozen locators и committed item/event/snapshot, read-back и зеркало через общий save без нового reader/поступления/snapshot',
+        'M/mofs_index/plan/writer.py':'typed atomic registration всех item/operations; barrier freeze; processing intent/attempt; typed result/event и batch completion; схемы/миграции неизменны',
+        'M/mofs_index/plan/query.py':'ordered batch items, attempts, последнее событие результата и согласованное read-only SQL-наблюдение',
+        'S/references/schemas/{batch-manifest,batch-receipt}.schema.json':'строгие JSON-контракты §20.4.4/§20.3.12.2',
+        'S/references/cli-contract.md':'batch save/resume/show, ошибки, блокировка, frozen context, коды и граница этапа 06',
+        'S/tests/{test_plan_manifest,test_plan_batch,test_batch_resume,test_plan_lock}.py':'входы/дубли/ошибки/повторы, реальные E/F+D-risks, восемь process-death границ, два процесса, freeze/commit/receipt/journaling',
+        'S/tests/fixtures/batch/':'проверенные manifest fixtures, одинаковые MPP, неразбираемый вход и нерекурсивный Inbox',
+        'M/tests/plan/test_batch.py':'атомарная регистрация и rollback, уникальность ID по пакету, запрет reader до общей фиксации, typed results и FK/integrity',
+        'S/tests/conftest.py':'обязательные ID этапа 05, изоляция и фактический gate/report из pytest; прежние стадии сохранены',
+    }
+    limitations = [
+        'Реализован только этап 05; proposals/decisions, retry-decisions и расширенная история относятся к этапу 06',
+        'schedule:not_verified; live Confluence/плагин не проверялись; полная приёмка §20 не заявлена',
+        'Нормативные E/F = 090726/230726; упомянутый в поручении 260626_risks проверен дополнительно как D-risks',
+        'При reader failure без export telemetry число MPXJ-read остаётся null; старые CSV/calendar paths отдельно не измерялись',
+        'Блокировка локальная POSIX flock; распределённая блокировка между разными хостами вне этого контура',
+        'Process-death tests не моделируют отказ ОС/питания; ownCloud sync не подтверждён',
+        'Production-БД/страницы/настройки/baseline, Gateway/кроны/наблюдатели/расписания не менялись',
+    ]
+    counters = {'batch_real':{mode:{'cold':[case['metrics']['counters'] for case in evidence['cases']],
+                                  'warm':[metric['counters'] for metric in evidence['repeat_metrics']]}
+                              for mode,evidence in cases.items()},
+                'legacy_reader_total':None, 'live_POST':0, 'live_PUT':0,
+                'publication_fake_regression':config._acceptance_counters}
+    report = {'stage':'05','gate':'passed' if good else 'failed','exit_code':int(exitstatus),
+              'base_commit':initial.get('base_commit'),
+              'command':[sys.executable,'-m','pytest',*config.invocation_params.args],
+              'environment':{'python':sys.executable,'version':platform.python_version(),'test_root':str(root),
+                             'cli_python':'/usr/bin/python3','mpxj_python':'/usr/bin/python3.9','PYTHONPATH':os.environ.get('PYTHONPATH')},
+              'master':{'version':'0.5.0','path':str(master),'sha256':hashlib.sha256(master.read_bytes()).hexdigest()},
+              'plan':{'path':str(plan),'normative_prefix_sha256':hashlib.sha256(plan.read_text().split('## Журнал исполнения')[0].encode()).hexdigest()},
+              'config_contract_sha256':hashlib.sha256(schema.read_bytes()).hexdigest(),
+              'source_files':hashes,'source_tree_sha256':hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),
+              'migrations':[], 'existing_schema':['0001','0002','0003','0004','0005','0006','0007','0008'],
+              'protected_files_checked':len(protected),'changed_protected_files':changed,
+              'implemented_files':implemented,'selected':len(session.items),'tests':results,
+              'mandatory_test_ids':sorted(STAGE05_REQUIRED),'external_checks':external,'real_cases':cases,'counters':counters,
+              'covered_requirements':['§20/AC-17','§20/AC-18','stage-05 parts of §20/AC-19','§20/AC-20','§20/AC-21','§20/AC-22','§20/AC-26'],
+              'batch_contract':{'inputs':['repeatable --mpp','manifest','Inbox'],
+                  'freeze':'All arrivals: verified durable bytes or specific terminal input error; atomic inputs_frozen_at before processing',
+                  'resume':'saved skipped; processing reconciled before parse; failed retried only explicitly if retryable; no original paths/current defaults',
+                  'balance':'total = saved + unchanged + failed + needs_decision + not_started; warnings subset of saved',
+                  'exit_priority':[2,4,5,6,0],'published':False,'baseline':'exact populated rows preserved','publication':'no added rows'},
+              'limitations':limitations,'generated_at':datetime.now(timezone.utc).isoformat()}
+    (root/'reports/stage-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    lines=['# Этап 05 — batch: входы, обработка и восстановление','',
+           f"Gate: **{report['gate']}**. S rc={exitstatus}; selected={len(session.items)}; passed={sum(result['status']=='passed' for result in results)}.",
+           '', 'Реализовано:', '']
+    lines.extend(f'- `{name}`: {value}.' for name,value in implemented.items())
+    lines.extend(['','Три входа: повторяемый --mpp, manifest и Inbox. Freeze-all завершается до reader; stop действует только на обработку. Resume работает на прежних байтах/контексте, пропускает успешные, разрешает retryable failed только явно. После commit сначала read-back, новый snapshot и reader запрещены.',
+                  '', 'Баланс: total = saved + unchanged + failed + needs_decision + not_started; saved_with_warnings входит в saved. Приоритет exit codes: 2 → 4 → 5 → 6 → 0. Published=false; baseline и публикации сохранены.',
+                  '', 'Команда S:', '', '```text', ' '.join(report['command']), '```', '',
+                  f"M/tests: rc={external.get('mofs_tests',{}).get('rc')}, passed={external.get('mofs_tests',{}).get('passed')}; команды/окружение/stdout/stderr/JUnit — external-checks.json и mofs-*.xml/log.",
+                  '', 'Реальные MPP:'])
+    for mode, evidence in cases.items():
+        measurements=', '.join(f"{case['case']}={case['receipt']['task_count']}/{case['receipt']['dependency_count']}" for case in evidence['cases'])
+        lines.append(f"- {mode}: {measurements}; cold=1 MPXJ-read на вход, warm=0/read + cache hit; rc={evidence['rc']}/{evidence['repeat_rc']}. Evidence: batch-real-{mode}.json.")
+    lines.extend(['', 'Восемь реальных os._exit границ: после первого freeze, до/после общей отметки, до/после snapshot commit, до single receipt, после item result и до batch receipt. Два независимых процесса подтверждают busy/4, отсутствие новых поступлений и освобождение после SIGKILL.',
+                  '', f"Защищённые файлы: {len(protected)}; изменено: {len(changed)}. Миграций нет. USERTOOLS before/after/patch/manifest и проверка обоих способов восстановления: usertools/MofsIndex/, external-checks.json.",
+                  '', f"Дерево исходников: `{report['source_tree_sha256']}`. Master 0.5.0 и контракты захэшированы в JSON. SHA финального коммита записывается после commit в журнал канонического плана.",
+                  '', 'Ограничения:', ''])
+    lines.extend('- '+value for value in limitations)
+    (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')

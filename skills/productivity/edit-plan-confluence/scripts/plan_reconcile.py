@@ -146,3 +146,40 @@ def saved_operation_receipt(conn, operation_id: str) -> dict | None:
             validate_single_receipt(result)
             return result
     return None
+
+
+def frozen_batch_input(item):
+    """Verify registered frozen locators only. Never refreeze an original path."""
+    from mpp_input import FrozenInput, InputError
+    path = Path(item["frozen_locator"])
+    try:
+        if path.is_symlink() or not path.is_file() or path.stat().st_size != item["size_bytes"] or hashlib.sha256(path.read_bytes()).hexdigest() != item["source_mpp_sha256"]:
+            raise InputError("frozen_input_corrupt")
+        if item["container_sha256"]:
+            container = Path(item["container_locator"])
+            if container.is_symlink() or not container.is_file() or hashlib.sha256(container.read_bytes()).hexdigest() != item["container_sha256"]:
+                raise InputError("frozen_container_corrupt")
+    except OSError as exc:
+        raise InputError("frozen_input_corrupt") from exc
+    return FrozenInput(path, item["source_mpp_sha256"], item["size_bytes"], item["original_name"],
+                       item["original_locator"], item["frozen_at"], item["container_sha256"],
+                       item["container_locator"], item["zip_member"])
+
+
+def reconcile_batch_item(conn, item, *, context):
+    """Resolve a committed processing item before any retry/reader.
+
+    Reuse the common full read-back/receipt implementation and original attempt;
+    even an interrupted mirror must not create a second arrival or snapshot.
+    """
+    from plan_operation import ImportOperation
+    from plan_save import save_frozen_input
+    committed = plan_query.get_committed_import(conn, item["item_id"])
+    if not committed:
+        return None
+    attempts = plan_query.get_operation_attempts(conn, item["operation_id"])
+    if not attempts:
+        raise plan_writer.PlanWriterError("operation_attempt_missing")
+    frozen = frozen_batch_input(item)
+    operation = ImportOperation(item["operation_id"], item["item_id"], attempts[-1]["attempt_id"])
+    return save_frozen_input(frozen, sha256=frozen.sha256, context=context, operation=operation)

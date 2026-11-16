@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "-c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+    "--acceptance-stage",
+    "05",
+    "--test-root",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage05-152031/stage-05",
+    "-m",
+    "unit or archive_integration or mpp_fixtures",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage05-152031/stage-05/reports/junit.xml"
+  ],
+  "rc": 0
+}

@@ -103,6 +103,45 @@ def validate_single_receipt(payload):
     jsonschema.validate(payload, json.loads(schema.read_text()))
 
 
+def batch_counts(items):
+    counts = dict.fromkeys(("total", "saved", "saved_with_warnings", "unchanged", "failed", "needs_decision", "not_started"), 0)
+    for item in items:
+        status = item["status"]
+        counts["total"] += 1
+        counts["saved" if status == "saved_with_warnings" else status] += 1
+        if status == "saved_with_warnings":
+            counts["saved_with_warnings"] += 1
+    return counts
+
+
+def batch_exit_code(counts, *, argument_error=False, conflict=False, infrastructure=False):
+    if argument_error:
+        return 2
+    if conflict:
+        return 4
+    if infrastructure:
+        return 5
+    return 6 if any(counts[k] for k in ("failed", "needs_decision", "not_started")) else 0
+
+
+def batch_receipt(*, batch_id=None, manifest_sha256=None, inputs_frozen_at=None, on_error="continue",
+                  items=(), status=None, error=None, argument_error=False, conflict=False, infrastructure=False):
+    counts = batch_counts(items)
+    code = batch_exit_code(counts, argument_error=argument_error, conflict=conflict, infrastructure=infrastructure)
+    status = status or ({2: "failed", 4: "conflict", 5: "infrastructure_stopped", 6: "completed_with_errors", 0: "completed"}[code])
+    return {"schema_version": 1, "batch_id": batch_id, "mode": "batch_save", "status": status,
+            "exit_code": code, "manifest_sha256": manifest_sha256, "inputs_frozen_at": inputs_frozen_at,
+            "on_error": on_error, "counts": counts, "items": list(items), "published": False, "error": error}
+
+
+def validate_batch_receipt(payload):
+    import jsonschema
+    schema = Path(__file__).resolve().parents[1] / "references/schemas/batch-receipt.schema.json"
+    jsonschema.validate(payload, json.loads(schema.read_text()))
+    if payload["counts"] != batch_counts(payload["items"]):
+        raise ValueError("batch_counts_mismatch")
+
+
 def write_failure_receipt(attempt_id: str, stage: str, error: Exception, *, external_effect: str) -> Path:
     """Unknown/partial remote writes never become published:false or success."""
     return write_receipt(attempt_id, "failure-" + stage, {

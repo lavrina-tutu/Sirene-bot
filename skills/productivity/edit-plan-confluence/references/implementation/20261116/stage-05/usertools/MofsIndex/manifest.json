@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "component": "MofsIndex",
+  "stage": "05",
+  "files": [
+    {
+      "relative_path": "mofs_index/plan/writer.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py",
+      "before_sha256": "4a9315ae8ae6d1377011ad7f4b7d8c0571187981fc676cb984006b3e9383a16b",
+      "after_sha256": "0bfdfd74bcd7d50fb9234edd498aa477e9f70ed955da2666e0a0da1246fe09db",
+      "operation": "modify",
+      "mode": "0o644",
+      "basis": "HF plan \u00a77; manual executor stage 05; existing typed MofsIndex batch model, no migration"
+    },
+    {
+      "relative_path": "mofs_index/plan/query.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py",
+      "before_sha256": "d34668914b4b57812a76d2029a11751dcb672568ae55ed3d650a5e119f2e7c34",
+      "after_sha256": "c6254681ce1655a427b05715c1891d1abb0a70a08874de9b62bc27b1088488ac",
+      "operation": "modify",
+      "mode": "0o644",
+      "basis": "HF plan \u00a77; manual executor stage 05; existing typed MofsIndex batch model, no migration"
+    },
+    {
+      "relative_path": "tests/plan/test_batch.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_batch.py",
+      "before_sha256": null,
+      "after_sha256": "a38e57e44de3bb161b0b1d0aad5606b8361853d451efa5018ea2cb72ed4722e2",
+      "operation": "create",
+      "mode": "0o644",
+      "basis": "HF plan \u00a77; manual executor stage 05; existing typed MofsIndex batch model, no migration"
+    }
+  ]
+}

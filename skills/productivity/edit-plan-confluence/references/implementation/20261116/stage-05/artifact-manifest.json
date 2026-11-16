@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "stage": "05",
+  "files": {
+    "batch-real-inbox.json": {
+      "sha256": "1492fb33284f158d611885e4327fc51c04bb074810c253be7b2a56145eaa47b9",
+      "size_bytes": 49217
+    },
+    "batch-real-manifest.json": {
+      "sha256": "d473e41e531639d3fd72ddbef15e34eec3fa44c9f7d279d3026920c173700550",
+      "size_bytes": 49150
+    },
+    "batch-real-mpp.json": {
+      "sha256": "da59d55ff4784de19f956d1908a5db3ad57a0abf9cd527ade6988cee909f5b2b",
+      "size_bytes": 64875
+    },
+    "batch-real-named-risks.json": {
+      "sha256": "79f7e55a112117cb76d71a14a39d406ed5a0817326139a33b8ea927f0a681280",
+      "size_bytes": 49616
+    },
+    "cache-read-evidence.json": {
+      "sha256": "2e8b8c2c9ab0e2f742bc6a69443a186f3f340ba21d209088455152b9efcfbd51",
+      "size_bytes": 511
+    },
+    "command-result.json": {
+      "sha256": "2d0b34f8cf48def78d687614e5bac852de5fb72e611a323f8286ade2a9f24e49",
+      "size_bytes": 621
+    },
+    "command.json": {
+      "sha256": "369eba6837ae83941cc12712b8d01a62e575c76062847839b72a51f711de0fae",
+      "size_bytes": 729
+    },
+    "environment.json": {
+      "sha256": "4f713e5831f29564a4d4b9ffc0a8625f7ba8c31e546b432c6a02ef98daad9196",
+      "size_bytes": 960
+    },
+    "external-checks.json": {
+      "sha256": "ec3846bf2148f226d31eb3d155b4b853083d5d0fdef4132ecf5ee42c49c1e20d",
+      "size_bytes": 1937
+    },
+    "initial-state.json": {
+      "sha256": "082ea896ba9e058ed41413e6f5c691be843bdc872a97aeba37fa502b5f23a61c",
+      "size_bytes": 34138
+    },
+    "junit.xml": {
+      "sha256": "3d7490c54da8d1368a513c3df884c2b1550ac5bcb8e1b0f0f327a22a752eecd0",
+      "size_bytes": 44547
+    },
+    "mofs-junit.xml": {
+      "sha256": "4de12aa041e68ce7c934c2d02748f45c70c160ea440897f8c093fb3386d8ceba",
+      "size_bytes": 10429
+    },
+    "mofs-stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "mofs-stdout.log": {
+      "sha256": "825c37efd53b0333b097fb4189e13c9631642113d32bf57864b49c48c494fe2a",
+      "size_bytes": 317
+    },
+    "restore-check.json": {
+      "sha256": "7b26b73b0f91409e61f7477b290839232ee654ead9b8d5709520db86a33b8147",
+      "size_bytes": 914
+    },
+    "save-e2e-E.json": {
+      "sha256": "4e8a6061aa84687752910afaf5cbb050bc984e309a9467a4545b75b4430d90b1",
+      "size_bytes": 11408
+    },
+    "save-e2e-F.json": {
+      "sha256": "2c375e327c141a7939f27b8d9a2ff5e3e52d2d760300cea174e2be92c8b16b23",
+      "size_bytes": 11407
+    },
+    "stage-report.json": {
+      "sha256": "ab635a0b2665c98f30402c7a83c6816d6dee3bbae6f0c16b881f60b6062566dc",
+      "size_bytes": 334877
+    },
+    "stage-report.md": {
+      "sha256": "7a0b2b0f711d0fb77c54e23d858206556c4ae9a86e6e3bc168b4776d58436052",
+      "size_bytes": 7030
+    },
+    "stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "stdout.log": {
+      "sha256": "3558ba8b17d35257814a6e2d21a7997ee14299608c66df01cf5c35e0382db8a9",
+      "size_bytes": 4456
+    },
+    "usertools/MofsIndex/after/mofs_index/plan/query.py": {
+      "sha256": "c6254681ce1655a427b05715c1891d1abb0a70a08874de9b62bc27b1088488ac",
+      "size_bytes": 36195
+    },
+    "usertools/MofsIndex/after/mofs_index/plan/writer.py": {
+      "sha256": "0bfdfd74bcd7d50fb9234edd498aa477e9f70ed955da2666e0a0da1246fe09db",
+      "size_bytes": 74428
+    },
+    "usertools/MofsIndex/after/tests/plan/test_batch.py": {
+      "sha256": "a38e57e44de3bb161b0b1d0aad5606b8361853d451efa5018ea2cb72ed4722e2",
+      "size_bytes": 4411
+    },
+    "usertools/MofsIndex/before/mofs_index/plan/query.py": {
+      "sha256": "d34668914b4b57812a76d2029a11751dcb672568ae55ed3d650a5e119f2e7c34",
+      "size_bytes": 34510
+    },
+    "usertools/MofsIndex/before/mofs_index/plan/writer.py": {
+      "sha256": "4a9315ae8ae6d1377011ad7f4b7d8c0571187981fc676cb984006b3e9383a16b",
+      "size_bytes": 67427
+    },
+    "usertools/MofsIndex/changes.patch": {
+      "sha256": "fb2bf719ceda85ac6f1250c456999ba904661a2801b04d53cebfa270140c9aef",
+      "size_bytes": 14077
+    },
+    "usertools/MofsIndex/manifest.json": {
+      "sha256": "4fd96f6f17cf93fd008e2dc3275d10df366b696b0191da3525d80fca74ec207c",
+      "size_bytes": 1513
+    }
+  }
+}

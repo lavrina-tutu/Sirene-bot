@@ -291,8 +291,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 through 08")
+    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08", "09"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 09")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -308,6 +308,8 @@ def pytest_configure(config):
         # tmp_path and subprocess TMPDIR are confined to the same run.
         if not config.option.basetemp:
             config.option.basetemp = str(root / "pytest-tmp")
+    if stage=='09':
+        config._acceptance_start_hashes=_stage09_sources()
 
 
 @pytest.hookimpl(tryfirst=True)
@@ -326,7 +328,7 @@ def pytest_collection_modifyitems(config, items):
         else:
             group = "unit"
         item.add_marker(getattr(pytest.mark, group))
-    if config.getoption('--acceptance-stage') == '08':
+    if config.getoption('--acceptance-stage') in ('08','09'):
         order={'unit':0,'archive_integration':1,'mpp_fixtures':2,'confluence_live':3}
         items.sort(key=lambda item:(max(order[g] for g in GROUPS if item.get_closest_marker(g)),item.nodeid))
 
@@ -336,7 +338,7 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED}[stage]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED, "09": STAGE09_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -355,6 +357,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption('--acceptance-stage') == '09':
+        _stage09_report(session,exitstatus,root)
         return
     if config.getoption("--acceptance-stage") == "08":
         _stage08_report(session, exitstatus, root)
@@ -1238,3 +1243,170 @@ STAGE08_REQUIRED |= {'test_plugin_profile.py::test_context_installed_profiles_fr
 STAGE08_REQUIRED.add('test_mpp_convert.py::test_prepared_summary_dependency_and_unrepresented_scheduling')
 
 STAGE08_REQUIRED.add('test_mpp_calendar.py::test_prepared_calendar_source_day_basis_mismatch_is_explicit')
+
+
+@pytest.fixture
+def stage09_export():
+    folder=FIXTURES/'synthetic/new-source-identity-resume'
+    manifest=json.loads((folder/'manifest.json').read_text())
+    for name,digest in manifest['files'].items():
+        assert hashlib.sha256((folder/name).read_bytes()).hexdigest()==digest
+    for entry in manifest['binary_fixtures']:
+        assert hashlib.sha256((folder/entry['path']).read_bytes()).hexdigest()==entry['sha256']
+    return json.loads((folder/'prepared-export.json').read_text())
+
+
+@pytest.fixture
+def publish_case(tmp_path, stage09_export, stage08_profile, fake_confluence):
+    """Explicit synthetic parsed contract, separate from real MPXJ acceptance."""
+    from copy import deepcopy
+    from plan_context import PlanContext
+    from mofs_index.db import connect_durable
+    from mofs_index.plan.migrate import ensure_plan_schema
+    db=tmp_path/'state/index.sqlite';wv=tmp_path/'WorkVault';cache=tmp_path/'cache'
+    context=PlanContext.resolve(db=db,workvault=wv,cache_dir=cache)
+    source=tmp_path/'synthetic-source.mpp';source.write_bytes(b'unit-only source bytes; parsed export supplied explicitly')
+    data=deepcopy(stage09_export)
+    data['provenance'].update(sha256=hashlib.sha256(source.read_bytes()).hexdigest(),size_bytes=source.stat().st_size)
+    c=connect_durable(db);ensure_plan_schema(c)
+    result={'db':db,'wv':wv,'cache':cache,'context':context,'source':source,'export':data,
+            'profile':stage08_profile,'client':fake_confluence,'conn':c,'tmp':tmp_path}
+    yield result
+    c.close()
+
+
+STAGE09_REQUIRED = STAGE07_REQUIRED | STAGE08_REQUIRED | {
+    'test_publish_prepare.py::'+name for name in (
+        'test_first_diff_snapshot_before_admission','test_new_binding_without_slug_retains_input_no_resumable_id',
+        'test_unknown_timezone_archived_before_needs_decision','test_archive_failure_never_writes_network',
+        'test_binding_conflict_preserves_frozen_intake','test_new_mpp_publish_in_clean_environment_archives_when_blocked',
+        'test_prepared_branch_never_calls_legacy_readers','test_durable_admission_before_network_and_actual_readback',
+        'test_admitted_bytes_mismatch_stops_before_put','test_changed_target_invalidates_admission_and_proposal',
+        'test_prepared_artifact_corruption_never_uploads')
+} | {'test_admission.py::'+name for name in (
+    'test_specific_proposal_cannot_override_archive_or_profile','test_dates_each_task_and_milestone_with_matching_root',
+    'test_unknown_timezone_never_claims_absolute_date_delta','test_unknown_field_blocks_but_proven_nonimpact_warns',
+    'test_local_scheduler_unsupported_and_plan_unobserved_are_warnings','test_semantic_losses_block_after_archive',
+    'test_accepted_date_deviation_never_becomes_verified')
+} | {'test_identity_resume_e2e.py::'+name for name in (
+    'test_bootstrap_no_save_one_arrival_then_identity_confirm_resume',
+    'test_timezone_resume_new_preparation_and_snapshot_preserves_previous','test_timezone_new_pair_never_copies_mapping_or_decision',
+    'test_identity_revision_blockers','test_resume_forms_are_mutually_exclusive_and_apply_has_slug')
+} | {'test_plan_rules.py::test_bc_exact_mapping_and_context['+kind+']'
+     for kind in ('reorder','new_uid','context','relation','not_needed','missing_reference')
+} | {'test_plan_rules.py::test_drop_dep_resolves_exact_source_and_does_not_apply_without_consent',
+     'test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker'}
+STAGE09_REQUIRED |= {'test_admission.py::test_matrix_row[row-'+str(row)+']' for row in range(1,20)}
+STAGE09_REQUIRED |= {'test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-'+str(row)+']'
+                     for row in (3,4,7,8,9,11,12,13,14,15,16,17,18,19)}
+STAGE09_REQUIRED |= {'test_identity_resume_e2e.py::test_real_mpp_new_snapshot_separate_clean_environments['+action+']'
+                     for action in ('diff','publish')}
+
+
+def _stage09_report(session, exitstatus, root):
+    """The gate is computed from actual pytest, external delivery and live evidence."""
+    config=session.config
+    def read(name):
+        path=root/'reports'/name
+        return json.loads(path.read_text()) if path.is_file() else {}
+    initial=read('initial-state.json');external=read('external-checks.json');live=read('stage09-live.json')
+    controls=read('stage08-live.json')
+    binary={action:read('stage09-real-'+action+'.json') for action in ('diff','publish')}
+    bootstrap=read('stage09-real-bootstrap.json')
+    protected=initial.get('protected_hashes',{})
+    changed=[p for p,h in protected.items() if not Path(p).is_file() or hashlib.sha256(Path(p).read_bytes()).hexdigest()!=h]
+    results=config._acceptance_results
+    hashes=_stage09_sources()
+    changed_during_run=sorted(set(hashes)^set(config._acceptance_start_hashes) |
+        {name for name,digest in hashes.items() if config._acceptance_start_hashes.get(name)!=digest})
+    optional={'test_rest_live.py::test_live_get_test_page','test_rest_live.py::test_live_apply_plan_ok'}
+    def optional_skip(result):
+        return result['status']=='skipped' and any(result['test_id'].endswith(x) for x in optional)
+    good=(int(exitstatus)==0 and bool(session.items) and bool(results)
+          and all(r['status']=='passed' or optional_skip(r) for r in results)
+          and bool(protected) and not changed and external.get('gate')=='passed'
+          and live.get('status')=='passed' and controls.get('status')=='passed'
+          and not changed_during_run
+          and bootstrap.get('new_MPXJ_read')==1 and bootstrap.get('resume_MPXJ_read')==0
+          and all(b.get('counters',{}).get('MPXJ_read')==1 and b.get('resume_counters',{}).get('MPXJ_read')==0
+                  for b in binary.values()))
+    master=Path.home()/'WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md'
+    plan=master.parent/'plans/HF-plan_EditPlanConfluence_20261116.md'
+    schema=Path.home()/'WorkVault/Registries/EcosystemConfig.schema.json'
+    implemented={
+        'S/scripts/pipeline.py':'prepare_publish; shared diff/publish/apply; primary archive/read-back before identity/admission; durable evidence then network primitives; exact-version download without status=any; valid storage paragraph assembly',
+        'S/scripts/plan_policy.py':'all 19 normative rows; blockers cannot choose warning severity; concrete proposals only; accepted_deviation independent of verified',
+        'S/scripts/plan_diagnostics.py':'conservative completeness, graph, capability losses, per-task/milestone minute dates and separated evidence layers; no reopening MPP for scheduler',
+        'S/scripts/plan_rules.py':'immutable project rules, reference/evidence, exact sufficient mapping, original type/signed lag/basis and task context, current cause, derived-only exclusion, not_needed; source-bound legacy drop-dep',
+        'S/scripts/plan_operation.py + plan_decision.py':'preparation history/show, addressed proposals and decisions, single resume and preserved batch contract, project-scoped consent persistence',
+        'S/scripts/cli.py + references/cli-contract.md':'publish/diff/apply slug and paths; mutually exclusive resume forms; archive receipt and fixed context',
+        'S/references/profiles/publication-policy-v1.json + project-rules-v1.json':'versioned conservative field/date policy and inactive unanchored historical B/C, without guessed stable keys or invented evidence',
+        'M/mofs_index/plan/schema.py':'only 0011_publish_preparation; append-only preparations/rules/proposals/decisions/admission/artifact bindings; 0001–0010 unchanged',
+        'M/mofs_index/plan/writer.py + query.py':'typed write/read APIs; new timezone snapshot link preserves intake and previous preparation; revision-scoped identity choices and audit',
+        'S/tests/test_admission.py + test_plan_rules.py + test_publish_prepare.py + test_identity_resume_e2e.py + test_publish_live.py':'matrix, zero-write blockers, B/C, timezone, identity/bootstrap, real binary cold/resume, actual HTTP bytes/storage',
+        'S/tests/fixtures/synthetic/new-source-identity-resume':'explicit test-only export and user evidence; no production identity assertion',
+        'M/tests/plan/test_preparation.py + test_migrate.py + test_identity.py':'new migration/typed contracts, preservation and current migration expectations; older migration definitions remain fixed',
+        'S/tests/test_pipeline.py':'existing stage-01 network verification cases explicitly exercise preserved legacy helper; public apply now uses mandatory admission',
+        'S/tests/conftest.py':'stage-09 mandatory IDs, group order, actual report/gate; earlier maps/reports retained'}
+    limitations=[
+        'Only stage 09. Target locking, reconciliation/idempotency after HTTP effects and verified_v1 registration remain stage 10; post-effect resume returns network_reconciliation_required instead of repeating a write.',
+        'The live admitted plan is an explicitly synthetic parsed fixture; its exporter is not presented as a real MPP read. Independent binary MPP diff/publish tests use real MPXJ and are correctly blocked by extraction/profile limitations after verified archival.',
+        'schedule:not_verified. Prepared-only local scheduler is unsupported; legacy model/CSV paths are excluded from the new branch. No live per-plan schedule equality is claimed.',
+        'Historical production B/C without reference snapshot/evidence/stable keys remain inactive. Test-only identity evidence does not confirm production Trisigma.',
+        'MPP child diff/apply share archive/admission. Recovery after child creation and legacy parent-copy/empty-child lifecycle remain stage 10; no production child-page scenario is claimed accepted.',
+        'Two legacy optional REST tests are not enabled; mandatory stage-08 controls and stage-09 HTTP publication run independently.',
+        'OwnCloud sync is not confirmed. Production DB/WorkVault, A–D/AB pages, configs, Gateway, crons, watchers and schedules were not changed.']
+    report={'stage':'09','gate':'passed' if good else 'failed','exit_code':int(exitstatus),
+        'base_commit':initial.get('base_commit'),'command':[sys.executable,'-m','pytest',*config.invocation_params.args],
+        'environment':{'python':sys.executable,'version':platform.python_version(),'cli_python':'/usr/bin/python3',
+            'MPXJ_PYTHON':'/usr/bin/python3.9','PYTHONPATH':os.environ.get('PYTHONPATH'),'test_root':str(root)},
+        'master':{'path':str(master),'version':'0.5.0','sha256':hashlib.sha256(master.read_bytes()).hexdigest()},
+        'plan':{'path':str(plan),'normative_prefix_sha256':hashlib.sha256(plan.read_text().split('## Журнал исполнения')[0].encode()).hexdigest()},
+        'config_contract_sha256':hashlib.sha256(schema.read_bytes()).hexdigest(),'source_files':hashes,
+        'source_tree_sha256':hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),
+        'implemented_files':implemented,'migrations':['0011_publish_preparation'],'previous_migrations':'0001–0010 checksum equality tested',
+        'protected_files_checked':len(protected),'changed_protected_files':changed,'tests':results,'selected':len(session.items),
+        'changed_during_test_run':changed_during_run,
+        'mandatory_test_ids':sorted(STAGE09_REQUIRED),'external_checks':external,
+        'binary_evidence':{'diff':'stage09-real-diff.json','publish':'stage09-real-publish.json','bootstrap':'stage09-real-bootstrap.json'},
+        'live_evidence':'stage09-live.json','plugin_controls_evidence':'stage08-live.json',
+        'counters':{'stage09_live_POST':live.get('POST'),'stage09_live_PUT':live.get('PUT'),
+            'stage08_controls_POST':controls.get('POST'),'stage08_controls_PUT':controls.get('PUT'),
+            'real_binary':{a:b.get('counters') for a,b in binary.items()},'regression':config._acceptance_counters,
+            'all_legacy_reader_calls':None},
+        'covered_requirements':['§20/AC-04,05,07,08,09,15 stage-09 portions'],
+        'limitations':limitations,'generated_at':datetime.now(timezone.utc).isoformat()}
+    (root/'reports/stage-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    lines=['# Этап 09 — первичный snapshot, допуск и B/C','',
+        f"Gate: **{report['gate']}**. S rc={exitstatus}; selected={len(session.items)}; passed={sum(r['status']=='passed' for r in results)}.",'']
+    lines += ['- `'+name+'`: '+text+'.' for name,text in implemented.items()]
+    lines += ['', 'Порядок: frozen input → prepared → проект/lineage и GET цели → исходный snapshot → read-back → identity/B/C → повторная диагностика → долговечный artifact/evidence/admission → сеть. Diff завершает подготовку без POST/PUT.',
+        '', 'Матрица: 19 строк с параметризованными тестами; запрещающие случаи сохраняют архив и имеют POST=PUT=0. Даты всех задач/вех: ≤60 секунд, без абсолютного сравнения при unknown timezone. Общего override предупреждений нет.',
+        '', 'B/C: точная достаточная mapping revision и обе задачи, сохранность исходных связей и контекста, актуальная причина, повторный допуск, not_needed. Таймзона создаёт новую подготовку и snapshot без автоматического переноса решений.',
+        '', 'Команда S:', '', '```text',' '.join(report['command']),'```','',
+        'MofsIndex: команды/rc/JUnit и восстановление before/after/patch — external-checks.json. Реальные MPP: stage09-real-diff.json / stage09-real-publish.json. HTTP: stage09-live.json. Отдельная успешная публикация синтетического плана и блокировка настоящего MPP различаются явно.',
+        '', f"Live stage09: POST={live.get('POST')}, PUT={live.get('PUT')}; stage08 controls: POST={controls.get('POST')}, PUT={controls.get('PUT')}. Полные следы и версии сохранены.",
+        '', f"Проверенное дерево: `{report['source_tree_sha256']}`. Защищено файлов: {len(protected)}, изменено: {len(changed)}. SHA коммита записывается в журнал плана после commit.",
+        '', 'Ограничения:', '']
+    lines += ['- '+s for s in limitations]
+    (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')
+
+STAGE09_REQUIRED |= {
+    'test_plan_rules.py::test_explicit_project_scope_persists_versioned_rule',
+    'test_publish_prepare.py::test_false_attachment_verifier_blocks_put',
+    'test_publish_prepare.py::test_public_apply_uses_same_archive_and_admission',
+    'test_identity_resume_e2e.py::test_mapping_resume_selects_its_exact_pair_when_another_pair_is_pending',
+}
+STAGE09_REQUIRED.add('test_publish_prepare.py::test_mpp_child_uses_shared_admission_before_page_creation')
+STAGE09_REQUIRED.add('test_admission.py::test_legacy_longest_path_excludes_root_and_never_proposes_auto_removal')
+
+
+def _stage09_sources():
+    files=sorted(set([*SCRIPTS.glob('*.py'),*(SKILL_ROOT/'tests').glob('*.py'),
+        *(SKILL_ROOT/'references/profiles').glob('*.json'),*(SKILL_ROOT/'references/schemas').glob('*.json'),
+        *(MOFS_INDEX_ROOT/'mofs_index/plan').glob('*.py'),*(MOFS_INDEX_ROOT/'tests/plan').glob('*.py'),
+        SKILL_ROOT/'references/cli-contract.md',SKILL_ROOT/'tests/pytest.ini',
+        *(p for p in FIXTURES.rglob('*') if p.is_file())]))
+    return {str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+STAGE09_REQUIRED.add('test_plan_rules.py::test_changed_hierarchy_blocks_even_when_wbs_and_uid_match')
+STAGE09_REQUIRED.add('test_identity_resume_e2e.py::test_real_binary_bootstrap_identity_resume_without_preliminary_save')

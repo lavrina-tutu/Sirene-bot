@@ -1,0 +1,59 @@
+{
+  "tool": "MofsIndex",
+  "files": [
+    {
+      "path": "mofs_index/plan/schema.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py",
+      "before_sha256": "5672c9bc4702398486364d4a01ba18c78cffe454d6b4e78698cbbdfa09254c89",
+      "after_sha256": "d2355a1d94e3fce1f4c76040846f272d9be371b7d90ff4b8100ec5f86eb023fd",
+      "mode": "0o644",
+      "change": "modified",
+      "basis": "Agreed implementation plan stage 09; new 0011 migration and typed preparation/rule/admission APIs"
+    },
+    {
+      "path": "mofs_index/plan/writer.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py",
+      "before_sha256": "62195efac0ccba754bbfbfac37b92bc3373c59187cf77299aa81ad93d4e71049",
+      "after_sha256": "520c95b3cfaf17ac7fa75e60e144bdeea74ae2806a6446bd4b3721e244796df0",
+      "mode": "0o644",
+      "change": "modified",
+      "basis": "Agreed implementation plan stage 09; new 0011 migration and typed preparation/rule/admission APIs"
+    },
+    {
+      "path": "mofs_index/plan/query.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py",
+      "before_sha256": "87c3e0f47c3ba7fe22e9dbab66dfedbb692d8bb8972ab7d8c6cb125efa82ee04",
+      "after_sha256": "e91cdb870d0a0e8c94ea751d3b489c4f58ee9487f53b7d0b28bacc21da29f91e",
+      "mode": "0o644",
+      "change": "modified",
+      "basis": "Agreed implementation plan stage 09; new 0011 migration and typed preparation/rule/admission APIs"
+    },
+    {
+      "path": "tests/plan/test_migrate.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py",
+      "before_sha256": "29417a533e165f41c1d9656ff75bbe15491d061560ab546ac32e18eec4b09b5e",
+      "after_sha256": "e0972eff00d07fde9e3a0c9fc424f216fa4214ee245b522ef8d6af64d943d11d",
+      "mode": "0o644",
+      "change": "modified",
+      "basis": "Agreed implementation plan stage 09; new 0011 migration and typed preparation/rule/admission APIs"
+    },
+    {
+      "path": "tests/plan/test_identity.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_identity.py",
+      "before_sha256": "e1a072fb26c172a9ba22810d0153be96bdae9c7d2e4baf0ce82f13b775627ee9",
+      "after_sha256": "83bb25586e9be0ddb9b05a94e95d2015f6e6fd86aabe853fba97a6ca40d94c71",
+      "mode": "0o644",
+      "change": "modified",
+      "basis": "Agreed implementation plan stage 09; new 0011 migration and typed preparation/rule/admission APIs"
+    },
+    {
+      "path": "tests/plan/test_preparation.py",
+      "target": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_preparation.py",
+      "before_sha256": null,
+      "after_sha256": "49b3e164b7b0bc735d4433b15c5ff67736bcb18c48bb8123a61da5f73880e13e",
+      "mode": "0o644",
+      "change": "created",
+      "basis": "Agreed implementation plan stage 09; new 0011 migration and typed preparation/rule/admission APIs"
+    }
+  ]
+}

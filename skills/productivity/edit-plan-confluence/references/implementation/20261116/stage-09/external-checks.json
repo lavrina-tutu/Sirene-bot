@@ -1,0 +1,61 @@
+{
+  "gate": "passed",
+  "mofs": {
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "tests/plan",
+      "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage09-181250/stage-09/mofs-final-tmp",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage09-181250/stage-09/reports/mofs-junit.xml",
+      "-q"
+    ],
+    "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+    "rc": 0,
+    "environment": {
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+    },
+    "junit": {
+      "tests": 130,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "delivery": {
+    "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-09/usertools/MofsIndex/manifest.json",
+    "patch": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-09/usertools/MofsIndex/changes.patch",
+    "files": 6,
+    "patch_commands": [
+      {
+        "command": [
+          "git",
+          "apply",
+          "--check",
+          "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-09/usertools/MofsIndex/changes.patch"
+        ],
+        "cwd": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage09-181250/stage-09/restore-patch",
+        "rc": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "git",
+          "apply",
+          "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-09/usertools/MofsIndex/changes.patch"
+        ],
+        "cwd": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage09-181250/stage-09/restore-patch",
+        "rc": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "patch_restore_verified": true,
+    "after_copy_restore_verified": true,
+    "working_files_match_after": true,
+    "file_modes_verified": true
+  },
+  "protected_files_checked": 412,
+  "changed_protected_files": []
+}

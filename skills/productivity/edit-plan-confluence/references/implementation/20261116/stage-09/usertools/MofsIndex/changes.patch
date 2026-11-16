@@ -1,0 +1,548 @@
+--- a/mofs_index/plan/schema.py
++++ b/mofs_index/plan/schema.py
+@@ -984,6 +984,54 @@
+ MIGRATIONS += (Migration('0010_identity_revisions', IDENTITY_DDL),)
+ 
+ 
++# Stage 09. Preparation history is independent of the immutable intake link.
++PREPARATION_DDL = (
++    """CREATE TABLE plan_preparation (
++        operation_id TEXT NOT NULL REFERENCES plan_operation(operation_id),
++        revision INTEGER NOT NULL CHECK(revision>0),
++        snapshot_id TEXT NOT NULL REFERENCES plan_snapshot(snapshot_id),
++        prepared_artifact_id TEXT NOT NULL REFERENCES plan_artifact(artifact_id),
++        context_json TEXT NOT NULL, request_json TEXT NOT NULL, created_at TEXT NOT NULL,
++        PRIMARY KEY(operation_id,revision))""",
++    """CREATE TABLE plan_project_rule (
++        rule_id TEXT NOT NULL, revision TEXT NOT NULL, plan_id TEXT NOT NULL REFERENCES plan(plan_id),
++        reference_snapshot_id TEXT REFERENCES plan_snapshot(snapshot_id),
++        evidence_id TEXT REFERENCES plan_artifact(artifact_id), evidence_sha256 TEXT,
++        content_json TEXT NOT NULL, content_sha256 TEXT NOT NULL, created_at TEXT NOT NULL,
++        PRIMARY KEY(rule_id,revision))""",
++    """CREATE TABLE plan_publish_proposal (
++        proposal_id TEXT PRIMARY KEY, operation_id TEXT NOT NULL, preparation_revision INTEGER NOT NULL,
++        proposal_sha256 TEXT NOT NULL, content_json TEXT NOT NULL, created_at TEXT NOT NULL,
++        FOREIGN KEY(operation_id,preparation_revision) REFERENCES plan_preparation(operation_id,revision),
++        UNIQUE(operation_id,preparation_revision,proposal_sha256))""",
++    """CREATE TABLE plan_publish_decision (
++        decision_id TEXT PRIMARY KEY, proposal_id TEXT NOT NULL UNIQUE REFERENCES plan_publish_proposal(proposal_id),
++        rule_scope TEXT NOT NULL CHECK(rule_scope IN ('once','project')), reason TEXT NOT NULL,
++        content_sha256 TEXT NOT NULL, created_at TEXT NOT NULL)""",
++    """CREATE TABLE plan_preparation_result (
++        result_id TEXT PRIMARY KEY, operation_id TEXT NOT NULL, preparation_revision INTEGER NOT NULL,
++        state TEXT NOT NULL CHECK(state IN ('blocked','admitted')),
++        representation_artifact_id TEXT REFERENCES plan_artifact(artifact_id),
++        evidence_artifact_id TEXT NOT NULL REFERENCES plan_artifact(artifact_id),
++        admission_json TEXT NOT NULL, result_json TEXT NOT NULL, created_at TEXT NOT NULL,
++        FOREIGN KEY(operation_id,preparation_revision) REFERENCES plan_preparation(operation_id,revision))""",
++) + tuple(
++    f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
++    "BEGIN SELECT RAISE(ABORT,'append_only'); END"
++    for table in ('plan_preparation','plan_project_rule','plan_publish_proposal',
++                  'plan_publish_decision','plan_preparation_result')
++    for action in ('UPDATE','DELETE')
++) + tuple(
++    f"CREATE TRIGGER immutable_preparation_artifact_{action.lower()} BEFORE {action} ON plan_artifact "
++    "WHEN EXISTS(SELECT 1 FROM plan_preparation WHERE prepared_artifact_id=OLD.artifact_id) "
++    "OR EXISTS(SELECT 1 FROM plan_project_rule WHERE evidence_id=OLD.artifact_id) "
++    "OR EXISTS(SELECT 1 FROM plan_preparation_result WHERE representation_artifact_id=OLD.artifact_id "
++    "OR evidence_artifact_id=OLD.artifact_id) BEGIN SELECT RAISE(ABORT,'append_only'); END"
++    for action in ('UPDATE','DELETE')
++)
++MIGRATIONS += (Migration('0011_publish_preparation', PREPARATION_DDL),)
++
++
+ def all_plan_table_names() -> tuple[str, ...]:
+     """Имена всех таблиц, которые когда-либо вводятся этим пакетом.
+ 
+@@ -992,6 +1040,8 @@
+     `mofs_index.db.drop_all()`/`drop_docs()`.
+     """
+     return (
++        "plan_preparation", "plan_project_rule", "plan_publish_proposal",
++        "plan_publish_decision", "plan_preparation_result",
+         "plan_mapping_event", "plan_identity_requirement", "plan_operation_mapping", "plan_identity_check",
+         "plan_provenance",
+         "plan_batch_proposal",
+--- a/mofs_index/plan/writer.py
++++ b/mofs_index/plan/writer.py
+@@ -1876,7 +1876,7 @@
+         if not op or op[0] != spec.plan_id or op[1] != spec.preparation_revision:
+             raise i.IdentityError('operation_identity_scope_mismatch')
+         item = conn.execute('SELECT snapshot_id,batch_id FROM plan_import_item WHERE operation_id=?', (spec.operation_id,)).fetchone()
+-        if not item or item[1] or item[0] != spec.to_snapshot_id:
++        if not item or item[1] or _identity_snapshot(conn, spec.operation_id, item[0]) != spec.to_snapshot_id:
+             raise i.IdentityError('operation_identity_scope_mismatch')
+         scope = i.pair_scope(conn,spec.plan_id,spec.from_snapshot_id,spec.to_snapshot_id)
+         if not spec.rule_id or not spec.rule_revision or not spec.required_entities:
+@@ -1923,7 +1923,7 @@
+         req = rows[0]
+         op = conn.execute('SELECT plan_id,preparation_revision FROM plan_operation WHERE operation_id=?',(spec.operation_id,)).fetchone()
+         item = conn.execute('SELECT snapshot_id,batch_id FROM plan_import_item WHERE operation_id=?',(spec.operation_id,)).fetchone()
+-        if (op[0],op[1]) != (req['plan_id'],req['preparation_revision']) or not item or item[1] or item[0] != req['to_snapshot_id']:
++        if (op[0],op[1]) != (req['plan_id'],req['preparation_revision']) or not item or item[1] or _identity_snapshot(conn, spec.operation_id, item[0]) != req['to_snapshot_id']:
+             raise i.IdentityError('operation_identity_scope_mismatch')
+         prior = conn.execute('SELECT c.mapping_revision_id FROM plan_operation_mapping c JOIN plan_identity_requirement r '
+             'ON r.requirement_id=c.requirement_id WHERE r.operation_id=? AND r.preparation_revision=? '
+@@ -1954,3 +1954,217 @@
+                 (spec.requirement_id,resolution['mapping_revision_id'],resolution['evidence_id'],resolution['evidence_sha256'],
+                  _json(resolution['scope']),_now()))
+         return {'status':'selected','exit_code':0,**resolution}
++
++
++# Stage 09 typed preparation/rule/decision API. No skill writes plan SQL.
++def _identity_snapshot(conn, operation_id, fallback):
++    row = conn.execute('SELECT p.snapshot_id FROM plan_preparation p JOIN plan_operation o '
++        'ON o.operation_id=p.operation_id AND o.preparation_revision=p.revision WHERE p.operation_id=?',
++        (operation_id,)).fetchone()
++    return row[0] if row else fallback
++
++
++@dataclass(frozen=True)
++class PreparationSpec:
++    operation_id: str
++    revision: int
++    snapshot_id: str
++    prepared_artifact_id: str
++    context: dict
++    request: dict
++
++
++def record_preparation(conn, spec: PreparationSpec):
++    from . import query as q
++    with _transaction(conn):
++        op = q.get_operation(conn, spec.operation_id)
++        item = q.get_operation_item(conn, spec.operation_id)
++        snapshot = q.get_snapshot(conn, spec.snapshot_id)
++        if not op or op['action'] != 'publish' or not item or item['batch_id'] or not snapshot:
++            raise PlanWriterError('operation_context_incomplete')
++        execution = json.loads(op['context_json'])
++        execution.pop('publish',None)
++        if execution != spec.context:
++            raise PlanWriterError('operation_context_conflict')
++        verify_snapshot(conn, spec.snapshot_id)
++        artifact = verify_artifact(conn, spec.prepared_artifact_id)
++        prepared = json.loads(Path(artifact).read_text())
++        if (snapshot['plan_id'] != op['plan_id'] or snapshot['lineage_id'] != op['lineage_id']
++                or snapshot['source_mpp_sha256'] != item['source_mpp_sha256']
++                or prepared['semantic_sha256'] != snapshot['normalized_data_sha256']
++                or _json(prepared['normalized_data']) != snapshot['source_json']):
++            raise PlanWriterError('preparation_snapshot_mismatch')
++        prior = conn.execute('SELECT snapshot_id,prepared_artifact_id,context_json,request_json FROM plan_preparation '
++            'WHERE operation_id=? AND revision=?',(spec.operation_id,spec.revision)).fetchone()
++        values = (spec.snapshot_id,spec.prepared_artifact_id,_json(spec.context),_json(spec.request))
++        if prior:
++            if tuple(prior) != values:
++                raise PlanWriterError('preparation_revision_conflict')
++            return spec.revision
++        if spec.revision != op['preparation_revision'] + (1 if op['preparation_revision'] > 0 and
++                conn.execute('SELECT 1 FROM plan_preparation WHERE operation_id=?',(spec.operation_id,)).fetchone() else 0):
++            raise PlanWriterError('preparation_revision_conflict')
++        if spec.revision > 1:
++            old = q.get_preparation(conn,spec.operation_id)
++            previous = q.get_snapshot(conn,old['snapshot_id']) if old else None
++            if (not previous or previous['resolved_timezone'] != 'unknown'
++                    or snapshot['resolved_timezone'] == 'unknown' or q.publish_external_effect(conn,spec.operation_id)):
++                raise PlanWriterError('timezone_revision_forbidden')
++            latest = q.get_preparation_result(conn,spec.operation_id)
++            if not latest or not any(c['category']=='timezone' for c in latest['admission']['blockers']):
++                raise PlanWriterError('timezone_revision_forbidden')
++            expected_request={**old['request'],'timezone_hint':spec.request.get('timezone_hint')}
++            if (spec.request!=expected_request or old['context']!=spec.context
++                    or normalize_timezone(spec.request.get('timezone_hint'))!=snapshot['resolved_timezone']):
++                raise PlanWriterError('preparation_revision_conflict')
++        conn.execute('INSERT INTO plan_preparation VALUES (?,?,?,?,?,?,?)',
++            (spec.operation_id,spec.revision,*values,_now()))
++        conn.execute('UPDATE plan_operation SET preparation_revision=? WHERE operation_id=?',
++                     (spec.revision,spec.operation_id))
++    return spec.revision
++
++
++@dataclass(frozen=True)
++class ProjectRuleSpec:
++    rule_id: str
++    revision: str
++    project_slug: str
++    reference_snapshot_id: str | None
++    evidence_id: str | None
++    evidence_sha256: str | None
++    content: dict
++
++
++def record_project_rule(conn, spec: ProjectRuleSpec):
++    from . import query as q
++    plan = q.resolve_plan(conn,spec.project_slug)
++    if 'plan_id' not in plan or not spec.rule_id or not spec.revision:
++        raise PlanWriterError('invalid_project_rule')
++    d = spec.content
++    required = ('predecessor_key','successor_key','expected_relation','task_contexts','action',
++                'reason','approved_at','policy_revision','termination','cause')
++    if (any(k not in d for k in required) or d['action'] != 'exclude_dependency'
++            or not d['reason'] or not d['approved_at'] or not d['termination']
++            or d['predecessor_key'] == d['successor_key']
++            or set(d['task_contexts']) != {d['predecessor_key'],d['successor_key']}
++            or any(not context for context in d['task_contexts'].values())
++            or not {'type','lag','units','elapsed','calendar_basis'} <= set(d['expected_relation'])
++            or not {'code','entity','source_sha256'} <= set(d['cause'])):
++        raise PlanWriterError('invalid_project_rule')
++    if spec.reference_snapshot_id:
++        snapshot = q.get_snapshot(conn,spec.reference_snapshot_id)
++        if not snapshot or snapshot['plan_id'] != plan['plan_id'] or snapshot['representation'] != 'mpp':
++            raise PlanWriterError('rule_reference_scope_mismatch')
++    if bool(spec.evidence_id) != bool(spec.evidence_sha256):
++        raise PlanWriterError('rule_evidence_required')
++    if spec.evidence_id:
++        verify_artifact(conn,spec.evidence_id,spec.evidence_sha256)
++    content = _json(d)
++    digest = hashlib.sha256(content.encode()).hexdigest()
++    values = (plan['plan_id'],spec.reference_snapshot_id,spec.evidence_id,spec.evidence_sha256,content,digest)
++    with _transaction(conn):
++        prior = conn.execute('SELECT plan_id,reference_snapshot_id,evidence_id,evidence_sha256,content_json,content_sha256 '
++            'FROM plan_project_rule WHERE rule_id=? AND revision=?',(spec.rule_id,spec.revision)).fetchone()
++        if prior:
++            if tuple(prior) != values:
++                raise PlanWriterError('rule_revision_conflict')
++        else:
++            conn.execute('INSERT INTO plan_project_rule VALUES (?,?,?,?,?,?,?,?,?)',
++                         (spec.rule_id,spec.revision,*values,_now()))
++    return digest
++
++
++@dataclass(frozen=True)
++class PublishProposalSpec:
++    operation_id: str
++    revision: int
++    content: dict
++
++
++def record_publish_proposal(conn, spec: PublishProposalSpec):
++    from . import query as q
++    prep = q.get_preparation(conn,spec.operation_id,spec.revision)
++    if not prep or spec.content.get('snapshot_id') != prep['snapshot_id']:
++        raise PlanWriterError('proposal_context_mismatch')
++    if spec.content.get('action') not in ('exclude_dependency','accept_date_deviation') or not spec.content.get('losses'):
++        raise PlanWriterError('invalid_publish_proposal')
++    payload = _json(spec.content); digest = hashlib.sha256(payload.encode()).hexdigest()
++    with _transaction(conn):
++        prior = conn.execute('SELECT proposal_id FROM plan_publish_proposal WHERE operation_id=? '
++            'AND preparation_revision=? AND proposal_sha256=?',(spec.operation_id,spec.revision,digest)).fetchone()
++        pid = prior[0] if prior else _new_id('proposal')
++        if not prior:
++            conn.execute('INSERT INTO plan_publish_proposal VALUES (?,?,?,?,?,?)',
++                         (pid,spec.operation_id,spec.revision,digest,payload,_now()))
++    return pid
++
++
++@dataclass(frozen=True)
++class PublishDecisionSpec:
++    operation_id: str
++    proposal_id: str
++    reason: str
++    rule_scope: str = 'once'
++
++
++def register_publish_decision(conn, spec: PublishDecisionSpec):
++    from . import query as q
++    if not spec.reason or not spec.reason.strip() or spec.rule_scope not in ('once','project'):
++        raise PlanWriterError('invalid_decision_reason')
++    with _transaction(conn):
++        prep = q.get_preparation(conn,spec.operation_id)
++        proposals = q.get_publish_proposals(conn,spec.operation_id)
++        proposal = next((p for p in proposals if p['proposal_id']==spec.proposal_id),None)
++        latest = q.get_preparation_result(conn,spec.operation_id)
++        if (not prep or not proposal or not latest or proposal['content'].get('basis_sha256') != latest['result'].get('basis_sha256')
++                or q.publish_external_effect(conn,spec.operation_id)):
++            raise PlanWriterError('proposal_context_mismatch')
++        if spec.rule_scope == 'project' and not proposal['content'].get('project_rule'):
++            raise PlanWriterError('proposal_project_rule_unsupported')
++        old = conn.execute('SELECT * FROM plan_publish_decision WHERE proposal_id=?',(spec.proposal_id,)).fetchone()
++        if old:
++            if old['reason'] != spec.reason or old['rule_scope'] != spec.rule_scope:
++                raise PlanWriterError('decision_conflict')
++            return old['decision_id']
++        did = _new_id('decision')
++        conn.execute('INSERT INTO plan_publish_decision VALUES (?,?,?,?,?,?)',
++            (did,spec.proposal_id,spec.rule_scope,spec.reason,proposal['proposal_sha256'],_now()))
++        return did
++
++
++@dataclass(frozen=True)
++class PreparationResultSpec:
++    operation_id: str
++    revision: int
++    representation_artifact_id: str | None
++    evidence_artifact_id: str
++    admission: dict
++    result: dict
++
++
++def record_preparation_result(conn, spec: PreparationResultSpec):
++    from . import query as q
++    with _transaction(conn):
++        prep = q.get_preparation(conn,spec.operation_id,spec.revision)
++        if not prep or spec.revision != q.get_operation(conn,spec.operation_id)['preparation_revision']:
++            raise PlanWriterError('preparation_revision_conflict')
++        evidence = verify_artifact(conn,spec.evidence_artifact_id)
++        document = json.loads(Path(evidence).read_text())
++        if (document.get('admission') != spec.admission or document.get('context') != prep['context']
++                or document.get('snapshot_id') != prep['snapshot_id']
++                or not all(k in document for k in ('profiles','rules','diagnostics','target'))):
++            raise PlanWriterError('admission_evidence_mismatch')
++        admitted = spec.admission.get('allowed') is True
++        if admitted and (spec.admission.get('blockers') or not spec.representation_artifact_id
++                         or document.get('archive') != 'verified'):
++            raise PlanWriterError('invalid_admission')
++        if spec.representation_artifact_id:
++            verify_artifact(conn,spec.representation_artifact_id)
++            representation = q.get_artifact(conn,spec.representation_artifact_id)
++            if document.get('representation_sha256') != representation['raw_sha256']:
++                raise PlanWriterError('admission_representation_mismatch')
++        rid = _new_id('preparation_result')
++        conn.execute('INSERT INTO plan_preparation_result VALUES (?,?,?,?,?,?,?,?,?)',
++            (rid,spec.operation_id,spec.revision,'admitted' if admitted else 'blocked',
++             spec.representation_artifact_id,spec.evidence_artifact_id,_json(spec.admission),_json(spec.result),_now()))
++    return rid
+--- a/mofs_index/plan/query.py
++++ b/mofs_index/plan/query.py
+@@ -850,3 +850,65 @@
+ def get_identity_requirements(conn, operation_id):
+     from .identity import operation_requirements
+     return operation_requirements(conn, operation_id)
++
++
++# Stage 09: typed preparation/rule/decision reads shared by CLI and pipeline.
++def get_preparation(conn, operation_id, revision=None):
++    if revision is None:
++        operation = get_operation(conn,operation_id)
++        revision = operation['preparation_revision'] if operation else 0
++    rows = _records(conn,'SELECT * FROM plan_preparation WHERE operation_id=? AND revision=?',(operation_id,revision))
++    if not rows:
++        return None
++    row = rows[0]
++    row['context'] = json.loads(row.pop('context_json'))
++    row['request'] = json.loads(row.pop('request_json'))
++    return row
++
++
++def get_preparation_history(conn, operation_id):
++    return [get_preparation(conn,operation_id,row['revision']) for row in
++        _records(conn,'SELECT revision FROM plan_preparation WHERE operation_id=? ORDER BY revision',(operation_id,))]
++
++
++def get_project_rules(conn, project_slug):
++    rows = _records(conn,'SELECT r.* FROM plan_project_rule r JOIN plan p ON p.plan_id=r.plan_id '
++        'WHERE p.project_slug=? ORDER BY r.rule_id,r.rowid',(project_slug,))
++    for row in rows:
++        row['content'] = json.loads(row.pop('content_json'))
++        row['project_slug'] = project_slug
++    # Rule revisions are explicit; no lexicographic version ordering.
++    return rows
++
++
++def get_preparation_result(conn, operation_id, revision=None):
++    prep = get_preparation(conn,operation_id,revision)
++    if not prep:
++        return None
++    rows = _records(conn,'SELECT * FROM plan_preparation_result WHERE operation_id=? AND preparation_revision=? '
++        'ORDER BY rowid DESC LIMIT 1',(operation_id,prep['revision']))
++    if not rows:
++        return None
++    row = rows[0]
++    row['admission'] = json.loads(row.pop('admission_json'))
++    row['result'] = json.loads(row.pop('result_json'))
++    return row
++
++
++def get_publish_proposals(conn, operation_id, revision=None):
++    prep = get_preparation(conn,operation_id,revision)
++    if not prep:
++        return []
++    rows = _records(conn,'SELECT p.*,d.decision_id,d.rule_scope,d.reason decision_reason,d.created_at decision_created_at '
++        'FROM plan_publish_proposal p LEFT JOIN plan_publish_decision d ON d.proposal_id=p.proposal_id '
++        'WHERE p.operation_id=? AND p.preparation_revision=? ORDER BY p.rowid',(operation_id,prep['revision']))
++    for row in rows:
++        row['content'] = json.loads(row.pop('content_json'))
++    return rows
++
++
++def publish_external_effect(conn, operation_id):
++    for event in get_operation_events(conn,operation_id):
++        if event['event_kind']=='publish_network_intent':return True
++        if event['event_kind']=='publish_network_result' and json.loads(event['detail']).get('external_effect')!='none':return True
++    return False
+--- a/tests/plan/test_migrate.py
++++ b/tests/plan/test_migrate.py
+@@ -33,7 +33,7 @@
+     assert first == [
+         "0001_phase0_baseline", "0002_phase1_core", "0003_phase2_snapshot",
+         "0004_phase3_analysis", "0005_phase3_fts", "0006_publication_trust",
+-        "0007_durable_imports", "0008_snapshot_semantics", "0009_batch_decisions", "0010_identity_revisions",
++        "0007_durable_imports", "0008_snapshot_semantics", "0009_batch_decisions", "0010_identity_revisions", "0011_publish_preparation",
+     ]
+     assert second == []
+ 
+@@ -41,7 +41,7 @@
+ def test_applied_migrations_records_checksum(conn):
+     ensure_plan_schema(conn)
+     rows = applied_migrations(conn)
+-    assert len(rows) == 10
++    assert len(rows) == 11
+     migration_id, applied_at, checksum = rows[0]
+     assert migration_id == "0001_phase0_baseline"
+     assert applied_at  # не пусто
+@@ -85,7 +85,7 @@
+     publication_before = tuple(conn.execute("SELECT * FROM plan_publication").fetchone())
+     attempt_before = tuple(conn.execute("SELECT * FROM plan_import_attempt").fetchone())
+     monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations)
+-    assert ensure_plan_schema(conn) == ["0006_publication_trust","0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions"]
++    assert ensure_plan_schema(conn) == ["0006_publication_trust","0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions","0011_publish_preparation"]
+     for name, rows in before.items():
+         assert [tuple(r)[:len(rows[i])] for i,r in enumerate(conn.execute("SELECT * FROM " + name))] == rows
+     assert tuple(conn.execute("SELECT * FROM plan_publication").fetchone())[:len(publication_before)] == publication_before
+@@ -125,7 +125,7 @@
+     assert conn.execute("SELECT count(*) FROM plan_attempt_event").fetchone()[0]==1
+     assert conn.execute("SELECT count(*) FROM plan_schema_migration").fetchone()[0]==6
+     monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations)
+-    assert ensure_plan_schema(conn)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions"]
++    assert ensure_plan_schema(conn)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions","0011_publish_preparation"]
+     assert conn.execute("SELECT attempt_id FROM plan_attempt_event").fetchone()[0]==attempt
+     assert not conn.execute("PRAGMA foreign_key_check").fetchall()
+ 
+@@ -161,7 +161,7 @@
+     assert backup_to(backup,origin).ok and verify_backup(backup).ok
+     copy=connect(backup,durable=True)
+     monkeypatch.setattr(migrate,"MIGRATIONS",migrations)
+-    assert ensure_plan_schema(copy)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions"]
++    assert ensure_plan_schema(copy)==["0007_durable_imports","0008_snapshot_semantics","0009_batch_decisions","0010_identity_revisions","0011_publish_preparation"]
+     for table,rows in before.items():
+         actual=[tuple(row) for row in copy.execute("SELECT * FROM "+table+" ORDER BY rowid")]
+         assert len(actual)==len(rows)
+--- a/tests/plan/test_identity.py
++++ b/tests/plan/test_identity.py
+@@ -295,7 +295,7 @@
+         conn.commit()
+     finally:
+         migrate.MIGRATIONS=original
+-    assert ensure_plan_schema(conn)==['0010_identity_revisions']
++    assert ensure_plan_schema(conn)==['0010_identity_revisions','0011_publish_preparation']
+     assert ensure_plan_schema(conn)==[]
+     assert conn.execute('SELECT count(*) FROM plan_identity_mapping').fetchone()[0]==2
+     assert not conn.execute('PRAGMA foreign_key_check').fetchall()
+--- /dev/null
++++ b/tests/plan/test_preparation.py
+@@ -0,0 +1,115 @@
++"""Stage 09 typed API and migration history; no skill SQL is involved."""
++from pathlib import Path
++import hashlib
++import json
++import sqlite3
++from dataclasses import replace
++
++import pytest
++from mofs_index.db import connect,initialize
++from mofs_index.plan import writer as w,query as q
++from mofs_index.plan.migrate import ensure_plan_schema,_checksum
++from mofs_index.plan.schema import MIGRATIONS
++
++
++def canonical(value):return json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(',',':'))
++
++
++@pytest.fixture
++def prepared(tmp_path):
++    c=connect(tmp_path/'state.sqlite',durable=True);initialize(c);ensure_plan_schema(c)
++    plan=w.ensure_plan(c,'test');line=w.ensure_lineage(c,plan,'test')
++    def artifact(data,kind):
++        digest=hashlib.sha256(data).hexdigest();p=tmp_path/digest;p.write_bytes(data)
++        return w.record_artifact(c,digest,kind,str(p),size_bytes=len(data))
++    source=b'typed synthetic source';digest=hashlib.sha256(source).hexdigest();aid=artifact(source,'mpp')
++    op=w.create_operation(c,w.OperationSpec('publish',canonical({'fixture':'nonsecret'}),plan_id=plan,lineage_id=line))
++    item=w.create_import_item(c,w.ImportItemSpec(op,'test.mpp','fixture',source_mpp_sha256=digest))
++    attempt=w.begin_operation_attempt(c,op,item)
++    def snapshot(tz):
++        data={'resolved_timezone':tz,'source_identity':{'sha256':digest}}
++        raw=canonical(data);semantic=hashlib.sha256(raw.encode()).hexdigest()
++        spec=w.SnapshotSpec(plan,'mpp',lineage_id=line,source_artifact_id=aid,source_mpp_sha256=digest,
++            normalization_profile_fingerprint='unit-v1',resolved_timezone=w.normalize_timezone(tz),source_json=raw,normalized_data_sha256=semantic,
++            tasks=(w.TaskVersionSpec('uid:1',uid='1'),w.TaskVersionSpec('uid:2',uid='2')))
++        envelope=artifact(canonical({'semantic_sha256':semantic,'normalized_data':data}).encode(),'prepared_json')
++        return spec,envelope
++    spec,envelope=snapshot('unknown');sid=w.commit_import_snapshot(c,item,attempt,spec).snapshot_id
++    prep=w.PreparationSpec(op,1,sid,envelope,{'fixture':'nonsecret'},{'project_slug':'test','timezone_hint':None})
++    w.record_preparation(c,prep)
++    yield dict(c=c,op=op,item=item,attempt=attempt,prep=prep,sid=sid,snapshot=snapshot,artifact=artifact)
++    c.close()
++
++
++def result(d,*,allowed=False):
++    admission={'allowed':allowed,'blockers':[] if allowed else [{'category':'timezone'}]}
++    rep=d['artifact'](b'{}','prepared_json')
++    evidence={'admission':admission,'context':d['prep'].context,'snapshot_id':d['sid'],'profiles':{},'rules':[],
++              'diagnostics':{},'target':{},'archive':'verified','representation_sha256':hashlib.sha256(b'{}').hexdigest()}
++    aid=d['artifact'](canonical(evidence).encode(),'admission_evidence')
++    return w.PreparationResultSpec(d['op'],1,rep,aid,admission,{'basis_sha256':'unit-basis'})
++
++
++def test_preparation_append_only_and_admission_requires_evidence(prepared):
++    d=prepared;c=d['c'];spec=result(d,allowed=True)
++    rid=w.record_preparation_result(c,spec)
++    assert q.get_preparation_result(c,d['op'])['result_id']==rid
++    assert q.get_preparation_result(c,d['op'])['state']=='admitted'
++    with pytest.raises(w.PlanWriterError):w.record_preparation_result(c,replace(spec,admission={'allowed':True,'blockers':['bad']}))
++    for table in ('plan_preparation','plan_preparation_result'):
++        with pytest.raises(sqlite3.IntegrityError):c.execute('DELETE FROM '+table)
++        c.rollback()
++    assert w.record_preparation(c,d['prep'])==1
++
++
++def test_timezone_preparation_preserves_intake_and_prior_snapshot(prepared):
++    d=prepared;c=d['c'];w.record_preparation_result(c,result(d))
++    spec,envelope=d['snapshot']('Europe/Moscow');sid=w.ingest_snapshot(c,spec)
++    nextprep=replace(d['prep'],revision=2,snapshot_id=sid,prepared_artifact_id=envelope,
++        request={'project_slug':'test','timezone_hint':'Europe/Moscow'})
++    w.record_preparation(c,nextprep)
++    assert q.get_operation_item(c,d['op'])['snapshot_id']==d['sid']
++    assert len(q.get_preparation_history(c,d['op']))==2
++    assert q.get_preparation(c,d['op'])['snapshot_id']==sid
++    assert q.get_snapshot(c,d['sid'])['resolved_timezone']=='unknown'
++
++
++def test_timezone_preparation_forbidden_after_intent(prepared):
++    d=prepared;c=d['c'];w.record_preparation_result(c,result(d))
++    w.record_operation_event(c,d['attempt'],'publish_network_intent',detail='test')
++    spec,envelope=d['snapshot']('UTC');sid=w.ingest_snapshot(c,spec)
++    with pytest.raises(w.PlanWriterError,match='timezone_revision_forbidden'):
++        w.record_preparation(c,replace(d['prep'],revision=2,snapshot_id=sid,prepared_artifact_id=envelope))
++    assert len(q.get_preparation_history(c,d['op']))==1
++
++
++def test_proposal_decision_exact_context_idempotent_conflict(prepared):
++    d=prepared;c=d['c'];w.record_preparation_result(c,result(d))
++    content={'snapshot_id':d['sid'],'basis_sha256':'unit-basis','action':'exclude_dependency','losses':['one exact dependency']}
++    pid=w.record_publish_proposal(c,w.PublishProposalSpec(d['op'],1,content))
++    assert w.record_publish_proposal(c,w.PublishProposalSpec(d['op'],1,content))==pid
++    spec=w.PublishDecisionSpec(d['op'],pid,'Explicit test consent')
++    did=w.register_publish_decision(c,spec)
++    assert w.register_publish_decision(c,spec)==did
++    with pytest.raises(w.PlanWriterError,match='decision_conflict'):w.register_publish_decision(c,replace(spec,reason='changed'))
++    assert q.get_publish_proposals(c,d['op'])[0]['decision_id']==did
++
++
++def test_0011_prefix_checksums_migration_idempotency(tmp_path):
++    # Earlier installed migration definitions are checked against committed stage 08 delivery.
++    root=Path.home()/'hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-07/usertools/MofsIndex/after/mofs_index/plan/schema.py'
++    import importlib.util,sys
++    spec=importlib.util.spec_from_file_location('_old_stage07_schema',root);old=importlib.util.module_from_spec(spec)
++    sys.modules[spec.name]=old;spec.loader.exec_module(old)
++    assert [(m.migration_id,_checksum(m)) for m in MIGRATIONS[:10]]==[(m.migration_id,_checksum(m)) for m in old.MIGRATIONS]
++    c=connect(tmp_path/'legacy.sqlite',durable=True);initialize(c)
++    from unittest.mock import patch
++    with patch('mofs_index.plan.migrate.MIGRATIONS',MIGRATIONS[:10]):
++        ensure_plan_schema(c)
++        pid=w.ensure_plan(c,'preserved')
++    assert ensure_plan_schema(c)==['0011_publish_preparation']
++    assert ensure_plan_schema(c)==[]
++    assert q.resolve_plan(c,'preserved')['plan_id']==pid
++    assert c.execute('PRAGMA integrity_check').fetchone()[0]=='ok'
++    assert not c.execute('PRAGMA foreign_key_check').fetchall()
++    c.close()

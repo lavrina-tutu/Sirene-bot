@@ -1,0 +1,5 @@
+{
+  "release_gate": false,
+  "reason": "Superseded by final run after source review and additional hierarchy/child/binary-bootstrap tests; source changed during this preliminary run",
+  "observed_pytest_rc": 0
+}

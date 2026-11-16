@@ -7,7 +7,7 @@ import pytest
 from conf_client import ConfluenceError
 from gantt_attachment import UploadVerificationConflict
 from macro import build_macro_html, find_macro
-from pipeline import LIVE_AB_PAGE, apply_plan, build_plan_empty, build_plan_from_mpp
+from pipeline import LIVE_AB_PAGE, _legacy_apply_plan as apply_plan, build_plan_empty, build_plan_from_mpp
 from plan_verify import PublicationVerificationError
 
 

@@ -1,0 +1,33 @@
+{
+  "scope": "Earlier diagnostic runs; final run targets are in its own live evidence",
+  "pages": [
+    {
+      "page_id": "537572282",
+      "title": "EditPlanConfluence stage 09 admission 20261116T153325797071",
+      "page_version": 2,
+      "ancestor_test_page": "519501810",
+      "read_only_check": true
+    },
+    {
+      "page_id": "537572287",
+      "title": "EditPlanConfluence stage 09 admission 20261116T153455961980",
+      "page_version": 2,
+      "ancestor_test_page": "519501810",
+      "read_only_check": true
+    },
+    {
+      "page_id": "537572347",
+      "title": "EditPlanConfluence stage 08 controls 20261116T155435009665",
+      "page_version": 1,
+      "ancestor_test_page": "519501810",
+      "read_only_check": true
+    },
+    {
+      "page_id": "537572361",
+      "title": "EditPlanConfluence stage 09 admission 20261116T155545195044",
+      "page_version": 2,
+      "ancestor_test_page": "519501810",
+      "read_only_check": true
+    }
+  ]
+}

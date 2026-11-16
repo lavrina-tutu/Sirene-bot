@@ -38,16 +38,18 @@ def _parse_drop_links(values: list[str] | None) -> list[tuple[int, int]] | None:
         parts = v.split(":")
         if len(parts) != 2:
             raise argparse.ArgumentTypeError(f"неверный формат --drop-dep '{v}', нужно FROM:TO")
-        out.append((int(parts[0].strip()), int(parts[1].strip())))
+        try:
+            out.append((int(parts[0].strip()), int(parts[1].strip())))
+        except ValueError as exc:
+            raise argparse.ArgumentTypeError('нужны числовые FROM:TO') from exc
     return out
 
 
 def cmd_diff(args: argparse.Namespace) -> int:
-    from pipeline import prepare_child_diff, prepare_apply_diff
-    from mpp_input import resolve_mpp_path
-    mpp = resolve_mpp_path(args.mpp) if args.mpp else None
+    from pipeline import prepare_child_diff
+    mpp = args.mpp
     drop = _parse_drop_links(args.drop_dep)
-    if args.child:
+    if args.child and not args.mpp:
         title, _gantt, diff, _ = prepare_child_diff(
             _client(), args.page_id, args.title, mpp,
             allow_live_ab=args.allow_live_ab, drop_links=drop,
@@ -57,45 +59,39 @@ def cmd_diff(args: argparse.Namespace) -> int:
     if not mpp:
         print("error: --mpp required for diff apply", file=sys.stderr)
         return 2
-    _page, _gantt, diff, _ = prepare_apply_diff(
-        _client(), args.page_id, mpp,
-        allow_live_ab=args.allow_live_ab, drop_links=drop,
-    )
-    print(diff)
-    return 0
+    return _cmd_publish_preparation(args, execute=False)
+
+
+def _cmd_publish_preparation(args, *, execute):
+    from pipeline import prepare_publish, publish_plan
+    result = (publish_plan if execute else prepare_publish)(
+        page_id=args.page_id, mpp_path=args.mpp, project_slug=args.project_slug,
+        timezone_hint=args.timezone_hint, drop_links=_parse_drop_links(getattr(args,'drop_dep',None)),
+        child=getattr(args,'child',False),title=getattr(args,'title',None),
+        allow_live_ab=args.allow_live_ab, db_path=args.db, workvault=args.workvault, cache_dir=args.cache_dir)
+    print(json.dumps(result.to_dict(),ensure_ascii=False))
+    return result.exit_code
+
+
+def cmd_publish(args):
+    return _cmd_publish_preparation(args, execute=True)
 
 
 def cmd_apply(args: argparse.Namespace) -> int:
     from gate_diff import is_confirmed
-    from pipeline import apply_plan, create_child_with_plan
+    from pipeline import create_child_with_plan
     if not is_confirmed(args.confirm or ""):
         print("error: --confirm must be лей|пиши|да", file=sys.stderr)
         return 2
-    from mpp_input import resolve_mpp_path
-    mpp = resolve_mpp_path(args.mpp) if args.mpp else None
-    drop = _parse_drop_links(args.drop_dep)
-    if args.child:
-        result = create_child_with_plan(
-            _client(),
-            args.page_id,
-            args.confirm,
-            title=args.title,
-            mpp_path=mpp,
-            allow_live_ab=args.allow_live_ab,
-            drop_links=drop,
-        )
-    else:
-        if not mpp:
-            print("error: --mpp required for apply", file=sys.stderr)
+    if not args.child or args.mpp:
+        if not args.mpp:
+            print("error: --mpp required for apply",file=sys.stderr)
             return 2
-        result = apply_plan(
-            _client(),
-            args.page_id,
-            mpp,
-            args.confirm,
-            allow_live_ab=args.allow_live_ab,
-            drop_links=drop,
-        )
+        return _cmd_publish_preparation(args, execute=True)
+    drop = _parse_drop_links(args.drop_dep)
+    result = create_child_with_plan(
+        _client(),args.page_id,args.confirm,title=args.title,mpp_path=None,
+        allow_live_ab=args.allow_live_ab,drop_links=drop)
     print(json.dumps({
         "page_id": result.page_id,
         "title": result.title,
@@ -162,10 +158,10 @@ def cmd_operation(args):
 
 
 def cmd_resume(args):
-    from plan_decision import register_decision
-    result = register_decision(args.operation_id, args.accept_proposal, reason=args.reason,
+    from plan_decision import resume_operation
+    result = resume_operation(args.operation_id, args.accept_proposal, reason=args.reason,
         rule_scope=args.rule_scope, timezone_hint=args.timezone_hint, mapping_revision=args.mapping_revision,
-        db_path=args.db, workvault=args.workvault, cache_dir=args.cache_dir)
+        db_path=args.db, workvault=args.workvault, cache_dir=args.cache_dir,allow_live_ab=args.allow_live_ab)
     print(json.dumps(result, ensure_ascii=False))
     return result['exit_code']
 
@@ -244,6 +240,8 @@ def build_parser() -> argparse.ArgumentParser:
     sd = sub.add_parser("diff", help="Show gate diff before write")
     sd.add_argument("--page-id", required=True)
     sd.add_argument("--mpp")
+    sd.add_argument("--project-slug")
+    sd.add_argument("--timezone-hint")
     sd.add_argument("--child", action="store_true")
     sd.add_argument("--title")
     sd.add_argument("--drop-dep", action="append", metavar="FROM:TO",
@@ -253,12 +251,22 @@ def build_parser() -> argparse.ArgumentParser:
     sa = sub.add_parser("apply", help="Apply plan after confirm")
     sa.add_argument("--page-id", required=True)
     sa.add_argument("--mpp")
+    sa.add_argument("--project-slug")
+    sa.add_argument("--timezone-hint")
     sa.add_argument("--confirm", required=True)
     sa.add_argument("--child", action="store_true")
     sa.add_argument("--title")
     sa.add_argument("--drop-dep", action="append", metavar="FROM:TO",
                     help="исключить зависимость FROM→TO (можно повторять)")
     sa.set_defaults(func=cmd_apply)
+
+    publish = sub.add_parser('publish',help='Archive and admit MPP, then publish')
+    publish.add_argument('--page-id',required=True)
+    publish.add_argument('--mpp',required=True)
+    publish.add_argument('--project-slug')
+    publish.add_argument('--timezone-hint')
+    publish.add_argument('--drop-dep',action='append',metavar='FROM:TO')
+    publish.set_defaults(func=cmd_publish)
 
     sh = sub.add_parser("archive-history", help="GET-only import of attachment version history (P1.W1.10)")
     sh.add_argument("--page-id", required=True)
@@ -368,9 +376,15 @@ def main(argv: list[str] | None = None) -> int:
     if not args.command:
         parser.print_help()
         return 0
-    if args.command not in ("save", "batch", "operation", "resume", "history", "identity") and any((args.db, args.workvault, args.cache_dir)):
+    if args.command not in ("save", "batch", "operation", "resume", "history", "identity", "publish", "diff", "apply") and any((args.db, args.workvault, args.cache_dir)):
         parser.error("path overrides are supported for save and batch")
-    return args.func(args)
+    if args.command=='resume' and ((args.accept_proposal and (not args.reason or not args.reason.strip())) or
+            (not args.accept_proposal and (args.reason or args.rule_scope!='once'))):
+        parser.error('reason and rule-scope require a proposal')
+    try:
+        return args.func(args)
+    except argparse.ArgumentTypeError:
+        parser.error('invalid dependency address')
 
 
 if __name__ == "__main__":

@@ -93,19 +93,31 @@ def build_plan_from_mpp(
 
 
 def gantt_critical_warning(gantt: dict[str, Any]) -> str | None:
-    """Если плагин пересчитает срок проекта (критический путь по связям)
-    быстрее/дольше, чем указано в корне (duration из MPP) — вернуть текст
-    предупреждения. Плагин игнорирует start/end и живёт по цепочке связей."""
+    """Limited legacy FS/zero-lag diagnostic; never a plugin prediction."""
+    from copy import deepcopy
     from mpp_convert import critical_path_days
-
-    root = gantt["eventsData"][0]
+    roots=gantt.get('eventsData',[])
+    if not roots:return 'Ограниченная диагностика longest-path: нет корня; schedule:not_verified'
+    root = roots[0]
+    def leaves(nodes):
+        for node in nodes:
+            if node.get('children'):yield from leaves(node['children'])
+            elif not node.get('rollup') and node['id']!=root['id']:yield deepcopy(node)
+    tasks=list(leaves(roots));keys={t['id'] for t in tasks}
+    dependencies=[d for d in gantt.get('dependenciesData',[]) if d.get('active',True)]
+    if not tasks or any(d.get('from') not in keys or d.get('to') not in keys or
+                        d.get('type')!=2 or d.get('lag')!=0 for d in dependencies):
+        return 'Ограниченная диагностика longest-path неприменима к этому профилю; schedule:not_verified'
     mpp_dur = float(root.get("duration") or 0.0)
-    plugin_dur = critical_path_days(gantt)
-    if abs(mpp_dur - plugin_dur) >= 0.05:
+    try:
+        estimate = critical_path_days({'eventsData':tasks,'dependenciesData':dependencies})
+    except (RecursionError,KeyError,TypeError,ValueError):
+        return 'Ограниченная диагностика longest-path: неподдержанный граф; schedule:not_verified'
+    if abs(mpp_dur - estimate) >= 0.05:
         return (
-            f"плагин покажет срок {plugin_dur:g} дней, а не {mpp_dur:g} из MPP "
-            f"(критический путь по связям не совпадает с корнем). Если нужно "
-            f"совпадение — исключи лишние зависимости через --drop-dep FROM:TO"
+            f"Ограниченная модель FS/zero-lag: {estimate:g} дней; корень MPP: {mpp_dur:g}. "
+            "Календари, ограничения и назначения не рассчитаны; это не результат плагина "
+            "и не основание исключения связи; schedule:not_verified"
         )
     return None
 
@@ -364,7 +376,7 @@ def _record_readback(ctx, page_id, observed, verification, evidence):
         conn.close()
 
 
-def apply_plan(
+def _legacy_apply_plan(
     client: ConfluenceClient,
     page_id: str,
     mpp_path: Path,
@@ -630,3 +642,522 @@ def _upload_child_attachment_with_receipt(
             "attachment_version": uploaded.version, "expected_sha256": expected_sha256,
         })
     return uploaded.version
+
+
+# Stage 09 public prepared branch. Legacy helpers above remain for compatibility
+# tests and child-page support; the CLI's MPP diff/publish/apply share this path.
+@dataclass
+class PublishPreparation:
+    receipt: dict
+    counters: dict
+    context: Any = None
+    operation: Any = None
+    result_id: str | None = None
+    conversion: dict | None = None
+    target: dict | None = None
+
+    @property
+    def exit_code(self):
+        return self.receipt['exit_code']
+
+    def to_dict(self):
+        return json.loads(json.dumps(self.receipt))
+
+
+def _publish_error(receipt, code, rc=5):
+    receipt.update(status='needs_decision' if rc==3 else 'conflict' if rc==4 else 'failed',exit_code=rc,
+                   error={'code':code,'message':code,'retryable':False,
+                          'next_action':'operation show --operation-id '+str(receipt['operation_id']) if receipt['operation_id'] else 'diff --project-slug <slug>'})
+    return receipt
+
+
+def _current_target(client, page_id):
+    from prepared_plan import fingerprint
+    from dataclasses import asdict
+    page=client.get_page(page_id)
+    if str(page.get('id'))!=str(page_id):
+        raise ValueError('target_page_mismatch')
+    storage=page['body']['storage']['value']; macro=find_macro(storage)
+    attachments=client.list_attachments(page_id) if macro else []
+    att=find_gantt_attachment(attachments,macro) if macro else None
+    target={'page_id':str(page_id),'page_version':int(page['version']['number']),
+            'storage_sha256':hashlib.sha256(storage.encode()).hexdigest(),
+            'macro':asdict(macro) if macro else None,'attachment':asdict(att) if att else None}
+    target['sha256']=fingerprint(target)
+    return page,target
+
+
+def _prepared_source(conn, operation, context, request, counters, export=None):
+    from env import Settings, select_mpxj_python
+    from plan_save import run_export_full
+    from plan_cache import ParseCache
+    from prepared_plan import PreparedPlan, NormalizationProfile, validate_export
+    from plan_operation import freeze_operation_input
+    from plan_context import PROFILES
+    from mofs_index.plan import query as q
+    frozen=freeze_operation_input(conn,operation)
+    if export is None:
+        runtime=select_mpxj_python(settings=Settings(context.settings,context.sources))
+        material=ParseCache.material(frozen.sha256,reader=runtime.versions,export_version='full-export-v2')
+        cache=ParseCache(context.cache_dir,counters=counters)
+        try:
+            export=cache.get_or_parse(frozen.mpp_path,material,parser=lambda source:run_export_full(source,context=context,runtime=runtime,
+                diagnostics_dir=context.workvault/'_plan-receipts'/operation.operation_id/operation.attempt_id))
+        except Exception:
+            counters['MPXJ_read']=None
+            raise
+    validate_export(export)
+    if export['provenance']['sha256']!=frozen.sha256 or export['provenance']['size_bytes']!=frozen.size_bytes:
+        from plan_save import PlanSaveError
+        raise PlanSaveError('source_hash_mismatch',exit_code=4)
+    path=PROFILES/(context.settings['NORMALIZATION_PROFILE']+'.json')
+    if hashlib.sha256(path.read_bytes()).hexdigest()!=context.snapshot()['profiles']['NORMALIZATION_PROFILE']['sha256']:
+        from plan_save import PlanSaveError
+        raise PlanSaveError('normalization_profile_changed',exit_code=4)
+    prepared=PreparedPlan.from_export(export,profile=NormalizationProfile.load(path),timezone_hint=request.get('timezone_hint'),
+        provenance={'original_name':frozen.original_name,'source_path':frozen.original_locator})
+    write_receipt(operation.operation_id,'source-prepared',prepared.to_dict(),workvault=context.workvault)
+    return prepared,frozen
+
+
+def _archive_publish_source(conn, operation, prepared, frozen, binding, context):
+    from prepared_plan import canonical_bytes
+    from mofs_index.plan.ingest_mpp import build_snapshot_spec
+    aid,digest=store_artifact(frozen.mpp_path,'mpp',project_slug=binding['project_slug'],conn=conn,workvault=context.workvault)
+    if digest!=frozen.sha256:raise ValueError('source_hash_mismatch')
+    spec=build_snapshot_spec(prepared.to_dict(),plan_id=binding['plan_id'],lineage_id=binding['lineage_id'],source_artifact_id=aid)
+    store_artifact(spec.source_json.encode(),'export_json',ext='json',project_slug=binding['project_slug'],conn=conn,workvault=context.workvault)
+    committed=plan_writer.commit_import_snapshot(conn,operation.item_id,operation.attempt_id,spec)
+    # Set the ID in durable SQL first. Even a failed read-back retains it.
+    return committed.snapshot_id
+
+
+def _load_publish_prepared(conn, prep):
+    from prepared_plan import PreparedPlan
+    path=plan_writer.verify_artifact(conn,prep['prepared_artifact_id'])
+    return PreparedPlan(json.loads(Path(path).read_text())).validate()
+
+
+def _publish_readback(conn, snapshot_id):
+    from mofs_index.plan import query as q
+    plan_writer.verify_snapshot(conn,snapshot_id)
+    snapshot=q.get_snapshot(conn,snapshot_id)
+    artifact=q.find_artifact_by_hash(conn,snapshot['normalized_data_sha256'])
+    if not artifact:raise ValueError('normalized_export_missing')
+    path=plan_writer.verify_artifact(conn,artifact['artifact_id'],snapshot['normalized_data_sha256'])
+    if Path(path).read_bytes()!=snapshot['source_json'].encode():raise ValueError('normalized_export_mismatch')
+
+
+def prepare_publish(client=None, page_id=None, mpp_path=None, *, project_slug=None, lineage_id=None,
+                    timezone_hint=None, drop_links=None, allow_live_ab=False, context=None,
+                    db_path=None, workvault=None, cache_dir=None, operation_id=None,
+                    mapping_revision=None, accept_proposal=None, reason=None, rule_scope='once',
+                    export=None, plugin_profile=None, child=False, title=None):
+    """Freeze → prepared → project/target → snapshot/read-back → identity/rules/admission.
+
+    No POST/PUT. Resume reads durable prepared artifacts, never the original path.
+    """
+    from prepared_plan import PreparedPlan, canonical_bytes, fingerprint
+    from plan_context import PlanContext, PROFILES
+    from plan_save import validate_save_arguments, _failure
+    from plan_operation import begin_import, ImportOperation
+    from plan_receipt import single_receipt, mask_secrets, validate_single_receipt
+    from mofs_index.db import connect_durable
+    from mofs_index.plan import query as q, identity as identity
+    from mofs_index.plan.migrate import ensure_plan_schema
+    from mofs_index.plan.ingest_mpp import build_snapshot_spec
+    from mpp_convert import convert_prepared_plan, representation_bytes
+    from plugin_profile import PluginProfile
+    from plan_diagnostics import diagnose, finding, compact_receipt_diagnostics
+    from plan_policy import evaluate, POLICY_VERSION
+    from plan_rules import apply_rules, resolve_drop_links, relation_signature, task_context, RULES_VERSION
+    receipt=single_receipt(project_slug=project_slug);receipt['mode']='publish'
+    counters=dict(MPXJ_read=0,cache_hit=0,cache_miss=0,POST=0,PUT=0)
+    outcome=PublishPreparation(receipt,counters);conn=None
+    try:
+        validate_save_arguments(timezone_hint=timezone_hint)
+        context=context or PlanContext.resolve(db=db_path,workvault=workvault,cache_dir=cache_dir)
+        outcome.context=context
+        conn=connect_durable(context.db);ensure_plan_schema(conn)
+        previous=None
+        if operation_id:
+            op=q.get_operation(conn,operation_id); item=q.get_operation_item(conn,operation_id)
+            if not op or not item or op['action']!='publish' or item['batch_id']:
+                return PublishPreparation(_publish_error(receipt,'operation_context_incomplete',4),counters)
+            previous=q.get_preparation(conn,operation_id)
+            saved=json.loads(op['context_json'])
+            context=PlanContext.from_snapshot(saved);outcome.context=context
+            from plan_batch import _check_paths
+            _check_paths(saved,workvault=workvault,cache_dir=cache_dir)
+            if str(context.db)!=str(Path(db_path).resolve()) if db_path is not None else False:
+                raise ValueError('operation_context_conflict')
+            request=dict(previous['request'] if previous else saved['publish'])
+            if not request.get('project_slug') and not op['plan_id']:
+                raise ValueError('operation_context_incomplete')
+            operation=ImportOperation(operation_id,item['item_id'],plan_writer.begin_operation_attempt(conn,operation_id,item['item_id']))
+            if q.publish_external_effect(conn,operation_id):
+                # Stage 10 owns reconciliation after network effects.
+                return PublishPreparation(_publish_error({**receipt,'operation_id':operation_id,'item_id':item['item_id'],
+                    'snapshot_id':previous['snapshot_id'] if previous else item['snapshot_id'],
+                    'published':None,'external_effect':'unknown'},'network_reconciliation_required',5),counters,context,operation)
+        else:
+            request=dict(page_id=str(page_id),project_slug=project_slug,lineage_id=lineage_id,
+                         timezone_hint=timezone_hint,drop_links=drop_links or [],child=child,title=title)
+            operation=begin_import(conn,mpp_path,context={**context.snapshot(),'publish':request},action='publish')
+            item=q.get_import_item(conn,operation.item_id)
+        outcome.operation=operation
+        receipt.update(operation_id=operation.operation_id,item_id=operation.item_id)
+        page_id=request['page_id'];_guard_page(page_id,allow_live_ab)
+        revision=previous['revision'] if previous else 1
+        if previous:
+            prepared=_load_publish_prepared(conn,previous)
+            receipt['snapshot_id']=previous['snapshot_id']
+            _publish_readback(conn,previous['snapshot_id'])
+            receipt['verification']['archive']='verified'
+            if timezone_hint is not None:
+                old=q.get_preparation_result(conn,operation.operation_id)
+                if prepared.normalized_data['resolved_timezone'] is not None or not old or not any(b['category']=='timezone' for b in old['admission']['blockers']):
+                    raise ValueError('timezone_revision_forbidden')
+                data=prepared.normalized_data
+                prepared=PreparedPlan.from_export({**data,'provenance':data['source_identity'],'timezone_hint':None},
+                    timezone_hint=timezone_hint,provenance=prepared.document['provenance'])
+                request['timezone_hint']=timezone_hint;revision+=1
+                snapshot=q.get_snapshot(conn,previous['snapshot_id'])
+                spec=build_snapshot_spec(prepared.to_dict(),plan_id=op['plan_id'],lineage_id=op['lineage_id'],source_artifact_id=snapshot['source_artifact_id'])
+                store_artifact(spec.source_json.encode(),'export_json',ext='json',project_slug=request['project_slug'],conn=conn,workvault=context.workvault)
+                receipt['snapshot_id']=plan_writer.ingest_snapshot(conn,spec)
+                _publish_readback(conn,receipt['snapshot_id'])
+        else:
+            prepared,frozen=_prepared_source(conn,operation,context,request,counters,export)
+            receipt['source']={'name':frozen.original_name,'sha256':frozen.sha256,'size_bytes':frozen.size_bytes}
+            receipt['completed_stages']=['input_frozen','prepared']
+        # Project resolution and read-only target validation precede snapshot creation.
+        binding=resolve_plan_binding(page_id,request.get('project_slug'),lineage_id=request.get('lineage_id'),conn=conn)
+        request.update(project_slug=binding['project_slug'],lineage_id=binding['lineage_id'])
+        publication_profiles={name:hashlib.sha256((PROFILES/name).read_bytes()).hexdigest()
+                              for name in ('publication-policy-v1.json','project-rules-v1.json')}
+        if previous and request.get('publication_profiles')!=publication_profiles:
+            raise ValueError('operation_context_conflict')
+        request['publication_profiles']=publication_profiles
+        if not previous:
+            request['rule_revisions']=[{'rule_id':r['rule_id'],'revision':r['revision'],'content_sha256':r['content_sha256']}
+                                       for r in q.get_project_rules(conn,binding['project_slug'])]
+        receipt['project_slug']=binding['project_slug']
+        client=client or ConfluenceClient()
+        page,target=_current_target(client,page_id)
+        outcome.target=target
+        if not previous:
+            receipt['snapshot_id']=_archive_publish_source(conn,operation,prepared,frozen,binding,context)
+            _publish_readback(conn,receipt['snapshot_id'])
+        receipt['verification']['archive']='verified'
+        receipt['completed_stages']=['input_frozen','prepared','archived']
+        item=q.get_operation_item(conn,operation.operation_id)
+        receipt['source']={'name':item['original_name'],'sha256':item['source_mpp_sha256'],'size_bytes':item['size_bytes']}
+        prep_artifact,_=store_artifact(canonical_bytes(prepared.to_dict()),'prepared_json',ext='json',project_slug=request['project_slug'],conn=conn,workvault=context.workvault)
+        plan_writer.record_preparation(conn,plan_writer.PreparationSpec(operation.operation_id,revision,receipt['snapshot_id'],
+            prep_artifact,context.snapshot(),request))
+        # A target change invalidates old proposals/decisions even before effects.
+        prior_result=q.get_preparation_result(conn,operation.operation_id)
+        if previous and prior_result and prior_result['result']['target']['sha256']!=target['sha256']:
+            return PublishPreparation(_publish_error(receipt,'target_conflict',4),counters,context,operation,target=target)
+        profile_error=None
+        try:
+            for name in ('NORMALIZATION_PROFILE','SUMMARY_PROFILE','PLUGIN_PROFILE'):
+                p=PROFILES/(context.settings[name]+'.json')
+                expected=context.snapshot()['profiles'][name]['sha256']
+                if not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest()!=expected:
+                    raise ValueError('preparation_profile_changed')
+            profile=plugin_profile or PluginProfile.load(PROFILES/(context.settings['PLUGIN_PROFILE']+'.json'))
+            profile.validate()
+            conversion=convert_prepared_plan(prepared,plugin_profile=profile)
+        except (ValueError,OSError) as exc:
+            profile_error=getattr(exc,'code','plugin_profile_required');profile=None
+            # Keep primary archive useful even with an unavailable target profile.
+            conversion={'gantt':{},'mappings':{'tasks':{},'dependencies':{}},'diagnostics':[],
+                        'summary':{'counts':{},'work':{},'reasons':[]}}
+        findings=[];rules=[];excluded=[]
+        if profile is not None:
+            conversion,rules,findings,excluded=apply_rules(conn,operation.operation_id,prepared,conversion,mapping_revision=mapping_revision)
+            diagnostics=diagnose(prepared,conversion,plugin_profile=profile,excluded=excluded)
+            findings+=diagnostics['findings']
+        else:
+            diagnostics={'findings':[],'dates':[],'local_model':{'status':'unsupported'}}
+            findings.append(finding('plugin_unknown',profile_error,'plugin'))
+        # A legacy --drop-dep is an addressable proposal, never an instruction to
+        # silently delete. Its local IDs are resolved once against this hash.
+        proposed=resolve_drop_links(prepared.normalized_data,request.get('drop_links'))
+        basis=fingerprint({'source':prepared.semantic_hash,'target':target,'policy':POLICY_VERSION,
+            'rules':rules,'profile':profile.fingerprint if profile else None,'conversion':conversion})
+        proposals=[{'action':'exclude_dependency','finding_sha256':fingerprint(f),
+                    'losses':['Историческое адресное правило '+rule['rule_id']+'; сначала требуется identity confirm']}
+                   for rule in rules if rule.get('pending_cause')
+                   for f in findings if f['code']==rule['pending_cause']]
+        for drop in proposed:
+            matches=[f for f in findings if f['category'] in ('graph','unsupported_semantics') and
+                     (f['entity']==drop['dependency_key'] or f['code']=='cycle')]
+            addressed=matches or [finding('unsupported_semantics','explicit_dependency_exclusion',drop['dependency_key'],drop)]
+            if not matches:findings+=addressed
+            for f in addressed:
+                proposal={**drop,'action':'exclude_dependency','finding_sha256':fingerprint(f),'basis_sha256':basis,
+                    'snapshot_id':receipt['snapshot_id'],'policy_revision':POLICY_VERSION,
+                    'losses':['Исключение одной точно указанной исходной связи только из представления Confluence']}
+                tasks={t['task_key']:t for t in prepared.normalized_data['tasks']}
+                proposal['project_rule']={'predecessor_key':drop['predecessor_key'],'successor_key':drop['successor_key'],
+                    'expected_relation':drop['expected_relation'],
+                    'task_contexts':{k:task_context(tasks[k]) for k in (drop['predecessor_key'],drop['successor_key'])},
+                    'action':'exclude_dependency','policy_revision':POLICY_VERSION,
+                    'termination':'Identity, task context, original relation or the addressed cause is no longer proven',
+                    'cause':{'code':f['code'],'entity':drop['dependency_key'],'source_sha256':fingerprint(drop['expected_relation']),
+                             'exact_source_required':drop['source_sha256'] if not matches else None}}
+                pid=plan_writer.record_publish_proposal(conn,plan_writer.PublishProposalSpec(operation.operation_id,revision,proposal))
+                proposals.append({**proposal,'proposal_id':pid})
+        for f in findings:
+            if f['category']=='date_mismatch':
+                proposal={'action':'accept_date_deviation','finding_sha256':fingerprint(f),'basis_sha256':basis,
+                    'snapshot_id':receipt['snapshot_id'],'source_sha256':receipt['source']['sha256'],
+                    'policy_revision':POLICY_VERSION,'entity':f['entity'],
+                    'expected_dates':{'source':f['source'],'represented':f['represented'],'observed':f['observed']},
+                    'losses':['Сохранить точно перечисленное отклонение дат; schedule:accepted_deviation']}
+                pid=plan_writer.record_publish_proposal(conn,plan_writer.PublishProposalSpec(operation.operation_id,revision,proposal))
+                proposals.append({**proposal,'proposal_id':pid})
+        if accept_proposal:
+            # Recompute current basis before accepting a stored proposal.
+            saved_proposals=q.get_publish_proposals(conn,operation.operation_id)
+            selected=next((p for p in saved_proposals if p['proposal_id']==accept_proposal),None)
+            if not selected or selected['content']['basis_sha256']!=basis:raise ValueError('proposal_context_mismatch')
+            plan_writer.register_publish_decision(conn,plan_writer.PublishDecisionSpec(operation.operation_id,accept_proposal,reason,rule_scope))
+        decisions=q.get_publish_proposals(conn,operation.operation_id)
+        accepted_deviations=[];decision_ids=[]
+        for proposal in decisions:
+            p=proposal['content']
+            if not proposal['decision_id'] or p['basis_sha256']!=basis:continue
+            decision_ids.append(proposal['decision_id'])
+            if p['action']=='exclude_dependency':
+                if p['source_sha256']!=prepared.normalized_data['source_identity']['sha256']:raise ValueError('proposal_context_mismatch')
+                depid=conversion['mappings']['dependencies'].get(p['dependency_key'])
+                conversion['gantt']['dependenciesData']=[d for d in conversion['gantt']['dependenciesData'] if d['id']!=depid]
+                conversion['diagnostics']=[d for d in conversion['diagnostics'] if d.get('entity')!=p['dependency_key']]
+                excluded.append(p['dependency_key'])
+                if proposal['rule_scope']=='project':
+                    from plan_decision import persist_project_rule
+                    persist_project_rule(conn,proposal,project_slug=request['project_slug'],workvault=context.workvault)
+            elif p['action']=='accept_date_deviation':accepted_deviations.append(p['finding_sha256'])
+        if decision_ids:
+            # No severity override: diagnose the transformed representation again.
+            findings=[f for f in findings if f['category']=='identity']
+            diagnostics=diagnose(prepared,conversion,plugin_profile=profile,excluded=excluded)
+            findings+=diagnostics['findings']
+        admission=evaluate(findings,proposals=proposals,accepted_deviations=accepted_deviations)
+        receipt.update(status=admission['status'],exit_code=admission['exit_code'],
+            exceptions=[{'rule_id':r['rule_id'],'revision':r['rule_revision'],
+                         'result':r['status'],'evidence_id':r['evidence_id']} for r in rules])
+        receipt['verification']['schedule'],receipt['warnings']=compact_receipt_diagnostics(admission)
+        counts=conversion['summary'].get('counts',{})
+        for key in ('task_count','display_task_count','dependency_count'):receipt[key]=counts.get(key)
+        if admission['blockers']:
+            _publish_error(receipt,admission['blockers'][0]['code'],admission['exit_code'])
+        raw=representation_bytes(conversion) if profile else None
+        representation=None
+        if raw is not None:
+            representation,digest=store_artifact(raw,'prepared_json',ext='json',project_slug=request['project_slug'],conn=conn,workvault=context.workvault)
+        evidence={'snapshot_id':receipt['snapshot_id'],'archive':'verified','admission':admission,'context':context.snapshot(),
+            'profiles':{'plugin':profile.document if profile else None,'policy':diagnostics.get('profile'),
+                        'normalization':json.loads((PROFILES/(context.settings['NORMALIZATION_PROFILE']+'.json')).read_text()),
+                        'converter_version':conversion.get('converter_version'),
+                        'historical_rules':json.loads((PROFILES/'project-rules-v1.json').read_text()),
+                        'summary':json.loads((PROFILES/'summary-v1.json').read_text()),'rules_version':RULES_VERSION},
+            'rules':rules,'decisions':decision_ids,'diagnostics':diagnostics,'target':target,
+            'representation_sha256':hashlib.sha256(raw).hexdigest() if raw is not None else None}
+        eid,_=store_artifact(canonical_bytes(evidence),'admission_evidence',ext='json',project_slug=request['project_slug'],conn=conn,workvault=context.workvault)
+        receipt['verification']['schedule'],receipt['warnings']=compact_receipt_diagnostics(admission,eid)
+        if admission['allowed']:receipt['completed_stages'].append('admitted')
+        result={'receipt':receipt,'target':target,'basis_sha256':basis,'summary':conversion['summary']}
+        validate_single_receipt(receipt)
+        outcome.result_id=plan_writer.record_preparation_result(conn,plan_writer.PreparationResultSpec(operation.operation_id,revision,
+            representation,eid,admission,result))
+        plan_writer.record_operation_event(conn,operation.attempt_id,'publish_preparation',detail=outcome.result_id)
+        outcome.conversion=conversion
+        write_receipt(operation.operation_id,'publish-preparation-'+str(revision),receipt,workvault=context.workvault)
+    except Exception as exc:
+        if isinstance(exc,identity.IdentityError):_publish_error(receipt,exc.code,exc.exit_code)
+        elif isinstance(exc,ValueError) and str(exc) in ('timezone_revision_forbidden','target_conflict','proposal_context_mismatch',
+                'operation_context_conflict','operation_context_incomplete','preparation_revision_conflict'):
+            _publish_error(receipt,str(exc),4)
+        else:_failure(receipt,exc)
+        if getattr(exc,'candidates',None) and outcome.operation:
+            try:
+                diagnostic=write_receipt(outcome.operation.operation_id,'input-error',
+                    {'code':receipt['error']['code'],'candidates':list(exc.candidates)},workvault=context.workvault)
+                receipt['error']['next_action']='Выбрать один MPP; список кандидатов: '+str(diagnostic)
+            except OSError:
+                _publish_error(receipt,'input_diagnostic_unavailable')
+        if receipt['snapshot_id'] and receipt['verification']['archive']!='verified':receipt['verification']['archive']='failed'
+        if conn is not None and outcome.operation:
+            try:
+                item=q.get_operation_item(conn,outcome.operation.operation_id)
+                if item:
+                    receipt['source']={'name':item['original_name'],'sha256':item['source_mpp_sha256'],'size_bytes':item['size_bytes']}
+                    receipt['snapshot_id']=receipt['snapshot_id'] or item['snapshot_id']
+                    if not item['snapshot_id']:
+                        plan_writer.fail_import_item(conn,item['item_id'],outcome.operation.attempt_id,receipt['error']['code'])
+                plan_writer.record_operation_event(conn,outcome.operation.attempt_id,'publish_preparation_failed',status='failed',detail=json.dumps(receipt))
+                write_receipt(outcome.operation.operation_id,'publish-failed',receipt,workvault=context.workvault)
+            except Exception:pass # Original failure remains; never starts the network.
+        if receipt['error']['code']=='project_slug_required':
+            receipt.update(operation_id=None,item_id=None) # Intake is retained, not resumable for publication.
+    finally:
+        if conn is not None:conn.close()
+    outcome.receipt=mask_secrets(receipt)
+    return outcome
+
+
+def _upload_prepared_bytes(client,page_id,filename,raw,existing):
+    from gantt_attachment import _create_attachment, _post_attachment_data
+    return (_post_attachment_data(client,page_id,existing.attach_id,filename,raw) if existing else
+            _create_attachment(client,page_id,filename,raw))
+
+
+def _verify_stage09_attachment(client,page_id,uploaded,expected):
+    """Current metadata + exact version download: avoids the known status=any 400.
+
+    Fail closed if that exact version is no longer current. Historical-version
+    reconciliation belongs to stage 10; latest bytes are never substituted.
+    """
+    current=find_gantt_attachment(client.list_attachments(page_id),
+        type('AttachmentTarget',(),{'attachment_name':uploaded.filename})())
+    if not current or (current.attach_id,current.version)!=(uploaded.attach_id,uploaded.version):
+        raise UploadVerificationConflict('current attachment identity/version changed')
+    raw=client.download_attachment(page_id,uploaded.filename,uploaded.version)
+    check=verify_attachment_bytes(raw,expected)
+    if not check.ok:raise UploadVerificationConflict('exact attachment bytes mismatch')
+    return check
+
+
+def publish_prepared(client, preparation, *, allow_live_ab=False):
+    """Execute the existing network primitives only after durable admission.
+
+    This stage supplies the admission boundary. Recovery/idempotency/target locks
+    and verified_v1 publication trust are the work of stage 10.
+    """
+    from copy import deepcopy
+    from mofs_index.db import connect_durable
+    from mofs_index.plan import query as q
+    receipt=deepcopy(preparation.receipt)
+    if receipt['exit_code'] or 'admitted' not in receipt['completed_stages']:return preparation
+    conn=connect_durable(preparation.context.db)
+    try:
+        result=q.get_preparation_result(conn,preparation.operation.operation_id)
+        if not result or result['result_id']!=preparation.result_id or result['state']!='admitted':
+            raise ValueError('durable_admission_required')
+        raw_path=plan_writer.verify_artifact(conn,result['representation_artifact_id'])
+        raw=Path(raw_path).read_bytes();expected=hashlib.sha256(raw).hexdigest()
+        plan_writer.verify_artifact(conn,result['evidence_artifact_id'])
+        prep=q.get_preparation(conn,preparation.operation.operation_id)
+        for requirement in q.get_identity_requirements(conn,preparation.operation.operation_id):
+            if requirement['preparation_revision']==prep['revision']:
+                choice=plan_writer.select_operation_identity(conn,plan_writer.IdentityChoiceSpec(
+                    preparation.operation.operation_id,requirement['requirement_id'],requirement['mapping_revision_id']))
+                if choice['exit_code']:raise ValueError('identity_confirmation_required')
+        _publish_readback(conn,prep['snapshot_id'])
+        page_id=prep['request']['page_id'];_guard_page(page_id,allow_live_ab)
+        page,target=_current_target(client,page_id)
+        if target!=result['result']['target']:
+            return PublishPreparation(_publish_error(receipt,'target_conflict',4),preparation.counters)
+        macro=find_macro(page['body']['storage']['value'])
+        new_macro=build_macro_html(*new_macro_ids()) if macro is None else None
+        expected_macro=macro or find_macro(new_macro)
+        if prep['request'].get('child'):
+            new_macro=build_macro_html(*new_macro_ids())
+            expected_macro=find_macro(new_macro)
+        att=find_gantt_attachment(client.list_attachments(page_id),expected_macro)
+        # Durable admission includes profiles/rules/context before this intent.
+        plan_writer.record_operation_event(conn,preparation.operation.attempt_id,'publish_network_intent',detail=json.dumps(
+            {'preparation_result_id':result['result_id'],'page_id':page_id,'child':prep['request'].get('child',False),
+             'macro':asdict(expected_macro)}))
+        receipt.update(published=None,external_effect='unknown')
+        summary=result['result']['summary']; d1,d2,n=summary['d1'],summary['d2'],summary['n_days']
+        if prep['request'].get('child'):
+            # Reuse the existing child naming/macro/HTTP contracts after the
+            # same primary archive and admission. Recovery remains stage 10.
+            storage=build_itogo_html(d1,d2,n,0)+build_macro_html(
+                expected_macro.macro_id,expected_macro.param_id,expected_macro.param_hash)
+            preparation.counters['POST']+=1
+            created=client.create_page(prep['request'].get('title') or default_child_title(page['title']),
+                page['space']['key'],storage,page_id)
+            page_id=str(created['id']);receipt.update(page_id=page_id,page_url=page_url(page_id),external_effect='partial')
+            preparation.counters['POST']+=1
+            uploaded=_upload_prepared_bytes(client,page_id,expected_macro.attachment_name,raw,None)
+            receipt['attachment_version']=uploaded.version
+            verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
+            if getattr(verified,'ok',False) is not True or verified.actual_sha256!=expected:
+                raise UploadVerificationConflict('child exact attachment verification returned false')
+            observed=client.get_page(page_id)
+            check=verify_storage_observation(observed['body']['storage']['value'],expected_storage=storage,
+                expected_macro=expected_macro,expected_itogo=(d1,d2,n),expected_version=int(created['version']['number']),
+                actual_version=int(observed['version']['number']))
+            if not check.ok:raise PublicationVerificationError('child storage read-back failed')
+            verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
+            if getattr(verified,'ok',False) is not True or verified.actual_sha256!=expected:
+                raise UploadVerificationConflict('child current attachment verification returned false')
+            receipt['verification'].update(attachment='verified',storage='verified')
+            receipt['completed_stages']+=['attachment_uploaded','attachment_verified','storage_written','storage_verified']
+            receipt.update(published=True,external_effect='confirmed',status='published_with_warnings',exit_code=0,error=None)
+            plan_writer.record_operation_event(conn,preparation.operation.attempt_id,'publish_network_result',detail=json.dumps(receipt))
+            write_receipt(preparation.operation.operation_id,'publish',receipt,workvault=preparation.context.workvault)
+            preparation.receipt=receipt
+            return preparation
+        preparation.counters['POST']+=1
+        uploaded=_upload_prepared_bytes(client,page_id,expected_macro.attachment_name,raw,att)
+        receipt['external_effect']='partial';receipt['attachment_version']=uploaded.version
+        verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
+        if getattr(verified,'ok',False) is not True or verified.actual_sha256!=expected:
+            raise UploadVerificationConflict('exact attachment verification returned false')
+        receipt['verification']['attachment']='verified';receipt['completed_stages']+=['attachment_uploaded','attachment_verified']
+        fresh=client.get_page(page_id)
+        if fresh['body']['storage']['value']!=page['body']['storage']['value'] or fresh['version']!=page['version']:
+            _publish_error(receipt,'target_conflict',4);return PublishPreparation(receipt,preparation.counters)
+        # Insert a whole paragraph at a block boundary. The legacy helper puts
+        # it inside a <p>-wrapped macro; Confluence then rewrites invalid nested
+        # paragraphs and exact storage read-back correctly rejects the result.
+        storage=fresh['body']['storage']['value']+(new_macro or '')
+        storage=apply_itogo(storage,d1,d2,n,0)
+        preparation.counters['PUT']+=1
+        client.put_page(page_id,fresh['title'],storage,int(fresh['version']['number'])+1)
+        receipt['completed_stages'].append('storage_written')
+        observed=client.get_page(page_id)
+        check=verify_storage_observation(observed['body']['storage']['value'],expected_storage=storage,
+            expected_macro=expected_macro,expected_itogo=(d1,d2,n),expected_version=int(fresh['version']['number'])+1,
+            actual_version=int(observed['version']['number']))
+        if not check.ok:raise PublicationVerificationError('storage read-back failed')
+        verified=_verify_stage09_attachment(client,page_id,uploaded,expected)
+        if getattr(verified,'ok',False) is not True or verified.actual_sha256!=expected:
+            raise UploadVerificationConflict('current attachment verification returned false')
+        receipt['verification']['storage']='verified';receipt['completed_stages'].append('storage_verified')
+        receipt.update(published=True,external_effect='confirmed',status='published_with_warnings',exit_code=0,
+                       page_id=page_id,page_url=page_url(page_id),error=None)
+        # No verified_v1 registration before stage 10's full network lifecycle.
+        plan_writer.record_operation_event(conn,preparation.operation.attempt_id,'publish_network_result',detail=json.dumps(receipt))
+        write_receipt(preparation.operation.operation_id,'publish',receipt,workvault=preparation.context.workvault)
+    except Exception as exc:
+        _publish_error(receipt,'attachment_verification_failed' if isinstance(exc,UploadVerificationConflict) else
+                       'storage_verification_failed' if isinstance(exc,PublicationVerificationError) else 'publication_failed')
+        plan_writer.record_operation_event(conn,preparation.operation.attempt_id,'publish_network_result',status='failed',detail=json.dumps(receipt))
+        write_receipt(preparation.operation.operation_id,'publish-failed',receipt,workvault=preparation.context.workvault)
+    finally:conn.close()
+    preparation.receipt=receipt
+    return preparation
+
+
+def publish_plan(client=None, **kwargs):
+    preparation=prepare_publish(client,**kwargs)
+    if preparation.exit_code:return preparation
+    return publish_prepared(client or ConfluenceClient(),preparation,allow_live_ab=kwargs.get('allow_live_ab',False))
+
+
+def apply_plan(client, page_id, mpp_path, confirm, *, project_slug=None, timezone_hint=None,
+               allow_live_ab=False, drop_links=None, **paths):
+    """Compatible confirmed command; archive/admission are mandatory."""
+    if not is_confirmed(confirm):
+        raise PermissionError('Запись без подтверждения «лей»/«пиши»/«да» запрещена')
+    return publish_plan(client,page_id=page_id,mpp_path=mpp_path,project_slug=project_slug,
+        timezone_hint=timezone_hint,allow_live_ab=allow_live_ab,drop_links=drop_links,**paths)

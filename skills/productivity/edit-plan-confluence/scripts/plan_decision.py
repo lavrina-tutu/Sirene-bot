@@ -79,3 +79,41 @@ def register_decision(operation_id, proposal_id=None, *, reason=None, rule_scope
     finally:
         if conn is not None:
             conn.close()
+
+
+def resume_operation(operation_id, proposal_id=None, *, reason=None, rule_scope='once', timezone_hint=None,
+                     mapping_revision=None, db_path=None, workvault=None, cache_dir=None, allow_live_ab=False,
+                     client=None, plugin_profile=None, execute=True):
+    """Batch keeps its immutable contract; single publish uses saved preparation."""
+    from plan_batch import _connect, _db
+    conn = _connect(_db(db_path=db_path))
+    try:
+        item=q.get_operation_item(conn,operation_id)
+        if item and item['batch_id']:
+            return register_decision(operation_id,proposal_id,reason=reason,rule_scope=rule_scope,
+                timezone_hint=timezone_hint,mapping_revision=mapping_revision,db_path=db_path,
+                workvault=workvault,cache_dir=cache_dir)
+    finally:conn.close()
+    from pipeline import prepare_publish, publish_prepared
+    from conf_client import ConfluenceClient
+    prepared=prepare_publish(client,operation_id=operation_id,timezone_hint=timezone_hint,
+        mapping_revision=mapping_revision,accept_proposal=proposal_id,reason=reason,rule_scope=rule_scope,
+        db_path=db_path,workvault=workvault,cache_dir=cache_dir,allow_live_ab=allow_live_ab,plugin_profile=plugin_profile)
+    if execute and prepared.exit_code==0:
+        prepared=publish_prepared(client or ConfluenceClient(),prepared,allow_live_ab=allow_live_ab)
+    return prepared.to_dict()
+
+
+def persist_project_rule(conn, decision, *, project_slug, workvault):
+    """Explicit project scope only; exact consent artifact and reference snapshot."""
+    from prepared_plan import canonical_bytes
+    content=decision['content']
+    if decision['rule_scope']!='project' or not decision['decision_id'] or not content.get('project_rule'):
+        raise w.PlanWriterError('proposal_project_rule_unsupported')
+    evidence,digest=plan_archive.store_artifact(canonical_bytes({'proposal':content,
+        'proposal_sha256':decision['proposal_sha256'],'decision_id':decision['decision_id'],
+        'reason':decision['decision_reason'],'approved_at':decision['decision_created_at']}),
+        'rule_evidence',ext='json',project_slug=project_slug,workvault=workvault,conn=conn)
+    rule={**content['project_rule'],'reason':decision['decision_reason'],'approved_at':decision['decision_created_at']}
+    return w.record_project_rule(conn,w.ProjectRuleSpec('proposal-'+decision['proposal_id'],'1',project_slug,
+        content['snapshot_id'],evidence,digest,rule))

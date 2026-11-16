@@ -1,0 +1,53 @@
+{
+  "release_gate": false,
+  "runs": [
+    {
+      "name": "live-smoke",
+      "rc": 1,
+      "stdout": "live-smoke-stdout.log",
+      "stderr": "live-smoke-stderr.log",
+      "page_id": "537572282",
+      "result": "Attachment bytes verified; storage read-back rejected nested paragraph normalization. Corrected prepared storage assembly; failure preserved, no rollback claimed."
+    },
+    {
+      "name": "live-smoke2",
+      "rc": 0,
+      "stdout": "live-smoke2-stdout.log",
+      "stderr": "live-smoke2-stderr.log",
+      "page_id": "537572287",
+      "result": "Actual synthetic publication and independently blocked binary MPP passed."
+    },
+    {
+      "name": "preliminary-full",
+      "rc": 0,
+      "stdout": "preliminary-full/pytest-stdout.log",
+      "junit": "preliminary-full/junit.xml",
+      "passed": 522,
+      "optional_skipped": 2,
+      "result": "Superseded after source review; no release claim. See preliminary-full/scope.json."
+    },
+    {
+      "name": "interrupted-full",
+      "rc": 1,
+      "stdout": "interrupted-full/pytest-stdout.log",
+      "stderr": "interrupted-full/pytest-stderr.log",
+      "result": "Intentionally interrupted with SIGINT to compact machine stdout. Pytest teardown also reported KeyError after interruption; not a completed acceptance run."
+    },
+    {
+      "name": "final-unit",
+      "rc": 0,
+      "stdout": "final-unit-stdout.log",
+      "stderr": "final-unit-stderr.log",
+      "passed": 90,
+      "result": "Focused new behavior after hierarchy/child/binary-bootstrap review."
+    },
+    {
+      "name": "compact",
+      "rc": 0,
+      "stdout": "compact-stdout.log",
+      "stderr": "compact-stderr.log",
+      "passed": 6,
+      "result": "Receipt projection, actual binary chain, admission and attachment read-back checks."
+    }
+  ]
+}

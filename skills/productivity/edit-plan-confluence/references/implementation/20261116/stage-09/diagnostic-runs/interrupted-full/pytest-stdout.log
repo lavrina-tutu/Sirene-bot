@@ -1,0 +1,55 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests
+configfile: pytest.ini
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 528 items
+
+skills/productivity/edit-plan-confluence/tests/test_admission.py ....... [  1%]
+..............................................                           [ 10%]
+skills/productivity/edit-plan-confluence/tests/test_child_page.py ...... [ 11%]
+.............                                                            [ 13%]
+skills/productivity/edit-plan-confluence/tests/test_cli.py ......        [ 14%]
+skills/productivity/edit-plan-confluence/tests/test_env.py .....         [ 15%]
+skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py . [ 15%]
+..........                                                               [ 17%]
+skills/productivity/edit-plan-confluence/tests/test_gate_diff.py ....    [ 18%]
+skills/productivity/edit-plan-confluence/tests/test_identity_resume_e2e.py . [ 18%]
+.........                                                                [ 20%]
+skills/productivity/edit-plan-confluence/tests/test_itogo.py ........... [ 22%]
+................                                                         [ 25%]
+skills/productivity/edit-plan-confluence/tests/test_macro.py ...         [ 26%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py .... [ 26%]
+                                                                         [ 26%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py ..... [ 27%]
+...................                                                      [ 31%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_input.py ....... [ 32%]
+.................                                                        [ 35%]
+skills/productivity/edit-plan-confluence/tests/test_pipeline.py ........ [ 37%]
+...............                                                          [ 40%]
+skills/productivity/edit-plan-confluence/tests/test_plan_cache.py ...... [ 41%]
+........                                                                 [ 42%]
+skills/productivity/edit-plan-confluence/tests/test_plan_manifest.py ... [ 43%]
+....................                                                     [ 47%]
+skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py .... [ 48%]
+...............                                                          [ 50%]
+skills/productivity/edit-plan-confluence/tests/test_plan_rules.py ...... [ 52%]
+...                                                                      [ 52%]
+skills/productivity/edit-plan-confluence/tests/test_plan_verify.py ..... [ 53%]
+.............                                                            [ 56%]
+skills/productivity/edit-plan-confluence/tests/test_plugin_profile.py .. [ 56%]
+.......                                                                  [ 57%]
+skills/productivity/edit-plan-confluence/tests/test_prepared_plan.py ... [ 58%]
+...........................                                              [ 63%]
+skills/productivity/edit-plan-confluence/tests/test_publish_prepare.py . [ 63%]
+..............                                                           [ 66%]
+skills/productivity/edit-plan-confluence/tests/test_batch_decisions.py . [ 66%]
+................                                                         [ 69%]
+skills/productivity/edit-plan-confluence/tests/test_batch_resume.py .... [ 70%]
+..............                                                           [ 72%]
+skills/productivity/edit-plan-confluence/tests/test_history_queries.py . [ 73%]
+.................
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/home/tkachenkoav/.local/lib/python3.9/site-packages/yaml/reader.py:139: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)

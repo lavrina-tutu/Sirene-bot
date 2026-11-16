@@ -1,0 +1,55 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_stage09_live_publish_bytes_storage_and_binary_blocker __________
+
+tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage09-181250/stage-09/live-smoke-tmp/test_stage09_live_publish_byte0')
+request = <FixtureRequest for <Function test_stage09_live_publish_bytes_storage_and_binary_blocker>>
+stage09_export = {'assignments': [], 'calendars': [{'calendar_key': 'cal', 'exceptions': [], 'exceptions_quality': {'count': 0, 'reason...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f8442211520>
+
+    def test_stage09_live_publish_bytes_storage_and_binary_blocker(tmp_path,request,stage09_export,monkeypatch):
+        import conf_client,gantt_attachment
+        from conf_client import ConfluenceClient
+        from env import load_confluence_env
+        from plan_context import PlanContext
+        from pipeline import prepare_publish,publish_prepared,publish_plan
+        from mofs_index.db import connect_durable
+        from mofs_index.plan import query as q
+        root=getattr(request.config,'_acceptance_root',tmp_path)
+        folder=root/'live-stage09';folder.mkdir(exist_ok=True)
+        calls=[];status={'status':'not_run','test_parent':PARENT,'scope':'stage09 admission, bytes and storage; schedule:not_verified',
+            'admitted_fixture':'explicit synthetic export, no MPXJ read claimed','calls':calls}
+        def trace(original):
+            def call(req,*args,**kwargs):
+                calls.append({'method':req.get_method(),'path':urlsplit(req.full_url).path})
+                return original(req,*args,**kwargs)
+            return call
+        monkeypatch.setattr(conf_client,'urlopen',trace(conf_client.urlopen))
+        monkeypatch.setattr(gantt_attachment,'urlopen',trace(gantt_attachment.urlopen))
+        try:
+            token=load_confluence_env(Path.home()/'USERTOOLS/ConfluenceSync/.env')['CONFLUENCE_TOKEN']
+            client=ConfluenceClient(token=token)
+            parent=client.get_page(PARENT)
+            child=client.create_page('EditPlanConfluence stage 09 admission '+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f'),
+                parent['space']['key'],'<p>Stage 09 acceptance neighbour</p>',PARENT)
+            page_id=str(child['id']);status['page_id']=page_id
+            assert page_id not in ('519492935',PARENT)
+            source=tmp_path/'synthetic-parsed-contract.mpp';source.write_bytes(b'Synthetic parsed fixture: no claim of binary MPP extraction')
+            data=stage09_export;data['provenance'].update(sha256=hashlib.sha256(source.read_bytes()).hexdigest(),size_bytes=source.stat().st_size)
+            context=PlanContext.resolve(db=tmp_path/'state/index.sqlite',workvault=tmp_path/'WorkVault',cache_dir=tmp_path/'cache')
+            before=sum(c['method'] in ('POST','PUT') for c in calls)
+            prepared=prepare_publish(client,page_id,source,project_slug='stage09-live-test',timezone_hint='Europe/Moscow',
+                context=context,export=data)
+            assert prepared.exit_code==0,prepared.receipt
+            assert sum(c['method'] in ('POST','PUT') for c in calls)==before
+            result=publish_prepared(client,prepared)
+            status.update(receipt=result.receipt,counters=result.counters)
+>           assert result.exit_code==0 and result.receipt['published'] is True,result.receipt
+E           AssertionError: {'attachment_version': 1, 'completed_stages': ['input_frozen', 'prepared', 'archived', 'admitted', 'attachment_uploaded', 'attachment_verified', ...], 'dependency_count': 1, 'display_task_count': 3, ...}
+E           assert (5 == 0)
+E            +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_339dcd6cb0b94e95a98b8d6fb8bd15e2', 'item_i...bfd', 'macro': None, 'attachment': None, 'sha256': 'ead5fb1cc3415562c1053eb5016877926770e30b5c9546e9a4224e73db0a6ef3'}).exit_code
+
+tests/test_publish_live.py:59: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker
+1 failed in 3.08s

@@ -1,0 +1,27 @@
+{
+  "version": "project-exceptions-v1",
+  "historical": [
+    {
+      "rule_id": "B",
+      "revision": "historical-unresolved-v1",
+      "project_slug": "trisigma",
+      "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+      "reference_snapshot_id": null,
+      "evidence_id": null,
+      "stable_task_keys": null,
+      "basis": "EditPlanConfluence master 0.5.0 §20.3.7 and case B: historical consent exists; source-local row numbers are not stable task identity",
+      "status": "inactive"
+    },
+    {
+      "rule_id": "C",
+      "revision": "historical-unresolved-v1",
+      "project_slug": "trisigma",
+      "source_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+      "reference_snapshot_id": null,
+      "evidence_id": null,
+      "stable_task_keys": null,
+      "basis": "EditPlanConfluence master 0.5.0 §20.3.7 and case C: historical consent exists; source-local row numbers are not stable task identity",
+      "status": "inactive"
+    }
+  ]
+}

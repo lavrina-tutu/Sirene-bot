@@ -314,3 +314,31 @@ Registries; evidence paths/hashes проверяются при загрузке
 производного представления дополнительно зависит от converter/rules/plugin/
 summary fingerprints, параметров шаблона и явного выбора корня. Кэш можно
 удалить; он не заменяет долговечный архив или свежую проверку Confluence.
+
+## Подготовка публикации — этап 09
+
+`diff`, `publish` и `apply --confirm` используют `prepare_publish`: фиксация входа → prepared/cache → проект/lineage и GET цели → первичный MPP snapshot/read-back → identity/B/C → диагностика/допуск. До допуска POST/PUT запрещены. `diff` архивирует источник, возвращает одиночную JSON-квитанцию `prepared / 0` либо адресную остановку и никогда не пишет в Confluence.
+
+```text
+cli.py --db <isolated.sqlite> --workvault <vault> --cache-dir <cache> diff --mpp <file> --page-id <id> --project-slug <slug> --timezone-hint Europe/Moscow
+cli.py publish --mpp <file> --page-id <id> --project-slug <slug> --timezone-hint Europe/Moscow
+cli.py apply --mpp <file> --page-id <id> --project-slug <slug> --confirm да
+cli.py operation show --operation-id <id>
+cli.py resume --operation-id <id> --mapping-revision <revision>
+cli.py resume --operation-id <id> --timezone-hint Europe/Moscow
+cli.py resume --operation-id <id> --accept-proposal <proposal> --reason <text> [--rule-scope once|project]
+```
+
+Для новой страницы без архивного binding `--project-slug` обязателен: `project_slug_required / 2`, пригодный operation ID отсутствует; факт поступления и frozen bytes сохраняются. Slug из заголовка файла не выводится. Конфликт явного slug с binding — `binding_conflict / 4`. Для существующей однозначной привязки slug можно опустить.
+
+После архива остановка содержит `snapshot_id`, `verification.archive:verified`, `published:false`, `external_effect:none`. Proposals/mapping/timezone взаимоисключающие. Подтверждение identity не запускает публикацию. Resume использует сохранённый контекст и источник без нового поступления/разбора. Смена неизвестной таймзоны до внешнего эффекта создаёт новую подготовку и snapshot, сохраняя прежние; mapping/решения не переносятся на новую пару. Разрешённую таймзону меняют новой операцией.
+
+`--drop-dep FROM:TO` — конкретное предложение, привязанное к хэшу источника и устойчивым source-local ключам, а не автоматическое исключение. Принимается точный proposal с текстом основания; scope по умолчанию `once`. Явный scope `project` сохраняет версионированное правило с исходным snapshot и immutable consent evidence; для другого источника требуется точная достаточная mapping revision и повторная проверка причины/контекста. Неподтверждённые исторические B/C остаются неактивными; исправленная конвертация может дать `not_needed`.
+
+Матрица §20.3.6.2 исполняется `plan_policy.py`: неизвестные поля считаются влияющими на представление, если версионный профиль не доказывает обратное. Для всех задач и вех допуск дат — 60 секунд; при неизвестной таймзоне абсолютное сравнение не утверждается. Локальный scheduler, повторно открывающий MPP, исключён из prepared-ветки. Допущенный план без наблюдения результата установленного плагина имеет `schedule:not_verified`.
+
+До `admitted` в MofsIndex/архиве сохранены представление, решение, профили, правила, диагностика и контекст. Сетевая ветка этапа 09 использует эти bytes и точную версию скачивания, текущие metadata без старого `status=any` (HTTP 400). Проверки байтов/storage не ослабляются согласованием. Полное восстановление после сетевого эффекта, идемпотентность и регистрация `verified_v1` остаются этапу 10: пока такой resume возвращает `network_reconciliation_required / 5` и не повторяет запись.
+
+MPP-ветка `diff/apply --child` также проходит первичный архив и допуск. Флаг дочерней страницы и заголовок сохраняются в контексте; `resume` после identity/timezone продолжает создание дочки, а не заменяет родительский план. До допуска POST создания страницы запрещён. Варианты копии родителя/пустой дочки без MPP и полное восстановление сетевого создания сохраняют отдельную границу этапа 10.
+
+Квитанция содержит сгруппированную сводку проверок с количеством и примерами затронутых сущностей. Полные исходные/представленные значения и проверки всех дат остаются в immutable admission evidence; `verification.schedule.evidence_ids` и `warnings[].details_ref` указывают на этот артефакт. Полный нормализованный экспорт в штатный stdout не попадает.

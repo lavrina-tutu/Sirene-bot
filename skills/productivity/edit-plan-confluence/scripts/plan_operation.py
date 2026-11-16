@@ -123,6 +123,26 @@ def show_operation(operation_id, *, db_path=None, workvault=None, cache_dir=None
         context = json.loads(operation['context_json'])
         _check_paths(context, workvault=workvault, cache_dir=cache_dir)
         events = q.get_operation_events(conn, operation_id)
+        if operation['action'] == 'publish':
+            preparation = q.get_preparation(conn,operation_id)
+            latest = q.get_preparation_result(conn,operation_id)
+            proposals = q.get_publish_proposals(conn,operation_id)
+            result = latest['result']['receipt'] if latest else None
+            network_results=[e for e in events if e['event_kind']=='publish_network_result']
+            if network_results:
+                result=json.loads(network_results[-1]['detail'])
+            return {'schema_version':1,'action':'show_operation','exit_code':0,'operation_id':operation_id,
+                'item_id':item['item_id'],'batch_id':None,'source_mpp_sha256':item['source_mpp_sha256'],
+                'snapshot_id':preparation['snapshot_id'] if preparation else item['snapshot_id'],
+                'preparation_revision':operation['preparation_revision'],
+                'preparations':q.get_preparation_history(conn,operation_id),
+                'status':result['status'] if result else item['status'],
+                'completed_stages':result['completed_stages'] if result else [],
+                'reasons':latest['admission']['blockers'] if latest else [],
+                'proposals':proposals,'decisions':[p for p in proposals if p['decision_id']],
+                'identity_requirements':identity_requirements(conn,operation_id),
+                'admission':latest['admission'] if latest else None,'events':events,
+                'published':result['published'] if result else False,'error':None}
         from plan_reconcile import saved_operation_receipt
         saved = saved_operation_receipt(conn, operation_id)
         completed = saved['completed_stages'] if saved else (['input_frozen'] if item['frozen_at'] else [])

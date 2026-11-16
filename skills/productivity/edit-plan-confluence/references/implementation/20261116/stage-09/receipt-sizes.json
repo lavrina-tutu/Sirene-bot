@@ -1,0 +1,16 @@
+{
+  "diff": {
+    "utf8_bytes": 5733,
+    "checks": 19,
+    "evidence_ids": [
+      "artifact_feb165da1b174ac8abe8f66a22601081"
+    ]
+  },
+  "publish": {
+    "utf8_bytes": 5733,
+    "checks": 19,
+    "evidence_ids": [
+      "artifact_fac27f4768d444f8a8b716186f3457b0"
+    ]
+  }
+}

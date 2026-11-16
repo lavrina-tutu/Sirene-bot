@@ -1,0 +1,1002 @@
+{
+  "input_mode": "mpp",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/cache",
+    "batch",
+    "save",
+    "--batch-id",
+    "real",
+    "--project-slug",
+    "batch-project",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/E.mpp",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/F.mpp"
+  ],
+  "rc": 0,
+  "receipt": {
+    "schema_version": 1,
+    "batch_id": "real",
+    "mode": "batch_save",
+    "status": "completed",
+    "exit_code": 0,
+    "manifest_sha256": "f21b063b0b489e31a01d7a19be9b59351d142a82163c74e719855ad4ba1023f1",
+    "inputs_frozen_at": "2026-11-16T13:56:37+00:00",
+    "on_error": "continue",
+    "counts": {
+      "total": 2,
+      "saved": 2,
+      "saved_with_warnings": 2,
+      "unchanged": 0,
+      "failed": 0,
+      "needs_decision": 0,
+      "not_started": 0
+    },
+    "items": [
+      {
+        "item_id": "1",
+        "position": 1,
+        "status": "saved_with_warnings",
+        "operation_id": "batch-op-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46",
+        "snapshot_id": "snapshot_46dd14fec6f942c582e2d771d6be10ef",
+        "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+        "receipt_ref": "_plan-receipts/batch-op-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46/save.json",
+        "error": null,
+        "warnings": [
+          {
+            "code": "timezone_unknown",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Исходные даты сохранены без подтверждённой таймзоны"
+          },
+          {
+            "code": "collection_assignments_partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Полнота коллекции assignments: partial"
+          },
+          {
+            "code": "collection_dependencies_partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Полнота коллекции dependencies: partial"
+          },
+          {
+            "code": "fields_missing",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Часть исходных полей имеет качество missing"
+          },
+          {
+            "code": "fields_unsupported",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Часть исходных полей имеет качество unsupported"
+          }
+        ]
+      },
+      {
+        "item_id": "2",
+        "position": 2,
+        "status": "saved_with_warnings",
+        "operation_id": "batch-op-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3",
+        "snapshot_id": "snapshot_3ea371553aac45a9a9e0793b9ad00b4c",
+        "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+        "receipt_ref": "_plan-receipts/batch-op-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3/save.json",
+        "error": null,
+        "warnings": [
+          {
+            "code": "timezone_unknown",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Исходные даты сохранены без подтверждённой таймзоны"
+          },
+          {
+            "code": "collection_assignments_partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Полнота коллекции assignments: partial"
+          },
+          {
+            "code": "collection_dependencies_partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Полнота коллекции dependencies: partial"
+          },
+          {
+            "code": "fields_missing",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Часть исходных полей имеет качество missing"
+          },
+          {
+            "code": "fields_unsupported",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Часть исходных полей имеет качество unsupported"
+          }
+        ]
+      }
+    ],
+    "published": false,
+    "error": null
+  },
+  "fixtures": [
+    {
+      "id": "E",
+      "path": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a.mpp",
+      "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+      "size_bytes": 552960,
+      "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a/doc_b844448dc7e8_Переход_на_Trisigma_Только_пилот_090726.mpp",
+      "evidence": "master §20.7.4; user evidence 2026-11-16",
+      "identity_status": "source_bytes_verified",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/E.mpp"
+    },
+    {
+      "id": "F",
+      "path": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+      "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+      "size_bytes": 567808,
+      "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c/doc_0d7fb1d86009_Переход на Trisigma (Только пилот)230726.mpp",
+      "evidence": "master §20.7.4; user evidence 2026-11-16",
+      "identity_status": "source_bytes_verified",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/F.mpp"
+    }
+  ],
+  "cases": [
+    {
+      "case": "E",
+      "receipt": {
+        "schema_version": 1,
+        "operation_id": "batch-op-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46",
+        "item_id": "batch-item-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46",
+        "status": "saved_with_warnings",
+        "mode": "save",
+        "exit_code": 0,
+        "project_slug": "batch-project",
+        "source": {
+          "name": "E.mpp",
+          "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+          "size_bytes": 552960
+        },
+        "snapshot_id": "snapshot_46dd14fec6f942c582e2d771d6be10ef",
+        "page_id": null,
+        "page_url": null,
+        "task_count": 78,
+        "display_task_count": 77,
+        "dependency_count": 84,
+        "exceptions": [],
+        "attachment_version": null,
+        "verification": {
+          "archive": "verified",
+          "attachment": "not_applicable",
+          "storage": "not_applicable",
+          "schedule": {
+            "status": "not_verified",
+            "checks": [],
+            "limitations": [
+              "timezone_unknown",
+              "collection_assignments_partial",
+              "collection_dependencies_partial",
+              "fields_missing",
+              "fields_unsupported",
+              "schedule_not_verified"
+            ],
+            "evidence_ids": []
+          }
+        },
+        "published": false,
+        "warnings": [
+          {
+            "code": "timezone_unknown",
+            "message": "Исходные даты сохранены без подтверждённой таймзоны",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+          },
+          {
+            "code": "collection_assignments_partial",
+            "message": "Полнота коллекции assignments: partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+          },
+          {
+            "code": "collection_dependencies_partial",
+            "message": "Полнота коллекции dependencies: partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+          },
+          {
+            "code": "fields_missing",
+            "message": "Часть исходных полей имеет качество missing",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+          },
+          {
+            "code": "fields_unsupported",
+            "message": "Часть исходных полей имеет качество unsupported",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+          }
+        ],
+        "completed_stages": [
+          "input_frozen",
+          "prepared",
+          "archived"
+        ],
+        "external_effect": "none",
+        "error": null
+      },
+      "metrics": {
+        "counters": {
+          "MPXJ_read": 1,
+          "cache_hit": 0,
+          "cache_miss": 1,
+          "POST": 0,
+          "PUT": 0
+        },
+        "duration_seconds": 5.425718117010547,
+        "stage_durations_seconds": {
+          "readback": 0.19706973002757877,
+          "parse_cache": 3.012875290005468,
+          "normalization_quality": 1.8335095689981245,
+          "archive_commit": 0.3745389969844837
+        }
+      },
+      "versions": {
+        "jpype": "1.7.1",
+        "mpxj": "16.4.0",
+        "reader": "read-mpp-v2",
+        "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+        "size_bytes": 552960
+      },
+      "events": [
+        {
+          "event_id": "event_aa20cb8a20ba4efbae29ba270eb9638c",
+          "attempt_id": "attempt_2232aeebf9784297a35ce763cd426334",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "batch-item-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46",
+          "created_at": "2026-11-16T13:56:37+00:00",
+          "event_kind": "attempt_started",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_ba6d592a111047de8374fbf1b3a92eb8",
+          "attempt_id": "attempt_2232aeebf9784297a35ce763cd426334",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "batch-item-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46",
+          "created_at": "2026-11-16T13:56:37+00:00",
+          "event_kind": "input_frozen",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_041e2e1ccb414e94894b2e5d69d0cc71",
+          "attempt_id": "attempt_8376ad6d791345468c872b5dd30d95c5",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "batch-item-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46",
+          "created_at": "2026-11-16T13:56:37+00:00",
+          "event_kind": "batch_processing",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_f62e203e669f45d5886fa52a83266bdd",
+          "attempt_id": "attempt_8376ad6d791345468c872b5dd30d95c5",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "{\"counters\": {\"MPXJ_read\": 1, \"POST\": 0, \"PUT\": 0, \"cache_hit\": 0, \"cache_miss\": 1}, \"path\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/_plan-receipts/batch-op-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46/prepared.json\", \"semantic_sha256\": \"c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d\"}",
+          "created_at": "2026-11-16T13:56:42+00:00",
+          "event_kind": "prepared",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "snapshot_committed:batch-item-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46",
+          "attempt_id": "attempt_8376ad6d791345468c872b5dd30d95c5",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "batch-item-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46",
+          "created_at": "2026-11-16T13:56:43+00:00",
+          "event_kind": "snapshot_committed",
+          "snapshot_id": "snapshot_46dd14fec6f942c582e2d771d6be10ef"
+        },
+        {
+          "event_id": "event_060dd0c752ae4551a22e661cbce2599b",
+          "attempt_id": "attempt_8376ad6d791345468c872b5dd30d95c5",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "{\"counters\": {\"MPXJ_read\": 1, \"cache_hit\": 0, \"cache_miss\": 1, \"POST\": 0, \"PUT\": 0}, \"duration_seconds\": 5.425718117010547, \"stage_durations_seconds\": {\"readback\": 0.19706973002757877, \"parse_cache\": 3.012875290005468, \"normalization_quality\": 1.8335095689981245, \"archive_commit\": 0.3745389969844837}}",
+          "created_at": "2026-11-16T13:56:43+00:00",
+          "event_kind": "save_metrics",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_2ded4ecb7eb249268b4b3bcff1458660",
+          "attempt_id": "attempt_8376ad6d791345468c872b5dd30d95c5",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "{\"attachment_version\": null, \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"dependency_count\": 84, \"display_task_count\": 77, \"error\": null, \"exceptions\": [], \"exit_code\": 0, \"external_effect\": \"none\", \"item_id\": \"batch-item-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46\", \"mode\": \"save\", \"operation_id\": \"batch-op-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46\", \"page_id\": null, \"page_url\": null, \"project_slug\": \"batch-project\", \"published\": false, \"schema_version\": 1, \"snapshot_id\": \"snapshot_46dd14fec6f942c582e2d771d6be10ef\", \"source\": {\"name\": \"E.mpp\", \"sha256\": \"04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a\", \"size_bytes\": 552960}, \"status\": \"saved_with_warnings\", \"task_count\": 78, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"schedule\": {\"checks\": [], \"evidence_ids\": [], \"limitations\": [\"timezone_unknown\", \"collection_assignments_partial\", \"collection_dependencies_partial\", \"fields_missing\", \"fields_unsupported\", \"schedule_not_verified\"], \"status\": \"not_verified\"}, \"storage\": \"not_applicable\"}, \"warnings\": [{\"code\": \"timezone_unknown\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\", \"message\": \"Исходные даты сохранены без подтверждённой таймзоны\"}, {\"code\": \"collection_assignments_partial\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\", \"message\": \"Полнота коллекции assignments: partial\"}, {\"code\": \"collection_dependencies_partial\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\", \"message\": \"Полнота коллекции dependencies: partial\"}, {\"code\": \"fields_missing\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\", \"message\": \"Часть исходных полей имеет качество missing\"}, {\"code\": \"fields_unsupported\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\", \"message\": \"Часть исходных полей имеет качество unsupported\"}]}",
+          "created_at": "2026-11-16T13:56:43+00:00",
+          "event_kind": "save_result",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_6ee4a162076743f6a4407e345f584513",
+          "attempt_id": "attempt_8376ad6d791345468c872b5dd30d95c5",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "save.json",
+          "created_at": "2026-11-16T13:56:43+00:00",
+          "event_kind": "receipt_written",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_de0caf190874407aa103d8ae6ac59d39",
+          "attempt_id": "attempt_8376ad6d791345468c872b5dd30d95c5",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "{\"error\":null,\"item_id\":\"1\",\"operation_id\":\"batch-op-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46\",\"position\":1,\"receipt_ref\":\"_plan-receipts/batch-op-38ef6d752fa74752c425d15a4433d00bfd626eafa7834d34872bb23c61192d46/save.json\",\"sha256\":\"04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a\",\"snapshot_id\":\"snapshot_46dd14fec6f942c582e2d771d6be10ef\",\"status\":\"saved_with_warnings\",\"warnings\":[{\"code\":\"timezone_unknown\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\",\"message\":\"Исходные даты сохранены без подтверждённой таймзоны\"},{\"code\":\"collection_assignments_partial\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\",\"message\":\"Полнота коллекции assignments: partial\"},{\"code\":\"collection_dependencies_partial\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\",\"message\":\"Полнота коллекции dependencies: partial\"},{\"code\":\"fields_missing\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\",\"message\":\"Часть исходных полей имеет качество missing\"},{\"code\":\"fields_unsupported\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json\",\"message\":\"Часть исходных полей имеет качество unsupported\"}]}",
+          "created_at": "2026-11-16T13:56:43+00:00",
+          "event_kind": "batch_item_result",
+          "snapshot_id": null
+        }
+      ]
+    },
+    {
+      "case": "F",
+      "receipt": {
+        "schema_version": 1,
+        "operation_id": "batch-op-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3",
+        "item_id": "batch-item-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3",
+        "status": "saved_with_warnings",
+        "mode": "save",
+        "exit_code": 0,
+        "project_slug": "batch-project",
+        "source": {
+          "name": "F.mpp",
+          "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+          "size_bytes": 567808
+        },
+        "snapshot_id": "snapshot_3ea371553aac45a9a9e0793b9ad00b4c",
+        "page_id": null,
+        "page_url": null,
+        "task_count": 86,
+        "display_task_count": 85,
+        "dependency_count": 93,
+        "exceptions": [],
+        "attachment_version": null,
+        "verification": {
+          "archive": "verified",
+          "attachment": "not_applicable",
+          "storage": "not_applicable",
+          "schedule": {
+            "status": "not_verified",
+            "checks": [],
+            "limitations": [
+              "timezone_unknown",
+              "collection_assignments_partial",
+              "collection_dependencies_partial",
+              "fields_missing",
+              "fields_unsupported",
+              "schedule_not_verified"
+            ],
+            "evidence_ids": []
+          }
+        },
+        "published": false,
+        "warnings": [
+          {
+            "code": "timezone_unknown",
+            "message": "Исходные даты сохранены без подтверждённой таймзоны",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+          },
+          {
+            "code": "collection_assignments_partial",
+            "message": "Полнота коллекции assignments: partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+          },
+          {
+            "code": "collection_dependencies_partial",
+            "message": "Полнота коллекции dependencies: partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+          },
+          {
+            "code": "fields_missing",
+            "message": "Часть исходных полей имеет качество missing",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+          },
+          {
+            "code": "fields_unsupported",
+            "message": "Часть исходных полей имеет качество unsupported",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+          }
+        ],
+        "completed_stages": [
+          "input_frozen",
+          "prepared",
+          "archived"
+        ],
+        "external_effect": "none",
+        "error": null
+      },
+      "metrics": {
+        "counters": {
+          "MPXJ_read": 1,
+          "cache_hit": 0,
+          "cache_miss": 1,
+          "POST": 0,
+          "PUT": 0
+        },
+        "duration_seconds": 5.885765496001113,
+        "stage_durations_seconds": {
+          "readback": 0.22929094600840472,
+          "parse_cache": 3.146771838015411,
+          "normalization_quality": 2.1057159090123605,
+          "archive_commit": 0.3984585090074688
+        }
+      },
+      "versions": {
+        "jpype": "1.7.1",
+        "mpxj": "16.4.0",
+        "reader": "read-mpp-v2",
+        "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+        "size_bytes": 567808
+      },
+      "events": [
+        {
+          "event_id": "event_9607be7363b5491580ef081f14c225f4",
+          "attempt_id": "attempt_534a1c43f0834918b23c29205488c737",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "batch-item-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3",
+          "created_at": "2026-11-16T13:56:37+00:00",
+          "event_kind": "attempt_started",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_91cb4d81574b40f0a5a87e40605bcc01",
+          "attempt_id": "attempt_534a1c43f0834918b23c29205488c737",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "batch-item-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3",
+          "created_at": "2026-11-16T13:56:37+00:00",
+          "event_kind": "input_frozen",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_8650ee20536f432db7894f100bd1ab46",
+          "attempt_id": "attempt_be73c984446147d0a69c8915b17d6a76",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "batch-item-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3",
+          "created_at": "2026-11-16T13:56:43+00:00",
+          "event_kind": "batch_processing",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_f62e600c158e4268822ac1abecc2f8e4",
+          "attempt_id": "attempt_be73c984446147d0a69c8915b17d6a76",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "{\"counters\": {\"MPXJ_read\": 1, \"POST\": 0, \"PUT\": 0, \"cache_hit\": 0, \"cache_miss\": 1}, \"path\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/_plan-receipts/batch-op-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3/prepared.json\", \"semantic_sha256\": \"bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48\"}",
+          "created_at": "2026-11-16T13:56:48+00:00",
+          "event_kind": "prepared",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "snapshot_committed:batch-item-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3",
+          "attempt_id": "attempt_be73c984446147d0a69c8915b17d6a76",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "batch-item-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3",
+          "created_at": "2026-11-16T13:56:49+00:00",
+          "event_kind": "snapshot_committed",
+          "snapshot_id": "snapshot_3ea371553aac45a9a9e0793b9ad00b4c"
+        },
+        {
+          "event_id": "event_da814f3f99f14c66b8c7bb145630bd18",
+          "attempt_id": "attempt_be73c984446147d0a69c8915b17d6a76",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "{\"counters\": {\"MPXJ_read\": 1, \"cache_hit\": 0, \"cache_miss\": 1, \"POST\": 0, \"PUT\": 0}, \"duration_seconds\": 5.885765496001113, \"stage_durations_seconds\": {\"readback\": 0.22929094600840472, \"parse_cache\": 3.146771838015411, \"normalization_quality\": 2.1057159090123605, \"archive_commit\": 0.3984585090074688}}",
+          "created_at": "2026-11-16T13:56:49+00:00",
+          "event_kind": "save_metrics",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_96b03d70256d4f38b53e93b592c75a16",
+          "attempt_id": "attempt_be73c984446147d0a69c8915b17d6a76",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "{\"attachment_version\": null, \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"dependency_count\": 93, \"display_task_count\": 85, \"error\": null, \"exceptions\": [], \"exit_code\": 0, \"external_effect\": \"none\", \"item_id\": \"batch-item-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3\", \"mode\": \"save\", \"operation_id\": \"batch-op-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3\", \"page_id\": null, \"page_url\": null, \"project_slug\": \"batch-project\", \"published\": false, \"schema_version\": 1, \"snapshot_id\": \"snapshot_3ea371553aac45a9a9e0793b9ad00b4c\", \"source\": {\"name\": \"F.mpp\", \"sha256\": \"58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c\", \"size_bytes\": 567808}, \"status\": \"saved_with_warnings\", \"task_count\": 86, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"schedule\": {\"checks\": [], \"evidence_ids\": [], \"limitations\": [\"timezone_unknown\", \"collection_assignments_partial\", \"collection_dependencies_partial\", \"fields_missing\", \"fields_unsupported\", \"schedule_not_verified\"], \"status\": \"not_verified\"}, \"storage\": \"not_applicable\"}, \"warnings\": [{\"code\": \"timezone_unknown\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\", \"message\": \"Исходные даты сохранены без подтверждённой таймзоны\"}, {\"code\": \"collection_assignments_partial\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\", \"message\": \"Полнота коллекции assignments: partial\"}, {\"code\": \"collection_dependencies_partial\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\", \"message\": \"Полнота коллекции dependencies: partial\"}, {\"code\": \"fields_missing\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\", \"message\": \"Часть исходных полей имеет качество missing\"}, {\"code\": \"fields_unsupported\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\", \"message\": \"Часть исходных полей имеет качество unsupported\"}]}",
+          "created_at": "2026-11-16T13:56:49+00:00",
+          "event_kind": "save_result",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_41b8cb4efca24cd498f891b1519bd22f",
+          "attempt_id": "attempt_be73c984446147d0a69c8915b17d6a76",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "save.json",
+          "created_at": "2026-11-16T13:56:49+00:00",
+          "event_kind": "receipt_written",
+          "snapshot_id": null
+        },
+        {
+          "event_id": "event_d0f9139d281a489d85a8ecd95244052c",
+          "attempt_id": "attempt_be73c984446147d0a69c8915b17d6a76",
+          "stage": "archive",
+          "status": "confirmed",
+          "detail": "{\"error\":null,\"item_id\":\"2\",\"operation_id\":\"batch-op-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3\",\"position\":2,\"receipt_ref\":\"_plan-receipts/batch-op-90ce57e3022567b9f1fbba5dca5f796117159dc5427c83dae9323c51d26c33c3/save.json\",\"sha256\":\"58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c\",\"snapshot_id\":\"snapshot_3ea371553aac45a9a9e0793b9ad00b4c\",\"status\":\"saved_with_warnings\",\"warnings\":[{\"code\":\"timezone_unknown\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\",\"message\":\"Исходные даты сохранены без подтверждённой таймзоны\"},{\"code\":\"collection_assignments_partial\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\",\"message\":\"Полнота коллекции assignments: partial\"},{\"code\":\"collection_dependencies_partial\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\",\"message\":\"Полнота коллекции dependencies: partial\"},{\"code\":\"fields_missing\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\",\"message\":\"Часть исходных полей имеет качество missing\"},{\"code\":\"fields_unsupported\",\"details_ref\":\"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json\",\"message\":\"Часть исходных полей имеет качество unsupported\"}]}",
+          "created_at": "2026-11-16T13:56:49+00:00",
+          "event_kind": "batch_item_result",
+          "snapshot_id": null
+        }
+      ]
+    }
+  ],
+  "repeat_command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/cache",
+    "batch",
+    "save",
+    "--batch-id",
+    "new-arrival",
+    "--project-slug",
+    "batch-project",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/E.mpp",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/F.mpp"
+  ],
+  "repeat_rc": 0,
+  "repeat_receipt": {
+    "schema_version": 1,
+    "batch_id": "new-arrival",
+    "mode": "batch_save",
+    "status": "completed",
+    "exit_code": 0,
+    "manifest_sha256": "f21b063b0b489e31a01d7a19be9b59351d142a82163c74e719855ad4ba1023f1",
+    "inputs_frozen_at": "2026-11-16T13:56:51+00:00",
+    "on_error": "continue",
+    "counts": {
+      "total": 2,
+      "saved": 0,
+      "saved_with_warnings": 0,
+      "unchanged": 2,
+      "failed": 0,
+      "needs_decision": 0,
+      "not_started": 0
+    },
+    "items": [
+      {
+        "item_id": "1",
+        "position": 1,
+        "status": "unchanged",
+        "operation_id": "batch-op-ca9222853cb98d5f0a59fdaa904b43ad543993e68faa6f86b09f7978aa854b6a",
+        "snapshot_id": "snapshot_46dd14fec6f942c582e2d771d6be10ef",
+        "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+        "receipt_ref": "_plan-receipts/batch-op-ca9222853cb98d5f0a59fdaa904b43ad543993e68faa6f86b09f7978aa854b6a/save.json",
+        "error": null,
+        "warnings": [
+          {
+            "code": "timezone_unknown",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Исходные даты сохранены без подтверждённой таймзоны"
+          },
+          {
+            "code": "collection_assignments_partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Полнота коллекции assignments: partial"
+          },
+          {
+            "code": "collection_dependencies_partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Полнота коллекции dependencies: partial"
+          },
+          {
+            "code": "fields_missing",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Часть исходных полей имеет качество missing"
+          },
+          {
+            "code": "fields_unsupported",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+            "message": "Часть исходных полей имеет качество unsupported"
+          }
+        ]
+      },
+      {
+        "item_id": "2",
+        "position": 2,
+        "status": "unchanged",
+        "operation_id": "batch-op-4fc2ec72cc6d3f72e625e7a032b34f58a1e951fbc29d966085a7958ce5aac86c",
+        "snapshot_id": "snapshot_3ea371553aac45a9a9e0793b9ad00b4c",
+        "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+        "receipt_ref": "_plan-receipts/batch-op-4fc2ec72cc6d3f72e625e7a032b34f58a1e951fbc29d966085a7958ce5aac86c/save.json",
+        "error": null,
+        "warnings": [
+          {
+            "code": "timezone_unknown",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Исходные даты сохранены без подтверждённой таймзоны"
+          },
+          {
+            "code": "collection_assignments_partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Полнота коллекции assignments: partial"
+          },
+          {
+            "code": "collection_dependencies_partial",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Полнота коллекции dependencies: partial"
+          },
+          {
+            "code": "fields_missing",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Часть исходных полей имеет качество missing"
+          },
+          {
+            "code": "fields_unsupported",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+            "message": "Часть исходных полей имеет качество unsupported"
+          }
+        ]
+      }
+    ],
+    "published": false,
+    "error": null
+  },
+  "repeat_metrics": [
+    {
+      "counters": {
+        "MPXJ_read": 0,
+        "cache_hit": 1,
+        "cache_miss": 0,
+        "POST": 0,
+        "PUT": 0
+      },
+      "duration_seconds": 3.099009527009912,
+      "stage_durations_seconds": {
+        "readback": 0.17612915302743204,
+        "parse_cache": 0.8119279090024065,
+        "normalization_quality": 1.8373205910029355,
+        "archive_commit": 0.2666925549856387
+      }
+    },
+    {
+      "counters": {
+        "MPXJ_read": 0,
+        "cache_hit": 1,
+        "cache_miss": 0,
+        "POST": 0,
+        "PUT": 0
+      },
+      "duration_seconds": 3.364272267004708,
+      "stage_durations_seconds": {
+        "readback": 0.19629788800375536,
+        "parse_cache": 0.9024198790139053,
+        "normalization_quality": 1.9736472599906847,
+        "archive_commit": 0.2838790579990018
+      }
+    }
+  ],
+  "corrupt_batches": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/cache",
+        "batch",
+        "save",
+        "--batch-id",
+        "real-continue",
+        "--on-error",
+        "continue",
+        "--project-slug",
+        "batch-project",
+        "--mpp",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/E.mpp",
+        "--mpp",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/corrupt.mpp",
+        "--mpp",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/F.mpp"
+      ],
+      "rc": 6,
+      "receipt": {
+        "schema_version": 1,
+        "batch_id": "real-continue",
+        "mode": "batch_save",
+        "status": "completed_with_errors",
+        "exit_code": 6,
+        "manifest_sha256": "af4d02487dccd4c050ab3c58d831cf0be9b49b06bef6477b9868709d3a9aff26",
+        "inputs_frozen_at": "2026-11-16T13:57:01+00:00",
+        "on_error": "continue",
+        "counts": {
+          "total": 3,
+          "saved": 0,
+          "saved_with_warnings": 0,
+          "unchanged": 2,
+          "failed": 1,
+          "needs_decision": 0,
+          "not_started": 0
+        },
+        "items": [
+          {
+            "item_id": "1",
+            "position": 1,
+            "status": "unchanged",
+            "operation_id": "batch-op-ec449250a26254feda37122c5b8faa4364aea880f09aa2d012d0f4c77a764aee",
+            "snapshot_id": "snapshot_46dd14fec6f942c582e2d771d6be10ef",
+            "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "receipt_ref": "_plan-receipts/batch-op-ec449250a26254feda37122c5b8faa4364aea880f09aa2d012d0f4c77a764aee/save.json",
+            "error": null,
+            "warnings": [
+              {
+                "code": "timezone_unknown",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Исходные даты сохранены без подтверждённой таймзоны"
+              },
+              {
+                "code": "collection_assignments_partial",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Полнота коллекции assignments: partial"
+              },
+              {
+                "code": "collection_dependencies_partial",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Полнота коллекции dependencies: partial"
+              },
+              {
+                "code": "fields_missing",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Часть исходных полей имеет качество missing"
+              },
+              {
+                "code": "fields_unsupported",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Часть исходных полей имеет качество unsupported"
+              }
+            ]
+          },
+          {
+            "item_id": "2",
+            "position": 2,
+            "status": "failed",
+            "operation_id": "batch-op-a29996153946dc6945ade4fec837ef776b891ea848a18916cebb7f3b42da2953",
+            "snapshot_id": null,
+            "sha256": "78298a6b9f6de78e2f427add9065032ed2d6983ede930291bbe6d46b746ddc2d",
+            "receipt_ref": null,
+            "error": {
+              "code": "mpp_unreadable",
+              "message": "Сохранение не подтверждено: mpp_unreadable",
+              "next_action": null,
+              "retryable": false
+            },
+            "warnings": []
+          },
+          {
+            "item_id": "3",
+            "position": 3,
+            "status": "unchanged",
+            "operation_id": "batch-op-1e893cb61337304915dc7cdf52821663f10bf7a815c86ecd0ba7585cf9b741f6",
+            "snapshot_id": "snapshot_3ea371553aac45a9a9e0793b9ad00b4c",
+            "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+            "receipt_ref": "_plan-receipts/batch-op-1e893cb61337304915dc7cdf52821663f10bf7a815c86ecd0ba7585cf9b741f6/save.json",
+            "error": null,
+            "warnings": [
+              {
+                "code": "timezone_unknown",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+                "message": "Исходные даты сохранены без подтверждённой таймзоны"
+              },
+              {
+                "code": "collection_assignments_partial",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+                "message": "Полнота коллекции assignments: partial"
+              },
+              {
+                "code": "collection_dependencies_partial",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+                "message": "Полнота коллекции dependencies: partial"
+              },
+              {
+                "code": "fields_missing",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+                "message": "Часть исходных полей имеет качество missing"
+              },
+              {
+                "code": "fields_unsupported",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+                "message": "Часть исходных полей имеет качество unsupported"
+              }
+            ]
+          }
+        ],
+        "published": false,
+        "error": null
+      }
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/cache",
+        "batch",
+        "save",
+        "--batch-id",
+        "real-stop",
+        "--on-error",
+        "stop",
+        "--project-slug",
+        "batch-project",
+        "--mpp",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/E.mpp",
+        "--mpp",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/corrupt.mpp",
+        "--mpp",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/Inbox/F.mpp"
+      ],
+      "rc": 6,
+      "receipt": {
+        "schema_version": 1,
+        "batch_id": "real-stop",
+        "mode": "batch_save",
+        "status": "stopped",
+        "exit_code": 6,
+        "manifest_sha256": "c43c12212192fdc73e0d4ed786fe036b98a7277a00076765ece06c84821308b6",
+        "inputs_frozen_at": "2026-11-16T13:57:12+00:00",
+        "on_error": "stop",
+        "counts": {
+          "total": 3,
+          "saved": 0,
+          "saved_with_warnings": 0,
+          "unchanged": 1,
+          "failed": 1,
+          "needs_decision": 0,
+          "not_started": 1
+        },
+        "items": [
+          {
+            "item_id": "1",
+            "position": 1,
+            "status": "unchanged",
+            "operation_id": "batch-op-2bf7054c130894dbd8e6f644d5460b4e73513fa8c7165ba4b9114a1a2f4d5138",
+            "snapshot_id": "snapshot_46dd14fec6f942c582e2d771d6be10ef",
+            "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "receipt_ref": "_plan-receipts/batch-op-2bf7054c130894dbd8e6f644d5460b4e73513fa8c7165ba4b9114a1a2f4d5138/save.json",
+            "error": null,
+            "warnings": [
+              {
+                "code": "timezone_unknown",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Исходные даты сохранены без подтверждённой таймзоны"
+              },
+              {
+                "code": "collection_assignments_partial",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Полнота коллекции assignments: partial"
+              },
+              {
+                "code": "collection_dependencies_partial",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Полнота коллекции dependencies: partial"
+              },
+              {
+                "code": "fields_missing",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Часть исходных полей имеет качество missing"
+              },
+              {
+                "code": "fields_unsupported",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage07/stage-07/pytest-tmp/test_real_batch_cli_native_cop0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+                "message": "Часть исходных полей имеет качество unsupported"
+              }
+            ]
+          },
+          {
+            "item_id": "2",
+            "position": 2,
+            "status": "failed",
+            "operation_id": "batch-op-40a68c37843018c60aeaf8a18902607fb90a47a290748d7e05e06cc30316e6be",
+            "snapshot_id": null,
+            "sha256": "78298a6b9f6de78e2f427add9065032ed2d6983ede930291bbe6d46b746ddc2d",
+            "receipt_ref": null,
+            "error": {
+              "code": "mpp_unreadable",
+              "message": "Сохранение не подтверждено: mpp_unreadable",
+              "next_action": null,
+              "retryable": false
+            },
+            "warnings": []
+          },
+          {
+            "item_id": "3",
+            "position": 3,
+            "status": "not_started",
+            "operation_id": "batch-op-7a29857cfe7bbed5df2c42ada2b8967a41eba190b8a93ac60deea03a7903ea48",
+            "snapshot_id": null,
+            "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+            "receipt_ref": null,
+            "error": null,
+            "warnings": []
+          }
+        ],
+        "published": false,
+        "error": {
+          "code": "mpp_unreadable",
+          "message": "Сохранение не подтверждено: mpp_unreadable",
+          "next_action": null,
+          "retryable": false
+        }
+      }
+    }
+  ],
+  "baseline_before": {
+    "plan_baseline_selection": [
+      [
+        "bsel_fd804c95bee84885a75aa59de6da28f5",
+        "plan_fee74f9122934d508afd687bf3dd8c55",
+        "snapshot_46dd14fec6f942c582e2d771d6be10ef",
+        0,
+        1,
+        "acceptance",
+        null,
+        "2026-11-16T13:56:50+00:00"
+      ]
+    ],
+    "plan_snapshot_selection": [
+      [
+        "sel_7ba5327cb3eb438d89bb313f2a257e08",
+        "lineage_a45ea621f1f642a8b50fee9673a2ccd7",
+        "snapshot_46dd14fec6f942c582e2d771d6be10ef",
+        1,
+        "acceptance",
+        null,
+        "2026-11-16T13:56:50+00:00"
+      ]
+    ],
+    "plan_publication": [],
+    "plan_publication_snapshot": []
+  },
+  "baseline_after": {
+    "plan_baseline_selection": [
+      [
+        "bsel_fd804c95bee84885a75aa59de6da28f5",
+        "plan_fee74f9122934d508afd687bf3dd8c55",
+        "snapshot_46dd14fec6f942c582e2d771d6be10ef",
+        0,
+        1,
+        "acceptance",
+        null,
+        "2026-11-16T13:56:50+00:00"
+      ]
+    ],
+    "plan_snapshot_selection": [
+      [
+        "sel_7ba5327cb3eb438d89bb313f2a257e08",
+        "lineage_a45ea621f1f642a8b50fee9673a2ccd7",
+        "snapshot_46dd14fec6f942c582e2d771d6be10ef",
+        1,
+        "acceptance",
+        null,
+        "2026-11-16T13:56:50+00:00"
+      ]
+    ],
+    "plan_publication": [],
+    "plan_publication_snapshot": []
+  },
+  "client_import": "forbidden",
+  "network": "forbidden",
+  "POST": 0,
+  "PUT": 0
+}

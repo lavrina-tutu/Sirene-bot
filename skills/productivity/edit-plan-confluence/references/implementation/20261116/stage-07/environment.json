@@ -1,0 +1,9 @@
+{
+  "python": "Python 3.9.25",
+  "cli_python": "Python 3.9.25",
+  "pytest": "pytest 8.4.2",
+  "base_commit": "ff11e6f1d3f45e0c58c523da44d53fe4989688fe",
+  "schema_migration": "0010_identity_revisions (isolated DBs only)",
+  "network": "denied in test harnesses; no network action invoked",
+  "configuration": "unchanged"
+}

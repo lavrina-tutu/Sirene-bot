@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="0.847" timestamp="2026-11-16T16:53:13.716560+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_plan_identity" name="test_q_identity_integration_uses_same_api" time="0.270" /></testsuite></testsuites>

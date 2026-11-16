@@ -1,0 +1,79 @@
+{
+  "component": "MofsIndex",
+  "root": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+  "stage": "07",
+  "files": [
+    {
+      "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/identity.py",
+      "relative_path": "mofs_index/plan/identity.py",
+      "action": "create",
+      "before_sha256": null,
+      "after_sha256": "eb702389d0c87d769565f64357316e24096fca458c5e6b0e2f3398e0011e61b7",
+      "mode": "0o644",
+      "basis": "Approved EditPlanConfluence plan §9, stage 07"
+    },
+    {
+      "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py",
+      "relative_path": "mofs_index/plan/query.py",
+      "action": "modify",
+      "before_sha256": "4bc0c3df12c9c608282903182311f6b89b2f567ec6bea11eed7d32b7214e3917",
+      "after_sha256": "87c3e0f47c3ba7fe22e9dbab66dfedbb692d8bb8972ab7d8c6cb125efa82ee04",
+      "mode": "0o644",
+      "basis": "Approved EditPlanConfluence plan §9, stage 07"
+    },
+    {
+      "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py",
+      "relative_path": "mofs_index/plan/schema.py",
+      "action": "modify",
+      "before_sha256": "542b5d463ce91aeecae1e3adcc022bea303b80b2b5b036f4fe42d3364fb52cdd",
+      "after_sha256": "5672c9bc4702398486364d4a01ba18c78cffe454d6b4e78698cbbdfa09254c89",
+      "mode": "0o644",
+      "basis": "Approved EditPlanConfluence plan §9, stage 07"
+    },
+    {
+      "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py",
+      "relative_path": "mofs_index/plan/writer.py",
+      "action": "modify",
+      "before_sha256": "d098d6d9cd373abeac6f0dd326e04160f9defba8690df32b2204aa97b4832788",
+      "after_sha256": "62195efac0ccba754bbfbfac37b92bc3373c59187cf77299aa81ad93d4e71049",
+      "mode": "0o644",
+      "basis": "Approved EditPlanConfluence plan §9, stage 07"
+    },
+    {
+      "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_batch_decisions.py",
+      "relative_path": "tests/plan/test_batch_decisions.py",
+      "action": "modify",
+      "before_sha256": "030533a374ea4d19d496e63f6648d5600277f2e69a463d687605321ae87ae0d1",
+      "after_sha256": "a233ad015172b5e7b5785333d45e6e2a01e4f9d79cfb588cb034f098cfb90e28",
+      "mode": "0o644",
+      "basis": "Approved EditPlanConfluence plan §9, stage 07"
+    },
+    {
+      "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_identity.py",
+      "relative_path": "tests/plan/test_identity.py",
+      "action": "create",
+      "before_sha256": null,
+      "after_sha256": "e1a072fb26c172a9ba22810d0153be96bdae9c7d2e4baf0ce82f13b775627ee9",
+      "mode": "0o644",
+      "basis": "Approved EditPlanConfluence plan §9, stage 07"
+    },
+    {
+      "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py",
+      "relative_path": "tests/plan/test_migrate.py",
+      "action": "modify",
+      "before_sha256": "4b1c8c9f3b825612b5f900c2d6fbfb9409936a54c31004eb6c41c59b9aa31b96",
+      "after_sha256": "29417a533e165f41c1d9656ff75bbe15491d061560ab546ac32e18eec4b09b5e",
+      "mode": "0o644",
+      "basis": "Approved EditPlanConfluence plan §9, stage 07"
+    },
+    {
+      "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_query.py",
+      "relative_path": "tests/plan/test_query.py",
+      "action": "modify",
+      "before_sha256": "4b90840f8d5be1e1a72f8550cee8e2f4ce65eb9ab95dcdc1ba9c12419c980f4c",
+      "after_sha256": "72c07497963cd0c05e70949b38a5e4b3d7bf7309c7405a98d1655945a54d9f9a",
+      "mode": "0o644",
+      "basis": "Approved EditPlanConfluence plan §9, stage 07"
+    }
+  ]
+}

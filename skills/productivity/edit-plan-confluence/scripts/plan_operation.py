@@ -132,7 +132,8 @@ def show_operation(operation_id, *, db_path=None, workvault=None, cache_dir=None
         return {'schema_version': 1, 'action': 'show_operation', 'exit_code': 0,
                 'operation_id': operation_id, 'item_id': item['item_id'], 'batch_id': item['batch_id'],
                 'source_mpp_sha256': item['source_mpp_sha256'], 'snapshot_id': item['snapshot_id'],
-                'status': item['status'], 'preparation_revision': None, 'identity_requirements': [],
+                'status': item['status'], 'preparation_revision': operation['preparation_revision'],
+                'identity_requirements': identity_requirements(conn, operation_id),
                 'completed_stages': completed,
                 **state, 'events': events, 'published': False, 'error': None}
     except Exception as exc:
@@ -140,3 +141,13 @@ def show_operation(operation_id, *, db_path=None, workvault=None, cache_dir=None
     finally:
         if conn is not None:
             conn.close()
+
+
+def identity_requirements(conn, operation_id):
+    """Read exact pairs, source hashes, required entities, checks and fixed choices."""
+    return q.get_identity_requirements(conn, operation_id)
+
+
+def select_identity(conn, operation_id, requirement_id, mapping_revision_id=None):
+    """Internal preparation hook; no B/C execution, publication or resume here."""
+    return w.select_operation_identity(conn,w.IdentityChoiceSpec(operation_id,requirement_id,mapping_revision_id))

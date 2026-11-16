@@ -179,6 +179,15 @@ def cmd_history(args):
     return result['exit_code']
 
 
+def cmd_identity(args):
+    from plan_identity import identity_action
+    params = {key:getattr(args,key,None) for key in ('project_slug','from_selector','to_selector','mode',
+        'evidence','reason','mapping','supersedes','mapping_revision')}
+    result = identity_action(args.identity_command,db_path=args.db,workvault=args.workvault,cache_dir=args.cache_dir,**params)
+    print(json.dumps(result,ensure_ascii=False))
+    return result['exit_code']
+
+
 class JsonArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         # Stable error; argument strings can contain secrets. Details go to stderr.
@@ -324,6 +333,26 @@ def build_parser() -> argparse.ArgumentParser:
     history.add_argument('--cursor')
     history.set_defaults(func=cmd_history)
 
+    identity = sub.add_parser('identity', help='Register explicit pair-scoped identity evidence')
+    identity.result_action = 'identity'
+    ic = identity.add_subparsers(dest='identity_command', required=True)
+    confirm = ic.add_parser('confirm')
+    confirm.result_action = 'identity_confirm'
+    confirm.add_argument('--project-slug',required=True)
+    confirm.add_argument('--from',dest='from_selector',required=True)
+    confirm.add_argument('--to',dest='to_selector',required=True)
+    confirm.add_argument('--mode',choices=('continuity','mapping'),required=True)
+    confirm.add_argument('--evidence',type=Path,required=True)
+    confirm.add_argument('--reason',required=True)
+    confirm.add_argument('--mapping',type=Path)
+    confirm.add_argument('--supersedes')
+    confirm.set_defaults(func=cmd_identity)
+    identity_show = ic.add_parser('show')
+    identity_show.result_action = 'identity_show'
+    identity_show.add_argument('--project-slug',required=True)
+    identity_show.add_argument('--mapping-revision',required=True)
+    identity_show.set_defaults(func=cmd_identity)
+
     sc = sub.add_parser("convert", help="Offline MPP→JSON convert")
     sc.add_argument("--mpp", required=True)
     sc.add_argument("--out")
@@ -339,7 +368,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.command:
         parser.print_help()
         return 0
-    if args.command not in ("save", "batch", "operation", "resume", "history") and any((args.db, args.workvault, args.cache_dir)):
+    if args.command not in ("save", "batch", "operation", "resume", "history", "identity") and any((args.db, args.workvault, args.cache_dir)):
         parser.error("path overrides are supported for save and batch")
     return args.func(args)
 

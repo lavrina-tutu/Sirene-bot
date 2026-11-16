@@ -1,0 +1,16 @@
+{
+  "component": "workvault-rag",
+  "root": "/home/tkachenkoav/hermes-workspace/skills/research/workvault-rag",
+  "stage": "07",
+  "files": [
+    {
+      "path": "/home/tkachenkoav/hermes-workspace/skills/research/workvault-rag/references/plan-queries.md",
+      "relative_path": "references/plan-queries.md",
+      "action": "modify",
+      "before_sha256": "76232931a8f9543b05801cda7bba278b65a5281cbc7aff0acbc803391d796f53",
+      "after_sha256": "1720f7dec41f283bd6e32697855c50a9e1db72a45a764cbc67dd20db3f1e5888",
+      "mode": "0o644",
+      "basis": "Approved EditPlanConfluence plan §9, stage 07"
+    }
+  ]
+}

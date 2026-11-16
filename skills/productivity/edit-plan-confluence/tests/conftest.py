@@ -263,6 +263,18 @@ STAGE06_REQUIRED |= {'test_history_queries.py::'+name for name in (
     'test_q_history_integration_uses_same_api', 'test_history_all_views_paginate_without_duplicates')}
 
 
+STAGE07_REQUIRED = STAGE06_REQUIRED | {'test_plan_identity.py::'+name for name in (
+    'test_confirm_show_no_automatic_operation_start_and_evidence_copy',
+    'test_operation_requirements_partial_then_sufficient_and_fixed_revision',
+    'test_strict_mapping_shape_before_mutation',
+    'test_mapping_rejects_duplicate_json_keys_and_continuity_mapping_argument',
+    'test_schema_matches_runtime_validator',
+    'test_foreign_project_pair_and_unknown_uid_are_conflicts',
+    'test_real_cli_confirm_show_errors_and_no_resume',
+    'test_q_identity_integration_uses_same_api',
+    'test_real_independent_mpp_same_uid_stays_unknown')}
+
+
 def pytest_addoption(parser):
     parser.addoption("--acceptance-stage", default=None)
     parser.addoption("--test-root", default=None)
@@ -279,8 +291,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03", "04", "05", "06"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 through 06")
+    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 07")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -321,7 +333,7 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED}[stage]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -340,6 +352,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption("--acceptance-stage") == "07":
+        _stage07_report(session, exitstatus, root)
         return
     if config.getoption("--acceptance-stage") == "06":
         _stage06_report(session, exitstatus, root)
@@ -935,6 +950,84 @@ def _stage06_report(session, exitstatus, root):
         'M/Q, команды/rc/JUnit/stdout/stderr и восстановление комплектов: external-checks.json. Полный CLI-проход с реальным E: batch-decisions-cli.json.',
         '', f"Проверено защищённых файлов: {len(protected)}; изменено: {len(changed)}. Дерево исходников: `{report['source_tree_sha256']}`.",
         '', 'Комплекты: usertools/MofsIndex/ и usertools/workvault-rag/ — before/after/changes.patch/manifest.json. SHA завершающего коммита записывается после commit в журнал плана.',
+        '', 'Ограничения:', '']
+    lines += ['- '+value for value in limitations]
+    (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')
+
+
+
+def _stage07_report(session, exitstatus, root):
+    """Stage-specific evidence gate; all values come from actual checks."""
+    config=session.config
+    def read(name):
+        path=root/'reports'/name
+        return json.loads(path.read_text()) if path.exists() else {}
+    initial,external,cli=read('initial-state.json'),read('external-checks.json'),read('identity-cli.json')
+    real=read('identity-real-mpp.json')
+    protected=initial.get('protected_hashes',{})
+    changed=[name for name,digest in protected.items() if not Path(name).is_file()
+             or hashlib.sha256(Path(name).read_bytes()).hexdigest()!=digest]
+    results=config._acceptance_results
+    good=(int(exitstatus)==0 and bool(session.items) and bool(results)
+          and all(r['status']=='passed' for r in results) and bool(protected) and not changed
+          and external.get('gate')=='passed' and cli.get('no_automatic_resume') is True
+          and bool(cli.get('calls')) and cli['calls'][0]['rc']==0
+          and real.get('mapping')=='unknown' and real.get('MPXJ_read')==[1,1])
+    qroot=SKILL_ROOT.parents[1]/'research/workvault-rag'
+    files=sorted(set([*SCRIPTS.glob('*.py'),*(SKILL_ROOT/'tests').glob('*.py'),
+        *(MOFS_INDEX_ROOT/'mofs_index/plan').glob('*.py'),*(MOFS_INDEX_ROOT/'tests/plan').glob('*.py'),
+        *(SKILL_ROOT/'references/schemas').glob('*.json'),*(SKILL_ROOT/'references/profiles').glob('*.json'),
+        SKILL_ROOT/'references/cli-contract.md',qroot/'references/plan-queries.md',SKILL_ROOT/'tests/pytest.ini',
+        *(p for p in (SKILL_ROOT/'tests/fixtures/synthetic/identity-confirmation').rglob('*') if p.is_file())]))
+    hashes={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+    master=Path.home()/'WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md'
+    plan=master.parent/'plans/HF-plan_EditPlanConfluence_20261116.md'
+    schema=Path.home()/'WorkVault/Registries/EcosystemConfig.schema.json'
+    implemented={
+        'M/mofs_index/plan/identity.py':'единая политика точной пары, scope, continuity/mapping, same_source, выбор и проверки evidence',
+        'M/mofs_index/plan/schema.py':'только новая 0010_identity_revisions; scope/evidence/supersedes/отзыв, calendar/assignment, append-only требования/выбор/проверки',
+        'M/mofs_index/plan/writer.py':'typed подтверждение/отзыв/требования; атомарный достаточный выбор; идемпотентность, конфликт и отсутствие автоподмены',
+        'M/mofs_index/plan/query.py':'diff/task_history/causal guard используют доказательства; unknown и несопоставленные остатки вместо ложного confirmed_uid',
+        'S/scripts/plan_identity.py':'внутренние confirm/show адаптеры; immutable content-addressed evidence, без reader/автозапуска/публикации',
+        'S/scripts/plan_operation.py':'identity_requirements с точными парами/hashes/rule/revision/evidence/checks и внутренний typed выбор',
+        'S/scripts/cli.py':'identity confirm/show, selectors, форма mapping/continuity, глобальные пути и JSON ошибок',
+        'S/references/schemas/identity-mapping.schema.json':'строгая схема v1; четыре типа, null/unknown/пустые ключи запрещены',
+        'S/references/cli-contract.md + Q/references/plan-queries.md':'контракт identity/revision; убраны обещания подтверждения UID без evidence; исполняемый Q пример',
+        'M/tests/plan/test_identity.py + test_query.py + test_migrate.py':'прямые контракты, миграция с legacy данными, checksums 0001–0009, атомарность и два процесса; новые ожидаемые результаты query/migrations',
+        'S/tests/test_plan_identity.py + fixtures/synthetic/identity-confirmation':'CLI, строгая схема, immutable evidence, partial→sufficient, operation show, Q и отсутствие автозапуска',
+        'S/tests/conftest.py':'добавлены карта обязательных test ID и отчёт/gate этапа 07; прежние карты/отчёты сохранены'}
+    limitations=[
+        'Только этап 07. Правила B/C и публичный publish/resume с ними — этап 09; stage-07 select hook не исполняет правила или сетевые стадии.',
+        'Полные semantic diff связей/календарей/назначений и точные publication selectors — этап 11. Snapshot diff честно completeness:partial/calendar:unknown.',
+        'Task history требует прямое доказательство каждой пары; без опорного snapshot совпавшие UID показываются раздельно; абсолютная дельта при неизвестной таймзоне не заявляется.',
+        'Evidence хранится в существующем artifact-контуре; append-only SQL и SHA-256 проверяются при использовании. Изменение/утрата байтов блокирует применение.',
+        'Schedule:not_verified. Live Confluence не запускался; полномасштабная приёмка §20 не заявлена.',
+        'OwnCloud sync не подтверждён. Production-БД/страницы/настройки/baseline, Gateway и расписания не менялись.']
+    report={'stage':'07','gate':'passed' if good else 'failed','exit_code':int(exitstatus),
+        'base_commit':initial.get('base_commit'),'command':[sys.executable,'-m','pytest',*config.invocation_params.args],
+        'environment':{'python':sys.executable,'version':platform.python_version(),'cli_python':'/usr/bin/python3',
+            'PYTHONPATH':os.environ.get('PYTHONPATH'),'test_root':str(root)},
+        'master':{'version':'0.5.0','path':str(master),'sha256':hashlib.sha256(master.read_bytes()).hexdigest()},
+        'plan':{'path':str(plan),'normative_prefix_sha256':hashlib.sha256(plan.read_text().split('## Журнал исполнения')[0].encode()).hexdigest()},
+        'config_contract_sha256':hashlib.sha256(schema.read_bytes()).hexdigest(),
+        'source_files':hashes,'source_tree_sha256':hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),
+        'migrations':['0010_identity_revisions'],'previous_migrations':'0001–0009 unchanged; checksums tested',
+        'implemented_files':implemented,'tests':results,'selected':len(session.items),'mandatory_test_ids':sorted(STAGE07_REQUIRED),
+        'external_checks':external,'cli_evidence':'identity-cli.json','real_mpp_evidence':'identity-real-mpp.json','protected_files_checked':len(protected),'changed_protected_files':changed,
+        'counters':{'identity_reader_reads':cli.get('reader_reads'),'real_identity_MPXJ_read':real.get('MPXJ_read'),'identity_POST':cli.get('POST'),'identity_PUT':cli.get('PUT'),
+                    'regression_fake_counters':config._acceptance_counters,'legacy_reader_total':None},
+        'covered_requirements':['§20.6.3 identity portions of AC-09,24; foundation for AC-04'],
+        'revision_selection':'explicit usable; single active; unknown without confirmation; ambiguous/3; sufficient before atomic immutable pair choice; no automatic replacement',
+        'false_confirmed_uid_removed':True,'limitations':limitations,'generated_at':datetime.now(timezone.utc).isoformat()}
+    (root/'reports/stage-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    lines=['# Этап 07 — подтверждение идентичности и mapping revision','',
+        f"Gate: **{report['gate']}**. S rc={exitstatus}; selected={len(session.items)}; passed={sum(r['status']=='passed' for r in results)}.",'']
+    lines += ['- `'+name+'`: '+value+'.' for name,value in implemented.items()]
+    lines += ['', 'Выбор: явная пригодная → единственная активная → unknown; несколько → mapping_ambiguous/3. Partial без требуемых сущностей не занимает слот. Выбор фиксируется атомарно; повтор идемпотентен, замена mapping_revision_conflict/4. Отзыв/supersedes блокирует сохранённый выбор. История сохраняется.',
+        '', 'Ложное confirmed_uid в diff/task_history и причинном query убрано; подтверждение возможно только через выбранную revision/evidence. Same-source ограничен источником и профилем. Автоматической транзитивности нет.',
+        '', 'Команда S:', '', '```text', ' '.join(report['command']), '```',
+        '', 'M/Q, команды/rc/JUnit/stdout/stderr, восстановление patch/after-copy и protected hashes: external-checks.json. Реальные CLI argv/results: identity-cli.json.',
+        '', f"Дерево: `{report['source_tree_sha256']}`. Защищено файлов: {len(protected)}; изменено: {len(changed)}. Комплекты usertools/MofsIndex/ и usertools/workvault-rag/ включаются в завершающий commit; SHA после commit записывается в журнал плана.",
         '', 'Ограничения:', '']
     lines += ['- '+value for value in limitations]
     (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')

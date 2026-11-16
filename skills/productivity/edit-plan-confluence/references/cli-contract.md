@@ -242,3 +242,45 @@ Files сохраняет повторные поступления и ошибк
 поступления, включая дедупликацию; `snapshot_recorded_at` — время создания
 переиспользованного snapshot. Эти времена могут различаться. Публикационные
 связи возвращают confidence/evidence отдельно от trust публикации.
+
+
+## Identity — этап 07
+
+Глобальные `--db`, `--workvault`, `--cache-dir` стоят перед `identity`.
+
+```text
+identity confirm --project-slug SLUG --from snapshot:FROM --to snapshot:TO
+                 --mode continuity --evidence /absolute/user-statement.txt --reason "Явное утверждение пользователя"
+identity confirm --project-slug SLUG --from snapshot:FROM --to snapshot:TO
+                 --mode mapping --mapping /absolute/mapping.json
+                 --evidence /absolute/user-statement.txt --reason "Явное соответствие"
+                 [--supersedes REVISION]
+identity show --project-slug SLUG --mapping-revision REVISION
+```
+
+Continuity требует явное свидетельство сохранения UID namespace; команда не
+выводит это из метаданных. Evidence копируется в существующий content-addressed
+архив WorkVault, записываются author/source/time/reason/policy и SHA-256.
+`--mapping` обязателен только для mode=mapping; лишний mapping для continuity
+отклоняется. Строгая схема: `schemas/identity-mapping.schema.json`; нет null и
+неизвестных полей, допустимы task/resource/calendar/assignment, однозначность
+обеих сторон. Локальные ключи берутся из version-данных точных snapshot.
+
+Confirm возвращает schema_version:1, status:confirmed, exit_code:0,
+project_slug, from_snapshot_id/to_snapshot_id, from_source_sha256/to_source_sha256,
+mapping_revision_id, evidence_id/evidence_sha256, published:false, error:null.
+Это регистрация подтверждения; она не выбирает revision в операции и не
+запускает reader/правила/публикацию. Повтор той же регистрации возвращает тот
+же ID. Show возвращает запись с scope, pairs, evidence и active/superseded/revoked.
+
+Выбор выполняется typed `writer.select_operation_identity(IdentityChoiceSpec)`:
+явная пригодная revision → единственная активная → unknown/identity_confirmation_required;
+несколько активных — mapping_ambiguous/3. Неподходящая область/неактивность — 4,
+недостаточный partial — identity_mapping_incomplete/3 без заполнения выбора.
+После достаточности выбор атомарно фиксируется для точной пары/подготовки/правила,
+повтор идемпотентен, замена — mapping_revision_conflict/4. Отзыв/supersedes
+выбранного ID блокирует продолжение без автоматической подстановки другой.
+`operation show.identity_requirements` содержит точные пары/hashes, rule/revision,
+требуемые сущности, историю проверок и nullable выбранные revision/evidence.
+Публичное исполнение publish/resume с правилами B/C добавляется этапом 09;
+существующий batch-item resume сохраняет ограничения этапа 06.

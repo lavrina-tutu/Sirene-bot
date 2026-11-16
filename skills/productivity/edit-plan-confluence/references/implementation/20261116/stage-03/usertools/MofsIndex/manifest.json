@@ -1,0 +1,103 @@
+{
+  "component": "MofsIndex",
+  "stage": "03",
+  "source_root": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+  "runtime_imports_from_evidence": "forbidden",
+  "files": [
+    {
+      "relative_path": "mofs_index/plan/ingest_mpp.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/ingest_mpp.py",
+      "action": "modified",
+      "before_sha256": "6e9e1dccfc00eb1fd2e859fd777c8febcca0133a1002f3d6884548052dc83ca4",
+      "after_sha256": "6cab3fa6f28c571b749a2593b1fd59b3e29097cabc2b260d6b8dec00711970e0",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved implementation plan §5 stage 03; durable imports, atomic snapshots and lossless data"
+    },
+    {
+      "relative_path": "mofs_index/plan/migrate.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/migrate.py",
+      "action": "modified",
+      "before_sha256": "a4fa2761083ec3e091e5205f0f40170096d942ebbcef489a28255ae6d27bcd8a",
+      "after_sha256": "a4a1bd4460e1c52d319511f3b8bf396e05fbad3f985fe492cca4b66aa8680d8f",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved implementation plan §5 stage 03; durable imports, atomic snapshots and lossless data"
+    },
+    {
+      "relative_path": "mofs_index/plan/query.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py",
+      "action": "modified",
+      "before_sha256": "ce7327c4d78934afd164cf1f8cf62cef98b091847a7e38f0f8e1027324bfb5eb",
+      "after_sha256": "d34668914b4b57812a76d2029a11751dcb672568ae55ed3d650a5e119f2e7c34",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved implementation plan §5 stage 03; durable imports, atomic snapshots and lossless data"
+    },
+    {
+      "relative_path": "mofs_index/plan/schema.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py",
+      "action": "modified",
+      "before_sha256": "748f4509aed5194f008c8196b682bb220cf5c2cc7d6a6a300d5f95afbe0435b7",
+      "after_sha256": "2d9e4f6a8ae483a27fad17adc1f1edc0b1c0ee6f704d65cb81df84f3d67b43f1",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved implementation plan §5 stage 03; durable imports, atomic snapshots and lossless data"
+    },
+    {
+      "relative_path": "mofs_index/plan/writer.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py",
+      "action": "modified",
+      "before_sha256": "9a0f0cebd6e1feeaa02258a2239a3314603c2515b70411d3cdb879fc82abe0a4",
+      "after_sha256": "4a9315ae8ae6d1377011ad7f4b7d8c0571187981fc676cb984006b3e9383a16b",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved implementation plan §5 stage 03; durable imports, atomic snapshots and lossless data"
+    },
+    {
+      "relative_path": "tests/plan/test_backup.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_backup.py",
+      "action": "modified",
+      "before_sha256": "94b6fed0cf1af575bf00ece287de66954f0c034a17c57d0e31e7b4b2637f2da4",
+      "after_sha256": "cc2907bfa0f2233c34ff0a27a5acaab687119a72d1a9f7484db1d7cadd6c1534",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved implementation plan §5 stage 03; durable imports, atomic snapshots and lossless data"
+    },
+    {
+      "relative_path": "tests/plan/test_migrate.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py",
+      "action": "modified",
+      "before_sha256": "17ecd2ebd343122e8bd5a78f8784b7cb2263c1b0f766073f7692e4dfe558138f",
+      "after_sha256": "1b570f0fd627bc6832c862464f14006268072dbca4408854dbd851823a83172e",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved implementation plan §5 stage 03; durable imports, atomic snapshots and lossless data"
+    },
+    {
+      "relative_path": "tests/plan/test_schema.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_schema.py",
+      "action": "modified",
+      "before_sha256": "4b0cd7a58de2953028e264d472f024b842df975381a9fbcd23adfad00aea9546",
+      "after_sha256": "509502b25a4f2294d694263f607af4daf53ccf9a04ee56925521f96e85972831",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved implementation plan §5 stage 03; durable imports, atomic snapshots and lossless data"
+    },
+    {
+      "relative_path": "tests/plan/test_writer_snapshot.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer_snapshot.py",
+      "action": "modified",
+      "before_sha256": "52d2943887dff9710a7141ba6bb8706a8d8e67767b30c60b7bd3a9e9da24c076",
+      "after_sha256": "29ffc93cef76740ba962e30947a1f0bd3705682e92f806dc4f5b9b4de0c3ccbd",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "basis": "approved implementation plan §5 stage 03; durable imports, atomic snapshots and lossless data"
+    }
+  ],
+  "restoration": {
+    "patch_rc": 0,
+    "files_verified": 9,
+    "after_copy_verified": true
+  }
+}

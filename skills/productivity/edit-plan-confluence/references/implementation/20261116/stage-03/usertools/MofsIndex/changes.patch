@@ -1,0 +1,1769 @@
+--- a/mofs_index/plan/ingest_mpp.py
++++ b/mofs_index/plan/ingest_mpp.py
+@@ -1,10 +1 @@
+-"""Конвертер ``MppReader/plan_export.export_full()`` JSON → ``writer.SnapshotSpec``
+-(P3.SCHEMA.1 доб., используется P3.RAG.2/3 для реальных diff-чисел ZD).
+-
+-Эта часть НЕ требует JVM/mpxj — она работает с уже сериализованным словарём
+-(вывод ``plan_export.export_full``, записанный в JSON ``/usr/bin/python3.9
+-plan_export.py <mpp> --out <json>``), поэтому живёт в ``mofs_index`` (python3,
+-без JVM) отдельно от самого экспорта (MppReader, требует JVM). Конвертация
+-чистая: не домысливает поля, которых нет в экспорте (``quality="unknown"``
+-по умолчанию, не ``"ok"``).
+-"""
++"""Lossless full-export-v2 (and legacy export) to MofsIndex typed specs. No JVM."""
+@@ -12 +3 @@
+-
++import hashlib
+@@ -16 +6,0 @@
+-
+@@ -20,9 +10,24 @@
+-def _field_value(field: dict[str, Any] | None) -> tuple[Any, str]:
+-    if not isinstance(field, dict):
+-        return field, "unknown"
+-    return field.get("value"), field.get("quality", "unknown")
+-
+-
+-def _num(field: dict[str, Any] | None) -> float | None:
+-    value, _ = _field_value(field)
+-    if value is None:
++def _field_value(field):
++    if isinstance(field,dict) and "value" in field:
++        return field.get("value"),field.get("quality","unknown")
++    return field,"unknown"
++
++
++def _v(field):
++    return _field_value(field)[0]
++
++
++def _j(value):
++    return json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(",", ":"))
++
++
++def _text(field):
++    v = _v(field)
++    return _j(v) if isinstance(v,(dict,list)) else None if v is None else str(v)
++
++
++def _num(field):
++    v = _v(field)
++    try:
++        return float(v) if v is not None else None
++    except (ValueError,TypeError):
+@@ -30,4 +35,16 @@
+-    try:
+-        return float(value)
+-    except (TypeError, ValueError):
+-        return None
++
++
++def _quantity(field):
++    if not isinstance(field,dict):
++        return {}
++    q = field.get("quantity",field.get("value"))
++    return q if isinstance(q,dict) else {}
++
++
++def _amount(field):
++    v = _quantity(field).get("amount")
++    return None if v is None else str(v)
++
++
++def _units(field):
++    return _quantity(field).get("units")
+@@ -37,2 +54,2 @@
+-    out = []
+-    for t in export.get("tasks", ()):
++    out=[]
++    for t in export.get("tasks",()):
+@@ -41,57 +58,17 @@
+-        segments = tuple(
+-            plan_writer.TaskSegmentSpec(start_raw=s.get("start"), finish_raw=s.get("finish"))
+-            for s in t.get("segments", ())
+-        )
+-        baseline_values = tuple(
+-            plan_writer.BaselineValueSpec(
+-                baseline_slot=bv["slot"],
+-                baseline_start=bv.get("start"),
+-                baseline_finish=bv.get("finish"),
+-                baseline_duration_raw=bv.get("duration"),
+-                baseline_work_raw=bv.get("work"),
+-                baseline_cost=bv.get("cost"),
+-            )
+-            for bv in t.get("baseline_values", ())
+-        )
+-        start_v, start_q = _field_value(t.get("start"))
+-        finish_v, finish_q = _field_value(t.get("finish"))
+-        dur_v, dur_q = _field_value(t.get("duration"))
+-        es_v, _ = _field_value(t.get("early_start"))
+-        ef_v, _ = _field_value(t.get("early_finish"))
+-        ls_v, _ = _field_value(t.get("late_start"))
+-        lf_v, _ = _field_value(t.get("late_finish"))
+-        ct_v, _ = _field_value(t.get("constraint_type"))
+-        cd_v, _ = _field_value(t.get("constraint_date"))
+-        as_v, _ = _field_value(t.get("actual_start"))
+-        af_v, _ = _field_value(t.get("actual_finish"))
+-        ad_v, _ = _field_value(t.get("actual_duration"))
+-        rd_v, _ = _field_value(t.get("remaining_duration"))
+-        notes_v, _ = _field_value(t.get("notes"))
+-        overall_quality = "ok" if "missing" not in (start_q, finish_q, dur_q) else "partial"
+-        out.append(plan_writer.TaskVersionSpec(
+-            task_key=t["task_key"],
+-            uid=str(t["uid"]) if t.get("uid") is not None else None,
+-            wbs=t.get("wbs"),
+-            name=t.get("name"),
+-            outline_level=t.get("outline_level"),
+-            start_raw=start_v,
+-            finish_raw=finish_v,
+-            duration_raw=dur_v,
+-            early_start=es_v,
+-            early_finish=ef_v,
+-            late_start=ls_v,
+-            late_finish=lf_v,
+-            percent_complete=_num(t.get("percent_complete")),
+-            milestone=bool(t.get("milestone")),
+-            summary=bool(t.get("summary")),
+-            constraint_type=ct_v,
+-            constraint_date=cd_v,
+-            actual_start=as_v,
+-            actual_finish=af_v,
+-            actual_duration_raw=ad_v,
+-            remaining_duration_raw=rd_v,
+-            notes=notes_v,
+-            quality=overall_quality,
+-            segments=segments,
+-            baseline_values=baseline_values,
+-        ))
++        simple={name: _text(t.get(key)) for name,key in {
++            "start_raw":"start","finish_raw":"finish","duration_raw":"duration",
++            "early_start":"early_start","early_finish":"early_finish","late_start":"late_start","late_finish":"late_finish",
++            "constraint_type":"constraint_type","constraint_date":"constraint_date","actual_start":"actual_start",
++            "actual_finish":"actual_finish","actual_duration_raw":"actual_duration","remaining_duration_raw":"remaining_duration",
++            "notes":"notes","source_id":"id","parent_task_key":"parent_task_key","calendar_key":"calendar_key",
++            "effective_calendar_key":"effective_calendar_key","task_mode":"task_mode"}.items()}
++        segments=tuple(plan_writer.TaskSegmentSpec(_text(s.get("start")),_text(s.get("finish"))) for s in (_v(t.get("segments")) or ()))
++        baselines=tuple(plan_writer.BaselineValueSpec(baseline_slot=b["slot"],baseline_start=_text(b.get("start")),
++            baseline_finish=_text(b.get("finish")),baseline_duration_raw=_text(b.get("duration")),baseline_work_raw=_text(b.get("work")),
++            baseline_cost=_num(b.get("cost")),baseline_cost_decimal=_text(b.get("cost")),source_json=_j(b)) for b in t.get("baseline_values",()))
++        out.append(plan_writer.TaskVersionSpec(task_key=t["task_key"],uid=_text(t.get("uid")),wbs=t.get("wbs"),name=t.get("name"),
++            outline_level=t.get("outline_level"),percent_complete=_num(t.get("percent_complete")),
++            percent_complete_decimal=_text(t.get("percent_complete")),milestone=_v(t.get("milestone")),summary=_v(t.get("summary")),
++            duration_amount=_amount(t.get("duration")),duration_units=_units(t.get("duration")),
++            duration_elapsed=_quantity(t.get("duration")).get("elapsed"),work_amount=_amount(t.get("work")),work_units=_units(t.get("work")),
++            quality="partial" if t.get("issues") else "unknown",source_json=_j(t),segments=segments,baseline_values=baselines,**simple))
+@@ -102,12 +79,6 @@
+-    out = []
+-    for d in export.get("dependencies", ()):
+-        lag_v, _ = _field_value(d.get("lag")) if isinstance(d.get("lag"), dict) else (d.get("lag"), "ok")
+-        lag_cal_v, _ = _field_value(d.get("lag_calendar"))
+-        out.append(plan_writer.DependencyVersionSpec(
+-            predecessor_task_key=d["predecessor_task_key"],
+-            successor_task_key=d["successor_task_key"],
+-            link_type=d.get("link_type"),
+-            lag_raw=lag_v if not isinstance(lag_v, dict) else None,
+-            lag_calendar=lag_cal_v,
+-        ))
+-    return tuple(out)
++    return tuple(plan_writer.DependencyVersionSpec(
++        predecessor_task_key=d["predecessor_task_key"],successor_task_key=d["successor_task_key"],link_type=_text(d.get("link_type")),
++        lag_raw=_text(d.get("lag")),lag_calendar=_text(d.get("lag_calendar")),dependency_key=d.get("dependency_key"),
++        lag_amount=_amount(d.get("lag_value")),lag_units=_units(d.get("lag_value")),
++        lag_elapsed=_quantity(d.get("lag_value")).get("elapsed"),calendar_basis=_text(d.get("calendar_basis")),source_json=_j(d))
++        for d in export.get("dependencies",()) if "error" not in d and d.get("predecessor_task_key") is not None and d.get("successor_task_key") is not None)
+@@ -117,9 +88,2 @@
+-    return tuple(
+-        plan_writer.ExternalDependencySpec(
+-            local_task_key=e["local_task_key"],
+-            direction=e["direction"],
+-            reason=e["reason"],
+-            external_ref=e.get("external_ref"),
+-        )
+-        for e in export.get("external_dependencies", ())
+-    )
++    return tuple(plan_writer.ExternalDependencySpec(local_task_key=e["local_task_key"],direction=e["direction"],reason=e["reason"],
++        external_ref=e.get("external_ref")) for e in export.get("external_dependencies",()) if e.get("local_task_key") is not None)
+@@ -129,26 +93,8 @@
+-    out = []
+-    for r in export.get("resources", ()):
+-        if "error" in r:
+-            continue
+-        availability = tuple(
+-            plan_writer.ResourceAvailabilitySpec(
+-                available_from=a.get("available_from"),
+-                available_to=a.get("available_to"),
+-                max_units=a.get("max_units"),
+-            )
+-            for a in r.get("availability", ())
+-        )
+-        std_rate_v, _ = _field_value(r.get("std_rate"))
+-        out.append(plan_writer.ResourceVersionSpec(
+-            resource_key=r["resource_key"],
+-            uid=str(r["uid"]) if r.get("uid") is not None else None,
+-            name=r.get("name"),
+-            type=r.get("type"),
+-            email=r.get("email"),
+-            resource_group=r.get("group"),
+-            max_units=_num(r.get("max_units")),
+-            std_rate_raw=std_rate_v,
+-            cost_per_use=_num(r.get("cost_per_use")),
+-            availability=availability,
+-        ))
+-    return tuple(out)
++    return tuple(plan_writer.ResourceVersionSpec(resource_key=r["resource_key"],uid=_text(r.get("uid")),name=r.get("name"),
++        type=_text(r.get("type")),email=_text(r.get("email")),resource_group=_text(r.get("group")),max_units=_num(r.get("max_units")),
++        max_units_decimal=_text(r.get("max_units")),std_rate_raw=_text(r.get("std_rate")),ot_rate_raw=_text(r.get("ot_rate")),
++        cost_per_use=_num(r.get("cost_per_use")),cost_per_use_decimal=_text(r.get("cost_per_use")),calendar_key=_text(r.get("calendar_key")),
++        base_calendar_key=_text(r.get("base_calendar_key")),source_json=_j(r),
++        availability=tuple(plan_writer.ResourceAvailabilitySpec(available_from=_text(a.get("available_from")),available_to=_text(a.get("available_to")),
++            max_units=_num(a.get("max_units")),max_units_decimal=_text(a.get("max_units")),source_json=_j(a)) for a in r.get("availability",())))
++        for r in export.get("resources",()) if "error" not in r)
+@@ -158,27 +104,9 @@
+-    out = []
+-    for a in export.get("assignments", ()):
+-        if "error" in a or a.get("task_key") is None or a.get("resource_key") is None:
+-            continue
+-        timephased = tuple(
+-            plan_writer.TimephasedSpec(
+-                period_start=tp["period_start"], period_end=tp["period_end"], work_raw=tp.get("work"),
+-            )
+-            for tp in a.get("timephased", ())
+-        )
+-        start_v, _ = _field_value(a.get("start"))
+-        finish_v, _ = _field_value(a.get("finish"))
+-        work_v, _ = _field_value(a.get("work"))
+-        aw_v, _ = _field_value(a.get("actual_work"))
+-        rw_v, _ = _field_value(a.get("remaining_work"))
+-        out.append(plan_writer.AssignmentVersionSpec(
+-            task_key=a["task_key"],
+-            resource_key=a["resource_key"],
+-            units=_num(a.get("units")),
+-            work_raw=work_v,
+-            start_raw=start_v,
+-            finish_raw=finish_v,
+-            actual_work_raw=aw_v,
+-            remaining_work_raw=rw_v,
+-            timephased=timephased,
+-        ))
+-    return tuple(out)
++    return tuple(plan_writer.AssignmentVersionSpec(task_key=a["task_key"],resource_key=a["resource_key"],assignment_key=a.get("assignment_key"),
++        uid=_text(a.get("uid")),units=_num(a.get("units")),units_decimal=_text(a.get("units")),work_raw=_text(a.get("work")),
++        work_amount=_amount(a.get("work")),work_units=_units(a.get("work")),start_raw=_text(a.get("start")),finish_raw=_text(a.get("finish")),
++        actual_work_raw=_text(a.get("actual_work")),remaining_work_raw=_text(a.get("remaining_work")),
++        effective_calendar_key=_text(a.get("effective_calendar_key")),source_json=_j(a),
++        timephased=tuple(plan_writer.TimephasedSpec(period_start=_text(tp["period_start"]),period_end=_text(tp["period_end"]),
++            work_raw=_text(tp.get("work")),work_amount=_amount(tp.get("work")),work_units=_units(tp.get("work")),source_json=_j(tp))
++            for tp in a.get("timephased",()) if _v(tp.get("period_start")) is not None and _v(tp.get("period_end")) is not None))
++        for a in export.get("assignments",()) if "error" not in a and a.get("task_key") is not None and a.get("resource_key") is not None)
+@@ -188,2 +116,2 @@
+-    out = []
+-    for c in export.get("calendars", ()):
++    out=[]
++    for c in export.get("calendars",()):
+@@ -192,19 +120,14 @@
+-        intervals = []
+-        for wd in c.get("weekdays", ()):
+-            intervals.append(plan_writer.CalendarIntervalSpec(
+-                interval_kind="weekday", day_or_date=str(wd.get("day")), working=bool(wd.get("working")),
+-            ))
+-        for exc in c.get("exceptions", ()):
+-            intervals.append(plan_writer.CalendarIntervalSpec(
+-                interval_kind="exception",
+-                day_or_date=f"{exc.get('from_date')}..{exc.get('to_date')}",
+-                working=bool(exc.get("working")),
+-            ))
+-        out.append(plan_writer.CalendarVersionSpec(
+-            calendar_key=c["calendar_key"],
+-            name=c.get("name"),
+-            base_calendar_key=str(c["parent_uid"]) if c.get("parent_uid") is not None else None,
+-            minutes_per_day=_num(c.get("minutes_per_day")),
+-            minutes_per_week=_num(c.get("minutes_per_week")),
+-            intervals=tuple(intervals),
+-        ))
++        intervals=[]
++        for kind,days in (("weekday",c.get("weekdays",())),("exception",c.get("exceptions",()))):
++            for day in days:
++                label=str(day.get("day")) if kind == "weekday" else f"{_v(day.get('from_date'))}..{_v(day.get('to_date'))}"
++                ranges=_v(day.get("intervals")) or ()
++                for part in ranges or ({},):
++                    intervals.append(plan_writer.CalendarIntervalSpec(kind,label,_v(day.get("working")),
++                        _text(part.get("start")),_text(part.get("end"))))
++        parent=_text(c.get("parent_key"))
++        out.append(plan_writer.CalendarVersionSpec(calendar_key=c["calendar_key"],name=c.get("name"),
++            base_calendar_key=parent or _text(c.get("parent_uid")),parent_key=parent,
++            minutes_per_day=_num(c.get("minutes_per_day")),minutes_per_week=_num(c.get("minutes_per_week")),
++            minutes_per_day_decimal=_text(c.get("minutes_per_day")),minutes_per_week_decimal=_text(c.get("minutes_per_week")),
++            source_json=_j(c),intervals=tuple(intervals)))
+@@ -215,8 +138,15 @@
+-    out = []
+-    for kind, info in (export.get("collections") or {}).items():
+-        out.append(plan_writer.CollectionStatusSpec(
+-            collection_kind=kind,
+-            status=info.get("status", "unsupported"),
+-            count=info.get("count"),
+-            reason=info.get("reason"),
+-        ))
++    return tuple(plan_writer.CollectionStatusSpec(kind,info.get("status","unsupported"),info.get("count"),info.get("reason"))
++                 for kind,info in (export.get("collections") or {}).items())
++
++
++def quality_issue_specs_from_export(export: dict[str, Any]) -> tuple[plan_writer.QualityIssueSpec, ...]:
++    graph=export.get("diagnose_graph") or {}
++    out=[]
++    for key,severity in (("multiple_roots","warning"),("has_cycle","error"),("has_service_row","info"),
++                         ("self_references","error"),("dangling_endpoints","error"),("external_dependencies","warning")):
++        if graph.get(key):
++            out.append(plan_writer.QualityIssueSpec(key,severity,_j(graph)))
++    for name in ("tasks","dependencies","resources","assignments","calendars"):
++        for row in export.get(name,()):
++            if row.get("error"):
++                out.append(plan_writer.QualityIssueSpec("unreadable_"+name,"warning",_j(row)))
+@@ -226,57 +156,23 @@
+-def quality_issue_specs_from_export(export: dict[str, Any]) -> tuple[plan_writer.QualityIssueSpec, ...]:
+-    out = []
+-    graph = export.get("diagnose_graph") or {}
+-    if graph.get("multiple_roots"):
+-        out.append(plan_writer.QualityIssueSpec(
+-            issue_kind="multiple_roots", severity="warning",
+-            detail=f"roots={graph.get('roots')}",
+-        ))
+-    if graph.get("has_cycle"):
+-        out.append(plan_writer.QualityIssueSpec(
+-            issue_kind="dependency_cycle", severity="error",
+-            detail=f"cycles={graph.get('cycles')}",
+-        ))
+-    if graph.get("has_service_row"):
+-        out.append(plan_writer.QualityIssueSpec(
+-            issue_kind="service_row", severity="info",
+-            detail=f"service_rows={graph.get('service_rows')}",
+-        ))
+-    return tuple(out)
+-
+-
+-def build_snapshot_spec(
+-    export: dict[str, Any],
+-    *,
+-    plan_id: str,
+-    lineage_id: str | None = None,
+-    source_artifact_id: str | None = None,
+-    representation: str = "mpp",
+-    timezone_hint: str | None = None,
+-    published_at: str | None = None,
+-    observed_at: str | None = None,
+-) -> plan_writer.SnapshotSpec:
+-    """Собрать ``SnapshotSpec`` из словаря ``plan_export.export_full()``.
+-
+-    Не выдумывает ``status_date``/``timezone_hint`` — если явно не передано
+-    вызывающей стороной (R-012/R-013), берёт то, что реально в экспорте
+-    (``project.status_date.value``), иначе ``None``.
+-    """
+-    status_date_v, _ = _field_value(export.get("project", {}).get("status_date"))
+-    return plan_writer.SnapshotSpec(
+-        plan_id=plan_id,
+-        lineage_id=lineage_id,
+-        source_artifact_id=source_artifact_id,
+-        representation=representation,
+-        timezone_hint=timezone_hint,
+-        status_date=status_date_v,
+-        published_at=published_at,
+-        observed_at=observed_at,
+-        collections=collection_specs_from_export(export),
+-        tasks=task_specs_from_export(export),
+-        dependencies=dependency_specs_from_export(export),
+-        external_dependencies=external_dependency_specs_from_export(export),
+-        resources=resource_specs_from_export(export),
+-        assignments=assignment_specs_from_export(export),
+-        calendars=calendar_specs_from_export(export),
+-        quality_issues=quality_issue_specs_from_export(export),
+-    )
++def build_snapshot_spec(export: dict[str,Any], *, plan_id: str, lineage_id=None, source_artifact_id=None,
++                        representation="mpp",timezone_hint=None,published_at=None,observed_at=None,
++                        normalization_profile_fingerprint=None,resolved_timezone=None,source_mpp_sha256=None) -> plan_writer.SnapshotSpec:
++    # PreparedPlan carries the profile plus extraction/runtime versions. A bare
++    # legacy export remains outside new dedup unless an explicit profile is supplied.
++    data=export.get("normalized_data",export)
++    source=data.get("source_identity",data.get("provenance",{}))
++    profile=normalization_profile_fingerprint
++    if profile is None and data.get("normalization"):
++        material={"normalization":data["normalization"],"export_version":data.get("export_version"),
++                  "schema_version":export.get("schema_version"),"runtime":{k:source.get(k) for k in ("reader","mpxj","jpype")}}
++        profile=hashlib.sha256(_j(material).encode()).hexdigest()
++    zone=resolved_timezone if resolved_timezone is not None else timezone_hint if timezone_hint is not None else data.get("resolved_timezone")
++    zone=plan_writer.normalize_timezone(zone) if profile else None
++    raw=_j(data)
++    return plan_writer.SnapshotSpec(plan_id=plan_id,lineage_id=lineage_id,source_artifact_id=source_artifact_id,
++        representation=representation,timezone_hint=timezone_hint,status_date=_text(data.get("project",{}).get("status_date")),
++        published_at=published_at,observed_at=observed_at,normalization_profile_fingerprint=profile,resolved_timezone=zone,
++        source_mpp_sha256=source_mpp_sha256 or source.get("sha256"),normalized_data_sha256=hashlib.sha256(raw.encode()).hexdigest(),
++        source_json=raw,collections=collection_specs_from_export(data),tasks=task_specs_from_export(data),
++        dependencies=dependency_specs_from_export(data),external_dependencies=external_dependency_specs_from_export(data),
++        resources=resource_specs_from_export(data),assignments=assignment_specs_from_export(data),calendars=calendar_specs_from_export(data),
++        quality_issues=quality_issue_specs_from_export(data))
+--- a/mofs_index/plan/migrate.py
++++ b/mofs_index/plan/migrate.py
+@@ -40,0 +41,2 @@
++    if conn.in_transaction:
++        raise ValueError("migration requires an idle connection; caller transaction preserved")
+@@ -42 +43,0 @@
+-    conn.commit()
+@@ -56,0 +58,6 @@
++        rebuild = migration.migration_id in {"0007_durable_imports", "0008_snapshot_semantics"}
++        foreign_keys = conn.execute("PRAGMA foreign_keys").fetchone()[0]
++        if rebuild:
++            # SQLite's documented create/copy/drop/rename procedure. Never rename
++            # the old parent: dependent FK definitions must retain its real name.
++            conn.execute("PRAGMA foreign_keys=OFF")
+@@ -58 +65,9 @@
+-            conn.execute("BEGIN")
++            conn.execute("BEGIN IMMEDIATE")
++            # Another migration process may have won while we waited for the lock.
++            row = conn.execute("SELECT checksum FROM plan_schema_migration WHERE migration_id=?",
++                               (migration.migration_id,)).fetchone()
++            if row:
++                if row[0] != checksum:
++                    raise ValueError("applied migration checksum mismatch")
++                conn.execute("COMMIT")
++                continue
+@@ -65,0 +81,2 @@
++            if conn.execute("PRAGMA foreign_key_check").fetchall():
++                raise ValueError("migration foreign_key_check failed")
+@@ -67,2 +84,3 @@
+-        except Exception:
+-            conn.execute("ROLLBACK")
++        except BaseException:
++            if conn.in_transaction:
++                conn.execute("ROLLBACK")
+@@ -69,0 +88,3 @@
++        finally:
++            if rebuild:
++                conn.execute(f"PRAGMA foreign_keys={int(foreign_keys)}")
+--- a/mofs_index/plan/query.py
++++ b/mofs_index/plan/query.py
+@@ -641,0 +642,71 @@
++
++
++# Stage 03 internal adapters consume these read APIs, never free SQL.
++def _record(conn: sqlite3.Connection, table: str, key: str, value: str) -> dict[str, Any] | None:
++    cursor = conn.execute(f"SELECT * FROM {table} WHERE {key}=?", (value,))
++    row = cursor.fetchone()
++    return dict(zip((c[0] for c in cursor.description), row)) if row else None
++
++
++def get_operation(conn: sqlite3.Connection, operation_id: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_operation","operation_id",operation_id)
++
++
++def get_import_item(conn: sqlite3.Connection, item_id: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_import_item","item_id",item_id)
++
++
++def get_operation_item(conn: sqlite3.Connection, operation_id: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_import_item","operation_id",operation_id)
++
++
++def get_import_batch(conn: sqlite3.Connection, batch_id: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_import_batch","batch_id",batch_id)
++
++
++def get_snapshot(conn: sqlite3.Connection, snapshot_id: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_snapshot","snapshot_id",snapshot_id)
++
++
++def find_snapshot_by_dedup_key(conn: sqlite3.Connection, dedup_key: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_snapshot","dedup_key",dedup_key)
++
++
++def get_artifact(conn: sqlite3.Connection, artifact_id: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_artifact","artifact_id",artifact_id)
++
++
++def find_artifact_by_hash(conn: sqlite3.Connection, sha256: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_artifact","raw_sha256",sha256)
++
++
++def get_lineage(conn: sqlite3.Connection, lineage_id: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_lineage","lineage_id",lineage_id)
++
++
++def get_attempt(conn: sqlite3.Connection, attempt_id: str) -> dict[str, Any] | None:
++    return _record(conn,"plan_import_attempt","attempt_id",attempt_id)
++
++
++def get_operation_events(conn: sqlite3.Connection, operation_id: str) -> list[dict[str, Any]]:
++    cursor = conn.execute("SELECT e.* FROM plan_attempt_event e JOIN plan_import_attempt a USING(attempt_id) "
++                          "WHERE a.operation_id=? ORDER BY e.created_at,e.rowid",(operation_id,))
++    names = [c[0] for c in cursor.description]
++    return [dict(zip(names,row)) for row in cursor]
++
++
++def get_committed_import(conn: sqlite3.Connection, item_id: str) -> dict[str, Any] | None:
++    item = get_import_item(conn,item_id)
++    if not item or not item["snapshot_id"]:
++        return None
++    event = conn.execute("SELECT snapshot_id FROM plan_attempt_event WHERE event_id=? AND event_kind='snapshot_committed'",
++                         ("snapshot_committed:"+item_id,)).fetchone()
++    if not event or event[0] != item["snapshot_id"]:
++        raise PlanQueryError("committed_import_inconsistent")
++    return {"item": item, "snapshot": get_snapshot(conn,item["snapshot_id"])}
++
++
++def page_bindings(conn: sqlite3.Connection, page_id: str, namespace: str) -> list[dict[str, Any]]:
++    cursor = conn.execute("SELECT l.lineage_id,l.plan_id,p.project_slug FROM plan_lineage l JOIN plan p USING(plan_id) "
++                          "WHERE l.page_id=? AND l.source_namespace=?",(page_id,namespace))
++    return [dict(zip(("lineage_id","plan_id","project_slug"),row)) for row in cursor]
+--- a/mofs_index/plan/schema.py
++++ b/mofs_index/plan/schema.py
+@@ -778,0 +779,106 @@
++# Stage 03. Earlier migration objects and their checksums are immutable.
++IMPORT_DDL = (
++    """CREATE TABLE plan_operation (
++        operation_id TEXT PRIMARY KEY, action TEXT NOT NULL,
++        plan_id TEXT REFERENCES plan(plan_id), lineage_id TEXT REFERENCES plan_lineage(lineage_id),
++        context_json TEXT NOT NULL, preparation_revision INTEGER NOT NULL DEFAULT 1,
++        created_at TEXT NOT NULL,
++        FOREIGN KEY(lineage_id,plan_id) REFERENCES plan_lineage(lineage_id,plan_id),
++        CHECK(lineage_id IS NULL OR plan_id IS NOT NULL)
++    )""",
++    """CREATE TABLE plan_import_batch (
++        batch_id TEXT PRIMARY KEY, manifest_version INTEGER NOT NULL,
++        manifest_json TEXT NOT NULL, manifest_sha256 TEXT NOT NULL,
++        source TEXT NOT NULL, created_at TEXT NOT NULL, inputs_frozen_at TEXT,
++        completed_at TEXT, on_error TEXT NOT NULL CHECK(on_error IN ('continue','stop')),
++        context_json TEXT NOT NULL, status TEXT NOT NULL, stop_reason TEXT
++    )""",
++    """CREATE TABLE plan_import_item (
++        item_id TEXT PRIMARY KEY, operation_id TEXT NOT NULL UNIQUE REFERENCES plan_operation(operation_id),
++        batch_id TEXT REFERENCES plan_import_batch(batch_id), ordinal INTEGER NOT NULL DEFAULT 0,
++        plan_id TEXT REFERENCES plan(plan_id), lineage_id TEXT REFERENCES plan_lineage(lineage_id),
++        original_name TEXT NOT NULL, original_locator TEXT NOT NULL, transport_json TEXT,
++        source_mpp_sha256 TEXT, size_bytes INTEGER, container_sha256 TEXT, container_locator TEXT,
++        zip_member TEXT, received_at TEXT NOT NULL, frozen_at TEXT, frozen_locator TEXT,
++        source_version_date TEXT, source_version_basis TEXT,
++        artifact_id TEXT REFERENCES plan_artifact(artifact_id), snapshot_id TEXT REFERENCES plan_snapshot(snapshot_id),
++        normalization_profile_fingerprint TEXT, resolved_timezone TEXT, dedup_key TEXT,
++        status TEXT NOT NULL DEFAULT 'not_started', error_code TEXT, retryable INTEGER NOT NULL DEFAULT 0,
++        UNIQUE(batch_id,ordinal), FOREIGN KEY(lineage_id,plan_id) REFERENCES plan_lineage(lineage_id,plan_id),
++        CHECK(lineage_id IS NULL OR plan_id IS NOT NULL)
++    )""",
++    """CREATE TABLE plan_import_attempt_new (
++        attempt_id TEXT PRIMARY KEY, plan_id TEXT REFERENCES plan(plan_id),
++        lineage_id TEXT REFERENCES plan_lineage(lineage_id), source_namespace TEXT,
++        range_from TEXT, range_to TEXT, prepared_sha256 TEXT,
++        status TEXT NOT NULL DEFAULT 'not_started', created_at TEXT NOT NULL, historical_status TEXT,
++        operation_id TEXT REFERENCES plan_operation(operation_id), item_id TEXT REFERENCES plan_import_item(item_id),
++        FOREIGN KEY(lineage_id,plan_id) REFERENCES plan_lineage(lineage_id,plan_id),
++        CHECK(lineage_id IS NULL OR plan_id IS NOT NULL)
++    )""",
++    """INSERT INTO plan_import_attempt_new
++        SELECT attempt_id,plan_id,lineage_id,source_namespace,range_from,range_to,prepared_sha256,
++               status,created_at,historical_status,NULL,NULL FROM plan_import_attempt""",
++    "DROP TABLE plan_import_attempt",
++    "ALTER TABLE plan_import_attempt_new RENAME TO plan_import_attempt",
++    "CREATE INDEX idx_plan_import_attempt_plan ON plan_import_attempt(plan_id)",
++    "CREATE INDEX idx_plan_import_attempt_operation ON plan_import_attempt(operation_id)",
++    "ALTER TABLE plan_attempt_event ADD COLUMN event_kind TEXT",
++    "ALTER TABLE plan_attempt_event ADD COLUMN snapshot_id TEXT REFERENCES plan_snapshot(snapshot_id)",
++    "CREATE UNIQUE INDEX uq_item_snapshot_commit ON plan_attempt_event(event_kind,detail) WHERE event_kind='snapshot_committed'",
++)
++
++# TEXT is deliberate: decimal quantities never travel through SQLite REAL.
++VERSION_EXTRA_COLUMNS = {
++    'plan_task_version': ('source_id','parent_task_key','calendar_key','effective_calendar_key','task_mode',
++                          'duration_amount','duration_units','duration_elapsed','work_amount','work_units',
++                          'percent_complete_decimal','source_json'),
++    'plan_dependency_version': ('dependency_key','lag_amount','lag_units','lag_elapsed','calendar_basis','source_json'),
++    'plan_resource_version': ('calendar_key','base_calendar_key','max_units_decimal','cost_per_use_decimal','source_json'),
++    'plan_assignment_version': ('assignment_key','uid','units_decimal','work_amount','work_units',
++                                'effective_calendar_key','source_json'),
++    'plan_calendar_version': ('parent_key','minutes_per_day_decimal','minutes_per_week_decimal','source_json'),
++    'plan_resource_availability': ('max_units_decimal','source_json'),
++    'plan_assignment_timephased': ('work_amount','work_units','source_json'),
++    'plan_embedded_baseline_value': ('baseline_cost_decimal','source_json'),
++}
++SNAPSHOT_SEMANTICS_DDL = (
++    "ALTER TABLE plan_snapshot ADD COLUMN normalization_profile_fingerprint TEXT",
++    "ALTER TABLE plan_snapshot ADD COLUMN resolved_timezone TEXT",
++    "ALTER TABLE plan_snapshot ADD COLUMN source_mpp_sha256 TEXT",
++    "ALTER TABLE plan_snapshot ADD COLUMN dedup_key TEXT",
++    "ALTER TABLE plan_snapshot ADD COLUMN normalized_data_sha256 TEXT",
++    "ALTER TABLE plan_snapshot ADD COLUMN source_json TEXT",
++    "ALTER TABLE plan_snapshot ADD COLUMN version_counts_json TEXT",
++    "CREATE UNIQUE INDEX uq_snapshot_dedup_key ON plan_snapshot(dedup_key) WHERE dedup_key IS NOT NULL",
++    """CREATE UNIQUE INDEX uq_snapshot_semantic_scope ON plan_snapshot
++        (plan_id,lineage_id,source_mpp_sha256,representation,normalization_profile_fingerprint,resolved_timezone)
++        WHERE normalization_profile_fingerprint IS NOT NULL""",
++    # Parallel assignments to the same task/resource are independent records.
++    """CREATE TABLE plan_assignment_version_new (
++        assignment_version_id TEXT PRIMARY KEY, snapshot_id TEXT NOT NULL REFERENCES plan_snapshot(snapshot_id),
++        task_key TEXT NOT NULL, resource_key TEXT NOT NULL, units REAL, work_raw TEXT,
++        start_raw TEXT, finish_raw TEXT, actual_work_raw TEXT, remaining_work_raw TEXT, recorded_at TEXT NOT NULL
++    )""",
++    "INSERT INTO plan_assignment_version_new SELECT * FROM plan_assignment_version",
++    "DROP TABLE plan_assignment_version",
++    "ALTER TABLE plan_assignment_version_new RENAME TO plan_assignment_version",
++    "CREATE INDEX idx_plan_assignment_version_snapshot ON plan_assignment_version(snapshot_id)",
++    """CREATE TABLE plan_calendar_interval_new (
++        interval_id TEXT PRIMARY KEY, calendar_version_id TEXT NOT NULL REFERENCES plan_calendar_version(calendar_version_id),
++        interval_kind TEXT NOT NULL CHECK(interval_kind IN ('weekday','exception')),
++        day_or_date TEXT NOT NULL, working INTEGER, time_from TEXT, time_to TEXT, recorded_at TEXT NOT NULL
++    )""",
++    "INSERT INTO plan_calendar_interval_new SELECT * FROM plan_calendar_interval",
++    "DROP TABLE plan_calendar_interval",
++    "ALTER TABLE plan_calendar_interval_new RENAME TO plan_calendar_interval",
++) + tuple(f"ALTER TABLE {table} ADD COLUMN {column} " + ("INTEGER" if column in ("duration_elapsed","lag_elapsed") else "TEXT")
++          for table, columns in VERSION_EXTRA_COLUMNS.items() for column in columns) + (
++    "CREATE UNIQUE INDEX uq_assignment_source_key ON plan_assignment_version(snapshot_id,assignment_key) WHERE assignment_key IS NOT NULL",
++)
++MIGRATIONS += (
++    Migration('0007_durable_imports', IMPORT_DDL),
++    Migration('0008_snapshot_semantics', SNAPSHOT_SEMANTICS_DDL),
++)
++
++
+@@ -786,0 +893,3 @@
++        "plan_operation",
++        "plan_import_batch",
++        "plan_import_item",
+--- a/mofs_index/plan/writer.py
++++ b/mofs_index/plan/writer.py
+@@ -20 +20 @@
+-from dataclasses import dataclass
++from dataclasses import dataclass, asdict
+@@ -21,0 +22,4 @@
++from contextlib import contextmanager
++from functools import lru_cache
++from pathlib import Path
++from zoneinfo import ZoneInfo
+@@ -58,8 +62,7 @@
+-    row = conn.execute(
+-        "SELECT plan_id FROM plan WHERE project_slug = ?", (project_slug,)
+-    ).fetchone()
+-    if row:
+-        return row[0]
+-    plan_id = _new_id("plan")
+-    conn.execute("BEGIN")
+-    try:
++    with _transaction(conn):
++        row = conn.execute(
++            "SELECT plan_id FROM plan WHERE project_slug = ?", (project_slug,)
++        ).fetchone()
++        if row:
++            return row[0]
++        plan_id = _new_id("plan")
+@@ -73,6 +76 @@
+-        conn.execute("COMMIT")
+-    except Exception:
+-        conn.execute("ROLLBACK")
+-        raise
+-    return plan_id
+-
++        return plan_id
+@@ -94,10 +92,9 @@
+-    row = conn.execute(
+-        "SELECT lineage_id FROM plan_lineage "
+-        "WHERE plan_id = ? AND source_namespace = ? AND page_id IS ?",
+-        (plan_id, source_namespace, page_id),
+-    ).fetchone()
+-    if row:
+-        return row[0]
+-    lineage_id = _new_id("lineage")
+-    conn.execute("BEGIN")
+-    try:
++    with _transaction(conn):
++        row = conn.execute(
++            "SELECT lineage_id FROM plan_lineage "
++            "WHERE plan_id = ? AND source_namespace = ? AND page_id IS ?",
++            (plan_id, source_namespace, page_id),
++        ).fetchone()
++        if row:
++            return row[0]
++        lineage_id = _new_id("lineage")
+@@ -109,5 +106 @@
+-        conn.execute("COMMIT")
+-    except Exception:
+-        conn.execute("ROLLBACK")
+-        raise
+-    return lineage_id
++        return lineage_id
+@@ -119 +111,0 @@
+-
+@@ -133,9 +125,8 @@
+-    row = conn.execute(
+-        "SELECT artifact_id FROM plan_artifact WHERE raw_sha256 = ?",
+-        (raw_sha256,),
+-    ).fetchone()
+-    if row:
+-        return row[0]
+-    artifact_id = _new_id("artifact")
+-    conn.execute("BEGIN")
+-    try:
++    with _transaction(conn):
++        row = conn.execute(
++            "SELECT artifact_id FROM plan_artifact WHERE raw_sha256 = ?",
++            (raw_sha256,),
++        ).fetchone()
++        if row:
++            return row[0]
++        artifact_id = _new_id("artifact")
+@@ -147,6 +138 @@
+-        conn.execute("COMMIT")
+-    except Exception:
+-        conn.execute("ROLLBACK")
+-        raise
+-    return artifact_id
+-
++        return artifact_id
+@@ -466,0 +453,2 @@
++    baseline_cost_decimal: str | None = None
++    source_json: str | None = None
+@@ -484,2 +472,2 @@
+-    milestone: bool = False
+-    summary: bool = False
++    milestone: bool | None = False
++    summary: bool | None = False
+@@ -496,0 +485,12 @@
++    source_id: str | None = None
++    parent_task_key: str | None = None
++    calendar_key: str | None = None
++    effective_calendar_key: str | None = None
++    task_mode: str | None = None
++    duration_amount: str | None = None
++    duration_units: str | None = None
++    duration_elapsed: bool | None = None
++    work_amount: str | None = None
++    work_units: str | None = None
++    percent_complete_decimal: str | None = None
++    source_json: str | None = None
+@@ -505,0 +506,6 @@
++    dependency_key: str | None = None
++    lag_amount: str | None = None
++    lag_units: str | None = None
++    lag_elapsed: bool | None = None
++    calendar_basis: str | None = None
++    source_json: str | None = None
+@@ -520,0 +527,2 @@
++    max_units_decimal: str | None = None
++    source_json: str | None = None
+@@ -536,0 +545,5 @@
++    calendar_key: str | None = None
++    base_calendar_key: str | None = None
++    max_units_decimal: str | None = None
++    cost_per_use_decimal: str | None = None
++    source_json: str | None = None
+@@ -543,0 +557,3 @@
++    work_amount: str | None = None
++    work_units: str | None = None
++    source_json: str | None = None
+@@ -556,0 +573,7 @@
++    assignment_key: str | None = None
++    uid: str | None = None
++    units_decimal: str | None = None
++    work_amount: str | None = None
++    work_units: str | None = None
++    effective_calendar_key: str | None = None
++    source_json: str | None = None
+@@ -563 +586 @@
+-    working: bool
++    working: bool | None
+@@ -575,0 +599,4 @@
++    parent_key: str | None = None
++    minutes_per_day_decimal: str | None = None
++    minutes_per_week_decimal: str | None = None
++    source_json: str | None = None
+@@ -611,0 +639,197 @@
++    normalization_profile_fingerprint: str | None = None
++    resolved_timezone: str | None = None
++    source_mpp_sha256: str | None = None
++    normalized_data_sha256: str | None = None
++    source_json: str | None = None
++
++
++def _write_extra(conn, table, pk, value, spec):
++    from .schema import VERSION_EXTRA_COLUMNS
++    fields = {c: getattr(spec, c) for c in VERSION_EXTRA_COLUMNS[table] if getattr(spec, c) is not None}
++    if fields:
++        conn.execute(f"UPDATE {table} SET " + ",".join(f"{c}=?" for c in fields) + f" WHERE {pk}=?",
++                     (*fields.values(), value))
++
++
++@contextmanager
++def _transaction(conn):
++    if conn.in_transaction:
++        raise PlanWriterError("writer requires an idle connection; no implicit/nested commit")
++    conn.execute("BEGIN IMMEDIATE")
++    try:
++        yield
++        conn.execute("COMMIT")
++    except BaseException:
++        if conn.in_transaction:
++            conn.execute("ROLLBACK")
++        raise
++
++
++def _insert_snapshot(conn, spec, snapshot_id):
++    """SQL only. The caller owns the transaction, including item/event linkage."""
++    if spec.normalization_profile_fingerprint and not spec.tasks:
++        raise PlanWriterError("snapshot_has_no_readable_tasks")
++    now = _now()
++    conn.execute(
++        "INSERT INTO plan_snapshot(snapshot_id, plan_id, lineage_id, "
++        "source_artifact_id, representation, timezone_hint, status_date, "
++        "published_at, observed_at, recorded_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
++        (snapshot_id, spec.plan_id, spec.lineage_id, spec.source_artifact_id,
++         spec.representation, spec.timezone_hint, spec.status_date,
++         spec.published_at, spec.observed_at, now),
++    )
++
++    for col in spec.collections:
++        conn.execute(
++            "INSERT INTO plan_snapshot_collection(collection_id, snapshot_id, "
++            "collection_kind, status, count, reason, recorded_at) "
++            "VALUES (?,?,?,?,?,?,?)",
++            (_new_id("coll"), snapshot_id, col.collection_kind, col.status,
++             col.count, col.reason, now),
++        )
++
++    for task in spec.tasks:
++        task_version_id = _new_id("taskv")
++        conn.execute(
++            "INSERT INTO plan_task_version(task_version_id, snapshot_id, plan_id, "
++            "task_key, uid, wbs, name, outline_level, start_raw, finish_raw, "
++            "duration_raw, early_start, early_finish, late_start, late_finish, "
++            "percent_complete, milestone, summary, constraint_type, constraint_date, "
++            "actual_start, actual_finish, actual_duration_raw, remaining_duration_raw, "
++            "notes, quality, extensions, recorded_at) "
++            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
++            (task_version_id, snapshot_id, spec.plan_id, task.task_key, task.uid,
++             task.wbs, task.name, task.outline_level, task.start_raw, task.finish_raw,
++             task.duration_raw, task.early_start, task.early_finish, task.late_start,
++             task.late_finish, task.percent_complete, int(task.milestone) if task.milestone is not None else None,
++             int(task.summary) if task.summary is not None else None, task.constraint_type, task.constraint_date,
++             task.actual_start, task.actual_finish, task.actual_duration_raw,
++             task.remaining_duration_raw, task.notes, task.quality, task.extensions, now),
++        )
++        _write_extra(conn, "plan_task_version", "task_version_id", task_version_id, task)
++        for idx, seg in enumerate(task.segments):
++            conn.execute(
++                "INSERT INTO plan_task_segment(segment_id, task_version_id, "
++                "segment_index, start_raw, finish_raw, recorded_at) VALUES (?,?,?,?,?,?)",
++                (_new_id("seg"), task_version_id, idx, seg.start_raw, seg.finish_raw, now),
++            )
++        for bv in task.baseline_values:
++            baseline_value_id = _new_id("bv")
++            conn.execute(
++                "INSERT INTO plan_embedded_baseline_value(baseline_value_id, "
++                "task_version_id, baseline_slot, baseline_start, baseline_finish, "
++                "baseline_duration_raw, baseline_work_raw, baseline_cost, recorded_at) "
++                "VALUES (?,?,?,?,?,?,?,?,?)",
++                (baseline_value_id, task_version_id, bv.baseline_slot, bv.baseline_start,
++                 bv.baseline_finish, bv.baseline_duration_raw, bv.baseline_work_raw,
++                 bv.baseline_cost, now),
++            )
++
++            _write_extra(conn, "plan_embedded_baseline_value", "baseline_value_id", baseline_value_id, bv)
++
++    for dep in spec.dependencies:
++        dependency_version_id = _new_id("dep")
++        conn.execute(
++            "INSERT INTO plan_dependency_version(dependency_version_id, snapshot_id, "
++            "predecessor_task_key, successor_task_key, link_type, lag_raw, "
++            "lag_calendar, recorded_at) VALUES (?,?,?,?,?,?,?,?)",
++            (dependency_version_id, snapshot_id, dep.predecessor_task_key,
++             dep.successor_task_key, dep.link_type, dep.lag_raw, dep.lag_calendar, now),
++        )
++
++        _write_extra(conn, "plan_dependency_version", "dependency_version_id", dependency_version_id, dep)
++
++    for ext in spec.external_dependencies:
++        conn.execute(
++            "INSERT INTO plan_external_dependency(external_dependency_id, snapshot_id, "
++            "local_task_key, external_ref, direction, reason, recorded_at) "
++            "VALUES (?,?,?,?,?,?,?)",
++            (_new_id("extdep"), snapshot_id, ext.local_task_key, ext.external_ref,
++             ext.direction, ext.reason, now),
++        )
++
++    for res in spec.resources:
++        resource_version_id = _new_id("resv")
++        conn.execute(
++            "INSERT INTO plan_resource_version(resource_version_id, snapshot_id, "
++            "plan_id, resource_key, uid, name, type, email, resource_group, "
++            "max_units, std_rate_raw, ot_rate_raw, cost_per_use, extensions, recorded_at) "
++            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
++            (resource_version_id, snapshot_id, spec.plan_id, res.resource_key, res.uid,
++             res.name, res.type, res.email, res.resource_group, res.max_units,
++             res.std_rate_raw, res.ot_rate_raw, res.cost_per_use, res.extensions, now),
++        )
++        _write_extra(conn, "plan_resource_version", "resource_version_id", resource_version_id, res)
++        for av in res.availability:
++            availability_id = _new_id("avail")
++            conn.execute(
++                "INSERT INTO plan_resource_availability(availability_id, "
++                "resource_version_id, available_from, available_to, max_units, recorded_at) "
++                "VALUES (?,?,?,?,?,?)",
++                (availability_id, resource_version_id, av.available_from,
++                 av.available_to, av.max_units, now),
++            )
++
++            _write_extra(conn, "plan_resource_availability", "availability_id", availability_id, av)
++
++    for asg in spec.assignments:
++        assignment_version_id = _new_id("asgv")
++        conn.execute(
++            "INSERT INTO plan_assignment_version(assignment_version_id, snapshot_id, "
++            "task_key, resource_key, units, work_raw, start_raw, finish_raw, "
++            "actual_work_raw, remaining_work_raw, recorded_at) "
++            "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
++            (assignment_version_id, snapshot_id, asg.task_key, asg.resource_key,
++             asg.units, asg.work_raw, asg.start_raw, asg.finish_raw,
++             asg.actual_work_raw, asg.remaining_work_raw, now),
++        )
++        _write_extra(conn, "plan_assignment_version", "assignment_version_id", assignment_version_id, asg)
++        for tp in asg.timephased:
++            timephased_id = _new_id("tp")
++            conn.execute(
++                "INSERT INTO plan_assignment_timephased(timephased_id, "
++                "assignment_version_id, period_start, period_end, work_raw, recorded_at) "
++                "VALUES (?,?,?,?,?,?)",
++                (timephased_id, assignment_version_id, tp.period_start, tp.period_end,
++                 tp.work_raw, now),
++            )
++
++            _write_extra(conn, "plan_assignment_timephased", "timephased_id", timephased_id, tp)
++
++    for cal in spec.calendars:
++        calendar_version_id = _new_id("calv")
++        conn.execute(
++            "INSERT INTO plan_calendar_version(calendar_version_id, snapshot_id, "
++            "calendar_key, name, base_calendar_key, minutes_per_day, minutes_per_week, "
++            "recorded_at) VALUES (?,?,?,?,?,?,?,?)",
++            (calendar_version_id, snapshot_id, cal.calendar_key, cal.name,
++             cal.base_calendar_key, cal.minutes_per_day, cal.minutes_per_week, now),
++        )
++        _write_extra(conn, "plan_calendar_version", "calendar_version_id", calendar_version_id, cal)
++        for interval in cal.intervals:
++            conn.execute(
++                "INSERT INTO plan_calendar_interval(interval_id, calendar_version_id, "
++                "interval_kind, day_or_date, working, time_from, time_to, recorded_at) "
++                "VALUES (?,?,?,?,?,?,?,?)",
++                (_new_id("iv"), calendar_version_id, interval.interval_kind,
++                 interval.day_or_date, int(interval.working) if interval.working is not None else None, interval.time_from,
++                 interval.time_to, now),
++            )
++
++    for issue in spec.quality_issues:
++        conn.execute(
++            "INSERT INTO plan_quality_issue(issue_id, plan_id, lineage_id, snapshot_id, "
++            "issue_kind, severity, detail, recorded_at) VALUES (?,?,?,?,?,?,?,?)",
++            (_new_id("issue"), spec.plan_id, spec.lineage_id, snapshot_id,
++             issue.issue_kind, issue.severity, issue.detail, now),
++        )
++
++    fields = {c: getattr(spec, c) for c in (
++        "normalization_profile_fingerprint", "resolved_timezone", "source_mpp_sha256",
++        "normalized_data_sha256", "source_json") if getattr(spec, c) is not None}
++    if spec.normalization_profile_fingerprint:
++        fields["dedup_key"] = snapshot_dedup_key(spec)
++        fields["version_counts_json"] = _json(_version_counts(spec))
++    if fields:
++        conn.execute("UPDATE plan_snapshot SET " + ",".join(f"{c}=?" for c in fields) + " WHERE snapshot_id=?",
++                     (*fields.values(), snapshot_id))
+@@ -615,11 +839,7 @@
+-    """Записать полный снимок плана ОДНОЙ транзакцией (P2.SCHEMA.1-8).
+-
+-    Любая ошибка на любом шаге откатывает ВСЮ транзакцию — не остаётся
+-    полуснимка последним "полным" (AC-116). Повтор с тем же явно переданным
+-    ``spec.snapshot_id`` идемпотентен на верхнем уровне (не создаёт вторую
+-    строку ``plan_snapshot`` и не повторяет вложенные вставки)."""
+-    snapshot_id = spec.snapshot_id or _new_id("snapshot")
+-    existing = conn.execute(
+-        "SELECT snapshot_id FROM plan_snapshot WHERE snapshot_id = ?", (snapshot_id,)
+-    ).fetchone()
+-    if existing:
++    """Legacy ingest and profiled ingest share the same transaction-free inserter."""
++    with _transaction(conn):
++        snapshot_id = _find_snapshot(conn, spec)
++        if snapshot_id:
++            return snapshot_id
++        snapshot_id = spec.snapshot_id or _new_id("snapshot")
++        _insert_snapshot(conn, spec, snapshot_id)
+@@ -627,146 +846,0 @@
+-    now = _now()
+-    conn.execute("BEGIN")
+-    try:
+-        conn.execute(
+-            "INSERT INTO plan_snapshot(snapshot_id, plan_id, lineage_id, "
+-            "source_artifact_id, representation, timezone_hint, status_date, "
+-            "published_at, observed_at, recorded_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+-            (snapshot_id, spec.plan_id, spec.lineage_id, spec.source_artifact_id,
+-             spec.representation, spec.timezone_hint, spec.status_date,
+-             spec.published_at, spec.observed_at, now),
+-        )
+-
+-        for col in spec.collections:
+-            conn.execute(
+-                "INSERT INTO plan_snapshot_collection(collection_id, snapshot_id, "
+-                "collection_kind, status, count, reason, recorded_at) "
+-                "VALUES (?,?,?,?,?,?,?)",
+-                (_new_id("coll"), snapshot_id, col.collection_kind, col.status,
+-                 col.count, col.reason, now),
+-            )
+-
+-        for task in spec.tasks:
+-            task_version_id = _new_id("taskv")
+-            conn.execute(
+-                "INSERT INTO plan_task_version(task_version_id, snapshot_id, plan_id, "
+-                "task_key, uid, wbs, name, outline_level, start_raw, finish_raw, "
+-                "duration_raw, early_start, early_finish, late_start, late_finish, "
+-                "percent_complete, milestone, summary, constraint_type, constraint_date, "
+-                "actual_start, actual_finish, actual_duration_raw, remaining_duration_raw, "
+-                "notes, quality, extensions, recorded_at) "
+-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+-                (task_version_id, snapshot_id, spec.plan_id, task.task_key, task.uid,
+-                 task.wbs, task.name, task.outline_level, task.start_raw, task.finish_raw,
+-                 task.duration_raw, task.early_start, task.early_finish, task.late_start,
+-                 task.late_finish, task.percent_complete, int(task.milestone),
+-                 int(task.summary), task.constraint_type, task.constraint_date,
+-                 task.actual_start, task.actual_finish, task.actual_duration_raw,
+-                 task.remaining_duration_raw, task.notes, task.quality, task.extensions, now),
+-            )
+-            for idx, seg in enumerate(task.segments):
+-                conn.execute(
+-                    "INSERT INTO plan_task_segment(segment_id, task_version_id, "
+-                    "segment_index, start_raw, finish_raw, recorded_at) VALUES (?,?,?,?,?,?)",
+-                    (_new_id("seg"), task_version_id, idx, seg.start_raw, seg.finish_raw, now),
+-                )
+-            for bv in task.baseline_values:
+-                conn.execute(
+-                    "INSERT INTO plan_embedded_baseline_value(baseline_value_id, "
+-                    "task_version_id, baseline_slot, baseline_start, baseline_finish, "
+-                    "baseline_duration_raw, baseline_work_raw, baseline_cost, recorded_at) "
+-                    "VALUES (?,?,?,?,?,?,?,?,?)",
+-                    (_new_id("bv"), task_version_id, bv.baseline_slot, bv.baseline_start,
+-                     bv.baseline_finish, bv.baseline_duration_raw, bv.baseline_work_raw,
+-                     bv.baseline_cost, now),
+-                )
+-
+-        for dep in spec.dependencies:
+-            conn.execute(
+-                "INSERT INTO plan_dependency_version(dependency_version_id, snapshot_id, "
+-                "predecessor_task_key, successor_task_key, link_type, lag_raw, "
+-                "lag_calendar, recorded_at) VALUES (?,?,?,?,?,?,?,?)",
+-                (_new_id("dep"), snapshot_id, dep.predecessor_task_key,
+-                 dep.successor_task_key, dep.link_type, dep.lag_raw, dep.lag_calendar, now),
+-            )
+-
+-        for ext in spec.external_dependencies:
+-            conn.execute(
+-                "INSERT INTO plan_external_dependency(external_dependency_id, snapshot_id, "
+-                "local_task_key, external_ref, direction, reason, recorded_at) "
+-                "VALUES (?,?,?,?,?,?,?)",
+-                (_new_id("extdep"), snapshot_id, ext.local_task_key, ext.external_ref,
+-                 ext.direction, ext.reason, now),
+-            )
+-
+-        for res in spec.resources:
+-            resource_version_id = _new_id("resv")
+-            conn.execute(
+-                "INSERT INTO plan_resource_version(resource_version_id, snapshot_id, "
+-                "plan_id, resource_key, uid, name, type, email, resource_group, "
+-                "max_units, std_rate_raw, ot_rate_raw, cost_per_use, extensions, recorded_at) "
+-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+-                (resource_version_id, snapshot_id, spec.plan_id, res.resource_key, res.uid,
+-                 res.name, res.type, res.email, res.resource_group, res.max_units,
+-                 res.std_rate_raw, res.ot_rate_raw, res.cost_per_use, res.extensions, now),
+-            )
+-            for av in res.availability:
+-                conn.execute(
+-                    "INSERT INTO plan_resource_availability(availability_id, "
+-                    "resource_version_id, available_from, available_to, max_units, recorded_at) "
+-                    "VALUES (?,?,?,?,?,?)",
+-                    (_new_id("avail"), resource_version_id, av.available_from,
+-                     av.available_to, av.max_units, now),
+-                )
+-
+-        for asg in spec.assignments:
+-            assignment_version_id = _new_id("asgv")
+-            conn.execute(
+-                "INSERT INTO plan_assignment_version(assignment_version_id, snapshot_id, "
+-                "task_key, resource_key, units, work_raw, start_raw, finish_raw, "
+-                "actual_work_raw, remaining_work_raw, recorded_at) "
+-                "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+-                (assignment_version_id, snapshot_id, asg.task_key, asg.resource_key,
+-                 asg.units, asg.work_raw, asg.start_raw, asg.finish_raw,
+-                 asg.actual_work_raw, asg.remaining_work_raw, now),
+-            )
+-            for tp in asg.timephased:
+-                conn.execute(
+-                    "INSERT INTO plan_assignment_timephased(timephased_id, "
+-                    "assignment_version_id, period_start, period_end, work_raw, recorded_at) "
+-                    "VALUES (?,?,?,?,?,?)",
+-                    (_new_id("tp"), assignment_version_id, tp.period_start, tp.period_end,
+-                     tp.work_raw, now),
+-                )
+-
+-        for cal in spec.calendars:
+-            calendar_version_id = _new_id("calv")
+-            conn.execute(
+-                "INSERT INTO plan_calendar_version(calendar_version_id, snapshot_id, "
+-                "calendar_key, name, base_calendar_key, minutes_per_day, minutes_per_week, "
+-                "recorded_at) VALUES (?,?,?,?,?,?,?,?)",
+-                (calendar_version_id, snapshot_id, cal.calendar_key, cal.name,
+-                 cal.base_calendar_key, cal.minutes_per_day, cal.minutes_per_week, now),
+-            )
+-            for interval in cal.intervals:
+-                conn.execute(
+-                    "INSERT INTO plan_calendar_interval(interval_id, calendar_version_id, "
+-                    "interval_kind, day_or_date, working, time_from, time_to, recorded_at) "
+-                    "VALUES (?,?,?,?,?,?,?,?)",
+-                    (_new_id("iv"), calendar_version_id, interval.interval_kind,
+-                     interval.day_or_date, int(interval.working), interval.time_from,
+-                     interval.time_to, now),
+-                )
+-
+-        for issue in spec.quality_issues:
+-            conn.execute(
+-                "INSERT INTO plan_quality_issue(issue_id, plan_id, lineage_id, snapshot_id, "
+-                "issue_kind, severity, detail, recorded_at) VALUES (?,?,?,?,?,?,?,?)",
+-                (_new_id("issue"), spec.plan_id, spec.lineage_id, snapshot_id,
+-                 issue.issue_kind, issue.severity, issue.detail, now),
+-            )
+-
+-        conn.execute("COMMIT")
+-    except Exception:
+-        conn.execute("ROLLBACK")
+-        raise
+-    return snapshot_id
+@@ -1056,0 +1131,354 @@
++
++
++# Stage 03: durable receipts and one atomic snapshot/item/event boundary.
++def _json(value):
++    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
++
++
++@dataclass(frozen=True)
++class OperationSpec:
++    action: str
++    context_json: str = "{}"
++    operation_id: str | None = None
++    plan_id: str | None = None
++    lineage_id: str | None = None
++
++
++@dataclass(frozen=True)
++class ImportBatchSpec:
++    batch_id: str
++    manifest_version: int
++    manifest_json: str
++    manifest_sha256: str
++    source: str
++    context_json: str
++    on_error: str = "continue"
++    status: str = "freezing_inputs"
++
++
++@dataclass(frozen=True)
++class ImportItemSpec:
++    operation_id: str
++    original_name: str
++    original_locator: str
++    item_id: str | None = None
++    batch_id: str | None = None
++    ordinal: int = 0
++    plan_id: str | None = None
++    lineage_id: str | None = None
++    transport_json: str | None = None
++    source_mpp_sha256: str | None = None
++    size_bytes: int | None = None
++    container_sha256: str | None = None
++    container_locator: str | None = None
++    zip_member: str | None = None
++    received_at: str | None = None
++    frozen_at: str | None = None
++    frozen_locator: str | None = None
++    source_version_date: str | None = None
++    source_version_basis: str | None = None
++    normalization_profile_fingerprint: str | None = None
++    resolved_timezone: str | None = None
++    status: str = "not_started"
++    error_code: str | None = None
++    retryable: bool = False
++
++
++@dataclass(frozen=True)
++class ImportCommitResult:
++    item_id: str
++    snapshot_id: str
++    status: str
++
++
++_VERSION_COLLECTIONS = {
++    "plan_task_version": "tasks", "plan_dependency_version": "dependencies",
++    "plan_external_dependency": "external_dependencies", "plan_resource_version": "resources",
++    "plan_assignment_version": "assignments", "plan_calendar_version": "calendars",
++    "plan_snapshot_collection": "collections", "plan_quality_issue": "quality_issues",
++}
++
++
++_VERSION_CHILDREN = {
++    "plan_task_segment": ("plan_task_version","task_version_id"),
++    "plan_embedded_baseline_value": ("plan_task_version","task_version_id"),
++    "plan_resource_availability": ("plan_resource_version","resource_version_id"),
++    "plan_assignment_timephased": ("plan_assignment_version","assignment_version_id"),
++    "plan_calendar_interval": ("plan_calendar_version","calendar_version_id"),
++}
++
++
++def _version_counts(spec):
++    counts={name:len(getattr(spec,attr)) for name,attr in _VERSION_COLLECTIONS.items()}
++    counts.update(plan_task_segment=sum(len(t.segments) for t in spec.tasks),
++                  plan_embedded_baseline_value=sum(len(t.baseline_values) for t in spec.tasks),
++                  plan_resource_availability=sum(len(r.availability) for r in spec.resources),
++                  plan_assignment_timephased=sum(len(a.timephased) for a in spec.assignments),
++                  plan_calendar_interval=sum(len(c.intervals) for c in spec.calendars))
++    return counts
++
++
++@lru_cache(maxsize=512)
++def normalize_timezone(value):
++    if value is None or value == "unknown":
++        return "unknown"
++    zone = ZoneInfo(value)
++    # RHEL tzdata also represents aliases as hardlinks. Its Link records give
++    # semantic names; equal UTC offsets alone must never merge distinct zones.
++    metadata=Path("/usr/share/zoneinfo/tzdata.zi")
++    if metadata.is_file():
++        links={}
++        for line in metadata.read_text().splitlines():
++            parts=line.split()
++            if len(parts)==3 and parts[0] in ("L","Link"):
++                links[parts[2]]=parts[1]
++        canonical=zone.key
++        seen=set()
++        while canonical in links and canonical not in seen:
++            seen.add(canonical)
++            canonical=links[canonical]
++        return canonical
++    # Resolve tzdata symlink aliases (e.g. US/Eastern), independent of local TZ.
++    for root in (Path("/usr/share/zoneinfo"),):
++        candidate = root / zone.key
++        try:
++            canonical = candidate.resolve(strict=True).relative_to(root.resolve()).as_posix()
++        except (OSError, ValueError):
++            continue
++        if not canonical.startswith(("posix/", "right/")):
++            return canonical
++    return zone.key
++
++
++def snapshot_dedup_key(spec: SnapshotSpec) -> str | None:
++    if not spec.normalization_profile_fingerprint:
++        return None  # Historical snapshots are never guessed equivalent.
++    if not spec.lineage_id or not spec.source_mpp_sha256 or not spec.source_artifact_id:
++        raise PlanWriterError("profiled snapshot requires lineage, source hash and artifact")
++    if spec.resolved_timezone != normalize_timezone(spec.resolved_timezone):
++        raise PlanWriterError("resolved_timezone must be normalized IANA or unknown")
++    return hashlib.sha256(_json([spec.plan_id, spec.lineage_id, spec.source_mpp_sha256,
++                                spec.representation, spec.normalization_profile_fingerprint,
++                                spec.resolved_timezone]).encode()).hexdigest()
++
++
++def verify_artifact(conn, artifact_id, expected_sha256=None):
++    row = conn.execute("SELECT path,raw_sha256,size_bytes FROM plan_artifact WHERE artifact_id=?",
++                       (artifact_id,)).fetchone()
++    if not row:
++        raise PlanWriterError("artifact_missing")
++    path, digest, size = row
++    if expected_sha256 and digest != expected_sha256:
++        raise PlanWriterError("artifact_hash_mismatch")
++    try:
++        h = hashlib.sha256()
++        count = 0
++        with Path(path).open("rb") as source:
++            for block in iter(lambda: source.read(1024 * 1024), b""):
++                h.update(block)
++                count += len(block)
++        if h.hexdigest() != digest or (size is not None and size != count):
++            raise PlanWriterError("artifact_hash_mismatch")
++    except OSError as exc:
++        raise PlanWriterError("artifact_missing") from exc
++    return path
++
++
++def verify_snapshot(conn, snapshot_id):
++    row = conn.execute("SELECT source_artifact_id,source_mpp_sha256,version_counts_json "
++                       "FROM plan_snapshot WHERE snapshot_id=?", (snapshot_id,)).fetchone()
++    if not row:
++        raise PlanWriterError("snapshot_missing")
++    artifact, digest, counts_json = row
++    data=conn.execute("SELECT source_json,normalized_data_sha256 FROM plan_snapshot WHERE snapshot_id=?",(snapshot_id,)).fetchone()
++    if data[0] is not None and hashlib.sha256(data[0].encode()).hexdigest() != data[1]:
++        raise PlanWriterError("normalized_data_hash_mismatch")
++    verify_artifact(conn, artifact, digest)
++    if not counts_json:
++        raise PlanWriterError("snapshot_profile_unknown")
++    for table, expected in json.loads(counts_json).items():
++        if table in _VERSION_COLLECTIONS:
++            sql=f"SELECT count(*) FROM {table} WHERE snapshot_id=?"
++        elif table in _VERSION_CHILDREN:
++            parent,foreign_key=_VERSION_CHILDREN[table]
++            sql=f"SELECT count(*) FROM {table} c JOIN {parent} p USING({foreign_key}) WHERE p.snapshot_id=?"
++        else:
++            raise PlanWriterError("snapshot_invalid_counts")
++        count=conn.execute(sql,(snapshot_id,)).fetchone()[0]
++        if count != expected:
++            raise PlanWriterError("snapshot_incomplete")
++    return snapshot_id
++
++
++def _find_snapshot(conn, spec):
++    key = snapshot_dedup_key(spec)
++    if key:
++        verify_artifact(conn, spec.source_artifact_id, spec.source_mpp_sha256)
++        row = conn.execute("SELECT snapshot_id FROM plan_snapshot WHERE dedup_key=?", (key,)).fetchone()
++        if row:
++            verify_snapshot(conn, row[0])
++            return row[0]
++    if spec.snapshot_id:
++        row = conn.execute("SELECT dedup_key FROM plan_snapshot WHERE snapshot_id=?", (spec.snapshot_id,)).fetchone()
++        if row:
++            if key and row[0] != key:
++                raise PlanWriterError("snapshot_id_conflict")
++            return spec.snapshot_id
++    return None
++
++
++def create_operation(conn, spec: OperationSpec) -> str:
++    operation_id = spec.operation_id or _new_id("operation")
++    with _transaction(conn):
++        row = conn.execute("SELECT action,context_json,plan_id,lineage_id FROM plan_operation WHERE operation_id=?",
++                           (operation_id,)).fetchone()
++        values = (spec.action, spec.context_json, spec.plan_id, spec.lineage_id)
++        if row:
++            # Resolved project refs may have been filled after registration.
++            if tuple(row)[:2] != values[:2] or any(v is not None and row[i] != v for i,v in enumerate(values[2:],2)):
++                raise PlanWriterError("operation_context_conflict")
++        else:
++            conn.execute("INSERT INTO plan_operation(operation_id,action,context_json,plan_id,lineage_id,created_at) "
++                         "VALUES (?,?,?,?,?,?)", (operation_id,*values,_now()))
++    return operation_id
++
++
++def create_import_batch(conn, spec: ImportBatchSpec) -> str:
++    values = asdict(spec)
++    canonical = _json(json.loads(spec.manifest_json))
++    if hashlib.sha256(canonical.encode()).hexdigest() != spec.manifest_sha256:
++        raise PlanWriterError("batch_manifest_hash_mismatch")
++    values["manifest_json"] = canonical
++    with _transaction(conn):
++        row = conn.execute("SELECT manifest_sha256,context_json,on_error FROM plan_import_batch WHERE batch_id=?",
++                           (spec.batch_id,)).fetchone()
++        if row:
++            if tuple(row) != (spec.manifest_sha256,spec.context_json,spec.on_error):
++                raise PlanWriterError("batch_manifest_conflict")
++        else:
++            values["created_at"] = _now()
++            conn.execute("INSERT INTO plan_import_batch("+",".join(values)+") VALUES ("+",".join("?" for _ in values)+")",
++                         tuple(values.values()))
++    return spec.batch_id
++
++
++def create_import_item(conn, spec: ImportItemSpec) -> str:
++    values = asdict(spec)
++    values["item_id"] = spec.item_id or _new_id("item")
++    values["received_at"] = spec.received_at or _now()
++    with _transaction(conn):
++        row = conn.execute("SELECT * FROM plan_import_item WHERE operation_id=? OR item_id=?",
++                           (spec.operation_id,values["item_id"])).fetchone()
++        if row:
++            columns = [r[1] for r in conn.execute("PRAGMA table_info(plan_import_item)")]
++            existing = dict(zip(columns,row))
++            for name,value in values.items():
++                if name in {"item_id","received_at","status","error_code","retryable"}:
++                    continue
++                if value is not None and existing[name] != value:
++                    raise PlanWriterError("import_item_conflict")
++            return existing["item_id"]
++        conn.execute("INSERT INTO plan_import_item("+",".join(values)+") VALUES ("+",".join("?" for _ in values)+")",
++                     tuple(values.values()))
++    return values["item_id"]
++
++
++def begin_operation_attempt(conn, operation_id: str, item_id: str) -> str:
++    attempt_id = _new_id("attempt")
++    with _transaction(conn):
++        row = conn.execute("SELECT plan_id,lineage_id FROM plan_import_item WHERE item_id=? AND operation_id=?",
++                           (item_id,operation_id)).fetchone()
++        if not row:
++            raise PlanWriterError("operation_item_mismatch")
++        conn.execute("INSERT INTO plan_import_attempt(attempt_id,operation_id,item_id,plan_id,lineage_id,status,created_at) "
++                     "VALUES (?,?,?,?,?,'prepared',?)", (attempt_id,operation_id,item_id,*row,_now()))
++        _operation_event(conn,attempt_id,"attempt_started",None,item_id)
++    return attempt_id
++
++
++def _operation_event(conn, attempt_id, kind, snapshot_id, item_id, status="confirmed"):
++    event_id = "snapshot_committed:"+item_id if kind == "snapshot_committed" else _new_id("event")
++    conn.execute("INSERT INTO plan_attempt_event(event_id,attempt_id,stage,status,detail,created_at,event_kind,snapshot_id) "
++                 "VALUES (?,?,'archive',?,?,?,?,?)",
++                 (event_id,attempt_id,status,item_id,_now(),kind,snapshot_id))
++    return event_id
++
++
++def record_operation_event(conn, attempt_id: str, kind: str, *, detail: str | None = None, status="confirmed"):
++    if kind == "snapshot_committed":
++        raise PlanWriterError("snapshot_committed requires atomic commit_import_snapshot")
++    with _transaction(conn):
++        return _operation_event(conn,attempt_id,kind,None,detail,status)
++
++
++def freeze_import_item(conn, item_id: str, *, frozen_locator: str, source_mpp_sha256: str,
++                       size_bytes: int, frozen_at: str, container_sha256=None, container_locator=None,
++                       zip_member=None):
++    with _transaction(conn):
++        row = conn.execute("SELECT frozen_locator,source_mpp_sha256 FROM plan_import_item WHERE item_id=?",(item_id,)).fetchone()
++        if not row:
++            raise PlanWriterError("item_missing")
++        if row[0]:
++            if tuple(row) != (frozen_locator,source_mpp_sha256):
++                raise PlanWriterError("frozen_input_conflict")
++            return
++        conn.execute("UPDATE plan_import_item SET frozen_locator=?,source_mpp_sha256=?,size_bytes=?,frozen_at=?,"
++                     "container_sha256=?,container_locator=?,zip_member=?,status='frozen' WHERE item_id=?",
++                     (frozen_locator,source_mpp_sha256,size_bytes,frozen_at,container_sha256,container_locator,zip_member,item_id))
++
++
++def fail_import_item(conn, item_id: str, attempt_id: str, error_code: str, *, retryable=False, container_sha256=None, container_locator=None):
++    with _transaction(conn):
++        row = conn.execute("SELECT item_id FROM plan_import_attempt WHERE attempt_id=?",(attempt_id,)).fetchone()
++        if not row or row[0] != item_id:
++            raise PlanWriterError("operation_attempt_mismatch")
++        conn.execute("UPDATE plan_import_item SET status='failed',error_code=?,retryable=?,container_sha256=coalesce(?,container_sha256),container_locator=coalesce(?,container_locator) WHERE item_id=? AND snapshot_id IS NULL",
++                     (error_code,int(retryable),container_sha256,container_locator,item_id))
++        _operation_event(conn,attempt_id,"input_failed",None,error_code,"failed")
++
++
++def commit_import_snapshot(conn, item_id: str, attempt_id: str, spec: SnapshotSpec) -> ImportCommitResult:
++    """Single BEGIN IMMEDIATE: snapshot -> versions -> item -> commit event.
++
++    The DB lock serializes competing writers. No public writer is called inside
++    this transaction; process death before COMMIT leaves none of its four effects.
++    """
++    key = snapshot_dedup_key(spec)
++    if not key:
++        raise PlanWriterError("normalization_profile_required")
++    with _transaction(conn):
++        item = conn.execute("SELECT operation_id,snapshot_id,source_mpp_sha256,status FROM plan_import_item WHERE item_id=?",
++                            (item_id,)).fetchone()
++        attempt = conn.execute("SELECT operation_id,item_id FROM plan_import_attempt WHERE attempt_id=?",(attempt_id,)).fetchone()
++        if not item or not attempt or tuple(attempt) != (item[0],item_id):
++            raise PlanWriterError("operation_attempt_mismatch")
++        if item[2] != spec.source_mpp_sha256:
++            raise PlanWriterError("source_hash_mismatch")
++        if item[1]:
++            current = conn.execute("SELECT dedup_key FROM plan_snapshot WHERE snapshot_id=?",(item[1],)).fetchone()
++            if not current or current[0] != key:
++                raise PlanWriterError("committed_snapshot_conflict")
++            verify_snapshot(conn,item[1])
++            return ImportCommitResult(item_id,item[1],item[3])
++        context=conn.execute("SELECT plan_id,lineage_id FROM plan_operation WHERE operation_id=?",(item[0],)).fetchone()
++        scope=conn.execute("SELECT plan_id,lineage_id,normalization_profile_fingerprint,resolved_timezone FROM plan_import_item WHERE item_id=?",(item_id,)).fetchone()
++        target=(spec.plan_id,spec.lineage_id,spec.normalization_profile_fingerprint,spec.resolved_timezone)
++        if any(v is not None and v != target[i] for i,v in enumerate(scope)) or any(v is not None and v != target[i] for i,v in enumerate(context)):
++            raise PlanWriterError("operation_binding_conflict")
++        existing = _find_snapshot(conn,spec)
++        snapshot_id = existing or spec.snapshot_id or _new_id("snapshot")
++        if not existing:
++            _insert_snapshot(conn,spec,snapshot_id)
++        status = "unchanged" if existing else "saved_with_warnings" if spec.quality_issues or any(c.status != "complete" for c in spec.collections) else "saved"
++        conn.execute("UPDATE plan_import_item SET plan_id=?,lineage_id=?,artifact_id=?,snapshot_id=?,"
++                     "normalization_profile_fingerprint=?,resolved_timezone=?,dedup_key=?,status=?,error_code=NULL,retryable=0 WHERE item_id=?",
++                     (spec.plan_id,spec.lineage_id,spec.source_artifact_id,snapshot_id,spec.normalization_profile_fingerprint,
++                      spec.resolved_timezone,key,status,item_id))
++        conn.execute("UPDATE plan_operation SET plan_id=?,lineage_id=? WHERE operation_id=? AND (plan_id IS NULL OR plan_id=?)",
++                     (spec.plan_id,spec.lineage_id,item[0],spec.plan_id))
++        if conn.execute("SELECT changes()").fetchone()[0] != 1:
++            raise PlanWriterError("operation_binding_conflict")
++        conn.execute("UPDATE plan_import_attempt SET plan_id=?,lineage_id=?,status='confirmed' WHERE attempt_id=?",
++                     (spec.plan_id,spec.lineage_id,attempt_id))
++        _operation_event(conn,attempt_id,"snapshot_committed",snapshot_id,item_id)
++        return ImportCommitResult(item_id,snapshot_id,status)
+--- a/tests/plan/test_backup.py
++++ b/tests/plan/test_backup.py
+@@ -86,0 +87,17 @@
++
++
++def test_backup_preserves_unresolved_receipts_and_wal_events(tmp_path,src_db):
++    from mofs_index.plan import writer as w,query as q
++    conn=connect(src_db,durable=True)
++    operation=w.create_operation(conn,w.OperationSpec("save",context_json='{"frozen":"context"}'))
++    item=w.create_import_item(conn,w.ImportItemSpec(operation,"pending.mpp","/input/pending.mpp"))
++    attempt=w.begin_operation_attempt(conn,operation,item)
++    event=w.record_operation_event(conn,attempt,"input_pending")
++    dest=tmp_path/"migration-backup.sqlite"
++    assert backup_to(dest,src_db).ok
++    assert verify_backup(dest).ok
++    copy=connect(dest,read_only=True)
++    assert q.get_import_item(copy,item)==q.get_import_item(conn,item)
++    assert q.get_operation_events(copy,operation)==q.get_operation_events(conn,operation)
++    assert q.get_operation_events(copy,operation)[-1]["event_id"]==event
++    copy.close();conn.close()
+--- a/tests/plan/test_migrate.py
++++ b/tests/plan/test_migrate.py
+@@ -4,0 +5 @@
++from pathlib import Path
+@@ -34,0 +36 @@
++        "0007_durable_imports", "0008_snapshot_semantics",
+@@ -42 +44 @@
+-    assert len(rows) == 6
++    assert len(rows) == 8
+@@ -86 +88 @@
+-    assert ensure_plan_schema(conn) == ["0006_publication_trust"]
++    assert ensure_plan_schema(conn) == ["0006_publication_trust","0007_durable_imports","0008_snapshot_semantics"]
+@@ -88 +90 @@
+-        assert [tuple(r) for r in conn.execute("SELECT * FROM " + name)] == rows
++        assert [tuple(r)[:len(rows[i])] for i,r in enumerate(conn.execute("SELECT * FROM " + name))] == rows
+@@ -104,0 +107,67 @@
++
++
++def test_rebuild_failure_rolls_back_and_restores_fk(conn,monkeypatch):
++    import mofs_index.plan.migrate as migrate
++    from mofs_index.plan.schema import Migration
++    all_migrations=migrate.MIGRATIONS
++    monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations[:6]);ensure_plan_schema(conn)
++    from mofs_index.plan import writer as w
++    plan=w.ensure_plan(conn,"old-project")
++    attempt=w.begin_attempt(conn,w.AttemptSpec(plan))
++    w.record_event(conn,attempt,"archive","confirmed")
++    before=[tuple(r) for r in conn.execute("SELECT * FROM plan_import_attempt")]
++    broken=Migration(all_migrations[6].migration_id,all_migrations[6].statements[:6]+("SELECT missing_column FROM missing_table",))
++    monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations[:6]+(broken,))
++    with pytest.raises(Exception,match="missing_table"):
++        ensure_plan_schema(conn)
++    assert conn.execute("PRAGMA foreign_keys").fetchone()[0]==1
++    assert [tuple(r) for r in conn.execute("SELECT * FROM plan_import_attempt")]==before
++    assert conn.execute("SELECT count(*) FROM plan_attempt_event").fetchone()[0]==1
++    assert conn.execute("SELECT count(*) FROM plan_schema_migration").fetchone()[0]==6
++    monkeypatch.setattr(migrate,"MIGRATIONS",all_migrations)
++    assert ensure_plan_schema(conn)==["0007_durable_imports","0008_snapshot_semantics"]
++    assert conn.execute("SELECT attempt_id FROM plan_attempt_event").fetchone()[0]==attempt
++    assert not conn.execute("PRAGMA foreign_key_check").fetchall()
++
++
++def test_migration_does_not_commit_caller_transaction(conn):
++    conn.execute("BEGIN")
++    with pytest.raises(ValueError,match="idle connection"):
++        ensure_plan_schema(conn)
++    assert conn.in_transaction
++    conn.rollback()
++
++
++def test_migrate_isolated_old_backup_preserves_populated_graph(conn,tmp_path,monkeypatch):
++    import mofs_index.plan.migrate as migrate
++    from mofs_index.plan import writer as w
++    from mofs_index.plan.backup import backup_to,verify_backup
++    from tests.plan.test_writer_snapshot import _full_snapshot_spec
++    migrations=migrate.MIGRATIONS
++    monkeypatch.setattr(migrate,"MIGRATIONS",migrations[:6]);ensure_plan_schema(conn)
++    plan=w.ensure_plan(conn,"old-project")
++    lineage=w.ensure_lineage(conn,plan,"old-file-line",page_id="file-name.mpp")
++    snapshot=w.ingest_snapshot(conn,_full_snapshot_spec(plan,lineage))
++    w.select_snapshot_baseline(conn,lineage,snapshot,is_explicit=True,basis="owner")
++    w.select_plan_baseline(conn,plan,snapshot,0,is_explicit=True,basis="owner")
++    attempt=w.begin_attempt(conn,w.AttemptSpec(plan,lineage_id=lineage))
++    w.record_event(conn,attempt,"archive","confirmed")
++    from mofs_index.plan.schema import all_plan_table_names
++    tables=[t for t in all_plan_table_names() if t not in {"plan_operation","plan_import_batch","plan_import_item","plan_schema_migration","plan_fts"}]
++    before={t:[tuple(row) for row in conn.execute("SELECT * FROM "+t+" ORDER BY rowid")] for t in tables}
++    origin=Path(conn.execute("PRAGMA database_list").fetchone()[2])
++    backup=tmp_path/"old-backup.sqlite"
++    assert backup_to(backup,origin).ok and verify_backup(backup).ok
++    copy=connect(backup,durable=True)
++    monkeypatch.setattr(migrate,"MIGRATIONS",migrations)
++    assert ensure_plan_schema(copy)==["0007_durable_imports","0008_snapshot_semantics"]
++    for table,rows in before.items():
++        actual=[tuple(row) for row in copy.execute("SELECT * FROM "+table+" ORDER BY rowid")]
++        assert len(actual)==len(rows)
++        assert [row[:len(rows[i])] for i,row in enumerate(actual)]==rows
++    assert copy.execute("SELECT normalization_profile_fingerprint,dedup_key FROM plan_snapshot").fetchone()[:]==(None,None)
++    assert copy.execute("PRAGMA integrity_check").fetchone()[0]=="ok"
++    assert not copy.execute("PRAGMA foreign_key_check").fetchall()
++    assert ensure_plan_schema(copy)==[]
++    assert len(migrate.applied_migrations(conn))==6  # source old DB unchanged
++    copy.close()
+--- a/tests/plan/test_schema.py
++++ b/tests/plan/test_schema.py
+@@ -75,0 +76,13 @@
++
++
++def test_new_receipt_rows_survive_rebuild(conn_with_plan):
++    from mofs_index.plan import writer as w,query as q
++    conn=conn_with_plan
++    operation=w.create_operation(conn,w.OperationSpec("save"))
++    item=w.create_import_item(conn,w.ImportItemSpec(operation,"unknown.mpp","/unknown.mpp"))
++    attempt=w.begin_operation_attempt(conn,operation,item)
++    expected=q.get_import_item(conn,item)
++    drop_all(conn);initialize(conn);drop_docs(conn)
++    assert q.get_import_item(conn,item)==expected
++    assert q.get_attempt(conn,attempt)["plan_id"] is None
++    assert not conn.execute("PRAGMA foreign_key_check").fetchall()
+--- a/tests/plan/test_writer_snapshot.py
++++ b/tests/plan/test_writer_snapshot.py
+@@ -107,0 +108,3 @@
++    def __getattr__(self, name):
++        return getattr(self._real, name)
++
+@@ -252,0 +256,152 @@
++
++
++def _profiled_case(conn,tmp_path,*,profile="a"*64,timezone="unknown",source=b"mpp bytes"):
++    import hashlib
++    plan=w.ensure_plan(conn,"archive-project")
++    lineage=w.ensure_lineage(conn,plan,"local-archive-v1")
++    path=tmp_path/(hashlib.sha256(source).hexdigest()+".mpp");path.write_bytes(source)
++    sha=hashlib.sha256(source).hexdigest()
++    artifact=w.record_artifact(conn,sha,"mpp",str(path),size_bytes=len(source))
++    op=w.create_operation(conn,w.OperationSpec("save"))
++    item=w.create_import_item(conn,w.ImportItemSpec(op,"original.mpp","/original.mpp",source_mpp_sha256=sha))
++    attempt=w.begin_operation_attempt(conn,op,item)
++    spec=w.SnapshotSpec(plan, "mpp",lineage_id=lineage,source_artifact_id=artifact,source_mpp_sha256=sha,
++        normalization_profile_fingerprint=profile,resolved_timezone=timezone,
++        tasks=(w.TaskVersionSpec("t",duration_amount="0.123456789012345678901",duration_units="HOURS"),),
++        collections=(w.CollectionStatusSpec("tasks","complete",1),))
++    return item,attempt,spec,path
++
++
++def test_atomic_import_records_link_event_and_decimal(conn,tmp_path):
++    from mofs_index.plan import query as q
++    item,attempt,spec,_=_profiled_case(conn,tmp_path)
++    result=w.commit_import_snapshot(conn,item,attempt,spec)
++    assert result.status=="saved"
++    assert q.get_committed_import(conn,item)["snapshot"]["dedup_key"]==w.snapshot_dedup_key(spec)
++    row=conn.execute("SELECT duration_amount,typeof(duration_amount) FROM plan_task_version").fetchone()
++    assert tuple(row)==("0.123456789012345678901","text")
++    assert w.commit_import_snapshot(conn,item,attempt,spec)==result
++
++
++def test_dedup_scope_and_legacy_exclusion(conn,tmp_path):
++    from dataclasses import replace
++    item,attempt,spec,_=_profiled_case(conn,tmp_path)
++    legacy=w.ingest_snapshot(conn,w.SnapshotSpec(spec.plan_id,"mpp",lineage_id=spec.lineage_id,source_artifact_id=spec.source_artifact_id))
++    first=w.commit_import_snapshot(conn,item,attempt,spec)
++    assert first.snapshot_id!=legacy
++    for profile,zone,same in [("a"*64,"unknown",True),("b"*64,"unknown",False),("a"*64,"Europe/Moscow",False)]:
++        other,attempt2,second,_=_profiled_case(conn,tmp_path,profile=profile,timezone=zone)
++        result=w.commit_import_snapshot(conn,other,attempt2,second)
++        assert (result.snapshot_id==first.snapshot_id) is same
++        assert (result.status=="unchanged") is same
++    key=conn.execute("SELECT dedup_key FROM plan_snapshot WHERE snapshot_id=?",(legacy,)).fetchone()[0]
++    assert key is None
++
++
++@pytest.mark.parametrize("damage",["artifact","missing","versions","normalized"])
++def test_corrupt_existing_snapshot_not_successful_duplicate(conn,tmp_path,damage):
++    item,attempt,spec,path=_profiled_case(conn,tmp_path)
++    w.commit_import_snapshot(conn,item,attempt,spec)
++    other,attempt2,second,_=_profiled_case(conn,tmp_path)
++    if damage=="artifact":
++        path.write_bytes(b"corrupt")
++    elif damage=="missing":
++        path.unlink()
++    elif damage=="versions":
++        conn.execute("DELETE FROM plan_task_version");conn.commit()
++    else:
++        conn.execute("UPDATE plan_snapshot SET source_json='corrupt'");conn.commit()
++    with pytest.raises(w.PlanWriterError):
++        w.commit_import_snapshot(conn,other,attempt2,second)
++    assert conn.execute("SELECT snapshot_id FROM plan_import_item WHERE item_id=?",(other,)).fetchone()[0] is None
++
++
++def test_atomic_import_failure_rolls_back_item_and_event(conn,tmp_path):
++    item,attempt,spec,_=_profiled_case(conn,tmp_path)
++    flaky=_FlakyConnProxy(conn,"INSERT INTO plan_attempt_event")
++    with pytest.raises(RuntimeError):
++        w.commit_import_snapshot(flaky,item,attempt,spec)
++    assert conn.execute("SELECT count(*) FROM plan_snapshot").fetchone()[0]==0
++    assert conn.execute("SELECT snapshot_id FROM plan_import_item WHERE item_id=?",(item,)).fetchone()[0] is None
++    assert conn.execute("SELECT count(*) FROM plan_attempt_event WHERE event_kind='snapshot_committed'").fetchone()[0]==0
++    assert not conn.in_transaction
++
++
++def test_nested_transaction_is_not_committed(conn,tmp_path):
++    item,attempt,spec,_=_profiled_case(conn,tmp_path)
++    conn.execute("BEGIN")
++    with pytest.raises(w.PlanWriterError,match="idle connection"):
++        w.commit_import_snapshot(conn,item,attempt,spec)
++    assert conn.in_transaction
++    conn.rollback()
++
++
++def test_full_export_v2_lossless_exact_fields_and_parallel_assignments(conn,tmp_path):
++    import json
++    from mofs_index.plan.ingest_mpp import build_snapshot_spec
++    field=lambda v:{"value":v,"quality":"ok"}
++    quantity={"amount":"-0.123456789012345678901","units":"ELAPSED_HOURS","source_units":"eh","elapsed":True}
++    duration={"value":"-0.123456789012345678901 eh","quantity":quantity,"quality":"ok"}
++    export={"tasks":[{"task_key":"t","id":0,"uid":1,"parent_task_key":field(None),"calendar_key":field("c"),
++                       "duration":duration,"segments":field([{"start":"2026-01-01","finish":"2026-01-02"}]),
++                       "baseline_values":[{"slot":0,"duration":quantity,"cost":"1.00000000000000001"}]}],
++        "dependencies":[{"predecessor_task_key":"t","successor_task_key":"t","link_type":"SF","lag_value":field(quantity),"lag":"-.1 eh"}],
++        "resources":[{"resource_key":"r","max_units":field("12.00000000000000001"),"calendar_key":field("c")}],
++        "assignments":[{"assignment_key":key,"task_key":"t","resource_key":"r","units":field("33.3333333333333333333"),"work":duration,
++                        "timephased":[{"period_start":field("2026-01-01"),"period_end":field("2026-01-02"),"work":duration}]} for key in ("a1","a2")],
++        "calendars":[{"calendar_key":"c","parent_key":field("base"),"weekdays":[{"day":"MON","working":field(True),
++            "intervals":field([{"start":"08:00","end":"12:00"},{"start":"13:00","end":"17:00"}])}],
++            "exceptions":[{"from_date":field("2026-01-01"),"to_date":field("2026-01-01"),"working":field(False),"intervals":field([])}],
++            "work_weeks":[{"name":"special"}]}],"project":{"conversion":{"minutes_per_day":field("480")}}}
++    item,attempt,base,_=_profiled_case(conn,tmp_path)
++    spec=build_snapshot_spec(export,plan_id=base.plan_id,lineage_id=base.lineage_id,source_artifact_id=base.source_artifact_id,
++        source_mpp_sha256=base.source_mpp_sha256,normalization_profile_fingerprint="a"*64)
++    result=w.commit_import_snapshot(conn,item,attempt,spec)
++    assert conn.execute("SELECT duration_amount FROM plan_task_version").fetchone()[0]==quantity["amount"]
++    assert conn.execute("SELECT lag_amount FROM plan_dependency_version").fetchone()[0]==quantity["amount"]
++    assert conn.execute("SELECT count(*) FROM plan_assignment_version").fetchone()[0]==2
++    assert conn.execute("SELECT units_decimal FROM plan_assignment_version LIMIT 1").fetchone()[0]=="33.3333333333333333333"
++    assert conn.execute("SELECT count(*) FROM plan_calendar_interval").fetchone()[0]==3
++    assert json.loads(conn.execute("SELECT source_json FROM plan_calendar_version").fetchone()[0])==export["calendars"][0]
++    assert json.loads(conn.execute("SELECT source_json FROM plan_snapshot WHERE snapshot_id=?",(result.snapshot_id,)).fetchone()[0])==export
++    assert conn.execute("SELECT baseline_cost_decimal FROM plan_embedded_baseline_value").fetchone()[0]=="1.00000000000000001"
++    assert conn.execute("SELECT work_amount FROM plan_assignment_timephased LIMIT 1").fetchone()[0]==quantity["amount"]
++
++
++def test_snapshot_normalization_fingerprint_includes_runtime_and_profile():
++    from copy import deepcopy
++    from mofs_index.plan.ingest_mpp import build_snapshot_spec
++    data={"normalized_data":{"normalization":{"id":"normalization-v1","fingerprint":"profile-sha"},
++        "source_identity":{"sha256":"a"*64,"reader":"v2","mpxj":"16.4","jpype":"1.7"},"export_version":"full-export-v2"},"schema_version":1}
++    first=build_snapshot_spec(data,plan_id="p")
++    changed=deepcopy(data);changed["normalized_data"]["source_identity"]["mpxj"]="17"
++    assert build_snapshot_spec(changed,plan_id="p").normalization_profile_fingerprint!=first.normalization_profile_fingerprint
++    changed=deepcopy(data);changed["normalized_data"]["normalization"]["fingerprint"]="other"
++    assert build_snapshot_spec(changed,plan_id="p").normalization_profile_fingerprint!=first.normalization_profile_fingerprint
++    assert w.normalize_timezone(None)=="unknown"
++    assert w.normalize_timezone("US/Eastern")=="America/New_York"
++
++
++def test_import_preserves_nonempty_baseline_selections(conn,tmp_path):
++    item,attempt,spec,_=_profiled_case(conn,tmp_path)
++    old=w.ingest_snapshot(conn,w.SnapshotSpec(spec.plan_id,"mpp",lineage_id=spec.lineage_id))
++    w.select_snapshot_baseline(conn,spec.lineage_id,old,is_explicit=True,basis="owner")
++    w.select_plan_baseline(conn,spec.plan_id,old,0,is_explicit=True,basis="owner")
++    tables=("plan_baseline_selection","plan_snapshot_selection")
++    before={t:[tuple(r) for r in conn.execute("SELECT * FROM "+t)] for t in tables}
++    w.commit_import_snapshot(conn,item,attempt,spec)
++    assert all(before.values())
++    assert {t:[tuple(r) for r in conn.execute("SELECT * FROM "+t)] for t in tables}==before
++
++
++def test_missing_boolean_and_known_false_are_distinct(conn,tmp_path):
++    from mofs_index.plan.ingest_mpp import build_snapshot_spec
++    item,attempt,base,_=_profiled_case(conn,tmp_path)
++    export={"tasks":[{"task_key":"missing","milestone":None,"summary":False}],
++        "calendars":[{"calendar_key":"c","weekdays":[{"day":"MON","working":{"value":None,"quality":"unsupported"}},
++            {"day":"TUE","working":{"value":False,"quality":"ok"}}]}]}
++    spec=build_snapshot_spec(export,plan_id=base.plan_id,lineage_id=base.lineage_id,source_artifact_id=base.source_artifact_id,
++        source_mpp_sha256=base.source_mpp_sha256,normalization_profile_fingerprint="a"*64)
++    w.commit_import_snapshot(conn,item,attempt,spec)
++    assert tuple(conn.execute("SELECT milestone,summary FROM plan_task_version").fetchone())==(None,0)
++    assert [row[0] for row in conn.execute("SELECT working FROM plan_calendar_interval ORDER BY day_or_date")]==[None,0]

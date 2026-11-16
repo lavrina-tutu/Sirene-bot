@@ -1,0 +1,75 @@
+{
+  "gate": "passed",
+  "migrations": {
+    "unchanged_0001_0006": true,
+    "method": "AST equality of all original module declarations; no evidence imports",
+    "checksums": {
+      "0001_phase0_baseline": "a9ce2ecb6cb563fc9292049c1581f2f1e28cb1522b166f979199373e2a779d95",
+      "0002_phase1_core": "1f03e5b2d749d565af38821253a3f22ffb8b5beb61ad8fc4dde4a4430946fe3d",
+      "0003_phase2_snapshot": "43d1fc5a2b0eec5ccf520401744ea2c215bfcd7173546df6183e105f7f15f649",
+      "0004_phase3_analysis": "9d6211117c512c552926f565d60aef838bafa64018cffc3a3d6c32754e5af2a8",
+      "0005_phase3_fts": "c8aa5aadda2af4b513d729e730d07a5fefb4df320241eaee2789e49a6a2ebd0b",
+      "0006_publication_trust": "619860451d482c22fe7e14b7e8e472c1a00821c1f310a9824818dfa89ba53e98",
+      "0007_durable_imports": "8d8929429bd938f332cb6c355da8212118aae1468073bddd02c4d98b9397afb1",
+      "0008_snapshot_semantics": "ef5a126cb32f8642db021c49ac18e1a47004950661ef85a19897871c85456362"
+    }
+  },
+  "delivery": {
+    "patch_rc": 0,
+    "files_verified": 9,
+    "after_copy_verified": true
+  },
+  "bundle_manifest_sha256": "223bc8158ccd8e79f3611cd12c59bfbb6695e721c0975c179f491270865d014a",
+  "preservation": {
+    "stage01_mofs_initial_matches": true,
+    "stage01_stage02_evidence_unchanged": true,
+    "MppReader_files_unchanged": 5,
+    "EcosystemConfig_and_schema_unchanged": true,
+    "mofs_db_render_backup_unchanged": true
+  },
+  "mofs_required": {
+    "command": {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "tests/plan/test_schema.py",
+        "tests/plan/test_migrate.py",
+        "tests/plan/test_writer_snapshot.py",
+        "tests/plan/test_backup.py",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage03-141956/stage-03/mofs-required",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage03-141956/stage-03/reports/mofs-required-junit.xml",
+        "-q",
+        "--tb=short"
+      ],
+      "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+      "rc": 0,
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+    },
+    "passed": 43,
+    "failed": 0,
+    "skipped": 0,
+    "junit": "mofs-required-junit.xml"
+  },
+  "mofs_regression": {
+    "command": {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "tests/plan",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage03-141956/stage-03/mofs-regression",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage03-141956/stage-03/reports/mofs-regression-junit.xml",
+        "-q",
+        "--tb=short"
+      ],
+      "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+      "rc": 0,
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+    },
+    "passed": 82,
+    "failed": 0,
+    "skipped": 0,
+    "junit": "mofs-regression-junit.xml"
+  }
+}

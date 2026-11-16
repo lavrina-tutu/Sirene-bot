@@ -1,0 +1,14 @@
+{
+  "command": [
+    "patch",
+    "--batch",
+    "--forward",
+    "-p1",
+    "-i",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-03/usertools/MofsIndex/changes.patch"
+  ],
+  "rc": 0,
+  "files_verified": 9,
+  "patch_sha256": "70c6084ebd1595820c6950e4bf007a38f185fbf1382bb4b6d4d733f2bd5aa56e",
+  "note": "zero context avoids trailing-whitespace diagnostics on embedded unified diff context lines"
+}

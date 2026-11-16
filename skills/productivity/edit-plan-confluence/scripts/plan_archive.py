@@ -10,7 +10,9 @@
 from __future__ import annotations
 
 import hashlib
-import shutil
+import os
+import re
+import tempfile
 import sqlite3
 import sys
 from pathlib import Path
@@ -22,6 +24,7 @@ if str(MOFS_INDEX_ROOT) not in sys.path:
     sys.path.insert(0, str(MOFS_INDEX_ROOT))
 
 from mofs_index.db import DEFAULT_DB_PATH, connect_durable  # noqa: E402
+from mofs_index.plan import query as plan_query
 from mofs_index.plan import writer as plan_writer  # noqa: E402
 
 CONFLUENCE_NAMESPACE = "confluence:dom.tutu.ru"
@@ -43,55 +46,47 @@ def _connect(db_path: Path | None = None) -> sqlite3.Connection:
     return connect_durable(db_path or get_plan_db_path())
 
 
-def resolve_plan_binding(
-    page_id: str,
-    project_slug: str | None = None,
-    *,
-    db_path: Path | None = None,
-    conn: sqlite3.Connection | None = None,
-) -> dict[str, str]:
-    """Разрешить ``plan_id``/``lineage_id`` по ``pageId``.
+def _safe_component(value: str) -> str:
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*",value) or ".." in value:
+        raise PlanBindingError("invalid_project_slug_or_plan_key")
+    return value
 
-    При первом вызове для нового ``pageId`` создаёт ``plan``+``plan_lineage``
-    **только если** ``project_slug`` передан явно (R-007 §4.2: привязка не
-    угадывается по internal title MPP). Повторный вызов с тем же ``page_id``
-    возвращает уже созданную привязку независимо от переданного
-    ``project_slug`` (идемпотентность по UQ).
-    """
-    own_conn = conn is None
-    c = conn or _connect(db_path)
+
+def resolve_plan_binding(page_id: str | None, project_slug: str | None = None, *,
+                         lineage_id: str | None = None, db_path: Path | None = None,
+                         conn: sqlite3.Connection | None = None) -> dict[str,str]:
+    if project_slug is not None:
+        _safe_component(project_slug)
+    own_conn=conn is None
+    c=conn or _connect(db_path)
     try:
-        row = c.execute(
-            "SELECT lineage_id, plan_id FROM plan_lineage WHERE page_id = ? "
-            "AND source_namespace = ?",
-            (page_id, CONFLUENCE_NAMESPACE),
-        ).fetchone()
-        if row:
-            lineage_id, plan_id = row
-            slug_row = c.execute(
-                "SELECT project_slug FROM plan WHERE plan_id = ?", (plan_id,)
-            ).fetchone()
-            return {
-                "plan_id": plan_id,
-                "lineage_id": lineage_id,
-                "project_slug": slug_row[0] if slug_row else None,
-            }
+        from mofs_index.plan.migrate import ensure_plan_schema
+        ensure_plan_schema(c)
+        bindings=plan_query.page_bindings(c,page_id,CONFLUENCE_NAMESPACE) if page_id else []
+        if len(bindings)>1:
+            raise PlanBindingError("binding_conflict: contradictory page bindings")
+        if bindings:
+            binding=bindings[0]
+            if project_slug is not None and binding["project_slug"] != project_slug:
+                raise PlanBindingError("binding_conflict: explicit project differs from page binding")
+            if lineage_id and binding["lineage_id"] != lineage_id:
+                raise PlanBindingError("binding_conflict: explicit lineage differs from page binding")
+            return binding
         if not project_slug:
-            raise PlanBindingError(
-                f"Нет привязки plan/lineage для pageId={page_id}; "
-                "project_slug должен быть указан явно до первого архивного "
-                "commit (R-007 §4.2: не угадывается по заголовку MPP)."
-            )
-        plan_id = plan_writer.ensure_plan(
-            c,
-            project_slug,
-            name=project_slug,
-            md_path=f"Entities/{project_slug}/Pages/{project_slug}.ganttchart.md",
-        )
-        lineage_id = plan_writer.ensure_lineage(
-            c, plan_id, CONFLUENCE_NAMESPACE, page_id=page_id, basis="explicit",
-        )
-        return {"plan_id": plan_id, "lineage_id": lineage_id, "project_slug": project_slug}
+            raise PlanBindingError("project_slug_required")
+        plan_id=plan_writer.ensure_plan(c,project_slug,name=project_slug,
+            md_path=f"Entities/{project_slug}/Pages/{project_slug}.ganttchart.md")
+        if lineage_id:
+            row=plan_query.get_lineage(c,lineage_id)
+            if not row or row["plan_id"] != plan_id:
+                raise PlanBindingError("binding_conflict: lineage belongs to another project")
+            if page_id and (row["page_id"] != page_id or row["source_namespace"] != CONFLUENCE_NAMESPACE):
+                raise PlanBindingError("binding_conflict: lineage page differs")
+        else:
+            # A fresh stable local archive line; legacy filename-based lines remain intact.
+            lineage_id=plan_writer.ensure_lineage(c,plan_id,CONFLUENCE_NAMESPACE if page_id else "local-archive-v1",
+                                                page_id=page_id,basis="explicit" if page_id else "project_archive_v1")
+        return {"plan_id":plan_id,"lineage_id":lineage_id,"project_slug":project_slug}
     finally:
         if own_conn:
             c.close()
@@ -117,6 +112,7 @@ def store_artifact(
     ext: str | None = None,
     db_path: Path | None = None,
     conn: sqlite3.Connection | None = None,
+    workvault: Path | None = None,
 ) -> tuple[str, str]:
     """Сохранить артефакт content-addressed путём и зарегистрировать его в SQL.
 
@@ -129,24 +125,45 @@ def store_artifact(
         data = path_or_bytes
     sha256 = hashlib.sha256(data).hexdigest()
 
-    plan_key = plan_key or f"{project_slug}.ganttchart"
-    archive_dir = get_workvault_path() / "Entities" / project_slug / "Sources" / "plans" / plan_key / "artifacts"
-    archive_dir.mkdir(parents=True, exist_ok=True)
-    extension = _ext_for_kind(kind, ext)
-    dest = archive_dir / f"{sha256}.{extension}"
-    if not dest.exists():
-        if isinstance(path_or_bytes, (str, Path)):
-            shutil.copy2(path_or_bytes, dest)
-        else:
-            dest.write_bytes(data)
-
-    own_conn = conn is None
-    c = conn or _connect(db_path)
+    project_slug=_safe_component(project_slug)
+    plan_key=_safe_component(plan_key or f"{project_slug}.ganttchart")
+    archive_dir=(Path(workvault) if workvault is not None else get_workvault_path())/"Entities"/project_slug/"Sources"/"plans"/plan_key/"artifacts"
+    extension=_safe_component(_ext_for_kind(kind,ext))
+    own_conn=conn is None
+    c=conn or _connect(db_path)
     try:
-        artifact_id = plan_writer.record_artifact(
-            c, sha256, kind, str(dest), format=extension, size_bytes=len(data),
-        )
+        from mofs_index.plan.migrate import ensure_plan_schema
+        ensure_plan_schema(c)
+        existing=plan_query.find_artifact_by_hash(c,sha256)
+        if existing:
+            plan_writer.verify_artifact(c,existing["artifact_id"],sha256)
+            return existing["artifact_id"],sha256
+        archive_dir.mkdir(parents=True,exist_ok=True)
+        dest=archive_dir/f"{sha256}.{extension}"
+        if dest.exists():
+            if hashlib.sha256(dest.read_bytes()).hexdigest() != sha256:
+                raise plan_writer.PlanWriterError("artifact_hash_mismatch")
+        else:
+            fd,name=tempfile.mkstemp(prefix=".artifact-",dir=archive_dir)
+            temp=Path(name)
+            try:
+                with os.fdopen(fd,"wb") as target:
+                    target.write(data)
+                    target.flush()
+                    os.fsync(target.fileno())
+                # Hard-link installs without overwriting any concurrent winner.
+                try:
+                    os.link(temp,dest)
+                except FileExistsError:
+                    if hashlib.sha256(dest.read_bytes()).hexdigest() != sha256:
+                        raise plan_writer.PlanWriterError("artifact_hash_mismatch")
+                from mpp_input import _sync_dir
+                _sync_dir(archive_dir)
+            finally:
+                temp.unlink(missing_ok=True)
+        artifact_id=plan_writer.record_artifact(c,sha256,kind,str(dest),format=extension,size_bytes=len(data))
+        plan_writer.verify_artifact(c,artifact_id,sha256)
+        return artifact_id,sha256
     finally:
         if own_conn:
             c.close()
-    return artifact_id, sha256

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-m",
+    "pytest",
+    "tests/plan",
+    "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage03-141956/stage-03/mofs-regression",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage03-141956/stage-03/reports/mofs-regression-junit.xml",
+    "-q",
+    "--tb=short"
+  ],
+  "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+  "rc": 0,
+  "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+}

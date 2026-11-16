@@ -16,6 +16,7 @@ MOFS_INDEX_ROOT = Path.home() / "USERTOOLS" / "MofsIndex"
 if str(MOFS_INDEX_ROOT) not in sys.path:
     sys.path.insert(0, str(MOFS_INDEX_ROOT))
 
+from mofs_index.plan import query as plan_query
 from mofs_index.plan import writer as plan_writer  # noqa: E402
 
 from plan_archive import _connect  # noqa: E402
@@ -32,21 +33,12 @@ class ReconcileOutcome:
 
 
 def _attempt_row(c: sqlite3.Connection, attempt_id: str) -> dict | None:
-    row = c.execute(
-        "SELECT attempt_id, plan_id, lineage_id, prepared_sha256 "
-        "FROM plan_import_attempt WHERE attempt_id = ?",
-        (attempt_id,),
-    ).fetchone()
-    if not row:
-        return None
-    return {"attempt_id": row[0], "plan_id": row[1], "lineage_id": row[2], "prepared_sha256": row[3]}
+    return plan_query.get_attempt(c,attempt_id)
 
 
 def _lineage_page_id(c: sqlite3.Connection, lineage_id: str | None) -> str | None:
-    if not lineage_id:
-        return None
-    row = c.execute("SELECT page_id FROM plan_lineage WHERE lineage_id = ?", (lineage_id,)).fetchone()
-    return row[0] if row else None
+    row=plan_query.get_lineage(c,lineage_id) if lineage_id else None
+    return row["page_id"] if row else None
 
 
 def reconcile_attempt(
@@ -118,3 +110,27 @@ def reconcile_attempt(
     finally:
         if own_conn:
             c.close()
+
+
+def reconcile_import(conn: sqlite3.Connection, item_id: str, *, receipt_writer=None) -> dict | None:
+    """Committed link first, then archive read-back. No parser/reimport fallback.
+
+    A read-back or mirror failure propagates with the committed IDs retained in
+    MofsIndex. Callers must repair identical archived bytes and retry this read.
+    """
+    committed=plan_query.get_committed_import(conn,item_id)
+    if committed is None:
+        return None
+    item,snapshot=committed["item"],committed["snapshot"]
+    plan_writer.verify_snapshot(conn,item["snapshot_id"])
+    if not snapshot:
+        raise plan_writer.PlanWriterError("snapshot_missing")
+    source=snapshot.get("source_json")
+    expected=snapshot.get("normalized_data_sha256")
+    if source is not None and hashlib.sha256(source.encode()).hexdigest() != expected:
+        raise plan_writer.PlanWriterError("normalized_data_hash_mismatch")
+    result={"operation_id":item["operation_id"],"item_id":item_id,"snapshot_id":item["snapshot_id"],
+            "status":item["status"],"verification":{"archive":"verified"},"published":False,"external_effect":"none"}
+    if receipt_writer:
+        receipt_writer(result)
+    return result

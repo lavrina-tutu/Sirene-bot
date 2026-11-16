@@ -114,3 +114,12 @@ def test_reconcile_writes_event_and_receipt(conn, tmp_path):
         "SELECT stage, status FROM plan_attempt_event WHERE attempt_id=?", (attempt_id,)
     ).fetchall()
     assert ("attachment_verify", "confirmed") in [tuple(r) for r in events]
+
+
+def test_import_reconcile_missing_link_is_not_reimported(conn):
+    from mofs_index.plan import query as q
+    operation=plan_writer.create_operation(conn,plan_writer.OperationSpec("save"))
+    item=plan_writer.create_import_item(conn,plan_writer.ImportItemSpec(operation,"unbound.mpp","/unbound.mpp"))
+    assert pr.reconcile_import(conn,item) is None
+    assert q.get_import_item(conn,item)["snapshot_id"] is None
+    assert conn.execute("SELECT count(*) FROM plan_snapshot").fetchone()[0]==0

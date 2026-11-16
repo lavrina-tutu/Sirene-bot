@@ -1,0 +1,16 @@
+{
+  "python": "/usr/bin/python3.9",
+  "python_version": "3.9.25",
+  "sqlite": "3.34.1",
+  "versions": {
+    "pytest": "8.4.2",
+    "mpxj": "16.4.0",
+    "JPype1": "1.7.1",
+    "jsonschema": "4.25.1"
+  },
+  "java_version_rc": 0,
+  "java_version": "openjdk version \"17.0.17\" 2025-10-21 LTS\nOpenJDK Runtime Environment (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS)\nOpenJDK 64-Bit Server VM (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS, mixed mode, sharing)",
+  "tzdata": "# version 2025c-rearguard",
+  "PYTHONPATH": null,
+  "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage03-141956/stage-03"
+}

@@ -74,3 +74,47 @@ def test_store_artifact_dedup_survives_tmp_deletion(conn, tmp_path):
     assert sha2 == sha
     count = conn.execute("SELECT COUNT(*) FROM plan_artifact").fetchone()[0]
     assert count == 1
+
+
+def test_explicit_slug_and_contradictory_bindings_rejected(conn):
+    from mofs_index.plan import writer as w
+    binding=pa.resolve_plan_binding("page","one",conn=conn)
+    with pytest.raises(pa.PlanBindingError,match="binding_conflict"):
+        pa.resolve_plan_binding("page","two",conn=conn)
+    other=w.ensure_plan(conn,"two")
+    w.ensure_lineage(conn,other,pa.CONFLUENCE_NAMESPACE,page_id="page")
+    with pytest.raises(pa.PlanBindingError,match="contradictory"):
+        pa.resolve_plan_binding("page",conn=conn)
+    with pytest.raises(pa.PlanBindingError,match="invalid_project"):
+        pa.resolve_plan_binding(None,"../escape",conn=conn)
+
+
+def test_stable_local_lineage_preserves_old_filename_lines(conn):
+    from mofs_index.plan import writer as w
+    plan=w.ensure_plan(conn,"project")
+    old=w.ensure_lineage(conn,plan,"local-save",page_id="save:project:old-file")
+    first=pa.resolve_plan_binding(None,"project",conn=conn)
+    second=pa.resolve_plan_binding(None,"project",conn=conn)
+    assert first==second and first["lineage_id"]!=old
+    assert conn.execute("SELECT count(*) FROM plan_lineage").fetchone()[0]==2
+    with pytest.raises(pa.PlanBindingError,match="another project"):
+        pa.resolve_plan_binding(None,"other",lineage_id=old,conn=conn)
+
+
+def test_artifact_corruption_is_not_duplicate_success(conn,tmp_path):
+    from mofs_index.plan import query as q,writer as w
+    artifact,sha=pa.store_artifact(b"archived","mpp",project_slug="project",conn=conn,workvault=tmp_path/"override")
+    path=Path(q.get_artifact(conn,artifact)["path"])
+    assert tmp_path/"override" in path.parents
+    path.write_bytes(b"damaged")
+    with pytest.raises(w.PlanWriterError,match="artifact_hash_mismatch"):
+        pa.store_artifact(b"archived","mpp",project_slug="project",conn=conn,workvault=tmp_path/"override")
+    assert path.read_bytes()==b"damaged"
+
+
+def test_same_filename_different_bytes_get_different_objects(conn,tmp_path):
+    source=tmp_path/"same.mpp";source.write_bytes(b"first")
+    first=pa.store_artifact(source,"mpp",project_slug="project",conn=conn)
+    source.write_bytes(b"second")
+    second=pa.store_artifact(source,"mpp",project_slug="project",conn=conn)
+    assert first[0]!=second[0] and first[1]!=second[1]

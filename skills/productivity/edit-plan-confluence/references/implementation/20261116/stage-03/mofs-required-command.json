@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-m",
+    "pytest",
+    "tests/plan/test_schema.py",
+    "tests/plan/test_migrate.py",
+    "tests/plan/test_writer_snapshot.py",
+    "tests/plan/test_backup.py",
+    "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage03-141956/stage-03/mofs-required",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage03-141956/stage-03/reports/mofs-required-junit.xml",
+    "-q",
+    "--tb=short"
+  ],
+  "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+  "rc": 0,
+  "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+}

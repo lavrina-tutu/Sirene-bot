@@ -1,0 +1,14 @@
+{
+  "unchanged_0001_0006": true,
+  "method": "AST equality of all original module declarations; no evidence imports",
+  "checksums": {
+    "0001_phase0_baseline": "a9ce2ecb6cb563fc9292049c1581f2f1e28cb1522b166f979199373e2a779d95",
+    "0002_phase1_core": "1f03e5b2d749d565af38821253a3f22ffb8b5beb61ad8fc4dde4a4430946fe3d",
+    "0003_phase2_snapshot": "43d1fc5a2b0eec5ccf520401744ea2c215bfcd7173546df6183e105f7f15f649",
+    "0004_phase3_analysis": "9d6211117c512c552926f565d60aef838bafa64018cffc3a3d6c32754e5af2a8",
+    "0005_phase3_fts": "c8aa5aadda2af4b513d729e730d07a5fefb4df320241eaee2789e49a6a2ebd0b",
+    "0006_publication_trust": "619860451d482c22fe7e14b7e8e472c1a00821c1f310a9824818dfa89ba53e98",
+    "0007_durable_imports": "8d8929429bd938f332cb6c355da8212118aae1468073bddd02c4d98b9397afb1",
+    "0008_snapshot_semantics": "ef5a126cb32f8642db021c49ac18e1a47004950661ef85a19897871c85456362"
+  }
+}

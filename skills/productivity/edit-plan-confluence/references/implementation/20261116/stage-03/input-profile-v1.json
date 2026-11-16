@@ -1,0 +1,26 @@
+{
+  "profile": "input-v1",
+  "limits": {
+    "MPP_MAX_BYTES": {
+      "value": 67108864,
+      "source": "ecosystem_config"
+    },
+    "ZIP_MAX_BYTES": {
+      "value": 67108864,
+      "source": "ecosystem_config"
+    },
+    "ZIP_MAX_ENTRIES": {
+      "value": 128,
+      "source": "ecosystem_config"
+    },
+    "ZIP_MAX_UNPACKED_BYTES": {
+      "value": 268435456,
+      "source": "ecosystem_config"
+    },
+    "ZIP_MAX_RATIO": {
+      "value": 100,
+      "source": "ecosystem_config"
+    }
+  },
+  "config_mutated": false
+}

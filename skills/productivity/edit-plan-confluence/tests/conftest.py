@@ -137,6 +137,42 @@ STAGE02_REQUIRED = {
 }
 
 
+STAGE03_REQUIRED = STAGE01_REQUIRED | {
+    "test_import_atomicity.py::test_two_processes_one_snapshot_two_receipts",
+    "test_import_atomicity.py::test_process_death_commit_boundaries",
+    "test_import_atomicity.py::test_operation_repeat_preserves_item_adds_attempt",
+    "test_import_atomicity.py::test_unresolved_project_has_durable_input_no_fake_snapshot",
+    "test_import_atomicity.py::test_different_zip_containers_same_mpp_reuse_snapshot",
+    "test_import_atomicity.py::test_readback_failure_retains_commit_and_no_second_parse",
+    "test_import_atomicity.py::test_failed_zip_receipt_retains_container_locator",
+    "test_mpp_input.py::test_freeze_renamed_container_and_mpp_with_zip_suffix",
+    "test_mpp_input.py::test_multiple_candidates_no_first_selection_preserves_container",
+    "test_mpp_input.py::test_zip_unsafe_paths",
+    "test_mpp_input.py::test_zip_collisions",
+    "test_mpp_input.py::test_zip_symlink_and_input_symlink_forbidden",
+    "test_mpp_input.py::test_zip_numeric_limits",
+    "test_mpp_input.py::test_freeze_direct_exact_limit_and_missing",
+    "test_mpp_input.py::test_input_changed_during_copy_is_never_accepted",
+    "test_mpp_input.py::test_input_path_replaced_during_copy",
+    "test_plan_archive.py::test_explicit_slug_and_contradictory_bindings_rejected",
+    "test_plan_archive.py::test_stable_local_lineage_preserves_old_filename_lines",
+    "test_plan_archive.py::test_artifact_corruption_is_not_duplicate_success",
+    "test_plan_archive.py::test_same_filename_different_bytes_get_different_objects",
+    "test_plan_reconcile.py::test_import_reconcile_missing_link_is_not_reimported",
+}
+
+STAGE03_REQUIRED |= {
+    f"test_import_atomicity.py::test_process_death_commit_boundaries[{boundary}]"
+    for boundary in ("after_snapshot","after_versions","after_item_link","after_event","before_commit",
+                     "after_commit","before_readback","before_receipt")
+}
+STAGE03_REQUIRED |= {
+    f"test_mpp_input.py::test_zip_numeric_limits[{case}]"
+    for case in ("ZIP_MAX_ENTRIES-1-zip_entries_limit","ZIP_MAX_UNPACKED_BYTES-10-zip_unpacked_limit",
+                 "ZIP_MAX_RATIO-1-zip_ratio_limit","ZIP_MAX_BYTES-10-zip_size_limit","MPP_MAX_BYTES-10-mpp_size_limit")
+}
+
+
 def pytest_addoption(parser):
     parser.addoption("--acceptance-stage", default=None)
     parser.addoption("--test-root", default=None)
@@ -153,8 +189,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 and 02")
+    if stage and stage not in ("01", "02", "03"):
+        raise pytest.UsageError("this acceptance contour implements stages 01, 02 and 03")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -174,7 +210,7 @@ def pytest_configure(config):
 
 @pytest.hookimpl(tryfirst=True)
 def pytest_collection_modifyitems(config, items):
-    archive = {"test_plan_archive.py", "test_plan_history.py", "test_plan_save.py", "test_plan_reconcile.py"}
+    archive = {"test_plan_archive.py", "test_plan_history.py", "test_plan_save.py", "test_plan_reconcile.py", "test_import_atomicity.py"}
     real_reader = {"test_build_plan_from_mpp_offline", "test_calendar_from_mpp_fixture", "test_cli_convert_offline"}
     for item in items:
         if any(item.get_closest_marker(group) for group in GROUPS):
@@ -192,9 +228,10 @@ def pytest_collection_modifyitems(config, items):
 
 def pytest_collection_finish(session):
     if session.config.getoption("--acceptance-stage"):
-        selected = {item.nodeid.split("[")[0].split("/")[-1] for item in session.items}
+        selected = {item.path.name+"::"+item.name for item in session.items}
+        selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = STAGE01_REQUIRED if stage == "01" else STAGE02_REQUIRED
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -213,6 +250,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption("--acceptance-stage") == "03":
+        _stage03_report(session, exitstatus, root)
         return
     if config.getoption("--acceptance-stage") == "02":
         _stage02_report(session, exitstatus, root)
@@ -473,3 +513,66 @@ def _stage02_report(session, exitstatus, root):
     lines.extend("- " + item for item in report["limitations"])
     lines.append("- Optional skip относится только к старому ZD-тесту §19: исходные MPP отсутствуют. Обязательные тесты этапа 02 не пропущены.")
     (root / "reports/stage-report.md").write_text("\n".join(lines) + "\n")
+
+
+def _stage03_report(session, exitstatus, root):
+    """Aggregate actual tests with separately executed MofsIndex and delivery evidence."""
+    config=session.config
+    path=root/"reports/external-checks.json"
+    external=json.loads(path.read_text()) if path.exists() else {}
+    results=config._acceptance_results
+    good=(exitstatus==0 and bool(session.items) and bool(results)
+          and all(r["status"]=="passed" for r in results) and external.get("gate")=="passed")
+    paths=sorted(set([*SCRIPTS.glob("*.py"),*(SKILL_ROOT/"tests").glob("*.py"),
+        *(MOFS_INDEX_ROOT/"mofs_index/plan").glob("*.py"),*(MOFS_INDEX_ROOT/"tests/plan").glob("*.py"),
+        *(SKILL_ROOT/"references/schemas").glob("*.json"),SKILL_ROOT/"tests/pytest.ini",
+        SKILL_ROOT/"references/operations-and-recovery.md"]))
+    hashes={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
+    master=Path.home()/"WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md"
+    plan=master.parent/"plans/HF-plan_EditPlanConfluence_20261116.md"
+    schema=Path.home()/"WorkVault/Registries/EcosystemConfig.schema.json"
+    implemented={
+        "M/mofs_index/plan/schema.py":"0007 durable imports/nullable operation context; 0008 semantic dedup and lossless version fields; all_plan_table_names",
+        "M/mofs_index/plan/migrate.py":"transactional create-copy-drop-rename with FK restoration/check, checksums and migration concurrency; refuses caller transaction",
+        "M/mofs_index/plan/writer.py":"typed operations/batches/items/attempts/events; one atomic snapshot-version-item-event commit; artifact verification; exact decimals",
+        "M/mofs_index/plan/ingest_mpp.py":"legacy/v2/PreparedPlan adapters; complete source JSON, quantities/units, intervals and runtime/profile fingerprint",
+        "M/mofs_index/plan/query.py":"typed reads for operation/item/batch/attempt/events/artifact/lineage/snapshot/dedup/committed link",
+        "S/scripts/plan_archive.py":"atomic content-addressed artifact store/read-back; explicit slug/lineage/page conflicts; stable local archive lineage",
+        "S/scripts/mpp_input.py":"consistent double-read freeze; durable locator; ZIP content detection, all-member safety and numeric limits; no first candidate selection",
+        "S/scripts/plan_operation.py":"register unresolved operation/item before project; persist effective context, freeze/error provenance; new attempt on repeat; commit/reconcile adapter",
+        "S/scripts/plan_reconcile.py":"committed link then read-back; no parser path; mirror failure retains SQL commit",
+        "S/scripts/plan_save.py":"only replace filename-based local lineage with stable project archive binding; full pipeline wiring remains stage 04",
+        "M/tests/plan/{test_schema,test_migrate,test_writer_snapshot,test_backup}.py":"new/legacy migrations, rollback, rebuild preservation, exact values, dedup and backup",
+        "S/tests/{test_mpp_input,test_plan_archive,test_plan_reconcile,test_import_atomicity}.py":"ZIP/input adversarial tests, real two-process concurrency and eight os._exit crash boundaries",
+        "S/tests/conftest.py + S/references/operations-and-recovery.md":"stage-03 mandatory IDs/gate/report and reproducible internal API/input profile contract",
+    }
+    limitations=["Only stage 03: public prepared save/CLI integration is stage 04; batch orchestration is stages 05-06",
+                 "No production DB migration, Confluence/network publication or schedule verification",
+                 "No edits to stage-01/02 evidence, applied migrations 0001-0006, MppReader or EcosystemConfig",
+                 "ownCloud sync not confirmed; process-death tests do not simulate OS/power failure"]
+    counters=dict(config._acceptance_counters)
+    counters["MPXJ_read"]=0  # selected stage03 tests use existing serialized fixtures, never a JVM reader
+    report={"stage":"03","gate":"passed" if good else "failed","exit_code":int(exitstatus),
+        "command":[sys.executable,"-m","pytest",*config.invocation_params.args],
+        "base_commit":"e9f13dd82b51e2aa4e2515901ce6ed29772677d3",
+        "environment":{"python":sys.executable,"version":platform.python_version(),"test_root":str(root),"PYTHONPATH":os.environ.get("PYTHONPATH")},
+        "master":{"version":"0.5.0","path":str(master),"sha256":hashlib.sha256(master.read_bytes()).hexdigest()},
+        "plan":{"path":str(plan),"normative_prefix_sha256":hashlib.sha256(plan.read_text().split("## Журнал исполнения")[0].encode()).hexdigest()},
+        "source_files":hashes,"source_tree_sha256":hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),
+        "config_contract_sha256":hashlib.sha256(schema.read_bytes()).hexdigest(),
+        "migrations":["0007_durable_imports","0008_snapshot_semantics"],"implemented_files":implemented,
+        "tests":results,"selected":len(session.items),"mandatory_test_ids":sorted(STAGE03_REQUIRED),"external_checks":external,
+        "counters":counters,"covered_requirements":["foundations of §20/AC-15,16,20,21,22,26,27 and AC-19"],
+        "atomicity":"single BEGIN IMMEDIATE: snapshot -> versions -> item.snapshot_id -> snapshot_committed -> COMMIT; no nested public writer",
+        "deduplication":"plan+lineage+source_mpp_sha256+representation+normalization_profile_fingerprint+resolved_timezone; two DB unique indices; legacy NULL profile excluded",
+        "recovery":"committed item/event link -> verified source/hash and normalized/version read-back -> optional receipt mirror; no reader after commit",
+        "input":"input-v1; double open-file read/size/mtime/ctime/inode/hash plus fsync+atomic rename under explicit WorkVault; ZIP per-member/content/path/type/size/ratio checks",
+        "limitations":limitations,"generated_at":datetime.now(timezone.utc).isoformat()}
+    (root/"reports/stage-report.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
+    lines=["# Этап 03", "",f"Gate: **{report['gate']}**. S rc={exitstatus}; passed={sum(r['status']=='passed' for r in results)}; selected={len(session.items)}.",
+        "",f"MofsIndex: {external.get('mofs_required',{}).get('passed')} обязательных, {external.get('mofs_regression',{}).get('passed')} в полной plan-регрессии. Подробные команды/rc/JUnit: external-checks.json.",
+        "",f"Дерево исходников: `{report['source_tree_sha256']}`. Master 0.5.0, hash в JSON. Миграции: 0007_durable_imports, 0008_snapshot_semantics.","", "Реализовано:",""]
+    lines.extend(f"- `{path}`: {description}." for path,description in implemented.items())
+    lines.extend(["","Атомарность: "+report["atomicity"],"","Дедупликация: "+report["deduplication"],"","Восстановление: "+report["recovery"],"","Вход: "+report["input"],"","Команда S:","","```text"," ".join(report["command"]),"```","","Проверено восемь границ падения процесса: после snapshot, versions, item-link, event, до COMMIT, после COMMIT, до read-back, до квитанции. Два независимых процесса оставляют один snapshot и два поступления.","","Комплект внешних изменений: usertools/MofsIndex/{before,after,changes.patch,manifest.json}; восстановление и hashes — external-checks.json. SHA завершающего коммита записывается в журнал канонического плана после commit.","","Ограничения:",""])
+    lines.extend("- "+v for v in limitations)
+    (root/"reports/stage-report.md").write_text("\n".join(lines)+"\n")

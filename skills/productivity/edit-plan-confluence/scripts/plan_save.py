@@ -131,15 +131,7 @@ def save_snapshot(
                     "project_slug обязателен без page_id (аналог R-007 §4.2: "
                     "привязка не угадывается)"
                 )
-            plan_id = plan_writer.ensure_plan(
-                conn, project_slug, name=project_slug,
-                md_path=f"Entities/{project_slug}/Pages/{project_slug}.ganttchart.md",
-            )
-            lineage_id = plan_writer.ensure_lineage(
-                conn, plan_id, LOCAL_SAVE_NAMESPACE,
-                page_id=f"save:{project_slug}:{mpp_path.stem}", basis="explicit",
-            )
-            binding = {"plan_id": plan_id, "lineage_id": lineage_id, "project_slug": project_slug}
+            binding = resolve_plan_binding(None, project_slug, conn=conn)
 
         mpp_artifact_id, mpp_sha256 = store_artifact(
             mpp_path, "mpp", project_slug=binding["project_slug"], conn=conn,

@@ -86,3 +86,25 @@ def commit_prepared_import(conn, operation: ImportOperation, *, binding: dict, p
     spec=build_snapshot_spec(prepared,plan_id=binding["plan_id"],lineage_id=binding["lineage_id"],source_artifact_id=artifact_id)
     w.commit_import_snapshot(conn,operation.item_id,operation.attempt_id,spec)
     return reconcile_import(conn,operation.item_id,receipt_writer=receipt_writer)
+
+
+def finish_archive_operation(conn, operation: ImportOperation, receipt: dict, *, context):
+    """SQL result first; a failed file mirror cannot erase a committed result."""
+    from plan_receipt import mask_secrets, validate_single_receipt, write_receipt
+    receipt = mask_secrets(receipt)
+    validate_single_receipt(receipt)
+    w.record_operation_event(conn, operation.attempt_id, "save_result",
+                             detail=json.dumps(receipt, ensure_ascii=False, sort_keys=True))
+    try:
+        write_receipt(operation.operation_id, "save", receipt, workvault=context.workvault)
+    except OSError:
+        # Do not include exception text: it may originate in an external driver.
+        receipt = {**receipt, "status": "failed", "exit_code": 5,
+                   "error": {"code": "receipt_mirror_failed", "message": "Файловое зеркало квитанции не подтверждено; SQL-результат сохранён",
+                             "retryable": True, "next_action": "Восстановить зеркало из SQL через тот же frozen input"}}
+        w.record_operation_event(conn, operation.attempt_id, "receipt_mirror_failed",
+                                 detail=json.dumps(receipt, ensure_ascii=False, sort_keys=True), status="failed")
+    else:
+        w.record_operation_event(conn, operation.attempt_id, "receipt_written", detail="save.json")
+    w.set_attempt_status(conn, operation.attempt_id, "confirmed" if receipt["exit_code"] == 0 else "failed")
+    return receipt

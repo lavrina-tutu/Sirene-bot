@@ -62,3 +62,39 @@ def test_cli_apply_without_confirm_exit_2():
         cwd=str(SCRIPTS),
     )
     assert proc.returncode == 2
+
+
+def test_cli_save_parser_global_paths():
+    import cli
+    args = cli.build_parser().parse_args(["--db", "/fixture/db", "--workvault", "/fixture/vault", "--cache-dir", "/fixture/cache",
+        "save", "--mpp", "/fixture/input.zip", "--page-id", "123", "--lineage-id", "line1", "--source-version-date", "2026-11-15"])
+    assert args.db == Path("/fixture/db") and args.lineage_id == "line1"
+    assert args.source_version_date == "2026-11-15" and args.page_id == "123"
+
+
+def test_cli_save_argument_errors_are_single_json(tmp_path):
+    import json
+    from plan_receipt import validate_single_receipt
+    for tail in (["save"], ["save", "--mpp", "x", "--db", str(tmp_path/"x.sqlite")]):
+        proc = subprocess.run(["/usr/bin/python3", str(SCRIPTS/"cli.py"), *tail], capture_output=True, text=True)
+        assert proc.returncode == 2, proc.stderr
+        receipt = json.loads(proc.stdout)
+        validate_single_receipt(receipt)
+        assert receipt["exit_code"] == 2 and receipt["operation_id"] is None
+
+
+def test_cli_save_runtime_failure_is_single_json(tmp_path):
+    import json
+    proc = subprocess.run(["/usr/bin/python3", str(SCRIPTS/"cli.py"), "--db", str(tmp_path/"state/index.sqlite"),
+        "--workvault", str(tmp_path/"vault"), "--cache-dir", str(tmp_path/"cache"),
+        "save", "--mpp", str(tmp_path/"missing.mpp"), "--project-slug", "test"], capture_output=True, text=True)
+    assert proc.returncode == 5, proc.stderr
+    receipt = json.loads(proc.stdout)
+    assert receipt["error"]["code"] == "input_missing" and receipt["item_id"]
+
+
+def test_cli_rejects_unsupported_global_overrides(tmp_path):
+    import json
+    proc = subprocess.run(["/usr/bin/python3", str(SCRIPTS/"cli.py"), "--db", str(tmp_path/"db.sqlite"),
+        "preview"], capture_output=True, text=True)
+    assert proc.returncode == 2 and json.loads(proc.stdout)["error"]["code"] == "invalid_arguments"

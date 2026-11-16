@@ -134,3 +134,15 @@ def reconcile_import(conn: sqlite3.Connection, item_id: str, *, receipt_writer=N
     if receipt_writer:
         receipt_writer(result)
     return result
+
+
+def saved_operation_receipt(conn, operation_id: str) -> dict | None:
+    """Read the last full result from SQL, independently of its file mirror."""
+    import json
+    from plan_receipt import validate_single_receipt
+    for event in reversed(plan_query.get_operation_events(conn, operation_id)):
+        if event["event_kind"] in ("save_result", "receipt_mirror_failed"):
+            result = json.loads(event["detail"])
+            validate_single_receipt(result)
+            return result
+    return None

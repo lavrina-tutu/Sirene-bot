@@ -1,0 +1,2406 @@
+{
+  "stage": "04",
+  "gate": "passed",
+  "exit_code": 0,
+  "base_commit": "8901b8d4ae43cf13a7173dc306546899811ace3f",
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "-c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+    "--acceptance-stage",
+    "04",
+    "--test-root",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04",
+    "-m",
+    "unit or archive_integration or mpp_fixtures",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/reports/junit.xml"
+  ],
+  "environment": {
+    "python": "/usr/bin/python3.9",
+    "version": "3.9.25",
+    "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04",
+    "cli_python": "/usr/bin/python3",
+    "mpxj_python": "/usr/bin/python3.9",
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+  },
+  "master": {
+    "version": "0.5.0",
+    "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md",
+    "sha256": "ad246fac0a363d2b9d6e9b5c177b76b06dcbe1b8b07d4ea6c9f8c769018dc369"
+  },
+  "plan": {
+    "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md",
+    "normative_prefix_sha256": "a4fe0385b0c365975f75aeaa80b47212b3a00718a55044b499464d17daad39bc"
+  },
+  "source_files": {
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/cli-contract.md": "25367db25398144291dd00989a374e89e0aba9caf7474409151d98d897e522ae",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/export-contract.md": "78c03ff877dd032dee0daaf908328ac7f2147d183a6bf95bce25f1ce5d77cabd",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/mpp-to-gantt.md": "2c2a18cd8b4bec309370d63ee90da3146df1ae65c672b261bc56329b2e5a8b3c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/operations-and-recovery.md": "95cc26486c7e557041aff8888c8c83c81924f9ec3dc73f4b88d383a9edc1817f",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/profiles/normalization-v1.json": "e1971ad42cb832f04af18b7b730c804b4e672ba40b5477f4fea3431576ce5ee9",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/prepared-plan.schema.json": "122481a3cde3921c256fef1ad0ab9de8157d54ec775c57525d213c7321222201",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/settings.schema.json": "183043f984e3f7f603fe563ba7de56ede010d903531a4695e6f7b414ef0910ce",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/schemas/single-receipt.schema.json": "2afba9049a4cf899619ad9d4838e47b9538b2fc4c2245c07497b35f56c42e31c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/child_page.py": "99d1b8483ccbb6a1332822d476a09cfd536f7586c6ab073ade66fd279b5bfe9b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py": "801352a831d5bb62d8d99063ed4b9b21e925100d99bc03735472c1263d05dbe5",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/conf_client.py": "7291583bfd52628db37ba836121873bdb74b0f3efde8459c74e4c4f684810542",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/env.py": "b0fa9ab71b1f09d5a4c52c559dceb95daff9045e7b1b308a49e6fcc334a61ca6",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/gantt_attachment.py": "a6384f593cc71c2bf02e016a71616720ac0e5fbfb419807d0d0555dff1dbdc8e",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/gate_diff.py": "6e247dfe852c80a9e48bab160be5af7f503a6bd3dd17932b3f3230cbb5215b13",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/itogo.py": "4f6e52341056dfe84d7a81f28a8f7f52173bae8c7d8d5307fd83a03c91482f3a",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/macro.py": "b7dedee2fdf77049acf62e2ff6656935ebdff3cebfa16e4dce01c23f0736325b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/mpp_calendar.py": "4e24ea4d9053e6c6f03220d3cc67a0a5fd381bbff56395d7d5eaf1bfce532ced",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/mpp_convert.py": "df5780ffd9b0aa83f0c643d79d3a638e86dac3ce1a1c39f59d9834a697774cfd",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/mpp_input.py": "308e00189ed1c6df2cc619a50c08c9b615e7f7f27e3a2c6ecf4be747362c3da6",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/pipeline.py": "631750e03a787715811aea58f97f7d4f5909bd0916b4ab485d27dbfdba0a0067",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_archive.py": "084029857ed5b55fff42252d0eb33046c6485e1526b61ff653eb3c3491bb176c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_cache.py": "5f6079533d6ccd714f95532a97e70ea72e9f3465023681965b9d2012651bb40a",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_context.py": "94f5c311c03460e830a358e45df50db4eb86662ef1794ef2ddb84e018ce83923",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_history.py": "0c8555c6a1f4b633bc84752f16ecb8652a9227ee6892dca4233d8011d86198f0",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_operation.py": "f5ad5b86cbd1bddbeddf30f297a7e893bc771ba88a05eb56a7a335bdc9582966",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_receipt.py": "9ab10c6109c738ac13c54fd65e56ccea0a993fa1bc861529d8ae5d3c569f2a02",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_reconcile.py": "c7450450a58e2b8fcd5e8c7034576147aff63ebd4f39d2c5149ac5ad05e85cb9",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_save.py": "d5a20790582dfe757f31311a6f11e8e635635e015d1bc2eab0eafc4a9638dd57",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/plan_verify.py": "c40fa19c59c49fc5f42dfc1d22e31a5b73be141564e1e0ee6b9d7f2341a9a7ae",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/prepared_plan.py": "eb6b297bfd0deaa9457206ad901d5a95bb97d772419832b785ee1abab764692e",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/conftest.py": "5ea395dc798c24a643a6bf89d787180940041af502fbd7afc0072b167c638a2e",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini": "9e68035ef4b6060d621e65b73e0715c6a10e32602da3e74468bd78306825dbb4",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_child_page.py": "07b279aa4df0d3c9f9cd5d908861c1720d852ae5f0b15f4a86f68c94da370113",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_cli.py": "1332cbad15dc3542e42d3076479fa2a1149046f8ae2780c8a8682793aede488d",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_env.py": "4df40ae975ce457367c75577deac9073e6b98a1fe2903a2f22502bfd85487080",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py": "3afaf4456ba6a19e6a1101cb1aa3b89a63f61c820c075ad8dbc089693a5ea44a",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gate_diff.py": "ced8085b6ff7aaef7e3c4bfb0852151e14a7df37ea67e7957d106411ac126987",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_import_atomicity.py": "482ca709fe3878c39c9f08b048dd464b354e5b4acfd10db5d29ac2f233bcfdd2",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_itogo.py": "7ca90b890f946c18edd3e61b292f7f89d7e5fdef86cb2425d5aec38ecc4ba175",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_macro.py": "db4488a67c13be418a362c74c66686ae6e733a24fe5921256242cf8e32a00098",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py": "0b7a2332c20e96859aedfdf2dc9260fe147bde13640b465dfb093191abc10382",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py": "9c89f03f676795f59355288e6244fddee35a1f6c6801a39c4a79c2cd27f3589b",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_input.py": "33f0e8c564d5bb699620fcb578c29ce4e111f3403f31cd26e7f63344a4e4adf1",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_pipeline.py": "b2e8568dbd5c3b2af369a336195a54c1d48970ff195d6304fc5413b0c3f0e6aa",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_archive.py": "449a2bdd60d73ddb5bc6dc6938c25bc1d92394b91b4390b7601ac0fb80855066",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_cache.py": "625d518dab10cb34a48077b315b332300037a764d05260369680003d97138bc5",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_history.py": "9f8b820ab7075d04954184fab9620470491c611b5ed34082b79fb800d37232a3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py": "bf2d684be09d92efd1902c7b8bea3512f81453615f2237e53a1a91fc55c88647",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_reconcile.py": "6e8952f47a89eca1563e1ca9e3eee48365b73ea5750c13e5a3c22e1fa320d6e0",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_save.py": "eb3a0f2a8196e5a74a762d12ddc7f4fae7824773d4269a1b0e4a98b0110a9d68",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_verify.py": "3caed391c9bcc436e75282a76cea3a3ae3aca35b8a371192ce9335fa891228e5",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_prepared_plan.py": "b59d8b42b019f2ec96b70812e8b4ba10418345207b3fa31aeb8703670461ed32",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_rest_live.py": "8bfc84dd6a35a48ed7c23c0b97edfa07e3e6c08817ea797d891025eca9b4de70",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_save_e2e.py": "74c318301a7040bdfd7f3af58a6edaa933f7db4acc29bae32d335ab65a1beb95"
+  },
+  "source_tree_sha256": "cdba8fdb8dec5bceb3811e409104c63a6edefd0a6d3083d6fb9e1802130aee43",
+  "config_contract_sha256": "676c5a6f265ad7773bddc57d189cb19b95ad4587b955237fc67335ba727a4b8c",
+  "migrations": [],
+  "protected_files_checked": 193,
+  "changed_protected_files": [],
+  "preexisting_changes": [
+    " M skills/productivity/edit-plan-confluence/scripts/plan_context.py",
+    " M skills/productivity/edit-plan-confluence/scripts/plan_operation.py",
+    " M skills/productivity/edit-plan-confluence/scripts/plan_receipt.py",
+    " M skills/productivity/edit-plan-confluence/scripts/plan_reconcile.py",
+    "?? skills/productivity/edit-plan-confluence/references/cli-contract.md",
+    "?? skills/productivity/edit-plan-confluence/references/schemas/single-receipt.schema.json"
+  ],
+  "implemented_files": {
+    "S/scripts/plan_save.py": "единый freeze → parse/cache → quality → typed archive/dedup → read-back → receipt; save_frozen_input с обязательными artifact/hash/context/operation; краткий SaveResult; восстановление без reader",
+    "S/scripts/cli.py": "lazy client/pipeline imports; локальный save --page-id; глобальные пути, lineage и дата версии; JSON результата и ошибок; rc 0/2/4/5",
+    "S/scripts/plan_context.py": "изолированные db/WorkVault/cache передаются явно; восстановление settings/sources/profile hashes без loader",
+    "S/scripts/plan_receipt.py": "полный nullable контракт v1; атомарная замена/fsync/read-back; маскирование; безопасные имена зеркал",
+    "S/scripts/plan_operation.py": "save_result в SQL до файлового зеркала; ошибка зеркала сохраняет snapshot и SQL-историю",
+    "S/scripts/plan_reconcile.py": "чтение полной последней квитанции из SQL; committed read-back без повторного разбора",
+    "S/references/schemas/single-receipt.schema.json": "полная схема §20.3.12.1 и save-инварианты",
+    "S/references/cli-contract.md": "все добавленные параметры, размещение overrides, exit codes, обязательные пути и сохранённая совместимость",
+    "S/tests/test_plan_save.py + test_plan_receipt.py + test_cli.py + test_env.py": "контракты, populated baseline, предупреждения, ошибки, recovery commit/mirror, JSON и изоляция",
+    "S/tests/test_save_e2e.py": "CLI /usr/bin/python3 и реальный MPXJ /usr/bin/python3.9; E/F cold/warm, corruption rebuild, unreadable MPP, ZIP; импорт клиента и сеть запрещены",
+    "S/tests/conftest.py": "обязательные test ID этапа 04 и отчёт из фактических результатов; проверка неизменности внешних компонентов и evidence 01–03"
+  },
+  "selected": 267,
+  "tests": [
+    {
+      "test_id": "test_child_page.py::test_default_child_title",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002692769921850413
+    },
+    {
+      "test_id": "test_child_page.py::test_build_child_storage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00018666201503947377
+    },
+    {
+      "test_id": "test_child_page.py::test_create_child_page_without_attempt_id_always_creates",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0010366149945184588
+    },
+    {
+      "test_id": "test_child_page.py::test_create_child_page_resume_reuses_existing_page_id",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.030572602001484483
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[false]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4664331439998932
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.44716611100011505
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[download]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4685369959915988
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[duplicate]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.45831370100495405
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[macro_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4360114810115192
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[param_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4691944340011105
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[param_hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41396523400908336
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[attachment]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5489515999797732
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41820988000836223
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[extra_itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4653704870142974
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[labour]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4881006059877109
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[foreign]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.520332143001724
+    },
+    {
+      "test_id": "test_child_page.py::test_resume_rechecks_actual_bytes",
+      "phase": "call",
+      "status": "passed",
+      "duration": 2.1125453840068076
+    },
+    {
+      "test_id": "test_child_page.py::test_child_resume_changed_current_version_rejected",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.323382105998462
+    },
+    {
+      "test_id": "test_child_page.py::test_old_confirmed_child_upload_receipt_not_proof",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.011036787007469684
+    },
+    {
+      "test_id": "test_cli.py::test_cli_help",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.05060894400230609
+    },
+    {
+      "test_id": "test_cli.py::test_cli_convert_offline",
+      "phase": "call",
+      "status": "passed",
+      "duration": 5.1340287899947725
+    },
+    {
+      "test_id": "test_cli.py::test_cli_apply_without_confirm_exit_2",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6274239270132966
+    },
+    {
+      "test_id": "test_cli.py::test_cli_save_parser_global_paths",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.005217255995376036
+    },
+    {
+      "test_id": "test_cli.py::test_cli_save_argument_errors_are_single_json",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.2189343770151027
+    },
+    {
+      "test_id": "test_cli.py::test_cli_save_runtime_failure_is_single_json",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.3302306330006104
+    },
+    {
+      "test_id": "test_cli.py::test_cli_rejects_unsupported_global_overrides",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4757804280088749
+    },
+    {
+      "test_id": "test_env.py::test_load_confluence_env_ignores_foreign_keys",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007453150174114853
+    },
+    {
+      "test_id": "test_env.py::test_unified_only_credentials_do_not_read_local_env",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.38914402801310644
+    },
+    {
+      "test_id": "test_env.py::test_python_selection_fails_closed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.006824722018791363
+    },
+    {
+      "test_id": "test_env.py::test_process_env_priority_and_no_yaml_write",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.008157008996931836
+    },
+    {
+      "test_id": "test_env.py::test_save_context_resumes_frozen_paths_without_loader",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.40176230898941867
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_find_gantt_attachment",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00019634299678727984
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_upload_uses_post_data",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0017485029820818454
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_verify_uploaded_matches_version_specific_get",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007119099900592119
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_verify_uploaded_hash_mismatch_is_conflict_not_crash",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0010136720084119588
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005184320034459233
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[title]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00041976702050305903
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[version]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005076819797977805
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[page]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00043706197175197303
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_exact_historical_version_even_if_latest_changed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006269100122153759
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_no_fallback_to_unrelated_gantt_attachment",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00017287899390794337
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_upload_missing_identity_fails_closed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002540999004850164
+    },
+    {
+      "test_id": "test_gate_diff.py::test_is_confirmed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0001645339943934232
+    },
+    {
+      "test_id": "test_gate_diff.py::test_build_diff_contains_warning",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.39812753998558037
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_two_processes_one_snapshot_two_receipts",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7820946399879176
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_snapshot]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6873249650234357
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_versions]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6961022290051915
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_item_link]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.729135278990725
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_event]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6520600220246706
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[before_commit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6114532850042451
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_commit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6553682079829741
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[before_readback]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6379448549996596
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[before_receipt]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.688481838995358
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_operation_repeat_preserves_item_adds_attempt",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0078055089979898185
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_unresolved_project_has_durable_input_no_fake_snapshot",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5580269310157746
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_different_zip_containers_same_mpp_reuse_snapshot",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8675583889998961
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_readback_failure_retains_commit_and_no_second_parse",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.005261040001641959
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_failed_zip_receipt_retains_container_locator",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.48763064001104794
+    },
+    {
+      "test_id": "test_itogo.py::test_itogo_from_csv_080926",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0010006639931816608
+    },
+    {
+      "test_id": "test_itogo.py::test_format_thousands",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00016159098595380783
+    },
+    {
+      "test_id": "test_itogo.py::test_build_itogo_html",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00017735699657350779
+    },
+    {
+      "test_id": "test_itogo.py::test_patch_existing_itogo",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002512620121706277
+    },
+    {
+      "test_id": "test_itogo.py::test_patch_existing_itogo_line1_only",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00020902801770716906
+    },
+    {
+      "test_id": "test_itogo.py::test_insert_itogo_above_macro_no_block",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004261739959474653
+    },
+    {
+      "test_id": "test_itogo.py::test_apply_itogo_strips_line2_updates_line1",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00021613400895148516
+    },
+    {
+      "test_id": "test_itogo.py::test_apply_itogo_line2_only_inserts_line1",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004065469838678837
+    },
+    {
+      "test_id": "test_itogo.py::test_strip_trudozatraty_variants",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002369459834881127
+    },
+    {
+      "test_id": "test_itogo.py::test_parse_itogo_text_found",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00025677497615106404
+    },
+    {
+      "test_id": "test_itogo.py::test_parse_itogo_text_missing_is_none_not_fabricated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00024858801043592393
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_known",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0019797460117843
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_missing_is_unknown_not_fabricated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0018942900060210377
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_two_observations_not_glued_by_number",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0039021639968268573
+    },
+    {
+      "test_id": "test_macro.py::test_find_macro",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.000351760012563318
+    },
+    {
+      "test_id": "test_macro.py::test_new_macro_ids_unique",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00022822001483291388
+    },
+    {
+      "test_id": "test_macro.py::test_build_macro_html",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.000169149978319183
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_base_recurrent_intervals",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00020876500639133155
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_calendar_from_mpp_fixture",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.2466129940003157
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_convert_task_count",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0026207100017927587
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_id_counter_not_300000",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0026719029992818832
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_fs_dependencies_only",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0026684860058594495
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_naim_resource_added",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.002615090983454138
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_tree_structure",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0027700399805326015
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_service_header_217_first",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.003493255004286766
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_service_header_217_after_root",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0035010809951927513
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_parse_outline_level",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00017821500659920275
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_only_service_header_raises",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00033590500243008137
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_copy_and_empty",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.390865978988586
+    },
+    {
+      "test_id": "test_mpp_input.py::test_resolve_mpp_from_zip",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.48366153400274925
+    },
+    {
+      "test_id": "test_mpp_input.py::test_freeze_renamed_container_and_mpp_with_zip_suffix",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8020769089926034
+    },
+    {
+      "test_id": "test_mpp_input.py::test_multiple_candidates_no_first_selection_preserves_container",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4993380540108774
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[../evil.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41508566300035454
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[/absolute.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4323359059926588
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[C:/absolute.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41675720701459795
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[C:relative.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3924352739995811
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[a/../../b.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.38259290100540966
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[a\\\\b.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3946791930065956
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[./a.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4396923189924564
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[a//b.mpp]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.38030027798959054
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names0]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4906866090022959
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names1]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.434270108002238
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names2]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.45677504999912344
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names3]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4175551380030811
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_symlink_and_input_symlink_forbidden",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7713005819823593
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_ENTRIES-1-zip_entries_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.43682885402813554
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_UNPACKED_BYTES-10-zip_unpacked_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4183879269985482
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_RATIO-1-zip_ratio_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4289482700114604
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_BYTES-10-zip_size_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41816194899729453
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[MPP_MAX_BYTES-10-mpp_size_limit]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4557258549903054
+    },
+    {
+      "test_id": "test_mpp_input.py::test_freeze_direct_exact_limit_and_missing",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.2235301260079723
+    },
+    {
+      "test_id": "test_mpp_input.py::test_input_changed_during_copy_is_never_accepted",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4060342570010107
+    },
+    {
+      "test_id": "test_mpp_input.py::test_input_path_replaced_during_copy",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.433612457010895
+    },
+    {
+      "test_id": "test_pipeline.py::test_build_plan_empty",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005393120227381587
+    },
+    {
+      "test_id": "test_pipeline.py::test_build_plan_from_mpp_offline",
+      "phase": "call",
+      "status": "passed",
+      "duration": 2.5481065250060055
+    },
+    {
+      "test_id": "test_pipeline.py::test_live_ab_guard",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002780479844659567
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_without_confirm_writes_nothing",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002879429957829416
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[false]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.026667994010495
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6419226239959244
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[download]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7838498920027632
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[lying_true]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6255660250026267
+    },
+    {
+      "test_id": "test_pipeline.py::test_success_records_get_observation_and_actual_id",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.1967909460072406
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[duplicate]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7052726040128618
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[macro_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6541648190177511
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[param_id]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8165942470077425
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[param_hash]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6729553150071297
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[attachment]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6770425960130524
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6652173059992492
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[extra_itogo]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7452125400013756
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[labour]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7001357699919026
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[foreign]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6981836000049952
+    },
+    {
+      "test_id": "test_pipeline.py::test_actual_current_attachment_changed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6445103389851283
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_existing_macro_preserves_all_ids",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.18683215600322
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_put_409_retries_only_storage_stage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.1115874309907667
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_put_409_exhausted_retries_raises",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6670395599794574
+    },
+    {
+      "test_id": "test_pipeline.py::test_get_after_put_failure_is_unconfirmed",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.717416140018031
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_preflight_failure_blocks_all_http",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41417064901906997
+    },
+    {
+      "test_id": "test_plan_archive.py::test_resolve_plan_binding_requires_slug_for_new_page",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.001103924005292356
+    },
+    {
+      "test_id": "test_plan_archive.py::test_resolve_plan_binding_creates_and_is_idempotent",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0051429669838398695
+    },
+    {
+      "test_id": "test_plan_archive.py::test_resolve_plan_binding_different_pages_different_lineage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.006576393992872909
+    },
+    {
+      "test_id": "test_plan_archive.py::test_store_artifact_dedup_survives_tmp_deletion",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.007411877013510093
+    },
+    {
+      "test_id": "test_plan_archive.py::test_explicit_slug_and_contradictory_bindings_rejected",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00970595600665547
+    },
+    {
+      "test_id": "test_plan_archive.py::test_stable_local_lineage_preserves_old_filename_lines",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.014933665981516242
+    },
+    {
+      "test_id": "test_plan_archive.py::test_artifact_corruption_is_not_duplicate_success",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.012108563998481259
+    },
+    {
+      "test_id": "test_plan_archive.py::test_same_filename_different_bytes_get_different_objects",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.014208904991392046
+    },
+    {
+      "test_id": "test_plan_cache.py::test_independent_cache_keys",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3196322839939967
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[truncated]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.06132274999981746
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[checksum]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.08492047898471355
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[complete]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.05822359799640253
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[version]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.046573082014219835
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[payload_missing_field]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.05214868500479497
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[count]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.05226959599531256
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[reader]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.07861967597273178
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_source_is_not_read_or_reused",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.01598129401099868
+    },
+    {
+      "test_id": "test_plan_cache.py::test_cache_deletion_does_not_delete_durable_data",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.15756668100948445
+    },
+    {
+      "test_id": "test_plan_cache.py::test_atomic_failure_preserves_previous_entry",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.04326977100572549
+    },
+    {
+      "test_id": "test_plan_cache.py::test_concurrent_atomic_writes",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1933298819931224
+    },
+    {
+      "test_id": "test_plan_cache.py::test_representation_corruption_rebuilds",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.2969766190217342
+    },
+    {
+      "test_id": "test_plan_cache.py::test_real_parse_cache_one_read_same_bytes_different_names",
+      "phase": "call",
+      "status": "passed",
+      "duration": 4.698665199015522
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_six_events_four_unique_hashes",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.060795098019298166
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_repeat_does_not_increase_counts",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.09522193399607204
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_distinguishes_403_404_timeout",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.054493420000653714
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_resume_attempt_id_does_not_duplicate_attempt",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.07368916200357489
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_without_resume_key_creates_new_attempt_each_call",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.06781061898800544
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_missing_version_recorded_in_quality_issue",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.07926505501382053
+    },
+    {
+      "test_id": "test_plan_history.py::test_find_mpp_by_hash_missing_file_not_fabricated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005520349950529635
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_secrets_by_key",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002388319990132004
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_secrets_bearer_string_anywhere",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00017995599773712456
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_write_receipt_no_secrets_on_disk",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.004884780006250367
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_write_receipt_idempotent_path",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.008761326025705785
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_read_receipt_roundtrip",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0030555030098184943
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_read_receipt_missing_returns_none",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002464120043441653
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_all_required_nullable_fields",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.1317696580081247
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[published-True]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.033111536991782486
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[page_id-123]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.03356013001757674
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[page_url-https://invalid]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.030634088994702324
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[external_effect-storage_written]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.031559738010400906
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[attachment_version-2]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0301730299834162
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_atomic_mirror_failure_keeps_previous_json",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00765690000844188
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[Authorization: Basic c2VjcmV0]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00023630299256183207
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[CONFLUENCE_TOKEN=s3cr3t]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.000212611019378528
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[token: s3cr3t]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00025650899624451995
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[Bearer s3cr3t]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00020380699425004423
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_receipt_rejects_path_escape[../escape-save]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00021736801136285067
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_receipt_rejects_path_escape[op-../save]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00018948002252727747
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_single_candidate_does_not_confirm_operation",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.010354183003073558
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_two_candidates_same_version_gives_unknown",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.01081375899957493
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_no_candidate_gives_unknown",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.009920362994307652
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_writes_event_and_receipt",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.011436984990723431
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_import_reconcile_missing_link_is_not_reimported",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.005766891990788281
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_creates_snapshot_without_page_id",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.48401462999754585
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_deduplicates_and_preserves_each_arrival",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7951584869879298
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_preserves_populated_baseline_and_publication_rows",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7813127159897704
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_requires_project_slug_preserves_input",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.41610998401301913
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_with_page_id_reuses_existing_lineage",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.7370933440106455
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_explicit_lineage_and_version_date",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.2549704110133462
+    },
+    {
+      "test_id": "test_plan_save.py::test_invalid_arguments_before_intake[source_version_date-2026-02-30]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008017660002224147
+    },
+    {
+      "test_id": "test_plan_save.py::test_invalid_arguments_before_intake[source_version_date-20261115]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007509950082749128
+    },
+    {
+      "test_id": "test_plan_save.py::test_invalid_arguments_before_intake[timezone_hint-Not/AZone]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0018566639919299632
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_missing_input_is_failed_arrival",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.31235205798293464
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[no_tasks]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.29387713299365714
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[bad_count]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3420717619883362
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[wrong_source]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3413679249933921
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[legacy_export]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3274971449864097
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[invalid_schema]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.33843824500218034
+    },
+    {
+      "test_id": "test_plan_save.py::test_quality_warnings_do_not_block_archive",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5962864750181325
+    },
+    {
+      "test_id": "test_plan_save.py::test_frozen_input_never_refreezes_or_opens_original",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4832237419905141
+    },
+    {
+      "test_id": "test_plan_save.py::test_recovery_after_commit_before_readback_no_reader",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.6547047789790668
+    },
+    {
+      "test_id": "test_plan_save.py::test_receipt_mirror_failure_preserves_commit_and_recovers",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5781874389795121
+    },
+    {
+      "test_id": "test_plan_save.py::test_corrupt_archived_source_or_export_never_duplicate_success[source]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8584289739956148
+    },
+    {
+      "test_id": "test_plan_save.py::test_corrupt_archived_source_or_export_never_duplicate_success[export]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.8329850459995214
+    },
+    {
+      "test_id": "test_plan_save.py::test_reader_diagnostics_use_stderr_and_artifacts",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.005059568997239694
+    },
+    {
+      "test_id": "test_plan_save.py::test_complete_save_and_unknown_timezone_sql_status",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5549871549883392
+    },
+    {
+      "test_id": "test_plan_save.py::test_missing_runtime_is_explicit_failure_before_read",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3227482500078622
+    },
+    {
+      "test_id": "test_plan_verify.py::test_attachment_sha_is_independent_of_macro_hash",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002761330106295645
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_positive_and_xml_attribute_order",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0017005519766826183
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008491170010529459
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"wrong\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007194720092229545
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">wrong</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007204519934020936
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">wrong</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0007350319938268512
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 3 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008072080090641975
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0015223799855448306
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p>\\u0422\\u0440\\u0443\\u0434\\u043e\\u0437\\u0430\\u0442\\u0440\\u0430\\u0442\\u044b: 10 \\u0447\\u0435\\u043b\\u043e\\u0432\\u0435\\u043a\\u043e-\\u0447\\u0430\\u0441\\u043e\\u0432</p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0009417030087206513
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><strong>\\u0422\\u0440\\u0443\\u0434\\u043e\\u0437\\u0430\\u0442\\u0440\\u0430\\u0442\\u044b</strong>: 10 \\u0447-\\u0447</p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.001343544019619003
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u043f\\u043e\\u0442\\u0435\\u0440\\u044f\\u043d</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0013598399818874896
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p>]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008333129808306694
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><ac:structured-macro ac:name=\"gantt-chart-planner\" />]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0008611799858044833
+    },
+    {
+      "test_id": "test_plan_verify.py::test_exact_page_version_required",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0012915509869344532
+    },
+    {
+      "test_id": "test_plan_verify.py::test_find_macro_cannot_hide_duplicate_or_incomplete_target",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0005184570036362857
+    },
+    {
+      "test_id": "test_plan_verify.py::test_nested_and_reordered_macro_enumerated",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003822770086117089
+    },
+    {
+      "test_id": "test_plan_verify.py::test_test_root_rejects_production_symlink",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0006903949833940715
+    },
+    {
+      "test_id": "test_plan_verify.py::test_unit_network_is_disabled",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003568929969333112
+    },
+    {
+      "test_id": "test_plan_verify.py::test_archive_client_construction_is_disabled",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0004144179983995855
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_semantic_hash_excludes_execution_provenance",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.169155117997434
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_normalization_profile_and_timezone_change_identity",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.23379439298878424
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_relations_keep_signed_elapsed_and_known_zero",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.07245356100611389
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_calendar_intervals_exceptions_inheritance_and_bindings",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.13229595799930394
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_quality_missing_getter_errors_are_preserved",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.1107436339952983
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[task_key]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003598520124796778
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[count]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00021906901383772492
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[collection]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0002428519946988672
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[version]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0001865339872892946
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[field_reason]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.0003379929985385388
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[nan]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.003386136988410726
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[null_zero]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.00035603801370598376
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_prepared_load_rejects_changed_data",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.12958303198684007
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_fixtures_manifest_integrity",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.007239930011564866
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_context_unified_settings_cli_overrides_and_no_secrets",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.49970054600271396
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[MPP_READ_TIMEOUT_SECONDS-0]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4797990839870181
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[HTTP_TIMEOUT_SECONDS-86401]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5563757389900275
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[HTTP_RETRY_LIMIT-11]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.5364942879823502
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[MPP_MAX_BYTES--1]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4240473289974034
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[ZIP_MAX_RATIO-0]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.45996103799552657
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[ZIP_MAX_ENTRIES-1.2]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4327620179974474
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[NORMALIZATION_PROFILE-../../bad]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.3723017429874744
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[MPP_READ_TIMEOUT_SECONDS]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.43549200499546714
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[HTTP_TIMEOUT_SECONDS]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.44384908699430525
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[HTTP_RETRY_LIMIT]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.38873920898186043
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[MPP_MAX_BYTES]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4249435919919051
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_BYTES]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4705330840079114
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_ENTRIES]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.42768257501302287
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_UNPACKED_BYTES]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4119976579968352
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_RATIO]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 0.4217101950198412
+    },
+    {
+      "test_id": "test_save_e2e.py::test_real_cli_cold_warm_save[E-78-84]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 12.16586740600178
+    },
+    {
+      "test_id": "test_save_e2e.py::test_real_cli_cold_warm_save[F-86-93]",
+      "phase": "call",
+      "status": "passed",
+      "duration": 13.048077960003866
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_cache_corruption_rebuilds_once",
+      "phase": "call",
+      "status": "passed",
+      "duration": 7.6947930740134325
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_corrupt_mpp_is_failed_not_empty_plan",
+      "phase": "call",
+      "status": "passed",
+      "duration": 2.8076161930221133
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_zip_intake_inside_save",
+      "phase": "call",
+      "status": "passed",
+      "duration": 4.213885515986476
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_zip_multiple_candidates_retains_list",
+      "phase": "call",
+      "status": "passed",
+      "duration": 1.2931778880010825
+    }
+  ],
+  "mandatory_test_ids": [
+    "test_child_page.py::test_child_rejects_attachment_failure",
+    "test_child_page.py::test_child_storage_corruption",
+    "test_child_page.py::test_resume_rechecks_actual_bytes",
+    "test_cli.py::test_cli_convert_offline",
+    "test_cli.py::test_cli_rejects_unsupported_global_overrides",
+    "test_cli.py::test_cli_save_argument_errors_are_single_json",
+    "test_cli.py::test_cli_save_parser_global_paths",
+    "test_cli.py::test_cli_save_runtime_failure_is_single_json",
+    "test_env.py::test_process_env_priority_and_no_yaml_write",
+    "test_env.py::test_python_selection_fails_closed",
+    "test_env.py::test_save_context_resumes_frozen_paths_without_loader",
+    "test_env.py::test_unified_only_credentials_do_not_read_local_env",
+    "test_gantt_attachment.py::test_download_requires_exact_metadata",
+    "test_import_atomicity.py::test_different_zip_containers_same_mpp_reuse_snapshot",
+    "test_import_atomicity.py::test_failed_zip_receipt_retains_container_locator",
+    "test_import_atomicity.py::test_operation_repeat_preserves_item_adds_attempt",
+    "test_import_atomicity.py::test_process_death_commit_boundaries",
+    "test_import_atomicity.py::test_process_death_commit_boundaries[after_commit]",
+    "test_import_atomicity.py::test_process_death_commit_boundaries[after_event]",
+    "test_import_atomicity.py::test_process_death_commit_boundaries[after_item_link]",
+    "test_import_atomicity.py::test_process_death_commit_boundaries[after_snapshot]",
+    "test_import_atomicity.py::test_process_death_commit_boundaries[after_versions]",
+    "test_import_atomicity.py::test_process_death_commit_boundaries[before_commit]",
+    "test_import_atomicity.py::test_process_death_commit_boundaries[before_readback]",
+    "test_import_atomicity.py::test_process_death_commit_boundaries[before_receipt]",
+    "test_import_atomicity.py::test_readback_failure_retains_commit_and_no_second_parse",
+    "test_import_atomicity.py::test_two_processes_one_snapshot_two_receipts",
+    "test_import_atomicity.py::test_unresolved_project_has_durable_input_no_fake_snapshot",
+    "test_mpp_calendar.py::test_calendar_from_mpp_fixture",
+    "test_mpp_input.py::test_freeze_direct_exact_limit_and_missing",
+    "test_mpp_input.py::test_freeze_renamed_container_and_mpp_with_zip_suffix",
+    "test_mpp_input.py::test_input_changed_during_copy_is_never_accepted",
+    "test_mpp_input.py::test_input_path_replaced_during_copy",
+    "test_mpp_input.py::test_multiple_candidates_no_first_selection_preserves_container",
+    "test_mpp_input.py::test_zip_collisions",
+    "test_mpp_input.py::test_zip_numeric_limits",
+    "test_mpp_input.py::test_zip_numeric_limits[MPP_MAX_BYTES-10-mpp_size_limit]",
+    "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_BYTES-10-zip_size_limit]",
+    "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_ENTRIES-1-zip_entries_limit]",
+    "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_RATIO-1-zip_ratio_limit]",
+    "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_UNPACKED_BYTES-10-zip_unpacked_limit]",
+    "test_mpp_input.py::test_zip_symlink_and_input_symlink_forbidden",
+    "test_mpp_input.py::test_zip_unsafe_paths",
+    "test_pipeline.py::test_actual_current_attachment_changed",
+    "test_pipeline.py::test_attachment_failure_blocks_put",
+    "test_pipeline.py::test_build_plan_from_mpp_offline",
+    "test_pipeline.py::test_storage_readback_rejects_corruption",
+    "test_pipeline.py::test_success_records_get_observation_and_actual_id",
+    "test_plan_archive.py::test_artifact_corruption_is_not_duplicate_success",
+    "test_plan_archive.py::test_explicit_slug_and_contradictory_bindings_rejected",
+    "test_plan_archive.py::test_same_filename_different_bytes_get_different_objects",
+    "test_plan_archive.py::test_stable_local_lineage_preserves_old_filename_lines",
+    "test_plan_cache.py::test_atomic_failure_preserves_previous_entry",
+    "test_plan_cache.py::test_cache_deletion_does_not_delete_durable_data",
+    "test_plan_cache.py::test_concurrent_atomic_writes",
+    "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source",
+    "test_plan_cache.py::test_corrupt_source_is_not_read_or_reused",
+    "test_plan_cache.py::test_independent_cache_keys",
+    "test_plan_cache.py::test_real_parse_cache_one_read_same_bytes_different_names",
+    "test_plan_cache.py::test_representation_corruption_rebuilds",
+    "test_plan_receipt.py::test_atomic_mirror_failure_keeps_previous_json",
+    "test_plan_receipt.py::test_mask_driver_strings",
+    "test_plan_receipt.py::test_receipt_rejects_path_escape",
+    "test_plan_receipt.py::test_single_receipt_all_required_nullable_fields",
+    "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect",
+    "test_plan_reconcile.py::test_import_reconcile_missing_link_is_not_reimported",
+    "test_plan_reconcile.py::test_reconcile_single_candidate_does_not_confirm_operation",
+    "test_plan_save.py::test_complete_save_and_unknown_timezone_sql_status",
+    "test_plan_save.py::test_corrupt_archived_source_or_export_never_duplicate_success",
+    "test_plan_save.py::test_frozen_input_never_refreezes_or_opens_original",
+    "test_plan_save.py::test_invalid_arguments_before_intake",
+    "test_plan_save.py::test_missing_runtime_is_explicit_failure_before_read",
+    "test_plan_save.py::test_quality_warnings_do_not_block_archive",
+    "test_plan_save.py::test_reader_diagnostics_use_stderr_and_artifacts",
+    "test_plan_save.py::test_receipt_mirror_failure_preserves_commit_and_recovers",
+    "test_plan_save.py::test_recovery_after_commit_before_readback_no_reader",
+    "test_plan_save.py::test_save_creates_snapshot_without_page_id",
+    "test_plan_save.py::test_save_deduplicates_and_preserves_each_arrival",
+    "test_plan_save.py::test_save_explicit_lineage_and_version_date",
+    "test_plan_save.py::test_save_missing_input_is_failed_arrival",
+    "test_plan_save.py::test_save_preserves_populated_baseline_and_publication_rows",
+    "test_plan_save.py::test_save_requires_project_slug_preserves_input",
+    "test_plan_save.py::test_save_with_page_id_reuses_existing_lineage",
+    "test_plan_save.py::test_unusable_snapshot_is_not_success",
+    "test_plan_verify.py::test_storage_negative_cases",
+    "test_prepared_plan.py::test_calendar_intervals_exceptions_inheritance_and_bindings",
+    "test_prepared_plan.py::test_context_unified_settings_cli_overrides_and_no_secrets",
+    "test_prepared_plan.py::test_fixtures_manifest_integrity",
+    "test_prepared_plan.py::test_invalid_export_is_rejected",
+    "test_prepared_plan.py::test_normalization_profile_and_timezone_change_identity",
+    "test_prepared_plan.py::test_prepared_load_rejects_changed_data",
+    "test_prepared_plan.py::test_quality_missing_getter_errors_are_preserved",
+    "test_prepared_plan.py::test_relations_keep_signed_elapsed_and_known_zero",
+    "test_prepared_plan.py::test_semantic_hash_excludes_execution_provenance",
+    "test_prepared_plan.py::test_settings_numeric_contract_boundaries",
+    "test_prepared_plan.py::test_settings_reject_invalid_ranges",
+    "test_save_e2e.py::test_cli_cache_corruption_rebuilds_once",
+    "test_save_e2e.py::test_cli_corrupt_mpp_is_failed_not_empty_plan",
+    "test_save_e2e.py::test_cli_zip_intake_inside_save",
+    "test_save_e2e.py::test_cli_zip_multiple_candidates_retains_list",
+    "test_save_e2e.py::test_real_cli_cold_warm_save[E-78-84]",
+    "test_save_e2e.py::test_real_cli_cold_warm_save[F-86-93]"
+  ],
+  "counters": {
+    "save_E_F": {
+      "E": {
+        "cold": {
+          "MPXJ_read": 1,
+          "cache_hit": 0,
+          "cache_miss": 1,
+          "POST": 0,
+          "PUT": 0
+        },
+        "warm": {
+          "MPXJ_read": 0,
+          "cache_hit": 1,
+          "cache_miss": 0,
+          "POST": 0,
+          "PUT": 0
+        }
+      },
+      "F": {
+        "cold": {
+          "MPXJ_read": 1,
+          "cache_hit": 0,
+          "cache_miss": 1,
+          "POST": 0,
+          "PUT": 0
+        },
+        "warm": {
+          "MPXJ_read": 0,
+          "cache_hit": 1,
+          "cache_miss": 0,
+          "POST": 0,
+          "PUT": 0
+        }
+      }
+    },
+    "MPXJ_read_all_legacy_paths": null,
+    "live_POST": 0,
+    "live_PUT": 0,
+    "publication_regression_fake_counts": {
+      "MPXJ_read": 2,
+      "cache_hit": 1,
+      "cache_miss": 2,
+      "attachment_POST_fake": 33,
+      "page_POST_fake": 14,
+      "page_PUT_fake": 18,
+      "live_POST": 0,
+      "live_PUT": 0
+    }
+  },
+  "real_cases": {
+    "E": {
+      "case": "E",
+      "cold": {
+        "command": [
+          "/usr/bin/python3",
+          "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+          "--db",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/state/index.sqlite",
+          "--workvault",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault",
+          "--cache-dir",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/cache",
+          "save",
+          "--mpp",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/E.mpp",
+          "--project-slug",
+          "acceptance-project",
+          "--source-version-date",
+          "2026-11-15"
+        ],
+        "rc": 0,
+        "receipt": {
+          "schema_version": 1,
+          "operation_id": "operation_d74d170acde94e21b979bbaf6dac3ff0",
+          "item_id": "item_3dfc20ba41c44583aeaf6612583ef78b",
+          "status": "saved_with_warnings",
+          "mode": "save",
+          "exit_code": 0,
+          "project_slug": "acceptance-project",
+          "source": {
+            "name": "E.mpp",
+            "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "size_bytes": 552960
+          },
+          "snapshot_id": "snapshot_e3620b7ed7094205897f5fefd01f3943",
+          "page_id": null,
+          "page_url": null,
+          "task_count": 78,
+          "display_task_count": 77,
+          "dependency_count": 84,
+          "exceptions": [],
+          "attachment_version": null,
+          "verification": {
+            "archive": "verified",
+            "attachment": "not_applicable",
+            "storage": "not_applicable",
+            "schedule": {
+              "status": "not_verified",
+              "checks": [],
+              "limitations": [
+                "timezone_unknown",
+                "collection_assignments_partial",
+                "collection_dependencies_partial",
+                "fields_missing",
+                "fields_unsupported",
+                "schedule_not_verified"
+              ],
+              "evidence_ids": []
+            }
+          },
+          "published": false,
+          "warnings": [
+            {
+              "code": "timezone_unknown",
+              "message": "Исходные даты сохранены без подтверждённой таймзоны",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            },
+            {
+              "code": "collection_assignments_partial",
+              "message": "Полнота коллекции assignments: partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            },
+            {
+              "code": "collection_dependencies_partial",
+              "message": "Полнота коллекции dependencies: partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            },
+            {
+              "code": "fields_missing",
+              "message": "Часть исходных полей имеет качество missing",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            },
+            {
+              "code": "fields_unsupported",
+              "message": "Часть исходных полей имеет качество unsupported",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            }
+          ],
+          "completed_stages": [
+            "input_frozen",
+            "prepared",
+            "archived"
+          ],
+          "external_effect": "none",
+          "error": null
+        },
+        "counters": {
+          "MPXJ_read": 1,
+          "cache_hit": 0,
+          "cache_miss": 1,
+          "POST": 0,
+          "PUT": 0
+        },
+        "duration_seconds": 5.82524396001827,
+        "stage_durations_seconds": {
+          "readback": 0.18027988998801447,
+          "parse_cache": 3.4125307830108795,
+          "normalization_quality": 1.7852000639832113,
+          "archive_commit": 0.43179054200300016
+        },
+        "versions": {
+          "reader": "read-mpp-v2",
+          "mpxj": "16.4.0",
+          "jpype": "1.7.1",
+          "export": "full-export-v2",
+          "normalization": {
+            "fingerprint": "26f75d00b4daf3847545115420e36fea574c96044530ae1847dd0c81399efcad",
+            "id": "normalization-v1",
+            "normalizer_version": "prepared-v1",
+            "version": "1.0.0"
+          },
+          "resolved_timezone": null
+        }
+      },
+      "warm": {
+        "command": [
+          "/usr/bin/python3",
+          "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+          "--db",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/state/index.sqlite",
+          "--workvault",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault",
+          "--cache-dir",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/cache",
+          "save",
+          "--mpp",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/E-renamed.mpp",
+          "--project-slug",
+          "acceptance-project"
+        ],
+        "rc": 0,
+        "receipt": {
+          "schema_version": 1,
+          "operation_id": "operation_d44d689fff6c4ba39f5037583572ea68",
+          "item_id": "item_3baede30caf24d97bbb2dcd8604c9ac7",
+          "status": "unchanged",
+          "mode": "save",
+          "exit_code": 0,
+          "project_slug": "acceptance-project",
+          "source": {
+            "name": "E-renamed.mpp",
+            "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "size_bytes": 552960
+          },
+          "snapshot_id": "snapshot_e3620b7ed7094205897f5fefd01f3943",
+          "page_id": null,
+          "page_url": null,
+          "task_count": 78,
+          "display_task_count": 77,
+          "dependency_count": 84,
+          "exceptions": [],
+          "attachment_version": null,
+          "verification": {
+            "archive": "verified",
+            "attachment": "not_applicable",
+            "storage": "not_applicable",
+            "schedule": {
+              "status": "not_verified",
+              "checks": [],
+              "limitations": [
+                "timezone_unknown",
+                "collection_assignments_partial",
+                "collection_dependencies_partial",
+                "fields_missing",
+                "fields_unsupported",
+                "schedule_not_verified"
+              ],
+              "evidence_ids": []
+            }
+          },
+          "published": false,
+          "warnings": [
+            {
+              "code": "timezone_unknown",
+              "message": "Исходные даты сохранены без подтверждённой таймзоны",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            },
+            {
+              "code": "collection_assignments_partial",
+              "message": "Полнота коллекции assignments: partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            },
+            {
+              "code": "collection_dependencies_partial",
+              "message": "Полнота коллекции dependencies: partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            },
+            {
+              "code": "fields_missing",
+              "message": "Часть исходных полей имеет качество missing",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            },
+            {
+              "code": "fields_unsupported",
+              "message": "Часть исходных полей имеет качество unsupported",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_E0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json"
+            }
+          ],
+          "completed_stages": [
+            "input_frozen",
+            "prepared",
+            "archived"
+          ],
+          "external_effect": "none",
+          "error": null
+        },
+        "counters": {
+          "MPXJ_read": 0,
+          "cache_hit": 1,
+          "cache_miss": 0,
+          "POST": 0,
+          "PUT": 0
+        },
+        "duration_seconds": 3.2746137920184992,
+        "stage_durations_seconds": {
+          "readback": 0.21433112802333198,
+          "parse_cache": 0.9068634839786682,
+          "normalization_quality": 1.7932389890193008,
+          "archive_commit": 0.3485146269958932
+        },
+        "versions": {
+          "reader": "read-mpp-v2",
+          "mpxj": "16.4.0",
+          "jpype": "1.7.1",
+          "export": "full-export-v2",
+          "normalization": {
+            "fingerprint": "26f75d00b4daf3847545115420e36fea574c96044530ae1847dd0c81399efcad",
+            "id": "normalization-v1",
+            "normalizer_version": "prepared-v1",
+            "version": "1.0.0"
+          },
+          "resolved_timezone": null
+        }
+      },
+      "client_import": "forbidden",
+      "python_socket": "forbidden",
+      "baseline_before": [],
+      "baseline_after": [],
+      "publication_rows": 0,
+      "POST": 0,
+      "PUT": 0
+    },
+    "F": {
+      "case": "F",
+      "cold": {
+        "command": [
+          "/usr/bin/python3",
+          "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+          "--db",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/state/index.sqlite",
+          "--workvault",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault",
+          "--cache-dir",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/cache",
+          "save",
+          "--mpp",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/F.mpp",
+          "--project-slug",
+          "acceptance-project",
+          "--source-version-date",
+          "2026-11-15"
+        ],
+        "rc": 0,
+        "receipt": {
+          "schema_version": 1,
+          "operation_id": "operation_3a85e0c1f6b74247bf84a190fc773889",
+          "item_id": "item_1ff1194ec787415bb544816edd6e05e0",
+          "status": "saved_with_warnings",
+          "mode": "save",
+          "exit_code": 0,
+          "project_slug": "acceptance-project",
+          "source": {
+            "name": "F.mpp",
+            "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+            "size_bytes": 567808
+          },
+          "snapshot_id": "snapshot_64fe94b2b6d549cb85532c899b96879d",
+          "page_id": null,
+          "page_url": null,
+          "task_count": 86,
+          "display_task_count": 85,
+          "dependency_count": 93,
+          "exceptions": [],
+          "attachment_version": null,
+          "verification": {
+            "archive": "verified",
+            "attachment": "not_applicable",
+            "storage": "not_applicable",
+            "schedule": {
+              "status": "not_verified",
+              "checks": [],
+              "limitations": [
+                "timezone_unknown",
+                "collection_assignments_partial",
+                "collection_dependencies_partial",
+                "fields_missing",
+                "fields_unsupported",
+                "schedule_not_verified"
+              ],
+              "evidence_ids": []
+            }
+          },
+          "published": false,
+          "warnings": [
+            {
+              "code": "timezone_unknown",
+              "message": "Исходные даты сохранены без подтверждённой таймзоны",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            },
+            {
+              "code": "collection_assignments_partial",
+              "message": "Полнота коллекции assignments: partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            },
+            {
+              "code": "collection_dependencies_partial",
+              "message": "Полнота коллекции dependencies: partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            },
+            {
+              "code": "fields_missing",
+              "message": "Часть исходных полей имеет качество missing",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            },
+            {
+              "code": "fields_unsupported",
+              "message": "Часть исходных полей имеет качество unsupported",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            }
+          ],
+          "completed_stages": [
+            "input_frozen",
+            "prepared",
+            "archived"
+          ],
+          "external_effect": "none",
+          "error": null
+        },
+        "counters": {
+          "MPXJ_read": 1,
+          "cache_hit": 0,
+          "cache_miss": 1,
+          "POST": 0,
+          "PUT": 0
+        },
+        "duration_seconds": 6.45389133199933,
+        "stage_durations_seconds": {
+          "readback": 0.19847288099117577,
+          "parse_cache": 3.7242296829936095,
+          "normalization_quality": 2.129214487009449,
+          "archive_commit": 0.39287680899724364
+        },
+        "versions": {
+          "reader": "read-mpp-v2",
+          "mpxj": "16.4.0",
+          "jpype": "1.7.1",
+          "export": "full-export-v2",
+          "normalization": {
+            "fingerprint": "26f75d00b4daf3847545115420e36fea574c96044530ae1847dd0c81399efcad",
+            "id": "normalization-v1",
+            "normalizer_version": "prepared-v1",
+            "version": "1.0.0"
+          },
+          "resolved_timezone": null
+        }
+      },
+      "warm": {
+        "command": [
+          "/usr/bin/python3",
+          "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+          "--db",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/state/index.sqlite",
+          "--workvault",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault",
+          "--cache-dir",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/cache",
+          "save",
+          "--mpp",
+          "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/F-renamed.mpp",
+          "--project-slug",
+          "acceptance-project"
+        ],
+        "rc": 0,
+        "receipt": {
+          "schema_version": 1,
+          "operation_id": "operation_2124f676ceda47438032caca3bc0a5da",
+          "item_id": "item_ecfa911db4584b9db00faa9eca399e7a",
+          "status": "unchanged",
+          "mode": "save",
+          "exit_code": 0,
+          "project_slug": "acceptance-project",
+          "source": {
+            "name": "F-renamed.mpp",
+            "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+            "size_bytes": 567808
+          },
+          "snapshot_id": "snapshot_64fe94b2b6d549cb85532c899b96879d",
+          "page_id": null,
+          "page_url": null,
+          "task_count": 86,
+          "display_task_count": 85,
+          "dependency_count": 93,
+          "exceptions": [],
+          "attachment_version": null,
+          "verification": {
+            "archive": "verified",
+            "attachment": "not_applicable",
+            "storage": "not_applicable",
+            "schedule": {
+              "status": "not_verified",
+              "checks": [],
+              "limitations": [
+                "timezone_unknown",
+                "collection_assignments_partial",
+                "collection_dependencies_partial",
+                "fields_missing",
+                "fields_unsupported",
+                "schedule_not_verified"
+              ],
+              "evidence_ids": []
+            }
+          },
+          "published": false,
+          "warnings": [
+            {
+              "code": "timezone_unknown",
+              "message": "Исходные даты сохранены без подтверждённой таймзоны",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            },
+            {
+              "code": "collection_assignments_partial",
+              "message": "Полнота коллекции assignments: partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            },
+            {
+              "code": "collection_dependencies_partial",
+              "message": "Полнота коллекции dependencies: partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            },
+            {
+              "code": "fields_missing",
+              "message": "Часть исходных полей имеет качество missing",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            },
+            {
+              "code": "fields_unsupported",
+              "message": "Часть исходных полей имеет качество unsupported",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json"
+            }
+          ],
+          "completed_stages": [
+            "input_frozen",
+            "prepared",
+            "archived"
+          ],
+          "external_effect": "none",
+          "error": null
+        },
+        "counters": {
+          "MPXJ_read": 0,
+          "cache_hit": 1,
+          "cache_miss": 0,
+          "POST": 0,
+          "PUT": 0
+        },
+        "duration_seconds": 3.5792319620086346,
+        "stage_durations_seconds": {
+          "readback": 0.19772512101917528,
+          "parse_cache": 0.9317595149914268,
+          "normalization_quality": 2.1427415900107007,
+          "archive_commit": 0.2940951960044913
+        },
+        "versions": {
+          "reader": "read-mpp-v2",
+          "mpxj": "16.4.0",
+          "jpype": "1.7.1",
+          "export": "full-export-v2",
+          "normalization": {
+            "fingerprint": "26f75d00b4daf3847545115420e36fea574c96044530ae1847dd0c81399efcad",
+            "id": "normalization-v1",
+            "normalizer_version": "prepared-v1",
+            "version": "1.0.0"
+          },
+          "resolved_timezone": null
+        }
+      },
+      "client_import": "forbidden",
+      "python_socket": "forbidden",
+      "baseline_before": [],
+      "baseline_after": [],
+      "publication_rows": 0,
+      "POST": 0,
+      "PUT": 0
+    }
+  },
+  "covered_requirements": [
+    "§20/AC-01",
+    "save portions of §20/AC-07,08,15,16,20,21,26"
+  ],
+  "invariants": {
+    "published": false,
+    "page_id": null,
+    "page_url": null,
+    "external_effect": "none",
+    "baseline": "exact populated table rows preserved",
+    "publication": "no added rows"
+  },
+  "receipt": "schema_version:1; SQL save_result first; atomic file mirror; mirror failure failed/5 retains committed IDs; recovery read-back before reader",
+  "limitations": [
+    "Только этап 04; batch, identity, publish/resume CLI и активная регистрация остаются последующим этапам",
+    "schedule:not_verified; live Confluence и проверка установленного плагина не выполнялись",
+    "Общее число MPXJ-read старых CSV/calendar-путей не измерено; failed reader без экспортной telemetry имеет счётчик null",
+    "Production-БД/страницы/настройки/baseline не изменялись; новые миграции отсутствуют",
+    "MofsIndex/MppReader только читались; внешний комплект изменений не требуется",
+    "ownCloud sync не подтверждён; Gateway/кроны/наблюдатели/расписания не изменялись"
+  ],
+  "generated_at": "2026-11-16T12:14:23.527931+00:00"
+}

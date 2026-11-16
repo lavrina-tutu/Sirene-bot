@@ -23,6 +23,14 @@ class PlanContext:
     mpp_reader: Path
     settings: dict[str, Any]
     sources: dict[str, str]
+    frozen_profiles: dict[str, Any] | None = None
+
+    @classmethod
+    def from_snapshot(cls, document):
+        """Resume without resolving any current defaults or credentials."""
+        paths = document["paths"]
+        return cls(*(Path(paths[k]) for k in ("db", "workvault", "cache_dir", "mpp_reader")),
+                   dict(document["settings"]), dict(document["sources"]), document.get("profiles"))
 
     @classmethod
     def resolve(cls, *, db=None, workvault=None, cache_dir=None, settings: Settings | None = None):
@@ -60,8 +68,8 @@ class PlanContext:
         return cls(paths["db"], paths["WORKVAULT_PATH"], paths["CACHE_DIR"], tool_root("mpp_reader"), effective, sources)
 
     def snapshot(self):
-        profiles = {}
-        for key in ("NORMALIZATION_PROFILE", "SUMMARY_PROFILE", "PLUGIN_PROFILE"):
+        profiles = dict(self.frozen_profiles) if self.frozen_profiles is not None else {}
+        for key in (() if self.frozen_profiles is not None else ("NORMALIZATION_PROFILE", "SUMMARY_PROFILE", "PLUGIN_PROFILE")):
             path = PROFILES / f"{self.settings[key]}.json"
             profiles[key] = {"id": self.settings[key], "sha256": hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None,
                              "status": "available" if path.exists() else "not_installed"}

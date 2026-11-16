@@ -67,3 +67,16 @@ def test_process_env_priority_and_no_yaml_write(tmp_path, monkeypatch):
     assert settings.values["CACHE_DIR"] == "/override/cache"
     assert settings.sources["CACHE_DIR"] == "process_env"
     assert path.read_bytes() == before
+
+
+def test_save_context_resumes_frozen_paths_without_loader(tmp_path, monkeypatch):
+    from plan_context import PlanContext
+    context = PlanContext.resolve(db=tmp_path/"state/index.sqlite", workvault=tmp_path/"vault", cache_dir=tmp_path/"parse-cache")
+    saved = context.snapshot()
+    def forbidden(*a, **k):
+        raise AssertionError("resume consulted current defaults")
+    monkeypatch.setattr("plan_context.load_settings", forbidden)
+    monkeypatch.setattr("env.load_confluence_env", forbidden)
+    restored = PlanContext.from_snapshot(saved)
+    assert restored.snapshot() == saved
+    assert restored.db == context.db and restored.workvault == context.workvault and restored.cache_dir == context.cache_dir

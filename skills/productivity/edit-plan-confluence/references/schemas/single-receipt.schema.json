@@ -1,0 +1,388 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "operation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "item_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "prepared",
+        "saved",
+        "saved_with_warnings",
+        "published",
+        "published_with_warnings",
+        "unchanged",
+        "needs_decision",
+        "failed",
+        "conflict",
+        "unknown"
+      ]
+    },
+    "mode": {
+      "enum": [
+        "save",
+        "publish"
+      ]
+    },
+    "exit_code": {
+      "type": "integer",
+      "enum": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "project_slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "size_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "sha256",
+        "size_bytes"
+      ]
+    },
+    "snapshot_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "page_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "page_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "task_count": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "display_task_count": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "dependency_count": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "attachment_version": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rule_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "revision": {
+            "type": [
+              "string",
+              "integer",
+              "null"
+            ]
+          },
+          "result": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "rule_id",
+          "revision",
+          "result",
+          "evidence_id"
+        ]
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "archive": {
+          "enum": [
+            "verified",
+            "failed",
+            "not_verified",
+            "not_applicable"
+          ]
+        },
+        "attachment": {
+          "enum": [
+            "verified",
+            "failed",
+            "not_verified",
+            "not_applicable"
+          ]
+        },
+        "storage": {
+          "enum": [
+            "verified",
+            "failed",
+            "not_verified",
+            "not_applicable"
+          ]
+        },
+        "schedule": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "verified",
+                "not_verified",
+                "mismatch",
+                "accepted_deviation",
+                "not_applicable"
+              ]
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "status",
+            "checks",
+            "limitations",
+            "evidence_ids"
+          ]
+        }
+      },
+      "required": [
+        "archive",
+        "attachment",
+        "storage",
+        "schedule"
+      ]
+    },
+    "published": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "details_ref"
+        ]
+      }
+    },
+    "completed_stages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "external_effect": {
+      "enum": [
+        "none",
+        "attachment_written",
+        "storage_written",
+        "unknown"
+      ]
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "retryable": {
+              "type": "boolean"
+            },
+            "next_action": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "code",
+            "message",
+            "retryable",
+            "next_action"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "operation_id",
+    "item_id",
+    "status",
+    "mode",
+    "exit_code",
+    "project_slug",
+    "source",
+    "snapshot_id",
+    "page_id",
+    "page_url",
+    "task_count",
+    "display_task_count",
+    "dependency_count",
+    "attachment_version",
+    "exceptions",
+    "verification",
+    "published",
+    "warnings",
+    "completed_stages",
+    "external_effect",
+    "error"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "single-receipt.schema.json",
+  "title": "Single operation receipt v1 (§20.3.12.1)",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "save"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "published": {
+            "const": false
+          },
+          "page_id": {
+            "type": "null"
+          },
+          "page_url": {
+            "type": "null"
+          },
+          "attachment_version": {
+            "type": "null"
+          },
+          "external_effect": {
+            "const": "none"
+          }
+        }
+      }
+    }
+  ]
+}

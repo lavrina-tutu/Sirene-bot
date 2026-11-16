@@ -173,6 +173,43 @@ STAGE03_REQUIRED |= {
 }
 
 
+STAGE04_REQUIRED = STAGE03_REQUIRED | STAGE02_REQUIRED | {
+    "test_plan_save.py::test_complete_save_and_unknown_timezone_sql_status",
+    "test_plan_save.py::test_missing_runtime_is_explicit_failure_before_read",
+    "test_plan_save.py::test_reader_diagnostics_use_stderr_and_artifacts",
+    "test_save_e2e.py::test_cli_zip_multiple_candidates_retains_list",
+    "test_plan_save.py::test_save_creates_snapshot_without_page_id",
+    "test_plan_save.py::test_save_deduplicates_and_preserves_each_arrival",
+    "test_plan_save.py::test_save_preserves_populated_baseline_and_publication_rows",
+    "test_plan_save.py::test_save_requires_project_slug_preserves_input",
+    "test_plan_save.py::test_save_with_page_id_reuses_existing_lineage",
+    "test_plan_save.py::test_save_explicit_lineage_and_version_date",
+    "test_plan_save.py::test_invalid_arguments_before_intake",
+    "test_plan_save.py::test_save_missing_input_is_failed_arrival",
+    "test_plan_save.py::test_unusable_snapshot_is_not_success",
+    "test_plan_save.py::test_quality_warnings_do_not_block_archive",
+    "test_plan_save.py::test_frozen_input_never_refreezes_or_opens_original",
+    "test_plan_save.py::test_recovery_after_commit_before_readback_no_reader",
+    "test_plan_save.py::test_receipt_mirror_failure_preserves_commit_and_recovers",
+    "test_plan_save.py::test_corrupt_archived_source_or_export_never_duplicate_success",
+    "test_plan_receipt.py::test_single_receipt_all_required_nullable_fields",
+    "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect",
+    "test_plan_receipt.py::test_atomic_mirror_failure_keeps_previous_json",
+    "test_plan_receipt.py::test_mask_driver_strings",
+    "test_plan_receipt.py::test_receipt_rejects_path_escape",
+    "test_cli.py::test_cli_save_parser_global_paths",
+    "test_cli.py::test_cli_save_argument_errors_are_single_json",
+    "test_cli.py::test_cli_save_runtime_failure_is_single_json",
+    "test_cli.py::test_cli_rejects_unsupported_global_overrides",
+    "test_env.py::test_save_context_resumes_frozen_paths_without_loader",
+    "test_save_e2e.py::test_real_cli_cold_warm_save[E-78-84]",
+    "test_save_e2e.py::test_real_cli_cold_warm_save[F-86-93]",
+    "test_save_e2e.py::test_cli_cache_corruption_rebuilds_once",
+    "test_save_e2e.py::test_cli_corrupt_mpp_is_failed_not_empty_plan",
+    "test_save_e2e.py::test_cli_zip_intake_inside_save",
+}
+
+
 def pytest_addoption(parser):
     parser.addoption("--acceptance-stage", default=None)
     parser.addoption("--test-root", default=None)
@@ -189,8 +226,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03"):
-        raise pytest.UsageError("this acceptance contour implements stages 01, 02 and 03")
+    if stage and stage not in ("01", "02", "03", "04"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 04")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -231,7 +268,7 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED}[stage]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -250,6 +287,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption("--acceptance-stage") == "04":
+        _stage04_report(session, exitstatus, root)
         return
     if config.getoption("--acceptance-stage") == "03":
         _stage03_report(session, exitstatus, root)
@@ -307,7 +347,6 @@ def acceptance_isolation(tmp_path, monkeypatch, request):
     monkeypatch.setattr(plan_receipt, "get_workvault_path", lambda: wv)
     db_path = tmp_path / "state/index.sqlite"
     monkeypatch.setattr(plan_archive, "get_plan_db_path", lambda: db_path)
-    monkeypatch.setattr(plan_save, "get_plan_db_path", lambda: db_path)
     original_connect = sqlite3.connect
 
     def guarded_sqlite(path, *args, **kwargs):
@@ -575,4 +614,86 @@ def _stage03_report(session, exitstatus, root):
     lines.extend(f"- `{path}`: {description}." for path,description in implemented.items())
     lines.extend(["","Атомарность: "+report["atomicity"],"","Дедупликация: "+report["deduplication"],"","Восстановление: "+report["recovery"],"","Вход: "+report["input"],"","Команда S:","","```text"," ".join(report["command"]),"```","","Проверено восемь границ падения процесса: после snapshot, versions, item-link, event, до COMMIT, после COMMIT, до read-back, до квитанции. Два независимых процесса оставляют один snapshot и два поступления.","","Комплект внешних изменений: usertools/MofsIndex/{before,after,changes.patch,manifest.json}; восстановление и hashes — external-checks.json. SHA завершающего коммита записывается в журнал канонического плана после commit.","","Ограничения:",""])
     lines.extend("- "+v for v in limitations)
+    (root/"reports/stage-report.md").write_text("\n".join(lines)+"\n")
+
+
+def _stage04_report(session, exitstatus, root):
+    """Evidence and gate from actual pytest outcomes, E/F and protected hashes."""
+    config = session.config
+    results = config._acceptance_results
+    initial_path = root/"reports/initial-state.json"
+    initial = json.loads(initial_path.read_text()) if initial_path.is_file() else {}
+    protected = initial.get("protected_hashes", {})
+    changed_protected = [name for name, digest in protected.items()
+                         if not Path(name).is_file() or hashlib.sha256(Path(name).read_bytes()).hexdigest() != digest]
+    cases = {}
+    for name in ("E", "F"):
+        path = root/"reports"/("save-e2e-"+name+".json")
+        if path.is_file():
+            cases[name] = json.loads(path.read_text())
+    good = (exitstatus == 0 and bool(session.items) and bool(results)
+            and all(r["status"] == "passed" for r in results)
+            and bool(protected) and not changed_protected and set(cases) == {"E", "F"})
+    files = sorted(set([*SCRIPTS.glob("*.py"), *(SKILL_ROOT/"tests").glob("*.py"),
+                       *(SKILL_ROOT/"references/schemas").glob("*.json"),
+                       *(SKILL_ROOT/"references/profiles").glob("*.json"),
+                       *(SKILL_ROOT/"references").glob("*.md"), SKILL_ROOT/"tests/pytest.ini"]))
+    hashes = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+    master = Path.home()/"WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md"
+    plan = master.parent/"plans/HF-plan_EditPlanConfluence_20261116.md"
+    schema = Path.home()/"WorkVault/Registries/EcosystemConfig.schema.json"
+    implemented = {
+        "S/scripts/plan_save.py": "единый freeze → parse/cache → quality → typed archive/dedup → read-back → receipt; save_frozen_input с обязательными artifact/hash/context/operation; краткий SaveResult; восстановление без reader",
+        "S/scripts/cli.py": "lazy client/pipeline imports; локальный save --page-id; глобальные пути, lineage и дата версии; JSON результата и ошибок; rc 0/2/4/5",
+        "S/scripts/plan_context.py": "изолированные db/WorkVault/cache передаются явно; восстановление settings/sources/profile hashes без loader",
+        "S/scripts/plan_receipt.py": "полный nullable контракт v1; атомарная замена/fsync/read-back; маскирование; безопасные имена зеркал",
+        "S/scripts/plan_operation.py": "save_result в SQL до файлового зеркала; ошибка зеркала сохраняет snapshot и SQL-историю",
+        "S/scripts/plan_reconcile.py": "чтение полной последней квитанции из SQL; committed read-back без повторного разбора",
+        "S/references/schemas/single-receipt.schema.json": "полная схема §20.3.12.1 и save-инварианты",
+        "S/references/cli-contract.md": "все добавленные параметры, размещение overrides, exit codes, обязательные пути и сохранённая совместимость",
+        "S/tests/test_plan_save.py + test_plan_receipt.py + test_cli.py + test_env.py": "контракты, populated baseline, предупреждения, ошибки, recovery commit/mirror, JSON и изоляция",
+        "S/tests/test_save_e2e.py": "CLI /usr/bin/python3 и реальный MPXJ /usr/bin/python3.9; E/F cold/warm, corruption rebuild, unreadable MPP, ZIP; импорт клиента и сеть запрещены",
+        "S/tests/conftest.py": "обязательные test ID этапа 04 и отчёт из фактических результатов; проверка неизменности внешних компонентов и evidence 01–03",
+    }
+    limitations = ["Только этап 04; batch, identity, publish/resume CLI и активная регистрация остаются последующим этапам",
+                   "schedule:not_verified; live Confluence и проверка установленного плагина не выполнялись",
+                   "Общее число MPXJ-read старых CSV/calendar-путей не измерено; failed reader без экспортной telemetry имеет счётчик null",
+                   "Production-БД/страницы/настройки/baseline не изменялись; новые миграции отсутствуют",
+                   "MofsIndex/MppReader только читались; внешний комплект изменений не требуется",
+                   "ownCloud sync не подтверждён; Gateway/кроны/наблюдатели/расписания не изменялись"]
+    counters = {"save_E_F": {name: {kind: value[kind]["counters"] for kind in ("cold", "warm")} for name,value in cases.items()},
+                "MPXJ_read_all_legacy_paths": None, "live_POST":0, "live_PUT":0,
+                "publication_regression_fake_counts": config._acceptance_counters}
+    report = {"stage":"04", "gate":"passed" if good else "failed", "exit_code":int(exitstatus),
+              "base_commit":initial.get("base_commit"),
+              "command":[sys.executable,"-m","pytest",*config.invocation_params.args],
+              "environment":{"python":sys.executable,"version":platform.python_version(),"test_root":str(root),
+                             "cli_python":"/usr/bin/python3","mpxj_python":"/usr/bin/python3.9", "PYTHONPATH":os.environ.get("PYTHONPATH")},
+              "master":{"version":"0.5.0","path":str(master),"sha256":hashlib.sha256(master.read_bytes()).hexdigest()},
+              "plan":{"path":str(plan),"normative_prefix_sha256":hashlib.sha256(plan.read_text().split("## Журнал исполнения")[0].encode()).hexdigest()},
+              "source_files":hashes,"source_tree_sha256":hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),
+              "config_contract_sha256":hashlib.sha256(schema.read_bytes()).hexdigest(), "migrations":[],
+              "protected_files_checked":len(protected),"changed_protected_files":changed_protected,
+              "preexisting_changes":initial.get("preexisting",[]),"implemented_files":implemented,
+              "selected":len(session.items), "tests":results, "mandatory_test_ids":sorted(STAGE04_REQUIRED),
+              "counters":counters, "real_cases":cases,
+              "covered_requirements":["§20/AC-01", "save portions of §20/AC-07,08,15,16,20,21,26"],
+              "invariants":{"published":False,"page_id":None,"page_url":None,"external_effect":"none",
+                            "baseline":"exact populated table rows preserved", "publication":"no added rows"},
+              "receipt":"schema_version:1; SQL save_result first; atomic file mirror; mirror failure failed/5 retains committed IDs; recovery read-back before reader",
+              "limitations":limitations,"generated_at":datetime.now(timezone.utc).isoformat()}
+    (root/"reports/stage-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n")
+    lines = ["# Этап 04 — общий однопроходный save", "", f"Gate: **{report['gate']}**; rc={exitstatus}; selected={len(session.items)}; passed={sum(r['status']=='passed' for r in results)}.",
+             "", "Реализовано:", ""]
+    lines.extend(f"- `{name}`: {value}." for name,value in implemented.items())
+    lines.extend(["", "Цепочка: freeze → parse/cache → quality → typed archive/dedup → read-back → receipt. Каждый повтор регистрирует новое поступление, snapshot дедуплицируется. После commit reader не вызывается.",
+                  "", "Квитанция v1 содержит все обязательные поля §20.3.12.1. Save: published=false, page_id/page_url=null, external_effect=none. Baseline проверен точным сравнением заполненных таблиц. При отказе зеркала failed/5 сохраняет snapshot_id и подтверждённый archive read-back; SQL-результат не теряется.",
+                  "", "CLI: глобальные --db/--workvault/--cache-dir до подкоманды; save --mpp, --project-slug, --lineage-id, --timezone-hint, --source-version-date; совместимый --page-id только локальный. Полный контракт: references/cli-contract.md.",
+                  "", "Команда проверки:", "", "```text", " ".join(report["command"]), "```", "", "Реальные E/F:", ""])
+    for name, value in cases.items():
+        lines.append(f"- {name}: tasks/dependencies={value['cold']['receipt']['task_count']}/{value['cold']['receipt']['dependency_count']}; cold MPXJ={value['cold']['counters']['MPXJ_read']}; warm MPXJ={value['warm']['counters']['MPXJ_read']}, cache_hit={value['warm']['counters']['cache_hit']}; rc=0/0. Evidence: save-e2e-{name}.json.")
+    lines.extend(["", f"Проверено защищённых файлов: {len(protected)}; изменений: {len(changed_protected)}. M/R/E, миграции и evidence 01–03 без изменений. Внешнего комплекта нет. Незакоммиченные заготовки, найденные при входе, сохранены в T/preexisting и включены после проверки в реализацию этапа 04.",
+                  "", f"Дерево исходников: `{report['source_tree_sha256']}`. Версия master 0.5.0; hashes, версии, test ID/длительности и счётчики — в JSON. JUnit: junit.xml. SHA коммита записывается после commit в журнал канонического плана.",
+                  "", "Ограничения:", ""])
+    lines.extend("- "+value for value in limitations)
     (root/"reports/stage-report.md").write_text("\n".join(lines)+"\n")

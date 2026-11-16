@@ -15,12 +15,13 @@ from typing import Any
 from env import get_workvault_path
 
 _SECRET_KEY_RE = re.compile(r"(token|authorization|bearer)", re.IGNORECASE)
-_BEARER_VALUE_RE = re.compile(r"Bearer\s+[A-Za-z0-9._\-]+", re.IGNORECASE)
+_BEARER_VALUE_RE = re.compile(r"(Bearer|Basic)\s+[A-Za-z0-9._~+/=\-]+", re.IGNORECASE)
+_SECRET_VALUE_RE = re.compile(r"((?:[A-Za-z_]*token|authorization)\s*[=:]\s*)[^\s,;]+", re.IGNORECASE)
 
 
 def _mask_value(value: Any) -> Any:
     if isinstance(value, str):
-        return _BEARER_VALUE_RE.sub("Bearer ***MASKED***", value)
+        return _SECRET_VALUE_RE.sub(r"\1***MASKED***", _BEARER_VALUE_RE.sub(lambda m: m.group(1) + " ***MASKED***", value))
     return value
 
 
@@ -40,16 +41,20 @@ def mask_secrets(payload: Any) -> Any:
     return _mask_value(payload)
 
 
-def receipts_dir(attempt_id: str) -> Path:
-    return get_workvault_path() / "_plan-receipts" / attempt_id
+def receipts_dir(attempt_id: str, *, workvault: Path | None = None) -> Path:
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", attempt_id) or ".." in attempt_id:
+        raise ValueError("invalid_receipt_id")
+    return (Path(workvault) if workvault is not None else get_workvault_path()) / "_plan-receipts" / attempt_id
 
 
-def write_receipt(attempt_id: str, event_id: str, payload: dict[str, Any]) -> Path:
+def write_receipt(attempt_id: str, event_id: str, payload: dict[str, Any], *, workvault: Path | None = None) -> Path:
     """Записать квитанцию ``receipts/<attempt-id>/<event-id>.json``, маскируя
     секреты. Идемпотентна: повторный вызов перезаписывает тем же содержимым
     (не накапливает дубликаты файлов)."""
     masked = mask_secrets(payload)
-    d = receipts_dir(attempt_id)
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", event_id) or ".." in event_id:
+        raise ValueError("invalid_receipt_event_id")
+    d = receipts_dir(attempt_id, workvault=workvault)
     d.mkdir(parents=True, exist_ok=True)
     path = d / f"{event_id}.json"
     # A crash must not turn a receipt into truncated JSON.
@@ -60,17 +65,42 @@ def write_receipt(attempt_id: str, event_id: str, payload: dict[str, Any]) -> Pa
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temporary, path)
+        from mpp_input import _sync_dir
+        _sync_dir(d)
+        if json.loads(path.read_text(encoding="utf-8")) != json.loads(json.dumps(masked, default=str)):
+            raise OSError("receipt_readback_failed")
     finally:
         if os.path.exists(temporary):
             os.unlink(temporary)
     return path
 
 
-def read_receipt(attempt_id: str, event_id: str) -> dict[str, Any] | None:
-    path = receipts_dir(attempt_id) / f"{event_id}.json"
+def read_receipt(attempt_id: str, event_id: str, *, workvault: Path | None = None) -> dict[str, Any] | None:
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", event_id) or ".." in event_id:
+        raise ValueError("invalid_receipt_event_id")
+    path = receipts_dir(attempt_id, workvault=workvault) / f"{event_id}.json"
     if not path.is_file():
         return None
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def single_receipt(*, operation_id=None, item_id=None, project_slug=None, source=None):
+    """All §20.3.12.1 fields, including unknown nullable values."""
+    return {"schema_version": 1, "operation_id": operation_id, "item_id": item_id,
+            "status": "failed", "mode": "save", "exit_code": 5, "project_slug": project_slug,
+            "source": source or {"name": None, "sha256": None, "size_bytes": None},
+            "snapshot_id": None, "page_id": None, "page_url": None,
+            "task_count": None, "display_task_count": None, "dependency_count": None,
+            "exceptions": [], "attachment_version": None,
+            "verification": {"archive": "not_verified", "attachment": "not_applicable", "storage": "not_applicable",
+                             "schedule": {"status": "not_verified", "checks": [], "limitations": [], "evidence_ids": []}},
+            "published": False, "warnings": [], "completed_stages": [], "external_effect": "none", "error": None}
+
+
+def validate_single_receipt(payload):
+    import jsonschema
+    schema = Path(__file__).resolve().parents[1] / "references/schemas/single-receipt.schema.json"
+    jsonschema.validate(payload, json.loads(schema.read_text()))
 
 
 def write_failure_receipt(attempt_id: str, stage: str, error: Exception, *, external_effect: str) -> Path:

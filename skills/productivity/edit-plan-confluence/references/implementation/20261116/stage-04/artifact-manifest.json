@@ -1,0 +1,46 @@
+{
+  "gate": "passed",
+  "base_commit": "8901b8d4ae43cf13a7173dc306546899811ace3f",
+  "source_tree_sha256": "cdba8fdb8dec5bceb3811e409104c63a6edefd0a6d3083d6fb9e1802130aee43",
+  "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261116-stage04-145347/stage-04",
+  "external_changes": [],
+  "protected_files_checked": 193,
+  "files": {
+    "stage-report.json": {
+      "sha256": "4bbcdfcd61d9389aff518dffd4e724fa86b72e75d90e9acb0683a8165bfcf2d8",
+      "size_bytes": 105693
+    },
+    "stage-report.md": {
+      "sha256": "fc49e59f1e2bd8b7613cc50ddbd1d990cd18a8aad90435c7683f5efdb1d0ed50",
+      "size_bytes": 5791
+    },
+    "junit.xml": {
+      "sha256": "e53228a069e19ffaa2a7e3425ad8a8224dda499e5827ca5c8f38061fb9bd9ecb",
+      "size_bytes": 36569
+    },
+    "pytest.stdout.log": {
+      "sha256": "3bda2c34db5f0dea2002d0b4f6be9a873a11766dccf6a7d2d15319924be2d65e",
+      "size_bytes": 4624
+    },
+    "pytest.stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "initial-state.json": {
+      "sha256": "6229ffc5947b47322dd9186dcda4c0cf6260ce1445f061bdc61a7c7fbf15b5c4",
+      "size_bytes": 38075
+    },
+    "environment.json": {
+      "sha256": "8bdd89d808c851e9bc15813a033a1e554925e68b4ff4f125e73f2a0f19e9f1e4",
+      "size_bytes": 1284
+    },
+    "save-e2e-E.json": {
+      "sha256": "6eeccff82a37ad9f5ff5ab4289acbe138b112eee0d7b61e5c7142e7d229764a9",
+      "size_bytes": 11408
+    },
+    "save-e2e-F.json": {
+      "sha256": "a6e1d9b7fdda75278086f00c525efd3b81d4754347b2190f21362d83ef6cbddb",
+      "size_bytes": 11407
+    }
+  }
+}

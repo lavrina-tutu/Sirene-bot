@@ -55,3 +55,67 @@ def test_read_receipt_roundtrip():
 
 def test_read_receipt_missing_returns_none():
     assert pr.read_receipt("no-such-attempt", "no-event") is None
+
+
+def test_single_receipt_all_required_nullable_fields():
+    import copy
+    import jsonschema
+    receipt = pr.single_receipt()
+    pr.validate_single_receipt(receipt)
+    assert receipt["published"] is False and receipt["page_id"] is None and receipt["page_url"] is None
+    assert receipt["verification"]["schedule"]["status"] == "not_verified"
+    for key in receipt:
+        broken = copy.deepcopy(receipt)
+        del broken[key]
+        with pytest.raises(jsonschema.ValidationError):
+            pr.validate_single_receipt(broken)
+    for field in ("archive", "attachment", "storage", "schedule"):
+        broken = copy.deepcopy(receipt)
+        del broken["verification"][field]
+        with pytest.raises(jsonschema.ValidationError):
+            pr.validate_single_receipt(broken)
+    for obj in ("source",):
+        for key in receipt[obj]:
+            broken = copy.deepcopy(receipt)
+            del broken[obj][key]
+            with pytest.raises(jsonschema.ValidationError):
+                pr.validate_single_receipt(broken)
+    for key in receipt["verification"]["schedule"]:
+        broken = copy.deepcopy(receipt)
+        del broken["verification"]["schedule"][key]
+        with pytest.raises(jsonschema.ValidationError):
+            pr.validate_single_receipt(broken)
+
+
+@pytest.mark.parametrize("field,value", [("published", True), ("page_id", "123"), ("page_url", "https://invalid"),
+                                         ("external_effect", "storage_written"), ("attachment_version", 2)])
+def test_single_receipt_save_invariants_reject_remote_effect(field, value):
+    import jsonschema
+    receipt = pr.single_receipt()
+    receipt[field] = value
+    with pytest.raises(jsonschema.ValidationError):
+        pr.validate_single_receipt(receipt)
+
+
+def test_atomic_mirror_failure_keeps_previous_json(tmp_path, monkeypatch):
+    path = pr.write_receipt("op", "save", {"status":"old"})
+    original = path.read_bytes()
+    def fail(*a, **k):
+        raise OSError("replace failed")
+    monkeypatch.setattr(pr.os, "replace", fail)
+    with pytest.raises(OSError):
+        pr.write_receipt("op", "save", {"status":"new"})
+    assert path.read_bytes() == original
+    assert not list(path.parent.glob(".receipt-*"))
+
+
+@pytest.mark.parametrize("value", ["Authorization: Basic c2VjcmV0", "CONFLUENCE_TOKEN=s3cr3t", "token: s3cr3t", "Bearer s3cr3t"])
+def test_mask_driver_strings(value):
+    assert "s3cr3t" not in pr.mask_secrets(value)
+    assert "c2VjcmV0" not in pr.mask_secrets(value)
+
+
+@pytest.mark.parametrize("attempt,event", [("../escape", "save"), ("op", "../save")])
+def test_receipt_rejects_path_escape(attempt, event):
+    with pytest.raises(ValueError):
+        pr.write_receipt(attempt, event, {})

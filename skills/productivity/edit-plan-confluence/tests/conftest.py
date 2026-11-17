@@ -2306,7 +2306,7 @@ def _stage13_report(session, exitstatus, root):
             'evidence':[str(p.relative_to(root)) for p,_ in values],
             'user_decisions_required': None,
             'limitations':([live.get('limitation') or 'No observed plugin dates for this representation'] if case in ('A','B','C','D') and not observed else []),
-            'historical_rule_identity': 'not_evaluated_without_confirmed_historical_rule_context' if case in ('B','C') else None,
+            'historical_rule_identity': 'not_required_owner_decision_preserves_source_link' if case in ('B','C') else None,
             'durations_seconds':[r['duration'] for r in results if _stage13_short_id(r['test_id']) in definition['tests']]}
         _stage13_write(root/'reports/cases'/(case+'.json'), record)
         case_reports[case] = record

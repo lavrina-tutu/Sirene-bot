@@ -1,0 +1,152 @@
+{
+  "test_id": "acceptance/test_user_journeys.py::test_today_cli_local_boundaries",
+  "observed_at": "2026-11-17T16:20:09.845238+00:00",
+  "result": {
+    "schema_version": 1,
+    "action": "history",
+    "exit_code": 0,
+    "parameters": {
+      "project_slug": "stage13-trisigma",
+      "view": "files",
+      "order": "ingested",
+      "lineage_id": null,
+      "since": "2026-11-16T21:00:00.000000+00:00",
+      "until": "2026-11-17T21:00:00.000000+00:00",
+      "time_field": "received",
+      "limit": 100
+    },
+    "result": {
+      "records": [
+        {
+          "sequence": 2,
+          "item_id": "item_37f9f978d9c14171ac2dc576f48b933e",
+          "operation_id": "operation_e12c7de85f024fe586b710bfd950a593",
+          "batch_id": null,
+          "ordinal": 0,
+          "plan_id": "plan_13d53d3eda644bd4b492866a4f0e7965",
+          "lineage_id": "lineage_7a3b9a8d5a9746d9982647ea34c79139",
+          "original_name": "E.mpp",
+          "original_locator": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_today_cli_local_boundarie0/E.mpp",
+          "transport_json": null,
+          "source_mpp_sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+          "size_bytes": 552960,
+          "container_sha256": null,
+          "container_locator": null,
+          "zip_member": null,
+          "received_at": "2026-11-17T00:00:00+03:00",
+          "frozen_at": "2026-11-17T16:19:57.939897+00:00",
+          "frozen_locator": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_today_cli_local_boundarie0/WorkVault/_plan-receipts/operation_e12c7de85f024fe586b710bfd950a593/input/04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a/source.mpp",
+          "source_version_date": null,
+          "source_version_basis": null,
+          "artifact_id": "artifact_1febbcff4a2c4acc99582c94c4c59da3",
+          "snapshot_id": "snapshot_ac25c1709df243debc0fefd2cfc495ea",
+          "normalization_profile_fingerprint": "a22b622f83306016a9f82dd98f34995b6956eadf17de10d0101af877342c28ce",
+          "resolved_timezone": "unknown",
+          "dedup_key": "786c18e70471f1663a74ccbae5ceeb03ebc9a1329bee1a33f5d682c7ef7c6758",
+          "status": "unchanged",
+          "error_code": null,
+          "retryable": 0,
+          "project_slug": "stage13-trisigma",
+          "recorded_at": "2026-11-17T00:00:00+03:00",
+          "snapshot_recorded_at": "2026-11-16T23:59:59+03:00",
+          "status_date": null,
+          "publications": [],
+          "published_at": null,
+          "source_mtime_ns": 1794932391529343179
+        },
+        {
+          "sequence": 3,
+          "item_id": "item_611ab3c45b9b4ad28cad8fa030731313",
+          "operation_id": "operation_1af8d2b43a1f4068a77191dc42d8f682",
+          "batch_id": null,
+          "ordinal": 0,
+          "plan_id": "plan_13d53d3eda644bd4b492866a4f0e7965",
+          "lineage_id": "lineage_7a3b9a8d5a9746d9982647ea34c79139",
+          "original_name": "E.mpp",
+          "original_locator": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_today_cli_local_boundarie0/E.mpp",
+          "transport_json": null,
+          "source_mpp_sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+          "size_bytes": 552960,
+          "container_sha256": null,
+          "container_locator": null,
+          "zip_member": null,
+          "received_at": "2026-11-17T23:59:59+03:00",
+          "frozen_at": "2026-11-17T16:20:01.738134+00:00",
+          "frozen_locator": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_today_cli_local_boundarie0/WorkVault/_plan-receipts/operation_1af8d2b43a1f4068a77191dc42d8f682/input/04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a/source.mpp",
+          "source_version_date": null,
+          "source_version_basis": null,
+          "artifact_id": "artifact_1febbcff4a2c4acc99582c94c4c59da3",
+          "snapshot_id": "snapshot_ac25c1709df243debc0fefd2cfc495ea",
+          "normalization_profile_fingerprint": "a22b622f83306016a9f82dd98f34995b6956eadf17de10d0101af877342c28ce",
+          "resolved_timezone": "unknown",
+          "dedup_key": "786c18e70471f1663a74ccbae5ceeb03ebc9a1329bee1a33f5d682c7ef7c6758",
+          "status": "unchanged",
+          "error_code": null,
+          "retryable": 0,
+          "project_slug": "stage13-trisigma",
+          "recorded_at": "2026-11-17T23:59:59+03:00",
+          "snapshot_recorded_at": "2026-11-16T23:59:59+03:00",
+          "status_date": null,
+          "publications": [],
+          "published_at": null,
+          "source_mtime_ns": 1794932391529343179
+        }
+      ],
+      "unknown_source_dates": [],
+      "unknown_source_date_count": 2,
+      "unknown_time_count": 0,
+      "total": 2,
+      "next_cursor": null,
+      "current_plan": {
+        "basis": "source_file_mtime_ns",
+        "status": "selected",
+        "source_mtime_ns": 1794932391529343179,
+        "snapshot_id": "snapshot_ac25c1709df243debc0fefd2cfc495ea",
+        "candidates": [
+          {
+            "item_id": "item_c9a4e508885546fd9020f6c7be20e14d",
+            "snapshot_id": "snapshot_ac25c1709df243debc0fefd2cfc495ea",
+            "original_name": "E.mpp",
+            "source_mpp_sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "source_mtime_ns": 1794932391529343179
+          },
+          {
+            "item_id": "item_37f9f978d9c14171ac2dc576f48b933e",
+            "snapshot_id": "snapshot_ac25c1709df243debc0fefd2cfc495ea",
+            "original_name": "E.mpp",
+            "source_mpp_sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "source_mtime_ns": 1794932391529343179
+          },
+          {
+            "item_id": "item_611ab3c45b9b4ad28cad8fa030731313",
+            "snapshot_id": "snapshot_ac25c1709df243debc0fefd2cfc495ea",
+            "original_name": "E.mpp",
+            "source_mpp_sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "source_mtime_ns": 1794932391529343179
+          },
+          {
+            "item_id": "item_dc5fbb4091924bfc9a478cd628e06afe",
+            "snapshot_id": "snapshot_ac25c1709df243debc0fefd2cfc495ea",
+            "original_name": "E.mpp",
+            "source_mpp_sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "source_mtime_ns": 1794932391529343179
+          }
+        ],
+        "unknown_mtime_count": 0
+      }
+    },
+    "quality": {
+      "time_interval": "[since,until)",
+      "source_date_scale": "UTC calendar date; no task timezone inference",
+      "identity": "not_evaluated",
+      "publication_trust": "preserved"
+    },
+    "error": null
+  },
+  "since": "2026-11-17T00:00:00+03:00",
+  "until": "2026-11-18T00:00:00+03:00",
+  "expected_item_ids": [
+    "item_37f9f978d9c14171ac2dc576f48b933e",
+    "item_611ab3c45b9b4ad28cad8fa030731313"
+  ]
+}

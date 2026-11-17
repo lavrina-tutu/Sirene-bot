@@ -1,0 +1,1185 @@
+{
+  "schema_version": 1,
+  "case": "D",
+  "status": "failed",
+  "functional_status": "failed",
+  "fixture": {
+    "id": "D",
+    "path": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9.mpp",
+    "sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+    "size_bytes": 544256,
+    "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9/doc_810661426a27_Переход_на_Trisigma_Только_пилот_240626.mpp",
+    "evidence": "master §20.7.4; user evidence 2026-11-16",
+    "identity_status": "source_bytes_verified",
+    "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9.mpp",
+    "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/fixtures/real/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9.mpp",
+    "status": "verified",
+    "original_verified": false,
+    "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+    "functional_status": "not_run",
+    "expected": {
+      "archive_task_count": 72,
+      "display_task_count": 71,
+      "dependency_count": 76,
+      "work_hours": "3136"
+    }
+  },
+  "identity_status": "source_bytes_verified",
+  "tests": [
+    "test_cases_trisigma.py::test_real_cold_warm_archive[D]",
+    "test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]"
+  ],
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/cache",
+      "save",
+      "--mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/D.mpp",
+      "--project-slug",
+      "stage13-trisigma",
+      "--timezone-hint",
+      "Europe/Moscow"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/cache",
+      "save",
+      "--mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/same-bytes-renamed.mpp",
+      "--project-slug",
+      "stage13-trisigma",
+      "--timezone-hint",
+      "Europe/Moscow"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o3/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o3/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o3/cache",
+      "publish",
+      "--mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o3/D.mpp",
+      "--page-id",
+      "537576351",
+      "--project-slug",
+      "trisigma",
+      "--timezone-hint",
+      "Europe/Moscow"
+    ]
+  ],
+  "source": {
+    "path": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/fixtures/real/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9.mpp",
+    "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9.mpp",
+    "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9/doc_810661426a27_Переход_на_Trisigma_Только_пилот_240626.mpp",
+    "sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+    "size_bytes": 544256
+  },
+  "operation_item_batch_snapshot_publication_ids": [
+    {
+      "schema_version": 1,
+      "operation_id": "operation_a68816b878a841a48556d5084cc55558",
+      "item_id": "item_eb2977b96d894971abd47465e4dd03a4",
+      "status": "published_with_warnings",
+      "mode": "publish",
+      "exit_code": 0,
+      "project_slug": "trisigma",
+      "source": {
+        "name": "D.mpp",
+        "sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+        "size_bytes": 544256
+      },
+      "snapshot_id": "snapshot_fd1e2317f74142cc8113a2dfc8e446a0",
+      "page_id": "537576351",
+      "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576351",
+      "task_count": 72,
+      "display_task_count": 71,
+      "dependency_count": 76,
+      "exceptions": [],
+      "attachment_version": 1,
+      "verification": {
+        "archive": "verified",
+        "attachment": "verified",
+        "storage": "verified",
+        "source_values": {
+          "status": "not_verified",
+          "checks": [],
+          "limitations": [
+            "ordinary_view_for_this_plan_not_observed"
+          ],
+          "evidence_ids": []
+        },
+        "schedule": {
+          "status": "not_verified",
+          "checks": [
+            {
+              "row": 5,
+              "category": "local_unsupported",
+              "code": "local_scheduler_prepared_unsupported",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "model"
+              ]
+            },
+            {
+              "row": 6,
+              "category": "plugin_unobserved",
+              "code": "specific_plan_plugin_result_not_verified",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "plugin"
+              ]
+            },
+            {
+              "row": 20,
+              "category": "display_only",
+              "code": "task_actuals_display_only:actual_duration",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 34,
+              "example_entities": [
+                "uid:164",
+                "uid:376",
+                "uid:494"
+              ]
+            },
+            {
+              "row": 20,
+              "category": "display_only",
+              "code": "task_actuals_display_only:actual_finish",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 29,
+              "example_entities": [
+                "uid:532",
+                "uid:373",
+                "uid:496"
+              ]
+            },
+            {
+              "row": 20,
+              "category": "display_only",
+              "code": "task_actuals_display_only:actual_start",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 39,
+              "example_entities": [
+                "uid:164",
+                "uid:532",
+                "uid:373"
+              ]
+            },
+            {
+              "row": 20,
+              "category": "display_only",
+              "code": "task_actuals_display_only:actual_work",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 31,
+              "example_entities": [
+                "uid:164",
+                "uid:376",
+                "uid:494"
+              ]
+            },
+            {
+              "row": 20,
+              "category": "display_only",
+              "code": "task_actuals_display_only:resume",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 39,
+              "example_entities": [
+                "uid:164",
+                "uid:532",
+                "uid:373"
+              ]
+            },
+            {
+              "row": 20,
+              "category": "display_only",
+              "code": "task_actuals_display_only:stop",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 39,
+              "example_entities": [
+                "uid:164",
+                "uid:532",
+                "uid:373"
+              ]
+            },
+            {
+              "row": 20,
+              "category": "display_only",
+              "code": "unassigned_resource_source_display",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 9,
+              "example_entities": [
+                "uid:441",
+                "uid:443",
+                "uid:445"
+              ]
+            }
+          ],
+          "limitations": [
+            "local_scheduler_not_run",
+            "plan_plugin_result_not_verified"
+          ],
+          "evidence_ids": [
+            "artifact_ccaaf683836e4fd5987751b454f28fb3"
+          ]
+        }
+      },
+      "published": true,
+      "warnings": [
+        {
+          "code": "local_scheduler_prepared_unsupported",
+          "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_ccaaf683836e4fd5987751b454f28fb3"
+        },
+        {
+          "code": "specific_plan_plugin_result_not_verified",
+          "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_ccaaf683836e4fd5987751b454f28fb3"
+        },
+        {
+          "code": "task_actuals_display_only:actual_duration",
+          "message": "task_actuals_display_only:actual_duration: 34 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_ccaaf683836e4fd5987751b454f28fb3"
+        },
+        {
+          "code": "task_actuals_display_only:actual_finish",
+          "message": "task_actuals_display_only:actual_finish: 29 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_ccaaf683836e4fd5987751b454f28fb3"
+        },
+        {
+          "code": "task_actuals_display_only:actual_start",
+          "message": "task_actuals_display_only:actual_start: 39 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_ccaaf683836e4fd5987751b454f28fb3"
+        },
+        {
+          "code": "task_actuals_display_only:actual_work",
+          "message": "task_actuals_display_only:actual_work: 31 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_ccaaf683836e4fd5987751b454f28fb3"
+        },
+        {
+          "code": "task_actuals_display_only:resume",
+          "message": "task_actuals_display_only:resume: 39 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_ccaaf683836e4fd5987751b454f28fb3"
+        },
+        {
+          "code": "task_actuals_display_only:stop",
+          "message": "task_actuals_display_only:stop: 39 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_ccaaf683836e4fd5987751b454f28fb3"
+        },
+        {
+          "code": "unassigned_resource_source_display",
+          "message": "unassigned_resource_source_display: 9 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_ccaaf683836e4fd5987751b454f28fb3"
+        }
+      ],
+      "completed_stages": [
+        "prepared",
+        "archived",
+        "admitted",
+        "attachment_uploaded",
+        "attachment_verified",
+        "storage_written",
+        "storage_verified",
+        "confirmed"
+      ],
+      "external_effect": "storage_written",
+      "error": null
+    },
+    {
+      "schema_version": 1,
+      "operation_id": "operation_c7b9f898775f47ba8fa9a3ad4bf908c9",
+      "item_id": "item_1a65a05bdf8b41649aac170b31ebf22c",
+      "status": "saved_with_warnings",
+      "mode": "save",
+      "exit_code": 0,
+      "project_slug": "stage13-trisigma",
+      "source": {
+        "name": "D.mpp",
+        "sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+        "size_bytes": 544256
+      },
+      "snapshot_id": "snapshot_900fe343807d4ea1a42fbc5b81b565e9",
+      "page_id": null,
+      "page_url": null,
+      "task_count": 72,
+      "display_task_count": 71,
+      "dependency_count": 76,
+      "exceptions": [],
+      "attachment_version": null,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_applicable",
+        "storage": "not_applicable",
+        "source_values": {
+          "status": "not_applicable",
+          "checks": [],
+          "limitations": [],
+          "evidence_ids": []
+        },
+        "schedule": {
+          "status": "not_verified",
+          "checks": [],
+          "limitations": [
+            "fields_missing",
+            "fields_unsupported",
+            "schedule_not_verified"
+          ],
+          "evidence_ids": []
+        }
+      },
+      "published": false,
+      "warnings": [
+        {
+          "code": "fields_missing",
+          "message": "Часть исходных полей имеет качество missing",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/af570ca612ca6ac47541223e94f3bfd5f235518d78ac4cc703bcc052bdf9a926.json"
+        },
+        {
+          "code": "fields_unsupported",
+          "message": "Часть исходных полей имеет качество unsupported",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/af570ca612ca6ac47541223e94f3bfd5f235518d78ac4cc703bcc052bdf9a926.json"
+        }
+      ],
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived"
+      ],
+      "external_effect": "none",
+      "error": null
+    },
+    {
+      "schema_version": 1,
+      "operation_id": "operation_36ee6f3d204849978f1bb03999cf4085",
+      "item_id": "item_252aa1ba742f41fdbc549be606bac3ba",
+      "status": "unchanged",
+      "mode": "save",
+      "exit_code": 0,
+      "project_slug": "stage13-trisigma",
+      "source": {
+        "name": "same-bytes-renamed.mpp",
+        "sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+        "size_bytes": 544256
+      },
+      "snapshot_id": "snapshot_900fe343807d4ea1a42fbc5b81b565e9",
+      "page_id": null,
+      "page_url": null,
+      "task_count": 72,
+      "display_task_count": 71,
+      "dependency_count": 76,
+      "exceptions": [],
+      "attachment_version": null,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_applicable",
+        "storage": "not_applicable",
+        "source_values": {
+          "status": "not_applicable",
+          "checks": [],
+          "limitations": [],
+          "evidence_ids": []
+        },
+        "schedule": {
+          "status": "not_verified",
+          "checks": [],
+          "limitations": [
+            "fields_missing",
+            "fields_unsupported",
+            "schedule_not_verified"
+          ],
+          "evidence_ids": []
+        }
+      },
+      "published": false,
+      "warnings": [
+        {
+          "code": "fields_missing",
+          "message": "Часть исходных полей имеет качество missing",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/af570ca612ca6ac47541223e94f3bfd5f235518d78ac4cc703bcc052bdf9a926.json"
+        },
+        {
+          "code": "fields_unsupported",
+          "message": "Часть исходных полей имеет качество unsupported",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_D_1/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/af570ca612ca6ac47541223e94f3bfd5f235518d78ac4cc703bcc052bdf9a926.json"
+        }
+      ],
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived"
+      ],
+      "external_effect": "none",
+      "error": null
+    }
+  ],
+  "versions": {
+    "environment": {
+      "relation_observer_sha256": "6d77ac02ba9de195e26e54045369c983cb94940abafcb3afb5541f100cbd0e38",
+      "reader": "read-mpp-v3",
+      "mpxj": "16.4.0",
+      "jpype": "1.7.1",
+      "exporter": "full-export-v2",
+      "normalization": "prepared-v1",
+      "converter": "prepared-gantt-v7-owner-source",
+      "policy": "publication-admission-v1",
+      "rules": "project-exceptions-v2-owner-source",
+      "normalization_profile": {
+        "id": "normalization-v1",
+        "version": "1.0.0",
+        "normalizer_version": "prepared-v1",
+        "export_version": "full-export-v2",
+        "dates": {
+          "policy": "preserve_source_local_precision",
+          "unknown_timezone": null,
+          "timezone_hint": "IANA-explicit-only"
+        },
+        "numbers": {
+          "quantities": "decimal_strings",
+          "rounding": "none"
+        },
+        "identity": {
+          "scope": "source-local-only",
+          "fallback": "source_collection_position",
+          "cross_file_mapping": "unknown"
+        },
+        "ordering": "preserve_source_rows_and_parallel_relations",
+        "semantic_exclusions": [
+          "provenance_except_source_identity",
+          "source",
+          "telemetry",
+          "operation_id",
+          "work_dir",
+          "read_at"
+        ],
+        "quality": {
+          "collection": [
+            "complete",
+            "partial",
+            "missing",
+            "unsupported"
+          ],
+          "null": "missing:not_set",
+          "zero": "ok:0",
+          "unsupported": "explicit_reason"
+        },
+        "summary": "preserve_inputs_only;calculation_is_stage_08"
+      },
+      "summary_profile": {
+        "id": "summary-v1",
+        "version": "1.0.0",
+        "root": "unique_top_level_nonservice_summary_or_explicit_task_key",
+        "days": "ceil_root_working_duration_using_source_minutes_per_unit",
+        "elapsed_duration": "unsupported_without_explicit_transformation",
+        "dates": "source_local_in_resolved_timezone;convert_offset_dates_to_resolved_timezone",
+        "work": "unique_assignments_of_nonservice_nonsummary_tasks_including_milestones",
+        "timephased": "never_add_to_assignment_work",
+        "missing": "known_sum_partial;never_zero_total",
+        "arithmetic": "Decimal;no_per_task_rounding",
+        "display": {
+          "decimal_places": 3,
+          "rounding": "ROUND_HALF_UP",
+          "trim_zeroes": true
+        },
+        "storage_work": false
+      }
+    },
+    "source": {
+      "jpype": "1.7.1",
+      "mpxj": "16.4.0",
+      "reader": "read-mpp-v3",
+      "sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+      "size_bytes": 544256,
+      "export": "full-export-v2",
+      "normalization": {
+        "fingerprint": "26f75d00b4daf3847545115420e36fea574c96044530ae1847dd0c81399efcad",
+        "id": "normalization-v1",
+        "normalizer_version": "prepared-v1",
+        "version": "1.0.0"
+      }
+    },
+    "plugin_profile": {
+      "key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
+      "version": "frontend-build:H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "wrapper_asset_sha256": "9a43a94647ce8c2fff5cabdb07a52b8619b824bf8673b0bcafe9a090cd9dccb2"
+    },
+    "observed_plugin": null
+  },
+  "mapping_revision": [],
+  "archive_display_dependency_counts": {
+    "task_count": 72,
+    "archive_task_count": 72,
+    "service_task_count": 1,
+    "display_task_count": 71,
+    "dependency_count": 76,
+    "external_dependency_count": 0,
+    "task_extraction_errors": 0
+  },
+  "summary": {
+    "profile": "summary-v1",
+    "profile_fingerprint": "716c94354368c0642f1284f48213e6de246ec92f0024b5b533c45f4c3f1abc70",
+    "root_candidates": [
+      "uid:164"
+    ],
+    "root_task_key": "uid:164",
+    "explicit_root_choice": false,
+    "start": "2026-03-30T09:00",
+    "finish": "2026-08-28T18:00",
+    "d1": "30.03.26",
+    "d2": "28.08.26",
+    "n_days": 107,
+    "duration_working_days": "106.875",
+    "source_duration": {
+      "quality": "ok",
+      "quantity": {
+        "amount": "106.875",
+        "elapsed": false,
+        "source_units": "d",
+        "units": "DAYS"
+      },
+      "reason": null,
+      "value": "106.875 d"
+    },
+    "coefficients": {
+      "minutes_per_day": "480"
+    },
+    "work": {
+      "hours": "3136",
+      "display_hours": "3136",
+      "quality": "complete",
+      "known_assignments": 61,
+      "missing_assignments": 0,
+      "excluded_assignments": 0,
+      "reasons": [],
+      "per_task": {
+        "uid:373": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:375": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:377": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:508": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:346": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:342": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "complete"
+        },
+        "uid:496": {
+          "known_hours": "176",
+          "missing": 0,
+          "known": 1,
+          "hours": "176",
+          "quality": "complete"
+        },
+        "uid:497": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:507": {
+          "known_hours": "72",
+          "missing": 0,
+          "known": 1,
+          "hours": "72",
+          "quality": "complete"
+        },
+        "uid:498": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:337": {
+          "known_hours": "320",
+          "missing": 0,
+          "known": 2,
+          "hours": "320",
+          "quality": "complete"
+        },
+        "uid:343": {
+          "known_hours": "24",
+          "missing": 0,
+          "known": 1,
+          "hours": "24",
+          "quality": "complete"
+        },
+        "uid:292": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "complete"
+        },
+        "uid:378": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "complete"
+        },
+        "uid:510": {
+          "known_hours": "152",
+          "missing": 0,
+          "known": 1,
+          "hours": "152",
+          "quality": "complete"
+        },
+        "uid:323": {
+          "known_hours": "24",
+          "missing": 0,
+          "known": 1,
+          "hours": "24",
+          "quality": "complete"
+        },
+        "uid:324": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:512": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "complete"
+        },
+        "uid:513": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "complete"
+        },
+        "uid:326": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:327": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:329": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:330": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:331": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:332": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:334": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:335": {
+          "known_hours": "56",
+          "missing": 0,
+          "known": 1,
+          "hours": "56",
+          "quality": "complete"
+        },
+        "uid:514": {
+          "known_hours": "72",
+          "missing": 0,
+          "known": 1,
+          "hours": "72",
+          "quality": "complete"
+        },
+        "uid:339": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:341": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "complete"
+        },
+        "uid:515": {
+          "known_hours": "24",
+          "missing": 0,
+          "known": 1,
+          "hours": "24",
+          "quality": "complete"
+        },
+        "uid:344": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 2,
+          "hours": "80",
+          "quality": "complete"
+        },
+        "uid:347": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:348": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:321": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:517": {
+          "known_hours": "128",
+          "missing": 0,
+          "known": 1,
+          "hours": "128",
+          "quality": "complete"
+        },
+        "uid:518": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "complete"
+        },
+        "uid:519": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "complete"
+        },
+        "uid:520": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 1,
+          "hours": "80",
+          "quality": "complete"
+        },
+        "uid:521": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "complete"
+        },
+        "uid:532": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:533": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:314": {
+          "known_hours": "328",
+          "missing": 0,
+          "known": 1,
+          "hours": "328",
+          "quality": "complete"
+        },
+        "uid:534": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:535": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "complete"
+        },
+        "uid:536": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "complete"
+        },
+        "uid:537": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:538": {
+          "known_hours": "96",
+          "missing": 0,
+          "known": 1,
+          "hours": "96",
+          "quality": "complete"
+        },
+        "uid:539": {
+          "known_hours": "56",
+          "missing": 0,
+          "known": 1,
+          "hours": "56",
+          "quality": "complete"
+        },
+        "uid:540": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:541": {
+          "known_hours": "56",
+          "missing": 0,
+          "known": 1,
+          "hours": "56",
+          "quality": "complete"
+        },
+        "uid:542": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 2,
+          "hours": "32",
+          "quality": "complete"
+        },
+        "uid:543": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 2,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:544": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "complete"
+        },
+        "uid:545": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 1,
+          "hours": "80",
+          "quality": "complete"
+        },
+        "uid:546": {
+          "known_hours": "88",
+          "missing": 0,
+          "known": 1,
+          "hours": "88",
+          "quality": "complete"
+        },
+        "uid:547": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "complete"
+        }
+      }
+    },
+    "counts": {
+      "task_count": 72,
+      "archive_task_count": 72,
+      "service_task_count": 1,
+      "display_task_count": 71,
+      "dependency_count": 76,
+      "external_dependency_count": 0,
+      "task_extraction_errors": 0
+    },
+    "reasons": [],
+    "publishable": true,
+    "storage_html": "<p><strong>Итого: с 30.03.26 по 28.08.26 - 107 рабочих дней</strong></p>"
+  },
+  "attachment_hashes": {
+    "expected": null,
+    "received": null
+  },
+  "page_versions": {
+    "before": 1,
+    "after": 2
+  },
+  "attachment_versions": {
+    "before": null,
+    "after": null
+  },
+  "storage_from_GET": "<p><strong>Итого: с 30.03.26 по 28.08.26 - 107 рабочих дней</strong><br />по плану; факт — в колонках</p><p>Stage 13 acceptance neighbour</p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"51fb26d1-5afe-44dd-a85f-3238ec7b77d4\"><ac:parameter ac:name=\"id\">7494aecc41f9486381f2037602f927bf</ac:parameter><ac:parameter ac:name=\"hash\">a4a88f6283554188a20c10f0cfaf7438</ac:parameter></ac:structured-macro></p>",
+  "observed_plugin_dates": null,
+  "counters": [
+    {
+      "MPXJ_read": 1,
+      "cache_hit": 0,
+      "cache_miss": 1,
+      "POST": 1,
+      "PUT": 1,
+      "calls": [
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351/child/attachment"
+        },
+        {
+          "method": "POST",
+          "path": "/rest/api/content/537576351/child/attachment"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351/child/attachment"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576352"
+        },
+        {
+          "method": "GET",
+          "path": "/download/attachments/537576351/gantt-chart-7494aecc41f9486381f2037602f927bf.json"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351/child/attachment"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351/child/attachment"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576352"
+        },
+        {
+          "method": "GET",
+          "path": "/download/attachments/537576351/gantt-chart-7494aecc41f9486381f2037602f927bf.json"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351/child/attachment"
+        },
+        {
+          "method": "PUT",
+          "path": "/rest/api/content/537576351"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351/child/attachment"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576352"
+        },
+        {
+          "method": "GET",
+          "path": "/download/attachments/537576351/gantt-chart-7494aecc41f9486381f2037602f927bf.json"
+        },
+        {
+          "method": "GET",
+          "path": "/rest/api/content/537576351/child/attachment"
+        }
+      ]
+    },
+    {
+      "MPXJ_read": 1,
+      "cache_hit": 0,
+      "cache_miss": 1,
+      "POST": 0,
+      "PUT": 0
+    },
+    {
+      "MPXJ_read": 0,
+      "cache_hit": 1,
+      "cache_miss": 0,
+      "POST": 0,
+      "PUT": 0
+    }
+  ],
+  "baseline_before_after": [
+    {
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_338741aa739241e8a931c8ee049353f0','plan_80e056e0584e475c9c496c2c4e329ccc','snapshot_18da446684c34d8f8ccf8b6bae62f467',0,1,'test owner before acceptance',NULL,'2026-11-17T16:31:59+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_89ea7f2af45b48b4bb275242619da6be','lineage_6b4fef672df4455cb02661d0c0977cdf','snapshot_18da446684c34d8f8ccf8b6bae62f467',1,'test owner before acceptance',NULL,'2026-11-17T16:31:59+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_338741aa739241e8a931c8ee049353f0','plan_80e056e0584e475c9c496c2c4e329ccc','snapshot_18da446684c34d8f8ccf8b6bae62f467',0,1,'test owner before acceptance',NULL,'2026-11-17T16:31:59+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_89ea7f2af45b48b4bb275242619da6be','lineage_6b4fef672df4455cb02661d0c0977cdf','snapshot_18da446684c34d8f8ccf8b6bae62f467',1,'test owner before acceptance',NULL,'2026-11-17T16:31:59+00:00');"
+        ]
+      }
+    },
+    {
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_565a34bcc6a949d9988ae9f20d4a05bc','plan_1eb04282a3cd439d8ee101a173f070b4','snapshot_7c3735768d7b4ce68576469f5a452484',0,1,'test owner before acceptance',NULL,'2026-11-17T16:12:56+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_69be92a1fe2846e48fc14cbe3c569cee','lineage_380bea4f5b6d4eb4ab19d4066ebc5591','snapshot_7c3735768d7b4ce68576469f5a452484',1,'test owner before acceptance',NULL,'2026-11-17T16:12:56+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_565a34bcc6a949d9988ae9f20d4a05bc','plan_1eb04282a3cd439d8ee101a173f070b4','snapshot_7c3735768d7b4ce68576469f5a452484',0,1,'test owner before acceptance',NULL,'2026-11-17T16:12:56+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_69be92a1fe2846e48fc14cbe3c569cee','lineage_380bea4f5b6d4eb4ab19d4066ebc5591','snapshot_7c3735768d7b4ce68576469f5a452484',1,'test owner before acceptance',NULL,'2026-11-17T16:12:56+00:00');"
+        ]
+      }
+    },
+    {
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_565a34bcc6a949d9988ae9f20d4a05bc','plan_1eb04282a3cd439d8ee101a173f070b4','snapshot_7c3735768d7b4ce68576469f5a452484',0,1,'test owner before acceptance',NULL,'2026-11-17T16:12:56+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_69be92a1fe2846e48fc14cbe3c569cee','lineage_380bea4f5b6d4eb4ab19d4066ebc5591','snapshot_7c3735768d7b4ce68576469f5a452484',1,'test owner before acceptance',NULL,'2026-11-17T16:12:56+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_565a34bcc6a949d9988ae9f20d4a05bc','plan_1eb04282a3cd439d8ee101a173f070b4','snapshot_7c3735768d7b4ce68576469f5a452484',0,1,'test owner before acceptance',NULL,'2026-11-17T16:12:56+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_69be92a1fe2846e48fc14cbe3c569cee','lineage_380bea4f5b6d4eb4ab19d4066ebc5591','snapshot_7c3735768d7b4ce68576469f5a452484',1,'test owner before acceptance',NULL,'2026-11-17T16:12:56+00:00');"
+        ]
+      }
+    }
+  ],
+  "evidence": [
+    "reports/evidence/live-D.json",
+    "reports/evidence/case-D-cold.json",
+    "reports/evidence/case-D-warm.json"
+  ],
+  "user_decisions_required": null,
+  "limitations": [
+    "No observed plugin dates for this representation"
+  ],
+  "historical_rule_identity": null,
+  "durations_seconds": [
+    13.272939599992242,
+    78.59139882802265
+  ]
+}

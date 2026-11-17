@@ -366,7 +366,7 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v7-owner-source'
+CONVERTER_VERSION = 'prepared-gantt-v8-owner-source'
 
 PUBLICATION_MODE = 'planned_schedule_with_actuals_columns'
 PUBLICATION_LABEL = 'по плану; факт — в колонках'
@@ -433,7 +433,11 @@ def source_fact_values(task):
     return values
 
 
+SNAPSHOT_COLUMN = 'custom_mpp_schedule_mode'
 UNASSIGNED_COLUMN = 'custom_mpp_unassigned'
+
+def snapshot_text(task):
+    return 'Сохранённые даты MPP; исходный режим: ' + source_value_text(task.get('task_mode'))
 
 
 def unassigned_source(assignment, source_tasks):
@@ -452,10 +456,14 @@ def unassigned_text(assignment):
         + '; '.join(field + ': ' + source_value_text(assignment.get(field)) for field in fields))
 
 
-def add_source_columns(gantt):
+def add_source_columns(gantt, *, include_unassigned=False, include_snapshot=False):
     """Use the installed wrapper's customColumns object and customtext fields."""
     columns = gantt.setdefault('customColumns', {})
-    values = [*SOURCE_COLUMNS.values(), (UNASSIGNED_COLUMN, 'Назначения без ресурса (исходник)')]
+    values = list(SOURCE_COLUMNS.values())
+    if include_unassigned:
+        values.append((UNASSIGNED_COLUMN, 'Назначения без ресурса (исходник)'))
+    if include_snapshot:
+        values.append((SNAPSHOT_COLUMN, 'Показ дат / исходный режим MPP'))
     for column, title in values:
         columns[column] = {'id': column, 'text': title, 'type': 'customtext'}
     for mode in ('view', 'edit'):
@@ -681,6 +689,16 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
                 node['manuallyScheduled']=False
             else:
                 diagnostics.append({'code':'task_mode_unverified','entity':key,'source':t.get('task_mode'),'represented':None})
+            if profile.supports('publication:source_snapshot_dates'):
+                from plan_policy import owner_decision
+                decision = owner_decision()
+                node.update(manuallyScheduled=True, skipNonWorkingTimeWhenSchedulingManually=False)
+                node[SNAPSHOT_COLUMN] = snapshot_text(t)
+                transformations.append({'entity':key,'field':'task_mode','kind':'source_snapshot_dates',
+                    'source':deepcopy(t.get('task_mode')),'normalized':None,
+                    'represented':{'manuallyScheduled':True,'skipNonWorkingTimeWhenSchedulingManually':False},
+                    'basis':'Source dates are the published snapshot; no plugin schedule recalculation claimed',
+                    'owner_decision':decision})
             if field_value(t.get('active')) is False:
                 if profile.supports('task:active'):
                     node['inactive'] = True
@@ -804,10 +822,12 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
             diagnostics.append({'code':'graph_problem:'+name,'entity':'graph','source':graph[name],'represented':None})
     out=deepcopy(tmpl)
     out.update(eventsData=roots,resourcesData=resources,dependenciesData=deps,assignmentsData=assignments,calendarsData=cal['calendarsData'])
-    add_source_columns(out)
-    for key, node in nodes.items():
-        node[UNASSIGNED_COLUMN] = '\n'.join(unassigned_text(a) for a in data['assignments']
-            if a.get('task_key') == key and unassigned_source(a, source_tasks))
+    unassigned = [a for a in data['assignments'] if unassigned_source(a, source_tasks) and a['task_key'] in nodes]
+    add_source_columns(out, include_unassigned=bool(unassigned),
+        include_snapshot=profile.supports('publication:source_snapshot_dates'))
+    if unassigned:
+        for key, node in nodes.items():
+            node[UNASSIGNED_COLUMN] = '\n'.join(unassigned_text(a) for a in unassigned if a['task_key'] == key)
     default_cal=cal['bindings']['project']
     if profile.supports('calendar:bindings:project') and default_cal in cal['mapping']:
         out['calendar']=cal['mapping'][default_cal]

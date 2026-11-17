@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "skills": [
+    {
+      "requested_name": "edit-plan-confluence",
+      "path": "/home/tkachenkoav/.hermes/skills/productivity/edit-plan-confluence/SKILL.md",
+      "resolved_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/SKILL.md",
+      "sha256": "83d311c5b8c5e580734f7a62b47311a662d069abc57e364288d001de449a4430",
+      "success": true
+    },
+    {
+      "requested_name": "confluence-gantt-plan",
+      "path": "/home/tkachenkoav/.hermes/skills/productivity/confluence-gantt-plan/SKILL.md",
+      "resolved_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/confluence-gantt-plan/SKILL.md",
+      "sha256": "6d2edf035cff8b933577773520abe44d8fd852fd80f16a3b9219fa2dee9292cc",
+      "success": true
+    },
+    {
+      "requested_name": "productivity/edit-plan-confluence",
+      "path": "/home/tkachenkoav/.hermes/skills/productivity/edit-plan-confluence/SKILL.md",
+      "resolved_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/SKILL.md",
+      "sha256": "83d311c5b8c5e580734f7a62b47311a662d069abc57e364288d001de449a4430",
+      "success": true
+    },
+    {
+      "requested_name": "productivity/confluence-gantt-plan",
+      "path": "/home/tkachenkoav/.hermes/skills/productivity/confluence-gantt-plan/SKILL.md",
+      "resolved_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/confluence-gantt-plan/SKILL.md",
+      "sha256": "6d2edf035cff8b933577773520abe44d8fd852fd80f16a3b9219fa2dee9292cc",
+      "success": true
+    }
+  ]
+}

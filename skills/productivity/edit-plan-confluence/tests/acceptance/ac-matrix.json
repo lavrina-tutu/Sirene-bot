@@ -782,7 +782,12 @@
     "test_fix4_owner_history.py::test_missing_resource_requires_exact_source_display[date]",
     "test_fix4_owner_history.py::test_missing_resource_requires_exact_source_display[resource_uid]",
     "test_fix4_owner_history.py::test_missing_resource_requires_exact_source_display[error]",
-    "test_fix4_owner_history.py::test_current_mtime_and_history_task_links"
+    "test_fix4_owner_history.py::test_current_mtime_and_history_task_links",
+    "test_fix4_owner_history.py::test_snapshot_display_preserves_dates_links_and_source_mode[none]",
+    "test_fix4_owner_history.py::test_snapshot_display_preserves_dates_links_and_source_mode[manual]",
+    "test_fix4_owner_history.py::test_snapshot_display_preserves_dates_links_and_source_mode[source_mode]",
+    "test_fix4_owner_history.py::test_snapshot_display_preserves_dates_links_and_source_mode[hidden]",
+    "test_fix4_owner_history.py::test_zero_duration_milestone_with_different_dates_is_not_silently_fixed"
   ],
   "acceptance_test_ids": [
     "test_cases_trisigma.py::test_real_cold_warm_archive[A]",

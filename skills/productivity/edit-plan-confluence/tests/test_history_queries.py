@@ -159,7 +159,14 @@ def test_history_cli_matches_typed_api(history_case):
                '--cache-dir',str(context.cache_dir),'history','--project-slug','history','--limit','1']
     proc = subprocess.run(command,capture_output=True,text=True,timeout=30)
     assert proc.returncode == 0, proc.stderr
-    assert json.loads(proc.stdout) == history(c, HistoryRequest('history',limit=1))
+    actual = json.loads(proc.stdout)
+    # The CLI adds current-plan selection from the persisted intake metadata;
+    # the underlying typed history/cursor/trust contract remains byte-for-byte.
+    current = actual['result'].pop('current_plan')
+    assert current['basis']=='source_file_mtime_ns' and current['status'] in ('selected','ambiguous')
+    for row in actual['result']['records']:
+        assert type(row.pop('source_mtime_ns')) is int
+    assert actual == history(c, HistoryRequest('history',limit=1))
     wrong = subprocess.run(command+['--since','2026-11-16'],capture_output=True,text=True,timeout=30)
     assert wrong.returncode == json.loads(wrong.stdout)['exit_code'] == 2
 

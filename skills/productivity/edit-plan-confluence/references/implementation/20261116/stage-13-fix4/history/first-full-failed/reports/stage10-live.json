@@ -1,0 +1,1032 @@
+{
+  "status": "passed",
+  "parent_id": "519501810",
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/rest/api/content/519501810",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/content/537576316",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/content/537576316",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content/537576316/child/attachment/537576317/data",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576317",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576316/gantt-chart-2e40d8d5eac3405986250f2e14e70f5a.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576316/child/page",
+      "query": "limit=200&start=0&expand=body.storage%2Cversion%2Cspace%2Cancestors"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322",
+      "query": "expand=body.storage%2Cversion%2Cspace%2Cancestors"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content/537576322/child/attachment",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576323",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576322/gantt-chart-3eec5dce56a7482e9e4f4488b54ad824.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576323",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576322/gantt-chart-3eec5dce56a7482e9e4f4488b54ad824.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576323",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576322/gantt-chart-3eec5dce56a7482e9e4f4488b54ad824.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576322/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    }
+  ],
+  "source": "explicit synthetic parsed export; no binary reader measurement",
+  "schedule": "not_verified",
+  "page_id": "537576316",
+  "post_recovery": {
+    "attachment_version": 1,
+    "completed_stages": [
+      "prepared",
+      "archived",
+      "admitted",
+      "attachment_uploaded",
+      "attachment_verified",
+      "storage_written",
+      "storage_verified",
+      "confirmed"
+    ],
+    "dependency_count": 1,
+    "display_task_count": 3,
+    "error": null,
+    "exceptions": [],
+    "exit_code": 0,
+    "external_effect": "storage_written",
+    "item_id": "item_fc4b00bd17b046e4a9c9390d3245a458",
+    "mode": "publish",
+    "operation_id": "operation_b2090aef6b454589bd4f1404483d7285",
+    "page_id": "537576316",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576316",
+    "project_slug": "stage10-live-test",
+    "published": true,
+    "schema_version": 1,
+    "snapshot_id": "snapshot_65f29bd1dd3e493c9dd1701005b3e586",
+    "source": {
+      "name": "synthetic.mpp",
+      "sha256": "461ed6e4eb493b97e49c93af0d8b79154c379bc51b6b4357b25662c8a2d2c58a",
+      "size_bytes": 58
+    },
+    "status": "published_with_warnings",
+    "task_count": 3,
+    "verification": {
+      "archive": "verified",
+      "attachment": "verified",
+      "schedule": {
+        "checks": [
+          {
+            "accepted_deviation": false,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "count": 1,
+            "example_entities": [
+              "model"
+            ],
+            "exit_code": 0,
+            "row": 5
+          },
+          {
+            "accepted_deviation": false,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ],
+            "exit_code": 0,
+            "row": 6
+          }
+        ],
+        "evidence_ids": [
+          "artifact_a943739d145546b9a983e9569b2e4449"
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "status": "not_verified"
+      },
+      "source_values": {
+        "checks": [],
+        "evidence_ids": [],
+        "limitations": [
+          "ordinary_view_for_this_plan_not_observed"
+        ],
+        "status": "not_verified"
+      },
+      "storage": "verified"
+    },
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "details_ref": "artifact:artifact_a943739d145546b9a983e9569b2e4449",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "details_ref": "artifact:artifact_a943739d145546b9a983e9569b2e4449",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+      }
+    ]
+  },
+  "put_recovery": {
+    "attachment_version": 1,
+    "completed_stages": [
+      "prepared",
+      "archived",
+      "admitted",
+      "attachment_uploaded",
+      "attachment_verified",
+      "storage_written",
+      "storage_verified",
+      "confirmed"
+    ],
+    "dependency_count": 1,
+    "display_task_count": 3,
+    "error": null,
+    "exceptions": [],
+    "exit_code": 0,
+    "external_effect": "storage_written",
+    "item_id": "item_9946678563ad4e778cea881b929b6780",
+    "mode": "publish",
+    "operation_id": "operation_cacc79ab93d24d669f1d56add084a109",
+    "page_id": "537576316",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576316",
+    "project_slug": "stage10-live-test",
+    "published": true,
+    "schema_version": 1,
+    "snapshot_id": "snapshot_65f29bd1dd3e493c9dd1701005b3e586",
+    "source": {
+      "name": "synthetic.mpp",
+      "sha256": "461ed6e4eb493b97e49c93af0d8b79154c379bc51b6b4357b25662c8a2d2c58a",
+      "size_bytes": 58
+    },
+    "status": "published_with_warnings",
+    "task_count": 3,
+    "verification": {
+      "archive": "verified",
+      "attachment": "verified",
+      "schedule": {
+        "checks": [
+          {
+            "accepted_deviation": false,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "count": 1,
+            "example_entities": [
+              "model"
+            ],
+            "exit_code": 0,
+            "row": 5
+          },
+          {
+            "accepted_deviation": false,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ],
+            "exit_code": 0,
+            "row": 6
+          }
+        ],
+        "evidence_ids": [
+          "artifact_862136b35eac4023b59f93d7438892c4"
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "status": "not_verified"
+      },
+      "source_values": {
+        "checks": [],
+        "evidence_ids": [],
+        "limitations": [
+          "ordinary_view_for_this_plan_not_observed"
+        ],
+        "status": "not_verified"
+      },
+      "storage": "verified"
+    },
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "details_ref": "artifact:artifact_862136b35eac4023b59f93d7438892c4",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "details_ref": "artifact:artifact_862136b35eac4023b59f93d7438892c4",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+      }
+    ]
+  },
+  "foreign_version": {
+    "before": 1,
+    "current": 2,
+    "conflict": {
+      "attachment_version": null,
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived",
+        "admitted",
+        "attachment_uploaded",
+        "attachment_verified",
+        "storage_written",
+        "storage_verified"
+      ],
+      "dependency_count": 1,
+      "display_task_count": 3,
+      "error": {
+        "code": "attachment_target_conflict",
+        "message": "attachment_target_conflict",
+        "retryable": false,
+        "next_action": "Проверить конфликт цели; новая операция diff --project-slug stage10-live-test"
+      },
+      "exceptions": [],
+      "exit_code": 4,
+      "external_effect": "unknown",
+      "item_id": "item_9946678563ad4e778cea881b929b6780",
+      "mode": "publish",
+      "operation_id": "operation_cacc79ab93d24d669f1d56add084a109",
+      "page_id": "537576316",
+      "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576316",
+      "project_slug": "stage10-live-test",
+      "published": null,
+      "schema_version": 1,
+      "snapshot_id": "snapshot_65f29bd1dd3e493c9dd1701005b3e586",
+      "source": {
+        "name": "synthetic.mpp",
+        "sha256": "461ed6e4eb493b97e49c93af0d8b79154c379bc51b6b4357b25662c8a2d2c58a",
+        "size_bytes": 58
+      },
+      "status": "conflict",
+      "task_count": 3,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_verified",
+        "schedule": {
+          "checks": [
+            {
+              "accepted_deviation": false,
+              "category": "local_unsupported",
+              "code": "local_scheduler_prepared_unsupported",
+              "count": 1,
+              "example_entities": [
+                "model"
+              ],
+              "exit_code": 0,
+              "row": 5
+            },
+            {
+              "accepted_deviation": false,
+              "category": "plugin_unobserved",
+              "code": "specific_plan_plugin_result_not_verified",
+              "count": 1,
+              "example_entities": [
+                "plugin"
+              ],
+              "exit_code": 0,
+              "row": 6
+            }
+          ],
+          "evidence_ids": [
+            "artifact_862136b35eac4023b59f93d7438892c4"
+          ],
+          "limitations": [
+            "local_scheduler_not_run",
+            "plan_plugin_result_not_verified"
+          ],
+          "status": "not_verified"
+        },
+        "source_values": {
+          "checks": [],
+          "evidence_ids": [],
+          "limitations": [
+            "ordinary_view_for_this_plan_not_observed"
+          ],
+          "status": "not_verified"
+        },
+        "storage": "not_verified"
+      },
+      "warnings": [
+        {
+          "code": "local_scheduler_prepared_unsupported",
+          "details_ref": "artifact:artifact_862136b35eac4023b59f93d7438892c4",
+          "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+        },
+        {
+          "code": "specific_plan_plugin_result_not_verified",
+          "details_ref": "artifact:artifact_862136b35eac4023b59f93d7438892c4",
+          "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+        }
+      ]
+    }
+  },
+  "child": {
+    "attachment_version": 1,
+    "completed_stages": [
+      "prepared",
+      "archived",
+      "admitted",
+      "attachment_uploaded",
+      "attachment_verified",
+      "storage_written",
+      "storage_verified",
+      "confirmed"
+    ],
+    "dependency_count": 1,
+    "display_task_count": 3,
+    "error": null,
+    "exceptions": [],
+    "exit_code": 0,
+    "external_effect": "storage_written",
+    "item_id": "item_28a69ca9abb0435d86b23e49ee3a53f1",
+    "mode": "publish",
+    "operation_id": "operation_654538be8a9a4e53b5aafa79907300f0",
+    "page_id": "537576322",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576322",
+    "project_slug": "stage10-live-test",
+    "published": true,
+    "schema_version": 1,
+    "snapshot_id": "snapshot_65f29bd1dd3e493c9dd1701005b3e586",
+    "source": {
+      "name": "synthetic.mpp",
+      "sha256": "461ed6e4eb493b97e49c93af0d8b79154c379bc51b6b4357b25662c8a2d2c58a",
+      "size_bytes": 58
+    },
+    "status": "published_with_warnings",
+    "task_count": 3,
+    "verification": {
+      "archive": "verified",
+      "attachment": "verified",
+      "schedule": {
+        "checks": [
+          {
+            "accepted_deviation": false,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "count": 1,
+            "example_entities": [
+              "model"
+            ],
+            "exit_code": 0,
+            "row": 5
+          },
+          {
+            "accepted_deviation": false,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ],
+            "exit_code": 0,
+            "row": 6
+          }
+        ],
+        "evidence_ids": [
+          "artifact_d4bab4493d4844ce965c3f284e664639"
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "status": "not_verified"
+      },
+      "source_values": {
+        "checks": [],
+        "evidence_ids": [],
+        "limitations": [
+          "ordinary_view_for_this_plan_not_observed"
+        ],
+        "status": "not_verified"
+      },
+      "storage": "verified"
+    },
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "details_ref": "artifact:artifact_d4bab4493d4844ce965c3f284e664639",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "details_ref": "artifact:artifact_d4bab4493d4844ce965c3f284e664639",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+      }
+    ]
+  },
+  "POST": 5,
+  "PUT": 2,
+  "GET": 120
+}

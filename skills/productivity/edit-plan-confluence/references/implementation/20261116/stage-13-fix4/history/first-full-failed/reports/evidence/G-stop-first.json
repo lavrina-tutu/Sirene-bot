@@ -1,0 +1,115 @@
+{
+  "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]",
+  "observed_at": "2026-11-17T16:19:29.846984+00:00",
+  "case": "G",
+  "receipt": {
+    "schema_version": 1,
+    "batch_id": "G-stop",
+    "mode": "batch_save",
+    "status": "stopped",
+    "exit_code": 6,
+    "manifest_sha256": "d6a2cc0d8d5d716320935a2b31ac8f0e98c8006191d1567f4ace7fefc23b33c1",
+    "inputs_frozen_at": "2026-11-17T16:19:21+00:00",
+    "on_error": "stop",
+    "counts": {
+      "total": 4,
+      "saved": 1,
+      "saved_with_warnings": 1,
+      "unchanged": 0,
+      "failed": 1,
+      "needs_decision": 0,
+      "not_started": 2
+    },
+    "items": [
+      {
+        "item_id": "1",
+        "position": 1,
+        "status": "saved_with_warnings",
+        "operation_id": "batch-op-0c462582d0a3c1135127b7a4dffb9bf5e648a1775738bd6c7eb4e35dec4e4660",
+        "snapshot_id": "snapshot_bebc6fc4e14447d2bb8df9116d8291cd",
+        "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+        "receipt_ref": "_plan-receipts/batch-op-0c462582d0a3c1135127b7a4dffb9bf5e648a1775738bd6c7eb4e35dec4e4660/save.json",
+        "error": null,
+        "warnings": [
+          {
+            "code": "timezone_unknown",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_inbox_errors_resume_and_h1/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fc757c5931ab8f3dde36dec44a80fa29ca3e00ac5e694fb542de88c18b525221.json",
+            "message": "Исходные даты сохранены без подтверждённой таймзоны"
+          },
+          {
+            "code": "fields_missing",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_inbox_errors_resume_and_h1/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fc757c5931ab8f3dde36dec44a80fa29ca3e00ac5e694fb542de88c18b525221.json",
+            "message": "Часть исходных полей имеет качество missing"
+          },
+          {
+            "code": "fields_unsupported",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_inbox_errors_resume_and_h1/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fc757c5931ab8f3dde36dec44a80fa29ca3e00ac5e694fb542de88c18b525221.json",
+            "message": "Часть исходных полей имеет качество unsupported"
+          }
+        ]
+      },
+      {
+        "item_id": "2",
+        "position": 2,
+        "status": "failed",
+        "operation_id": "batch-op-866101f105273e16d97213942d24e777f088fa65e0856ed7bdfccf1805b2a5dd",
+        "snapshot_id": null,
+        "sha256": "7f5c7cb8509ede0adf98d8fd5241124136265118a40f282d96a40c0155cf2264",
+        "receipt_ref": null,
+        "error": {
+          "code": "mpp_unreadable",
+          "message": "Сохранение не подтверждено: mpp_unreadable",
+          "next_action": null,
+          "retryable": false
+        },
+        "warnings": []
+      },
+      {
+        "item_id": "3",
+        "position": 3,
+        "status": "not_started",
+        "operation_id": "batch-op-fa32cde927b1660bc0aae50256d7e993a01ef50623549a0ebb5f2e4825b1021b",
+        "snapshot_id": null,
+        "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+        "receipt_ref": null,
+        "error": null,
+        "warnings": []
+      },
+      {
+        "item_id": "4",
+        "position": 4,
+        "status": "not_started",
+        "operation_id": "batch-op-75ca8815f074b33be94d19f7a5750602ccd8811e15e6ba42a0c1fd8ec6a4ed8b",
+        "snapshot_id": null,
+        "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+        "receipt_ref": null,
+        "error": null,
+        "warnings": []
+      }
+    ],
+    "published": false,
+    "error": {
+      "code": "mpp_unreadable",
+      "message": "Сохранение не подтверждено: mpp_unreadable",
+      "next_action": null,
+      "retryable": false
+    }
+  },
+  "baseline_before": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_ea11e14b89284fa5bd2f851f68b714ce','plan_75c33f02e4084919b50c109de0aea2ba','snapshot_ef421197e8894938a4404df72e900108',0,1,'test owner before acceptance',NULL,'2026-11-17T16:19:19+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_433877a42765431d9fe443a1d9bd300a','lineage_8123a016fb83408795046818aacb7678','snapshot_ef421197e8894938a4404df72e900108',1,'test owner before acceptance',NULL,'2026-11-17T16:19:19+00:00');"
+    ]
+  },
+  "baseline_after": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_ea11e14b89284fa5bd2f851f68b714ce','plan_75c33f02e4084919b50c109de0aea2ba','snapshot_ef421197e8894938a4404df72e900108',0,1,'test owner before acceptance',NULL,'2026-11-17T16:19:19+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_433877a42765431d9fe443a1d9bd300a','lineage_8123a016fb83408795046818aacb7678','snapshot_ef421197e8894938a4404df72e900108',1,'test owner before acceptance',NULL,'2026-11-17T16:19:19+00:00');"
+    ]
+  },
+  "transport_limitation": "Telegram rejects before skill; folder plus one text command is the supported route"
+}

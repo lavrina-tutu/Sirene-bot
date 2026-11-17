@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "installed-gantt-profile",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "plugin": {
     "key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
     "version": "frontend-build:H6u7SQymvwxeyojc1ur6Z",
@@ -750,6 +750,15 @@
       "source_field": "percent",
       "representation": "summary_native",
       "required_checks": []
+    },
+    "publication:source_snapshot_dates": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix4_snapshot_A",
+        "fix4_snapshot_B",
+        "fix4_snapshot_C"
+      ],
+      "scope": "Read-only installed-browser candidate loads; source start/finish preserved with manuallyScheduled and no nonworking-time shift; links retained. Zero-duration milestones with distinct source dates are excluded; this is a snapshot display, not equivalent schedule calculation."
     }
   },
   "evidence": {
@@ -1336,6 +1345,18 @@
     "fix2_native_actuals_probe": {
       "path": "references/implementation/20261116/stage-13-fix2/group-5/live/actuals-stop-resume/observation.json",
       "sha256": "bc6d391ad8670d3e198371e4c1da039461102f05851053ff83edf162b321e325"
+    },
+    "fix4_snapshot_A": {
+      "path": "references/implementation/20261116/stage-13-fix4/group-2/snapshot-probe/A.json",
+      "sha256": "7ea24e0abeb8900b742a77833376234ec093d59529ef9145d39d71df9822f395"
+    },
+    "fix4_snapshot_B": {
+      "path": "references/implementation/20261116/stage-13-fix4/group-2/snapshot-probe/B.json",
+      "sha256": "c66d9fb704838eeb014889411cf2bacd783b8a2133ec941d27c51277e8cdf7b2"
+    },
+    "fix4_snapshot_C": {
+      "path": "references/implementation/20261116/stage-13-fix4/group-2/snapshot-probe/C.json",
+      "sha256": "4863b592bb1cf8126860f076da6f18576ec21b39f02aa5797df7a5ed27f51f81"
     }
   },
   "limitations": [

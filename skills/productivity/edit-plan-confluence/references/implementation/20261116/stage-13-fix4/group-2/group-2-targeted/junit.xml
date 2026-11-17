@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="37" time="69.162" timestamp="2026-11-17T19:39:10.517746+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[none]" time="4.758" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[text]" time="4.605" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[hidden]" time="4.700" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[date]" time="5.151" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[resource_uid]" time="4.115" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[error]" time="4.567" /><testcase classname="test_fix4_owner_history" name="test_current_mtime_and_history_task_links" time="1.991" /><testcase classname="test_fix4_owner_history" name="test_snapshot_display_preserves_dates_links_and_source_mode[none]" time="4.236" /><testcase classname="test_fix4_owner_history" name="test_snapshot_display_preserves_dates_links_and_source_mode[manual]" time="4.116" /><testcase classname="test_fix4_owner_history" name="test_snapshot_display_preserves_dates_links_and_source_mode[source_mode]" time="4.196" /><testcase classname="test_fix4_owner_history" name="test_snapshot_display_preserves_dates_links_and_source_mode[hidden]" time="4.518" /><testcase classname="test_fix4_owner_history" name="test_zero_duration_milestone_with_different_dates_is_not_silently_fixed" time="4.723" /><testcase classname="test_mpp_convert" name="test_prepared_golden_bytes_and_storage" time="0.239" /><testcase classname="test_import_atomicity" name="test_operation_repeat_preserves_item_adds_attempt" time="0.711" /><testcase classname="test_history_queries" name="test_history_cli_matches_typed_api" time="3.654" /><testcase classname="test_source_values" name="test_exact_percent_without_status_setter[0]" time="0.289" /><testcase classname="test_source_values" name="test_exact_percent_without_status_setter[21]" time="0.262" /><testcase classname="test_source_values" name="test_exact_percent_without_status_setter[47]" time="0.270" /><testcase classname="test_source_values" name="test_exact_percent_without_status_setter[76]" time="0.292" /><testcase classname="test_source_values" name="test_exact_percent_without_status_setter[100]" time="0.269" /><testcase classname="test_source_values" name="test_exact_percent_without_status_setter[21.125]" time="0.274" /><testcase classname="test_source_values" name="test_columns_visible_in_both_modes" time="0.002" /><testcase classname="test_source_values" name="test_source_facts_do_not_infer_actual_finish[0-2026-01-05T09:00-None-True-True]" time="0.002" /><testcase classname="test_source_values" name="test_source_facts_do_not_infer_actual_finish[None-None-None-True-True]" time="0.002" /><testcase classname="test_source_values" name="test_source_facts_do_not_infer_actual_finish[47-None-2026-01-06T18:00-True-True]" time="0.002" /><testcase classname="test_source_values" name="test_source_facts_do_not_infer_actual_finish[21.125-None-None-False-False]" time="0.003" /><testcase classname="test_source_values" name="test_source_facts_do_not_infer_actual_finish[100-None-2026-01-06T18:00-True-False]" time="0.003" /><testcase classname="test_source_values" name="test_custom_summary_values_are_text_and_not_aggregates" time="0.294" /><testcase classname="test_source_values" name="test_displayed_actuals_use_planned_schedule" time="0.893" /><testcase classname="test_source_values" name="test_actuals_display_cannot_hide_schedule_or_display_loss[date]" time="0.790"><failure message="KeyError: 'classification'">stage08_export = {'assignments': [{'actual_finish': {'quality': 'missing', 'reason': 'not_set', 'value': None}, 'actual_start': {'quali...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+damage = 'date'
+
+    @pytest.mark.parametrize('damage', ['date', 'duration', 'native', 'hidden', 'missing', 'type', 'text'])
+    def test_actuals_display_cannot_hide_schedule_or_display_loss(stage08_export, damage):
+        from plugin_profile import PluginProfile
+        from plan_diagnostics import capability_findings
+        from plan_policy import evaluate
+        export = deepcopy(stage08_export)
+        task = export['tasks'][2]
+        task['actual_start'] = {'value':'2026-01-05T09:00:00','quality':'ok','reason':None}
+        prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+        profile = PluginProfile.load()
+        conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+        node = flatten(conversion['gantt']['eventsData'])[conversion['mappings']['tasks'][task['task_key']]]
+        column = 'custom_mpp_actual_start'
+        if damage == 'date': node['startDate'] = '2099-01-01T09:00:00'
+        elif damage == 'duration': node['duration'] += 1
+        elif damage == 'native': node['actualStart'] = task['actual_start']['value']
+        elif damage == 'hidden':
+            next(c for c in conversion['gantt']['initialState']['view']['columns'] if c['id']==column)['hidden']=True
+        elif damage == 'missing': del node[column]
+        elif damage == 'type': conversion['gantt']['customColumns'][column]['type']='number'
+        else: node[column] = 'wrong fact'
+        found = [f for f in capability_findings(prepared.normalized_data,profile,conversion) if f['entity']==task['task_key']]
+        assert evaluate(found)['exit_code']==5
+&gt;       assert any(f['classification']=='schedule-affecting' for f in found)
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = &lt;list_iterator object at 0x7fcd1a9a83a0&gt;
+
+&gt;   assert any(f['classification']=='schedule-affecting' for f in found)
+E   KeyError: 'classification'
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: KeyError</failure></testcase><testcase classname="test_source_values" name="test_actuals_display_cannot_hide_schedule_or_display_loss[duration]" time="0.819"><failure message="KeyError: 'classification'">stage08_export = {'assignments': [{'actual_finish': {'quality': 'missing', 'reason': 'not_set', 'value': None}, 'actual_start': {'quali...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+damage = 'duration'
+
+    @pytest.mark.parametrize('damage', ['date', 'duration', 'native', 'hidden', 'missing', 'type', 'text'])
+    def test_actuals_display_cannot_hide_schedule_or_display_loss(stage08_export, damage):
+        from plugin_profile import PluginProfile
+        from plan_diagnostics import capability_findings
+        from plan_policy import evaluate
+        export = deepcopy(stage08_export)
+        task = export['tasks'][2]
+        task['actual_start'] = {'value':'2026-01-05T09:00:00','quality':'ok','reason':None}
+        prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+        profile = PluginProfile.load()
+        conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+        node = flatten(conversion['gantt']['eventsData'])[conversion['mappings']['tasks'][task['task_key']]]
+        column = 'custom_mpp_actual_start'
+        if damage == 'date': node['startDate'] = '2099-01-01T09:00:00'
+        elif damage == 'duration': node['duration'] += 1
+        elif damage == 'native': node['actualStart'] = task['actual_start']['value']
+        elif damage == 'hidden':
+            next(c for c in conversion['gantt']['initialState']['view']['columns'] if c['id']==column)['hidden']=True
+        elif damage == 'missing': del node[column]
+        elif damage == 'type': conversion['gantt']['customColumns'][column]['type']='number'
+        else: node[column] = 'wrong fact'
+        found = [f for f in capability_findings(prepared.normalized_data,profile,conversion) if f['entity']==task['task_key']]
+        assert evaluate(found)['exit_code']==5
+&gt;       assert any(f['classification']=='schedule-affecting' for f in found)
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = &lt;list_iterator object at 0x7fcd1a9a85e0&gt;
+
+&gt;   assert any(f['classification']=='schedule-affecting' for f in found)
+E   KeyError: 'classification'
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: KeyError</failure></testcase><testcase classname="test_source_values" name="test_actuals_display_cannot_hide_schedule_or_display_loss[native]" time="0.829"><failure message="KeyError: 'classification'">stage08_export = {'assignments': [{'actual_finish': {'quality': 'missing', 'reason': 'not_set', 'value': None}, 'actual_start': {'quali...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+damage = 'native'
+
+    @pytest.mark.parametrize('damage', ['date', 'duration', 'native', 'hidden', 'missing', 'type', 'text'])
+    def test_actuals_display_cannot_hide_schedule_or_display_loss(stage08_export, damage):
+        from plugin_profile import PluginProfile
+        from plan_diagnostics import capability_findings
+        from plan_policy import evaluate
+        export = deepcopy(stage08_export)
+        task = export['tasks'][2]
+        task['actual_start'] = {'value':'2026-01-05T09:00:00','quality':'ok','reason':None}
+        prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+        profile = PluginProfile.load()
+        conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+        node = flatten(conversion['gantt']['eventsData'])[conversion['mappings']['tasks'][task['task_key']]]
+        column = 'custom_mpp_actual_start'
+        if damage == 'date': node['startDate'] = '2099-01-01T09:00:00'
+        elif damage == 'duration': node['duration'] += 1
+        elif damage == 'native': node['actualStart'] = task['actual_start']['value']
+        elif damage == 'hidden':
+            next(c for c in conversion['gantt']['initialState']['view']['columns'] if c['id']==column)['hidden']=True
+        elif damage == 'missing': del node[column]
+        elif damage == 'type': conversion['gantt']['customColumns'][column]['type']='number'
+        else: node[column] = 'wrong fact'
+        found = [f for f in capability_findings(prepared.normalized_data,profile,conversion) if f['entity']==task['task_key']]
+        assert evaluate(found)['exit_code']==5
+&gt;       assert any(f['classification']=='schedule-affecting' for f in found)
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = &lt;list_iterator object at 0x7fcd19ec5880&gt;
+
+&gt;   assert any(f['classification']=='schedule-affecting' for f in found)
+E   KeyError: 'classification'
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: KeyError</failure></testcase><testcase classname="test_source_values" name="test_actuals_display_cannot_hide_schedule_or_display_loss[hidden]" time="0.816"><failure message="KeyError: 'classification'">stage08_export = {'assignments': [{'actual_finish': {'quality': 'missing', 'reason': 'not_set', 'value': None}, 'actual_start': {'quali...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+damage = 'hidden'
+
+    @pytest.mark.parametrize('damage', ['date', 'duration', 'native', 'hidden', 'missing', 'type', 'text'])
+    def test_actuals_display_cannot_hide_schedule_or_display_loss(stage08_export, damage):
+        from plugin_profile import PluginProfile
+        from plan_diagnostics import capability_findings
+        from plan_policy import evaluate
+        export = deepcopy(stage08_export)
+        task = export['tasks'][2]
+        task['actual_start'] = {'value':'2026-01-05T09:00:00','quality':'ok','reason':None}
+        prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+        profile = PluginProfile.load()
+        conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+        node = flatten(conversion['gantt']['eventsData'])[conversion['mappings']['tasks'][task['task_key']]]
+        column = 'custom_mpp_actual_start'
+        if damage == 'date': node['startDate'] = '2099-01-01T09:00:00'
+        elif damage == 'duration': node['duration'] += 1
+        elif damage == 'native': node['actualStart'] = task['actual_start']['value']
+        elif damage == 'hidden':
+            next(c for c in conversion['gantt']['initialState']['view']['columns'] if c['id']==column)['hidden']=True
+        elif damage == 'missing': del node[column]
+        elif damage == 'type': conversion['gantt']['customColumns'][column]['type']='number'
+        else: node[column] = 'wrong fact'
+        found = [f for f in capability_findings(prepared.normalized_data,profile,conversion) if f['entity']==task['task_key']]
+        assert evaluate(found)['exit_code']==5
+&gt;       assert any(f['classification']=='schedule-affecting' for f in found)
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = &lt;list_iterator object at 0x7fcd19ec5220&gt;
+
+&gt;   assert any(f['classification']=='schedule-affecting' for f in found)
+E   KeyError: 'classification'
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: KeyError</failure></testcase><testcase classname="test_source_values" name="test_actuals_display_cannot_hide_schedule_or_display_loss[missing]" time="0.796"><failure message="KeyError: 'classification'">stage08_export = {'assignments': [{'actual_finish': {'quality': 'missing', 'reason': 'not_set', 'value': None}, 'actual_start': {'quali...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+damage = 'missing'
+
+    @pytest.mark.parametrize('damage', ['date', 'duration', 'native', 'hidden', 'missing', 'type', 'text'])
+    def test_actuals_display_cannot_hide_schedule_or_display_loss(stage08_export, damage):
+        from plugin_profile import PluginProfile
+        from plan_diagnostics import capability_findings
+        from plan_policy import evaluate
+        export = deepcopy(stage08_export)
+        task = export['tasks'][2]
+        task['actual_start'] = {'value':'2026-01-05T09:00:00','quality':'ok','reason':None}
+        prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+        profile = PluginProfile.load()
+        conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+        node = flatten(conversion['gantt']['eventsData'])[conversion['mappings']['tasks'][task['task_key']]]
+        column = 'custom_mpp_actual_start'
+        if damage == 'date': node['startDate'] = '2099-01-01T09:00:00'
+        elif damage == 'duration': node['duration'] += 1
+        elif damage == 'native': node['actualStart'] = task['actual_start']['value']
+        elif damage == 'hidden':
+            next(c for c in conversion['gantt']['initialState']['view']['columns'] if c['id']==column)['hidden']=True
+        elif damage == 'missing': del node[column]
+        elif damage == 'type': conversion['gantt']['customColumns'][column]['type']='number'
+        else: node[column] = 'wrong fact'
+        found = [f for f in capability_findings(prepared.normalized_data,profile,conversion) if f['entity']==task['task_key']]
+        assert evaluate(found)['exit_code']==5
+&gt;       assert any(f['classification']=='schedule-affecting' for f in found)
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = &lt;list_iterator object at 0x7fcd1a3d9c40&gt;
+
+&gt;   assert any(f['classification']=='schedule-affecting' for f in found)
+E   KeyError: 'classification'
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: KeyError</failure></testcase><testcase classname="test_source_values" name="test_actuals_display_cannot_hide_schedule_or_display_loss[type]" time="0.825"><failure message="KeyError: 'classification'">stage08_export = {'assignments': [{'actual_finish': {'quality': 'missing', 'reason': 'not_set', 'value': None}, 'actual_start': {'quali...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+damage = 'type'
+
+    @pytest.mark.parametrize('damage', ['date', 'duration', 'native', 'hidden', 'missing', 'type', 'text'])
+    def test_actuals_display_cannot_hide_schedule_or_display_loss(stage08_export, damage):
+        from plugin_profile import PluginProfile
+        from plan_diagnostics import capability_findings
+        from plan_policy import evaluate
+        export = deepcopy(stage08_export)
+        task = export['tasks'][2]
+        task['actual_start'] = {'value':'2026-01-05T09:00:00','quality':'ok','reason':None}
+        prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+        profile = PluginProfile.load()
+        conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+        node = flatten(conversion['gantt']['eventsData'])[conversion['mappings']['tasks'][task['task_key']]]
+        column = 'custom_mpp_actual_start'
+        if damage == 'date': node['startDate'] = '2099-01-01T09:00:00'
+        elif damage == 'duration': node['duration'] += 1
+        elif damage == 'native': node['actualStart'] = task['actual_start']['value']
+        elif damage == 'hidden':
+            next(c for c in conversion['gantt']['initialState']['view']['columns'] if c['id']==column)['hidden']=True
+        elif damage == 'missing': del node[column]
+        elif damage == 'type': conversion['gantt']['customColumns'][column]['type']='number'
+        else: node[column] = 'wrong fact'
+        found = [f for f in capability_findings(prepared.normalized_data,profile,conversion) if f['entity']==task['task_key']]
+        assert evaluate(found)['exit_code']==5
+&gt;       assert any(f['classification']=='schedule-affecting' for f in found)
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = &lt;list_iterator object at 0x7fcd1a6bf070&gt;
+
+&gt;   assert any(f['classification']=='schedule-affecting' for f in found)
+E   KeyError: 'classification'
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: KeyError</failure></testcase><testcase classname="test_source_values" name="test_actuals_display_cannot_hide_schedule_or_display_loss[text]" time="0.913"><failure message="KeyError: 'classification'">stage08_export = {'assignments': [{'actual_finish': {'quality': 'missing', 'reason': 'not_set', 'value': None}, 'actual_start': {'quali...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+damage = 'text'
+
+    @pytest.mark.parametrize('damage', ['date', 'duration', 'native', 'hidden', 'missing', 'type', 'text'])
+    def test_actuals_display_cannot_hide_schedule_or_display_loss(stage08_export, damage):
+        from plugin_profile import PluginProfile
+        from plan_diagnostics import capability_findings
+        from plan_policy import evaluate
+        export = deepcopy(stage08_export)
+        task = export['tasks'][2]
+        task['actual_start'] = {'value':'2026-01-05T09:00:00','quality':'ok','reason':None}
+        prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+        profile = PluginProfile.load()
+        conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+        node = flatten(conversion['gantt']['eventsData'])[conversion['mappings']['tasks'][task['task_key']]]
+        column = 'custom_mpp_actual_start'
+        if damage == 'date': node['startDate'] = '2099-01-01T09:00:00'
+        elif damage == 'duration': node['duration'] += 1
+        elif damage == 'native': node['actualStart'] = task['actual_start']['value']
+        elif damage == 'hidden':
+            next(c for c in conversion['gantt']['initialState']['view']['columns'] if c['id']==column)['hidden']=True
+        elif damage == 'missing': del node[column]
+        elif damage == 'type': conversion['gantt']['customColumns'][column]['type']='number'
+        else: node[column] = 'wrong fact'
+        found = [f for f in capability_findings(prepared.normalized_data,profile,conversion) if f['entity']==task['task_key']]
+        assert evaluate(found)['exit_code']==5
+&gt;       assert any(f['classification']=='schedule-affecting' for f in found)
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = &lt;list_iterator object at 0x7fcd19ec5a30&gt;
+
+&gt;   assert any(f['classification']=='schedule-affecting' for f in found)
+E   KeyError: 'classification'
+
+skills/productivity/edit-plan-confluence/tests/test_source_values.py:109: KeyError</failure></testcase><testcase classname="test_source_values" name="test_publish_with_all_actuals_then_repeat" time="3.252" /></testsuite></testsuites>

@@ -101,8 +101,14 @@ def observe_plugin(client, page_id, expected, request, folder, *, attachment_ver
                         return {build:__NEXT_DATA__.buildId,engine_version:bryntum.getVersion('gantt'),readOnly:gantt.readOnly,
                             tasks:gantt.project.eventStore.allRecords.map(t=>({id:t.id,name:t.name,start:local(t.startDate),finish:local(t.endDate),milestone:t.isMilestone,percentDone:t.percentDone,status:t.status,model:t.toJSON(),persistable:t.persistableData})),
                             columns:gantt.columns.records.map(c=>({id:c.id,field:c.field,hidden:c.hidden})),
+                            dependencies:gantt.project.dependencyStore.records.map(d=>({from:d.fromEvent.id,to:d.toEvent.id,type:d.type,lag:d.lag})),
                             dependency_count:gantt.project.dependencyStore.count};
                     }""")
+                    from collections import Counter
+                    expected_dependencies = json.loads(expected)['dependenciesData']
+                    assert data['dependency_count'] == len(expected_dependencies)
+                    assert Counter((d['from'],d['to'],d['type'],d['lag']) for d in data['dependencies']) == Counter(
+                        (d['from'],d['to'],d['type'],d['lag']) for d in expected_dependencies)
                     assert received and received[-1] == expected
                     observation.update(build=data['build'],engine_version=data['engine_version'],
                         confluence_version=page.locator('meta[name="ajs-version-number"]').get_attribute('content'),
@@ -124,13 +130,25 @@ def observe_plugin(client, page_id, expected, request, folder, *, attachment_ver
                             assert text==task['model'][column]
                         data['visible_values'][column]=values
                         if opening==0:page.screenshot(path=str(folder/('visible-'+column+'.png')),full_page=True)
-                    from mpp_convert import UNASSIGNED_COLUMN
+                    from mpp_convert import UNASSIGNED_COLUMN, SNAPSHOT_COLUMN
                     expected_tasks = {}
                     def collect(rows):
                         for task in rows:
                             expected_tasks[str(task['id'])] = task
                             collect(task.get('children', []))
                     collect(json.loads(expected)['eventsData'])
+                    if any(t.get(SNAPSHOT_COLUMN) for t in expected_tasks.values()):
+                        assert columns[SNAPSHOT_COLUMN]['hidden'] is False
+                        frame.evaluate('async(id)=>{await gantt.scrollColumnIntoView(gantt.columns.getById(id));return null;}', SNAPSHOT_COLUMN)
+                        data['visible_snapshot_mode'] = {}
+                        for task in data['tasks']:
+                            assert task['model']['manuallyScheduled'] is True
+                            text = expected_tasks[str(task['id'])][SNAPSHOT_COLUMN]
+                            frame.evaluate('async(id)=>{await gantt.scrollRowIntoView(id);return null;}', task['id'])
+                            cell = frame.locator('.b-grid-row[data-id="'+str(task['id'])+'"] .b-grid-cell[data-column="'+SNAPSHOT_COLUMN+'"]')
+                            assert cell.count()==1 and cell.inner_text().strip()==text
+                            assert task['model'][SNAPSHOT_COLUMN]==text
+                            data['visible_snapshot_mode'][str(task['id'])] = text
                     if any(t.get(UNASSIGNED_COLUMN) for t in expected_tasks.values()):
                         assert columns[UNASSIGNED_COLUMN]['hidden'] is False
                         frame.evaluate('async(id)=>{await gantt.scrollColumnIntoView(gantt.columns.getById(id));return null;}', UNASSIGNED_COLUMN)

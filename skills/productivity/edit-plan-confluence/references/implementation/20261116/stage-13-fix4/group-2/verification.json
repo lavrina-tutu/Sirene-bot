@@ -1,0 +1,20 @@
+{
+  "initial_targeted": {
+    "passed": 30,
+    "failed": 7,
+    "rc": 1,
+    "reason": "New snapshot diagnostic lacked the established classification field; added classification without changing the tests."
+  },
+  "targeted_repeat": {
+    "passed": 11,
+    "failed": 0,
+    "rc": 0
+  },
+  "first_full": {
+    "passed": 813,
+    "failed": 6,
+    "rc": 1
+  },
+  "remaining_blocker": "D: source_milestone_interval_conflict uid:373",
+  "unchanged_gate": true
+}

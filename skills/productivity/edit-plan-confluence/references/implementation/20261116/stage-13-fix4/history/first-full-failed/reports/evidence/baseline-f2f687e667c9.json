@@ -1,0 +1,21 @@
+{
+  "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]",
+  "observed_at": "2026-11-17T16:19:32.750402+00:00",
+  "baseline_before": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_ea11e14b89284fa5bd2f851f68b714ce','plan_75c33f02e4084919b50c109de0aea2ba','snapshot_ef421197e8894938a4404df72e900108',0,1,'test owner before acceptance',NULL,'2026-11-17T16:19:19+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_433877a42765431d9fe443a1d9bd300a','lineage_8123a016fb83408795046818aacb7678','snapshot_ef421197e8894938a4404df72e900108',1,'test owner before acceptance',NULL,'2026-11-17T16:19:19+00:00');"
+    ]
+  },
+  "baseline_after": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_ea11e14b89284fa5bd2f851f68b714ce','plan_75c33f02e4084919b50c109de0aea2ba','snapshot_ef421197e8894938a4404df72e900108',0,1,'test owner before acceptance',NULL,'2026-11-17T16:19:19+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_433877a42765431d9fe443a1d9bd300a','lineage_8123a016fb83408795046818aacb7678','snapshot_ef421197e8894938a4404df72e900108',1,'test owner before acceptance',NULL,'2026-11-17T16:19:19+00:00');"
+    ]
+  },
+  "unchanged": true
+}

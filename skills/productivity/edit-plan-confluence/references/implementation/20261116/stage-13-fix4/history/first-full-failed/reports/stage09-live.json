@@ -1,0 +1,415 @@
+{
+  "status": "passed",
+  "test_parent": "519501810",
+  "scope": "stage09 admission, bytes and storage; schedule:not_verified",
+  "admitted_fixture": "explicit synthetic export, no MPXJ read claimed",
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313/child/attachment"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content/537576313/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576314"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576313/gantt-chart-7a4c4014fa21446c9f69d73727d130fb.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576314"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576313/gantt-chart-7a4c4014fa21446c9f69d73727d130fb.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313/child/attachment"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/content/537576313"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576314"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576313/gantt-chart-7a4c4014fa21446c9f69d73727d130fb.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576314"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576313/gantt-chart-7a4c4014fa21446c9f69d73727d130fb.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576313/child/attachment"
+    }
+  ],
+  "page_id": "537576313",
+  "receipt": {
+    "schema_version": 1,
+    "operation_id": "operation_a486ada74fc84534902909f0467a7100",
+    "item_id": "item_501ed1cc03704407a1c53446643c12cf",
+    "status": "published_with_warnings",
+    "mode": "publish",
+    "exit_code": 0,
+    "project_slug": "stage09-live-test",
+    "source": {
+      "name": "synthetic-parsed-contract.mpp",
+      "sha256": "b7432224b0956ae3d08c6fd89722f2d02873c24dc7f16ba4fa49278be7cb0788",
+      "size_bytes": 59
+    },
+    "snapshot_id": "snapshot_77235cb61c9745a79786831181c950a6",
+    "page_id": "537576313",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576313",
+    "task_count": 3,
+    "display_task_count": 3,
+    "dependency_count": 1,
+    "exceptions": [],
+    "attachment_version": 1,
+    "verification": {
+      "archive": "verified",
+      "attachment": "verified",
+      "storage": "verified",
+      "source_values": {
+        "status": "not_verified",
+        "checks": [],
+        "limitations": [
+          "ordinary_view_for_this_plan_not_observed"
+        ],
+        "evidence_ids": []
+      },
+      "schedule": {
+        "status": "not_verified",
+        "checks": [
+          {
+            "row": 5,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "model"
+            ]
+          },
+          {
+            "row": 6,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ]
+          }
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "evidence_ids": [
+          "artifact_aa724cc7abff4385986d3be3565eb502"
+        ]
+      }
+    },
+    "published": true,
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_aa724cc7abff4385986d3be3565eb502"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_aa724cc7abff4385986d3be3565eb502"
+      }
+    ],
+    "completed_stages": [
+      "prepared",
+      "archived",
+      "admitted",
+      "attachment_uploaded",
+      "attachment_verified",
+      "storage_written",
+      "storage_verified",
+      "confirmed"
+    ],
+    "external_effect": "storage_written",
+    "error": null
+  },
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 1,
+    "PUT": 1
+  },
+  "attachment_id": "537576314",
+  "received_sha256": "9cad0abfa3959c933ec1fee5acb9f0fe3d7771dc10e32b142d011faf2279dd97",
+  "page_version": 2,
+  "binary": {
+    "receipt": {
+      "schema_version": 1,
+      "operation_id": "operation_af3c3edcfe3e4296a90d20b3266f0411",
+      "item_id": "item_21a65cab026a42cc981123873807e988",
+      "status": "failed",
+      "mode": "publish",
+      "exit_code": 5,
+      "project_slug": "stage09-binary-test",
+      "source": {
+        "name": "real-input.mpp",
+        "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+        "size_bytes": 180736
+      },
+      "snapshot_id": "snapshot_2e91cb578ac846d6a2a3bd01de5ec99d",
+      "page_id": null,
+      "page_url": null,
+      "task_count": 6,
+      "display_task_count": 5,
+      "dependency_count": 4,
+      "exceptions": [],
+      "attachment_version": null,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_applicable",
+        "storage": "not_applicable",
+        "source_values": {
+          "status": "not_verified",
+          "checks": [],
+          "limitations": [
+            "ordinary_view_for_this_plan_not_observed"
+          ],
+          "evidence_ids": []
+        },
+        "schedule": {
+          "status": "not_verified",
+          "checks": [
+            {
+              "row": 5,
+              "category": "local_unsupported",
+              "code": "local_scheduler_prepared_unsupported",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "model"
+              ]
+            },
+            {
+              "row": 6,
+              "category": "plugin_unobserved",
+              "code": "specific_plan_plugin_result_not_verified",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "plugin"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "dependency_combination_unverified",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "local:dependency:000001"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "dependency_lag_unit_unsupported",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "local:dependency:000001"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "summary_root_missing",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "summary"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "task_semantics_unrepresented:effort_driven",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "task_semantics_unrepresented:segments",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "uid:5"
+              ]
+            },
+            {
+              "row": 20,
+              "category": "display_only",
+              "code": "unassigned_resource_source_display",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            }
+          ],
+          "limitations": [
+            "local_scheduler_not_run",
+            "plan_plugin_result_not_verified"
+          ],
+          "evidence_ids": [
+            "artifact_9694df2574ec4dba9bf62ca9db988ea3"
+          ]
+        }
+      },
+      "published": false,
+      "warnings": [
+        {
+          "code": "local_scheduler_prepared_unsupported",
+          "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_9694df2574ec4dba9bf62ca9db988ea3"
+        },
+        {
+          "code": "specific_plan_plugin_result_not_verified",
+          "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_9694df2574ec4dba9bf62ca9db988ea3"
+        },
+        {
+          "code": "unassigned_resource_source_display",
+          "message": "unassigned_resource_source_display: 5 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_9694df2574ec4dba9bf62ca9db988ea3"
+        }
+      ],
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived"
+      ],
+      "external_effect": "none",
+      "error": {
+        "code": "summary_root_missing",
+        "message": "summary_root_missing",
+        "retryable": false,
+        "next_action": "operation show --operation-id operation_af3c3edcfe3e4296a90d20b3266f0411"
+      }
+    },
+    "counters": {
+      "MPXJ_read": 1,
+      "cache_hit": 0,
+      "cache_miss": 1,
+      "POST": 0,
+      "PUT": 0
+    },
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576313"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576313/child/attachment"
+      }
+    ]
+  },
+  "POST": 2,
+  "PUT": 1
+}

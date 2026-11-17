@@ -94,3 +94,34 @@ def test_current_mtime_and_history_task_links(save_case):
     source.write_bytes(original);os.utime(source,ns=(2000000000000000000,2000000000000000000))
     ps.save_snapshot(source,project_slug='test-project',context=context,export=export)
     assert query_history(project_slug='test-project',**params)['result']['current_plan']['status']=='ambiguous'
+
+
+@pytest.mark.parametrize('damage', ['none','manual','source_mode','hidden'])
+def test_snapshot_display_preserves_dates_links_and_source_mode(damage):
+    from mpp_convert import SNAPSHOT_COLUMN
+    from plan_policy import evaluate
+    data, prepared, profile, conversion = converted('B')
+    node = next(iter(flatten(conversion['gantt']['eventsData']).values()))
+    assert node['manuallyScheduled'] is True and node['skipNonWorkingTimeWhenSchedulingManually'] is False
+    assert 'AUTO' in node[SNAPSHOT_COLUMN]
+    assert len(conversion['gantt']['dependenciesData'])==len(data['dependencies'])
+    if damage=='manual': node['manuallyScheduled']=False
+    elif damage=='source_mode': node[SNAPSHOT_COLUMN]=''
+    elif damage=='hidden':
+        next(c for c in conversion['gantt']['initialState']['view']['columns'] if c['id']==SNAPSHOT_COLUMN)['hidden']=True
+    findings = capability_findings(prepared.normalized_data,profile,conversion)
+    assert evaluate(findings)['exit_code'] == (0 if damage=='none' else 5)
+    assert conversion['source_semantics']['tasks']==prepared.normalized_data['tasks']
+
+
+def test_zero_duration_milestone_with_different_dates_is_not_silently_fixed():
+    data, prepared, profile, conversion = converted('D')
+    from plan_policy import evaluate
+    findings = capability_findings(prepared.normalized_data,profile,conversion)
+    conflicts = [f for f in findings if f['code']=='source_milestone_interval_conflict']
+    assert len(conflicts)==1 and conflicts[0]['entity']=='uid:373'
+    assert conflicts[0]['source']['start']['value']=='2026-03-30T09:00'
+    assert conflicts[0]['source']['finish']['value']=='2026-04-22T18:00'
+    assert conflicts[0]['source']['duration']['quantity']['amount']=='0'
+    assert evaluate(findings)['exit_code']==5
+    assert {f['entity'] for f in findings if f['code']=='unassigned_resource_source_display'} >= {'uid:441','uid:699','uid:700','uid:701'}

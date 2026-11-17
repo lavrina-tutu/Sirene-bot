@@ -165,7 +165,12 @@ def test_operation_repeat_preserves_item_adds_attempt(archive_case):
     assert repeat.operation_id==first.operation_id and repeat.item_id==first.item_id
     assert repeat.attempt_id!=first.attempt_id
     assert freeze_operation_input(conn,repeat).sha256==config["sha256"]
-    assert len(q.get_operation_events(conn,first.operation_id))==4  # two starts, freeze, commit
+    events = q.get_operation_events(conn,first.operation_id)
+    assert len(events)==5  # two starts, freeze, source metadata, commit
+    metadata = [json.loads(e['detail']) for e in events if e['event_kind']=='source_file_metadata']
+    assert len(metadata)==1  # Resume does not refreeze/restat a deleted source.
+    assert metadata[0]['source_mpp_sha256']==config['sha256']
+    assert type(metadata[0]['source_mtime_ns']) is int
     assert commit_prepared_import(conn,repeat,binding={},prepared={})["snapshot_id"]==q.get_import_item(conn,first.item_id)["snapshot_id"]
 
 

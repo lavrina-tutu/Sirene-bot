@@ -1,0 +1,117 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]",
+  "observed_at": "2026-11-17T16:29:46.931703+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o1/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o1/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o1/cache",
+    "publish",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o1/B.mpp",
+    "--page-id",
+    "537576341",
+    "--project-slug",
+    "trisigma",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 0,
+  "duration_seconds": 14.94767755700741,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_97918f88f08946e38996230971ed01e9\", \"item_id\": \"item_275e3a4becc54e2e92d8d2f62cb02333\", \"status\": \"published_with_warnings\", \"mode\": \"publish\", \"exit_code\": 0, \"project_slug\": \"trisigma\", \"source\": {\"name\": \"B.mpp\", \"sha256\": \"216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317\", \"size_bytes\": 586240}, \"snapshot_id\": \"snapshot_5a8243a81f7a430aab52fdf9d8f38d76\", \"page_id\": \"537576341\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537576341\", \"task_count\": 62, \"display_task_count\": 61, \"dependency_count\": 60, \"exceptions\": [{\"rule_id\": \"B\", \"revision\": \"historical-unresolved-v1\", \"result\": \"not_needed\", \"evidence_id\": null, \"reason\": \"историческое правило не применяется (решение владельца)\", \"owner_decision\": {\"schema_version\": 1, \"decision_id\": \"owner-20261117-fix4\", \"evidence_path\": \"references/implementation/20261116/stage-13-fix4/owner-decision.md\", \"evidence_sha256\": \"e6bc9687628d390a115378cb2dcc8953a78af26bcc74f3a58781cac15fd666a1\", \"historical_rules\": \"not_applicable\", \"unassigned_resources\": \"preserve_source_display\", \"actuality\": \"source_file_mtime_ns\"}}], \"attachment_version\": 1, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"storage\": \"verified\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"historical_rule_not_applicable_owner_decision\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"B\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_duration\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_finish\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 2, \"example_entities\": [\"uid:323\", \"uid:324\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_start\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_work\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:resume\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:stop\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"unassigned_resource_source_display\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 6, \"example_entities\": [\"uid:441\", \"uid:443\", \"uid:445\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_3683f7ce669c497db6b8814468710c1a\"]}}, \"published\": true, \"warnings\": [{\"code\": \"historical_rule_not_applicable_owner_decision\", \"message\": \"historical_rule_not_applicable_owner_decision: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}, {\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}, {\"code\": \"task_actuals_display_only:actual_duration\", \"message\": \"task_actuals_display_only:actual_duration: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}, {\"code\": \"task_actuals_display_only:actual_finish\", \"message\": \"task_actuals_display_only:actual_finish: 2 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}, {\"code\": \"task_actuals_display_only:actual_start\", \"message\": \"task_actuals_display_only:actual_start: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}, {\"code\": \"task_actuals_display_only:actual_work\", \"message\": \"task_actuals_display_only:actual_work: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}, {\"code\": \"task_actuals_display_only:resume\", \"message\": \"task_actuals_display_only:resume: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}, {\"code\": \"task_actuals_display_only:stop\", \"message\": \"task_actuals_display_only:stop: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}, {\"code\": \"unassigned_resource_source_display\", \"message\": \"unassigned_resource_source_display: 6 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3683f7ce669c497db6b8814468710c1a\"}], \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"external_effect\": \"storage_written\", \"error\": null}\n",
+  "stderr": "2026-11-17T16:29:34.911625930Z main ERROR Log4j API could not find a logging provider.\n",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 1,
+    "cache_hit": 0,
+    "cache_miss": 1,
+    "POST": 1,
+    "PUT": 1,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341/child/attachment"
+      },
+      {
+        "method": "POST",
+        "path": "/rest/api/content/537576341/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576342"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576341/gantt-chart-7283b84016d8408a86481c40d504bfa3.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576342"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576341/gantt-chart-7283b84016d8408a86481c40d504bfa3.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341/child/attachment"
+      },
+      {
+        "method": "PUT",
+        "path": "/rest/api/content/537576341"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576342"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576341/gantt-chart-7283b84016d8408a86481c40d504bfa3.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576341/child/attachment"
+      }
+    ]
+  }
+}

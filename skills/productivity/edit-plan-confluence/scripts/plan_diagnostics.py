@@ -136,6 +136,28 @@ def capability_findings(data, plugin_profile, conversion=None):
     nodes = flatten((conversion or {}).get('gantt', {}).get('eventsData', []))
     for task in data['tasks']:
         if task.get('id')==0:continue
+        if plugin_profile.supports('publication:source_snapshot_dates'):
+            from mpp_convert import SNAPSHOT_COLUMN, snapshot_text
+            ident = (conversion or {}).get('mappings', {}).get('tasks', {}).get(task['task_key'])
+            node = nodes.get(ident, {})
+            gantt = (conversion or {}).get('gantt', {})
+            visible = all(any(c.get('id')==SNAPSHOT_COLUMN and c.get('hidden') is False
+                for c in gantt.get('initialState',{}).get(mode,{}).get('columns',[])) for mode in ('view','edit'))
+            exact = (node.get('manuallyScheduled') is True and node.get('skipNonWorkingTimeWhenSchedulingManually') is False
+                and node.get(SNAPSHOT_COLUMN)==snapshot_text(task) and visible
+                and gantt.get('customColumns',{}).get(SNAPSHOT_COLUMN,{}).get('type')=='customtext'
+                and node.get('startDate')==field_value(task.get('start')) and node.get('endDate')==field_value(task.get('finish')))
+            from itogo import quantity_minutes
+            duration, _, _ = quantity_minutes(task.get('duration'), data['project'], working_only=True)
+            if task.get('milestone') is True and duration == 0 and field_value(task.get('start')) != field_value(task.get('finish')):
+                issues.append(finding('unsupported_semantics','source_milestone_interval_conflict',task['task_key'],
+                    {'start':task.get('start'),'finish':task.get('finish'),'duration':task.get('duration'),'milestone':True},
+                    {'reason':'Installed plugin collapses zero-duration milestone to one date; no source date or duration is invented.'}))
+            row = finding('display_only' if exact else 'unsupported_semantics',
+                'source_snapshot_dates' if exact else 'source_snapshot_display_unverified',task['task_key'],task.get('task_mode'),
+                {'source_mode':snapshot_text(task),'plugin_recalculation':False,'verified':exact})
+            row['classification'] = 'display-only' if exact else 'schedule-affecting'
+            issues.append(row)
         for field in ('actual_start','actual_finish','actual_duration','actual_work','stop','resume'):
             raw=task.get(field);value=field_value(raw)
             quantity=raw.get('quantity',{}) if isinstance(raw,dict) else {}

@@ -54,7 +54,7 @@ class PluginProfile:
                         and w.get('confluence_version') == d['confluence_version']]
             if not matching:
                 raise ValueError('installed_version_without_matching_metadata_evidence')
-        corrective = {'calendar:inheritance','calendar:bindings:tasks','calendar:bindings:resources',
+        corrective = {'publication:source_snapshot_dates','calendar:inheritance','calendar:bindings:tasks','calendar:bindings:resources',
             'calendar:bindings:assignments','resource:availability','assignment:start','assignment:finish',
             'task:segments','task:active','dependency:summary_endpoint','resource:default_availability','assignment:coincident_task_interval'}
         for name, capability in d['capabilities'].items():

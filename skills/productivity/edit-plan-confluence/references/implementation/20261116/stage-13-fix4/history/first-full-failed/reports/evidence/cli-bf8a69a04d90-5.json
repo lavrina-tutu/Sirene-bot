@@ -1,0 +1,37 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+  "observed_at": "2026-11-17T16:27:08.736901+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_binary_identity_does_not_0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_binary_identity_does_not_0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_binary_identity_does_not_0/cache",
+    "resume",
+    "--operation-id",
+    "operation_c2da882a0a0f4a11b4fd496b5024d956",
+    "--mapping-revision",
+    "mapping_2f8cf21f40534e9280289abdee070aac"
+  ],
+  "rc": 5,
+  "duration_seconds": 2.782955274975393,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_c2da882a0a0f4a11b4fd496b5024d956\", \"item_id\": \"item_ff67478b1bbe4e3f91cb8a9530df1108\", \"status\": \"failed\", \"mode\": \"publish\", \"exit_code\": 5, \"project_slug\": \"stage13-binary-negative\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_deb6a64ff14342189d69088463598359\", \"page_id\": null, \"page_url\": null, \"task_count\": 6, \"display_task_count\": 5, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"semantic-negative-diff\", \"revision\": \"binary-fixture-v1\", \"result\": \"applied\", \"evidence_id\": \"artifact_780b25bbd6b94cf2a7138cdffd630efb\", \"reason\": \"historical_consent_and_current_cause_verified\", \"owner_decision\": null}], \"attachment_version\": null, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"storage\": \"not_applicable\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"dependency_combination_unverified\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"local:dependency:000001\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"dependency_lag_unit_unsupported\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"local:dependency:000001\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"summary_root_missing\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"summary\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_semantics_unrepresented:effort_driven\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_semantics_unrepresented:segments\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"uid:5\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"unassigned_resource_source_display\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_d0d0770bc87744afa23d2e2e527841fa\"]}}, \"published\": false, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_d0d0770bc87744afa23d2e2e527841fa\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_d0d0770bc87744afa23d2e2e527841fa\"}, {\"code\": \"unassigned_resource_source_display\", \"message\": \"unassigned_resource_source_display: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_d0d0770bc87744afa23d2e2e527841fa\"}], \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"external_effect\": \"none\", \"error\": {\"code\": \"summary_root_missing\", \"message\": \"summary_root_missing\", \"retryable\": false, \"next_action\": \"operation show --operation-id operation_c2da882a0a0f4a11b4fd496b5024d956\"}}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576328"
+      }
+    ]
+  }
+}

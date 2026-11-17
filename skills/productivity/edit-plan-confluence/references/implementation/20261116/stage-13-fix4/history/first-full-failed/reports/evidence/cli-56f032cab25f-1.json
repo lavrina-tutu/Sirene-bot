@@ -1,0 +1,117 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
+  "observed_at": "2026-11-17T16:28:25.132990+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o0/cache",
+    "publish",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o0/A.mpp",
+    "--page-id",
+    "537576336",
+    "--project-slug",
+    "trisigma",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 0,
+  "duration_seconds": 14.70745052001439,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_f9494eb11060442cba53f69b8ad0ff3b\", \"item_id\": \"item_41441464bff04883bfa429696563c2fd\", \"status\": \"published_with_warnings\", \"mode\": \"publish\", \"exit_code\": 0, \"project_slug\": \"trisigma\", \"source\": {\"name\": \"A.mpp\", \"sha256\": \"7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89\", \"size_bytes\": 635904}, \"snapshot_id\": \"snapshot_c196252cd5dc43fb91489ce8f0c7a72b\", \"page_id\": \"537576336\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537576336\", \"task_count\": 58, \"display_task_count\": 57, \"dependency_count\": 53, \"exceptions\": [], \"attachment_version\": 1, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"storage\": \"verified\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_duration\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_finish\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 2, \"example_entities\": [\"uid:323\", \"uid:324\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_start\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_work\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:resume\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:stop\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"unassigned_resource_source_display\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:441\", \"uid:443\", \"uid:445\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"]}}, \"published\": true, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"}, {\"code\": \"task_actuals_display_only:actual_duration\", \"message\": \"task_actuals_display_only:actual_duration: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"}, {\"code\": \"task_actuals_display_only:actual_finish\", \"message\": \"task_actuals_display_only:actual_finish: 2 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"}, {\"code\": \"task_actuals_display_only:actual_start\", \"message\": \"task_actuals_display_only:actual_start: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"}, {\"code\": \"task_actuals_display_only:actual_work\", \"message\": \"task_actuals_display_only:actual_work: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"}, {\"code\": \"task_actuals_display_only:resume\", \"message\": \"task_actuals_display_only:resume: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"}, {\"code\": \"task_actuals_display_only:stop\", \"message\": \"task_actuals_display_only:stop: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"}, {\"code\": \"unassigned_resource_source_display\", \"message\": \"unassigned_resource_source_display: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_b81a4c69e9e84b13ba9abdd93923b0a9\"}], \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"external_effect\": \"storage_written\", \"error\": null}\n",
+  "stderr": "2026-11-17T16:28:13.332444422Z main ERROR Log4j API could not find a logging provider.\n",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 1,
+    "cache_hit": 0,
+    "cache_miss": 1,
+    "POST": 1,
+    "PUT": 1,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336/child/attachment"
+      },
+      {
+        "method": "POST",
+        "path": "/rest/api/content/537576336/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576338"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576336/gantt-chart-cf320c78b3244024b6f423c089f16f7e.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576338"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576336/gantt-chart-cf320c78b3244024b6f423c089f16f7e.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336/child/attachment"
+      },
+      {
+        "method": "PUT",
+        "path": "/rest/api/content/537576336"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576338"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576336/gantt-chart-cf320c78b3244024b6f423c089f16f7e.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576336/child/attachment"
+      }
+    ]
+  }
+}

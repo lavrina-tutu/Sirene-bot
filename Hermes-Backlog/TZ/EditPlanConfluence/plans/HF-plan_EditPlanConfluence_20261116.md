@@ -24,6 +24,8 @@
 12. Новая сущность вне утверждённого расширения существующих компонентов требует маркера **[NEW-ENTITY, требует согласования Саши]** и конкретного согласования до проектирования/создания. Отсутствие ответа не является согласованием.
 13. Архив, история и результаты запросов остаются в MofsIndex и существующем файловом архиве WorkVault; собственная БД скилла, дублирующий реестр проектов и новый `kind=plan` не создаются.
 
+После failed финальной приёмки выполняются корректирующие итерации этапов — владельцев нарушенных контрактов. Первоначальные отчёты и коммиты сохраняются. Каждая итерация имеет отдельный отчёт и commit; затем выполняется новый полный прогон этапа 13.
+
 ### 1.2. Корни файлов
 
 В таблицах ниже используются точные сокращения абсолютных путей.
@@ -351,6 +353,8 @@ AC-01…AC-27 относятся только к пакету §20 и запис
 
 ## 4. Этап 2. Зафиксировать полный экспорт и подготовленные данные
 
+Корректирующий цикл 17.11.2026: параметризованный getTimephasedWork(List, TimeUnit) и раздельные raw planned/actual/remaining; ProjectProperties.getRelationshipLagCalendar без Relation.getCalendar; проверка смысла getWorkSplits и нормализации segments. Полнота связей — наблюдаемость отброшенных self/dangling records в том же MPXJ-read, воспроизводимый patch/build закреплённой MPXJ 16.4.0; второго parser нет. До доказательства полноты блокировка сохраняется. Реальные API/raw-records тесты и комплект before/after/patch/manifest R — D/stage-13-fix/group-1/usertools/MppReader/.
+
 **Цель:** все последующие стадии получают достаточный воспроизводимый результат одного чтения MPP.
 
 ### Файлы
@@ -550,6 +554,8 @@ plan + lineage + source_mpp_sha256 + representation
 ---
 
 ## 6. Этап 4. Общий однопроходный `save`
+
+Корректирующий цикл 2 (вердикт архитектора витка 2; поручение владельца 17.11.2026). Этап 4: архивирование полного исходника независимо от publication capabilities; точный round-trip шести actuals/stop/resume без профиля/клиента/доступности Confluence. Существующие доказательства — D/stage-13-fix/; новые проверки и их результаты — D/stage-13-fix2/, без переноса старых статусов в новые результаты.
 
 **Цель:** получить завершённый архивный сценарий, на котором строятся одиночное сохранение и batch.
 
@@ -890,6 +896,10 @@ E/F проходят на проверенных реальных копиях. 
 
 ## 10. Этап 8. Представление Confluence, «Итого» и профиль плагина
 
+Корректирующий цикл 2 (вердикт архитектора витка 2; поручение владельца 17.11.2026). Этап 8: открыть status/percentdone/startdate/enddate/duration в view/edit; точный percentDone без setter статуса; пользовательские колонки исходных фактов, actual finish, summary и дробей. Отдельные live read-back/видимый текст/повторное открытие; привязка к wrapper asset. Существующие доказательства — D/stage-13-fix/; новые проверки и их результаты — D/stage-13-fix2/, без переноса старых статусов в новые результаты.
+
+Корректирующий цикл 17.11.2026: используемые A–D наследование/привязки календарей, доступность ресурсов, даты назначений, task type, constraints, segments, actuals, inactive tasks, summary dependencies. Для каждой capability: исходное → нормализованное → поле/эквивалентное преобразование → наблюдаемое поведение установленной обёртки Confluence. not_verified становится tested_supported только после отдельного live-контроля. Материализация эффективного календаря требует сохранения интервалов/исключений; закрепление дат и удаление полей ради картинки запрещены.
+
 **Цель:** преобразовывать подготовленные данные без повторного чтения MPP и без скрытой потери семантики.
 
 ### Файлы
@@ -977,6 +987,10 @@ E/F проходят на проверенных реальных копиях. 
 ---
 
 ## 11. Этап 9. Первичный snapshot, допуск и правила B/C
+
+Корректирующий цикл 2 (вердикт архитектора витка 2; поручение владельца 17.11.2026). Этап 9: при локально разрешённых проекте/lineage snapshot/read-back до Confluence GET. Доказательства по конкретному полю/способу представления; текст actuals не снимает календарный блокер. D и B/C проверять адресно. Существующие доказательства — D/stage-13-fix/; новые проверки и их результаты — D/stage-13-fix2/, без переноса старых статусов в новые результаты.
+
+Корректирующий цикл 17.11.2026: исходный partial сохраняется в архиве; классификация причин по исходным полям, без повторной классификации quality_issues. Предупреждение допустимо только при доказанном отсутствии влияния всех причин; неизвестная причина, неполное перечисление или влияющее поле блокируют. Глобальные разрешения collections.dependencies, assignments.* и всех quality_issues запрещены. Для B/C восстановить существующие evidence, опорные snapshots, устойчивые ключи и точные revisions, проверить текущую причину правила. Без пригодного evidence правило неактивно; identity confirm других блокеров не снимает.
 
 **Цель:** реализовать подготовку `publish/diff` с архивированием до решения и воспроизводимым допуском.
 
@@ -1081,6 +1095,8 @@ E/F проходят на проверенных реальных копиях. 
 ---
 
 ## 12. Этап 10. Сетевые стадии, идемпотентность и восстановление
+
+Корректирующий цикл 2 (вердикт архитектора витка 2; поручение владельца 17.11.2026). Этап 10: полная замена содержимого сохраняет страницу/macro-id/id/hash; conflict при чужих правках, resume без новой идентичности, unchanged без записи/роста версий. Квитанция раздельно фиксирует source_values и schedule. Существующие доказательства — D/stage-13-fix/; новые проверки и их результаты — D/stage-13-fix2/, без переноса старых статусов в новые результаты.
 
 **Цель:** завершить публикацию с долговечным намерением, проверкой цели и безопасным продолжением после сбоев.
 
@@ -1351,6 +1367,8 @@ CLI и typed API имеют одинаковые гарантии проекта
 
 ## 15. Этап 13. Комплексное тестирование по критериям приёмки
 
+Корректирующий цикл 2 (вердикт архитектора витка 2; поручение владельца 17.11.2026). Этап 13: новые проверки видимости в обычном просмотре, точного процента 21/47/76/100 и дробей, summary, actual finish, отключённого Confluence, полной замены/conflict/resume/unchanged. Старые доказательства цикла 1 не являются новыми проверками. Полный новый прогон на окончательном дереве; A–D и gate/rc=0 сохранены. Существующие доказательства — D/stage-13-fix/; новые проверки и их результаты — D/stage-13-fix2/, без переноса старых статусов в новые результаты.
+
 **Цель:** подтвердить всё ТЗ на чистых окружениях, реальных A–F и установленном живом плагине.
 
 ### 15.1. Файлы
@@ -1415,6 +1433,8 @@ CLI и typed API имеют одинаковые гарантии проекта
 D-risks не заменяет D и не наследует его метрики.
 
 ### 15.4. Полная матрица AC
+
+Положительный бинарный сценарий identity/resume использует MPP, для которого после обработки адресного правила отсутствуют независимые блокеры допуска. Отдельный отрицательный сценарий подтверждает: успешный identity confirm не устраняет неполноту данных и неподдержанную семантику; при их наличии сохраняются failed/5 и отсутствие сетевых записей. relations-all-types.mpp сохраняется как отрицательный сценарий. Положительный сценарий использует отдельную документированную пару бинарных MPP с пригодным корнем, поддержанной семантикой и адресным правилом с проверяемой причиной; подмена экспорта очищенным JSON запрещена. Fixture manifest, ac-matrix.json и evidence-привязки обновляются.
 
 | AC | Финальная проверка | Обязательное доказательство |
 |---|---|---|
@@ -1538,6 +1558,8 @@ D-risks не заменяет D и не наследует его метрики
 
 ### 15.8. Состав итогового отчёта
 
+Для каждого блокера указать: исходное поле, слой возникновения, доказательство исправления, test ID.
+
 Для каждого AC и кейса:
 
 - статус: `passed`, `failed`, `blocked_missing_fixture`, `blocked_identity`, `not_run`;
@@ -1605,6 +1627,10 @@ D-risks не заменяет D и не наследует его метрики
 10. Учтено, что MppReader/MofsIndex находятся вне git: коммиты hermes-workspace сохраняют воспроизводимые комплекты внешних изменений; ТЗ/планы остаются в WorkVault/ownCloud.
 11. Добавлены изменения workvault-rag и проверка общих Confluence-компонентов, чтобы другой вход не обходил новые правила идентичности/доверия.
 12. Сохранены последовательность 13 этапов, исходные функциональные требования, тестовые сценарии, численные эталоны, AC-01…AC-27 и комплексная приёмка A–G. Изменение плана не выдаётся за реализацию или выполненные тесты.
+
+## Д3 — режим «план + колонки факта» (master 0.5.3)
+
+Явное поручение владельца разрешает этот корректирующий цикл исполнителя по §1.1.1. Для работ этапа 9 (допуск, §11) разделить `display-only` и `schedule-affecting`: actuals/stop/resume в точных видимых customtext-колонках не требуют нативного пересчёта; влияние на плановые даты/длительности и остальные потери остаются блокерами. Для работ этапа 10 (публикация, §12) timeline использует плановые start/finish/duration, страницу/отчёт маркировать «по плану; факт — в колонках»; полный фактический пласт сохраняется в архиве. Для проверок этапа 13 (§15) обязательны успешные live A–D, видимость/повторное открытие фактов, наблюдение плановых дат, unchanged без роста версий и полная замена без смены макроса. Все прежние AC, кейсы, числа и gate сохраняются. Нативный пересчёт с участием факта этим режимом не заявляется.
 
 ## Журнал исполнения
 
@@ -1741,3 +1767,89 @@ D-risks не заменяет D и не наследует его метрики
 - Отчёт: `/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-10/stage-report.json`; SHA-256 `e4762986bac7e92ffa691a93a9fb94cfcb7408be554abf1033ddecdece72834a`. Проверенное дерево: `6b5177ccbb77fcceccd67fd78b35497a6f9b08e4ea5e22355679065cb06f8af8`. Все 629 новых/изменённых Git blobs сверены с рабочими байтами; 672 защищённых файла неизменны.
 - Комплект MofsIndex: 7 файлов before/after/changes.patch/manifest; patch и after-copy восстановлены отдельно, hashes/режимы совпали. Шесть before-файлов совпали с поставкой этапа 09. Прежние разделы operations-and-recovery.md сохранены побайтно; новый раздел добавлен в конец. Пробельные строки контекста unified patch сохранены для его воспроизводимости; остальные файлы проходят Git whitespace check.
 - Ограничения: schedule:not_verified для произвольного плана; admitted live-источник явно синтетический, реальные ограничения извлечения MPP не понижены. Flock локален общему WorkVault/хосту; актуальность подтверждена на момент наблюдения. Master на диске 0.5.1 с отдельным §21 сохранён без правок; исполнялся согласованный §20. OwnCloud sync не подтверждён. Production-БД/настройки, Gateway, кроны, наблюдатели и расписания не менялись.
+
+
+### Этап 11 — 2026-11-17
+
+- Gate: **passed**. Выполнен только этап 11; этапы 12/13 и полная приёмка §20/§19 не заявлены.
+- Коммит H: `e55f284b5997967036a9176084a256ecbb6b04fd` — `edit-plan-confluence: stage 11`. Только файлы этапа 11; canon.md вне delta коммита и побайтно совпадает с входом (SHA-256 `a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892`). На входе H был чистым после существовавшего auto-sync 96c629c.
+- Финальная заданная команда S: **598 passed**, 13 deselected выбранными группами, rc=0. M/tests/plan: **206 passed**, rc=0. JUnit failures/errors/skipped=0; единственное предупреждение — намеренная ZIP-коллизия. Фактические команды/окружение/stdout/stderr/JUnit сохранены в D/stage-11/.
+- Точные snapshot/publication selectors с проверкой обоих проектов до diff; page/attachment/lineage/snapshot и качество связи. UID/lineage/позиционный Gantt ID не подтверждают идентичность. Revision/evidence/same-source и структурные остатки partial/unknown mapping. MPP/Gantt без подтверждённого mapping возвращает representation_mismatch/4.
+- Полные сохранённые поля задач, вложенные splits/baseline, ресурсы; зависимости как мультимножества с типом, signed lag, units, elapsed и calendar basis, без ложной замены из-за перенумерации source endpoint ID. Календари: интервалы/исключения/наследование/коэффициенты/bindings; назначения: endpoints/units/work/даты/календари/timephased. Неизвестная timezone не даёт абсолютный date delta; completeness не выводится из timezone. Причинность без schedule replay не заявляется.
+- Publication verify: GET-only transport guard, expected bytes и точная версия, сохранённый storage, отдельная актуальность current scope; append-only observations, прежние trust/status/даты сохранены. Недостаточные данные/mismatch — not_verified/5. Историческая дата не восстанавливается текущим совпадением. NULL source snapshot.published_at не отрицает связанные публикации.
+- Собственный live этапа 11: выделенная страница 537572835, **GET=15, POST=PUT=0**; historical версия совпала с неизменными stage-10 bytes/storage, current attachment намеренно уже v2 вместо v1, без новых версий. Два настоящих CLI-процесса над loopback HTTP: GET=10, POST=PUT=0, разные observation ID. Все десять AC-24 через CLI и фактические selectors/revisions/results — stage11-compare-cli.json. Остальные live-регрессии использовали собственные выделенные тестовые страницы.
+- Первый полный S-прогон: 597 passed/1 failed из-за отсутствующего Playwright в свежем T; сохранён в failed-browser-runtime/. Переиспользован изолированный browser runtime принятого этапа 10, реальный Chromium launch/close прошёл; исходники и глобальное окружение не менялись. Повторная полная команда прошла. Ранний остановленный для semantic audit прогон и исправления тестовых фикстур сохранены как история.
+- Отчёт: `/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-11/stage-report.json`; SHA-256 `4fd85228478c0c0860fb9bb647f5fb369a8e62ec7bb7cbd15cc44b38adaf1815`. Проверенное дерево: `5fe1a053ca9b6989f4555687bb3452ddfd9b6b8eda045111cf6b214efc603e97`. Все **214** blobs коммита сверены по SHA-256 с фактическими байтами.
+- Комплект MofsIndex: 6 затронутых файлов в before/after/changes.patch/manifest.json; восстановление patch и after-copy в отдельных деревьях, hashes/режимы и совпадение с runtime подтверждены. Миграций и конфигурационных изменений нет. Схема/writer и все 1273 защищённых файлов неизменны, включая прежние evidence и canon.md. Расширен только hook стадии 11; отчёты 01–10 сохранены.
+- Ограничения: schedule:not_verified и working-time drift не вычисляется; публикации без доказанной Gantt-связи показывают структурные остатки. Live — явно синтетические stage-10 bytes, не проверка расписания произвольного MPP. Master на диске 0.5.1 с отдельным §21 сохранён; исполнялся согласованный §20. Активная доставка/полная приёмка — этапы 12/13. OwnCloud sync не подтверждён. Production-БД/архивы проектов/страницы A–D/AB, Gateway, кроны, наблюдатели и расписания не менялись.
+
+
+### Этап 12 — 2026-11-17
+
+- Gate: **passed**. Реализован только этап 12; этап 13 и полная приёмка §20/§19 не заявлены.
+- Коммит H: `3b0ddbb79dab1d294c9b2b7b08172fb4fbb905b7` — `edit-plan-confluence: stage 12`. Проверены все 75 Git blobs поставки; только файлы этапа 12. Чужой canon.md не изменён и не включён в delta, SHA-256 `a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892`. Параллельный чужой commit dfa56b6 с resume-скиллами сохранён как родитель, в delta этапа 12 не входит.
+- Финальная заданная команда S: **660 passed**, 25 deselected (явно offline выборка), rc=0; JUnit failures/errors/skipped=0. M/tests/plan: **206 passed**, rc=0. R exporter/reader regression: **24 passed**, один прежний необязательный §19 ZD skip, rc=0. Единственное предупреждение S — намеренная ZIP-коллизия. Команды, окружение, stdout/stderr/JUnit — D/stage-12/reports/.
+- Обновлены канон, короткая обёртка, Q и адресная авторизация/ссылка C; восемь эксплуатационных references, R/M README. Все команды/флаги/defaults/exit codes и JSON-схемы документированы. Новый test_skill_contract проверяет реальные загрузки, parser/dispatch, globals, локальные сутки/offset/DST, краткий stdout и secret canaries. Старые карты STAGE01–11 и report/source hooks сохранены; отдельный STAGE12_REQUIRED/order/report.
+- Доставка: по регламенту hermes-multi-profile-skills обычная активная папка W сохранена в ~/.hermes/_Archives; live слой исправлен симлинками к default profile, выполнен установленный restore-all-skills.sh (rc=0). Настоящие skill_view обоих bare/qualified имён и default preprocessing совпали с workspace. A/edit-plan-confluence/SKILL.md → S/SKILL.md, SHA-256 `3a3fa33220c5dac343b9e6fe45022743540449bcaeaebb3a289d058c36e1b58a`; A/confluence-gantt-plan/SKILL.md → W/SKILL.md, SHA-256 `6d2edf035cff8b933577773520abe44d8fd852fd80f16a3b9219fa2dee9292cc`. Gateway/loader/restore scripts не менялись. Штатный loader даёт предупреждение trusted-root для symlink, но успешно загружает тексты.
+- Удалены обязательный предварительный save, ручное копирование /tmp, автоматическая подгонка связей, вывод об отсутствии публикации по nullable дате и повторное общее да для publish. Адресные proposals/identity/revision/once-project/batch decision registration описаны точными командами. Сегодня — локальные границы суток с offset; последняя подтверждённая публикация отделена от текущего наблюдения.
+- Реальные источники всех 15 настроек/путей проверены; credential source — central_shared_env (~/.config/hermes/.env), ConfluenceSync unified_only. Документированы reader=180 с, JVM probe=60 с, HTTP=120 с, retry limit=1, MPP/ZIP=64 MiB, ZIP=128 entries/256 MiB unpacked/ratio=100; online backup/verify/restore до будущей миграции и частичные эффекты. Новых конфигов/миграций нет.
+- Существующие Manifest/skill-запись/digest/render и inventory синхронизированы без нового Tool ID. Inventory version соответствует фактическому master **0.5.1** с отдельным §21; master/норматив плана/appendix не изменены. 33 прежние ошибки общей Manifest schema сохранены, новые не добавлены; список и минимальные patches в registry/. Новый APPROVE не заявлен.
+- Secret scan: **4113** документационных/evidence/receipt/log файлов, утечек фактических credentials нет; значения/хэши секретов не сохранены. Canary stdout/receipt и invalid-argument проверки прошли. Все **1559** защищённых файлов неизменны.
+- Комплекты USERTOOLS docs: MppReader/README.md и MofsIndex/README.md before/after/changes.patch/manifest; patch и after-copy восстановлены в отдельных T-деревьях, hashes/режимы совпали с runtime.
+- Отчёт: `/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-12/stage-report.json`; SHA-256 `6e5a419d188a099b1c0bf148c18f08b8c10fb1cd0fe6f8f5b4eb02f82993b821`. Проверенное дерево: `e0f876a39bf2c4307d3c18109d1bc0899b707e58747902c9269a480f7a65ab14`. Неуспешный предварительный сбор rc=4 (унаследованные live test IDs в карте offline этапа 12) сохранён в failed-collection; исправлена только карта STAGE12. Первый отдельный smoke 74 passed использовал стандартный изолированный pytest tmp и не является gate; финальная приёмка/внешние проверки — T/stage-12.
+- Ограничения: нет прогона Gateway/LLM-сообщения и live A–D/полной A–G приёмки этапа 13; расписание независимо и может быть not_verified. Generic Codex validator не поддерживает старые Hermes frontmatter keys (rc=1); формат проверен настоящим Hermes loader. Полный счётчик всех reader/cache вызовов не измерен (null), отдельные регрессионные evidence сохранены. OwnCloud sync не подтверждён. Production-БД/архивы проектов/страницы A–D/AB не менялись; Gateway не перезапускался; cron/наблюдатели/расписания не создавались.
+
+
+### Этап 13 — 2026-11-17
+
+- Gate: **failed**. Контур и тесты этапа 13 реализованы и фактически прогнаны; полная приёмка §20 остаётся незавершённой.
+- Коммит H: `92bea3f9354e4439ef53f3f9aca30267811cec54` — `edit-plan-confluence: stage 13`. Проверены 722 Git blobs поставки; только файлы этапа 13. canon.md не изменён и не включён в delta, SHA-256 `a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892`.
+- Финальная заданная команда S: **716 passed, 6 failed, 0 skipped**, rc=1; 722 обязательных теста выбраны. M/tests/plan: **206 passed**, rc=0. R exporter/reader/scheduler/attribution: **58 passed**, 1 необязательный legacy ZD skip §19, rc=0. Сеть и конкурентные процессы запускались реально.
+- AC: **23 passed**, failed — **AC-02/03/04/09**; обязательные подслучаи — **58 passed / 8 failed**. Кейсы A–D failed; E/F/G/D-risks passed. Сценарии 2–10 passed, 1 и 11 failed.
+- Архивные метрики A/B/C/D: 58/57/53/1576, 62/61/60/2096, 62/61/61/2088, 72/71/76/3136; D 106.875→107. A — подтверждённый именованный 150526, identity_status=confirmed. Реальные E/F: 78/77/84 и 86/85/93; D-risks отдельно 74/73/81. Холодный save read=1, повтор read=0/cache hit.
+- Live контроли установленного плагина прошли: Confluence 8.9.4, frontend H6u7SQymvwxeyojc1ur6Z, Bryntum 5.4.1. A/D остановлены collection_partial; B/C — rule_reference_or_evidence_missing. Исходники архивированы, POST/PUT операций A–D=0, page version 1→1. Публикация, повтор и даты A–D в плагине не подтверждены. Бинарный diff/publish после identity confirm/resume также блокируется collection_partial; snapshot сохранён, повторного reader нет.
+- Порядок фаз 1–12 и групп unit→archive_integration→mpp_fixtures→confluence_live проверен. Все семь оригиналов/копий и Git blobs сверены по SHA-256; 46 supporting fixtures проверялись перед каждым тестом. Baseline сохранён; 1611 защищённых файлов прежних стадий/USERTOOLS/конфигов/fixtures/evidence неизменны. 12 предыдущих коммитов и восстановление 64 after-файлов проверены; 29 последних USERTOOLS совпали с runtime. 15 report/source hooks 02–12 сохранили исходный текст, stage-12 selection остался 660.
+- Первый полный прогон 714 passed/6 failed сохранён в history/first-full-failed; исправлена только ошибка контура: pytest cache был включён в protection scope и находился вне T. Финальный pytest cache изолирован, шесть runtime cache записей исключены явно. Предварительный остановленный прогон и ошибки подготовки также сохранены; они не зачтены как приёмка.
+- Долговечный итог: `/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/final/reports/acceptance-report.json`; SHA-256 `16595d59216409c42ffef718214970047b9faa15ee187ab9626605907e88f25f`. Отчёт этапа: `/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13/stage-report.json`; полный набор cases/JUnit/команды/rc/наблюдения/квитанции — D/final. Большие дополнительные receipt dumps сохранены lossless gzip с проверенным decoded SHA-256. Проверка фактического credential утечек не нашла.
+- Ограничения: исправления продуктовых контрактов принадлежат прежним этапам и не выполнялись в этапе 13; обход допуска не применялся. Master фактически 0.5.1 с отдельным §21, исполнялся §20. §19/W5/ZD/AC-101…144 остаются отдельными. OwnCloud sync не подтверждён. Production DB/архивы/страницы A–D/AB, Gateway, кроны/наблюдатели/расписания не изменялись.
+
+
+### Корректирующий цикл 2 — 2026-11-17
+
+- Итог §20: **failed**, 799 passed / 4 failed / 0 skipped, rc=1; 803 обязательных теста. Не прошли только реальные публикации A–D; POST/PUT операций 0/0, наблюдение дат и успешный повтор отсутствуют. Дополнительно preservation gate фиксирует изменившийся production DB SHA; writer не установлен.
+- Коммиты Г0–Г5: G0 `976aadcfa2815ec908825bf645bb26e94fee4f40`, G1 `7c27b3b46df8c042c776f609847bf8394ff74ec7`, G2 `ba165f97e2605cbc24ea8a7a47e889a9baa875ad`, G3 `65d77d49a87747ab1623da174fd3d371edb40d32`, G4 `82c9bac0c180e666e2d7647dca284ae225608d3f`, G5 `b574a01a86ff7cd87518f33719b05179249d7979`. Г6: SHA записывается после завершающего коммита.
+- Доказательства: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix2/stage-report.md; полный последний прогон /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final. 45 новых обязательных test ID; прежняя матрица и нормативные числа сохранены.
+- R: 81 passed и один необязательный legacy §19 skipped; M: 206 passed, оба rc=0; восстановлены 14 комплектов, проверены patch/after-copy и 38 текущих внешних исходников.
+- Первый полный S-прогон также 799/4, но без initial-state/external-checks; история сохранена. Последний прогон содержит свежие входы этих проверок. Gateway, кроны и наблюдатели не менялись. Production аудиты — mode=ro; полная сохранность production DB не заявляется.
+
+- Завершающий commit Г6: `b617aec113544514fed041222903b2caa9dcc9ef` — edit-plan-confluence: fix2-G6 repeat full acceptance and record failed gate. Delta только EditPlanConfluence; 180 Git source blobs проверены (3 прежних CSV через неизменный clean filter), 422 финальных и 185 исторических delivery blobs совпали с hashes. Чужие staged-изменения и canon.md не включены. Runtime tmp/cache/DB не входят в поставку.
+
+### Д3 — план + колонки факта, 17.11.2026
+
+- Gate §20: **failed**; полный этап 13: {'passed': 809, 'failed': 3, 'skipped': 0}; rc=1. Master 0.5.3.
+- Документы G0: b043f62299beb32cb164da610165d6cacd330327; реализация G1: 91534cf. SHA завершающего коммита записывается после commit.
+- Режим: по плану; факт — в колонках. Эквивалентный пересчёт с участием факта не заявляется; archive/display/schedule сохраняют независимые подтверждения.
+- A: passed, page 537576146 (parent 519501810), POST=1, PUT=1, повтор=unchanged, наблюдений задач=57; 58/57/53/1576.
+- B: failed, page 537576153 (parent 519501810), POST=0, PUT=0, повтор=None, наблюдений задач=0; 62/61/60/2096.
+- C: failed, page 537576154 (parent 519501810), POST=0, PUT=0, повтор=None, наблюдений задач=0; 62/61/61/2088.
+- D: failed, page 537576157 (parent 519501810), POST=0, PUT=0, повтор=None, наблюдений задач=0; 72/71/76/3136.
+- Итог и все gate checks: `/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix3/stage-report.json`; JUnit, blocker-ledger и браузерные улики сохранены рядом. 14 внешних комплектов восстановлены; R 81 passed/1 прежний необязательный skip, M 206 passed.
+- canon.md вне коммитов, SHA a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892. Production DB/страницы A–D/AB, Gateway, кроны/наблюдатели/расписания сохранены. §19 и ownCloud sync не заявляются. Прежние failed-прогоны не переписаны.
+
+- Завершающий commit Д3: `35add996b69acac1d62d286eaf9825354e29d2b6` — edit-plan-confluence: fix3-G2 record full acceptance and independent blockers. Все 434 Git blobs поставки сверены с рабочими байтами; delivery-manifest проверен. §20 failed: 809 passed/3 failed, rc=1; успешна только A. canon hash/status проверены после каждого коммита, canon вне всех трёх delta.
+
+### Д4 — актуальность по mtime, история как дифф, 17.11.2026
+
+- Корректирующий цикл реализован и полностью проверен; цель полного §20 passed **не достигнута**. Gate: **failed**; 823 passed / 1 failed / 0 skipped, rc=1. Master 0.5.4.
+- Коммиты: G0 `ec6c452388ff67e3549ad9097a3f47eadab65a08`; G1 `48c566402f4fd0ee65c695ed83fac58398bef304`; G2 `0a509dc5f14806c4087b55bff4ba365f6f0a6888`. Завершающий G3 фиксируется после commit. Параллельный чужой `84b1386` не является работой Д4.
+- Решение владельца исполнено: B/C UID510→UID323 сохранена, историческое правило не применяется; resource_uid: missing не превращается в выдуманный ресурс. Исходные назначения/интервалы/работа сохранены; mtime фиксируется при согласованном чтении; compare возвращает добавленные/удалённые задачи и все их связи.
+- A: passed, page 537576416 (parent 519501810), POST=1, PUT=1, повтор=unchanged, наблюдаемых задач=57; 58/57/53/1576.
+- B: passed, page 537576420 (parent 519501810), POST=1, PUT=1, повтор=unchanged, наблюдаемых задач=61; 62/61/60/2096.
+- C: passed, page 537576424 (parent 519501810), POST=1, PUT=1, повтор=unchanged, наблюдаемых задач=61; 62/61/61/2088.
+- D: failed, page 537576430 (parent 519501810), POST=0, PUT=0, повтор=None, наблюдаемых задач=0; 72/71/76/3136.
+- Остались самостоятельные блокеры: source_milestone_interval_conflict uid:373. У D веха UID373: duration=0, start=30.03.2026 09:00, finish=22.04.2026 18:00; установленный плагин сводит её к одной дате. Эти значения не изменены, gate не смягчён.
+- Первый полный прогон Д4: 813 passed/6 failed, rc=1 — сохранён в history/first-full-failed. Затем устранены три расхождения тестовых контрактов и автоматический пересчёт даты B/C; режим снимка подтверждён GET-only пробами и отдельными живыми публикациями. Статический снимок не заявляет эквивалентность пересчёта MS Project.
+- Отчёт: `/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix4/stage-report.json`; Markdown, JUnit и все источники evidence сохранены рядом. R: 81 passed/1 прежний необязательный skip; M: 206 passed; 14 внешних комплектов восстановлены.
+- canon.md вне коммитов, SHA-256 a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892. Production targets исключены; Gateway/cron/наблюдатели не менялись. §19 и ownCloud sync этим прогоном не заявлены. Новый APPROVE не заявлен.
+
+- Завершающий commit Д4 G3: `d45a56a3759e885ab0a2f3d698bcb7266dfd2215` — edit-plan-confluence: fix4-G3 record full acceptance and independent D milestone blocker. Проверены 470 Git blobs; canon.md отсутствует во всех четырёх delta, SHA совпал. Итог §20 failed: 823 passed/1 failed, rc=1; A/B/C опубликованы с unchanged, D остановлена по UID373.

@@ -1,0 +1,22 @@
+{
+  "commits": [
+    {
+      "commit": "ec6c452388ff67e3549ad9097a3f47eadab65a08",
+      "files": 6,
+      "canon_absent": true,
+      "latest_blobs_match_worktree": true
+    },
+    {
+      "commit": "48c566402f4fd0ee65c695ed83fac58398bef304",
+      "files": 19,
+      "canon_absent": true,
+      "latest_blobs_match_worktree": true
+    },
+    {
+      "commit": "0a509dc5f14806c4087b55bff4ba365f6f0a6888",
+      "files": 468,
+      "canon_absent": true,
+      "latest_blobs_match_worktree": true
+    }
+  ]
+}

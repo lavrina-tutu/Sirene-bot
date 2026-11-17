@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "stage": "13",
+  "correction": "fix4",
+  "master_version": "0.5.4",
+  "gate": "failed",
+  "exit_code": 1,
+  "summary": {
+    "passed": 823,
+    "failed": 1,
+    "skipped": 0
+  },
+  "gate_checks": {
+    "nonempty_results": true,
+    "all_required_selected": true,
+    "all_required_passed": false,
+    "all_AC_passed": false,
+    "all_cases_passed": false,
+    "all_journeys_passed": false,
+    "fixtures_verified": true,
+    "populated_baseline_preserved": true,
+    "protected_files_unchanged": true,
+    "sources_stable": true,
+    "external_regression_passed": true,
+    "external_sources_restorable": true,
+    "prior_twelve_commits": true,
+    "original_stage13_failed_preserved": true,
+    "no_production_live_targets": true,
+    "pytest_exit_zero": false,
+    "ordered_phases_2_through_11": true,
+    "ordered_unit_archive_mpp_live": true
+  },
+  "publication_mode": "planned_schedule_with_actuals_columns",
+  "label": "по плану; факт — в колонках",
+  "cases": [
+    {
+      "case": "A",
+      "status": "passed",
+      "page_id": "537576416",
+      "parent_id": "519501810",
+      "published": true,
+      "exit_code": 0,
+      "POST": 1,
+      "PUT": 1,
+      "page_version_before": 1,
+      "page_version_after": 2,
+      "archive_task_count": 58,
+      "display_task_count": 57,
+      "dependency_count": 53,
+      "work_hours": "1576",
+      "observed_task_count": 57,
+      "openings": 2,
+      "source_values_verification": "verified",
+      "repeat_status": "unchanged",
+      "repeat_POST": 0,
+      "repeat_PUT": 0
+    },
+    {
+      "case": "B",
+      "status": "passed",
+      "page_id": "537576420",
+      "parent_id": "519501810",
+      "published": true,
+      "exit_code": 0,
+      "POST": 1,
+      "PUT": 1,
+      "page_version_before": 1,
+      "page_version_after": 2,
+      "archive_task_count": 62,
+      "display_task_count": 61,
+      "dependency_count": 60,
+      "work_hours": "2096",
+      "observed_task_count": 61,
+      "openings": 2,
+      "source_values_verification": "verified",
+      "repeat_status": "unchanged",
+      "repeat_POST": 0,
+      "repeat_PUT": 0
+    },
+    {
+      "case": "C",
+      "status": "passed",
+      "page_id": "537576424",
+      "parent_id": "519501810",
+      "published": true,
+      "exit_code": 0,
+      "POST": 1,
+      "PUT": 1,
+      "page_version_before": 1,
+      "page_version_after": 2,
+      "archive_task_count": 62,
+      "display_task_count": 61,
+      "dependency_count": 61,
+      "work_hours": "2088",
+      "observed_task_count": 61,
+      "openings": 2,
+      "source_values_verification": "verified",
+      "repeat_status": "unchanged",
+      "repeat_POST": 0,
+      "repeat_PUT": 0
+    },
+    {
+      "case": "D",
+      "status": "failed",
+      "page_id": "537576430",
+      "parent_id": "519501810",
+      "published": false,
+      "exit_code": 5,
+      "POST": 0,
+      "PUT": 0,
+      "page_version_before": 1,
+      "page_version_after": 1,
+      "archive_task_count": 72,
+      "display_task_count": 71,
+      "dependency_count": 76,
+      "work_hours": "3136",
+      "observed_task_count": 0,
+      "openings": 0,
+      "source_values_verification": null,
+      "repeat_status": null,
+      "repeat_POST": null,
+      "repeat_PUT": null
+    }
+  ],
+  "display_only_count": 617,
+  "schedule_affecting_blocker_count": 1,
+  "identity_blocker_count": 0,
+  "original_blockers": {
+    "B": "resolved_by_owner_decision",
+    "C": "resolved_by_owner_decision",
+    "D_unassigned_resources": "resolved_by_owner_decision"
+  },
+  "remaining_blockers": [
+    {
+      "case": "D",
+      "classification": "schedule-affecting",
+      "finding": {
+        "category": "unsupported_semantics",
+        "code": "source_milestone_interval_conflict",
+        "entity": "uid:373",
+        "exit_code": 5,
+        "finding_sha256": "622f98885027e6e8c3010505103b788269160b87beb48e1b6b83538a5b6c7299",
+        "model": null,
+        "observed": null,
+        "represented": {
+          "reason": "Installed plugin collapses zero-duration milestone to one date; no source date or duration is invented."
+        },
+        "row": 8,
+        "source": {
+          "duration": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-22T18:00"
+          },
+          "milestone": true,
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-03-30T09:00"
+          }
+        }
+      },
+      "evidence": "final/reports/evidence/live-D.json"
+    }
+  ],
+  "migrations_added": [],
+  "master": {
+    "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md",
+    "version": "0.5.4",
+    "sha256": "b230609ca81ee1bc8b20aae634e21d458318671b894154c192faf9daf56c0d80",
+    "section20_sha256": "86a2cd0976b3873e5150ab4c8d2e2c0acabe36b7b103df054db273fe15a61ec2"
+  },
+  "canon_sha256": "a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892",
+  "implementation_commits": [
+    "ec6c452388ff67e3549ad9097a3f47eadab65a08",
+    "48c566402f4fd0ee65c695ed83fac58398bef304",
+    "0a509dc5f14806c4087b55bff4ba365f6f0a6888"
+  ],
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "-c",
+    "skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "skills/productivity/edit-plan-confluence/tests",
+    "--acceptance-stage",
+    "13",
+    "--test-root",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final",
+    "-m",
+    "unit or archive_integration or mpp_fixtures or confluence_live",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/junit.xml",
+    "-q"
+  ],
+  "source_tree_sha256": "6a4957511380b11d3cd28570cd016ef93647f9f3e25c03e576677a53c152a40b",
+  "acceptance_report": "final/reports/acceptance-report.json",
+  "junit": "junit.xml",
+  "blocker_ledger": "blocker-ledger.json",
+  "owner_decision": "owner-decision.md",
+  "actuality": "source_file_mtime_ns",
+  "history": "source_local_key_diff_with_incident_links"
+}

@@ -1,0 +1,61 @@
+{
+  "build": "H6u7SQymvwxeyojc1ur6Z",
+  "engine_version": "5.4.1",
+  "relation_codes": {
+    "StartToStart": 0,
+    "StartToEnd": 1,
+    "EndToStart": 2,
+    "EndToEnd": 3
+  },
+  "hours_per_day": 8,
+  "dependency_calendar": "ToEvent",
+  "tasks": [
+    {
+      "id": 1,
+      "start": "2026-01-07T09:00:00",
+      "finish": "2026-01-12T11:00:00",
+      "duration": 3.25,
+      "duration_unit": "day"
+    },
+    {
+      "id": 2,
+      "start": "2026-01-07T09:00:00",
+      "finish": "2026-01-08T18:00:00",
+      "duration": 2,
+      "duration_unit": "day"
+    },
+    {
+      "id": 3,
+      "start": "2026-01-09T11:00:00",
+      "finish": "2026-01-12T11:00:00",
+      "duration": 1,
+      "duration_unit": "day"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": 4,
+      "type": 2,
+      "lag": 2,
+      "lagUnit": "hour"
+    }
+  ],
+  "resources": [],
+  "assignments": [],
+  "calendars": [
+    {
+      "id": "general",
+      "name": "General",
+      "parentId": null
+    }
+  ],
+  "case": "hour-lag",
+  "page_id": "537576383",
+  "page_version": 1,
+  "attachment_id": "537576384",
+  "attachment_version": 7,
+  "input_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+  "received_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+  "confluence_version": "8.9.4",
+  "browser_received_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b"
+}

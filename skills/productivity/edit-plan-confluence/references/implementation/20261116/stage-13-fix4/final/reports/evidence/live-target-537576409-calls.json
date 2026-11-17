@@ -1,0 +1,17 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
+  "observed_at": "2026-11-17T17:05:18.070707+00:00",
+  "page_id": "537576409",
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content"
+    }
+  ],
+  "POST": 1,
+  "PUT": 0
+}

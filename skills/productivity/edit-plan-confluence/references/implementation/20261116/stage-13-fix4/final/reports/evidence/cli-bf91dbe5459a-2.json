@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+  "observed_at": "2026-11-17T17:05:29.431951+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu0/cache",
+    "diff",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu0/new-binary.mpp",
+    "--page-id",
+    "537576410",
+    "--project-slug",
+    "stage13-binary-positive",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 3,
+  "duration_seconds": 4.912127685034648,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_1770b940931d4474ac4a9f59b26602eb\", \"item_id\": \"item_a3fe64a5210549fbb75c73bb057ee16a\", \"status\": \"needs_decision\", \"mode\": \"publish\", \"exit_code\": 3, \"project_slug\": \"stage13-binary-positive\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_4b36ebe16ed04d7bb5ad2393ec4fb425\", \"page_id\": null, \"page_url\": null, \"task_count\": 6, \"display_task_count\": 6, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"new-source-diff\", \"revision\": \"binary-fixture-v1\", \"result\": \"inactive\", \"evidence_id\": \"artifact_e8cad0156c354a25a679c7668ca4a2c5\", \"reason\": \"identity_confirmation_required\", \"owner_decision\": null}], \"attachment_version\": null, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"storage\": \"not_applicable\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 14, \"category\": \"identity\", \"code\": \"identity_confirmation_required\", \"exit_code\": 3, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"new-source-diff\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"source_snapshot_dates\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 6, \"example_entities\": [\"uid:1000\", \"uid:1\", \"uid:2\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_036e78992eea4decace685989b574cfe\"]}}, \"published\": false, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_036e78992eea4decace685989b574cfe\"}, {\"code\": \"source_snapshot_dates\", \"message\": \"source_snapshot_dates: 6 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_036e78992eea4decace685989b574cfe\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_036e78992eea4decace685989b574cfe\"}], \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"external_effect\": \"none\", \"error\": {\"code\": \"identity_confirmation_required\", \"message\": \"identity_confirmation_required\", \"retryable\": false, \"next_action\": \"operation show --operation-id operation_1770b940931d4474ac4a9f59b26602eb\"}}\n",
+  "stderr": "2026-11-17T17:05:27.400002847Z main ERROR Log4j API could not find a logging provider.\n",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 1,
+    "cache_hit": 0,
+    "cache_miss": 1,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576410"
+      }
+    ]
+  }
+}

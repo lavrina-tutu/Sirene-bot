@@ -1,0 +1,15 @@
+{
+  "gate": "failed",
+  "files": [
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md",
+      "before_sha256": "2aa8fa9e91c2502697edf397c519fac58cc2f7c03f181fa44f8fe71b481a6a29",
+      "after_sha256": "2102120d2bac08da6414b8057e4abe9cb9a288685be30edf825394c1d70bbb38"
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md",
+      "before_sha256": "c61c844a368d024b2e01219c8a6b63c247598bf43fe81c367d0758c39cb16c17",
+      "after_sha256": "b9362fa95adf0c6ebd3004f9a6d941c95ee65c185bc53dd701ffcd009fdf978e"
+    }
+  ]
+}

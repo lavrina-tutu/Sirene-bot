@@ -1,0 +1,204 @@
+{
+  "case": "inactive",
+  "capabilities": [
+    "task:active"
+  ],
+  "status": "passed",
+  "page_id": "537576367",
+  "attachment_id": "537576368",
+  "attachment_version": 10,
+  "page_version": 1,
+  "source_normalization": null,
+  "expected": {
+    "2.inactive": true,
+    "3.startDate": "2026-01-05T09:00:00"
+  },
+  "input_sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c",
+  "runtime_errors": [
+    "Failed to fetch",
+    "Failed to fetch",
+    "Failed to fetch",
+    "generateDropDownMenu is not defined",
+    "Failed to fetch",
+    "Failed to fetch"
+  ],
+  "build": "H6u7SQymvwxeyojc1ur6Z",
+  "engine_version": "5.4.1",
+  "tasks": [
+    {
+      "id": 1,
+      "parentIndex": 0,
+      "expanded": true,
+      "startDate": "2026-01-05T09:00:00",
+      "endDate": "2026-01-05T18:00:00",
+      "duration": 1,
+      "durationUnit": "day",
+      "cls": "",
+      "name": "FS",
+      "calendar": null,
+      "direction": null,
+      "manuallyScheduled": false,
+      "unscheduled": false,
+      "ignoreResourceCalendar": null,
+      "constraintType": "",
+      "constraintDate": null,
+      "percentDone": 0,
+      "effort": 8,
+      "effortUnit": "hour",
+      "inactive": false,
+      "segments": null,
+      "effortDriven": false,
+      "schedulingMode": "Normal",
+      "baselines": [],
+      "parentId": null,
+      "rollup": true,
+      "propagateColor": true,
+      "defaultCollapse": false,
+      "children": null,
+      "native_fields": {
+        "actualStartDate": false,
+        "actualEndDate": false,
+        "actualDuration": false,
+        "actualEffort": false,
+        "stopDate": false,
+        "resumeDate": false,
+        "stop": false,
+        "resume": false,
+        "startDate": true,
+        "endDate": true,
+        "availability": false
+      }
+    },
+    {
+      "id": 2,
+      "parentIndex": 0,
+      "expanded": true,
+      "startDate": "2026-01-07T09:00:00",
+      "endDate": "2026-01-08T18:00:00",
+      "duration": 2,
+      "durationUnit": "day",
+      "cls": "",
+      "name": "A",
+      "calendar": null,
+      "direction": null,
+      "manuallyScheduled": true,
+      "unscheduled": false,
+      "ignoreResourceCalendar": null,
+      "constraintType": null,
+      "constraintDate": null,
+      "percentDone": 0,
+      "effort": 16,
+      "effortUnit": "hour",
+      "inactive": true,
+      "segments": null,
+      "effortDriven": false,
+      "schedulingMode": "FixedDuration",
+      "baselines": [],
+      "parentId": 1,
+      "propagateColor": true,
+      "defaultCollapse": false,
+      "children": null,
+      "native_fields": {
+        "actualStartDate": false,
+        "actualEndDate": false,
+        "actualDuration": false,
+        "actualEffort": false,
+        "stopDate": false,
+        "resumeDate": false,
+        "stop": false,
+        "resume": false,
+        "startDate": true,
+        "endDate": true,
+        "availability": false
+      }
+    },
+    {
+      "id": 3,
+      "parentIndex": 1,
+      "expanded": true,
+      "startDate": "2026-01-05T09:00:00",
+      "endDate": "2026-01-05T18:00:00",
+      "duration": 1,
+      "durationUnit": "day",
+      "cls": "",
+      "name": "B",
+      "calendar": null,
+      "direction": null,
+      "manuallyScheduled": false,
+      "unscheduled": false,
+      "ignoreResourceCalendar": null,
+      "constraintType": null,
+      "constraintDate": null,
+      "percentDone": 0,
+      "effort": 8,
+      "effortUnit": "hour",
+      "inactive": null,
+      "segments": null,
+      "effortDriven": false,
+      "schedulingMode": "FixedDuration",
+      "baselines": [],
+      "parentId": 1,
+      "propagateColor": true,
+      "defaultCollapse": false,
+      "children": null,
+      "native_fields": {
+        "actualStartDate": false,
+        "actualEndDate": false,
+        "actualDuration": false,
+        "actualEffort": false,
+        "stopDate": false,
+        "resumeDate": false,
+        "stop": false,
+        "resume": false,
+        "startDate": true,
+        "endDate": true,
+        "availability": false
+      }
+    }
+  ],
+  "resources": [],
+  "assignments": [],
+  "calendars": [
+    {
+      "id": "general",
+      "parentId": null,
+      "intervals": [
+        {
+          "id": "_generatedi_55f2d99b-d9fd-453b-85a0-44609de02aa0",
+          "recurrentStartDate": "at 12:00",
+          "recurrentEndDate": "at 13:00",
+          "isWorking": false
+        },
+        {
+          "id": "_generatedi_fd1382b9-44e4-4fce-889d-b8501572fcb7",
+          "recurrentStartDate": "at 18:00",
+          "recurrentEndDate": "at 09:00",
+          "isWorking": false
+        },
+        {
+          "id": "_generatedi_dd55f0d7-229e-4542-a401-82f90e01c22d",
+          "recurrentStartDate": "on Sat",
+          "recurrentEndDate": "on Mon",
+          "isWorking": false
+        }
+      ]
+    }
+  ],
+  "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+  "wrapper_asset_sha256": "9a43a94647ce8c2fff5cabdb07a52b8619b824bf8673b0bcafe9a090cd9dccb2",
+  "confluence_version": "8.9.4",
+  "browser_received_sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c",
+  "checks": {
+    "2.inactive": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "3.startDate": {
+      "expected": "2026-01-05T09:00:00",
+      "actual": "2026-01-05T09:00:00",
+      "passed": true
+    }
+  },
+  "assertion_kind": "supported"
+}

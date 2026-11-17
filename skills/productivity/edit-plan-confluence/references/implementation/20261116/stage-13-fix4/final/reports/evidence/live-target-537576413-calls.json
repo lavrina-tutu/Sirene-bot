@@ -1,0 +1,25 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+  "observed_at": "2026-11-17T17:05:59.088066+00:00",
+  "page_id": "537576413",
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576413"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576413"
+    }
+  ],
+  "POST": 1,
+  "PUT": 0
+}

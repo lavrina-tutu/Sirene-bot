@@ -1,0 +1,88 @@
+{
+  "test_id": "acceptance/test_migration_preservation.py::test_new_and_old_schema_history[0]",
+  "observed_at": "2026-11-17T16:42:03.023461+00:00",
+  "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_and_old_schema_histor0/migration-source/state/index.sqlite",
+  "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_and_old_schema_histor0/migration-copy.sqlite",
+  "old_schema_version": 0,
+  "applied_migrations": [
+    "0001_phase0_baseline",
+    "0002_phase1_core",
+    "0003_phase2_snapshot",
+    "0004_phase3_analysis",
+    "0005_phase3_fts",
+    "0006_publication_trust",
+    "0007_durable_imports",
+    "0008_snapshot_semantics",
+    "0009_batch_decisions",
+    "0010_identity_revisions",
+    "0011_publish_preparation",
+    "0012_publish_confirmation"
+  ],
+  "checksums": [
+    [
+      "0001_phase0_baseline",
+      "2026-11-17T16:42:02+00:00",
+      "a9ce2ecb6cb563fc9292049c1581f2f1e28cb1522b166f979199373e2a779d95"
+    ],
+    [
+      "0002_phase1_core",
+      "2026-11-17T16:42:02+00:00",
+      "1f03e5b2d749d565af38821253a3f22ffb8b5beb61ad8fc4dde4a4430946fe3d"
+    ],
+    [
+      "0003_phase2_snapshot",
+      "2026-11-17T16:42:02+00:00",
+      "43d1fc5a2b0eec5ccf520401744ea2c215bfcd7173546df6183e105f7f15f649"
+    ],
+    [
+      "0004_phase3_analysis",
+      "2026-11-17T16:42:02+00:00",
+      "9d6211117c512c552926f565d60aef838bafa64018cffc3a3d6c32754e5af2a8"
+    ],
+    [
+      "0005_phase3_fts",
+      "2026-11-17T16:42:02+00:00",
+      "c8aa5aadda2af4b513d729e730d07a5fefb4df320241eaee2789e49a6a2ebd0b"
+    ],
+    [
+      "0006_publication_trust",
+      "2026-11-17T16:42:02+00:00",
+      "619860451d482c22fe7e14b7e8e472c1a00821c1f310a9824818dfa89ba53e98"
+    ],
+    [
+      "0007_durable_imports",
+      "2026-11-17T16:42:02+00:00",
+      "8d8929429bd938f332cb6c355da8212118aae1468073bddd02c4d98b9397afb1"
+    ],
+    [
+      "0008_snapshot_semantics",
+      "2026-11-17T16:42:02+00:00",
+      "ef5a126cb32f8642db021c49ac18e1a47004950661ef85a19897871c85456362"
+    ],
+    [
+      "0009_batch_decisions",
+      "2026-11-17T16:42:02+00:00",
+      "b5aeb37dbec2932450e59932b906092258ea4996979edc61645c53f254746914"
+    ],
+    [
+      "0010_identity_revisions",
+      "2026-11-17T16:42:02+00:00",
+      "7795206794d5521933b0e388c8568e7335837187bd4880248b2d7976eedea8cb"
+    ],
+    [
+      "0011_publish_preparation",
+      "2026-11-17T16:42:03+00:00",
+      "e251bb937a942f215ae0f32d5e6af68acef6f1dbb682c90fe0b9eb7c87b6f6d6"
+    ],
+    [
+      "0012_publish_confirmation",
+      "2026-11-17T16:42:03+00:00",
+      "66716db3bef70a2df06dda58dd3b9eac9e4c5d3ff8d5b07be94bddc42ebcf44a"
+    ]
+  ],
+  "integrity_check": "ok",
+  "foreign_key_check": [],
+  "original_unchanged": true,
+  "history_preserved": false,
+  "network": "forbidden"
+}

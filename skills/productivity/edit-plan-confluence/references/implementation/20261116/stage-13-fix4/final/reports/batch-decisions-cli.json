@@ -1,0 +1,454 @@
+{
+  "calls": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/cache",
+        "batch",
+        "save",
+        "--batch-id",
+        "cli",
+        "--project-slug",
+        "batch-project",
+        "--mpp",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/E.mpp"
+      ],
+      "rc": 6,
+      "result": {
+        "schema_version": 1,
+        "batch_id": "cli",
+        "mode": "batch_save",
+        "status": "completed_with_errors",
+        "exit_code": 6,
+        "manifest_sha256": "74f991e475208e687cb2db93bed3b29f8dd8558b7ba9371a3ba791dff4574597",
+        "inputs_frozen_at": "2026-11-17T16:51:16+00:00",
+        "on_error": "continue",
+        "counts": {
+          "total": 1,
+          "saved": 0,
+          "saved_with_warnings": 0,
+          "unchanged": 0,
+          "failed": 0,
+          "needs_decision": 1,
+          "not_started": 0
+        },
+        "items": [
+          {
+            "item_id": "1",
+            "position": 1,
+            "status": "needs_decision",
+            "operation_id": "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+            "snapshot_id": null,
+            "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "receipt_ref": null,
+            "error": {
+              "code": "archive_project_confirmation_required",
+              "message": "Требуется адресное подтверждение архивного размещения",
+              "next_action": "operation show --operation-id batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+              "retryable": false
+            },
+            "warnings": []
+          }
+        ],
+        "published": false,
+        "error": null
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/cache",
+        "operation",
+        "show",
+        "--operation-id",
+        "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10"
+      ],
+      "rc": 0,
+      "result": {
+        "schema_version": 1,
+        "action": "show_operation",
+        "exit_code": 0,
+        "operation_id": "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+        "item_id": "batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+        "batch_id": "cli",
+        "source_mpp_sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+        "snapshot_id": null,
+        "status": "needs_decision",
+        "preparation_revision": 1,
+        "identity_requirements": [],
+        "completed_stages": [
+          "input_frozen"
+        ],
+        "proposals": [
+          {
+            "proposal_id": "proposal-4441c53a2f70a38391f38f1235c3ebd19e624ba9ffb098a4739431dd4d3ef967",
+            "operation_id": "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+            "item_id": "batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+            "batch_id": "cli",
+            "reason_code": "archive_project_confirmation_required",
+            "proposal_sha256": "4441c53a2f70a38391f38f1235c3ebd19e624ba9ffb098a4739431dd4d3ef967",
+            "content_json": "{\"action\":\"Archive in the frozen project and lineage; no UID continuity confirmation\",\"all_contradicting_evidence\":[{\"evidence_id\":\"evidence_62f2cb9b553745ffb53f6fde7335201d\",\"quality\":\"unconfirmed\",\"sha256\":\"cafb52541c4d40c5eea2e762a8edffaeaaa10aad8c991927a60e17793b20d2ca\"}],\"batch_id\":\"cli\",\"consequences\":\"Only archive placement is approved; source and batch context remain unchanged\",\"context_sha256\":\"4aa7f9861ccd7506187775ae6120b8d9d086763c019f2040c5e86fa359a4018e\",\"context_unchanged\":true,\"evidence\":[{\"evidence_id\":\"evidence_62f2cb9b553745ffb53f6fde7335201d\",\"evidence_json\":\"{\\\"assertion\\\":\\\"unverified archive placement\\\",\\\"label\\\":\\\"initial\\\",\\\"not_identity\\\":true,\\\"origin\\\":\\\"synthetic local provenance\\\"}\",\"evidence_sha256\":\"cafb52541c4d40c5eea2e762a8edffaeaaa10aad8c991927a60e17793b20d2ca\",\"lineage_id\":null,\"project_slug\":\"other\",\"quality\":\"unconfirmed\",\"reason\":\"Fixture only: contradictory, unverified placement label; no task identity assertion\",\"recorded_at\":\"2026-11-17T16:51:14+00:00\",\"source\":\"synthetic:batch-decision-registration\",\"source_mpp_sha256\":\"04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a\"}],\"item_id\":\"batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10\",\"lineage_id\":\"lineage_b6c9eab4d97d4a47974e52511e5ea438\",\"manifest_sha256\":\"74f991e475208e687cb2db93bed3b29f8dd8558b7ba9371a3ba791dff4574597\",\"normalization_profile\":{\"id\":\"normalization-v1\",\"sha256\":\"e1971ad42cb832f04af18b7b730c804b4e672ba40b5477f4fea3431576ce5ee9\",\"status\":\"available\"},\"operation_id\":\"batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10\",\"policy\":{\"on_error\":\"continue\",\"version\":\"archive-placement-v1\"},\"policy_sha256\":\"08d6007e482739b6784996e92e0d5d7ffb0b587f3be1bdd3e61b39ef0b8e8269\",\"project_slug\":\"batch-project\",\"reason_code\":\"archive_project_confirmation_required\",\"resolved_timezone\":\"unknown\",\"rule_scope\":\"once\",\"source_mpp_sha256\":\"04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a\",\"source_version_date\":null,\"type\":\"confirm_archive_project\"}",
+            "created_at": "2026-11-17T16:51:17+00:00",
+            "content": {
+              "action": "Archive in the frozen project and lineage; no UID continuity confirmation",
+              "all_contradicting_evidence": [
+                {
+                  "evidence_id": "evidence_62f2cb9b553745ffb53f6fde7335201d",
+                  "quality": "unconfirmed",
+                  "sha256": "cafb52541c4d40c5eea2e762a8edffaeaaa10aad8c991927a60e17793b20d2ca"
+                }
+              ],
+              "batch_id": "cli",
+              "consequences": "Only archive placement is approved; source and batch context remain unchanged",
+              "context_sha256": "4aa7f9861ccd7506187775ae6120b8d9d086763c019f2040c5e86fa359a4018e",
+              "context_unchanged": true,
+              "evidence": [
+                {
+                  "evidence_id": "evidence_62f2cb9b553745ffb53f6fde7335201d",
+                  "evidence_json": "{\"assertion\":\"unverified archive placement\",\"label\":\"initial\",\"not_identity\":true,\"origin\":\"synthetic local provenance\"}",
+                  "evidence_sha256": "cafb52541c4d40c5eea2e762a8edffaeaaa10aad8c991927a60e17793b20d2ca",
+                  "lineage_id": null,
+                  "project_slug": "other",
+                  "quality": "unconfirmed",
+                  "reason": "Fixture only: contradictory, unverified placement label; no task identity assertion",
+                  "recorded_at": "2026-11-17T16:51:14+00:00",
+                  "source": "synthetic:batch-decision-registration",
+                  "source_mpp_sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a"
+                }
+              ],
+              "item_id": "batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+              "lineage_id": "lineage_b6c9eab4d97d4a47974e52511e5ea438",
+              "manifest_sha256": "74f991e475208e687cb2db93bed3b29f8dd8558b7ba9371a3ba791dff4574597",
+              "normalization_profile": {
+                "id": "normalization-v1",
+                "sha256": "e1971ad42cb832f04af18b7b730c804b4e672ba40b5477f4fea3431576ce5ee9",
+                "status": "available"
+              },
+              "operation_id": "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+              "policy": {
+                "on_error": "continue",
+                "version": "archive-placement-v1"
+              },
+              "policy_sha256": "08d6007e482739b6784996e92e0d5d7ffb0b587f3be1bdd3e61b39ef0b8e8269",
+              "project_slug": "batch-project",
+              "reason_code": "archive_project_confirmation_required",
+              "resolved_timezone": "unknown",
+              "rule_scope": "once",
+              "source_mpp_sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+              "source_version_date": null,
+              "type": "confirm_archive_project"
+            },
+            "active": true
+          }
+        ],
+        "decisions": [],
+        "reasons": [
+          "archive_project_confirmation_required"
+        ],
+        "unresolved_reasons": [
+          "archive_project_confirmation_required"
+        ],
+        "decision_ready": false,
+        "events": [
+          {
+            "event_id": "event_3dae40067c714913b4e345396fd24531",
+            "attempt_id": "attempt_52e7227a64aa4676a6865c438b1a3cf0",
+            "stage": "archive",
+            "status": "confirmed",
+            "detail": "batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+            "created_at": "2026-11-17T16:51:16+00:00",
+            "event_kind": "attempt_started",
+            "snapshot_id": null
+          },
+          {
+            "event_id": "event_200274fd3bb24e80a1cfc104b91da241",
+            "attempt_id": "attempt_52e7227a64aa4676a6865c438b1a3cf0",
+            "stage": "archive",
+            "status": "confirmed",
+            "detail": "batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+            "created_at": "2026-11-17T16:51:16+00:00",
+            "event_kind": "input_frozen",
+            "snapshot_id": null
+          },
+          {
+            "event_id": "event_d14621d5c7e14e348e915f609f4abc6f",
+            "attempt_id": "attempt_52e7227a64aa4676a6865c438b1a3cf0",
+            "stage": "archive",
+            "status": "confirmed",
+            "detail": "{\"item_id\": \"batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10\", \"source_mpp_sha256\": \"04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a\", \"source_mtime_ns\": 1794934274270098009, \"basis\": \"source_file_mtime\"}",
+            "created_at": "2026-11-17T16:51:16+00:00",
+            "event_kind": "source_file_metadata",
+            "snapshot_id": null
+          },
+          {
+            "event_id": "event_67189ddd16a84b82963eedae5341185c",
+            "attempt_id": "attempt_795289a067464c67ab45cec6f57ddc38",
+            "stage": "archive",
+            "status": "confirmed",
+            "detail": "batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+            "created_at": "2026-11-17T16:51:17+00:00",
+            "event_kind": "batch_processing",
+            "snapshot_id": null
+          },
+          {
+            "event_id": "event_a63efa537a014fe18aaf53b3fbe63e38",
+            "attempt_id": "attempt_795289a067464c67ab45cec6f57ddc38",
+            "stage": "archive",
+            "status": "confirmed",
+            "detail": "proposal-4441c53a2f70a38391f38f1235c3ebd19e624ba9ffb098a4739431dd4d3ef967",
+            "created_at": "2026-11-17T16:51:17+00:00",
+            "event_kind": "proposal_created",
+            "snapshot_id": null
+          },
+          {
+            "event_id": "event_f4c73a8525964ddea6b5bb983177a039",
+            "attempt_id": "attempt_795289a067464c67ab45cec6f57ddc38",
+            "stage": "archive",
+            "status": "failed",
+            "detail": "{\"error\":{\"code\":\"archive_project_confirmation_required\",\"message\":\"Требуется адресное подтверждение архивного размещения\",\"next_action\":\"operation show --operation-id batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10\",\"retryable\":false},\"item_id\":\"1\",\"operation_id\":\"batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10\",\"position\":1,\"receipt_ref\":null,\"sha256\":\"04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a\",\"snapshot_id\":null,\"status\":\"needs_decision\",\"warnings\":[]}",
+            "created_at": "2026-11-17T16:51:17+00:00",
+            "event_kind": "batch_item_result",
+            "snapshot_id": null
+          }
+        ],
+        "published": false,
+        "error": null
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/cache",
+        "resume",
+        "--operation-id",
+        "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+        "--accept-proposal",
+        "proposal-4441c53a2f70a38391f38f1235c3ebd19e624ba9ffb098a4739431dd4d3ef967",
+        "--reason",
+        "Подтверждаю"
+      ],
+      "rc": 0,
+      "result": {
+        "schema_version": 1,
+        "action": "register_batch_decision",
+        "status": "decision_registered",
+        "exit_code": 0,
+        "batch_id": "cli",
+        "item_id": "batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+        "operation_id": "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+        "proposal_id": "proposal-4441c53a2f70a38391f38f1235c3ebd19e624ba9ffb098a4739431dd4d3ef967",
+        "decision_id": "decision_1a7ef63e13414ccab38d022a92ab0a37",
+        "manifest_sha256": "74f991e475208e687cb2db93bed3b29f8dd8558b7ba9371a3ba791dff4574597",
+        "decision_ready": true,
+        "published": false,
+        "error": null
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/cache",
+        "resume",
+        "--operation-id",
+        "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+        "--accept-proposal",
+        "proposal-4441c53a2f70a38391f38f1235c3ebd19e624ba9ffb098a4739431dd4d3ef967",
+        "--reason",
+        "Подтверждаю"
+      ],
+      "rc": 0,
+      "result": {
+        "schema_version": 1,
+        "action": "register_batch_decision",
+        "status": "decision_registered",
+        "exit_code": 0,
+        "batch_id": "cli",
+        "item_id": "batch-item-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+        "operation_id": "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+        "proposal_id": "proposal-4441c53a2f70a38391f38f1235c3ebd19e624ba9ffb098a4739431dd4d3ef967",
+        "decision_id": "decision_1a7ef63e13414ccab38d022a92ab0a37",
+        "manifest_sha256": "74f991e475208e687cb2db93bed3b29f8dd8558b7ba9371a3ba791dff4574597",
+        "decision_ready": true,
+        "published": false,
+        "error": null
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/cache",
+        "batch",
+        "resume",
+        "--batch-id",
+        "cli"
+      ],
+      "rc": 6,
+      "result": {
+        "schema_version": 1,
+        "batch_id": "cli",
+        "mode": "batch_save",
+        "status": "completed_with_errors",
+        "exit_code": 6,
+        "manifest_sha256": "74f991e475208e687cb2db93bed3b29f8dd8558b7ba9371a3ba791dff4574597",
+        "inputs_frozen_at": "2026-11-17T16:51:16+00:00",
+        "on_error": "continue",
+        "counts": {
+          "total": 1,
+          "saved": 0,
+          "saved_with_warnings": 0,
+          "unchanged": 0,
+          "failed": 0,
+          "needs_decision": 1,
+          "not_started": 0
+        },
+        "items": [
+          {
+            "item_id": "1",
+            "position": 1,
+            "status": "needs_decision",
+            "operation_id": "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+            "snapshot_id": null,
+            "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "receipt_ref": null,
+            "error": {
+              "code": "archive_project_confirmation_required",
+              "message": "Требуется адресное подтверждение архивного размещения",
+              "next_action": "operation show --operation-id batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+              "retryable": false
+            },
+            "warnings": []
+          }
+        ],
+        "published": false,
+        "error": null
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/cache",
+        "batch",
+        "resume",
+        "--batch-id",
+        "cli",
+        "--retry-decisions"
+      ],
+      "rc": 0,
+      "result": {
+        "schema_version": 1,
+        "batch_id": "cli",
+        "mode": "batch_save",
+        "status": "completed",
+        "exit_code": 0,
+        "manifest_sha256": "74f991e475208e687cb2db93bed3b29f8dd8558b7ba9371a3ba791dff4574597",
+        "inputs_frozen_at": "2026-11-17T16:51:16+00:00",
+        "on_error": "continue",
+        "counts": {
+          "total": 1,
+          "saved": 1,
+          "saved_with_warnings": 1,
+          "unchanged": 0,
+          "failed": 0,
+          "needs_decision": 0,
+          "not_started": 0
+        },
+        "items": [
+          {
+            "item_id": "1",
+            "position": 1,
+            "status": "saved_with_warnings",
+            "operation_id": "batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10",
+            "snapshot_id": "snapshot_a4efe02f7646419182bf8bfc56ef8681",
+            "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+            "receipt_ref": "_plan-receipts/batch-op-ed55d96a3c33d1e6a0b973de2f268448a2285dda9b0228dc9f32273dfd93ca10/save.json",
+            "error": {
+              "code": "archive_project_confirmation_required",
+              "message": "Пакет: archive_project_confirmation_required",
+              "next_action": null,
+              "retryable": false
+            },
+            "warnings": [
+              {
+                "code": "timezone_unknown",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/fc757c5931ab8f3dde36dec44a80fa29ca3e00ac5e694fb542de88c18b525221.json",
+                "message": "Исходные даты сохранены без подтверждённой таймзоны"
+              },
+              {
+                "code": "fields_missing",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/fc757c5931ab8f3dde36dec44a80fa29ca3e00ac5e694fb542de88c18b525221.json",
+                "message": "Часть исходных полей имеет качество missing"
+              },
+              {
+                "code": "fields_unsupported",
+                "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_ac19_real_cli_registratio0/WorkVault/Entities/batch-project/Sources/plans/batch-project.ganttchart/artifacts/fc757c5931ab8f3dde36dec44a80fa29ca3e00ac5e694fb542de88c18b525221.json",
+                "message": "Часть исходных полей имеет качество unsupported"
+              }
+            ]
+          }
+        ],
+        "published": false,
+        "error": null
+      },
+      "stderr": "2026-11-17T16:51:22.814987518Z main ERROR Log4j API could not find a logging provider.\n"
+    }
+  ],
+  "metrics": {
+    "counters": {
+      "MPXJ_read": 1,
+      "cache_hit": 0,
+      "cache_miss": 1,
+      "POST": 0,
+      "PUT": 0
+    },
+    "duration_seconds": 5.83087348198751,
+    "stage_durations_seconds": {
+      "readback": 0.17286809399956837,
+      "parse_cache": 3.363724322000053,
+      "normalization_quality": 1.8902114030206576,
+      "archive_commit": 0.39478340494679287
+    }
+  },
+  "POST": 0,
+  "PUT": 0
+}

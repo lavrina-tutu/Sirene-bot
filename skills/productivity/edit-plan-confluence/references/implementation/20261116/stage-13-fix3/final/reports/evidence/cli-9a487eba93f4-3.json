@@ -1,0 +1,34 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
+  "observed_at": "2026-11-17T15:14:53.330784+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/pytest-tmp/test_binary_identity_does_not_1/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/pytest-tmp/test_binary_identity_does_not_1/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/pytest-tmp/test_binary_identity_does_not_1/cache",
+    "operation",
+    "show",
+    "--operation-id",
+    "operation_b3deb62592f145fb905b35cb3c368705"
+  ],
+  "rc": 0,
+  "duration_seconds": 0.712478358997032,
+  "stdout": null,
+  "stderr": "",
+  "live": true,
+  "stdout_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/cli-output/9a487eba93f4-3.json",
+  "stdout_bytes": 111371,
+  "stdout_sha256": "01375706b2767b71654914ef6e29bd88070212004d3d7058eaab80c6fa2a9e5d",
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0,
+    "calls": []
+  }
+}

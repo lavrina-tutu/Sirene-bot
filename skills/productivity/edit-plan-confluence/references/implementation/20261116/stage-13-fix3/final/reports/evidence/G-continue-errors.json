@@ -1,0 +1,53 @@
+{
+  "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[continue]",
+  "observed_at": "2026-11-17T15:06:37.012325+00:00",
+  "case": "G",
+  "result": {
+    "schema_version": 1,
+    "action": "show_batch",
+    "batch_id": "G-continue",
+    "view": "errors",
+    "exit_code": 0,
+    "result": {
+      "status": "completed_with_errors",
+      "exit_code": 6,
+      "counts": {
+        "total": 4,
+        "saved": 2,
+        "saved_with_warnings": 2,
+        "unchanged": 1,
+        "failed": 1,
+        "needs_decision": 0,
+        "not_started": 0
+      },
+      "error": null,
+      "manifest_sha256": "159122807900b25aedab77fb9a7bd27b929430e866fc6eca04785b17c702e9b1",
+      "inputs_frozen_at": "2026-11-17T15:06:18+00:00",
+      "items": [
+        {
+          "item_id": "2",
+          "position": 2,
+          "status": "failed",
+          "operation_id": "batch-op-5fd6130b75c82f7f06e5597c6b15533e71cc4d267852a1e16a4f053e965452c6",
+          "snapshot_id": null,
+          "sha256": "7f5c7cb8509ede0adf98d8fd5241124136265118a40f282d96a40c0155cf2264",
+          "receipt_ref": null,
+          "error": {
+            "code": "mpp_unreadable",
+            "message": "Сохранение не подтверждено: mpp_unreadable",
+            "next_action": null,
+            "retryable": false
+          },
+          "warnings": [],
+          "proposals": [],
+          "decisions": [],
+          "reasons": [],
+          "unresolved_reasons": [],
+          "decision_ready": false
+        }
+      ]
+    },
+    "published": false,
+    "error": null
+  }
+}

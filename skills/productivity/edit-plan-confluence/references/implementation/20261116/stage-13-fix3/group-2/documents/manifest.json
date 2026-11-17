@@ -1,0 +1,15 @@
+{
+  "files": [
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md",
+      "before_sha256": "69247801bb5f0b76cdc902273d27b39dae5807a9755d1deda1e99192aaed1b51",
+      "after_sha256": "d0afadde13f18b57ae2fccb87bd1d6c325496c2c33a01fd6eda75b066335c3c1"
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md",
+      "before_sha256": "abe0ec6b6ec8ff19e593c0bfb95c70838b2f79c8e709fd8088bf06765021151e",
+      "after_sha256": "04d58d811456b8f8aee57f8bd5b9fb7b08fd646bbe11ec7b541c6f3744a5bd83"
+    }
+  ],
+  "gate": "failed"
+}

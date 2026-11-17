@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+  "observed_at": "2026-11-17T15:14:37.269469+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/pytest-tmp/test_binary_identity_does_not_0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/pytest-tmp/test_binary_identity_does_not_0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/pytest-tmp/test_binary_identity_does_not_0/cache",
+    "diff",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/pytest-tmp/test_binary_identity_does_not_0/new-binary.mpp",
+    "--page-id",
+    "537576133",
+    "--project-slug",
+    "stage13-binary-negative",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 5,
+  "duration_seconds": 4.8604917880147696,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_39af9a7045944c90960f3b656bf72277\", \"item_id\": \"item_81d575a22a1440e1bae1863f9b8b33be\", \"status\": \"failed\", \"mode\": \"publish\", \"exit_code\": 5, \"project_slug\": \"stage13-binary-negative\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_c75608952f36401db70d11e540d490d2\", \"page_id\": null, \"page_url\": null, \"task_count\": 6, \"display_task_count\": 5, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"semantic-negative-diff\", \"revision\": \"binary-fixture-v1\", \"result\": \"inactive\", \"evidence_id\": \"artifact_19908c7dd6cf4093bb81ba07e27a56b4\"}], \"attachment_version\": null, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"storage\": \"not_applicable\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"assignment_partial\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"assignment_semantics_unrepresented:finish\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"uid:5\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"assignment_semantics_unrepresented:segments\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"uid:5\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"assignment_semantics_unrepresented:start\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"uid:5\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"dependency_combination_unverified\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"local:dependency:000001\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"dependency_lag_unit_unsupported\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"local:dependency:000001\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"summary_root_missing\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"summary\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_semantics_unrepresented:effort_driven\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_semantics_unrepresented:segments\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"uid:5\"]}, {\"row\": 14, \"category\": \"identity\", \"code\": \"identity_confirmation_required\", \"exit_code\": 3, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"semantic-negative-diff\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_f525504f992b444da75fdb989d2e2524\"]}}, \"published\": false, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_f525504f992b444da75fdb989d2e2524\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_f525504f992b444da75fdb989d2e2524\"}], \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"external_effect\": \"none\", \"error\": {\"code\": \"identity_confirmation_required\", \"message\": \"identity_confirmation_required\", \"retryable\": false, \"next_action\": \"operation show --operation-id operation_39af9a7045944c90960f3b656bf72277\"}}\n",
+  "stderr": "2026-11-17T15:14:34.925136965Z main ERROR Log4j API could not find a logging provider.\n",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 1,
+    "cache_hit": 0,
+    "cache_miss": 1,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576133"
+      }
+    ]
+  }
+}

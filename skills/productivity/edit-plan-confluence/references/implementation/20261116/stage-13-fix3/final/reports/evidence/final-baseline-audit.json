@@ -1,0 +1,607 @@
+{
+  "test_id": "acceptance/test_user_journeys.py::test_final_baseline_audit",
+  "observed_at": "2026-11-17T15:10:41.232944+00:00",
+  "observations": [
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/G-continue-first.json",
+      "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[continue]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_261383b9af424bc79a5ed68312c480aa','plan_bbd078983e26435999823eff8b287044','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1958cc4c2d1743278e0b49df7da679ee','lineage_6cb1b82f8015437d878ff1128472e048','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_261383b9af424bc79a5ed68312c480aa','plan_bbd078983e26435999823eff8b287044','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1958cc4c2d1743278e0b49df7da679ee','lineage_6cb1b82f8015437d878ff1128472e048','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/EF-batch.json",
+      "test_id": "acceptance/test_user_journeys.py::test_real_ef_batch_and_exact_compare",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a5aefe37628e4d5f875cb2dd92d6b55c','plan_a758ffd7519e4497a36cc621c287c48a','snapshot_a51f255a783b4814b9af3c5e61cd2eae',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:53+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_633c72d6ccae4d0b89ba23c0505e11f5','lineage_01d5e71a88d840c981c37350e1d2fd59','snapshot_a51f255a783b4814b9af3c5e61cd2eae',1,'test owner before acceptance',NULL,'2026-11-17T15:06:53+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a5aefe37628e4d5f875cb2dd92d6b55c','plan_a758ffd7519e4497a36cc621c287c48a','snapshot_a51f255a783b4814b9af3c5e61cd2eae',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:53+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_633c72d6ccae4d0b89ba23c0505e11f5','lineage_01d5e71a88d840c981c37350e1d2fd59','snapshot_a51f255a783b4814b9af3c5e61cd2eae',1,'test owner before acceptance',NULL,'2026-11-17T15:06:53+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-A-cold.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[A]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_93cc4f4a4b71477fbd10082beb97c27e','plan_980f12918162411ebea7fb3ce157cfc0','snapshot_53241b36368541e8b0144e9bea9707e4',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7df7a2876368433999f8fb502f584a57','lineage_7eaf40d3edac4a0f9443db8e859b2308','snapshot_53241b36368541e8b0144e9bea9707e4',1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_93cc4f4a4b71477fbd10082beb97c27e','plan_980f12918162411ebea7fb3ce157cfc0','snapshot_53241b36368541e8b0144e9bea9707e4',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7df7a2876368433999f8fb502f584a57','lineage_7eaf40d3edac4a0f9443db8e859b2308','snapshot_53241b36368541e8b0144e9bea9707e4',1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-A-warm.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[A]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_93cc4f4a4b71477fbd10082beb97c27e','plan_980f12918162411ebea7fb3ce157cfc0','snapshot_53241b36368541e8b0144e9bea9707e4',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7df7a2876368433999f8fb502f584a57','lineage_7eaf40d3edac4a0f9443db8e859b2308','snapshot_53241b36368541e8b0144e9bea9707e4',1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_93cc4f4a4b71477fbd10082beb97c27e','plan_980f12918162411ebea7fb3ce157cfc0','snapshot_53241b36368541e8b0144e9bea9707e4',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7df7a2876368433999f8fb502f584a57','lineage_7eaf40d3edac4a0f9443db8e859b2308','snapshot_53241b36368541e8b0144e9bea9707e4',1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/G-continue-resume.json",
+      "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[continue]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_261383b9af424bc79a5ed68312c480aa','plan_bbd078983e26435999823eff8b287044','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1958cc4c2d1743278e0b49df7da679ee','lineage_6cb1b82f8015437d878ff1128472e048','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_261383b9af424bc79a5ed68312c480aa','plan_bbd078983e26435999823eff8b287044','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1958cc4c2d1743278e0b49df7da679ee','lineage_6cb1b82f8015437d878ff1128472e048','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-8296694d0a3a.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[A]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_93cc4f4a4b71477fbd10082beb97c27e','plan_980f12918162411ebea7fb3ce157cfc0','snapshot_53241b36368541e8b0144e9bea9707e4',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7df7a2876368433999f8fb502f584a57','lineage_7eaf40d3edac4a0f9443db8e859b2308','snapshot_53241b36368541e8b0144e9bea9707e4',1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_93cc4f4a4b71477fbd10082beb97c27e','plan_980f12918162411ebea7fb3ce157cfc0','snapshot_53241b36368541e8b0144e9bea9707e4',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7df7a2876368433999f8fb502f584a57','lineage_7eaf40d3edac4a0f9443db8e859b2308','snapshot_53241b36368541e8b0144e9bea9707e4',1,'test owner before acceptance',NULL,'2026-11-17T14:59:23+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-B-cold.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[B]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_32ae0571207e46a3a14af352efc1cf4a','plan_82f07b61d8134e6ba9f5ea04b129e916','snapshot_5751ea94a696476c988b317de94f3b5c',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f324e5700ce44587a75d6baf65f170fc','lineage_6338dbf6595d4ea6a975370e058961eb','snapshot_5751ea94a696476c988b317de94f3b5c',1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_32ae0571207e46a3a14af352efc1cf4a','plan_82f07b61d8134e6ba9f5ea04b129e916','snapshot_5751ea94a696476c988b317de94f3b5c',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f324e5700ce44587a75d6baf65f170fc','lineage_6338dbf6595d4ea6a975370e058961eb','snapshot_5751ea94a696476c988b317de94f3b5c',1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-1145316684dd.json",
+      "test_id": "acceptance/test_user_journeys.py::test_real_ef_batch_and_exact_compare",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a5aefe37628e4d5f875cb2dd92d6b55c','plan_a758ffd7519e4497a36cc621c287c48a','snapshot_a51f255a783b4814b9af3c5e61cd2eae',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:53+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_633c72d6ccae4d0b89ba23c0505e11f5','lineage_01d5e71a88d840c981c37350e1d2fd59','snapshot_a51f255a783b4814b9af3c5e61cd2eae',1,'test owner before acceptance',NULL,'2026-11-17T15:06:53+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a5aefe37628e4d5f875cb2dd92d6b55c','plan_a758ffd7519e4497a36cc621c287c48a','snapshot_a51f255a783b4814b9af3c5e61cd2eae',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:53+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_633c72d6ccae4d0b89ba23c0505e11f5','lineage_01d5e71a88d840c981c37350e1d2fd59','snapshot_a51f255a783b4814b9af3c5e61cd2eae',1,'test owner before acceptance',NULL,'2026-11-17T15:06:53+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-B-warm.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[B]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_32ae0571207e46a3a14af352efc1cf4a','plan_82f07b61d8134e6ba9f5ea04b129e916','snapshot_5751ea94a696476c988b317de94f3b5c',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f324e5700ce44587a75d6baf65f170fc','lineage_6338dbf6595d4ea6a975370e058961eb','snapshot_5751ea94a696476c988b317de94f3b5c',1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_32ae0571207e46a3a14af352efc1cf4a','plan_82f07b61d8134e6ba9f5ea04b129e916','snapshot_5751ea94a696476c988b317de94f3b5c',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f324e5700ce44587a75d6baf65f170fc','lineage_6338dbf6595d4ea6a975370e058961eb','snapshot_5751ea94a696476c988b317de94f3b5c',1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-0094acafda42.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[B]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_32ae0571207e46a3a14af352efc1cf4a','plan_82f07b61d8134e6ba9f5ea04b129e916','snapshot_5751ea94a696476c988b317de94f3b5c',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f324e5700ce44587a75d6baf65f170fc','lineage_6338dbf6595d4ea6a975370e058961eb','snapshot_5751ea94a696476c988b317de94f3b5c',1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_32ae0571207e46a3a14af352efc1cf4a','plan_82f07b61d8134e6ba9f5ea04b129e916','snapshot_5751ea94a696476c988b317de94f3b5c',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f324e5700ce44587a75d6baf65f170fc','lineage_6338dbf6595d4ea6a975370e058961eb','snapshot_5751ea94a696476c988b317de94f3b5c',1,'test owner before acceptance',NULL,'2026-11-17T14:59:36+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-C-cold.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[C]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_5f93b3fa2c5e4636a19da87bfe309494','plan_9a8a979b3b8540a4bfa69225d8db719b','snapshot_8808bc4b8fe148bb8b02f711f8caf527',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_84fead981c724802add3f85df7d30b3c','lineage_bc3f9a5563264c998054023abbcbe009','snapshot_8808bc4b8fe148bb8b02f711f8caf527',1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_5f93b3fa2c5e4636a19da87bfe309494','plan_9a8a979b3b8540a4bfa69225d8db719b','snapshot_8808bc4b8fe148bb8b02f711f8caf527',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_84fead981c724802add3f85df7d30b3c','lineage_bc3f9a5563264c998054023abbcbe009','snapshot_8808bc4b8fe148bb8b02f711f8caf527',1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-d10a8ce76211.json",
+      "test_id": "acceptance/test_user_journeys.py::test_today_cli_local_boundaries",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_5f29287be25142629a3b0141b009e5c8','plan_df4d533949334423945e051994f67683','snapshot_18b56e03437a430bae2cdee38c387f78',0,1,'test owner before acceptance',NULL,'2026-11-17T15:07:13+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_24f785834c0e438da138c4c0e24eab55','lineage_0f0b407040c44292a1b0c61492774eb8','snapshot_18b56e03437a430bae2cdee38c387f78',1,'test owner before acceptance',NULL,'2026-11-17T15:07:13+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_5f29287be25142629a3b0141b009e5c8','plan_df4d533949334423945e051994f67683','snapshot_18b56e03437a430bae2cdee38c387f78',0,1,'test owner before acceptance',NULL,'2026-11-17T15:07:13+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_24f785834c0e438da138c4c0e24eab55','lineage_0f0b407040c44292a1b0c61492774eb8','snapshot_18b56e03437a430bae2cdee38c387f78',1,'test owner before acceptance',NULL,'2026-11-17T15:07:13+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-C-warm.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[C]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_5f93b3fa2c5e4636a19da87bfe309494','plan_9a8a979b3b8540a4bfa69225d8db719b','snapshot_8808bc4b8fe148bb8b02f711f8caf527',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_84fead981c724802add3f85df7d30b3c','lineage_bc3f9a5563264c998054023abbcbe009','snapshot_8808bc4b8fe148bb8b02f711f8caf527',1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_5f93b3fa2c5e4636a19da87bfe309494','plan_9a8a979b3b8540a4bfa69225d8db719b','snapshot_8808bc4b8fe148bb8b02f711f8caf527',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_84fead981c724802add3f85df7d30b3c','lineage_bc3f9a5563264c998054023abbcbe009','snapshot_8808bc4b8fe148bb8b02f711f8caf527',1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-166c0e53f169.json",
+      "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[continue]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_261383b9af424bc79a5ed68312c480aa','plan_bbd078983e26435999823eff8b287044','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1958cc4c2d1743278e0b49df7da679ee','lineage_6cb1b82f8015437d878ff1128472e048','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_261383b9af424bc79a5ed68312c480aa','plan_bbd078983e26435999823eff8b287044','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1958cc4c2d1743278e0b49df7da679ee','lineage_6cb1b82f8015437d878ff1128472e048','snapshot_8e3be735986c4379be7e3eb4cc90b5ed',1,'test owner before acceptance',NULL,'2026-11-17T15:06:16+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-21b40040b7fe.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[C]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_5f93b3fa2c5e4636a19da87bfe309494','plan_9a8a979b3b8540a4bfa69225d8db719b','snapshot_8808bc4b8fe148bb8b02f711f8caf527',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_84fead981c724802add3f85df7d30b3c','lineage_bc3f9a5563264c998054023abbcbe009','snapshot_8808bc4b8fe148bb8b02f711f8caf527',1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_5f93b3fa2c5e4636a19da87bfe309494','plan_9a8a979b3b8540a4bfa69225d8db719b','snapshot_8808bc4b8fe148bb8b02f711f8caf527',0,1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_84fead981c724802add3f85df7d30b3c','lineage_bc3f9a5563264c998054023abbcbe009','snapshot_8808bc4b8fe148bb8b02f711f8caf527',1,'test owner before acceptance',NULL,'2026-11-17T14:59:50+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-D-risks-cold.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D-risks]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_7ace67c174084dba866f95bb996aabca','plan_97915096eb7a497ea87a458f306c4aae','snapshot_dda5077d7662406d9e74c2702e16993a',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_041b7a341a124a92b3c82d4846ffaf22','lineage_8ba7a471a10a498fb70e0b6aa4919be4','snapshot_dda5077d7662406d9e74c2702e16993a',1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_7ace67c174084dba866f95bb996aabca','plan_97915096eb7a497ea87a458f306c4aae','snapshot_dda5077d7662406d9e74c2702e16993a',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_041b7a341a124a92b3c82d4846ffaf22','lineage_8ba7a471a10a498fb70e0b6aa4919be4','snapshot_dda5077d7662406d9e74c2702e16993a',1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-D-risks-warm.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D-risks]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_7ace67c174084dba866f95bb996aabca','plan_97915096eb7a497ea87a458f306c4aae','snapshot_dda5077d7662406d9e74c2702e16993a',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_041b7a341a124a92b3c82d4846ffaf22','lineage_8ba7a471a10a498fb70e0b6aa4919be4','snapshot_dda5077d7662406d9e74c2702e16993a',1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_7ace67c174084dba866f95bb996aabca','plan_97915096eb7a497ea87a458f306c4aae','snapshot_dda5077d7662406d9e74c2702e16993a',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_041b7a341a124a92b3c82d4846ffaf22','lineage_8ba7a471a10a498fb70e0b6aa4919be4','snapshot_dda5077d7662406d9e74c2702e16993a',1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-0e35e0a93717.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D-risks]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_7ace67c174084dba866f95bb996aabca','plan_97915096eb7a497ea87a458f306c4aae','snapshot_dda5077d7662406d9e74c2702e16993a',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_041b7a341a124a92b3c82d4846ffaf22','lineage_8ba7a471a10a498fb70e0b6aa4919be4','snapshot_dda5077d7662406d9e74c2702e16993a',1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_7ace67c174084dba866f95bb996aabca','plan_97915096eb7a497ea87a458f306c4aae','snapshot_dda5077d7662406d9e74c2702e16993a',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_041b7a341a124a92b3c82d4846ffaf22','lineage_8ba7a471a10a498fb70e0b6aa4919be4','snapshot_dda5077d7662406d9e74c2702e16993a',1,'test owner before acceptance',NULL,'2026-11-17T15:00:04+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-D-cold.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7db5c68a15a4062aef6dfa5cfa72414','plan_932508e4696b473a819f388e19039fa3','snapshot_6c49da7baff64f568d2db4bda1699d82',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3d04a95b2d84b1abd1861b806894d29','lineage_ee1b106a4c2d44529aef41c4cf5414ca','snapshot_6c49da7baff64f568d2db4bda1699d82',1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7db5c68a15a4062aef6dfa5cfa72414','plan_932508e4696b473a819f388e19039fa3','snapshot_6c49da7baff64f568d2db4bda1699d82',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3d04a95b2d84b1abd1861b806894d29','lineage_ee1b106a4c2d44529aef41c4cf5414ca','snapshot_6c49da7baff64f568d2db4bda1699d82',1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-D-warm.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7db5c68a15a4062aef6dfa5cfa72414','plan_932508e4696b473a819f388e19039fa3','snapshot_6c49da7baff64f568d2db4bda1699d82',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3d04a95b2d84b1abd1861b806894d29','lineage_ee1b106a4c2d44529aef41c4cf5414ca','snapshot_6c49da7baff64f568d2db4bda1699d82',1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7db5c68a15a4062aef6dfa5cfa72414','plan_932508e4696b473a819f388e19039fa3','snapshot_6c49da7baff64f568d2db4bda1699d82',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3d04a95b2d84b1abd1861b806894d29','lineage_ee1b106a4c2d44529aef41c4cf5414ca','snapshot_6c49da7baff64f568d2db4bda1699d82',1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-f2f687e667c9.json",
+      "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_25487a1340664d078a99bc0f44ac547f','plan_db0dc92da3f440c3abd46cb8a40dde9b','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fc760a8b0d12463c9bb163dfd4d91179','lineage_0c815a2d76494e6e816dcd903ef20084','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_25487a1340664d078a99bc0f44ac547f','plan_db0dc92da3f440c3abd46cb8a40dde9b','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fc760a8b0d12463c9bb163dfd4d91179','lineage_0c815a2d76494e6e816dcd903ef20084','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-3d3434701e01.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7db5c68a15a4062aef6dfa5cfa72414','plan_932508e4696b473a819f388e19039fa3','snapshot_6c49da7baff64f568d2db4bda1699d82',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3d04a95b2d84b1abd1861b806894d29','lineage_ee1b106a4c2d44529aef41c4cf5414ca','snapshot_6c49da7baff64f568d2db4bda1699d82',1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7db5c68a15a4062aef6dfa5cfa72414','plan_932508e4696b473a819f388e19039fa3','snapshot_6c49da7baff64f568d2db4bda1699d82',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3d04a95b2d84b1abd1861b806894d29','lineage_ee1b106a4c2d44529aef41c4cf5414ca','snapshot_6c49da7baff64f568d2db4bda1699d82',1,'test owner before acceptance',NULL,'2026-11-17T15:00:18+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-E-cold.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[E]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c49ec5386c0445ea9946ba25923c314c','plan_a4ddbf9ddfbc459ab884a8d0f6cf685f','snapshot_f888f601d6244660bd294c19e5aa96eb',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c103aba0989b4d4abfb663d1439d30b0','lineage_22d639c2e0d24045a0f1f5c111dba6d5','snapshot_f888f601d6244660bd294c19e5aa96eb',1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c49ec5386c0445ea9946ba25923c314c','plan_a4ddbf9ddfbc459ab884a8d0f6cf685f','snapshot_f888f601d6244660bd294c19e5aa96eb',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c103aba0989b4d4abfb663d1439d30b0','lineage_22d639c2e0d24045a0f1f5c111dba6d5','snapshot_f888f601d6244660bd294c19e5aa96eb',1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-E-warm.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[E]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c49ec5386c0445ea9946ba25923c314c','plan_a4ddbf9ddfbc459ab884a8d0f6cf685f','snapshot_f888f601d6244660bd294c19e5aa96eb',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c103aba0989b4d4abfb663d1439d30b0','lineage_22d639c2e0d24045a0f1f5c111dba6d5','snapshot_f888f601d6244660bd294c19e5aa96eb',1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c49ec5386c0445ea9946ba25923c314c','plan_a4ddbf9ddfbc459ab884a8d0f6cf685f','snapshot_f888f601d6244660bd294c19e5aa96eb',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c103aba0989b4d4abfb663d1439d30b0','lineage_22d639c2e0d24045a0f1f5c111dba6d5','snapshot_f888f601d6244660bd294c19e5aa96eb',1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/G-stop-first.json",
+      "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_25487a1340664d078a99bc0f44ac547f','plan_db0dc92da3f440c3abd46cb8a40dde9b','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fc760a8b0d12463c9bb163dfd4d91179','lineage_0c815a2d76494e6e816dcd903ef20084','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_25487a1340664d078a99bc0f44ac547f','plan_db0dc92da3f440c3abd46cb8a40dde9b','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fc760a8b0d12463c9bb163dfd4d91179','lineage_0c815a2d76494e6e816dcd903ef20084','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-1d768dba485e.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[E]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c49ec5386c0445ea9946ba25923c314c','plan_a4ddbf9ddfbc459ab884a8d0f6cf685f','snapshot_f888f601d6244660bd294c19e5aa96eb',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c103aba0989b4d4abfb663d1439d30b0','lineage_22d639c2e0d24045a0f1f5c111dba6d5','snapshot_f888f601d6244660bd294c19e5aa96eb',1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c49ec5386c0445ea9946ba25923c314c','plan_a4ddbf9ddfbc459ab884a8d0f6cf685f','snapshot_f888f601d6244660bd294c19e5aa96eb',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c103aba0989b4d4abfb663d1439d30b0','lineage_22d639c2e0d24045a0f1f5c111dba6d5','snapshot_f888f601d6244660bd294c19e5aa96eb',1,'test owner before acceptance',NULL,'2026-11-17T15:00:33+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-F-cold.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[F]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_48e00b40be6142ebb7c03360a811a93d','plan_f288b433e4d14c70907de5de82e5b782','snapshot_e67114e60e1a4d74bb7d903de33a9343',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_ef01456725c44548831937ac1c1316b7','lineage_e7aebcd223e845088a9b567757f292ac','snapshot_e67114e60e1a4d74bb7d903de33a9343',1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_48e00b40be6142ebb7c03360a811a93d','plan_f288b433e4d14c70907de5de82e5b782','snapshot_e67114e60e1a4d74bb7d903de33a9343',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_ef01456725c44548831937ac1c1316b7','lineage_e7aebcd223e845088a9b567757f292ac','snapshot_e67114e60e1a4d74bb7d903de33a9343',1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/case-F-warm.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[F]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_48e00b40be6142ebb7c03360a811a93d','plan_f288b433e4d14c70907de5de82e5b782','snapshot_e67114e60e1a4d74bb7d903de33a9343',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_ef01456725c44548831937ac1c1316b7','lineage_e7aebcd223e845088a9b567757f292ac','snapshot_e67114e60e1a4d74bb7d903de33a9343',1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_48e00b40be6142ebb7c03360a811a93d','plan_f288b433e4d14c70907de5de82e5b782','snapshot_e67114e60e1a4d74bb7d903de33a9343',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_ef01456725c44548831937ac1c1316b7','lineage_e7aebcd223e845088a9b567757f292ac','snapshot_e67114e60e1a4d74bb7d903de33a9343',1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/baseline-c9ae0e089be8.json",
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[F]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_48e00b40be6142ebb7c03360a811a93d','plan_f288b433e4d14c70907de5de82e5b782','snapshot_e67114e60e1a4d74bb7d903de33a9343',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_ef01456725c44548831937ac1c1316b7','lineage_e7aebcd223e845088a9b567757f292ac','snapshot_e67114e60e1a4d74bb7d903de33a9343',1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_48e00b40be6142ebb7c03360a811a93d','plan_f288b433e4d14c70907de5de82e5b782','snapshot_e67114e60e1a4d74bb7d903de33a9343',0,1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_ef01456725c44548831937ac1c1316b7','lineage_e7aebcd223e845088a9b567757f292ac','snapshot_e67114e60e1a4d74bb7d903de33a9343',1,'test owner before acceptance',NULL,'2026-11-17T15:00:48+00:00');"
+        ]
+      }
+    },
+    {
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix3-20261117-174642/final/reports/evidence/G-stop-resume.json",
+      "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]",
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_25487a1340664d078a99bc0f44ac547f','plan_db0dc92da3f440c3abd46cb8a40dde9b','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fc760a8b0d12463c9bb163dfd4d91179','lineage_0c815a2d76494e6e816dcd903ef20084','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_25487a1340664d078a99bc0f44ac547f','plan_db0dc92da3f440c3abd46cb8a40dde9b','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',0,1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fc760a8b0d12463c9bb163dfd4d91179','lineage_0c815a2d76494e6e816dcd903ef20084','snapshot_c4c9500ac1564acdbf9fc973cf0fc57c',1,'test owner before acceptance',NULL,'2026-11-17T15:06:39+00:00');"
+        ]
+      }
+    }
+  ],
+  "status": "passed"
+}

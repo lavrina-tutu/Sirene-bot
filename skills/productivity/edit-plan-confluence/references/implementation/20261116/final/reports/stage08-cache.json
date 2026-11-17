@@ -1,0 +1,8 @@
+{
+  "counters": {
+    "cache_miss": 5,
+    "cache_hit": 1
+  },
+  "MPXJ_read": 0,
+  "source": "pure prepared conversion; reader forbidden by separate instrumentation test"
+}

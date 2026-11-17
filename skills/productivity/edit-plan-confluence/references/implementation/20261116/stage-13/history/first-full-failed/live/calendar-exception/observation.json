@@ -1,0 +1,61 @@
+{
+  "build": "H6u7SQymvwxeyojc1ur6Z",
+  "engine_version": "5.4.1",
+  "relation_codes": {
+    "StartToStart": 0,
+    "StartToEnd": 1,
+    "EndToStart": 2,
+    "EndToEnd": 3
+  },
+  "hours_per_day": 8,
+  "dependency_calendar": "ToEvent",
+  "tasks": [
+    {
+      "id": 1,
+      "start": "2026-01-07T09:00:00",
+      "finish": "2026-01-12T18:00:00",
+      "duration": 3,
+      "duration_unit": "day"
+    },
+    {
+      "id": 2,
+      "start": "2026-01-07T09:00:00",
+      "finish": "2026-01-08T18:00:00",
+      "duration": 2,
+      "duration_unit": "day"
+    },
+    {
+      "id": 3,
+      "start": "2026-01-12T09:00:00",
+      "finish": "2026-01-12T18:00:00",
+      "duration": 1,
+      "duration_unit": "day"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": 4,
+      "type": 2,
+      "lag": 0,
+      "lagUnit": "day"
+    }
+  ],
+  "resources": [],
+  "assignments": [],
+  "calendars": [
+    {
+      "id": "general",
+      "name": "General",
+      "parentId": null
+    }
+  ],
+  "case": "calendar-exception",
+  "page_id": "537573538",
+  "page_version": 1,
+  "attachment_id": "537573539",
+  "attachment_version": 9,
+  "input_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+  "received_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+  "confluence_version": "8.9.4",
+  "browser_received_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07"
+}

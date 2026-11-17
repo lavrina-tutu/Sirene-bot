@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "case": "A",
+  "status": "not_run",
+  "functional_status": "not_run",
+  "fixture": {
+    "id": "A",
+    "path": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89.mpp",
+    "sha256": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89",
+    "size_bytes": 635904,
+    "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89/doc_c7df61c64ba6_Переход_на_Trisigma_Только_пилот_150526.mpp",
+    "evidence": "master §20.7.4; user evidence 2026-11-16",
+    "identity_status": "confirmed",
+    "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89.mpp",
+    "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89.mpp",
+    "status": "verified",
+    "original_verified": true,
+    "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+    "functional_status": "not_run",
+    "expected": {
+      "archive_task_count": 58,
+      "display_task_count": 57,
+      "dependency_count": 53,
+      "work_hours": "1576"
+    }
+  },
+  "identity_status": "confirmed",
+  "tests": [
+    "test_cases_trisigma.py::test_real_cold_warm_archive[A]",
+    "test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]"
+  ],
+  "commands": [],
+  "source": {
+    "path": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89.mpp",
+    "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89.mpp",
+    "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89/doc_c7df61c64ba6_Переход_на_Trisigma_Только_пилот_150526.mpp",
+    "sha256": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89",
+    "size_bytes": 635904
+  },
+  "operation_item_batch_snapshot_publication_ids": [],
+  "versions": {
+    "environment": {
+      "reader": "read-mpp-v2",
+      "mpxj": "16.4.0",
+      "jpype": "1.7.1",
+      "exporter": "full-export-v2",
+      "normalization": "prepared-v1",
+      "converter": "prepared-gantt-v1",
+      "policy": "publication-admission-v1",
+      "rules": "project-exceptions-v1",
+      "normalization_profile": {
+        "id": "normalization-v1",
+        "version": "1.0.0",
+        "normalizer_version": "prepared-v1",
+        "export_version": "full-export-v2",
+        "dates": {
+          "policy": "preserve_source_local_precision",
+          "unknown_timezone": null,
+          "timezone_hint": "IANA-explicit-only"
+        },
+        "numbers": {
+          "quantities": "decimal_strings",
+          "rounding": "none"
+        },
+        "identity": {
+          "scope": "source-local-only",
+          "fallback": "source_collection_position",
+          "cross_file_mapping": "unknown"
+        },
+        "ordering": "preserve_source_rows_and_parallel_relations",
+        "semantic_exclusions": [
+          "provenance_except_source_identity",
+          "source",
+          "telemetry",
+          "operation_id",
+          "work_dir",
+          "read_at"
+        ],
+        "quality": {
+          "collection": [
+            "complete",
+            "partial",
+            "missing",
+            "unsupported"
+          ],
+          "null": "missing:not_set",
+          "zero": "ok:0",
+          "unsupported": "explicit_reason"
+        },
+        "summary": "preserve_inputs_only;calculation_is_stage_08"
+      },
+      "summary_profile": {
+        "id": "summary-v1",
+        "version": "1.0.0",
+        "root": "unique_top_level_nonservice_summary_or_explicit_task_key",
+        "days": "ceil_root_working_duration_using_source_minutes_per_unit",
+        "elapsed_duration": "unsupported_without_explicit_transformation",
+        "dates": "source_local_in_resolved_timezone;convert_offset_dates_to_resolved_timezone",
+        "work": "unique_assignments_of_nonservice_nonsummary_tasks_including_milestones",
+        "timephased": "never_add_to_assignment_work",
+        "missing": "known_sum_partial;never_zero_total",
+        "arithmetic": "Decimal;no_per_task_rounding",
+        "display": {
+          "decimal_places": 3,
+          "rounding": "ROUND_HALF_UP",
+          "trim_zeroes": true
+        },
+        "storage_work": false
+      }
+    },
+    "source": null,
+    "plugin_profile": {
+      "key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
+      "version": "frontend-build:H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe"
+    },
+    "observed_plugin": null
+  },
+  "mapping_revision": [],
+  "archive_display_dependency_counts": null,
+  "summary": null,
+  "attachment_hashes": {
+    "expected": null,
+    "received": null
+  },
+  "page_versions": {
+    "before": null,
+    "after": null
+  },
+  "attachment_versions": {
+    "before": null,
+    "after": null
+  },
+  "storage_from_GET": null,
+  "observed_plugin_dates": null,
+  "counters": [],
+  "baseline_before_after": [],
+  "evidence": [],
+  "user_decisions_required": null,
+  "limitations": [
+    "No observed plugin dates for this representation"
+  ],
+  "historical_rule_identity": null,
+  "durations_seconds": []
+}

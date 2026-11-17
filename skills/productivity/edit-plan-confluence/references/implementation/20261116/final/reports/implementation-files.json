@@ -1,0 +1,10 @@
+{
+  "S/tests/acceptance/ac-matrix.json": "27 AC, 66 обязательных подслучаев, все 685 прежних test IDs и 37 новых; fixtures и требования evidence; reuse существующей матрицы сбоев.",
+  "S/tests/acceptance/test_user_journeys.py": "Реальные E/F через CLI, Inbox continue/stop/corrupt/duplicate/delete-after-freeze/resume, точный compare, локальные сутки с offset, общий аудит baseline.",
+  "S/tests/acceptance/test_cases_trisigma.py": "Холодный и повторный save A–F/D-risks, typed archive read-back, counts/work/ceil, подтверждённый именованный A, отдельная история B/C.",
+  "S/tests/acceptance/test_failure_matrix.py": "Fail-closed проверка итогов pytest, полнота AC/подслучаев, порядок фаз, scope source/runtime cache, пять сценариев выбора identity revision. Продуктовые crash/concurrency тесты переиспользуются.",
+  "S/tests/acceptance/test_migration_preservation.py": "Новая схема и изолированная старая схема 0006, typed setup, online backup/verify, повтор миграций, сохранность исходной БД, истории/артефактов/строк baseline.",
+  "S/tests/acceptance/test_live_publication.py": "Реальные A–D через public CLI на новых test pages, дельты версий, браузерный observer, бинарные diff/publish → identity → resume, финальная загрузка обоих имён и parser smoke совместимых команд.",
+  "S/tests/conftest.py": "STAGE13_REQUIRED; изолированный pytest cache; phase/group ordering; manifests и SHA-256 перед каждым тестом; subprocess guards/counters; live inventory; acceptance-report и отдельные cases; отчёты 01–12 сохранены.",
+  "S/tests/pytest.ini": "Маркеры acceptance/loopback_http и strict markers; штатный pytest без нового runner/CLI."
+}

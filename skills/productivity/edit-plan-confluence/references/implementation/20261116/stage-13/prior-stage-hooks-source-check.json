@@ -1,0 +1,20 @@
+{
+  "same_source_text": {
+    "_stage02_report": true,
+    "_stage03_report": true,
+    "_stage04_report": true,
+    "_stage05_report": true,
+    "_stage06_report": true,
+    "_stage07_report": true,
+    "_stage08_report": true,
+    "_stage09_report": true,
+    "_stage09_sources": true,
+    "_stage10_sources": true,
+    "_stage10_report": true,
+    "_stage11_sources": true,
+    "_stage11_report": true,
+    "_stage12_sources": true,
+    "_stage12_report": true
+  },
+  "unchanged_count": 15
+}

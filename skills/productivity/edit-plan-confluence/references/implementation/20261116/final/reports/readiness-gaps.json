@@ -1,0 +1,698 @@
+{
+  "gate": "failed",
+  "observed_product_gaps": [
+    {
+      "case": "A",
+      "evidence": "evidence/live-A.json",
+      "page_id": "537573662",
+      "primary_error": "collection_partial",
+      "archive": "verified",
+      "page_version_before": 1,
+      "page_version_after": 1,
+      "MPXJ_read": 1,
+      "POST": 0,
+      "PUT": 0,
+      "blocker_count": 536,
+      "blocker_groups": [
+        {
+          "code": "resource_availability_unrepresented",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 67
+        },
+        {
+          "code": "calendar_inheritance_unsupported",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 67
+        },
+        {
+          "code": "field_unsupported",
+          "entity_pattern": "dependencies.[].lag_calendar",
+          "reason": "getter_unavailable:getCalendar",
+          "count": 53
+        },
+        {
+          "code": "field_unsupported",
+          "entity_pattern": "dependencies.[].quality_issues.[]",
+          "reason": "getter_unavailable:getCalendar",
+          "count": 53
+        },
+        {
+          "code": "field_missing",
+          "entity_pattern": "assignments.[].quality_issues.[]",
+          "reason": "getter_failed:getTimephasedWork:TypeError",
+          "count": 44
+        },
+        {
+          "code": "assignment_semantics_unrepresented:start",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 44
+        },
+        {
+          "code": "assignment_semantics_unrepresented:finish",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 44
+        },
+        {
+          "code": "task_semantics_unrepresented:task_type",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 43
+        },
+        {
+          "code": "assignment_semantics_unrepresented:segments",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 38
+        },
+        {
+          "code": "task_semantics_unrepresented:segments",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 37
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_actuals_unrepresented:stop",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_actuals_unrepresented:resume",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "assignment_partial",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_semantics_unrepresented:constraint_type",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 4
+        },
+        {
+          "code": "task_semantics_unrepresented:constraint_date",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 4
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_finish",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 2
+        },
+        {
+          "code": "collection_partial",
+          "entity_pattern": "assignments",
+          "reason": "read_errors:0;items_with_field_issues:44",
+          "count": 1
+        },
+        {
+          "code": "collection_partial",
+          "entity_pattern": "dependencies",
+          "reason": "read_errors:0;items_with_field_issues:53",
+          "count": 1
+        },
+        {
+          "code": "calendar_binding_unsupported",
+          "entity_pattern": "resources",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "calendar_binding_unsupported",
+          "entity_pattern": "assignments",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "inactive_task_unverified",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "summary_dependency_unverified",
+          "entity_pattern": "local:dependency:000050",
+          "reason": null,
+          "count": 1
+        }
+      ],
+      "exceptions": [],
+      "plugin_dates_status": "not_run: publication was not admitted"
+    },
+    {
+      "case": "B",
+      "evidence": "evidence/live-B.json",
+      "page_id": "537573663",
+      "primary_error": "rule_reference_or_evidence_missing",
+      "archive": "verified",
+      "page_version_before": 1,
+      "page_version_after": 1,
+      "MPXJ_read": 1,
+      "POST": 0,
+      "PUT": 0,
+      "blocker_count": 580,
+      "blocker_groups": [
+        {
+          "code": "resource_availability_unrepresented",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 67
+        },
+        {
+          "code": "calendar_inheritance_unsupported",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 67
+        },
+        {
+          "code": "field_unsupported",
+          "entity_pattern": "dependencies.[].lag_calendar",
+          "reason": "getter_unavailable:getCalendar",
+          "count": 60
+        },
+        {
+          "code": "field_unsupported",
+          "entity_pattern": "dependencies.[].quality_issues.[]",
+          "reason": "getter_unavailable:getCalendar",
+          "count": 60
+        },
+        {
+          "code": "field_missing",
+          "entity_pattern": "assignments.[].quality_issues.[]",
+          "reason": "getter_failed:getTimephasedWork:TypeError",
+          "count": 49
+        },
+        {
+          "code": "assignment_semantics_unrepresented:start",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 49
+        },
+        {
+          "code": "assignment_semantics_unrepresented:finish",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 49
+        },
+        {
+          "code": "task_semantics_unrepresented:task_type",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 47
+        },
+        {
+          "code": "assignment_semantics_unrepresented:segments",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 42
+        },
+        {
+          "code": "task_semantics_unrepresented:segments",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 40
+        },
+        {
+          "code": "assignment_partial",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 6
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_actuals_unrepresented:stop",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_actuals_unrepresented:resume",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_semantics_unrepresented:constraint_type",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_semantics_unrepresented:constraint_date",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_finish",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 2
+        },
+        {
+          "code": "rule_reference_or_evidence_missing",
+          "entity_pattern": "B",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "collection_partial",
+          "entity_pattern": "assignments",
+          "reason": "read_errors:0;items_with_field_issues:49",
+          "count": 1
+        },
+        {
+          "code": "collection_partial",
+          "entity_pattern": "dependencies",
+          "reason": "read_errors:0;items_with_field_issues:60",
+          "count": 1
+        },
+        {
+          "code": "calendar_binding_unsupported",
+          "entity_pattern": "resources",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "calendar_binding_unsupported",
+          "entity_pattern": "assignments",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "inactive_task_unverified",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "summary_dependency_unverified",
+          "entity_pattern": "local:dependency:000057",
+          "reason": null,
+          "count": 1
+        }
+      ],
+      "exceptions": [
+        {
+          "rule_id": "B",
+          "revision": "historical-unresolved-v1",
+          "result": "inactive",
+          "evidence_id": null
+        }
+      ],
+      "plugin_dates_status": "not_run: publication was not admitted"
+    },
+    {
+      "case": "C",
+      "evidence": "evidence/live-C.json",
+      "page_id": "537573664",
+      "primary_error": "rule_reference_or_evidence_missing",
+      "archive": "verified",
+      "page_version_before": 1,
+      "page_version_after": 1,
+      "MPXJ_read": 1,
+      "POST": 0,
+      "PUT": 0,
+      "blocker_count": 657,
+      "blocker_groups": [
+        {
+          "code": "resource_availability_unrepresented",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 67
+        },
+        {
+          "code": "calendar_inheritance_unsupported",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 67
+        },
+        {
+          "code": "field_unsupported",
+          "entity_pattern": "dependencies.[].lag_calendar",
+          "reason": "getter_unavailable:getCalendar",
+          "count": 61
+        },
+        {
+          "code": "field_unsupported",
+          "entity_pattern": "dependencies.[].quality_issues.[]",
+          "reason": "getter_unavailable:getCalendar",
+          "count": 61
+        },
+        {
+          "code": "field_missing",
+          "entity_pattern": "assignments.[].quality_issues.[]",
+          "reason": "getter_failed:getTimephasedWork:TypeError",
+          "count": 49
+        },
+        {
+          "code": "assignment_semantics_unrepresented:start",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 49
+        },
+        {
+          "code": "assignment_semantics_unrepresented:finish",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 49
+        },
+        {
+          "code": "task_semantics_unrepresented:task_type",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 47
+        },
+        {
+          "code": "assignment_semantics_unrepresented:segments",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 42
+        },
+        {
+          "code": "task_semantics_unrepresented:segments",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 40
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 18
+        },
+        {
+          "code": "task_actuals_unrepresented:stop",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 18
+        },
+        {
+          "code": "task_actuals_unrepresented:resume",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 18
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 17
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 17
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_finish",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 14
+        },
+        {
+          "code": "assignment_partial",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 6
+        },
+        {
+          "code": "task_semantics_unrepresented:constraint_type",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "task_semantics_unrepresented:constraint_date",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 5
+        },
+        {
+          "code": "rule_reference_or_evidence_missing",
+          "entity_pattern": "C",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "collection_partial",
+          "entity_pattern": "assignments",
+          "reason": "read_errors:0;items_with_field_issues:49",
+          "count": 1
+        },
+        {
+          "code": "collection_partial",
+          "entity_pattern": "dependencies",
+          "reason": "read_errors:0;items_with_field_issues:61",
+          "count": 1
+        },
+        {
+          "code": "calendar_binding_unsupported",
+          "entity_pattern": "resources",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "calendar_binding_unsupported",
+          "entity_pattern": "assignments",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "inactive_task_unverified",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "summary_dependency_unverified",
+          "entity_pattern": "local:dependency:000058",
+          "reason": null,
+          "count": 1
+        }
+      ],
+      "exceptions": [
+        {
+          "rule_id": "C",
+          "revision": "historical-unresolved-v1",
+          "result": "inactive",
+          "evidence_id": null
+        }
+      ],
+      "plugin_dates_status": "not_run: publication was not admitted"
+    },
+    {
+      "case": "D",
+      "evidence": "evidence/live-D.json",
+      "page_id": "537573665",
+      "primary_error": "collection_partial",
+      "archive": "verified",
+      "page_version_before": 1,
+      "page_version_after": 1,
+      "MPXJ_read": 1,
+      "POST": 0,
+      "PUT": 0,
+      "blocker_count": 883,
+      "blocker_groups": [
+        {
+          "code": "field_unsupported",
+          "entity_pattern": "dependencies.[].lag_calendar",
+          "reason": "getter_unavailable:getCalendar",
+          "count": 76
+        },
+        {
+          "code": "field_unsupported",
+          "entity_pattern": "dependencies.[].quality_issues.[]",
+          "reason": "getter_unavailable:getCalendar",
+          "count": 76
+        },
+        {
+          "code": "resource_availability_unrepresented",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 67
+        },
+        {
+          "code": "calendar_inheritance_unsupported",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 67
+        },
+        {
+          "code": "field_missing",
+          "entity_pattern": "assignments.[].quality_issues.[]",
+          "reason": "getter_failed:getTimephasedWork:TypeError",
+          "count": 61
+        },
+        {
+          "code": "assignment_semantics_unrepresented:start",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 61
+        },
+        {
+          "code": "assignment_semantics_unrepresented:finish",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 61
+        },
+        {
+          "code": "task_semantics_unrepresented:task_type",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 57
+        },
+        {
+          "code": "assignment_semantics_unrepresented:segments",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 55
+        },
+        {
+          "code": "task_semantics_unrepresented:segments",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 51
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 39
+        },
+        {
+          "code": "task_actuals_unrepresented:stop",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 39
+        },
+        {
+          "code": "task_actuals_unrepresented:resume",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 39
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 34
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 31
+        },
+        {
+          "code": "task_actuals_unrepresented:actual_finish",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 29
+        },
+        {
+          "code": "task_semantics_unrepresented:constraint_type",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 13
+        },
+        {
+          "code": "task_semantics_unrepresented:constraint_date",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 13
+        },
+        {
+          "code": "assignment_partial",
+          "entity_pattern": "uid:[]",
+          "reason": null,
+          "count": 9
+        },
+        {
+          "code": "collection_partial",
+          "entity_pattern": "assignments",
+          "reason": "read_errors:0;items_with_field_issues:61",
+          "count": 1
+        },
+        {
+          "code": "collection_partial",
+          "entity_pattern": "dependencies",
+          "reason": "read_errors:0;items_with_field_issues:76",
+          "count": 1
+        },
+        {
+          "code": "calendar_binding_unsupported",
+          "entity_pattern": "resources",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "calendar_binding_unsupported",
+          "entity_pattern": "assignments",
+          "reason": null,
+          "count": 1
+        },
+        {
+          "code": "summary_dependency_unverified",
+          "entity_pattern": "local:dependency:000073",
+          "reason": null,
+          "count": 1
+        }
+      ],
+      "exceptions": [],
+      "plugin_dates_status": "not_run: publication was not admitted"
+    }
+  ],
+  "scope_boundary": "No product code, profiles, migrations or evidence of stages 01-12 changed. No admission bypass or direct-upload substitute.",
+  "new_source_chains": [
+    "evidence/new-source-diff.json",
+    "evidence/new-source-publish.json"
+  ]
+}

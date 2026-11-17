@@ -1,0 +1,13 @@
+{
+  "pytest_rc": 1,
+  "results": {
+    "passed": 714,
+    "failed": 6,
+    "skipped": 0
+  },
+  "product_failures": [
+    "A-D publication",
+    "binary diff/publish identity chain"
+  ],
+  "test_contour_defect": "Initial protection list included volatile pytest cache; pytest cache default was outside T. Source code/evidence unchanged; exactly two volatile files differed. Fixing contour and rerunning."
+}

@@ -1,0 +1,6 @@
+{
+  "status": "interrupted_by_executor",
+  "pytest_rc": 2,
+  "passed_before_interrupt": 491,
+  "reason": "Move final batch/crash/cache checks after cold MPP; preserve unit/archive/mpp/live group order. This run is not acceptance."
+}

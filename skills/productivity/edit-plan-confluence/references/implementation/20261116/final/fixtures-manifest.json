@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "fixtures": [
+    {
+      "id": "A",
+      "path": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89.mpp",
+      "sha256": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89",
+      "size_bytes": 635904,
+      "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89/doc_c7df61c64ba6_Переход_на_Trisigma_Только_пилот_150526.mpp",
+      "evidence": "master §20.7.4; user evidence 2026-11-16",
+      "identity_status": "confirmed",
+      "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89.mpp",
+      "status": "verified",
+      "original_verified": true,
+      "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+      "functional_status": "not_run",
+      "expected": {
+        "archive_task_count": 58,
+        "display_task_count": 57,
+        "dependency_count": 53,
+        "work_hours": "1576"
+      }
+    },
+    {
+      "id": "B",
+      "path": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317.mpp",
+      "sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+      "size_bytes": 586240,
+      "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317/doc_2f274d74d3ad_Переход_на_Trisigma_Только_пилот_190526.mpp",
+      "evidence": "master §20.7.4; user evidence 2026-11-16",
+      "identity_status": "source_bytes_verified",
+      "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317.mpp",
+      "status": "verified",
+      "original_verified": true,
+      "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+      "functional_status": "not_run",
+      "expected": {
+        "archive_task_count": 62,
+        "display_task_count": 61,
+        "dependency_count": 60,
+        "work_hours": "2096"
+      }
+    },
+    {
+      "id": "C",
+      "path": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
+      "sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+      "size_bytes": 532480,
+      "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7/doc_06ee0cb06cd4_Переход_на_Trisigma_Только_пилот_260526.mpp",
+      "evidence": "master §20.7.4; user evidence 2026-11-16",
+      "identity_status": "source_bytes_verified",
+      "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
+      "status": "verified",
+      "original_verified": true,
+      "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+      "functional_status": "not_run",
+      "expected": {
+        "archive_task_count": 62,
+        "display_task_count": 61,
+        "dependency_count": 61,
+        "work_hours": "2088"
+      }
+    },
+    {
+      "id": "D",
+      "path": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9.mpp",
+      "sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+      "size_bytes": 544256,
+      "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9/doc_810661426a27_Переход_на_Trisigma_Только_пилот_240626.mpp",
+      "evidence": "master §20.7.4; user evidence 2026-11-16",
+      "identity_status": "source_bytes_verified",
+      "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9.mpp",
+      "status": "verified",
+      "original_verified": true,
+      "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+      "functional_status": "not_run",
+      "expected": {
+        "archive_task_count": 72,
+        "display_task_count": 71,
+        "dependency_count": 76,
+        "work_hours": "3136"
+      }
+    },
+    {
+      "id": "E",
+      "path": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a.mpp",
+      "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+      "size_bytes": 552960,
+      "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a/doc_b844448dc7e8_Переход_на_Trisigma_Только_пилот_090726.mpp",
+      "evidence": "master §20.7.4; user evidence 2026-11-16",
+      "identity_status": "source_bytes_verified",
+      "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a.mpp",
+      "status": "verified",
+      "original_verified": true,
+      "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+      "functional_status": "not_run",
+      "expected": {
+        "archive_task_count": 78,
+        "display_task_count": 77,
+        "dependency_count": 84,
+        "work_hours": null
+      }
+    },
+    {
+      "id": "F",
+      "path": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+      "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+      "size_bytes": 567808,
+      "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c/doc_0d7fb1d86009_Переход на Trisigma (Только пилот)230726.mpp",
+      "evidence": "master §20.7.4; user evidence 2026-11-16",
+      "identity_status": "source_bytes_verified",
+      "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+      "status": "verified",
+      "original_verified": true,
+      "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+      "functional_status": "not_run",
+      "expected": {
+        "archive_task_count": 86,
+        "display_task_count": 85,
+        "dependency_count": 93,
+        "work_hours": null
+      }
+    },
+    {
+      "id": "D-risks",
+      "path": "994989f149ac212e9b5a1122cea5b01363cb2b2d68e9d8308238585cbd5aaab0.mpp",
+      "sha256": "994989f149ac212e9b5a1122cea5b01363cb2b2d68e9d8308238585cbd5aaab0",
+      "size_bytes": 548352,
+      "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/994989f149ac212e9b5a1122cea5b01363cb2b2d68e9d8308238585cbd5aaab0/doc_2aca2b8b8551_Переход_на_Trisigma_Только_пилот_260626_risks.mpp",
+      "evidence": "master §20.7.4; user evidence 2026-11-16",
+      "identity_status": "source_bytes_verified",
+      "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/994989f149ac212e9b5a1122cea5b01363cb2b2d68e9d8308238585cbd5aaab0.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/994989f149ac212e9b5a1122cea5b01363cb2b2d68e9d8308238585cbd5aaab0.mpp",
+      "status": "verified",
+      "original_verified": true,
+      "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+      "functional_status": "not_run",
+      "expected": null
+    }
+  ],
+  "supporting_fixtures": [
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/ab_080926_пункт12.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/ab_080926_пункт12.mpp",
+      "sha256": "039d61d0962db22066cf9f7f601a77698ca03f8a68fe57d71bcbf682ebc933e9",
+      "size_bytes": 506880
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/ab_080926_пункт12__assignments.csv",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/ab_080926_пункт12__assignments.csv",
+      "sha256": "b91c78df68154c30b5805b873c7d5490ec6543a3d75f3ecbc917c18150acc230",
+      "size_bytes": 4666
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/ab_080926_пункт12__resources.csv",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/ab_080926_пункт12__resources.csv",
+      "sha256": "974bd73c1a30cd5505866cdf57c4e934502f9223868ab0d9ea5b8c93c19d03db",
+      "size_bytes": 736
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/ab_080926_пункт12__tasks.csv",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/ab_080926_пункт12__tasks.csv",
+      "sha256": "4e55269c89cfd4da1d863f5f05ebac783b8b0664c84d9ecf9114ed2a32f2498e",
+      "size_bytes": 5493
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/Inbox/A.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/Inbox/A.mpp",
+      "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "size_bytes": 180736
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/Inbox/later.mpp.part",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/Inbox/later.mpp.part",
+      "sha256": "49a94f77f840fae4c405061a76ca9d8c19caa765ecb3843a8600da301e13e965",
+      "size_bytes": 17
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/Inbox/nested/excluded.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/Inbox/nested/excluded.mpp",
+      "sha256": "7bf4c9c5bf7389bfb9deded1d88b5cd6b4be750afa79e5af1cdaf2c21c825226",
+      "size_bytes": 12
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/Inbox/~$open.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/Inbox/~$open.mpp",
+      "sha256": "a33e7cf009961aba46cc8f925dd4055d7bdb56ee062efc2a159f2052cba14ec1",
+      "size_bytes": 19
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/continue.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/continue.json",
+      "sha256": "8affe37a1719b97bbf41d3450530da1baf30ff4bb26d6ddba121ef90f49431df",
+      "size_bytes": 366
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/corrupt.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/corrupt.mpp",
+      "sha256": "78298a6b9f6de78e2f427add9065032ed2d6983ede930291bbe6d46b746ddc2d",
+      "size_bytes": 56
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/duplicate-ids.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/duplicate-ids.json",
+      "sha256": "a680d1d4b3a66a452fbf9c3bf0442d592d1d21e4e31c1d87d74d753c9a3abf60",
+      "size_bytes": 251
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/duplicate.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/duplicate.mpp",
+      "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "size_bytes": 180736
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/first.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/first.mpp",
+      "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "size_bytes": 180736
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/fixtures-manifest.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/fixtures-manifest.json",
+      "sha256": "dbc33ce29470325295ab99d763ad90c84264d78c6771481fcb9606412515f165",
+      "size_bytes": 1770
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/invalid-null.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/invalid-null.json",
+      "sha256": "27039e53100d6a5c036cccb573ca37da7948f48857d492554b29c5f1155e16bf",
+      "size_bytes": 383
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/batch/stop.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/batch/stop.json",
+      "sha256": "6a2331b1740a8bad3c6c5a89aa385f841be338d00a238fde2e61fa72dd9a4f3d",
+      "size_bytes": 388
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/gantt-test-template.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/gantt-test-template.json",
+      "sha256": "ba41ea47f7ee0d8c6c45145b2b12ac8c3470cc73332449388f0cee7d9f494c92",
+      "size_bytes": 18910
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/manifest.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/golden/manifest.json",
+      "sha256": "adc89ac7795ee7bcf1021939d455c33142df49d7afca4453613672128066fc98",
+      "size_bytes": 1027
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/plugin-controls-expected.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/golden/plugin-controls-expected.json",
+      "sha256": "3c45775447a11881e7dd043e078e434a2126265842c008981c1c3f230d17fdbc",
+      "size_bytes": 1011
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/plugin-controls-method.md",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/golden/plugin-controls-method.md",
+      "sha256": "2fb5f8f0b0bf227ebd5deeb13d43d1ebc2852a4ef2862dcf7420ae7d1593c017",
+      "size_bytes": 2063
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/plugin-controls.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/golden/plugin-controls.json",
+      "sha256": "58d113e0fad5646479562be5028d9e35bcc259ca62f780829723ce6d18bcb7f0",
+      "size_bytes": 128238
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/prepared-unit-gantt.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/golden/prepared-unit-gantt.json",
+      "sha256": "d276e4b75c667231040200882c0bd0f4193451cd6bcf1a7c7936adcb81177bd0",
+      "size_bytes": 6956
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/prepared-unit-storage.xml",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/golden/prepared-unit-storage.xml",
+      "sha256": "364a56885eb8a38193ad0dcee071daedb4dffe0503e072741fa46e9c3ed6e6b8",
+      "size_bytes": 90
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/batch-decision-registration/manifest.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/batch-decision-registration/manifest.json",
+      "sha256": "03c20a77cffa2ad8e43477f07f78ecca537c27c5395348cefce82ddcf720bdac",
+      "size_bytes": 419
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/batch-decision-registration/provenance.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/batch-decision-registration/provenance.json",
+      "sha256": "b1d4e388ff47ce3231dc198063b96fb7302f70c3e19c3cc30593da1181340a94",
+      "size_bytes": 329
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary_recipe.py",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/binary_recipe.py",
+      "sha256": "fab664afd18fdb808a08c78302bbf1002c1d03308f57095c3aef13f2122b391e",
+      "size_bytes": 2822
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/calendar-bindings.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/calendar-bindings.json",
+      "sha256": "017543e6055c2f49edf372be82f17159cc1fb2b8b5289d678ab7eb49ba69a5f1",
+      "size_bytes": 112346
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/calendar-intervals.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/calendar-intervals.json",
+      "sha256": "0f3b87097e0f9f7c39e7d0260faf8ba3876586ff315dc305fa5fc2b42bbf7238",
+      "size_bytes": 112279
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/calendar-recurring-exceptions-project2010-mpp14.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/calendar-recurring-exceptions-project2010-mpp14.mpp",
+      "sha256": "3c3ddd9e595154ed562199d2b91d43fe4004fe9cfeca9a021e229f25874e6d3a",
+      "size_bytes": 222720
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/graph-invalid.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/graph-invalid.json",
+      "sha256": "d7a3bd8e22dcd40b49df773dc449ab19afe0980324230f94e02347d36d9d71cd",
+      "size_bytes": 184090
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/graph-invalid.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/graph-invalid.mpp",
+      "sha256": "7c6429b58c31bf388aa094e33bae245320a517a918a25aea1b1cce5fa2ad7e20",
+      "size_bytes": 180736
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/identity-confirmation/manifest.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/identity-confirmation/manifest.json",
+      "sha256": "e160544b509e43264cc57dd516a9bef3422bc28148dd645160f780a04a89c29d",
+      "size_bytes": 259
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/identity-confirmation/user-statement.txt",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/identity-confirmation/user-statement.txt",
+      "sha256": "6476a9a05b99d8bd092358575bd707007748f9f4f100cc1b663a72c767b3df30",
+      "size_bytes": 154
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/manifest.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/manifest.json",
+      "sha256": "ffbb756a22d6d99bd5ac89f977f594c9f0d281e871ad9b6b9f23228ab1eee8c8",
+      "size_bytes": 7064
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/missing-getter-errors.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/missing-getter-errors.json",
+      "sha256": "3faa19935655a6286bbb2a9917cd9923f309a963c5d4b6cbbd9de8f9cf938735",
+      "size_bytes": 174251
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/mpp14calendar.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/mpp14calendar.mpp",
+      "sha256": "98c8a0fb569be058c0a76ec61d2918f4d81a2a6af9cdcc3ffd1e5640b888e8ec",
+      "size_bytes": 188416
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/mpp14duration.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/mpp14duration.mpp",
+      "sha256": "1bb7752a049c05224dd1397d17273c26b1541755c2f13b70da33523506b7a705",
+      "size_bytes": 184832
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/mpp14relations.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/mpp14relations.mpp",
+      "sha256": "8f33cdb774aa090b664d90145879acc8a289057ca45a6575884eb0da9fd91f30",
+      "size_bytes": 180736
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/mpp14splittask.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/mpp14splittask.mpp",
+      "sha256": "75fbd3626845ea2912cc2d7a1ce1e0b647e1b7dbcb33f7c78f45624eee8d6d31",
+      "size_bytes": 176640
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/mpxj-LICENSE",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/mpxj-LICENSE",
+      "sha256": "20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331",
+      "size_bytes": 26526
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/new-source-identity-resume/manifest.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/new-source-identity-resume/manifest.json",
+      "sha256": "42b6ededbd20b68e065e5e296c851c89091fa72fa81c0cdda5ed00bfdf09810a",
+      "size_bytes": 830
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/new-source-identity-resume/prepared-export.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/new-source-identity-resume/prepared-export.json",
+      "sha256": "8a3e8c71859d9d8a512cf834dd3dd340cbd43cbf1beb74a7e64dc9fdd2cd6900",
+      "size_bytes": 74302
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/new-source-identity-resume/test-only-user-evidence.txt",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/new-source-identity-resume/test-only-user-evidence.txt",
+      "sha256": "fe5fd3b0f097aca5fda7f043d3740a68253e3a2d92890eb0d8985a35cc91a1aa",
+      "size_bytes": 137
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/relations-all-types.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/relations-all-types.json",
+      "sha256": "121ade72bc562cb4f8f91fc983fd23e8c149bd8a78da146bce16f740c38cf55f",
+      "size_bytes": 174201
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/relations-all-types.mpp",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/relations-all-types.mpp",
+      "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "size_bytes": 180736
+    },
+    {
+      "source": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/upstream-manifest.json",
+      "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/supporting/synthetic/upstream-manifest.json",
+      "sha256": "90d3bea9c4f73c7fd157f2f3bfb5019a1c947aad45771e720648fc928b7a3370",
+      "size_bytes": 2837
+    }
+  ],
+  "copies_are_not_transport_cache_only": true,
+  "verified_at": "2026-11-17T07:32:27.590309+00:00"
+}

@@ -1,0 +1,20 @@
+{
+  "report_and_source_hooks_checked": [
+    "_stage02_report",
+    "_stage03_report",
+    "_stage04_report",
+    "_stage05_report",
+    "_stage06_report",
+    "_stage07_report",
+    "_stage08_report",
+    "_stage09_report",
+    "_stage09_sources",
+    "_stage10_sources",
+    "_stage10_report",
+    "_stage11_sources",
+    "_stage11_report",
+    "_stage12_sources",
+    "_stage12_report"
+  ],
+  "changed": []
+}

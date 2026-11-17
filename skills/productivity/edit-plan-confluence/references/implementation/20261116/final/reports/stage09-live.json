@@ -1,0 +1,537 @@
+{
+  "status": "passed",
+  "test_parent": "519501810",
+  "scope": "stage09 admission, bytes and storage; schedule:not_verified",
+  "admitted_fixture": "explicit synthetic export, no MPXJ read claimed",
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647/child/attachment"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content/537573647/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573648"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537573647/gantt-chart-051c827d564c4b009e46d30599f65abb.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573648"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537573647/gantt-chart-051c827d564c4b009e46d30599f65abb.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647/child/attachment"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/content/537573647"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573648"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537573647/gantt-chart-051c827d564c4b009e46d30599f65abb.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573648"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537573647/gantt-chart-051c827d564c4b009e46d30599f65abb.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537573647/child/attachment"
+    }
+  ],
+  "page_id": "537573647",
+  "receipt": {
+    "schema_version": 1,
+    "operation_id": "operation_9e01ba17423642fc9014d2feb0209955",
+    "item_id": "item_b395946af2d94e05b6c6e15b801a8554",
+    "status": "published_with_warnings",
+    "mode": "publish",
+    "exit_code": 0,
+    "project_slug": "stage09-live-test",
+    "source": {
+      "name": "synthetic-parsed-contract.mpp",
+      "sha256": "b7432224b0956ae3d08c6fd89722f2d02873c24dc7f16ba4fa49278be7cb0788",
+      "size_bytes": 59
+    },
+    "snapshot_id": "snapshot_e335693aa31f48be82864a55c117833e",
+    "page_id": "537573647",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537573647",
+    "task_count": 3,
+    "display_task_count": 3,
+    "dependency_count": 1,
+    "exceptions": [],
+    "attachment_version": 1,
+    "verification": {
+      "archive": "verified",
+      "attachment": "verified",
+      "storage": "verified",
+      "schedule": {
+        "status": "not_verified",
+        "checks": [
+          {
+            "row": 5,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "model"
+            ]
+          },
+          {
+            "row": 6,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ]
+          }
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "evidence_ids": [
+          "artifact_81c76a8ae6774b6591d073c360fff0e3"
+        ]
+      }
+    },
+    "published": true,
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_81c76a8ae6774b6591d073c360fff0e3"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_81c76a8ae6774b6591d073c360fff0e3"
+      }
+    ],
+    "completed_stages": [
+      "prepared",
+      "archived",
+      "admitted",
+      "attachment_uploaded",
+      "attachment_verified",
+      "storage_written",
+      "storage_verified",
+      "confirmed"
+    ],
+    "external_effect": "storage_written",
+    "error": null
+  },
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 1,
+    "PUT": 1
+  },
+  "attachment_id": "537573648",
+  "received_sha256": "d805ab00d512d8a3b9339939424a52a4381414ee94129e974f3e1c4bd5079bfc",
+  "page_version": 2,
+  "binary": {
+    "receipt": {
+      "schema_version": 1,
+      "operation_id": "operation_048cef15e3094ac389036a8f1d37553c",
+      "item_id": "item_1c083b9ae75843a5886c0b0ef4d79660",
+      "status": "failed",
+      "mode": "publish",
+      "exit_code": 5,
+      "project_slug": "stage09-binary-test",
+      "source": {
+        "name": "real-input.mpp",
+        "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+        "size_bytes": 180736
+      },
+      "snapshot_id": "snapshot_c414ca995dc6441880e67403169b3e37",
+      "page_id": null,
+      "page_url": null,
+      "task_count": 6,
+      "display_task_count": 5,
+      "dependency_count": 4,
+      "exceptions": [],
+      "attachment_version": null,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_applicable",
+        "storage": "not_applicable",
+        "schedule": {
+          "status": "not_verified",
+          "checks": [
+            {
+              "row": 2,
+              "category": "nonimpact_incomplete",
+              "code": "nested_collection_missing",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "assignments.0.timephased_quality",
+                "assignments.1.timephased_quality",
+                "assignments.2.timephased_quality"
+              ]
+            },
+            {
+              "row": 3,
+              "category": "incomplete",
+              "code": "collection_partial",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 2,
+              "example_entities": [
+                "assignments",
+                "dependencies"
+              ]
+            },
+            {
+              "row": 3,
+              "category": "incomplete",
+              "code": "field_missing",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "assignments.0.quality_issues.0",
+                "assignments.1.quality_issues.0",
+                "assignments.2.quality_issues.0"
+              ]
+            },
+            {
+              "row": 3,
+              "category": "incomplete",
+              "code": "field_unsupported",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 8,
+              "example_entities": [
+                "dependencies.0.lag_calendar",
+                "dependencies.0.quality_issues.0",
+                "dependencies.1.lag_calendar"
+              ]
+            },
+            {
+              "row": 5,
+              "category": "local_unsupported",
+              "code": "local_scheduler_prepared_unsupported",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "model"
+              ]
+            },
+            {
+              "row": 6,
+              "category": "plugin_unobserved",
+              "code": "specific_plan_plugin_result_not_verified",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "plugin"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "assignment_partial",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "assignment_semantics_unrepresented:finish",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "assignment_semantics_unrepresented:segments",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "assignment_semantics_unrepresented:start",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "calendar_binding_unsupported",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "resources"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "calendar_inheritance_unsupported",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "uid:2"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "dependency_combination_unverified",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "local:dependency:000001"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "dependency_lag_unit_unsupported",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "local:dependency:000001"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "resource_availability_unrepresented",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "uid:0"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "summary_root_missing",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "summary"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "task_semantics_unrepresented:effort_driven",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "task_semantics_unrepresented:segments",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "task_semantics_unrepresented:task_type",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            }
+          ],
+          "limitations": [
+            "local_scheduler_not_run",
+            "plan_plugin_result_not_verified"
+          ],
+          "evidence_ids": [
+            "artifact_80daa35eef41423fabfb347dcf6645de"
+          ]
+        }
+      },
+      "published": false,
+      "warnings": [
+        {
+          "code": "local_scheduler_prepared_unsupported",
+          "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_80daa35eef41423fabfb347dcf6645de"
+        },
+        {
+          "code": "nested_collection_missing",
+          "message": "nested_collection_missing: 5 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_80daa35eef41423fabfb347dcf6645de"
+        },
+        {
+          "code": "specific_plan_plugin_result_not_verified",
+          "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_80daa35eef41423fabfb347dcf6645de"
+        }
+      ],
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived"
+      ],
+      "external_effect": "none",
+      "error": {
+        "code": "collection_partial",
+        "message": "collection_partial",
+        "retryable": false,
+        "next_action": "operation show --operation-id operation_048cef15e3094ac389036a8f1d37553c"
+      }
+    },
+    "counters": {
+      "MPXJ_read": 1,
+      "cache_hit": 0,
+      "cache_miss": 1,
+      "POST": 0,
+      "PUT": 0
+    },
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537573647"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537573647/child/attachment"
+      }
+    ]
+  },
+  "POST": 2,
+  "PUT": 1
+}

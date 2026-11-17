@@ -1,0 +1,237 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]",
+  "observed_at": "2026-11-17T07:51:06.942888+00:00",
+  "page_id": "537573665",
+  "parent_id": "519501810",
+  "title": "EditPlanConfluence stage 13 test_real_publish_repeat_and_observed_dates[D] 20261117T075106854839",
+  "before": {
+    "id": "537573665",
+    "type": "page",
+    "status": "current",
+    "title": "EditPlanConfluence stage 13 test_real_publish_repeat_and_observed_dates[D] 20261117T075106854839",
+    "space": {
+      "id": 413171716,
+      "key": "~tkachenkoav",
+      "name": "Ткаченко Александр Владимирович",
+      "status": "current",
+      "type": "personal",
+      "_links": {
+        "webui": "/spaces/viewspace.action?key=~tkachenkoav",
+        "self": "https://dom.tutu.ru/rest/api/space/~tkachenkoav"
+      },
+      "_expandable": {
+        "metadata": "",
+        "icon": "",
+        "description": "",
+        "retentionPolicy": "",
+        "homepage": "/rest/api/content/412098093"
+      }
+    },
+    "history": {
+      "latest": true,
+      "createdBy": {
+        "type": "known",
+        "username": "tkachenkoav",
+        "userKey": "8a8383b593a26ea60194abdf8d090020",
+        "profilePicture": {
+          "path": "/download/attachments/400613401/cup-profile-picture.png",
+          "width": 48,
+          "height": 48,
+          "isDefault": false
+        },
+        "displayName": "Ткаченко Александр Владимирович",
+        "_links": {
+          "self": "https://dom.tutu.ru/rest/api/user?key=8a8383b593a26ea60194abdf8d090020"
+        },
+        "_expandable": {
+          "status": ""
+        }
+      },
+      "createdDate": "2026-11-17T10:51:06.887+03:00",
+      "_links": {
+        "self": "https://dom.tutu.ru/rest/api/content/537573665/history"
+      },
+      "_expandable": {
+        "lastUpdated": "",
+        "previousVersion": "",
+        "contributors": "",
+        "nextVersion": ""
+      }
+    },
+    "version": {
+      "by": {
+        "type": "known",
+        "username": "tkachenkoav",
+        "userKey": "8a8383b593a26ea60194abdf8d090020",
+        "profilePicture": {
+          "path": "/download/attachments/400613401/cup-profile-picture.png",
+          "width": 48,
+          "height": 48,
+          "isDefault": false
+        },
+        "displayName": "Ткаченко Александр Владимирович",
+        "_links": {
+          "self": "https://dom.tutu.ru/rest/api/user?key=8a8383b593a26ea60194abdf8d090020"
+        },
+        "_expandable": {
+          "status": ""
+        }
+      },
+      "when": "2026-11-17T10:51:06.887+03:00",
+      "message": "",
+      "number": 1,
+      "minorEdit": false,
+      "hidden": false,
+      "_links": {
+        "self": "https://dom.tutu.ru/rest/experimental/content/537573665/version/1"
+      },
+      "_expandable": {
+        "content": "/rest/api/content/537573665"
+      }
+    },
+    "ancestors": [
+      {
+        "id": "412098093",
+        "type": "page",
+        "status": "current",
+        "title": "Ткаченко Александр - РП Департамент Аналитики и данных: личная страница.",
+        "position": -1,
+        "extensions": {
+          "position": "none"
+        },
+        "_links": {
+          "webui": "/pages/viewpage.action?pageId=412098093",
+          "edit": "/pages/resumedraft.action?draftId=412098093",
+          "tinyui": "/x/LR6QG",
+          "self": "https://dom.tutu.ru/rest/api/content/412098093"
+        },
+        "_expandable": {
+          "container": "/rest/api/space/~tkachenkoav",
+          "metadata": "",
+          "operations": "",
+          "children": "/rest/api/content/412098093/child",
+          "restrictions": "/rest/api/content/412098093/restriction/byOperation",
+          "history": "/rest/api/content/412098093/history",
+          "ancestors": "",
+          "body": "",
+          "version": "",
+          "descendants": "/rest/api/content/412098093/descendant",
+          "space": "/rest/api/space/~tkachenkoav"
+        }
+      },
+      {
+        "id": "422705401",
+        "type": "page",
+        "status": "current",
+        "title": "Страницы",
+        "position": 2,
+        "extensions": {
+          "position": 2
+        },
+        "_links": {
+          "webui": "/pages/viewpage.action?pageId=422705401",
+          "edit": "/pages/resumedraft.action?draftId=422705401",
+          "tinyui": "/x/_fgxGQ",
+          "self": "https://dom.tutu.ru/rest/api/content/422705401"
+        },
+        "_expandable": {
+          "container": "/rest/api/space/~tkachenkoav",
+          "metadata": "",
+          "operations": "",
+          "children": "/rest/api/content/422705401/child",
+          "restrictions": "/rest/api/content/422705401/restriction/byOperation",
+          "history": "/rest/api/content/422705401/history",
+          "ancestors": "",
+          "body": "",
+          "version": "",
+          "descendants": "/rest/api/content/422705401/descendant",
+          "space": "/rest/api/space/~tkachenkoav"
+        }
+      },
+      {
+        "id": "519501810",
+        "type": "page",
+        "status": "current",
+        "title": "Для тестирования проект. (вар. п2) AB-платформа ТУТУ - Таймлайн и Стоимость доработок",
+        "position": 19,
+        "extensions": {
+          "position": 19
+        },
+        "_links": {
+          "webui": "/pages/viewpage.action?pageId=519501810",
+          "edit": "/pages/resumedraft.action?draftId=519501810",
+          "tinyui": "/x/8vf2Hg",
+          "self": "https://dom.tutu.ru/rest/api/content/519501810"
+        },
+        "_expandable": {
+          "container": "/rest/api/space/~tkachenkoav",
+          "metadata": "",
+          "operations": "",
+          "children": "/rest/api/content/519501810/child",
+          "restrictions": "/rest/api/content/519501810/restriction/byOperation",
+          "history": "/rest/api/content/519501810/history",
+          "ancestors": "",
+          "body": "",
+          "version": "",
+          "descendants": "/rest/api/content/519501810/descendant",
+          "space": "/rest/api/space/~tkachenkoav"
+        }
+      }
+    ],
+    "position": -1,
+    "container": {
+      "id": 413171716,
+      "key": "~tkachenkoav",
+      "name": "Ткаченко Александр Владимирович",
+      "status": "current",
+      "type": "personal",
+      "_links": {
+        "webui": "/spaces/viewspace.action?key=~tkachenkoav",
+        "self": "https://dom.tutu.ru/rest/api/space/~tkachenkoav"
+      },
+      "_expandable": {
+        "metadata": "",
+        "icon": "",
+        "description": "",
+        "retentionPolicy": "",
+        "homepage": "/rest/api/content/412098093"
+      }
+    },
+    "body": {
+      "storage": {
+        "value": "<p>Stage 13 acceptance neighbour</p>",
+        "representation": "storage",
+        "_expandable": {
+          "content": "/rest/api/content/537573665"
+        }
+      },
+      "_expandable": {
+        "editor": "",
+        "view": "",
+        "export_view": "",
+        "styled_view": "",
+        "anonymous_export_view": ""
+      }
+    },
+    "extensions": {
+      "position": "none"
+    },
+    "_links": {
+      "webui": "/display/~tkachenkoav/EditPlanConfluence+stage+13+test_real_publish_repeat_and_observed_dates%5BD%5D+20261117T075106854839",
+      "edit": "/pages/resumedraft.action?draftId=537573665",
+      "tinyui": "/x/IbkKI",
+      "collection": "/rest/api/content",
+      "base": "https://dom.tutu.ru",
+      "context": "",
+      "self": "https://dom.tutu.ru/rest/api/content/537573665"
+    },
+    "_expandable": {
+      "metadata": "",
+      "operations": "",
+      "children": "/rest/api/content/537573665/child",
+      "restrictions": "/rest/api/content/537573665/restriction/byOperation",
+      "descendants": "/rest/api/content/537573665/descendant"
+    }
+  },
+  "source": "dedicated newly created test page"
+}

@@ -1,0 +1,237 @@
+"""Real A-D via the public CLI; admission is never patched to force a pass."""
+from copy import deepcopy
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import sys
+
+import pytest
+from mofs_index.db import connect_durable
+from mofs_index.plan import query as q, writer as w
+
+pytestmark = [pytest.mark.acceptance, pytest.mark.confluence_live]
+PRODUCTION = {'496600693', '499550441', '499566117', '506248940', '519492935'}
+PARENT = '519501810'
+
+
+@pytest.fixture
+def live_page(tmp_path, request, monkeypatch, stage13_record):
+    from env import load_confluence_env
+    from conf_client import ConfluenceClient
+    import conf_client, gantt_attachment
+    from urllib.parse import urlsplit
+    token = load_confluence_env(Path.home()/'USERTOOLS/ConfluenceSync/.env')['CONFLUENCE_TOKEN']
+    monkeypatch.setenv('CONFLUENCE_TOKEN', token)
+    calls = []
+    def trace(original):
+        def invoke(req, *args, **kwargs):
+            path = urlsplit(req.full_url).path
+            assert not any('/'+page+'/' in path or path.endswith('/'+page) for page in PRODUCTION)
+            calls.append({'method': req.get_method(), 'path': path})
+            return original(req, *args, **kwargs)
+        return invoke
+    monkeypatch.setattr(conf_client, 'urlopen', trace(conf_client.urlopen))
+    monkeypatch.setattr(gantt_attachment, 'urlopen', trace(gantt_attachment.urlopen))
+    client = ConfluenceClient(token=token)
+    parent = client.get_page(PARENT)
+    child = client.create_page('EditPlanConfluence stage 13 '+request.node.name+' '+
+        datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f'), parent['space']['key'],
+        '<p>Stage 13 acceptance neighbour</p>', PARENT)
+    page_id = str(child['id'])
+    assert page_id not in PRODUCTION|{PARENT}
+    if hasattr(request.config, '_stage13_live_pages'):
+        request.config._stage13_live_pages.add(page_id)
+    stage13_record('live-target-'+page_id, {'page_id': page_id, 'parent_id': PARENT,
+        'title': child['title'], 'before': child, 'source': 'dedicated newly created test page'})
+    yield client, page_id, child
+    stage13_record('live-target-'+page_id+'-calls', {'page_id': page_id, 'calls': calls,
+        'POST': sum(c['method']=='POST' for c in calls), 'PUT': sum(c['method']=='PUT' for c in calls)})
+
+
+def observe_plugin(client, page_id, expected, request, folder):
+    """Read-only browser: observe the actual attachment and runtime project."""
+    root = getattr(request.config, '_acceptance_root', folder)
+    if (root/'browser-deps').is_dir(): sys.path.insert(0, str(root/'browser-deps'))
+    if (root/'browsers').is_dir(): os.environ['PLAYWRIGHT_BROWSERS_PATH'] = str(root/'browsers')
+    from playwright.sync_api import sync_playwright
+    from urllib.parse import urlsplit
+    received = []
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True, args=['--no-sandbox'])
+        ctx = browser.new_context(timezone_id='Europe/Moscow', extra_http_headers={'Cache-Control':'no-cache'})
+        def route(r):
+            if urlsplit(r.request.url).netloc != urlsplit(client.base_url).netloc:
+                r.abort(); return
+            if r.request.method not in ('GET','HEAD'):
+                r.abort(); return
+            r.continue_(headers={**r.request.headers, 'Authorization':'Bearer '+client.token})
+        ctx.route('**/*', route)
+        page = ctx.new_page()
+        def capture(response):
+            if response.status == 200 and '/download/attachments/'+page_id+'/' in response.url:
+                received.append({'url':response.url, 'bytes':response.body()})
+        page.on('response', capture)
+        page.goto(client.base_url+'/pages/viewpage.action?pageId='+page_id, wait_until='domcontentloaded', timeout=60000)
+        frame = page.wait_for_selector('iframe[src*="gantt-chart.html"]', timeout=45000).content_frame()
+        assert frame is not None
+        frame.wait_for_function('() => window.gantt?.project?.eventStore?.allRecords?.length > 1', timeout=45000)
+        observation = frame.evaluate('''async () => {
+            await gantt.project.commitAsync();
+            const local = d => d && [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')+'T'+[d.getHours(),d.getMinutes(),d.getSeconds()].map(x=>String(x).padStart(2,'0')).join(':');
+            return {build:__NEXT_DATA__.buildId, engine_version:bryntum.getVersion('gantt'),
+                tasks:gantt.project.eventStore.allRecords.map(t=>({id:t.id,name:t.name,start:local(t.startDate),finish:local(t.endDate),milestone:t.isMilestone})),
+                dependency_count:gantt.project.dependencyStore.count};
+        }''')
+        observation['confluence_version'] = page.locator('meta[name="ajs-version-number"]').get_attribute('content')
+        assert received and received[-1]['bytes'] == expected
+        observation['browser_received_sha256'] = hashlib.sha256(received[-1]['bytes']).hexdigest()
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder/'browser-received.json').write_bytes(received[-1]['bytes'])
+        frame.locator('body').screenshot(path=str(folder/'render.png'))
+        ctx.unroute_all(behavior='wait')
+        browser.close()
+    return observation
+
+
+@pytest.mark.parametrize('case', ['A','B','C','D'])
+def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):
+    from macro import find_macro
+    from itogo import compute_itogo_from_prepared
+    from prepared_plan import PreparedPlan, fingerprint
+    client, page_id, before = live_page
+    context, run = stage13_cli
+    source, fixture = stage13_input(case)
+    # Real Trisigma scope also exercises historical B/C rule diagnostics.
+    result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                 '--timezone-hint', 'Europe/Moscow', live=True)
+    counters = deepcopy(run.last_probe)
+    after = client.get_page(page_id)
+    conn = connect_durable(context.db)
+    try:
+        operation = result['operation_id']
+        snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None
+        prep = q.get_preparation_result(conn, operation) if operation else None
+        versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None
+        status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,
+            'page_id': page_id, 'page_version_before': before['version']['number'],
+            'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],
+            'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,
+            'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',
+            'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}
+        stage13_record('live-'+case, status)
+        assert result['verification']['archive'] == 'verified', result
+        assert counters['MPXJ_read'] == 1
+        assert result['exit_code'] == 0 and result['published'] is True, result
+        assert after['version']['number']-before['version']['number'] == 1
+        attachment_version_before = 0  # Dedicated empty page has no managed attachment.
+        assert result['attachment_version']-attachment_version_before == 1
+        assert len([v for v in versions['versions'] if v['kind']=='publication']) == 1
+        artifact = q.get_artifact(conn, prep['representation_artifact_id'])
+        expected = Path(w.verify_artifact(conn, artifact['artifact_id'])).read_bytes()
+        macro = find_macro(after['body']['storage']['value'])
+        attachment = next(a for a in client.list_attachments(page_id) if a['title']==macro.attachment_name)
+        received = client.download_attachment_version(page_id, attachment['id'], macro.attachment_name, result['attachment_version'])
+        assert expected == received
+        status.update(attachment_id=attachment['id'], attachment_version_before=0,
+            attachment_version_after=result['attachment_version'], expected_sha256=hashlib.sha256(expected).hexdigest(),
+            received_sha256=hashlib.sha256(received).hexdigest())
+        root = request.config._acceptance_root
+        observation = observe_plugin(client, page_id, expected, request, root/'live-stage13'/case)
+        status['plugin_observation'] = observation
+        normalized = json.loads(snapshot['source_json'])
+        source_dates = {str(t['id']):t for t in normalized['tasks'] if t.get('id') != 0}
+        # The converter preserves source IDs. Compare each task/milestone to the
+        # source, never just the summary root or a local scheduler result.
+        for task in observation['tasks']:
+            source_task = source_dates.get(str(task['id']))
+            if source_task:
+                for original, observed in [('start','start'),('finish','finish')]:
+                    expected_date = source_task[original].get('value')
+                    if expected_date:
+                        delta = abs((datetime.fromisoformat(task[observed])-datetime.fromisoformat(expected_date)).total_seconds())
+                        assert delta <= 60
+        repeat = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        status['repeat'] = repeat; status['repeat_counters'] = run.last_probe
+        assert repeat['status'] == 'unchanged' and repeat['published'] is True
+        assert run.last_probe['MPXJ_read'] == 0 and run.last_probe['cache_hit'] >= 1
+        assert run.last_probe['POST'] == run.last_probe['PUT'] == 0
+        assert client.get_page(page_id)['version']['number'] == after['version']['number']
+        assert client.get_attachment(attachment['id'])['version']['number'] == result['attachment_version']
+        stage13_record('live-'+case, status)
+    finally:
+        conn.close()
+
+
+@pytest.mark.parametrize('action', ['diff','publish'])
+def test_new_binary_identity_to_publication(action, live_page, stage13_cli, stage13_record, tmp_path):
+    from plan_rules import relation_signature, task_context
+    from prepared_plan import fingerprint
+    client, page_id, _ = live_page
+    context, run = stage13_cli
+    fixtures = Path(__file__).resolve().parents[1]/'fixtures/synthetic'
+    anchor_source = fixtures/'mpp14relations.mpp'
+    anchor = run('diff', '--mpp', str(anchor_source), '--page-id', page_id, '--project-slug', 'stage13-trisigma',
+                 '--timezone-hint', 'Europe/Moscow', live=True)
+    assert anchor['snapshot_id']
+    conn = connect_durable(context.db)
+    try:
+        normalized = json.loads(q.get_snapshot(conn, anchor['snapshot_id'])['source_json'])
+        dep = next(d for d in normalized['dependencies'] if d['link_type']=='FF')
+        signature = relation_signature(dep, normalized['project'])
+        tasks = {t['task_key']:t for t in normalized['tasks']}
+        keys = (dep['predecessor_task_key'],dep['successor_task_key'])
+        evidence = tmp_path/'test-only-user-evidence.txt'
+        evidence.write_bytes((fixtures/'new-source-identity-resume/test-only-user-evidence.txt').read_bytes())
+        digest = hashlib.sha256(evidence.read_bytes()).hexdigest()
+        eid = w.record_artifact(conn, digest, 'other', str(evidence))
+        content = {'predecessor_key':keys[0], 'successor_key':keys[1], 'expected_relation':signature,
+            'task_contexts':{k:task_context(tasks[k]) for k in keys}, 'action':'exclude_dependency',
+            'reason':'Explicit test-only rule, no claim of real Trisigma identity', 'approved_at':'2026-11-16T00:00:00Z',
+            'policy_revision':'publication-admission-v1', 'termination':'Exact pair/context changes',
+            'cause':{'code':'dependency_type_unsupported','entity':dep['dependency_key'],'source_sha256':fingerprint(signature)}}
+        w.record_project_rule(conn, w.ProjectRuleSpec('stage13-'+action,'1','stage13-trisigma',anchor['snapshot_id'],eid,digest,content))
+        new_source = tmp_path/'new-binary.mpp'; new_source.write_bytes((fixtures/'relations-all-types.mpp').read_bytes())
+        source_hash = hashlib.sha256(new_source.read_bytes()).hexdigest()
+        normalized_plan = q.get_snapshot(conn, anchor['snapshot_id'])['plan_id']
+        assert all(v.get('source_mpp_sha256') != source_hash for v in q.list_versions(conn, normalized_plan)['versions'])
+        first = run(action, '--mpp', str(new_source), '--page-id', page_id, '--project-slug', 'stage13-trisigma',
+                    '--timezone-hint', 'Europe/Moscow', live=True)
+        first_counters = deepcopy(run.last_probe)
+        shown = run('operation','show','--operation-id',first['operation_id'], live=True)
+        stage13_record('new-source-'+action, {'action':action,'anchor':anchor,'first':first,
+            'operation_show':shown,'counters':first_counters,'source_sha256':source_hash})
+        assert first['snapshot_id'] and first['verification']['archive']=='verified' and first['published'] is False
+        assert first_counters['MPXJ_read']==1 and first_counters['POST']==first_counters['PUT']==0
+        identity = run('identity','confirm','--project-slug','stage13-trisigma',
+            '--from','snapshot:'+anchor['snapshot_id'],'--to','snapshot:'+first['snapshot_id'],
+            '--mode','continuity','--evidence',str(evidence),'--reason','Explicit synthetic fixture identity assertion',live=True)
+        assert identity['exit_code']==0,identity
+        new_source.unlink()
+        resumed = run('resume','--operation-id',first['operation_id'],'--mapping-revision',identity['mapping_revision_id'],live=True)
+        stage13_record('new-source-'+action, {'action':action,'anchor':anchor,'first':first,'operation_show':shown,
+            'identity':identity,'resume':resumed,'first_counters':first_counters,'resume_counters':run.last_probe,
+            'source_sha256':source_hash,'functional_status':'passed' if resumed['published'] is True else 'failed'})
+        assert resumed['snapshot_id']==first['snapshot_id'] and run.last_probe['MPXJ_read']==0
+        assert first['exit_code']==3 and first['status']=='needs_decision',first
+        requirement = shown['identity_requirements'][0]
+        assert requirement['from_snapshot_id']==anchor['snapshot_id'] and requirement['to_snapshot_id']==first['snapshot_id']
+        assert len([v for v in q.list_versions(conn,normalized_plan)['versions'] if v.get('source_mpp_sha256')==source_hash])==1
+        assert resumed['exit_code']==0 and resumed['published'] is True,resumed
+    finally:
+        conn.close()
+
+
+def test_installed_names_after_live(request, stage13_record):
+    # The existing loader contract is reused again at the mandated final point.
+    from test_skill_contract import (test_active_library_loads_both_names, test_wrapper_has_one_canon_and_no_algorithm,
+                                     examples, test_documented_cli_examples_parse)
+    test_active_library_loads_both_names(request)
+    test_wrapper_has_one_canon_and_no_algorithm()
+    parsed = examples()
+    for source, line in parsed:
+        test_documented_cli_examples_parse(source, line)
+    stage13_record('installed-names-final', {'status':'passed','source':'installed Hermes skill_view; both names and qualified names',
+        'compatible_commands_parsed':len(parsed)})

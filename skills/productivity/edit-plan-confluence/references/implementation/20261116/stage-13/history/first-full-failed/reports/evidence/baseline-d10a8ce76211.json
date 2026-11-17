@@ -1,0 +1,21 @@
+{
+  "test_id": "acceptance/test_user_journeys.py::test_today_cli_local_boundaries",
+  "observed_at": "2026-11-17T07:18:32.139396+00:00",
+  "baseline_before": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_dc55ee0fc456430db54251c2b792831d','plan_35391080c1d140a59022bcf6df6509d2','snapshot_399200eaca734ad39310f107ab39b666',0,1,'test owner before acceptance',NULL,'2026-11-17T07:18:14+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_46870baf093c4a49a40ec3efef7f31dc','lineage_8e621cf93d1d4df0ac886599e4a2465e','snapshot_399200eaca734ad39310f107ab39b666',1,'test owner before acceptance',NULL,'2026-11-17T07:18:14+00:00');"
+    ]
+  },
+  "baseline_after": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_dc55ee0fc456430db54251c2b792831d','plan_35391080c1d140a59022bcf6df6509d2','snapshot_399200eaca734ad39310f107ab39b666',0,1,'test owner before acceptance',NULL,'2026-11-17T07:18:14+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_46870baf093c4a49a40ec3efef7f31dc','lineage_8e621cf93d1d4df0ac886599e4a2465e','snapshot_399200eaca734ad39310f107ab39b666',1,'test owner before acceptance',NULL,'2026-11-17T07:18:14+00:00');"
+    ]
+  },
+  "unchanged": true
+}

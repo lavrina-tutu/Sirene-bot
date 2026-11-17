@@ -1,0 +1,53 @@
+{
+  "cwd": "/home/tkachenkoav/hermes-workspace",
+  "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+  "runs": [
+    {
+      "name": "archive-and-support-smoke",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "-c",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/acceptance/test_failure_matrix.py",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/acceptance/test_migration_preservation.py",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/acceptance/test_cases_trisigma.py",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/acceptance/test_user_journeys.py",
+        "--test-root",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/smoke",
+        "-q",
+        "--tb=short"
+      ],
+      "rc": 1,
+      "results": "18 passed, 3 failed",
+      "log": "smoke-output.log",
+      "scope": "test support under development; not acceptance"
+    },
+    {
+      "name": "support-smoke-final",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "-c",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/acceptance/test_failure_matrix.py",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/acceptance/test_migration_preservation.py",
+        "-q",
+        "--tb=short"
+      ],
+      "rc": 0,
+      "results": "15 passed",
+      "log": "support-smoke-final.log",
+      "scope": "targeted support validation before final sorting changes"
+    },
+    {
+      "name": "interrupted-order-preflight",
+      "execution": "preflight-order/reports/execution.json",
+      "rc": 2,
+      "results": "491 passed before own SIGINT",
+      "reason": "Strict stage-13 ordering correction; no live group started; not acceptance"
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "status": "passed",
+  "page_id": "537572835",
+  "source": "immutable synthetic stage-10 expected bytes/storage",
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572836",
+      "query": "expand=version%2Ccontainer"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572836",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537572835/gantt-chart-9703cf3f5bb14f92ad39f3db5b07e5ee.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572835",
+      "query": "version=3&expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572836",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537572835/gantt-chart-9703cf3f5bb14f92ad39f3db5b07e5ee.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572835",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572835/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572835",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572836",
+      "query": "expand=version%2Ccontainer&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537572835/gantt-chart-9703cf3f5bb14f92ad39f3db5b07e5ee.json",
+      "query": "api=v2&version=1"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572835",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572835/child/attachment",
+      "query": "limit=200&start=0&expand=version"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572835",
+      "query": "expand=body.storage%2Cversion%2Cspace"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537572836",
+      "query": "expand=version%2Ccontainer"
+    }
+  ],
+  "POST": 0,
+  "PUT": 0,
+  "attachment_version_before": 2,
+  "attachment_version_after": 2,
+  "historical": {
+    "schema_version": 1,
+    "action": "publication verify",
+    "exit_code": 0,
+    "status": "verified_observation",
+    "verification_status": "verified_observation",
+    "publication_id": "pub_d3e95b86ad94427b8777ddd5c491979d",
+    "observation_id": "obs_754537df36e149109aa0328e26d577c3",
+    "verified_at": "2026-11-17T07:24:27+00:00",
+    "scope": "historical_version",
+    "checks": {
+      "exact_attachment": true,
+      "skeleton_version": true,
+      "skeleton_macro_count": true,
+      "page_version": true,
+      "one_gantt_macro": true,
+      "macro_id": true,
+      "param_id": true,
+      "param_hash": true,
+      "attachment_name": true,
+      "one_itogo": true,
+      "itogo_values": true,
+      "itogo_above_macro": true,
+      "no_trudozatraty": true,
+      "storage_preserved": true
+    },
+    "reasons": [],
+    "trust": "legacy_unverified",
+    "historical_status": null,
+    "historical_publication_proven": false,
+    "schedule": "not_verified",
+    "error": null
+  },
+  "current": {
+    "schema_version": 1,
+    "action": "publication verify",
+    "exit_code": 5,
+    "status": "not_verified",
+    "verification_status": "verification_failed",
+    "publication_id": "pub_d3e95b86ad94427b8777ddd5c491979d",
+    "observation_id": "obs_3ec45b7ccdb84e4c812f64cb192d75a1",
+    "verified_at": "2026-11-17T07:24:27+00:00",
+    "scope": "current_state",
+    "checks": {
+      "exact_attachment": true,
+      "skeleton_version": true,
+      "skeleton_macro_count": true,
+      "page_version": true,
+      "one_gantt_macro": true,
+      "macro_id": true,
+      "param_id": true,
+      "param_hash": true,
+      "attachment_name": true,
+      "one_itogo": true,
+      "itogo_values": true,
+      "itogo_above_macro": true,
+      "no_trudozatraty": true,
+      "storage_preserved": true,
+      "current_attachment": false,
+      "current_page_stable": true
+    },
+    "reasons": [],
+    "trust": "legacy_unverified",
+    "historical_status": null,
+    "historical_publication_proven": false,
+    "schedule": "not_verified",
+    "error": {
+      "code": "not_verified",
+      "message": "Недостаточные свидетельства или несоответствие"
+    }
+  },
+  "repeated": {
+    "schema_version": 1,
+    "action": "publication verify",
+    "exit_code": 5,
+    "status": "not_verified",
+    "verification_status": "verification_failed",
+    "publication_id": "pub_d3e95b86ad94427b8777ddd5c491979d",
+    "observation_id": "obs_8488d8bc8881408b9b6f8da5afc79207",
+    "verified_at": "2026-11-17T07:24:27+00:00",
+    "scope": "current_state",
+    "checks": {
+      "exact_attachment": true,
+      "skeleton_version": true,
+      "skeleton_macro_count": true,
+      "page_version": true,
+      "one_gantt_macro": true,
+      "macro_id": true,
+      "param_id": true,
+      "param_hash": true,
+      "attachment_name": true,
+      "one_itogo": true,
+      "itogo_values": true,
+      "itogo_above_macro": true,
+      "no_trudozatraty": true,
+      "storage_preserved": true,
+      "current_attachment": false,
+      "current_page_stable": true
+    },
+    "reasons": [],
+    "trust": "legacy_unverified",
+    "historical_status": null,
+    "historical_publication_proven": false,
+    "schedule": "not_verified",
+    "error": {
+      "code": "not_verified",
+      "message": "Недостаточные свидетельства или несоответствие"
+    }
+  },
+  "GET": 15
+}

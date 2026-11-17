@@ -1,0 +1,25 @@
+.........F........FF.                                                    [100%]
+=================================== FAILURES ===================================
+______________________ test_new_and_old_schema_history[6] ______________________
+skills/productivity/edit-plan-confluence/tests/acceptance/test_migration_preservation.py:47: in test_new_and_old_schema_history
+    assert len(applied) == len(all_migrations)-schema_version
+E   AssertionError: assert 0 == (12 - 6)
+E    +  where 0 = len([])
+E    +  and   12 = len((Migration(migration_id='0001_phase0_baseline', statements=()), Migration(migration_id='0002_phase1_core', statements=...ervation ADD COLUMN verification_json TEXT', 'ALTER TABLE plan_page_observation ADD COLUMN storage_sha256 TEXT')), ...))
+__________________ test_inbox_errors_resume_and_history[stop] __________________
+skills/productivity/edit-plan-confluence/tests/acceptance/test_user_journeys.py:43: in test_inbox_errors_resume_and_history
+    assert resumed['counts']['total'] == 4 and resumed['counts']['saved'] == 2
+E   assert (4 == 4 and 1 == 2)
+_____________________ test_real_ef_batch_and_exact_compare _____________________
+skills/productivity/edit-plan-confluence/tests/acceptance/test_user_journeys.py:80: in test_real_ef_batch_and_exact_compare
+    compared = run('compare', '--project-slug', 'stage13-trisigma', '--from', 'snapshot:'+snapshots[0],
+skills/productivity/edit-plan-confluence/tests/conftest.py:2111: in run
+    assert len(proc.stdout) < 100000
+E   assert 5110054 < 100000
+E    +  where 5110054 = len('{"schema_version": 1, "action": "compare", "exit_code": 0, "result": {"result_class": "observed_diff", "changed_tasks...: {"kind": "snapshot", "snapshot_id": "snapshot_189b96fc3611496fb1ea917d01b1ba46"}}, "exit_code": 0}, "error": null}\n')
+E    +    where '{"schema_version": 1, "action": "compare", "exit_code": 0, "result": {"result_class": "observed_diff", "changed_tasks...: {"kind": "snapshot", "snapshot_id": "snapshot_189b96fc3611496fb1ea917d01b1ba46"}}, "exit_code": 0}, "error": null}\n' = CompletedProcess(args=['/usr/bin/python3', '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluenc...snapshot", "snapshot_id": "snapshot_189b96fc3611496fb1ea917d01b1ba46"}}, "exit_code": 0}, "error": null}\n', stderr='').stdout
+=========================== short test summary info ============================
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_migration_preservation.py::test_new_and_old_schema_history[6]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_user_journeys.py::test_real_ef_batch_and_exact_compare
+3 failed, 18 passed in 188.62s (0:03:08)

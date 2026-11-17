@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "-c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+    "--acceptance-stage",
+    "13",
+    "--test-root",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final",
+    "-m",
+    "unit or archive_integration or mpp_fixtures or confluence_live",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/reports/junit.xml"
+  ],
+  "cwd": "/home/tkachenkoav/hermes-workspace",
+  "environment": {
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+    "EDITPLAN_LIVE": "1",
+    "CONFLUENCE_TOKEN": "existing loader; not recorded"
+  },
+  "started_at": "2026-11-17T07:05:20.244377+00:00",
+  "preflight_history": "../preflight-order/reports/execution.json",
+  "rc": 1,
+  "finished_at": "2026-11-17T07:24:37.351319+00:00"
+}

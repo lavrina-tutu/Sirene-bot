@@ -291,8 +291,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 through 12")
+    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 13")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -316,10 +316,20 @@ def pytest_configure(config):
         config._acceptance_start_hashes=_stage11_sources()
     if stage=='12':
         config._acceptance_start_hashes=_stage12_sources()
+    if stage == '13':
+        _stage13_configure(config)
 
 
 @pytest.hookimpl(tryfirst=True)
 def pytest_collection_modifyitems(config, items):
+    stage = config.getoption('--acceptance-stage')
+    if stage and stage != '13':
+        # New acceptance tests must not extend stages 01-12 or change their
+        # reports/mandatory selections when those commands are replayed.
+        added = [item for item in items if item.path.parent.name == 'acceptance']
+        if added:
+            config.hook.pytest_deselected(items=added)
+            items[:] = [item for item in items if item not in added]
     archive = {"test_plan_archive.py", "test_plan_history.py", "test_plan_save.py", "test_plan_reconcile.py", "test_import_atomicity.py"}
     real_reader = {"test_build_plan_from_mpp_offline", "test_calendar_from_mpp_fixture", "test_cli_convert_offline"}
     for item in items:
@@ -341,9 +351,41 @@ def pytest_collection_modifyitems(config, items):
         if deselected:
             config.hook.pytest_deselected(items=deselected)
             items[:] = [item for item in items if item not in deselected]
-    if config.getoption('--acceptance-stage') in ('08','09','10','11','12'):
+    if config.getoption('--acceptance-stage') == '13':
+        # Stage 13 keeps the four group boundaries while moving end-to-end
+        # batch/query and recovery checks after the cold MPP group. Earlier
+        # stages retain their original classification and report contracts.
+        batch_files = {'test_plan_batch.py','test_batch_decisions.py','test_history_queries.py',
+                       'test_plan_identity.py','test_compare_e2e.py','test_identity_resume_e2e.py'}
+        for item in items:
+            loopback = (item.name.startswith('test_real_process_death_http_reconciliation')
+                        or item.name.startswith('test_verify_cli_loopback_concurrent'))
+            if loopback:
+                item.own_markers[:] = [m for m in item.own_markers if m.name not in ('confluence_live','live')]
+                item.add_marker(pytest.mark.loopback_http)
+                item.add_marker(pytest.mark.mpp_fixtures)
+            elif not item.get_closest_marker('confluence_live') and (
+                    item.path.name in batch_files | STAGE13_RECOVERY_FILES):
+                item.add_marker(pytest.mark.mpp_fixtures)
+    if config.getoption('--acceptance-stage') in ('08','09','10','11','12','13'):
         order={'unit':0,'archive_integration':1,'mpp_fixtures':2,'confluence_live':3}
         items.sort(key=lambda item:(max(order[g] for g in GROUPS if item.get_closest_marker(g)),item.nodeid))
+    if config.getoption('--acceptance-stage') == '13':
+        def final_order(item):
+            group = max(GROUPS.index(g) for g in GROUPS if item.get_closest_marker(g))
+            # The final journeys follow the earlier component regression in each
+            # group. Migration precedes unit; real cold saves precede batch;
+            # legacy GET verification and active-skill loading follow live plans.
+            rank = 10
+            if item.path.name == 'test_migration_preservation.py': rank = -10
+            if item.path.parent.name == 'acceptance': rank = 20
+            if item.path.name == 'test_migration_preservation.py': rank = -10
+            if item.path.name == 'test_cases_trisigma.py': rank = 15
+            if item.path.name == 'test_live_publication.py': rank = 25
+            if ('legacy' in item.name or item.name.startswith('test_stage11_live_verify')) and group == 3: rank = 30
+            if 'installed_names' in item.name: rank = 40
+            return group, _stage13_phase(item), rank, item.nodeid
+        items.sort(key=final_order)
 
 
 def pytest_collection_finish(session):
@@ -351,7 +393,16 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED, "09": STAGE09_REQUIRED, "10": STAGE10_REQUIRED, "11": STAGE11_REQUIRED, "12": STAGE12_REQUIRED}[stage]
+        if stage == '13':
+            cache_probe = session.config.cache.mkdir('stage13-isolation')
+            if session.config._acceptance_root not in cache_probe.parents:
+                raise pytest.UsageError('pytest cache outside isolated acceptance root')
+            session.config._stage13_environment['pytest_cache_probe'] = str(cache_probe)
+            session.config._stage13_execution_order = [{'test_id':item.nodeid,
+                'phase':_stage13_phase(item),
+                'group':max(GROUPS.index(g) for g in GROUPS if item.get_closest_marker(g))}
+                for item in session.items]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED, "09": STAGE09_REQUIRED, "10": STAGE10_REQUIRED, "11": STAGE11_REQUIRED, "12": STAGE12_REQUIRED, "13": STAGE13_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -364,12 +415,24 @@ def pytest_runtest_makereport(item, call):
     if report.when == "call" or report.failed or report.skipped:
         item.config._acceptance_results.append({"test_id": report.nodeid, "phase": report.when,
                                                "status": report.outcome, "duration": report.duration})
+        if item.config.getoption('--acceptance-stage') == '13':
+            item.config._acceptance_results[-1].update(
+                evidence=getattr(item, '_stage13_evidence', []),
+                reason=str(report.longrepr) if report.failed or report.skipped else None)
 
 
 def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption('--acceptance-stage') == '13':
+        if config.option.collectonly:
+            _stage13_write(root/'reports/collection.json', {'stage':'13','collected':len(session.items),
+                'test_ids':[item.nodeid for item in session.items],
+                'order':config._stage13_execution_order, 'test_run':False})
+            return
+        _stage13_report(session, exitstatus, root)
         return
     if config.getoption('--acceptance-stage') == '12':
         _stage12_report(session,exitstatus,root)
@@ -476,7 +539,18 @@ def acceptance_isolation(tmp_path, monkeypatch, request):
     monkeypatch.setattr(plan_archive, "connect_durable", local_durable)
     monkeypatch.setattr(plan_save, "connect_durable", local_durable)
 
-    if not request.node.get_closest_marker("confluence_live"):
+    if request.node.get_closest_marker('loopback_http'):
+        original_socket_connect = socket.socket.connect
+        original_create_connection = socket.create_connection
+        def loopback_connect(sock, address, *args, **kwargs):
+            assert isinstance(address, tuple) and address[0] in ('127.0.0.1','localhost','::1'), 'non-loopback network forbidden'
+            return original_socket_connect(sock,address,*args,**kwargs)
+        def loopback_connection(address, *args, **kwargs):
+            assert address[0] in ('127.0.0.1','localhost','::1'), 'non-loopback network forbidden'
+            return original_create_connection(address,*args,**kwargs)
+        monkeypatch.setattr(socket.socket,'connect',loopback_connect)
+        monkeypatch.setattr(socket,'create_connection',loopback_connection)
+    elif not request.node.get_closest_marker("confluence_live"):
         def no_network(*args, **kwargs):
             raise AssertionError("network forbidden in isolated acceptance")
         monkeypatch.setattr(socket.socket, "connect", no_network)
@@ -1808,3 +1882,590 @@ def _stage12_report(session, exitstatus, root):
         '', 'Завершающий commit/SHA — после gate, в журнале канонического плана; canon.md исключён.','', 'Ограничения:','']
     lines+=['- '+value for value in limitations]
     (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')
+
+# Stage 13 extends this pytest contour; no product CLI or report runner.
+STAGE13_MATRIX = SKILL_ROOT/'tests/acceptance/ac-matrix.json'
+STAGE13_PRODUCTION_PAGES = {'496600693', '499550441', '499566117', '506248940', '519492935'}
+STAGE13_TEST_PARENT = '519501810'
+STAGE13_RECOVERY_FILES = {'test_batch_resume.py','test_import_atomicity.py','test_plan_cache.py',
+                         'test_plan_lock.py','test_publish_resume.py','test_publish_conflicts.py'}
+
+
+@pytest.hookimpl(tryfirst=True, specname='pytest_configure')
+def pytest_configure_stage13_cache(config):
+    # Runs before pytest's cacheprovider configures LF/NF plugins. Use the
+    # standard cache_dir setting; product cache remains a separate directory.
+    if config.getoption('--acceptance-stage') == '13':
+        value = config.getoption('--test-root')
+        if not value:
+            raise pytest.UsageError('--test-root required for acceptance')
+        root = _validate_test_root(value)
+        config.inicfg['cache_dir'] = str(root/'cache/pytest')
+
+
+def _stage13_protection_scope(hashes):
+    volatile = {p:h for p,h in hashes.items() if '.pytest_cache' in Path(p).parts or '__pycache__' in Path(p).parts}
+    return {p:h for p,h in hashes.items() if p not in volatile}, volatile
+
+
+def _stage13_phase(item):
+    if item.path.name == 'test_migration_preservation.py': return 2
+    if item.get_closest_marker('confluence_live'):
+        if 'installed_names' in item.name: return 11
+        if item.name.startswith('test_stage11_live_verify'): return 10
+        return 9
+    if item.name == 'test_final_baseline_audit': return 8
+    if item.path.name in STAGE13_RECOVERY_FILES or item.get_closest_marker('loopback_http'): return 7
+    if item.path.name in ('test_plan_batch.py','test_batch_decisions.py','test_history_queries.py',
+            'test_plan_identity.py','test_compare_e2e.py','test_user_journeys.py','test_identity_resume_e2e.py'):
+        return 6
+    if item.get_closest_marker('mpp_fixtures'): return 5
+    if item.get_closest_marker('archive_integration'): return 4
+    return 3
+
+
+def _stage13_matrix():
+    return json.loads(STAGE13_MATRIX.read_text())
+
+
+def _stage13_required():
+    if not STAGE13_MATRIX.is_file():
+        return set()
+    matrix = _stage13_matrix()
+    required = set(matrix['regression_test_ids'])
+    for row in matrix['requirements'].values():
+        required.update(row['tests'])
+        for subcase in row.get('subcases', {}).values():
+            required.update(subcase['tests'])
+    required.update(matrix['acceptance_test_ids'])
+    return required
+
+
+STAGE13_REQUIRED = _stage13_required()
+
+
+def _stage13_sources():
+    hashes = _stage12_sources()
+    files = [*SKILL_ROOT.joinpath('tests/acceptance').glob('*.py'), STAGE13_MATRIX,
+             SKILL_ROOT/'tests/conftest.py', SKILL_ROOT/'tests/pytest.ini',
+             *FIXTURES.rglob('*.mpp'), *FIXTURES.rglob('*manifest.json')]
+    hashes.update({str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in files if p.is_file()})
+    return hashes
+
+
+def _stage13_write(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(path.suffix+'.tmp')
+    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2, default=str)+'\n')
+    temp.replace(path)
+
+
+def _stage13_configure(config):
+    import subprocess
+    root = config._acceptance_root
+    config._acceptance_start_hashes = _stage13_sources()
+    records = json.loads((FIXTURES/'real/manifest.json').read_text())['fixtures']
+    expected = {'A': (58,57,53,'1576'), 'B': (62,61,60,'2096'), 'C': (62,61,61,'2088'),
+                'D': (72,71,76,'3136'), 'E': (78,77,84,None), 'F': (86,85,93,None)}
+    rows = []
+    for row in records:
+        source = FIXTURES/'real'/row['path']
+        dest = root/'fixtures/real'/row['path']
+        data = source.read_bytes() if source.is_file() else None
+        valid = data is not None and hashlib.sha256(data).hexdigest() == row['sha256'] and len(data) == row['size_bytes']
+        if valid:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(data)
+        original = Path(row['origin'])
+        origin_ok = original.is_file() and hashlib.sha256(original.read_bytes()).hexdigest() == row['sha256']
+        counts = expected.get(row['id'])
+        rows.append({**row, 'repository_copy': str(source), 'copy': str(dest),
+            'status': 'verified' if valid else 'blocked_missing_fixture',
+            'original_verified': origin_ok,
+            'identity_basis': 'Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4',
+            'functional_status': 'not_run',
+            'expected': dict(zip(('archive_task_count','display_task_count','dependency_count','work_hours'), counts)) if counts else None})
+    config._stage13_fixtures = rows
+    supporting = []
+    for path in sorted(FIXTURES.rglob('*')):
+        if not path.is_file() or '__pycache__' in path.parts or path.parent == FIXTURES/'real':
+            continue
+        dest = root/'fixtures/supporting'/path.relative_to(FIXTURES)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        data = path.read_bytes()
+        dest.write_bytes(data)
+        supporting.append({'source':str(path),'copy':str(dest),'sha256':hashlib.sha256(data).hexdigest(),'size_bytes':len(data)})
+    config._stage13_supporting_fixtures = supporting
+    _stage13_write(root/'fixtures-manifest.json', {'schema_version': 1, 'fixtures': rows,
+        'supporting_fixtures':supporting, 'copies_are_not_transport_cache_only': True,
+        'verified_at': datetime.now(timezone.utc).isoformat()})
+    config._stage13_start = datetime.now(timezone.utc).isoformat()
+    config._stage13_live_pages = {STAGE13_TEST_PARENT}
+    # Existing regression uses one immutable dedicated stage-10 test page.
+    legacy = SKILL_ROOT/'references/implementation/20261116/stage-10/reports/stage10-live.json'
+    if legacy.is_file():
+        config._stage13_live_pages.add(str(json.loads(legacy.read_text())['page_id']))
+    assert not config._stage13_live_pages & STAGE13_PRODUCTION_PAGES
+    _stage13_write(root/'reports/live-targets.json', {'parent_id': STAGE13_TEST_PARENT,
+        'pages': sorted(config._stage13_live_pages), 'production_excluded': sorted(STAGE13_PRODUCTION_PAGES)})
+    java = subprocess.run(['java', '-version'], text=True, capture_output=True, timeout=20)
+    config._stage13_environment = {'python': sys.executable, 'python_version': platform.python_version(),
+        'cli_python': '/usr/bin/python3', 'reader_python': '/usr/bin/python3.9',
+        'PYTHONPATH': os.environ.get('PYTHONPATH'), 'java': java.stderr.strip(), 'java_rc': java.returncode,
+        'test_root': str(root), 'plugin_profile': json.loads((SKILL_ROOT/'references/profiles/installed-gantt-profile.json').read_text())}
+    from env import select_mpxj_python
+    from mpp_convert import CONVERTER_VERSION
+    from plan_policy import POLICY_VERSION
+    from plan_rules import RULES_VERSION
+    runtime = select_mpxj_python()
+    config._stage13_environment['component_versions'] = {**runtime.versions,
+        'exporter':'full-export-v2','normalization':'prepared-v1','converter':CONVERTER_VERSION,
+        'policy':POLICY_VERSION,'rules':RULES_VERSION,
+        'normalization_profile':json.loads((SKILL_ROOT/'references/profiles/normalization-v1.json').read_text()),
+        'summary_profile':json.loads((SKILL_ROOT/'references/profiles/summary-v1.json').read_text())}
+    _stage13_write(root/'reports/environment.json', config._stage13_environment)
+    # Reuse the installed browser dependency; no new service, package or daemon.
+    browser_base = Path.home()/'.cache/edit-plan-confluence-acceptance/20261116-stage08/stage-08'
+    for name in ('browser-deps', 'browsers'):
+        dest = root/name
+        if (browser_base/name).is_dir() and not dest.exists():
+            dest.symlink_to(browser_base/name, target_is_directory=True)
+
+
+def _stage13_short_id(test_id):
+    head, sep, tail = test_id.partition('::')
+    return Path(head).name+sep+tail
+
+
+def _stage13_test_status(test_ids, results):
+    if not test_ids:
+        return 'not_run'
+    states = []
+    for test_id in test_ids:
+        rows = [r for r in results if _stage13_short_id(r['test_id']) == test_id]
+        if any(r['status'] == 'failed' for r in rows):
+            states.append('failed')
+        elif any(r['status'] == 'skipped' for r in rows):
+            states.append('not_run')
+        elif any(r['status'] == 'passed' and r['phase'] == 'call' for r in rows):
+            states.append('passed')
+        else:
+            states.append('not_run')
+    return 'failed' if 'failed' in states else 'not_run' if 'not_run' in states else 'passed'
+
+
+def _stage13_requirement_status(requirement, results, root):
+    status = _stage13_test_status(requirement['tests'], results)
+    matching = [r for r in results if _stage13_short_id(r['test_id']) in requirement['tests']]
+    if any('blocked_missing_fixture:' in (r.get('reason') or '') for r in matching):
+        status = 'blocked_missing_fixture'
+    elif any('blocked_identity:' in (r.get('reason') or '') for r in matching):
+        status = 'blocked_identity'
+    evidence = requirement.get('evidence', [])
+    missing = [name for name in evidence if not (root/name).is_file()]
+    if missing and status == 'passed':
+        status = 'not_run'
+    return {**requirement, 'status': status, 'missing_evidence': missing}
+
+
+@pytest.fixture(autouse=True)
+def stage13_fixture_integrity(request):
+    if request.config.getoption('--acceptance-stage') != '13':
+        return
+    # Recheck actual bytes before EVERY test, not just on session startup.
+    for row in request.config._stage13_fixtures:
+        path = Path(row['copy'])
+        if not path.is_file() or path.stat().st_size != row['size_bytes'] or hashlib.sha256(path.read_bytes()).hexdigest() != row['sha256']:
+            pytest.fail('blocked_missing_fixture: '+row['id'])
+    for row in request.config._stage13_supporting_fixtures:
+        for key in ('source','copy'):
+            path = Path(row[key])
+            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != row['sha256']:
+                pytest.fail('blocked_missing_fixture: '+str(path))
+
+
+@pytest.fixture
+def stage13_record(request, tmp_path):
+    root = getattr(request.config, '_acceptance_root', tmp_path)
+    def record(name, value):
+        path = root/'reports/evidence'/(name+'.json')
+        # Parametrized calls must not overwrite each other's observations.
+        if path.exists():
+            prior = json.loads(path.read_text())
+            if prior.get('test_id') != request.node.nodeid:
+                path = path.with_name(name+'-'+hashlib.sha256(request.node.nodeid.encode()).hexdigest()[:10]+'.json')
+        _stage13_write(path, {'test_id': request.node.nodeid, 'observed_at': datetime.now(timezone.utc).isoformat(), **value})
+        paths = getattr(request.node, '_stage13_evidence', [])
+        if str(path.relative_to(root)) not in paths:
+            paths.append(str(path.relative_to(root)))
+        request.node._stage13_evidence = paths
+        return path
+    return record
+
+
+@pytest.fixture
+def stage13_input(request, tmp_path):
+    def select(case):
+        manifest = getattr(request.config, '_stage13_fixtures', None)
+        if manifest is None:
+            manifest = json.loads((FIXTURES/'real/manifest.json').read_text())['fixtures']
+        row = next(r for r in manifest if r['id'] == case)
+        origin = Path(row.get('copy', FIXTURES/'real'/row['path']))
+        assert origin.is_file(), 'blocked_missing_fixture: '+case
+        data = origin.read_bytes()
+        assert hashlib.sha256(data).hexdigest() == row['sha256'] and len(data) == row['size_bytes']
+        dest = tmp_path/(case+'.mpp'); dest.write_bytes(data)
+        return dest, row
+    return select
+
+
+def _stage13_baseline(conn):
+    # Observational dump only: all fixture writes use typed writer APIs.
+    tables = ('plan_baseline_selection', 'plan_snapshot_selection')
+    return {table: sorted(line for line in conn.iterdump() if line.startswith('INSERT INTO "'+table+'"'))
+            for table in tables}
+
+
+@pytest.fixture
+def stage13_cli(tmp_path, request, stage13_record):
+    import subprocess
+    import time
+    from plan_context import PlanContext
+    from mofs_index.db import connect_durable
+    from mofs_index.plan import writer as w
+    context = PlanContext.resolve(db=tmp_path/'state/index.sqlite', workvault=tmp_path/'WorkVault', cache_dir=tmp_path/'cache')
+    conn = connect_durable(context.db)
+    plan = w.ensure_plan(conn, 'stage13-trisigma')
+    lineage = w.ensure_lineage(conn, plan, 'stage13-baseline-owner')
+    snapshot = w.ingest_snapshot(conn, w.SnapshotSpec(plan, 'mpp', lineage_id=lineage,
+        tasks=(w.TaskVersionSpec('baseline-fixture', uid='baseline', name='Pre-existing baseline'),)))
+    w.select_snapshot_baseline(conn, lineage, snapshot, is_explicit=True, basis='test owner before acceptance')
+    w.select_plan_baseline(conn, plan, snapshot, 0, is_explicit=True, basis='test owner before acceptance')
+    before = _stage13_baseline(conn)
+    conn.close()
+    class ObservedContext:
+        baseline_before = before
+        def __getattr__(self, name): return getattr(context, name)
+        def baseline(self):
+            conn = connect_durable(context.db)
+            try: return _stage13_baseline(conn)
+            finally: conn.close()
+    observed = ObservedContext()
+    guard = tmp_path/'cli-guard'; guard.mkdir()
+    (guard/'sitecustomize.py').write_text('''import os,sys,socket,sqlite3,importlib.abc
+from pathlib import Path
+allowed=Path(os.environ['EDITPLAN_TEST_ROOT']).resolve()
+original=sqlite3.connect
+def connect(path,*a,**kw):
+    if str(path)!=':memory:':
+        p=Path(str(path).removeprefix('file:').split('?')[0]).resolve()
+        if allowed not in p.parents: raise AssertionError('SQLite outside acceptance root')
+    return original(path,*a,**kw)
+sqlite3.connect=connect
+if os.environ.get('EDITPLAN_TEST_NETWORK')!='live':
+    class DenyConfluence(importlib.abc.MetaPathFinder):
+        def find_spec(self,fullname,path=None,target=None):
+            if fullname.split('.')[0] in ('conf_client','pipeline'): raise AssertionError('Confluence import forbidden in archive')
+    sys.meta_path.insert(0,DenyConfluence())
+    def denied(*a,**k):raise AssertionError('network forbidden in archive CLI')
+    socket.socket.connect=denied
+    socket.create_connection=denied
+else:
+    import urllib.request,json,re,atexit
+    measurements={'MPXJ_read':0,'cache_hit':0,'cache_miss':0,'POST':0,'PUT':0,'calls':[]}
+    sys.path.insert(0,os.environ['EDITPLAN_SKILL_SCRIPTS'])
+    import plan_cache
+    original_parse=plan_cache.ParseCache.get_or_parse
+    def measured_parse(self,*a,**kw):
+        before={k:self.counters.get(k,0) for k in ('MPXJ_read','cache_hit','cache_miss')}
+        try:return original_parse(self,*a,**kw)
+        finally:
+            for k in before:measurements[k]+=self.counters.get(k,0)-before[k]
+    plan_cache.ParseCache.get_or_parse=measured_parse
+    atexit.register(lambda:Path(os.environ['EDITPLAN_PROBE']).write_text(json.dumps(measurements)))
+    original_urlopen=urllib.request.urlopen
+    def safe_urlopen(req,*a,**kw):
+        url=req.full_url if hasattr(req,'full_url') else str(req)
+        for page in ('496600693','499550441','499566117','506248940','519492935'):
+            if re.search(r'(?<![0-9])'+page+r'(?![0-9])',url): raise AssertionError('production page forbidden')
+        if getattr(req,'data',None):
+            try: body=json.loads(req.data)
+            except (ValueError,UnicodeError):body={}
+            if isinstance(body,dict):
+                for page in body.get('ancestors',[]):
+                    if str(page.get('id')) in ('496600693','499550441','499566117','506248940','519492935'):raise AssertionError('production parent forbidden')
+        from urllib.parse import urlsplit
+        method=req.get_method() if hasattr(req,'get_method') else 'GET'
+        measurements['calls'].append({'method':method,'path':urlsplit(url).path})
+        if method in ('POST','PUT'):measurements[method]+=1
+        return original_urlopen(req,*a,**kw)
+    urllib.request.urlopen=safe_urlopen
+''')
+    sequence = [0]
+    def run(*args, live=False):
+        env = dict(os.environ)
+        env.update(PYTHONPATH=str(guard)+os.pathsep+env.get('PYTHONPATH',''),
+                   EDITPLAN_TEST_ROOT=str(tmp_path), EDITPLAN_TEST_NETWORK='live' if live else 'none',
+                   MPXJ_PYTHON='/usr/bin/python3.9', EDITPLAN_SKILL_SCRIPTS=str(SCRIPTS),
+                   EDITPLAN_PROBE=str(tmp_path/'probe.json'))
+        if not live: env.pop('CONFLUENCE_TOKEN', None)
+        command = ['/usr/bin/python3',str(SCRIPTS/'cli.py'),'--db',str(context.db),
+            '--workvault',str(context.workvault),'--cache-dir',str(context.cache_dir),*args]
+        start = time.monotonic()
+        proc = subprocess.run(command, capture_output=True, text=True, env=env, timeout=240)
+        sequence[0] += 1
+        record = {'command': command, 'rc': proc.returncode, 'duration_seconds': time.monotonic()-start,
+                  'stdout': proc.stdout, 'stderr': proc.stderr, 'live': live}
+        if len(proc.stdout) > 100000:
+            path = getattr(request.config, '_acceptance_root', tmp_path)/'reports/cli-output'/(
+                hashlib.sha256(request.node.nodeid.encode()).hexdigest()[:12]+'-'+str(sequence[0])+'.json')
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(proc.stdout)
+            record.update(stdout=None, stdout_ref=str(path), stdout_bytes=len(proc.stdout.encode()),
+                          stdout_sha256=hashlib.sha256(proc.stdout.encode()).hexdigest())
+        probe = tmp_path/'probe.json'
+        run.last_probe = json.loads(probe.read_text()) if live and probe.is_file() else None
+        record['counters'] = run.last_probe
+        stage13_record('cli-'+hashlib.sha256(request.node.nodeid.encode()).hexdigest()[:12]+'-'+str(sequence[0]), record)
+        result = json.loads(proc.stdout)
+        assert result['exit_code'] == proc.returncode
+        assert 'Authorization' not in proc.stdout
+        if args[0] in ('save','publish','diff','resume','batch'):
+            assert len(proc.stdout) < 100000
+        return result
+    yield observed, run
+    after = observed.baseline()
+    stage13_record('baseline-'+hashlib.sha256(request.node.nodeid.encode()).hexdigest()[:12],
+        {'baseline_before': before, 'baseline_after': after, 'unchanged': before == after})
+    assert before == after, 'save/batch/publication changed the owner baseline'
+
+
+def _stage13_report(session, exitstatus, root):
+    config = session.config
+    results = config._acceptance_results
+    matrix = _stage13_matrix()
+    def read(path):
+        file = root/path
+        return json.loads(file.read_text()) if file.is_file() else {}
+    initial = read('reports/initial-state.json')
+    external = read('reports/external-checks.json')
+    current = _stage13_sources()
+    start = config._acceptance_start_hashes
+    drift = sorted(set(current)^set(start) | {p for p,h in current.items() if start.get(p) != h})
+    protected, excluded_runtime = _stage13_protection_scope(initial.get('protected_hashes', {}))
+    changed = [p for p,h in protected.items() if not Path(p).is_file() or hashlib.sha256(Path(p).read_bytes()).hexdigest() != h]
+    requirements = {}
+    for ac, definition in matrix['requirements'].items():
+        row = _stage13_requirement_status(definition, results, root)
+        row['subcases'] = {name:_stage13_requirement_status(sub,results,root) for name,sub in definition['subcases'].items()}
+        states = [row['status'], *(sub['status'] for sub in row['subcases'].values())]
+        row['status'] = next(status for status in ('failed','blocked_missing_fixture','blocked_identity','not_run','passed') if status in states)
+        row['test_results'] = [r for r in results if _stage13_short_id(r['test_id']) in definition['tests']]
+        row['command'] = [sys.executable,'-m','pytest',*config.invocation_params.args]
+        requirements[ac] = row
+    case_reports = {}
+    evidence_files = list((root/'reports/evidence').glob('*.json'))
+    evidence_values = [(p,json.loads(p.read_text())) for p in evidence_files]
+    for case in ('A','B','C','D','E','F','G','D-risks'):
+        definition = matrix['cases'][case]
+        status = _stage13_test_status(definition['tests'], results)
+        fixture = next((r for r in config._stage13_fixtures if r['id'] == case), None)
+        if fixture and fixture['status'] != 'verified': status = 'blocked_missing_fixture'
+        if case == 'A' and fixture and fixture['identity_status'] != 'confirmed': status = 'blocked_identity'
+        values = [(p,v) for p,v in evidence_values if v.get('case') == case or case in v.get('cases', [])]
+        live = next((v for _,v in values if v.get('page_id') and 'receipt' in v), {})
+        cold = next((v for _,v in values if 'readback' in v), {})
+        # Missing observations are represented explicitly; never fill them with
+        # source dates, a model calculation or a historical report's success.
+        observed = live.get('plugin_observation')
+        if case in ('A','B','C','D') and not observed and status == 'passed': status = 'not_run'
+        baseline = [{'before':v['baseline_before'],'after':v.get('baseline_after')}
+                    for _,v in values if 'baseline_before' in v]
+        record = {'schema_version':1,'case':case,'status':status,
+            'functional_status':status, 'fixture':fixture,
+            'identity_status':fixture.get('identity_status') if fixture else None,
+            'tests':definition['tests'],'commands':[
+                v['command'] for _,v in evidence_values
+                if 'command' in v and _stage13_short_id(v.get('test_id','')) in definition['tests']],
+            'source': {'path':fixture['copy'],'repository_copy':fixture['repository_copy'],
+                       'origin':fixture['origin'],'sha256':fixture['sha256'],'size_bytes':fixture['size_bytes']} if fixture else None,
+            'operation_item_batch_snapshot_publication_ids': [v.get('receipt') for _,v in values if v.get('receipt')],
+            'versions':{'environment':config._stage13_environment.get('component_versions'),
+                        'source':cold.get('readback',{}).get('versions'),
+                        'plugin_profile':config._stage13_environment['plugin_profile'].get('plugin'),
+                        'observed_plugin':observed},
+            'mapping_revision':live.get('receipt',{}).get('exceptions',[]),
+            'archive_display_dependency_counts':cold.get('readback',{}).get('summary',{}).get('counts'),
+            'summary':cold.get('readback',{}).get('summary'),
+            'attachment_hashes':{'expected':live.get('expected_sha256'),'received':live.get('received_sha256')},
+            'page_versions':{'before':live.get('page_version_before'),'after':live.get('page_version_after')},
+            'attachment_versions':{'before':live.get('attachment_version_before'),'after':live.get('attachment_version_after')},
+            'storage_from_GET':live.get('storage_from_GET'), 'observed_plugin_dates':observed,
+            'counters':[v['counters'] for _,v in values if 'counters' in v],
+            'baseline_before_after':baseline,
+            'evidence':[str(p.relative_to(root)) for p,_ in values],
+            'user_decisions_required': None,
+            'limitations':([live.get('limitation') or 'No observed plugin dates for this representation'] if case in ('A','B','C','D') and not observed else []),
+            'historical_rule_identity': 'not_evaluated_without_confirmed_historical_rule_context' if case in ('B','C') else None,
+            'durations_seconds':[r['duration'] for r in results if _stage13_short_id(r['test_id']) in definition['tests']]}
+        _stage13_write(root/'reports/cases'/(case+'.json'), record)
+        case_reports[case] = record
+    journeys = {name:_stage13_requirement_status(row,results,root) for name,row in matrix['journeys'].items()}
+    selected = {_stage13_short_id(item.nodeid) for item in session.items}
+    selected |= {value.split('[')[0] for value in selected}
+    missing = sorted(STAGE13_REQUIRED-selected)
+    not_passed = [name for name in STAGE13_REQUIRED if _stage13_test_status([name],results) != 'passed']
+    # Parametrized base IDs from older stages are not used here: stage 13's
+    # machine matrix enumerates every concrete parameter, including failures.
+    baselines = [v for _,v in evidence_values if 'baseline_before' in v and 'baseline_after' in v]
+    baseline_ok = bool(baselines) and all(v['baseline_before']==v['baseline_after'] for v in baselines)
+    fixture_ok = len(config._stage13_fixtures)==7 and all(r['status']=='verified' for r in config._stage13_fixtures)
+    live_pages = sorted(config._stage13_live_pages)
+    _stage13_write(root/'reports/live-targets.json', {'parent_id':STAGE13_TEST_PARENT,
+        'pages':live_pages,'production_excluded':sorted(STAGE13_PRODUCTION_PAGES)})
+    checks = {'nonempty_results':bool(session.items) and bool(results), 'all_required_selected':not missing,
+        'all_required_passed':not not_passed, 'all_AC_passed':all(r['status']=='passed' for r in requirements.values()),
+        'all_cases_passed':all(r['status']=='passed' for r in case_reports.values()),
+        'all_journeys_passed':all(r['status']=='passed' for r in journeys.values()),
+        'fixtures_verified':fixture_ok,'populated_baseline_preserved':baseline_ok,
+        'protected_files_unchanged':bool(protected) and not changed,'sources_stable':not drift,
+        'external_regression_passed':external.get('gate')=='passed',
+        'external_sources_restorable':external.get('restoration_ok') is True,
+        'prior_twelve_commits':len(external.get('previous_stage_commits',[]))==12 and all(
+            c.get('recorded_gate')=='passed' for c in external.get('previous_stage_commits',[])),
+        'no_production_live_targets':not set(live_pages)&STAGE13_PRODUCTION_PAGES,
+        'pytest_exit_zero':int(exitstatus)==0}
+    order = config._stage13_execution_order
+    checks['ordered_phases_2_through_11'] = (
+        [r['phase'] for r in order] == sorted(r['phase'] for r in order)
+        and set(r['phase'] for r in order) == set(range(2,12)))
+    checks['ordered_unit_archive_mpp_live'] = [r['group'] for r in order] == sorted(r['group'] for r in order)
+    _stage13_write(root/'reports/execution-order.json', {'tests':order,'pre_collection_phase':1,'report_phase':12})
+    master = Path.home()/'WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md'
+    plan = master.parent/'plans/HF-plan_EditPlanConfluence_20261116.md'
+    text = master.read_text()
+    documents = {'master':{'path':str(master),'version':text.split('version:',1)[1].splitlines()[0].strip(),
+        'sha256':hashlib.sha256(master.read_bytes()).hexdigest(),
+        'section20_sha256':hashlib.sha256(text.split('## 20. ')[1].split('## 21. ')[0].encode()).hexdigest()},
+        'plan':{'path':str(plan),'normative_sha256':hashlib.sha256(plan.read_text().split('## Журнал исполнения')[0].encode()).hexdigest()}}
+    config_schema = Path.home()/'WorkVault/Registries/EcosystemConfig.schema.json'
+    report = {'schema_version':1,'stage':'13','gate':'passed' if all(checks.values()) else 'failed',
+        'gate_checks':checks,'exit_code':int(exitstatus),'base_commit':initial.get('base_commit'),
+        'command':[sys.executable,'-m','pytest',*config.invocation_params.args],
+        'started_at':config._stage13_start,'generated_at':datetime.now(timezone.utc).isoformat(),
+        'documents':documents,'environment':config._stage13_environment,'source_files':current,
+        'source_tree_sha256':hashlib.sha256(json.dumps(current,sort_keys=True).encode()).hexdigest(),
+        'config_contract_sha256':hashlib.sha256(config_schema.read_bytes()).hexdigest(),
+        'requirements':requirements,'cases':{case:{'status':row['status'],'report':'cases/'+case+'.json'} for case,row in case_reports.items()},
+        'journeys':journeys,'selected':len(session.items),'tests':results,
+        'summary':{s:sum(r['phase']=='call' and r['status']==s for r in results) for s in ('passed','failed','skipped')},
+        'mandatory_test_ids':sorted(STAGE13_REQUIRED),'missing_required':missing,'mandatory_not_passed':sorted(not_passed),
+        'fixtures_manifest':'../fixtures-manifest.json', 'fixture_count':len(config._stage13_fixtures),
+        'protected_file_count':len(protected),'excluded_runtime_paths':sorted(excluded_runtime),
+        'changed_protected_files':changed,'changed_during_test_run':drift,
+        'external_checks':external,'baseline_before_after':baselines,
+        'counters':{'all_regression_total':None,'scope':'Only instrumented observations; no invented global totals',
+            'instrumented_regression':config._acceptance_counters,
+            'CLI_measurements':[{'test_id':v['test_id'],'command':v['command'],'counters':v['counters']}
+                for _,v in evidence_values if v.get('counters') and 'command' in v]},
+        'live_pages':live_pages, 'production_pages_excluded':sorted(STAGE13_PRODUCTION_PAGES),
+        'execution_order':'execution-order.json',
+        'limitations':['Acceptance of §20 only; §19 W5/ZD/AC-101…144 remains independent.',
+            'Master is actually v0.5.1 with separate §21; §20 and stages 01–12 were not edited.',
+            'Product defects belong to earlier stages and are reported, not repaired in stage 13.',
+            'No token economy claim: tokens were not measured.',
+            'Process-death tests do not model power loss. Gateway, cron and watchers are unchanged.',
+            'Unknown counters/observations remain null; absent live publication cannot pass.']}
+    _stage13_write(root/'reports/acceptance-report.json', report)
+    lines = ['# Этап 13 — комплексная приёмка','',f"Gate: **{report['gate']}**; pytest rc={exitstatus}; selected={len(session.items)}.",'',
+        '## Команда','','```text',' '.join(report['command']),'```','',
+        '## Матрица AC','','| AC | Статус | Подслучаи passed / всего |','|---|---|---|']
+    for ac,row in requirements.items():
+        subs=row['subcases']
+        lines.append(f"| {ac} | {row['status']} | {sum(s['status']=='passed' for s in subs.values())}/{len(subs)} |")
+    lines += ['', 'Каждый подслучай с точными test ID, fixtures, требованиями evidence и результатом находится в acceptance-report.json.',
+        '', '## Кейсы','','| Кейс | Статус | Evidence |','|---|---|---|']
+    lines += [f"| {case} | {row['status']} | [JSON](cases/{case}.json) |" for case,row in case_reports.items()]
+    lines += ['', '## Пользовательские сценарии','']+[f"- {name}: **{row['status']}**." for name,row in journeys.items()]
+    lines += ['', '## Gate checks','']+[f'- {key}: {value}.' for key,value in checks.items()]
+    lines += ['', '## Ограничения','']+['- '+item for item in report['limitations']]
+    lines += ['', 'Все проверки выполняются на изолированных БД/WorkVault/cache. Baseline before/after, hashes, источники, версии, счётчики, команды/rc, storage из GET и причины отказа сохранены в JSON и reports/evidence/.',
+        '', 'Непрошедшие обязательные тесты:','']+['- `'+name+'`' for name in sorted(not_passed)]
+    (root/'reports/acceptance-report.md').write_text('\n'.join(lines)+'\n')
+    stage = {'schema_version':1,'stage':'13','gate':report['gate'],'exit_code':int(exitstatus),
+        'acceptance_report':'../../final/reports/acceptance-report.json','gate_checks':checks,
+        'source_tree_sha256':report['source_tree_sha256'],'command':report['command'],
+        'summary':report['summary'],'external_checks':external,
+        'changed_files':['S/tests/acceptance/ac-matrix.json','S/tests/acceptance/test_user_journeys.py',
+            'S/tests/acceptance/test_cases_trisigma.py','S/tests/acceptance/test_failure_matrix.py',
+            'S/tests/acceptance/test_migration_preservation.py','S/tests/acceptance/test_live_publication.py',
+            'S/tests/conftest.py','S/tests/pytest.ini'], 'migrations_added':[], 'protected_files_changed':changed}
+    _stage13_write(root/'reports/stage-report.json',stage)
+    stage_dir = root.parent/'stage-13/reports'
+    _stage13_write(stage_dir/'stage-report.json',stage)
+    content = f"# Этап 13\n\nGate: **{report['gate']}**; pytest rc={exitstatus}.\n\nПолный итог: [acceptance-report.json](../../final/reports/acceptance-report.json).\n\nПрежние этапы не изменены; canon.md исключён из поставки.\n"
+    (stage_dir/'stage-report.md').write_text(content)
+    (root/'reports/stage-report.md').write_text(content)
+    # JUnit's sessionfinish hook may run after this one; terminal_summary below
+    # copies its finalized output, never a partial XML document.
+    if report['gate'] != 'passed' and int(session.exitstatus) == 0:
+        session.exitstatus = pytest.ExitCode.TESTS_FAILED
+
+
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    if config.getoption('--acceptance-stage') != '13': return
+    root = config._acceptance_root
+    junit = root/'reports/junit.xml'
+    if junit.is_file():
+        dest = root.parent/'stage-13/reports/junit.xml'
+        dest.parent.mkdir(parents=True,exist_ok=True)
+        shutil.copy2(junit,dest)
+
+
+@pytest.fixture(autouse=True)
+def stage13_live_inventory(request, monkeypatch):
+    if request.config.getoption('--acceptance-stage') != '13' or not request.node.get_closest_marker('confluence_live'):
+        yield
+        return
+    from urllib.parse import urlsplit
+    import re
+    import conf_client, gantt_attachment
+    config = request.config
+    if not hasattr(config, '_stage13_http_calls'): config._stage13_http_calls = []
+    pages = config._stage13_live_pages
+    def real(client): return urlsplit(client.base_url).hostname == 'dom.tutu.ru'
+    create = conf_client.ConfluenceClient.create_page
+    def create_page(client, title, space_key, storage, parent_id=None):
+        if real(client):
+            assert str(parent_id) in pages, 'live parent outside explicit acceptance targets'
+        result = create(client, title, space_key, storage, parent_id)
+        if real(client):
+            page = str(result['id'])
+            assert page not in STAGE13_PRODUCTION_PAGES
+            pages.add(page)
+            _stage13_write(config._acceptance_root/'reports/live-targets.json', {
+                'parent_id':STAGE13_TEST_PARENT,'pages':sorted(pages),
+                'production_excluded':sorted(STAGE13_PRODUCTION_PAGES)})
+        return result
+    monkeypatch.setattr(conf_client.ConfluenceClient, 'create_page', create_page)
+    for method in ('get_page','put_page','list_attachments','download_attachment','download_attachment_version'):
+        original = getattr(conf_client.ConfluenceClient,method)
+        def guarded(client, page_id, *args, _original=original, **kwargs):
+            if real(client):
+                assert str(page_id) in pages and str(page_id) not in STAGE13_PRODUCTION_PAGES, 'non-acceptance page forbidden'
+            return _original(client,page_id,*args,**kwargs)
+        monkeypatch.setattr(conf_client.ConfluenceClient,method,guarded)
+    def trace(original):
+        def invoke(req,*args,**kwargs):
+            url = urlsplit(req.full_url)
+            assert not any(re.search(r'(?<![0-9])'+page+r'(?![0-9])',url.path) for page in STAGE13_PRODUCTION_PAGES)
+            config._stage13_http_calls.append({'test_id':request.node.nodeid,
+                'method':req.get_method(),'origin':url.netloc,'path':url.path})
+            return original(req,*args,**kwargs)
+        return invoke
+    monkeypatch.setattr(conf_client,'urlopen',trace(conf_client.urlopen))
+    monkeypatch.setattr(gantt_attachment,'urlopen',trace(gantt_attachment.urlopen))
+    yield
+    _stage13_write(config._acceptance_root/'reports/http-observations.json',{
+        'calls':config._stage13_http_calls,'pages':sorted(pages),
+        'counts':{m:sum(c['method']==m for c in config._stage13_http_calls) for m in ('GET','POST','PUT')}})

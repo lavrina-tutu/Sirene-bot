@@ -1,0 +1,30 @@
+{
+  "test_id": "acceptance/test_user_journeys.py::test_real_ef_batch_and_exact_compare",
+  "observed_at": "2026-11-17T07:45:04.470044+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/cache",
+    "compare",
+    "--project-slug",
+    "stage13-trisigma",
+    "--from",
+    "snapshot:snapshot_40328779d6694647bba94a466d8aaffd",
+    "--to",
+    "snapshot:snapshot_b566c0727ad345f0813c9c8cf90be657"
+  ],
+  "rc": 0,
+  "duration_seconds": 1.2204785409849137,
+  "stdout": null,
+  "stderr": "",
+  "live": false,
+  "stdout_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/reports/cli-output/1145316684dd-2.json",
+  "stdout_bytes": 5136862,
+  "stdout_sha256": "b59234a94019e0f1e0b7114f16a9a4a2accca35d2db3c391b86ffecf491eb23c",
+  "counters": null
+}

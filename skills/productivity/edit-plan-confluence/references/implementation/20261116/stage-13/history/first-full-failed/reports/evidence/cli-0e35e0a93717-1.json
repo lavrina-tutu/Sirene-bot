@@ -1,0 +1,27 @@
+{
+  "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D-risks]",
+  "observed_at": "2026-11-17T07:11:10.080103+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_D_0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_D_0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_D_0/cache",
+    "save",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_D_0/D-risks.mpp",
+    "--project-slug",
+    "stage13-trisigma",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 0,
+  "duration_seconds": 7.378557255025953,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_7fb58f00caf041be8786b475f3f7c3bb\", \"item_id\": \"item_1f40b296a038466482e9335d1786ac97\", \"status\": \"saved_with_warnings\", \"mode\": \"save\", \"exit_code\": 0, \"project_slug\": \"stage13-trisigma\", \"source\": {\"name\": \"D-risks.mpp\", \"sha256\": \"994989f149ac212e9b5a1122cea5b01363cb2b2d68e9d8308238585cbd5aaab0\", \"size_bytes\": 548352}, \"snapshot_id\": \"snapshot_506980a1e8df40cf8b78438c8267cbc5\", \"page_id\": null, \"page_url\": null, \"task_count\": 74, \"display_task_count\": 73, \"dependency_count\": 81, \"exceptions\": [], \"attachment_version\": null, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"storage\": \"not_applicable\", \"schedule\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"collection_assignments_partial\", \"collection_dependencies_partial\", \"fields_missing\", \"fields_unsupported\", \"schedule_not_verified\"], \"evidence_ids\": []}}, \"published\": false, \"warnings\": [{\"code\": \"collection_assignments_partial\", \"message\": \"Полнота коллекции assignments: partial\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_D_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fa4d63ca6c990d978c2c6f077207d2a2e143bc1c2b49c5e4c642cdb61462cef7.json\"}, {\"code\": \"collection_dependencies_partial\", \"message\": \"Полнота коллекции dependencies: partial\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_D_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fa4d63ca6c990d978c2c6f077207d2a2e143bc1c2b49c5e4c642cdb61462cef7.json\"}, {\"code\": \"fields_missing\", \"message\": \"Часть исходных полей имеет качество missing\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_D_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fa4d63ca6c990d978c2c6f077207d2a2e143bc1c2b49c5e4c642cdb61462cef7.json\"}, {\"code\": \"fields_unsupported\", \"message\": \"Часть исходных полей имеет качество unsupported\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_D_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fa4d63ca6c990d978c2c6f077207d2a2e143bc1c2b49c5e4c642cdb61462cef7.json\"}], \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"external_effect\": \"none\", \"error\": null}\n",
+  "stderr": "2026-11-17T07:11:05.781683752Z main ERROR Log4j API could not find a logging provider.\n",
+  "live": false,
+  "counters": null
+}

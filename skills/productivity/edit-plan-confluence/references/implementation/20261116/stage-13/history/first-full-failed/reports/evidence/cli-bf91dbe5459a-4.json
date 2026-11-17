@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+  "observed_at": "2026-11-17T07:23:14.204204+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu0/cache",
+    "identity",
+    "confirm",
+    "--project-slug",
+    "stage13-trisigma",
+    "--from",
+    "snapshot:snapshot_afa61e6480c84d45920f1cd469748da0",
+    "--to",
+    "snapshot:snapshot_f127199ccaf04508964f1ba62aa45c8e",
+    "--mode",
+    "continuity",
+    "--evidence",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu0/test-only-user-evidence.txt",
+    "--reason",
+    "Explicit synthetic fixture identity assertion"
+  ],
+  "rc": 0,
+  "duration_seconds": 0.6667822800227441,
+  "stdout": "{\"schema_version\": 1, \"action\": \"identity_confirm\", \"status\": \"confirmed\", \"exit_code\": 0, \"project_slug\": \"stage13-trisigma\", \"from_snapshot_id\": \"snapshot_afa61e6480c84d45920f1cd469748da0\", \"to_snapshot_id\": \"snapshot_f127199ccaf04508964f1ba62aa45c8e\", \"from_source_sha256\": \"8f33cdb774aa090b664d90145879acc8a289057ca45a6575884eb0da9fd91f30\", \"to_source_sha256\": \"759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937\", \"mapping_revision_id\": \"mapping_0b709aef523b4d34b612a290ebb0deab\", \"revision_status\": \"active\", \"evidence_id\": \"artifact_3156f6884cb849fd95b81a9b5677c764\", \"evidence_sha256\": \"fe5fd3b0f097aca5fda7f043d3740a68253e3a2d92890eb0d8985a35cc91a1aa\", \"published\": false, \"error\": null}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0,
+    "calls": []
+  }
+}

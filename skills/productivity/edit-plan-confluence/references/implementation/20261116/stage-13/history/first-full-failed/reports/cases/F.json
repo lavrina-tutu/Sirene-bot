@@ -1,0 +1,1077 @@
+{
+  "schema_version": 1,
+  "case": "F",
+  "status": "passed",
+  "functional_status": "passed",
+  "fixture": {
+    "id": "F",
+    "path": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+    "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+    "size_bytes": 567808,
+    "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c/doc_0d7fb1d86009_Переход на Trisigma (Только пилот)230726.mpp",
+    "evidence": "master §20.7.4; user evidence 2026-11-16",
+    "identity_status": "source_bytes_verified",
+    "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+    "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+    "status": "verified",
+    "original_verified": true,
+    "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+    "functional_status": "not_run",
+    "expected": {
+      "archive_task_count": 86,
+      "display_task_count": 85,
+      "dependency_count": 93,
+      "work_hours": null
+    }
+  },
+  "identity_status": "source_bytes_verified",
+  "tests": [
+    "test_cases_trisigma.py::test_real_cold_warm_archive[F]",
+    "test_user_journeys.py::test_real_ef_batch_and_exact_compare"
+  ],
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/cache",
+      "compare",
+      "--project-slug",
+      "stage13-trisigma",
+      "--from",
+      "snapshot:snapshot_65c2c8c32df543ab912ea8ce3d1ede7c",
+      "--to",
+      "snapshot:snapshot_55bd618a837b470483c8c2cb02ebe1cd"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/cache",
+      "save",
+      "--mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/F.mpp",
+      "--project-slug",
+      "stage13-trisigma",
+      "--timezone-hint",
+      "Europe/Moscow"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/cache",
+      "save",
+      "--mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/same-bytes-renamed.mpp",
+      "--project-slug",
+      "stage13-trisigma",
+      "--timezone-hint",
+      "Europe/Moscow"
+    ],
+    [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/cache",
+      "batch",
+      "save",
+      "--mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/E.mpp",
+      "--mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/F.mpp",
+      "--project-slug",
+      "stage13-trisigma",
+      "--batch-id",
+      "real-EF"
+    ]
+  ],
+  "source": {
+    "path": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/fixtures/real/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+    "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+    "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c/doc_0d7fb1d86009_Переход на Trisigma (Только пилот)230726.mpp",
+    "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+    "size_bytes": 567808
+  },
+  "operation_item_batch_snapshot_publication_ids": [
+    {
+      "schema_version": 1,
+      "batch_id": "real-EF",
+      "mode": "batch_save",
+      "status": "completed",
+      "exit_code": 0,
+      "manifest_sha256": "ad1ca99b3da120b27e32f74b8f6361f2e1a4f2f1180f09e4d4fdcb714bee6cee",
+      "inputs_frozen_at": "2026-11-17T07:17:58+00:00",
+      "on_error": "continue",
+      "counts": {
+        "total": 2,
+        "saved": 2,
+        "saved_with_warnings": 2,
+        "unchanged": 0,
+        "failed": 0,
+        "needs_decision": 0,
+        "not_started": 0
+      },
+      "items": [
+        {
+          "item_id": "1",
+          "position": 1,
+          "status": "saved_with_warnings",
+          "operation_id": "batch-op-31d793363a9f2e5386f19684ccdb5bb4e7ce9a525628fe8b1ea92479702debc7",
+          "snapshot_id": "snapshot_65c2c8c32df543ab912ea8ce3d1ede7c",
+          "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+          "receipt_ref": "_plan-receipts/batch-op-31d793363a9f2e5386f19684ccdb5bb4e7ce9a525628fe8b1ea92479702debc7/save.json",
+          "error": null,
+          "warnings": [
+            {
+              "code": "timezone_unknown",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+              "message": "Исходные даты сохранены без подтверждённой таймзоны"
+            },
+            {
+              "code": "collection_assignments_partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+              "message": "Полнота коллекции assignments: partial"
+            },
+            {
+              "code": "collection_dependencies_partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+              "message": "Полнота коллекции dependencies: partial"
+            },
+            {
+              "code": "fields_missing",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+              "message": "Часть исходных полей имеет качество missing"
+            },
+            {
+              "code": "fields_unsupported",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/c6db2864bd412ac8a2cbc61f50ee0811f1f115bc4d417fbd2f15d0a99c8cc84d.json",
+              "message": "Часть исходных полей имеет качество unsupported"
+            }
+          ]
+        },
+        {
+          "item_id": "2",
+          "position": 2,
+          "status": "saved_with_warnings",
+          "operation_id": "batch-op-e74a53c9a440e355740396873dc3ac6ca81a5e1bfda9e258a378fe283c75e995",
+          "snapshot_id": "snapshot_55bd618a837b470483c8c2cb02ebe1cd",
+          "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+          "receipt_ref": "_plan-receipts/batch-op-e74a53c9a440e355740396873dc3ac6ca81a5e1bfda9e258a378fe283c75e995/save.json",
+          "error": null,
+          "warnings": [
+            {
+              "code": "timezone_unknown",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+              "message": "Исходные даты сохранены без подтверждённой таймзоны"
+            },
+            {
+              "code": "collection_assignments_partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+              "message": "Полнота коллекции assignments: partial"
+            },
+            {
+              "code": "collection_dependencies_partial",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+              "message": "Полнота коллекции dependencies: partial"
+            },
+            {
+              "code": "fields_missing",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+              "message": "Часть исходных полей имеет качество missing"
+            },
+            {
+              "code": "fields_unsupported",
+              "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/bae8f0829614340e3d4540a755c016d4cd99d6c7d0df233bb0dc57c47a5ada48.json",
+              "message": "Часть исходных полей имеет качество unsupported"
+            }
+          ]
+        }
+      ],
+      "published": false,
+      "error": null
+    },
+    {
+      "schema_version": 1,
+      "operation_id": "operation_3f7fbd293526422d937b1db65b4d389c",
+      "item_id": "item_04aa619754b6447dbe3605744c836901",
+      "status": "saved_with_warnings",
+      "mode": "save",
+      "exit_code": 0,
+      "project_slug": "stage13-trisigma",
+      "source": {
+        "name": "F.mpp",
+        "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+        "size_bytes": 567808
+      },
+      "snapshot_id": "snapshot_63376bf8c86b4f028262ae8c01019f9b",
+      "page_id": null,
+      "page_url": null,
+      "task_count": 86,
+      "display_task_count": 85,
+      "dependency_count": 93,
+      "exceptions": [],
+      "attachment_version": null,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_applicable",
+        "storage": "not_applicable",
+        "schedule": {
+          "status": "not_verified",
+          "checks": [],
+          "limitations": [
+            "collection_assignments_partial",
+            "collection_dependencies_partial",
+            "fields_missing",
+            "fields_unsupported",
+            "schedule_not_verified"
+          ],
+          "evidence_ids": []
+        }
+      },
+      "published": false,
+      "warnings": [
+        {
+          "code": "collection_assignments_partial",
+          "message": "Полнота коллекции assignments: partial",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+        },
+        {
+          "code": "collection_dependencies_partial",
+          "message": "Полнота коллекции dependencies: partial",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+        },
+        {
+          "code": "fields_missing",
+          "message": "Часть исходных полей имеет качество missing",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+        },
+        {
+          "code": "fields_unsupported",
+          "message": "Часть исходных полей имеет качество unsupported",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+        }
+      ],
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived"
+      ],
+      "external_effect": "none",
+      "error": null
+    },
+    {
+      "schema_version": 1,
+      "operation_id": "operation_03ddee01e10043758039381747006e69",
+      "item_id": "item_36216d61f2f440a0a77716704345d3f8",
+      "status": "unchanged",
+      "mode": "save",
+      "exit_code": 0,
+      "project_slug": "stage13-trisigma",
+      "source": {
+        "name": "same-bytes-renamed.mpp",
+        "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+        "size_bytes": 567808
+      },
+      "snapshot_id": "snapshot_63376bf8c86b4f028262ae8c01019f9b",
+      "page_id": null,
+      "page_url": null,
+      "task_count": 86,
+      "display_task_count": 85,
+      "dependency_count": 93,
+      "exceptions": [],
+      "attachment_version": null,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_applicable",
+        "storage": "not_applicable",
+        "schedule": {
+          "status": "not_verified",
+          "checks": [],
+          "limitations": [
+            "collection_assignments_partial",
+            "collection_dependencies_partial",
+            "fields_missing",
+            "fields_unsupported",
+            "schedule_not_verified"
+          ],
+          "evidence_ids": []
+        }
+      },
+      "published": false,
+      "warnings": [
+        {
+          "code": "collection_assignments_partial",
+          "message": "Полнота коллекции assignments: partial",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+        },
+        {
+          "code": "collection_dependencies_partial",
+          "message": "Полнота коллекции dependencies: partial",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+        },
+        {
+          "code": "fields_missing",
+          "message": "Часть исходных полей имеет качество missing",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+        },
+        {
+          "code": "fields_unsupported",
+          "message": "Часть исходных полей имеет качество unsupported",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+        }
+      ],
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived"
+      ],
+      "external_effect": "none",
+      "error": null
+    }
+  ],
+  "versions": {
+    "environment": {
+      "reader": "read-mpp-v2",
+      "mpxj": "16.4.0",
+      "jpype": "1.7.1",
+      "exporter": "full-export-v2",
+      "normalization": "prepared-v1",
+      "converter": "prepared-gantt-v1",
+      "policy": "publication-admission-v1",
+      "rules": "project-exceptions-v1",
+      "normalization_profile": {
+        "id": "normalization-v1",
+        "version": "1.0.0",
+        "normalizer_version": "prepared-v1",
+        "export_version": "full-export-v2",
+        "dates": {
+          "policy": "preserve_source_local_precision",
+          "unknown_timezone": null,
+          "timezone_hint": "IANA-explicit-only"
+        },
+        "numbers": {
+          "quantities": "decimal_strings",
+          "rounding": "none"
+        },
+        "identity": {
+          "scope": "source-local-only",
+          "fallback": "source_collection_position",
+          "cross_file_mapping": "unknown"
+        },
+        "ordering": "preserve_source_rows_and_parallel_relations",
+        "semantic_exclusions": [
+          "provenance_except_source_identity",
+          "source",
+          "telemetry",
+          "operation_id",
+          "work_dir",
+          "read_at"
+        ],
+        "quality": {
+          "collection": [
+            "complete",
+            "partial",
+            "missing",
+            "unsupported"
+          ],
+          "null": "missing:not_set",
+          "zero": "ok:0",
+          "unsupported": "explicit_reason"
+        },
+        "summary": "preserve_inputs_only;calculation_is_stage_08"
+      },
+      "summary_profile": {
+        "id": "summary-v1",
+        "version": "1.0.0",
+        "root": "unique_top_level_nonservice_summary_or_explicit_task_key",
+        "days": "ceil_root_working_duration_using_source_minutes_per_unit",
+        "elapsed_duration": "unsupported_without_explicit_transformation",
+        "dates": "source_local_in_resolved_timezone;convert_offset_dates_to_resolved_timezone",
+        "work": "unique_assignments_of_nonservice_nonsummary_tasks_including_milestones",
+        "timephased": "never_add_to_assignment_work",
+        "missing": "known_sum_partial;never_zero_total",
+        "arithmetic": "Decimal;no_per_task_rounding",
+        "display": {
+          "decimal_places": 3,
+          "rounding": "ROUND_HALF_UP",
+          "trim_zeroes": true
+        },
+        "storage_work": false
+      }
+    },
+    "source": {
+      "jpype": "1.7.1",
+      "mpxj": "16.4.0",
+      "reader": "read-mpp-v2",
+      "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+      "size_bytes": 567808,
+      "export": "full-export-v2",
+      "normalization": {
+        "fingerprint": "26f75d00b4daf3847545115420e36fea574c96044530ae1847dd0c81399efcad",
+        "id": "normalization-v1",
+        "normalizer_version": "prepared-v1",
+        "version": "1.0.0"
+      }
+    },
+    "plugin_profile": {
+      "key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
+      "version": "frontend-build:H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe"
+    },
+    "observed_plugin": null
+  },
+  "mapping_revision": [],
+  "archive_display_dependency_counts": {
+    "task_count": 86,
+    "archive_task_count": 86,
+    "service_task_count": 1,
+    "display_task_count": 85,
+    "dependency_count": 93,
+    "external_dependency_count": 0,
+    "task_extraction_errors": 0
+  },
+  "summary": {
+    "profile": "summary-v1",
+    "profile_fingerprint": "716c94354368c0642f1284f48213e6de246ec92f0024b5b533c45f4c3f1abc70",
+    "root_candidates": [
+      "uid:164"
+    ],
+    "root_task_key": "uid:164",
+    "explicit_root_choice": false,
+    "start": "2026-03-30T09:00",
+    "finish": "2026-09-23T18:00",
+    "d1": "30.03.26",
+    "d2": "23.09.26",
+    "n_days": 125,
+    "duration_working_days": "124.875",
+    "source_duration": {
+      "quality": "ok",
+      "quantity": {
+        "amount": "124.875",
+        "elapsed": false,
+        "source_units": "d",
+        "units": "DAYS"
+      },
+      "reason": null,
+      "value": "124.875 d"
+    },
+    "coefficients": {
+      "minutes_per_day": "480"
+    },
+    "work": {
+      "hours": "3608",
+      "display_hours": "3608",
+      "quality": "partial",
+      "known_assignments": 72,
+      "missing_assignments": 0,
+      "excluded_assignments": 3,
+      "reasons": [],
+      "per_task": {
+        "uid:373": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "partial"
+        },
+        "uid:375": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "partial"
+        },
+        "uid:377": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "partial"
+        },
+        "uid:508": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "partial"
+        },
+        "uid:346": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:496": {
+          "known_hours": "176",
+          "missing": 0,
+          "known": 1,
+          "hours": "176",
+          "quality": "partial"
+        },
+        "uid:497": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:507": {
+          "known_hours": "72",
+          "missing": 0,
+          "known": 1,
+          "hours": "72",
+          "quality": "partial"
+        },
+        "uid:498": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:337": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 2,
+          "hours": "160",
+          "quality": "partial"
+        },
+        "uid:343": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:378": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "partial"
+        },
+        "uid:510": {
+          "known_hours": "152",
+          "missing": 0,
+          "known": 1,
+          "hours": "152",
+          "quality": "partial"
+        },
+        "uid:323": {
+          "known_hours": "24",
+          "missing": 0,
+          "known": 1,
+          "hours": "24",
+          "quality": "partial"
+        },
+        "uid:324": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:512": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "partial"
+        },
+        "uid:513": {
+          "known_hours": "96",
+          "missing": 0,
+          "known": 1,
+          "hours": "96",
+          "quality": "partial"
+        },
+        "uid:326": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:327": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:329": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "partial"
+        },
+        "uid:330": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "partial"
+        },
+        "uid:331": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "partial"
+        },
+        "uid:332": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "partial"
+        },
+        "uid:334": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:335": {
+          "known_hours": "56",
+          "missing": 0,
+          "known": 1,
+          "hours": "56",
+          "quality": "partial"
+        },
+        "uid:339": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:341": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "partial"
+        },
+        "uid:515": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "partial"
+        },
+        "uid:344": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 2,
+          "hours": "80",
+          "quality": "partial"
+        },
+        "uid:347": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "partial"
+        },
+        "uid:348": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "partial"
+        },
+        "uid:321": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "partial"
+        },
+        "uid:517": {
+          "known_hours": "120",
+          "missing": 0,
+          "known": 1,
+          "hours": "120",
+          "quality": "partial"
+        },
+        "uid:518": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "partial"
+        },
+        "uid:519": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "partial"
+        },
+        "uid:520": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 1,
+          "hours": "80",
+          "quality": "partial"
+        },
+        "uid:521": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "partial"
+        },
+        "uid:532": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "partial"
+        },
+        "uid:533": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "partial"
+        },
+        "uid:314": {
+          "known_hours": "328",
+          "missing": 0,
+          "known": 1,
+          "hours": "328",
+          "quality": "partial"
+        },
+        "uid:534": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "partial"
+        },
+        "uid:535": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "partial"
+        },
+        "uid:536": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "partial"
+        },
+        "uid:537": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "partial"
+        },
+        "uid:538": {
+          "known_hours": "96",
+          "missing": 0,
+          "known": 1,
+          "hours": "96",
+          "quality": "partial"
+        },
+        "uid:539": {
+          "known_hours": "56",
+          "missing": 0,
+          "known": 1,
+          "hours": "56",
+          "quality": "partial"
+        },
+        "uid:540": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:541": {
+          "known_hours": "56",
+          "missing": 0,
+          "known": 1,
+          "hours": "56",
+          "quality": "partial"
+        },
+        "uid:542": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 2,
+          "hours": "32",
+          "quality": "partial"
+        },
+        "uid:543": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 2,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:544": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "partial"
+        },
+        "uid:545": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 1,
+          "hours": "80",
+          "quality": "partial"
+        },
+        "uid:546": {
+          "known_hours": "88",
+          "missing": 0,
+          "known": 1,
+          "hours": "88",
+          "quality": "partial"
+        },
+        "uid:547": {
+          "known_hours": "72",
+          "missing": 0,
+          "known": 1,
+          "hours": "72",
+          "quality": "partial"
+        },
+        "uid:548": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "partial"
+        },
+        "uid:549": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "partial"
+        },
+        "uid:552": {
+          "known_hours": "152",
+          "missing": 0,
+          "known": 1,
+          "hours": "152",
+          "quality": "partial"
+        },
+        "uid:553": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "partial"
+        },
+        "uid:551": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "partial"
+        },
+        "uid:550": {
+          "known_hours": "48",
+          "missing": 0,
+          "known": 1,
+          "hours": "48",
+          "quality": "partial"
+        },
+        "uid:554": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "partial"
+        },
+        "uid:555": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "partial"
+        },
+        "uid:556": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "partial"
+        },
+        "uid:557": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "partial"
+        },
+        "uid:558": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "partial"
+        },
+        "uid:559": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "partial"
+        },
+        "uid:560": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "partial"
+        },
+        "uid:561": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "partial"
+        }
+      }
+    },
+    "counts": {
+      "task_count": 86,
+      "archive_task_count": 86,
+      "service_task_count": 1,
+      "display_task_count": 85,
+      "dependency_count": 93,
+      "external_dependency_count": 0,
+      "task_extraction_errors": 0
+    },
+    "reasons": [],
+    "publishable": true,
+    "storage_html": "<p><strong>Итого: с 30.03.26 по 23.09.26 - 125 рабочих дней</strong></p>"
+  },
+  "attachment_hashes": {
+    "expected": null,
+    "received": null
+  },
+  "page_versions": {
+    "before": null,
+    "after": null
+  },
+  "attachment_versions": {
+    "before": null,
+    "after": null
+  },
+  "storage_from_GET": null,
+  "observed_plugin_dates": null,
+  "counters": [
+    {
+      "MPXJ_read": 1,
+      "cache_hit": 0,
+      "cache_miss": 1,
+      "POST": 0,
+      "PUT": 0
+    },
+    {
+      "MPXJ_read": 0,
+      "cache_hit": 1,
+      "cache_miss": 0,
+      "POST": 0,
+      "PUT": 0
+    }
+  ],
+  "baseline_before_after": [
+    {
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_fae3f3da550043b990ec653d159ce760','plan_8fd030189a7a4f8ea28d6fe39cc9ac82','snapshot_8db1cc7bc66d4a94b836a8b9d35a8fc4',0,1,'test owner before acceptance',NULL,'2026-11-17T07:17:56+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_79a5ee3bb541422b9d39e4991dbe38c7','lineage_b46a13c6b75d4641822c3379b6014e06','snapshot_8db1cc7bc66d4a94b836a8b9d35a8fc4',1,'test owner before acceptance',NULL,'2026-11-17T07:17:56+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_fae3f3da550043b990ec653d159ce760','plan_8fd030189a7a4f8ea28d6fe39cc9ac82','snapshot_8db1cc7bc66d4a94b836a8b9d35a8fc4',0,1,'test owner before acceptance',NULL,'2026-11-17T07:17:56+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_79a5ee3bb541422b9d39e4991dbe38c7','lineage_b46a13c6b75d4641822c3379b6014e06','snapshot_8db1cc7bc66d4a94b836a8b9d35a8fc4',1,'test owner before acceptance',NULL,'2026-11-17T07:17:56+00:00');"
+        ]
+      }
+    },
+    {
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_16cccc501b2941c084bb461ca17dfeac','plan_5afaef60c27e4eb9b6a3847ff644634a','snapshot_d9634e4ed21446f08921e5d639799d88',0,1,'test owner before acceptance',NULL,'2026-11-17T07:11:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3ac4ad8a570b419f9c15c73a0a085cfe','lineage_e4b790f745ae454fae7104f6554c047e','snapshot_d9634e4ed21446f08921e5d639799d88',1,'test owner before acceptance',NULL,'2026-11-17T07:11:48+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_16cccc501b2941c084bb461ca17dfeac','plan_5afaef60c27e4eb9b6a3847ff644634a','snapshot_d9634e4ed21446f08921e5d639799d88',0,1,'test owner before acceptance',NULL,'2026-11-17T07:11:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3ac4ad8a570b419f9c15c73a0a085cfe','lineage_e4b790f745ae454fae7104f6554c047e','snapshot_d9634e4ed21446f08921e5d639799d88',1,'test owner before acceptance',NULL,'2026-11-17T07:11:48+00:00');"
+        ]
+      }
+    },
+    {
+      "before": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_16cccc501b2941c084bb461ca17dfeac','plan_5afaef60c27e4eb9b6a3847ff644634a','snapshot_d9634e4ed21446f08921e5d639799d88',0,1,'test owner before acceptance',NULL,'2026-11-17T07:11:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3ac4ad8a570b419f9c15c73a0a085cfe','lineage_e4b790f745ae454fae7104f6554c047e','snapshot_d9634e4ed21446f08921e5d639799d88',1,'test owner before acceptance',NULL,'2026-11-17T07:11:48+00:00');"
+        ]
+      },
+      "after": {
+        "plan_baseline_selection": [
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_16cccc501b2941c084bb461ca17dfeac','plan_5afaef60c27e4eb9b6a3847ff644634a','snapshot_d9634e4ed21446f08921e5d639799d88',0,1,'test owner before acceptance',NULL,'2026-11-17T07:11:48+00:00');"
+        ],
+        "plan_snapshot_selection": [
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3ac4ad8a570b419f9c15c73a0a085cfe','lineage_e4b790f745ae454fae7104f6554c047e','snapshot_d9634e4ed21446f08921e5d639799d88',1,'test owner before acceptance',NULL,'2026-11-17T07:11:48+00:00');"
+        ]
+      }
+    }
+  ],
+  "evidence": [
+    "reports/evidence/EF-batch.json",
+    "reports/evidence/EF-readback-compare.json",
+    "reports/evidence/case-F-cold.json",
+    "reports/evidence/case-F-warm.json"
+  ],
+  "user_decisions_required": null,
+  "limitations": [],
+  "historical_rule_identity": null,
+  "durations_seconds": [
+    15.204228249029256,
+    17.205404456006363
+  ]
+}

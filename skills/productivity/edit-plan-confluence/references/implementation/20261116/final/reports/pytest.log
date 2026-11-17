@@ -1,0 +1,419 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+cachedir: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/cache/pytest
+rootdir: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests
+configfile: pytest.ini
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 722 items
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_migration_preservation.py . [  0%]
+.                                                                        [  0%]
+skills/productivity/edit-plan-confluence/tests/test_admission.py ....... [  1%]
+..............................................                           [  7%]
+skills/productivity/edit-plan-confluence/tests/test_child_page.py ...... [  8%]
+...............                                                          [ 10%]
+skills/productivity/edit-plan-confluence/tests/test_cli.py ......        [ 11%]
+skills/productivity/edit-plan-confluence/tests/test_env.py .....         [ 12%]
+skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py . [ 12%]
+..........                                                               [ 13%]
+skills/productivity/edit-plan-confluence/tests/test_gate_diff.py ....    [ 14%]
+skills/productivity/edit-plan-confluence/tests/test_itogo.py ........... [ 15%]
+................                                                         [ 17%]
+skills/productivity/edit-plan-confluence/tests/test_macro.py ...         [ 18%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py .... [ 18%]
+                                                                         [ 18%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py ..... [ 19%]
+...................                                                      [ 22%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_input.py ....... [ 23%]
+.................                                                        [ 25%]
+skills/productivity/edit-plan-confluence/tests/test_pipeline.py ........ [ 26%]
+...............                                                          [ 28%]
+skills/productivity/edit-plan-confluence/tests/test_plan_manifest.py ... [ 29%]
+....................                                                     [ 31%]
+skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py .... [ 32%]
+...............                                                          [ 34%]
+skills/productivity/edit-plan-confluence/tests/test_plan_rules.py ...... [ 35%]
+...                                                                      [ 35%]
+skills/productivity/edit-plan-confluence/tests/test_plan_verify.py ..... [ 36%]
+.............                                                            [ 38%]
+skills/productivity/edit-plan-confluence/tests/test_plugin_profile.py .. [ 38%]
+.......                                                                  [ 39%]
+skills/productivity/edit-plan-confluence/tests/test_prepared_plan.py ... [ 39%]
+...........................                                              [ 43%]
+skills/productivity/edit-plan-confluence/tests/test_publication_verify.py . [ 43%]
+............                                                             [ 45%]
+skills/productivity/edit-plan-confluence/tests/test_publish_idempotency.py . [ 45%]
+....                                                                     [ 46%]
+skills/productivity/edit-plan-confluence/tests/test_publish_prepare.py . [ 46%]
+..............                                                           [ 48%]
+skills/productivity/edit-plan-confluence/tests/test_skill_contract.py .. [ 48%]
+.......................................................................  [ 58%]
+skills/productivity/edit-plan-confluence/tests/acceptance/test_failure_matrix.py . [ 58%]
+...............                                                          [ 60%]
+skills/productivity/edit-plan-confluence/tests/test_plan_archive.py .... [ 61%]
+....                                                                     [ 61%]
+skills/productivity/edit-plan-confluence/tests/test_plan_history.py .... [ 62%]
+...                                                                      [ 62%]
+skills/productivity/edit-plan-confluence/tests/test_plan_reconcile.py .. [ 62%]
+...                                                                      [ 63%]
+skills/productivity/edit-plan-confluence/tests/test_plan_save.py ....... [ 64%]
+.................                                                        [ 66%]
+skills/productivity/edit-plan-confluence/tests/test_plan_verify.py .     [ 66%]
+skills/productivity/edit-plan-confluence/tests/test_skill_contract.py .  [ 66%]
+skills/productivity/edit-plan-confluence/tests/test_cli.py .             [ 67%]
+skills/productivity/edit-plan-confluence/tests/test_itogo.py ....        [ 67%]
+skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py .    [ 67%]
+skills/productivity/edit-plan-confluence/tests/test_pipeline.py .        [ 67%]
+skills/productivity/edit-plan-confluence/tests/test_save_e2e.py ......   [ 68%]
+skills/productivity/edit-plan-confluence/tests/acceptance/test_cases_trisigma.py . [ 68%]
+......                                                                   [ 69%]
+skills/productivity/edit-plan-confluence/tests/test_batch_decisions.py . [ 69%]
+................                                                         [ 72%]
+skills/productivity/edit-plan-confluence/tests/test_compare_e2e.py ..... [ 72%]
+.......                                                                  [ 73%]
+skills/productivity/edit-plan-confluence/tests/test_history_queries.py . [ 73%]
+....................                                                     [ 76%]
+skills/productivity/edit-plan-confluence/tests/test_identity_resume_e2e.py . [ 76%]
+............                                                             [ 78%]
+skills/productivity/edit-plan-confluence/tests/test_plan_batch.py ...... [ 79%]
+................                                                         [ 81%]
+skills/productivity/edit-plan-confluence/tests/test_plan_identity.py ... [ 81%]
+...............                                                          [ 83%]
+skills/productivity/edit-plan-confluence/tests/acceptance/test_user_journeys.py . [ 84%]
+...                                                                      [ 84%]
+skills/productivity/edit-plan-confluence/tests/test_batch_resume.py .... [ 85%]
+..............                                                           [ 86%]
+skills/productivity/edit-plan-confluence/tests/test_import_atomicity.py . [ 87%]
+.............                                                            [ 88%]
+skills/productivity/edit-plan-confluence/tests/test_plan_cache.py ...... [ 89%]
+.........                                                                [ 90%]
+skills/productivity/edit-plan-confluence/tests/test_plan_lock.py ..      [ 91%]
+skills/productivity/edit-plan-confluence/tests/test_publication_verify.py . [ 91%]
+                                                                         [ 91%]
+skills/productivity/edit-plan-confluence/tests/test_publish_conflicts.py . [ 91%]
+...........                                                              [ 93%]
+skills/productivity/edit-plan-confluence/tests/test_publish_resume.py .. [ 93%]
+...................................                                      [ 98%]
+skills/productivity/edit-plan-confluence/tests/acceptance/test_user_journeys.py . [ 98%]
+                                                                         [ 98%]
+skills/productivity/edit-plan-confluence/tests/test_plugin_controls_live.py . [ 98%]
+                                                                         [ 98%]
+skills/productivity/edit-plan-confluence/tests/test_publish_live.py .    [ 98%]
+skills/productivity/edit-plan-confluence/tests/test_rest_live.py ..      [ 98%]
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py F [ 99%]
+FFFFF                                                                    [ 99%]
+skills/productivity/edit-plan-confluence/tests/test_publication_verify.py . [ 99%]
+                                                                         [ 99%]
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py . [100%]
+
+=================================== FAILURES ===================================
+________________ test_new_binary_identity_to_publication[diff] _________________
+
+action = 'diff'
+live_page = (<conf_client.ConfluenceClient object at 0x7fed5cbf7fa0>, '537573658', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537573658'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7fed681cf8e0>, <function stage13_cli.<locals>.run at 0x7fed0e28b9d0>)
+stage13_record = <function stage13_record.<locals>.record at 0x7fed5e719a60>
+tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu0')
+
+    @pytest.mark.parametrize('action', ['diff','publish'])
+    def test_new_binary_identity_to_publication(action, live_page, stage13_cli, stage13_record, tmp_path):
+        from plan_rules import relation_signature, task_context
+        from prepared_plan import fingerprint
+        client, page_id, _ = live_page
+        context, run = stage13_cli
+        fixtures = Path(__file__).resolve().parents[1]/'fixtures/synthetic'
+        anchor_source = fixtures/'mpp14relations.mpp'
+        anchor = run('diff', '--mpp', str(anchor_source), '--page-id', page_id, '--project-slug', 'stage13-trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        assert anchor['snapshot_id']
+        conn = connect_durable(context.db)
+        try:
+            normalized = json.loads(q.get_snapshot(conn, anchor['snapshot_id'])['source_json'])
+            dep = next(d for d in normalized['dependencies'] if d['link_type']=='FF')
+            signature = relation_signature(dep, normalized['project'])
+            tasks = {t['task_key']:t for t in normalized['tasks']}
+            keys = (dep['predecessor_task_key'],dep['successor_task_key'])
+            evidence = tmp_path/'test-only-user-evidence.txt'
+            evidence.write_bytes((fixtures/'new-source-identity-resume/test-only-user-evidence.txt').read_bytes())
+            digest = hashlib.sha256(evidence.read_bytes()).hexdigest()
+            eid = w.record_artifact(conn, digest, 'other', str(evidence))
+            content = {'predecessor_key':keys[0], 'successor_key':keys[1], 'expected_relation':signature,
+                'task_contexts':{k:task_context(tasks[k]) for k in keys}, 'action':'exclude_dependency',
+                'reason':'Explicit test-only rule, no claim of real Trisigma identity', 'approved_at':'2026-11-16T00:00:00Z',
+                'policy_revision':'publication-admission-v1', 'termination':'Exact pair/context changes',
+                'cause':{'code':'dependency_type_unsupported','entity':dep['dependency_key'],'source_sha256':fingerprint(signature)}}
+            w.record_project_rule(conn, w.ProjectRuleSpec('stage13-'+action,'1','stage13-trisigma',anchor['snapshot_id'],eid,digest,content))
+            new_source = tmp_path/'new-binary.mpp'; new_source.write_bytes((fixtures/'relations-all-types.mpp').read_bytes())
+            source_hash = hashlib.sha256(new_source.read_bytes()).hexdigest()
+            normalized_plan = q.get_snapshot(conn, anchor['snapshot_id'])['plan_id']
+            assert all(v.get('source_mpp_sha256') != source_hash for v in q.list_versions(conn, normalized_plan)['versions'])
+            first = run(action, '--mpp', str(new_source), '--page-id', page_id, '--project-slug', 'stage13-trisigma',
+                        '--timezone-hint', 'Europe/Moscow', live=True)
+            first_counters = deepcopy(run.last_probe)
+            shown = run('operation','show','--operation-id',first['operation_id'], live=True)
+            stage13_record('new-source-'+action, {'action':action,'anchor':anchor,'first':first,
+                'operation_show':shown,'counters':first_counters,'source_sha256':source_hash})
+            assert first['snapshot_id'] and first['verification']['archive']=='verified' and first['published'] is False
+            assert first_counters['MPXJ_read']==1 and first_counters['POST']==first_counters['PUT']==0
+            identity = run('identity','confirm','--project-slug','stage13-trisigma',
+                '--from','snapshot:'+anchor['snapshot_id'],'--to','snapshot:'+first['snapshot_id'],
+                '--mode','continuity','--evidence',str(evidence),'--reason','Explicit synthetic fixture identity assertion',live=True)
+            assert identity['exit_code']==0,identity
+            new_source.unlink()
+            resumed = run('resume','--operation-id',first['operation_id'],'--mapping-revision',identity['mapping_revision_id'],live=True)
+            stage13_record('new-source-'+action, {'action':action,'anchor':anchor,'first':first,'operation_show':shown,
+                'identity':identity,'resume':resumed,'first_counters':first_counters,'resume_counters':run.last_probe,
+                'source_sha256':source_hash,'functional_status':'passed' if resumed['published'] is True else 'failed'})
+            assert resumed['snapshot_id']==first['snapshot_id'] and run.last_probe['MPXJ_read']==0
+>           assert first['exit_code']==3 and first['status']=='needs_decision',first
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 4, 'display_task_count': 5, ...}
+E           assert (5 == 3)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:218: AssertionError
+_______________ test_new_binary_identity_to_publication[publish] _______________
+
+action = 'publish'
+live_page = (<conf_client.ConfluenceClient object at 0x7fed5fe64e80>, '537573659', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537573659'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7fed5fe455b0>, <function stage13_cli.<locals>.run at 0x7fed8d6cb040>)
+stage13_record = <function stage13_record.<locals>.record at 0x7fed0de11160>
+tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu1')
+
+    @pytest.mark.parametrize('action', ['diff','publish'])
+    def test_new_binary_identity_to_publication(action, live_page, stage13_cli, stage13_record, tmp_path):
+        from plan_rules import relation_signature, task_context
+        from prepared_plan import fingerprint
+        client, page_id, _ = live_page
+        context, run = stage13_cli
+        fixtures = Path(__file__).resolve().parents[1]/'fixtures/synthetic'
+        anchor_source = fixtures/'mpp14relations.mpp'
+        anchor = run('diff', '--mpp', str(anchor_source), '--page-id', page_id, '--project-slug', 'stage13-trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        assert anchor['snapshot_id']
+        conn = connect_durable(context.db)
+        try:
+            normalized = json.loads(q.get_snapshot(conn, anchor['snapshot_id'])['source_json'])
+            dep = next(d for d in normalized['dependencies'] if d['link_type']=='FF')
+            signature = relation_signature(dep, normalized['project'])
+            tasks = {t['task_key']:t for t in normalized['tasks']}
+            keys = (dep['predecessor_task_key'],dep['successor_task_key'])
+            evidence = tmp_path/'test-only-user-evidence.txt'
+            evidence.write_bytes((fixtures/'new-source-identity-resume/test-only-user-evidence.txt').read_bytes())
+            digest = hashlib.sha256(evidence.read_bytes()).hexdigest()
+            eid = w.record_artifact(conn, digest, 'other', str(evidence))
+            content = {'predecessor_key':keys[0], 'successor_key':keys[1], 'expected_relation':signature,
+                'task_contexts':{k:task_context(tasks[k]) for k in keys}, 'action':'exclude_dependency',
+                'reason':'Explicit test-only rule, no claim of real Trisigma identity', 'approved_at':'2026-11-16T00:00:00Z',
+                'policy_revision':'publication-admission-v1', 'termination':'Exact pair/context changes',
+                'cause':{'code':'dependency_type_unsupported','entity':dep['dependency_key'],'source_sha256':fingerprint(signature)}}
+            w.record_project_rule(conn, w.ProjectRuleSpec('stage13-'+action,'1','stage13-trisigma',anchor['snapshot_id'],eid,digest,content))
+            new_source = tmp_path/'new-binary.mpp'; new_source.write_bytes((fixtures/'relations-all-types.mpp').read_bytes())
+            source_hash = hashlib.sha256(new_source.read_bytes()).hexdigest()
+            normalized_plan = q.get_snapshot(conn, anchor['snapshot_id'])['plan_id']
+            assert all(v.get('source_mpp_sha256') != source_hash for v in q.list_versions(conn, normalized_plan)['versions'])
+            first = run(action, '--mpp', str(new_source), '--page-id', page_id, '--project-slug', 'stage13-trisigma',
+                        '--timezone-hint', 'Europe/Moscow', live=True)
+            first_counters = deepcopy(run.last_probe)
+            shown = run('operation','show','--operation-id',first['operation_id'], live=True)
+            stage13_record('new-source-'+action, {'action':action,'anchor':anchor,'first':first,
+                'operation_show':shown,'counters':first_counters,'source_sha256':source_hash})
+            assert first['snapshot_id'] and first['verification']['archive']=='verified' and first['published'] is False
+            assert first_counters['MPXJ_read']==1 and first_counters['POST']==first_counters['PUT']==0
+            identity = run('identity','confirm','--project-slug','stage13-trisigma',
+                '--from','snapshot:'+anchor['snapshot_id'],'--to','snapshot:'+first['snapshot_id'],
+                '--mode','continuity','--evidence',str(evidence),'--reason','Explicit synthetic fixture identity assertion',live=True)
+            assert identity['exit_code']==0,identity
+            new_source.unlink()
+            resumed = run('resume','--operation-id',first['operation_id'],'--mapping-revision',identity['mapping_revision_id'],live=True)
+            stage13_record('new-source-'+action, {'action':action,'anchor':anchor,'first':first,'operation_show':shown,
+                'identity':identity,'resume':resumed,'first_counters':first_counters,'resume_counters':run.last_probe,
+                'source_sha256':source_hash,'functional_status':'passed' if resumed['published'] is True else 'failed'})
+            assert resumed['snapshot_id']==first['snapshot_id'] and run.last_probe['MPXJ_read']==0
+>           assert first['exit_code']==3 and first['status']=='needs_decision',first
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 4, 'display_task_count': 5, ...}
+E           assert (5 == 3)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:218: AssertionError
+________________ test_real_publish_repeat_and_observed_dates[A] ________________
+
+case = 'A'
+live_page = (<conf_client.ConfluenceClient object at 0x7fed0d6c3100>, '537573662', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537573662'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_input = <function stage13_input.<locals>.select at 0x7fed5e7195e0>
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7fed0d6c38b0>, <function stage13_cli.<locals>.run at 0x7fed8d6cb820>)
+stage13_record = <function stage13_record.<locals>.record at 0x7fed5e719790>
+request = <FixtureRequest for <Function test_real_publish_repeat_and_observed_dates[A]>>
+
+    @pytest.mark.parametrize('case', ['A','B','C','D'])
+    def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):
+        from macro import find_macro
+        from itogo import compute_itogo_from_prepared
+        from prepared_plan import PreparedPlan, fingerprint
+        client, page_id, before = live_page
+        context, run = stage13_cli
+        source, fixture = stage13_input(case)
+        # Real Trisigma scope also exercises historical B/C rule diagnostics.
+        result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        counters = deepcopy(run.last_probe)
+        after = client.get_page(page_id)
+        conn = connect_durable(context.db)
+        try:
+            operation = result['operation_id']
+            snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None
+            prep = q.get_preparation_result(conn, operation) if operation else None
+            versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None
+            status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,
+                'page_id': page_id, 'page_version_before': before['version']['number'],
+                'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],
+                'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,
+                'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',
+                'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}
+            stage13_record('live-'+case, status)
+            assert result['verification']['archive'] == 'verified', result
+            assert counters['MPXJ_read'] == 1
+>           assert result['exit_code'] == 0 and result['published'] is True, result
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 53, 'display_task_count': 57, ...}
+E           assert (5 == 0)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:126: AssertionError
+________________ test_real_publish_repeat_and_observed_dates[B] ________________
+
+case = 'B'
+live_page = (<conf_client.ConfluenceClient object at 0x7fed5f865f70>, '537573663', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537573663'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_input = <function stage13_input.<locals>.select at 0x7fed0ddd8b80>
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7fed82486d60>, <function stage13_cli.<locals>.run at 0x7fed0ddd8670>)
+stage13_record = <function stage13_record.<locals>.record at 0x7fed5e7190d0>
+request = <FixtureRequest for <Function test_real_publish_repeat_and_observed_dates[B]>>
+
+    @pytest.mark.parametrize('case', ['A','B','C','D'])
+    def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):
+        from macro import find_macro
+        from itogo import compute_itogo_from_prepared
+        from prepared_plan import PreparedPlan, fingerprint
+        client, page_id, before = live_page
+        context, run = stage13_cli
+        source, fixture = stage13_input(case)
+        # Real Trisigma scope also exercises historical B/C rule diagnostics.
+        result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        counters = deepcopy(run.last_probe)
+        after = client.get_page(page_id)
+        conn = connect_durable(context.db)
+        try:
+            operation = result['operation_id']
+            snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None
+            prep = q.get_preparation_result(conn, operation) if operation else None
+            versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None
+            status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,
+                'page_id': page_id, 'page_version_before': before['version']['number'],
+                'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],
+                'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,
+                'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',
+                'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}
+            stage13_record('live-'+case, status)
+            assert result['verification']['archive'] == 'verified', result
+            assert counters['MPXJ_read'] == 1
+>           assert result['exit_code'] == 0 and result['published'] is True, result
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 60, 'display_task_count': 61, ...}
+E           assert (5 == 0)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:126: AssertionError
+________________ test_real_publish_repeat_and_observed_dates[C] ________________
+
+case = 'C'
+live_page = (<conf_client.ConfluenceClient object at 0x7fed8d320ac0>, '537573664', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537573664'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_input = <function stage13_input.<locals>.select at 0x7fed5e7195e0>
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7fed5fe45610>, <function stage13_cli.<locals>.run at 0x7fed5e7199d0>)
+stage13_record = <function stage13_record.<locals>.record at 0x7fed8d6cbc10>
+request = <FixtureRequest for <Function test_real_publish_repeat_and_observed_dates[C]>>
+
+    @pytest.mark.parametrize('case', ['A','B','C','D'])
+    def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):
+        from macro import find_macro
+        from itogo import compute_itogo_from_prepared
+        from prepared_plan import PreparedPlan, fingerprint
+        client, page_id, before = live_page
+        context, run = stage13_cli
+        source, fixture = stage13_input(case)
+        # Real Trisigma scope also exercises historical B/C rule diagnostics.
+        result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        counters = deepcopy(run.last_probe)
+        after = client.get_page(page_id)
+        conn = connect_durable(context.db)
+        try:
+            operation = result['operation_id']
+            snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None
+            prep = q.get_preparation_result(conn, operation) if operation else None
+            versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None
+            status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,
+                'page_id': page_id, 'page_version_before': before['version']['number'],
+                'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],
+                'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,
+                'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',
+                'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}
+            stage13_record('live-'+case, status)
+            assert result['verification']['archive'] == 'verified', result
+            assert counters['MPXJ_read'] == 1
+>           assert result['exit_code'] == 0 and result['published'] is True, result
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 61, 'display_task_count': 61, ...}
+E           assert (5 == 0)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:126: AssertionError
+________________ test_real_publish_repeat_and_observed_dates[D] ________________
+
+case = 'D'
+live_page = (<conf_client.ConfluenceClient object at 0x7fed5fe97c40>, '537573665', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537573665'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_input = <function stage13_input.<locals>.select at 0x7fed6814b550>
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7fed8248eb80>, <function stage13_cli.<locals>.run at 0x7fed0e28b700>)
+stage13_record = <function stage13_record.<locals>.record at 0x7fed0e28b3a0>
+request = <FixtureRequest for <Function test_real_publish_repeat_and_observed_dates[D]>>
+
+    @pytest.mark.parametrize('case', ['A','B','C','D'])
+    def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):
+        from macro import find_macro
+        from itogo import compute_itogo_from_prepared
+        from prepared_plan import PreparedPlan, fingerprint
+        client, page_id, before = live_page
+        context, run = stage13_cli
+        source, fixture = stage13_input(case)
+        # Real Trisigma scope also exercises historical B/C rule diagnostics.
+        result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        counters = deepcopy(run.last_probe)
+        after = client.get_page(page_id)
+        conn = connect_durable(context.db)
+        try:
+            operation = result['operation_id']
+            snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None
+            prep = q.get_preparation_result(conn, operation) if operation else None
+            versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None
+            status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,
+                'page_id': page_id, 'page_version_before': before['version']['number'],
+                'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],
+                'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,
+                'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',
+                'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}
+            stage13_record('live-'+case, status)
+            assert result['verification']['archive'] == 'verified', result
+            assert counters['MPXJ_read'] == 1
+>           assert result['exit_code'] == 0 and result['published'] is True, result
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 76, 'display_task_count': 71, ...}
+E           assert (5 == 0)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:126: AssertionError
+=============================== warnings summary ===============================
+test_mpp_input.py::test_zip_collisions[names0]
+  /usr/lib64/python3.9/zipfile.py:1535: UserWarning: Duplicate name: 'x.mpp'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/reports/junit.xml -
+=========================== short test summary info ============================
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[C]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]
+============ 6 failed, 716 passed, 1 warning in 1141.61s (0:19:01) =============

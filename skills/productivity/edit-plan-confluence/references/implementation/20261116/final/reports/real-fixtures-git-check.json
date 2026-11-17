@@ -1,0 +1,47 @@
+{
+  "fixtures": [
+    {
+      "id": "A",
+      "repository_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89.mpp",
+      "sha256": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89",
+      "git_blob_matches": true
+    },
+    {
+      "id": "B",
+      "repository_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317.mpp",
+      "sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+      "git_blob_matches": true
+    },
+    {
+      "id": "C",
+      "repository_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
+      "sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+      "git_blob_matches": true
+    },
+    {
+      "id": "D",
+      "repository_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9.mpp",
+      "sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+      "git_blob_matches": true
+    },
+    {
+      "id": "E",
+      "repository_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a.mpp",
+      "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+      "git_blob_matches": true
+    },
+    {
+      "id": "F",
+      "repository_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c.mpp",
+      "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+      "git_blob_matches": true
+    },
+    {
+      "id": "D-risks",
+      "repository_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/994989f149ac212e9b5a1122cea5b01363cb2b2d68e9d8308238585cbd5aaab0.mpp",
+      "sha256": "994989f149ac212e9b5a1122cea5b01363cb2b2d68e9d8308238585cbd5aaab0",
+      "git_blob_matches": true
+    }
+  ],
+  "copies_already_durable_in_git": true
+}

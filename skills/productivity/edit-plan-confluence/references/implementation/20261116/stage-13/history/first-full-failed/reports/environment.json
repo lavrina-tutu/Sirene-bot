@@ -1,0 +1,644 @@
+{
+  "python": "/usr/bin/python3.9",
+  "python_version": "3.9.25",
+  "cli_python": "/usr/bin/python3",
+  "reader_python": "/usr/bin/python3.9",
+  "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+  "java": "openjdk version \"17.0.17\" 2025-10-21 LTS\nOpenJDK Runtime Environment (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS)\nOpenJDK 64-Bit Server VM (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS, mixed mode, sharing)",
+  "java_rc": 0,
+  "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final",
+  "plugin_profile": {
+    "schema_version": 1,
+    "id": "installed-gantt-profile",
+    "version": "1.0.0",
+    "plugin": {
+      "key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
+      "version": "frontend-build:H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe"
+    },
+    "confluence_version": "8.9.4",
+    "codes": {
+      "relation": {
+        "FS": 2,
+        "SS": 0,
+        "FF": 3,
+        "SF": 1
+      },
+      "lag_unit": {
+        "DAYS": "day",
+        "HOURS": "hour"
+      }
+    },
+    "capabilities": {
+      "relation:FS": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "Exact installed frontend build, single dependency; dates observed in live engine. Parallel rows preserved by converter; parallel driving semantics not inferred."
+      },
+      "relation:SS": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__SS__input_json",
+          "profile-controls__SS__observation_json",
+          "profile-controls__SS__received_json",
+          "profile-controls__SS__render_png",
+          "profile-controls__SS__storage_xml"
+        ],
+        "scope": "Exact installed frontend build, single dependency; dates observed in live engine. Parallel rows preserved by converter; parallel driving semantics not inferred."
+      },
+      "relation:FF": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FF__input_json",
+          "profile-controls__FF__observation_json",
+          "profile-controls__FF__received_json",
+          "profile-controls__FF__render_png",
+          "profile-controls__FF__storage_xml"
+        ],
+        "scope": "Exact installed frontend build, single dependency; dates observed in live engine. Parallel rows preserved by converter; parallel driving semantics not inferred."
+      },
+      "relation:SF": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__SF__input_json",
+          "profile-controls__SF__observation_json",
+          "profile-controls__SF__received_json",
+          "profile-controls__SF__render_png",
+          "profile-controls__SF__storage_xml"
+        ],
+        "scope": "Exact installed frontend build, single dependency; dates observed in live engine. Parallel rows preserved by converter; parallel driving semantics not inferred."
+      },
+      "lag_unit:DAYS": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__positive-lag__input_json",
+          "profile-controls__positive-lag__observation_json",
+          "profile-controls__positive-lag__received_json",
+          "profile-controls__positive-lag__render_png",
+          "profile-controls__positive-lag__storage_xml"
+        ],
+        "scope": "Working time; shared endpoint/project calendar only."
+      },
+      "lag_unit:HOURS": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__hour-lag__input_json",
+          "profile-controls__hour-lag__observation_json",
+          "profile-controls__hour-lag__received_json",
+          "profile-controls__hour-lag__render_png",
+          "profile-controls__hour-lag__storage_xml"
+        ],
+        "scope": "Working time; shared endpoint/project calendar only."
+      },
+      "lag:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "FS controls with shared endpoint/project calendar; other type/lag combinations remain unverified."
+      },
+      "lag:positive": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__positive-lag__input_json",
+          "profile-controls__positive-lag__observation_json",
+          "profile-controls__positive-lag__received_json",
+          "profile-controls__positive-lag__render_png",
+          "profile-controls__positive-lag__storage_xml"
+        ],
+        "scope": "FS controls with shared endpoint/project calendar; other type/lag combinations remain unverified."
+      },
+      "lag:negative": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__negative-lag__input_json",
+          "profile-controls__negative-lag__observation_json",
+          "profile-controls__negative-lag__received_json",
+          "profile-controls__negative-lag__render_png",
+          "profile-controls__negative-lag__storage_xml"
+        ],
+        "scope": "FS controls with shared endpoint/project calendar; other type/lag combinations remain unverified."
+      },
+      "lag_unit:ELAPSED_DAYS": {
+        "status": "not_verified",
+        "evidence": [
+          "profile-controls__elapsed-lag__input_json",
+          "profile-controls__elapsed-lag__observation_json",
+          "profile-controls__elapsed-lag__received_json",
+          "profile-controls__elapsed-lag__render_png",
+          "profile-controls__elapsed-lag__storage_xml"
+        ],
+        "scope": "Attempted eday encoding produced Conversion unit not provided. No alternate elapsed encoding verified."
+      },
+      "lag_basis:equal_endpoint_calendars": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "Plugin dependenciesCalendar=ToEvent. PREDECESSOR/SUCCESSOR/PROJECT only equivalent when both effective task calendars equal project calendar."
+      },
+      "calendar:uniform_weekdays": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__hour-lag__input_json",
+          "profile-controls__hour-lag__observation_json",
+          "profile-controls__hour-lag__received_json",
+          "profile-controls__hour-lag__render_png",
+          "profile-controls__hour-lag__storage_xml"
+        ],
+        "scope": "Same two daily working intervals, weekday calendar expressed as recurrent nonworking complements. Varied daily intervals not verified."
+      },
+      "calendar:project_id_general": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "Installed wrapper selects project calendar id general."
+      },
+      "calendar:exceptions": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__calendar-exception__input_json",
+          "profile-controls__calendar-exception__observation_json",
+          "profile-controls__calendar-exception__received_json",
+          "profile-controls__calendar-exception__render_png",
+          "profile-controls__calendar-exception__storage_xml",
+          "profile-controls__calendar-working-exception__input_json",
+          "profile-controls__calendar-working-exception__observation_json",
+          "profile-controls__calendar-working-exception__received_json",
+          "profile-controls__calendar-working-exception__render_png",
+          "profile-controls__calendar-working-exception__storage_xml"
+        ],
+        "scope": "Date ranges are exclusive-end; negative override priority20 and working window priority30. Working-window witness is separately included."
+      },
+      "calendar:bindings:project": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json",
+          "profile-controls__FS__render_png",
+          "profile-controls__FS__storage_xml"
+        ],
+        "scope": "General project calendar only."
+      },
+      "calendar:intervals": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:inheritance": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:recurrence": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:work_weeks": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:bindings:tasks": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:bindings:resources": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "calendar:bindings:assignments": {
+        "status": "not_verified",
+        "evidence": [],
+        "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      },
+      "resource:identity": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__resources-assignments__input_json",
+          "profile-controls__resources-assignments__observation_json",
+          "profile-controls__resources-assignments__received_json",
+          "profile-controls__resources-assignments__render_png",
+          "profile-controls__resources-assignments__storage_xml"
+        ],
+        "scope": "Two distinct resource IDs with identical names retained by live engine."
+      },
+      "assignment:units": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__resources-assignments__input_json",
+          "profile-controls__resources-assignments__observation_json",
+          "profile-controls__resources-assignments__received_json",
+          "profile-controls__resources-assignments__render_png",
+          "profile-controls__resources-assignments__storage_xml"
+        ],
+        "scope": "FixedDuration assignments preserve explicit 0 and 50 units, associated by numeric resource/task IDs. Work/contours not claimed."
+      },
+      "dependency:FS:DAYS:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FS__input_json",
+          "profile-controls__FS__observation_json",
+          "profile-controls__FS__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:SS:DAYS:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__SS__input_json",
+          "profile-controls__SS__observation_json",
+          "profile-controls__SS__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:FF:DAYS:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__FF__input_json",
+          "profile-controls__FF__observation_json",
+          "profile-controls__FF__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:SF:DAYS:zero": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__SF__input_json",
+          "profile-controls__SF__observation_json",
+          "profile-controls__SF__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:FS:DAYS:positive": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__positive-lag__input_json",
+          "profile-controls__positive-lag__observation_json",
+          "profile-controls__positive-lag__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:FS:DAYS:negative": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__negative-lag__input_json",
+          "profile-controls__negative-lag__observation_json",
+          "profile-controls__negative-lag__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      },
+      "dependency:FS:HOURS:positive": {
+        "status": "tested_supported",
+        "evidence": [
+          "profile-controls__hour-lag__input_json",
+          "profile-controls__hour-lag__observation_json",
+          "profile-controls__hour-lag__received_json"
+        ],
+        "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+      }
+    },
+    "evidence": {
+      "installed-metadata_json": {
+        "path": "references/implementation/20261116/stage-08/live/installed-metadata.json",
+        "sha256": "eca09ebea5f90fb66a3146156defa56baca2da773bcef4a16d6a5c69c3e9b6f8"
+      },
+      "profile-controls__FF__initial-load-errors_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/initial-load-errors.json",
+        "sha256": "7621e860c8568ff7a146be16f8fbd65e333582ec7e2d6a41a04ad94fe81c0f29"
+      },
+      "profile-controls__FF__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/input.json",
+        "sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e"
+      },
+      "profile-controls__FF__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/observation.json",
+        "sha256": "03fed92b937f3505a025243f5544bbc8f4ed4939219ace963eb391d002c7adfa"
+      },
+      "profile-controls__FF__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/received.json",
+        "sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e"
+      },
+      "profile-controls__FF__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/render.png",
+        "sha256": "bf06d626851fb518abf1c9f5901181ad7bce0cf8f5068e337bf64aa4cf26b1f5"
+      },
+      "profile-controls__FF__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FF/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__FS__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/input.json",
+        "sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d"
+      },
+      "profile-controls__FS__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/observation.json",
+        "sha256": "0236121c5cea5681f5793de786566abe495fe4fd786fb9bbeff7204cf9dce7ef"
+      },
+      "profile-controls__FS__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/received.json",
+        "sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d"
+      },
+      "profile-controls__FS__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/render.png",
+        "sha256": "6be17851ea3fdcadf2676d7b556a9d30f7c92bece4b5061e22f2b649ba627334"
+      },
+      "profile-controls__FS__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/FS/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__SF__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/input.json",
+        "sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518"
+      },
+      "profile-controls__SF__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/observation.json",
+        "sha256": "5de0badce1b909fa606b4ecb33a350cc0b0b8253b68ca28c61a66ce0900f89f4"
+      },
+      "profile-controls__SF__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/received.json",
+        "sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518"
+      },
+      "profile-controls__SF__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/render.png",
+        "sha256": "4a24abf08c440fa05acdbc53e3935f13bc684904b9a202a6ea9ac4ee799c9b1a"
+      },
+      "profile-controls__SF__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SF/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__SS__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/input.json",
+        "sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175"
+      },
+      "profile-controls__SS__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/observation.json",
+        "sha256": "62bdeb7fa5844b7415f937a241ddf510d59e4fe9010a400c8073a235bb12160a"
+      },
+      "profile-controls__SS__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/received.json",
+        "sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175"
+      },
+      "profile-controls__SS__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/render.png",
+        "sha256": "8c2fd2f4eb9868582496ea606bc2187543fdd567621d5089e0a9b3d2476fcbb8"
+      },
+      "profile-controls__SS__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/SS/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__calendar-exception__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/input.json",
+        "sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07"
+      },
+      "profile-controls__calendar-exception__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/observation.json",
+        "sha256": "cc9916397858b3e1d139d99b2f2c4d419d5a2a899ec382eaaaab7aff04e6c934"
+      },
+      "profile-controls__calendar-exception__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/received.json",
+        "sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07"
+      },
+      "profile-controls__calendar-exception__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/render.png",
+        "sha256": "e3820cc29e267dea951dcbfa68e14881cc32b4b108c75eb6de749bafe8e7c75c"
+      },
+      "profile-controls__calendar-exception__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-exception/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__calendar-working-exception__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/input.json",
+        "sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710"
+      },
+      "profile-controls__calendar-working-exception__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/observation.json",
+        "sha256": "9c21efcb2003ca451494348210774a4745c5a0a29c68586b46e7de0a40645c9d"
+      },
+      "profile-controls__calendar-working-exception__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/received.json",
+        "sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710"
+      },
+      "profile-controls__calendar-working-exception__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/render.png",
+        "sha256": "dd92a180b229c7482605568f475eb90698ca098b0613e0db097c4503368c3fbd"
+      },
+      "profile-controls__calendar-working-exception__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/calendar-working-exception/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__elapsed-lag__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/input.json",
+        "sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842"
+      },
+      "profile-controls__elapsed-lag__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/observation.json",
+        "sha256": "5fb39fbce9ee801531885edf5c5dcf58bf9c1809a980a951d572fc5f0434452e"
+      },
+      "profile-controls__elapsed-lag__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/received.json",
+        "sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842"
+      },
+      "profile-controls__elapsed-lag__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/render.png",
+        "sha256": "7c42233fc1bdde1e8a9755f645e3a4e520468c92d63b48ea610b71cb7693cf2e"
+      },
+      "profile-controls__elapsed-lag__rendered-text_txt": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/rendered-text.txt",
+        "sha256": "53da63a1f70a0961e43f962dbfac44d32fa2026458559322fe77738bd73ce949"
+      },
+      "profile-controls__elapsed-lag__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/elapsed-lag/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__hour-lag__initial-load-errors_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/initial-load-errors.json",
+        "sha256": "7621e860c8568ff7a146be16f8fbd65e333582ec7e2d6a41a04ad94fe81c0f29"
+      },
+      "profile-controls__hour-lag__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/input.json",
+        "sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b"
+      },
+      "profile-controls__hour-lag__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/observation.json",
+        "sha256": "5e08cdb08fb54c82e2c7ebedd2db4aaecaa7d8cab0cfb32e4f78d0061355fa15"
+      },
+      "profile-controls__hour-lag__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/received.json",
+        "sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b"
+      },
+      "profile-controls__hour-lag__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/render.png",
+        "sha256": "89e3f5794a9866034c8239f78fac834bbc7f7be7c9fb2438c3ee59bdf7553ca2"
+      },
+      "profile-controls__hour-lag__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/hour-lag/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__negative-lag__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/input.json",
+        "sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194"
+      },
+      "profile-controls__negative-lag__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/observation.json",
+        "sha256": "fc4aba0aaf16e0603580d49154e09bf4460080b68575bc9d55f8a8dc1cfb9b9d"
+      },
+      "profile-controls__negative-lag__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/received.json",
+        "sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194"
+      },
+      "profile-controls__negative-lag__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/render.png",
+        "sha256": "05cc5da25bf1572060bee86f92ff993b4764b01de00d33d73dba244e6dd5a33d"
+      },
+      "profile-controls__negative-lag__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/negative-lag/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__positive-lag__initial-load-errors_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/initial-load-errors.json",
+        "sha256": "7621e860c8568ff7a146be16f8fbd65e333582ec7e2d6a41a04ad94fe81c0f29"
+      },
+      "profile-controls__positive-lag__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/input.json",
+        "sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f"
+      },
+      "profile-controls__positive-lag__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/observation.json",
+        "sha256": "a854354e851aa65329288b5cdd3c845c0d14be96cac6217e947f4183391f3a97"
+      },
+      "profile-controls__positive-lag__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/received.json",
+        "sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f"
+      },
+      "profile-controls__positive-lag__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/render.png",
+        "sha256": "282ce55eb858692b211cb94c856f5ff516767ac455353133aad1194e52759f74"
+      },
+      "profile-controls__positive-lag__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/positive-lag/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      },
+      "profile-controls__resources-assignments__input_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/input.json",
+        "sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be"
+      },
+      "profile-controls__resources-assignments__observation_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/observation.json",
+        "sha256": "fcb28c0f001e70ccf46dba29f7368f8781824c8420020c64c088dcd261437a66"
+      },
+      "profile-controls__resources-assignments__received_json": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/received.json",
+        "sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be"
+      },
+      "profile-controls__resources-assignments__render_png": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/render.png",
+        "sha256": "f12ad5c566ad2c6330be699940d4f6a55ab8400ea1de0776814d5a4db3ec6972"
+      },
+      "profile-controls__resources-assignments__storage_xml": {
+        "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/storage.xml",
+        "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+      }
+    },
+    "limitations": [
+      "Version pins installed frontend build plus engine asset SHA-256, not an inferred server release number; UPM release metadata is inaccessible (401).",
+      "Bryntum Gantt engine observed as 5.4.1. Local MppReader scheduler results are not plugin evidence.",
+      "Only the stated control scopes are verified. Type+nonzero lag combinations other than FS have no live proof.",
+      "Elapsed eday encoding failed; other elapsed encodings, varied daily intervals, inheritance/workweeks/recurrences and task/resource/assignment calendar bindings remain not_verified.",
+      "Representation conversion does not establish schedule equality for arbitrary source plans. Exact source dates and per-task comparison remain separate.",
+      "Work is displayed in diagnostics only; no work block is published in storage."
+    ]
+  },
+  "component_versions": {
+    "reader": "read-mpp-v2",
+    "mpxj": "16.4.0",
+    "jpype": "1.7.1",
+    "exporter": "full-export-v2",
+    "normalization": "prepared-v1",
+    "converter": "prepared-gantt-v1",
+    "policy": "publication-admission-v1",
+    "rules": "project-exceptions-v1",
+    "normalization_profile": {
+      "id": "normalization-v1",
+      "version": "1.0.0",
+      "normalizer_version": "prepared-v1",
+      "export_version": "full-export-v2",
+      "dates": {
+        "policy": "preserve_source_local_precision",
+        "unknown_timezone": null,
+        "timezone_hint": "IANA-explicit-only"
+      },
+      "numbers": {
+        "quantities": "decimal_strings",
+        "rounding": "none"
+      },
+      "identity": {
+        "scope": "source-local-only",
+        "fallback": "source_collection_position",
+        "cross_file_mapping": "unknown"
+      },
+      "ordering": "preserve_source_rows_and_parallel_relations",
+      "semantic_exclusions": [
+        "provenance_except_source_identity",
+        "source",
+        "telemetry",
+        "operation_id",
+        "work_dir",
+        "read_at"
+      ],
+      "quality": {
+        "collection": [
+          "complete",
+          "partial",
+          "missing",
+          "unsupported"
+        ],
+        "null": "missing:not_set",
+        "zero": "ok:0",
+        "unsupported": "explicit_reason"
+      },
+      "summary": "preserve_inputs_only;calculation_is_stage_08"
+    },
+    "summary_profile": {
+      "id": "summary-v1",
+      "version": "1.0.0",
+      "root": "unique_top_level_nonservice_summary_or_explicit_task_key",
+      "days": "ceil_root_working_duration_using_source_minutes_per_unit",
+      "elapsed_duration": "unsupported_without_explicit_transformation",
+      "dates": "source_local_in_resolved_timezone;convert_offset_dates_to_resolved_timezone",
+      "work": "unique_assignments_of_nonservice_nonsummary_tasks_including_milestones",
+      "timephased": "never_add_to_assignment_work",
+      "missing": "known_sum_partial;never_zero_total",
+      "arithmetic": "Decimal;no_per_task_rounding",
+      "display": {
+        "decimal_places": 3,
+        "rounding": "ROUND_HALF_UP",
+        "trim_zeroes": true
+      },
+      "storage_work": false
+    }
+  }
+}

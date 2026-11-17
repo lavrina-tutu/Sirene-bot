@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+  "observed_at": "2026-11-17T07:50:25.205994+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu1/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
+    "publish",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_new_binary_identity_to_pu1/new-binary.mpp",
+    "--page-id",
+    "537573659",
+    "--project-slug",
+    "stage13-trisigma",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 5,
+  "duration_seconds": 4.357837304996792,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_e9006c0200404075ad2c93750aabf524\", \"item_id\": \"item_b7baba70821c4eed85c15d14edbc3e73\", \"status\": \"failed\", \"mode\": \"publish\", \"exit_code\": 5, \"project_slug\": \"stage13-trisigma\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_c17f3334140f42a3a4c24c5b1a86ccbf\", \"page_id\": null, \"page_url\": null, \"task_count\": 6, \"display_task_count\": 5, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"stage13-publish\", \"revision\": \"1\", \"result\": \"inactive\", \"evidence_id\": \"artifact_e4ade96ed7a94a829da73be71c95df7d\"}], \"attachment_version\": null, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"storage\": \"not_applicable\", \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 2, \"category\": \"nonimpact_incomplete\", \"code\": \"nested_collection_missing\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"assignments.0.timephased_quality\", \"assignments.1.timephased_quality\", \"assignments.2.timephased_quality\"]}, {\"row\": 3, \"category\": \"incomplete\", \"code\": \"collection_partial\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 2, \"example_entities\": [\"assignments\", \"dependencies\"]}, {\"row\": 3, \"category\": \"incomplete\", \"code\": \"field_missing\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"assignments.0.quality_issues.0\", \"assignments.1.quality_issues.0\", \"assignments.2.quality_issues.0\"]}, {\"row\": 3, \"category\": \"incomplete\", \"code\": \"field_unsupported\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 8, \"example_entities\": [\"dependencies.0.lag_calendar\", \"dependencies.0.quality_issues.0\", \"dependencies.1.lag_calendar\"]}, {\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"assignment_partial\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"assignment_semantics_unrepresented:finish\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"assignment_semantics_unrepresented:segments\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"assignment_semantics_unrepresented:start\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"calendar_binding_unsupported\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"resources\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"calendar_inheritance_unsupported\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"uid:2\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"dependency_combination_unverified\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"local:dependency:000001\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"dependency_lag_unit_unsupported\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"local:dependency:000001\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"resource_availability_unrepresented\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"uid:0\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"summary_root_missing\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"summary\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_semantics_unrepresented:effort_driven\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_semantics_unrepresented:segments\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_semantics_unrepresented:task_type\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:1\", \"uid:2\", \"uid:3\"]}, {\"row\": 14, \"category\": \"identity\", \"code\": \"identity_confirmation_required\", \"exit_code\": 3, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"stage13-publish\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_ddddac40534646b99485f5660e0c0a2c\"]}}, \"published\": false, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_ddddac40534646b99485f5660e0c0a2c\"}, {\"code\": \"nested_collection_missing\", \"message\": \"nested_collection_missing: 5 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_ddddac40534646b99485f5660e0c0a2c\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_ddddac40534646b99485f5660e0c0a2c\"}], \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"external_effect\": \"none\", \"error\": {\"code\": \"identity_confirmation_required\", \"message\": \"identity_confirmation_required\", \"retryable\": false, \"next_action\": \"operation show --operation-id operation_e9006c0200404075ad2c93750aabf524\"}}\n",
+  "stderr": "2026-11-17T07:50:23.189249040Z main ERROR Log4j API could not find a logging provider.\n",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 1,
+    "cache_hit": 0,
+    "cache_miss": 1,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537573659"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/tkachenkoav/USERTOOLS/MppReader/plan_export.py", line 501, in <module>
+    sys.exit(main())
+  File "/home/tkachenkoav/USERTOOLS/MppReader/plan_export.py", line 492, in main
+    payload = json.dumps(export_full(args.path), ensure_ascii=False, indent=2, allow_nan=False)
+  File "/home/tkachenkoav/USERTOOLS/MppReader/plan_export.py", line 432, in export_full
+    project = read_project_file(str(src), read_observer=observe)
+  File "/home/tkachenkoav/USERTOOLS/MppReader/read_mpp.py", line 53, in read_project_file
+    raise RuntimeError(f"Не удалось прочитать файл: {path}")
+RuntimeError: Не удалось прочитать файл: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_inbox_errors_resume_and_h0/WorkVault/_plan-receipts/batch-op-5fd6130b75c82f7f06e5597c6b15533e71cc4d267852a1e16a4f053e965452c6/input/7f5c7cb8509ede0adf98d8fd5241124136265118a40f282d96a40c0155cf2264/source.mpp

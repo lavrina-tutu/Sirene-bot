@@ -1,0 +1,246 @@
+{
+  "calls": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/cache",
+        "identity",
+        "confirm",
+        "--project-slug",
+        "identity-test",
+        "--from",
+        "snapshot:snapshot_bc1abf1367fe418580baf21cbfd0b5dd",
+        "--to",
+        "snapshot:snapshot_29ba7ffe414d47e3adb6a01a752e5c51",
+        "--mode",
+        "continuity",
+        "--evidence",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/user-statement.txt",
+        "--reason",
+        "TEST ONLY explicit user statement"
+      ],
+      "rc": 0,
+      "result": {
+        "schema_version": 1,
+        "action": "identity_confirm",
+        "status": "confirmed",
+        "exit_code": 0,
+        "project_slug": "identity-test",
+        "from_snapshot_id": "snapshot_bc1abf1367fe418580baf21cbfd0b5dd",
+        "to_snapshot_id": "snapshot_29ba7ffe414d47e3adb6a01a752e5c51",
+        "from_source_sha256": "c4abde1da73b6964b73e58b022d9c51e69407f777ae0676f403964617d927933",
+        "to_source_sha256": "3f7e887cdba9d056d6d9a05607621b92499906dcc97b9b1be38bd73d5da92d80",
+        "mapping_revision_id": "mapping_11088b90c582479c986d39017754fd60",
+        "revision_status": "active",
+        "evidence_id": "artifact_851e680df73543678af26c2291ba83fb",
+        "evidence_sha256": "6476a9a05b99d8bd092358575bd707007748f9f4f100cc1b663a72c767b3df30",
+        "published": false,
+        "error": null
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/cache",
+        "identity",
+        "confirm",
+        "--project-slug",
+        "identity-test",
+        "--from",
+        "snapshot:snapshot_bc1abf1367fe418580baf21cbfd0b5dd",
+        "--to",
+        "snapshot:snapshot_29ba7ffe414d47e3adb6a01a752e5c51",
+        "--mode",
+        "continuity",
+        "--evidence",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/user-statement.txt",
+        "--reason",
+        "TEST ONLY explicit user statement"
+      ],
+      "rc": 0,
+      "result": {
+        "schema_version": 1,
+        "action": "identity_confirm",
+        "status": "confirmed",
+        "exit_code": 0,
+        "project_slug": "identity-test",
+        "from_snapshot_id": "snapshot_bc1abf1367fe418580baf21cbfd0b5dd",
+        "to_snapshot_id": "snapshot_29ba7ffe414d47e3adb6a01a752e5c51",
+        "from_source_sha256": "c4abde1da73b6964b73e58b022d9c51e69407f777ae0676f403964617d927933",
+        "to_source_sha256": "3f7e887cdba9d056d6d9a05607621b92499906dcc97b9b1be38bd73d5da92d80",
+        "mapping_revision_id": "mapping_11088b90c582479c986d39017754fd60",
+        "revision_status": "active",
+        "evidence_id": "artifact_851e680df73543678af26c2291ba83fb",
+        "evidence_sha256": "6476a9a05b99d8bd092358575bd707007748f9f4f100cc1b663a72c767b3df30",
+        "published": false,
+        "error": null
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/cache",
+        "identity",
+        "show",
+        "--project-slug",
+        "identity-test",
+        "--mapping-revision",
+        "mapping_11088b90c582479c986d39017754fd60"
+      ],
+      "rc": 0,
+      "result": {
+        "schema_version": 1,
+        "action": "identity_show",
+        "exit_code": 0,
+        "project_slug": "identity-test",
+        "mapping_revision_id": "mapping_11088b90c582479c986d39017754fd60",
+        "result": {
+          "mapping_revision_id": "mapping_11088b90c582479c986d39017754fd60",
+          "plan_id": "plan_73551717a98c4c4186c7bb07f6436d4e",
+          "basis": "continuity",
+          "created_at": "2026-11-17T07:43:58+00:00",
+          "from_snapshot_id": "snapshot_bc1abf1367fe418580baf21cbfd0b5dd",
+          "to_snapshot_id": "snapshot_29ba7ffe414d47e3adb6a01a752e5c51",
+          "scope_json": "{\"from_profile\":\"identity-test-v1\",\"from_representation\":\"mpp\",\"from_snapshot_id\":\"snapshot_bc1abf1367fe418580baf21cbfd0b5dd\",\"from_source_sha256\":\"c4abde1da73b6964b73e58b022d9c51e69407f777ae0676f403964617d927933\",\"from_timezone\":\"unknown\",\"plan_id\":\"plan_73551717a98c4c4186c7bb07f6436d4e\",\"to_profile\":\"identity-test-v1\",\"to_representation\":\"mpp\",\"to_snapshot_id\":\"snapshot_29ba7ffe414d47e3adb6a01a752e5c51\",\"to_source_sha256\":\"3f7e887cdba9d056d6d9a05607621b92499906dcc97b9b1be38bd73d5da92d80\",\"to_timezone\":\"unknown\"}",
+          "evidence_id": "artifact_851e680df73543678af26c2291ba83fb",
+          "evidence_sha256": "6476a9a05b99d8bd092358575bd707007748f9f4f100cc1b663a72c767b3df30",
+          "author": "tkachenkoav",
+          "action_source": "explicit_user_cli",
+          "reason": "TEST ONLY explicit user statement",
+          "policy_revision": "identity-v1",
+          "supersedes": null,
+          "confirmation_sha256": "703975a9d54e5bad0be1e312446d9acaeaec37e5f93cdc6de969cac31b8bc035",
+          "project_slug": "identity-test",
+          "scope": {
+            "from_profile": "identity-test-v1",
+            "from_representation": "mpp",
+            "from_snapshot_id": "snapshot_bc1abf1367fe418580baf21cbfd0b5dd",
+            "from_source_sha256": "c4abde1da73b6964b73e58b022d9c51e69407f777ae0676f403964617d927933",
+            "from_timezone": "unknown",
+            "plan_id": "plan_73551717a98c4c4186c7bb07f6436d4e",
+            "to_profile": "identity-test-v1",
+            "to_representation": "mpp",
+            "to_snapshot_id": "snapshot_29ba7ffe414d47e3adb6a01a752e5c51",
+            "to_source_sha256": "3f7e887cdba9d056d6d9a05607621b92499906dcc97b9b1be38bd73d5da92d80",
+            "to_timezone": "unknown"
+          },
+          "status": "active",
+          "pairs": [
+            {
+              "entity_kind": "assignment",
+              "from_key": "uid:100",
+              "to_key": "uid:100",
+              "identity_key": "assignment:uid:100"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "uid:10",
+              "to_key": "uid:10",
+              "identity_key": "resource:uid:10"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "uid:1",
+              "to_key": "uid:1",
+              "identity_key": "task:uid:1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "uid:2",
+              "to_key": "uid:2",
+              "identity_key": "task:uid:2"
+            }
+          ]
+        },
+        "published": false,
+        "error": null
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/cache",
+        "identity",
+        "show",
+        "--project-slug",
+        "other",
+        "--mapping-revision",
+        "mapping_11088b90c582479c986d39017754fd60"
+      ],
+      "rc": 4,
+      "result": {
+        "schema_version": 1,
+        "action": "identity_show",
+        "status": "failed",
+        "exit_code": 4,
+        "project_slug": "other",
+        "result": null,
+        "published": false,
+        "error": {
+          "code": "mapping_revision_scope_mismatch",
+          "message": "mapping_revision_scope_mismatch"
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+        "--db",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/state/index.sqlite",
+        "--workvault",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/WorkVault",
+        "--cache-dir",
+        "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cli_confirm_show_err0/cache",
+        "identity",
+        "confirm",
+        "--project-slug",
+        "identity-test"
+      ],
+      "rc": 2,
+      "result": {
+        "schema_version": 1,
+        "action": "identity_confirm",
+        "exit_code": 2,
+        "result": null,
+        "error": {
+          "code": "invalid_arguments",
+          "message": "Некорректные аргументы CLI"
+        }
+      },
+      "stderr": "Ошибка аргументов CLI\n"
+    }
+  ],
+  "reader_reads": 0,
+  "POST": 0,
+  "PUT": 0,
+  "no_automatic_resume": true
+}

@@ -1,0 +1,9 @@
+..............F                                                          [100%]
+=================================== FAILURES ===================================
+______________________ test_new_and_old_schema_history[6] ______________________
+skills/productivity/edit-plan-confluence/tests/acceptance/test_migration_preservation.py:56: in test_new_and_old_schema_history
+    assert publication['historical_status'] == 'registered'
+E   AssertionError: assert None == 'registered'
+=========================== short test summary info ============================
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_migration_preservation.py::test_new_and_old_schema_history[6]
+1 failed, 14 passed in 14.97s

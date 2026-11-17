@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "operation_id": "operation_89df3c4eff5f4d49b2516091d65f8902",
+  "item_id": "item_e87ca590300f48069524e5eda1ec928b",
+  "status": "saved_with_warnings",
+  "mode": "save",
+  "exit_code": 0,
+  "project_slug": "stage13-trisigma",
+  "source": {
+    "name": "F.mpp",
+    "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+    "size_bytes": 567808
+  },
+  "snapshot_id": "snapshot_8a0eac0238804bc7878f33eb32645374",
+  "page_id": null,
+  "page_url": null,
+  "task_count": 86,
+  "display_task_count": 85,
+  "dependency_count": 93,
+  "exceptions": [],
+  "attachment_version": null,
+  "verification": {
+    "archive": "verified",
+    "attachment": "not_applicable",
+    "storage": "not_applicable",
+    "schedule": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [
+        "collection_assignments_partial",
+        "collection_dependencies_partial",
+        "fields_missing",
+        "fields_unsupported",
+        "schedule_not_verified"
+      ],
+      "evidence_ids": []
+    }
+  },
+  "published": false,
+  "warnings": [
+    {
+      "code": "collection_assignments_partial",
+      "message": "Полнота коллекции assignments: partial",
+      "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+    },
+    {
+      "code": "collection_dependencies_partial",
+      "message": "Полнота коллекции dependencies: partial",
+      "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+    },
+    {
+      "code": "fields_missing",
+      "message": "Часть исходных полей имеет качество missing",
+      "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+    },
+    {
+      "code": "fields_unsupported",
+      "message": "Часть исходных полей имеет качество unsupported",
+      "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/ab5ba63e914f9ab958c520d36dd44ed9c428ae53d548231f97fc176b184fc89b.json"
+    }
+  ],
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived"
+  ],
+  "external_effect": "none",
+  "error": null
+}

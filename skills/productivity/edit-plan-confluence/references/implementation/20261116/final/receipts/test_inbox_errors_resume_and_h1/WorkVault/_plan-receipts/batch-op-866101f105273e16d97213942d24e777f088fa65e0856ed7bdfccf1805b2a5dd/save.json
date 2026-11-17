@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "operation_id": "batch-op-866101f105273e16d97213942d24e777f088fa65e0856ed7bdfccf1805b2a5dd",
+  "item_id": "batch-item-866101f105273e16d97213942d24e777f088fa65e0856ed7bdfccf1805b2a5dd",
+  "status": "failed",
+  "mode": "save",
+  "exit_code": 5,
+  "project_slug": "stage13-trisigma",
+  "source": {
+    "name": "02-corrupt.mpp",
+    "sha256": "7f5c7cb8509ede0adf98d8fd5241124136265118a40f282d96a40c0155cf2264",
+    "size_bytes": 34
+  },
+  "snapshot_id": null,
+  "page_id": null,
+  "page_url": null,
+  "task_count": null,
+  "display_task_count": null,
+  "dependency_count": null,
+  "exceptions": [],
+  "attachment_version": null,
+  "verification": {
+    "archive": "not_verified",
+    "attachment": "not_applicable",
+    "storage": "not_applicable",
+    "schedule": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [],
+      "evidence_ids": []
+    }
+  },
+  "published": false,
+  "warnings": [],
+  "completed_stages": [
+    "input_frozen"
+  ],
+  "external_effect": "none",
+  "error": {
+    "code": "mpp_unreadable",
+    "message": "Сохранение не подтверждено: mpp_unreadable",
+    "retryable": false,
+    "next_action": null
+  }
+}

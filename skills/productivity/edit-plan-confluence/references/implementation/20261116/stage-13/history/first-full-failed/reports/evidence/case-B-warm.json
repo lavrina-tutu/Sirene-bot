@@ -1,0 +1,97 @@
+{
+  "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[B]",
+  "observed_at": "2026-11-17T07:10:46.638990+00:00",
+  "case": "B",
+  "receipt": {
+    "schema_version": 1,
+    "operation_id": "operation_74d6ffcf5c614f66bc3164ba6fd0dcd7",
+    "item_id": "item_1ce9608b7d014be6beeefcc639aac3c4",
+    "status": "unchanged",
+    "mode": "save",
+    "exit_code": 0,
+    "project_slug": "stage13-trisigma",
+    "source": {
+      "name": "same-bytes-renamed.mpp",
+      "sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+      "size_bytes": 586240
+    },
+    "snapshot_id": "snapshot_8c2a57815e0540dfbb6fe1bd0e94ca36",
+    "page_id": null,
+    "page_url": null,
+    "task_count": 62,
+    "display_task_count": 61,
+    "dependency_count": 60,
+    "exceptions": [],
+    "attachment_version": null,
+    "verification": {
+      "archive": "verified",
+      "attachment": "not_applicable",
+      "storage": "not_applicable",
+      "schedule": {
+        "status": "not_verified",
+        "checks": [],
+        "limitations": [
+          "collection_assignments_partial",
+          "collection_dependencies_partial",
+          "fields_missing",
+          "fields_unsupported",
+          "schedule_not_verified"
+        ],
+        "evidence_ids": []
+      }
+    },
+    "published": false,
+    "warnings": [
+      {
+        "code": "collection_assignments_partial",
+        "message": "Полнота коллекции assignments: partial",
+        "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_B_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/331fc73ee64bcfc1ad054e01633f2d3ac24f875e703513d0c3ff2a78920aaa04.json"
+      },
+      {
+        "code": "collection_dependencies_partial",
+        "message": "Полнота коллекции dependencies: partial",
+        "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_B_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/331fc73ee64bcfc1ad054e01633f2d3ac24f875e703513d0c3ff2a78920aaa04.json"
+      },
+      {
+        "code": "fields_missing",
+        "message": "Часть исходных полей имеет качество missing",
+        "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_B_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/331fc73ee64bcfc1ad054e01633f2d3ac24f875e703513d0c3ff2a78920aaa04.json"
+      },
+      {
+        "code": "fields_unsupported",
+        "message": "Часть исходных полей имеет качество unsupported",
+        "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_B_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/331fc73ee64bcfc1ad054e01633f2d3ac24f875e703513d0c3ff2a78920aaa04.json"
+      }
+    ],
+    "completed_stages": [
+      "input_frozen",
+      "prepared",
+      "archived"
+    ],
+    "external_effect": "none",
+    "error": null
+  },
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 1,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0
+  },
+  "baseline_before": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_515c96c95bb744a6974dd3d4b458de6c','plan_018e977e794e476886d6c0c65eb421bb','snapshot_449bcc0d5f704516bf7f3087dee12b60',0,1,'test owner before acceptance',NULL,'2026-11-17T07:10:34+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e50479a7e4104a99a5bf838d6cd74b60','lineage_2ea24a19dfe143f0a3f4ba670d6c3ed6','snapshot_449bcc0d5f704516bf7f3087dee12b60',1,'test owner before acceptance',NULL,'2026-11-17T07:10:34+00:00');"
+    ]
+  },
+  "baseline_after": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_515c96c95bb744a6974dd3d4b458de6c','plan_018e977e794e476886d6c0c65eb421bb','snapshot_449bcc0d5f704516bf7f3087dee12b60',0,1,'test owner before acceptance',NULL,'2026-11-17T07:10:34+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e50479a7e4104a99a5bf838d6cd74b60','lineage_2ea24a19dfe143f0a3f4ba670d6c3ed6','snapshot_449bcc0d5f704516bf7f3087dee12b60',1,'test owner before acceptance',NULL,'2026-11-17T07:10:34+00:00');"
+    ]
+  }
+}

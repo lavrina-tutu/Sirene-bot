@@ -1,0 +1,27 @@
+{
+  "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[C]",
+  "observed_at": "2026-11-17T07:37:52.111179+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_C_0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_C_0/cache",
+    "save",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_C_0/same-bytes-renamed.mpp",
+    "--project-slug",
+    "stage13-trisigma",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 0,
+  "duration_seconds": 4.465586940001231,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_8b1eafa2a8a9412299c027b66eef471b\", \"item_id\": \"item_1c2498e616d34fd98a28ec23e4bfd99c\", \"status\": \"unchanged\", \"mode\": \"save\", \"exit_code\": 0, \"project_slug\": \"stage13-trisigma\", \"source\": {\"name\": \"same-bytes-renamed.mpp\", \"sha256\": \"38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7\", \"size_bytes\": 532480}, \"snapshot_id\": \"snapshot_1ba5fa44a639418f98af228b02ee70b2\", \"page_id\": null, \"page_url\": null, \"task_count\": 62, \"display_task_count\": 61, \"dependency_count\": 61, \"exceptions\": [], \"attachment_version\": null, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"storage\": \"not_applicable\", \"schedule\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"collection_assignments_partial\", \"collection_dependencies_partial\", \"fields_missing\", \"fields_unsupported\", \"schedule_not_verified\"], \"evidence_ids\": []}}, \"published\": false, \"warnings\": [{\"code\": \"collection_assignments_partial\", \"message\": \"Полнота коллекции assignments: partial\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/28547e9bbf169e2af37697f61d8c8312aa52b9da720ae4b22c199888f95add1c.json\"}, {\"code\": \"collection_dependencies_partial\", \"message\": \"Полнота коллекции dependencies: partial\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/28547e9bbf169e2af37697f61d8c8312aa52b9da720ae4b22c199888f95add1c.json\"}, {\"code\": \"fields_missing\", \"message\": \"Часть исходных полей имеет качество missing\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/28547e9bbf169e2af37697f61d8c8312aa52b9da720ae4b22c199888f95add1c.json\"}, {\"code\": \"fields_unsupported\", \"message\": \"Часть исходных полей имеет качество unsupported\", \"details_ref\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117-stage13/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/28547e9bbf169e2af37697f61d8c8312aa52b9da720ae4b22c199888f95add1c.json\"}], \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"external_effect\": \"none\", \"error\": null}\n",
+  "stderr": "",
+  "live": false,
+  "counters": null
+}

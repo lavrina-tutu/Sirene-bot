@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.276" timestamp="2026-11-17T13:45:27.024058+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_corrective_completeness" name="test_partial_proof_fails_closed[enumeration_explicitly_incomplete]" time="1.193"><failure message="assert False&#10; +  where False = any(&lt;generator object test_partial_proof_fails_closed.&lt;locals&gt;.&lt;genexpr&gt; at 0x7f91287e1040&gt;)">publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/enum-before/p..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+defect = 'enumeration_explicitly_incomplete'
+
+    @pytest.mark.parametrize('defect',['influencing','unknown_reason','row_missing','count_missing','enumeration_explicitly_incomplete','unknown_mirror','mirror_reason_changed','extra_cause'])
+    def test_partial_proof_fails_closed(publish_case,defect):
+        d=data(publish_case);field=inject(d,influencing=defect=='influencing',reason='unknown_reason' if defect=='unknown_reason' else 'getter_failed:getLateStart:RuntimeError')
+        if defect=='row_missing':d['collections']['tasks']['record_count']+=1
+        if defect=='count_missing':del d['collections']['tasks']['record_count']
+        if defect=='enumeration_explicitly_incomplete':d['collections']['tasks']['enumeration_complete']=False
+        if defect=='unknown_mirror':d['tasks'][1]['quality_issues'][0]['field']='not_a_source_field'
+        if defect=='mirror_reason_changed':d['tasks'][1]['quality_issues'][0]['reason']='unknown_other'
+        if defect=='extra_cause':d['tasks'][1]['constraint_date']={'value':None,'quality':'unsupported','reason':'getter_unavailable:getConstraintDate'}
+&gt;       assert any(f['category']=='incomplete' for f in completeness(d,policy_profile()))
+E       assert False
+E        +  where False = any(&lt;generator object test_partial_proof_fails_closed.&lt;locals&gt;.&lt;genexpr&gt; at 0x7f91287e1040&gt;)
+
+skills/productivity/edit-plan-confluence/tests/test_corrective_completeness.py:43: AssertionError</failure></testcase></testsuite></testsuites>

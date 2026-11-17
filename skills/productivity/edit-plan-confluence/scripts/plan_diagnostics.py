@@ -85,6 +85,9 @@ def completeness(data, profile):
         row['provenance_paths']=item['origins'][:]
         findings.append(row);by_group.setdefault(path.split('.')[0],[]).append(row)
     for name,status in data['collections'].items():
+        if status.get('enumeration_complete') is False:
+            findings.append(finding('incomplete','collection_enumeration_unproven','collections.'+name,deepcopy(status)))
+            continue
         if status['status']=='complete':continue
         rows=(data.get(name) if name!='baseline_values' else [b for t in data['tasks'] for b in t.get('baseline_values',[])])
         causes=by_group.get(name,[])

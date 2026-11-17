@@ -1,0 +1,7 @@
+# Группа 3 — итерация 2: явная неполнота перечисления
+
+Исправлена воспроизведённая граница допуска: enumeration_complete:false теперь независимо блокирует коллекцию как collection_enumeration_unproven даже при совпавших count/record_count/error_count и известной несущественной причине поля. Противоречивое сочетание status:complete с этим флагом также блокируется. Исходный status и причины не меняются. Версия publication-admission-v1 повышена с 2 до 3, меняется fingerprint политики. Глобальных разрешений не добавлено.
+
+До исправления test_corrective_completeness.py::test_partial_proof_fails_closed[enumeration_explicitly_incomplete] реально упал: 1 failed, rc=1. После исправления на замороженном дереве: 75 passed, rc=0, 59.06s. Команда: PYTHONPATH=/home/tkachenkoav/.local/lib/python3.9/site-packages /usr/bin/python3.9 -m pytest -c S/tests/pytest.ini S/tests/test_corrective_completeness.py S/tests/test_admission.py S/tests/test_plan_rules.py --test-root T/enum-after-v2 --junitxml=T/group-5/enum-after-v2.xml -q. Второй адресный test ID: test_partial_proof_fails_closed[complete_but_enumeration_incomplete]. Оба включены в обязательную ac-matrix, всего 758 тестов. Промежуточный targeted-прогон enum-after (74 passed) не используется как проверка финального дерева.
+
+Третий полный прогон прерван до изменения кода: 438 passed, rc=2, 190.63s. Артефакты сохраняются в T/repeat-stage13-v3/final и истории группы 5. Общий gate §20 остаётся failed; для финального дерева запускается новый полный прогон с чистыми БД/WorkVault/cache.

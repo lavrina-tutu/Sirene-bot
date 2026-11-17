@@ -31,11 +31,14 @@ def test_nonimpact_partial_proof_keeps_original_and_one_cause(publish_case):
     assert d==before and d['collections']['tasks']['status']=='partial'
 
 
-@pytest.mark.parametrize('defect',['influencing','unknown_reason','row_missing','count_missing','unknown_mirror','mirror_reason_changed','extra_cause'])
+@pytest.mark.parametrize('defect',['influencing','unknown_reason','row_missing','count_missing','enumeration_explicitly_incomplete','complete_but_enumeration_incomplete','unknown_mirror','mirror_reason_changed','extra_cause'])
 def test_partial_proof_fails_closed(publish_case,defect):
     d=data(publish_case);field=inject(d,influencing=defect=='influencing',reason='unknown_reason' if defect=='unknown_reason' else 'getter_failed:getLateStart:RuntimeError')
     if defect=='row_missing':d['collections']['tasks']['record_count']+=1
     if defect=='count_missing':del d['collections']['tasks']['record_count']
+    if defect in ('enumeration_explicitly_incomplete','complete_but_enumeration_incomplete'):
+        d['collections']['tasks']['enumeration_complete']=False
+        if defect=='complete_but_enumeration_incomplete':d['collections']['tasks']['status']='complete'
     if defect=='unknown_mirror':d['tasks'][1]['quality_issues'][0]['field']='not_a_source_field'
     if defect=='mirror_reason_changed':d['tasks'][1]['quality_issues'][0]['reason']='unknown_other'
     if defect=='extra_cause':d['tasks'][1]['constraint_date']={'value':None,'quality':'unsupported','reason':'getter_unavailable:getConstraintDate'}

@@ -1,0 +1,3027 @@
+[
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-10]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_10_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_10_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_10_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_824111ca09de4d8187240d48874eff10",
+      "--to",
+      "snapshot:snapshot_f8789bd821084a2d9d58f97bfa208a62",
+      "--mapping-revision",
+      "mapping_c73c32e8683b4f5692c341869d1f8a87"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:00",
+          "finish_delta_seconds": 0.0,
+          "finish_delta_calendar_days": 0.0
+        },
+        "links_removed": [],
+        "links_added": [],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [
+              {
+                "task_key": "t2",
+                "uid": "2",
+                "wbs": null,
+                "name": "Child",
+                "outline_level": null,
+                "start_raw": null,
+                "finish_raw": null,
+                "duration_raw": null,
+                "early_start": null,
+                "early_finish": null,
+                "late_start": null,
+                "late_finish": null,
+                "percent_complete": null,
+                "milestone": 0,
+                "summary": 0,
+                "constraint_type": null,
+                "constraint_date": null,
+                "actual_start": null,
+                "actual_finish": null,
+                "actual_duration_raw": null,
+                "remaining_duration_raw": null,
+                "notes": null,
+                "quality": "unknown",
+                "extensions": null,
+                "source_id": null,
+                "parent_task_key": null,
+                "calendar_key": null,
+                "effective_calendar_key": null,
+                "task_mode": null,
+                "duration_amount": null,
+                "duration_units": null,
+                "duration_elapsed": null,
+                "work_amount": null,
+                "work_units": null,
+                "percent_complete_decimal": null,
+                "source_json": null,
+                "segments": [],
+                "baseline_values": []
+              }
+            ],
+            "to": [
+              {
+                "task_key": "t2",
+                "uid": "2",
+                "wbs": null,
+                "name": "Child",
+                "outline_level": null,
+                "start_raw": null,
+                "finish_raw": null,
+                "duration_raw": null,
+                "early_start": null,
+                "early_finish": null,
+                "late_start": null,
+                "late_finish": null,
+                "percent_complete": null,
+                "milestone": 0,
+                "summary": 0,
+                "constraint_type": null,
+                "constraint_date": null,
+                "actual_start": null,
+                "actual_finish": null,
+                "actual_duration_raw": null,
+                "remaining_duration_raw": null,
+                "notes": null,
+                "quality": "unknown",
+                "extensions": null,
+                "source_id": null,
+                "parent_task_key": null,
+                "calendar_key": null,
+                "effective_calendar_key": null,
+                "task_mode": null,
+                "duration_amount": null,
+                "duration_units": null,
+                "duration_elapsed": null,
+                "work_amount": null,
+                "work_units": null,
+                "percent_complete_decimal": null,
+                "source_json": null,
+                "segments": [],
+                "baseline_values": []
+              }
+            ]
+          },
+          "resource": {
+            "from": [
+              {
+                "resource_key": "r1",
+                "uid": "1",
+                "name": null,
+                "type": null,
+                "email": null,
+                "resource_group": null,
+                "max_units": null,
+                "std_rate_raw": null,
+                "ot_rate_raw": null,
+                "cost_per_use": null,
+                "extensions": null,
+                "calendar_key": null,
+                "base_calendar_key": null,
+                "max_units_decimal": null,
+                "cost_per_use_decimal": null,
+                "source_json": null,
+                "availability": []
+              },
+              {
+                "resource_key": "r2",
+                "uid": "2",
+                "name": null,
+                "type": null,
+                "email": null,
+                "resource_group": null,
+                "max_units": null,
+                "std_rate_raw": null,
+                "ot_rate_raw": null,
+                "cost_per_use": null,
+                "extensions": null,
+                "calendar_key": null,
+                "base_calendar_key": null,
+                "max_units_decimal": null,
+                "cost_per_use_decimal": null,
+                "source_json": null,
+                "availability": []
+              }
+            ],
+            "to": [
+              {
+                "resource_key": "r1",
+                "uid": "1",
+                "name": null,
+                "type": null,
+                "email": null,
+                "resource_group": null,
+                "max_units": null,
+                "std_rate_raw": null,
+                "ot_rate_raw": null,
+                "cost_per_use": null,
+                "extensions": null,
+                "calendar_key": null,
+                "base_calendar_key": null,
+                "max_units_decimal": null,
+                "cost_per_use_decimal": null,
+                "source_json": null,
+                "availability": []
+              },
+              {
+                "resource_key": "r2",
+                "uid": "2",
+                "name": null,
+                "type": null,
+                "email": null,
+                "resource_group": null,
+                "max_units": null,
+                "std_rate_raw": null,
+                "ot_rate_raw": null,
+                "cost_per_use": null,
+                "extensions": null,
+                "calendar_key": null,
+                "base_calendar_key": null,
+                "max_units_decimal": null,
+                "cost_per_use_decimal": null,
+                "source_json": null,
+                "availability": []
+              }
+            ]
+          },
+          "calendar": {
+            "from": [
+              {
+                "calendar_key": "c1",
+                "name": null,
+                "base_calendar_key": null,
+                "minutes_per_day": null,
+                "minutes_per_week": null,
+                "parent_key": null,
+                "minutes_per_day_decimal": null,
+                "minutes_per_week_decimal": null,
+                "source_json": null,
+                "intervals": [
+                  {
+                    "interval_kind": "weekday",
+                    "day_or_date": "MONDAY",
+                    "working": 1,
+                    "time_from": "09:00",
+                    "time_to": "12:00"
+                  }
+                ]
+              }
+            ],
+            "to": [
+              {
+                "calendar_key": "c1",
+                "name": null,
+                "base_calendar_key": null,
+                "minutes_per_day": null,
+                "minutes_per_week": null,
+                "parent_key": null,
+                "minutes_per_day_decimal": null,
+                "minutes_per_week_decimal": null,
+                "source_json": null,
+                "intervals": [
+                  {
+                    "interval_kind": "weekday",
+                    "day_or_date": "MONDAY",
+                    "working": 1,
+                    "time_from": "09:00",
+                    "time_to": "12:00"
+                  }
+                ]
+              }
+            ]
+          },
+          "assignment": {
+            "from": [
+              {
+                "task_key": "t1",
+                "resource_key": "r1",
+                "units": null,
+                "work_raw": null,
+                "start_raw": null,
+                "finish_raw": null,
+                "actual_work_raw": null,
+                "remaining_work_raw": null,
+                "assignment_key": "a1",
+                "uid": "1",
+                "units_decimal": null,
+                "work_amount": "8",
+                "work_units": null,
+                "effective_calendar_key": null,
+                "source_json": null,
+                "timephased": []
+              }
+            ],
+            "to": [
+              {
+                "task_key": "t1",
+                "resource_key": "r1",
+                "units": null,
+                "work_raw": null,
+                "start_raw": null,
+                "finish_raw": null,
+                "actual_work_raw": null,
+                "remaining_work_raw": null,
+                "assignment_key": "a1",
+                "uid": "1",
+                "units_decimal": null,
+                "work_amount": "8",
+                "work_units": null,
+                "effective_calendar_key": null,
+                "source_json": null,
+                "timephased": []
+              }
+            ]
+          },
+          "dependency": {
+            "from": [
+              {
+                "predecessor_task_key": "t1",
+                "successor_task_key": "t2",
+                "link_type": "FS",
+                "lag_raw": null,
+                "lag_calendar": null,
+                "dependency_key": null,
+                "lag_amount": "1",
+                "lag_units": "DAYS",
+                "lag_elapsed": 0,
+                "calendar_basis": "predecessor",
+                "source_json": null
+              },
+              {
+                "predecessor_task_key": "t1",
+                "successor_task_key": "t2",
+                "link_type": "FS",
+                "lag_raw": null,
+                "lag_calendar": null,
+                "dependency_key": null,
+                "lag_amount": "1",
+                "lag_units": "DAYS",
+                "lag_elapsed": 0,
+                "calendar_basis": "predecessor",
+                "source_json": null
+              }
+            ],
+            "to": [
+              {
+                "predecessor_task_key": "t1",
+                "successor_task_key": "t2",
+                "link_type": "FS",
+                "lag_raw": null,
+                "lag_calendar": null,
+                "dependency_key": null,
+                "lag_amount": "1",
+                "lag_units": "DAYS",
+                "lag_elapsed": 0,
+                "calendar_basis": "predecessor",
+                "source_json": null
+              },
+              {
+                "predecessor_task_key": "t1",
+                "successor_task_key": "t2",
+                "link_type": "FS",
+                "lag_raw": null,
+                "lag_calendar": null,
+                "dependency_key": null,
+                "lag_amount": "1",
+                "lag_units": "DAYS",
+                "lag_elapsed": 0,
+                "calendar_basis": "predecessor",
+                "source_json": null
+              }
+            ]
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_554d2ec3175b45aeaf6b5e246841ec3e",
+          "snapshot_a": "snapshot_824111ca09de4d8187240d48874eff10",
+          "snapshot_b": "snapshot_f8789bd821084a2d9d58f97bfa208a62",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "confirmed_mapping",
+          "mapping_revision_id": "mapping_c73c32e8683b4f5692c341869d1f8a87",
+          "evidence_id": "artifact_23a540dfbb7748d2af8469c9baad346e",
+          "evidence_sha256": "d5d6cfe962aba4bd85e7a28427b0a3a311aa2e30bdf16ccf9360fc9af0335f24",
+          "identity_scope": {
+            "plan_id": "plan_554d2ec3175b45aeaf6b5e246841ec3e",
+            "from_snapshot_id": "snapshot_824111ca09de4d8187240d48874eff10",
+            "to_snapshot_id": "snapshot_f8789bd821084a2d9d58f97bfa208a62",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:t1"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:01+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_824111ca09de4d8187240d48874eff10"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_f8789bd821084a2d9d58f97bfa208a62"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-1]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_1_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_1_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_1_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_d9010633f96f4bd983260b491115af8f",
+      "--to",
+      "snapshot:snapshot_69149cd4fdf8495fbae13e0617b093c1"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": null,
+          "finish_b": null,
+          "finish_delta_seconds": null,
+          "finish_delta_calendar_days": null
+        },
+        "links_removed": [],
+        "links_added": [],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [
+              {
+                "task_key": "t1",
+                "uid": "1",
+                "wbs": null,
+                "name": "Root",
+                "outline_level": 1,
+                "start_raw": null,
+                "finish_raw": "2026-11-01T09:00:00",
+                "duration_raw": null,
+                "early_start": null,
+                "early_finish": null,
+                "late_start": null,
+                "late_finish": null,
+                "percent_complete": null,
+                "milestone": 0,
+                "summary": 0,
+                "constraint_type": null,
+                "constraint_date": null,
+                "actual_start": null,
+                "actual_finish": null,
+                "actual_duration_raw": null,
+                "remaining_duration_raw": null,
+                "notes": null,
+                "quality": "unknown",
+                "extensions": null,
+                "source_id": null,
+                "parent_task_key": null,
+                "calendar_key": null,
+                "effective_calendar_key": null,
+                "task_mode": null,
+                "duration_amount": null,
+                "duration_units": null,
+                "duration_elapsed": null,
+                "work_amount": null,
+                "work_units": null,
+                "percent_complete_decimal": null,
+                "source_json": null,
+                "segments": [],
+                "baseline_values": []
+              },
+              {
+                "task_key": "t2",
+                "uid": "2",
+                "wbs": null,
+                "name": "Child",
+                "outline_level": null,
+                "start_raw": null,
+                "finish_raw": null,
+                "duration_raw": null,
+                "early_start": null,
+                "early_finish": null,
+                "late_start": null,
+                "late_finish": null,
+                "percent_complete": null,
+                "milestone": 0,
+                "summary": 0,
+                "constraint_type": null,
+                "constraint_date": null,
+                "actual_start": null,
+                "actual_finish": null,
+                "actual_duration_raw": null,
+                "remaining_duration_raw": null,
+                "notes": null,
+                "quality": "unknown",
+                "extensions": null,
+                "source_id": null,
+                "parent_task_key": null,
+                "calendar_key": null,
+                "effective_calendar_key": null,
+                "task_mode": null,
+                "duration_amount": null,
+                "duration_units": null,
+                "duration_elapsed": null,
+                "work_amount": null,
+                "work_units": null,
+                "percent_complete_decimal": null,
+                "source_json": null,
+                "segments": [],
+                "baseline_values": []
+              }
+            ],
+            "to": [
+              {
+                "task_key": "t1",
+                "uid": "1",
+                "wbs": null,
+                "name": "Root",
+                "outline_level": 1,
+                "start_raw": null,
+                "finish_raw": "2026-11-01T09:00:00",
+                "duration_raw": null,
+                "early_start": null,
+                "early_finish": null,
+                "late_start": null,
+                "late_finish": null,
+                "percent_complete": null,
+                "milestone": 0,
+                "summary": 0,
+                "constraint_type": null,
+                "constraint_date": null,
+                "actual_start": null,
+                "actual_finish": null,
+                "actual_duration_raw": null,
+                "remaining_duration_raw": null,
+                "notes": null,
+                "quality": "unknown",
+                "extensions": null,
+                "source_id": null,
+                "parent_task_key": null,
+                "calendar_key": null,
+                "effective_calendar_key": null,
+                "task_mode": null,
+                "duration_amount": null,
+                "duration_units": null,
+                "duration_elapsed": null,
+                "work_amount": null,
+                "work_units": null,
+                "percent_complete_decimal": null,
+                "source_json": null,
+                "segments": [],
+                "baseline_values": []
+              },
+              {
+                "task_key": "t2",
+                "uid": "2",
+                "wbs": null,
+                "name": "Child",
+                "outline_level": null,
+                "start_raw": null,
+                "finish_raw": null,
+                "duration_raw": null,
+                "early_start": null,
+                "early_finish": null,
+                "late_start": null,
+                "late_finish": null,
+                "percent_complete": null,
+                "milestone": 0,
+                "summary": 0,
+                "constraint_type": null,
+                "constraint_date": null,
+                "actual_start": null,
+                "actual_finish": null,
+                "actual_duration_raw": null,
+                "remaining_duration_raw": null,
+                "notes": null,
+                "quality": "unknown",
+                "extensions": null,
+                "source_id": null,
+                "parent_task_key": null,
+                "calendar_key": null,
+                "effective_calendar_key": null,
+                "task_mode": null,
+                "duration_amount": null,
+                "duration_units": null,
+                "duration_elapsed": null,
+                "work_amount": null,
+                "work_units": null,
+                "percent_complete_decimal": null,
+                "source_json": null,
+                "segments": [],
+                "baseline_values": []
+              }
+            ]
+          },
+          "resource": {
+            "from": [
+              {
+                "resource_key": "r1",
+                "uid": "1",
+                "name": null,
+                "type": null,
+                "email": null,
+                "resource_group": null,
+                "max_units": null,
+                "std_rate_raw": null,
+                "ot_rate_raw": null,
+                "cost_per_use": null,
+                "extensions": null,
+                "calendar_key": null,
+                "base_calendar_key": null,
+                "max_units_decimal": null,
+                "cost_per_use_decimal": null,
+                "source_json": null,
+                "availability": []
+              },
+              {
+                "resource_key": "r2",
+                "uid": "2",
+                "name": null,
+                "type": null,
+                "email": null,
+                "resource_group": null,
+                "max_units": null,
+                "std_rate_raw": null,
+                "ot_rate_raw": null,
+                "cost_per_use": null,
+                "extensions": null,
+                "calendar_key": null,
+                "base_calendar_key": null,
+                "max_units_decimal": null,
+                "cost_per_use_decimal": null,
+                "source_json": null,
+                "availability": []
+              }
+            ],
+            "to": [
+              {
+                "resource_key": "r1",
+                "uid": "1",
+                "name": null,
+                "type": null,
+                "email": null,
+                "resource_group": null,
+                "max_units": null,
+                "std_rate_raw": null,
+                "ot_rate_raw": null,
+                "cost_per_use": null,
+                "extensions": null,
+                "calendar_key": null,
+                "base_calendar_key": null,
+                "max_units_decimal": null,
+                "cost_per_use_decimal": null,
+                "source_json": null,
+                "availability": []
+              },
+              {
+                "resource_key": "r2",
+                "uid": "2",
+                "name": null,
+                "type": null,
+                "email": null,
+                "resource_group": null,
+                "max_units": null,
+                "std_rate_raw": null,
+                "ot_rate_raw": null,
+                "cost_per_use": null,
+                "extensions": null,
+                "calendar_key": null,
+                "base_calendar_key": null,
+                "max_units_decimal": null,
+                "cost_per_use_decimal": null,
+                "source_json": null,
+                "availability": []
+              }
+            ]
+          },
+          "calendar": {
+            "from": [
+              {
+                "calendar_key": "c1",
+                "name": null,
+                "base_calendar_key": null,
+                "minutes_per_day": null,
+                "minutes_per_week": null,
+                "parent_key": null,
+                "minutes_per_day_decimal": null,
+                "minutes_per_week_decimal": null,
+                "source_json": null,
+                "intervals": [
+                  {
+                    "interval_kind": "weekday",
+                    "day_or_date": "MONDAY",
+                    "working": 1,
+                    "time_from": "09:00",
+                    "time_to": "12:00"
+                  }
+                ]
+              }
+            ],
+            "to": [
+              {
+                "calendar_key": "c1",
+                "name": null,
+                "base_calendar_key": null,
+                "minutes_per_day": null,
+                "minutes_per_week": null,
+                "parent_key": null,
+                "minutes_per_day_decimal": null,
+                "minutes_per_week_decimal": null,
+                "source_json": null,
+                "intervals": [
+                  {
+                    "interval_kind": "weekday",
+                    "day_or_date": "MONDAY",
+                    "working": 1,
+                    "time_from": "09:00",
+                    "time_to": "12:00"
+                  }
+                ]
+              }
+            ]
+          },
+          "assignment": {
+            "from": [
+              {
+                "task_key": "t1",
+                "resource_key": "r1",
+                "units": null,
+                "work_raw": null,
+                "start_raw": null,
+                "finish_raw": null,
+                "actual_work_raw": null,
+                "remaining_work_raw": null,
+                "assignment_key": "a1",
+                "uid": "1",
+                "units_decimal": null,
+                "work_amount": "8",
+                "work_units": null,
+                "effective_calendar_key": null,
+                "source_json": null,
+                "timephased": []
+              }
+            ],
+            "to": [
+              {
+                "task_key": "t1",
+                "resource_key": "r1",
+                "units": null,
+                "work_raw": null,
+                "start_raw": null,
+                "finish_raw": null,
+                "actual_work_raw": null,
+                "remaining_work_raw": null,
+                "assignment_key": "a1",
+                "uid": "1",
+                "units_decimal": null,
+                "work_amount": "8",
+                "work_units": null,
+                "effective_calendar_key": null,
+                "source_json": null,
+                "timephased": []
+              }
+            ]
+          },
+          "dependency": {
+            "from": [
+              {
+                "predecessor_task_key": "t1",
+                "successor_task_key": "t2",
+                "link_type": "FS",
+                "lag_raw": null,
+                "lag_calendar": null,
+                "dependency_key": null,
+                "lag_amount": "1",
+                "lag_units": "DAYS",
+                "lag_elapsed": 0,
+                "calendar_basis": "predecessor",
+                "source_json": null
+              },
+              {
+                "predecessor_task_key": "t1",
+                "successor_task_key": "t2",
+                "link_type": "FS",
+                "lag_raw": null,
+                "lag_calendar": null,
+                "dependency_key": null,
+                "lag_amount": "1",
+                "lag_units": "DAYS",
+                "lag_elapsed": 0,
+                "calendar_basis": "predecessor",
+                "source_json": null
+              }
+            ],
+            "to": [
+              {
+                "predecessor_task_key": "t1",
+                "successor_task_key": "t2",
+                "link_type": "FS",
+                "lag_raw": null,
+                "lag_calendar": null,
+                "dependency_key": null,
+                "lag_amount": "1",
+                "lag_units": "DAYS",
+                "lag_elapsed": 0,
+                "calendar_basis": "predecessor",
+                "source_json": null
+              },
+              {
+                "predecessor_task_key": "t1",
+                "successor_task_key": "t2",
+                "link_type": "FS",
+                "lag_raw": null,
+                "lag_calendar": null,
+                "dependency_key": null,
+                "lag_amount": "1",
+                "lag_units": "DAYS",
+                "lag_elapsed": 0,
+                "calendar_basis": "predecessor",
+                "source_json": null
+              }
+            ]
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_beddbf354cb0488180316fe5ee490a98",
+          "snapshot_a": "snapshot_d9010633f96f4bd983260b491115af8f",
+          "snapshot_b": "snapshot_69149cd4fdf8495fbae13e0617b093c1",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "unknown",
+          "mapping_revision_id": null,
+          "evidence_id": null,
+          "evidence_sha256": null,
+          "identity_scope": {
+            "plan_id": "plan_beddbf354cb0488180316fe5ee490a98",
+            "from_snapshot_id": "snapshot_d9010633f96f4bd983260b491115af8f",
+            "to_snapshot_id": "snapshot_69149cd4fdf8495fbae13e0617b093c1",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:02+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_d9010633f96f4bd983260b491115af8f"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_69149cd4fdf8495fbae13e0617b093c1"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-2]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_2_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_2_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_2_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_e801db7ffe8c4581ba11fac23bafb270",
+      "--to",
+      "snapshot:snapshot_dce47858d97d4485a8cdad708e8fc53f",
+      "--mapping-revision",
+      "mapping_5930c9d54f70451885f55ef512345e74"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:00",
+          "finish_delta_seconds": 0.0,
+          "finish_delta_calendar_days": 0.0
+        },
+        "links_removed": [],
+        "links_added": [],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [],
+            "to": []
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [
+              {
+                "calendar_key": "c1",
+                "name": null,
+                "base_calendar_key": null,
+                "minutes_per_day": null,
+                "minutes_per_week": null,
+                "parent_key": null,
+                "minutes_per_day_decimal": null,
+                "minutes_per_week_decimal": null,
+                "source_json": null,
+                "intervals": [
+                  {
+                    "interval_kind": "weekday",
+                    "day_or_date": "MONDAY",
+                    "working": 1,
+                    "time_from": "09:00",
+                    "time_to": "12:00"
+                  }
+                ]
+              }
+            ],
+            "to": [
+              {
+                "calendar_key": "c1",
+                "name": null,
+                "base_calendar_key": null,
+                "minutes_per_day": null,
+                "minutes_per_week": null,
+                "parent_key": null,
+                "minutes_per_day_decimal": null,
+                "minutes_per_week_decimal": null,
+                "source_json": null,
+                "intervals": [
+                  {
+                    "interval_kind": "weekday",
+                    "day_or_date": "MONDAY",
+                    "working": 1,
+                    "time_from": "09:00",
+                    "time_to": "12:00"
+                  }
+                ]
+              }
+            ]
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_80847f0b955e4f869b0c769bd978a996",
+          "snapshot_a": "snapshot_e801db7ffe8c4581ba11fac23bafb270",
+          "snapshot_b": "snapshot_dce47858d97d4485a8cdad708e8fc53f",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "confirmed_uid",
+          "mapping_revision_id": "mapping_5930c9d54f70451885f55ef512345e74",
+          "evidence_id": "artifact_c18e61a2061a48dd8cc8033b386a3c96",
+          "evidence_sha256": "d5d6cfe962aba4bd85e7a28427b0a3a311aa2e30bdf16ccf9360fc9af0335f24",
+          "identity_scope": {
+            "plan_id": "plan_80847f0b955e4f869b0c769bd978a996",
+            "from_snapshot_id": "snapshot_e801db7ffe8c4581ba11fac23bafb270",
+            "to_snapshot_id": "snapshot_dce47858d97d4485a8cdad708e8fc53f",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "assignment",
+              "from_key": "a1",
+              "to_key": "a1",
+              "identity_key": "assignment:uid:1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r1",
+              "to_key": "r1",
+              "identity_key": "resource:uid:1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r2",
+              "to_key": "r2",
+              "identity_key": "resource:uid:2"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:uid:1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t2",
+              "to_key": "t2",
+              "identity_key": "task:uid:2"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:03+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_e801db7ffe8c4581ba11fac23bafb270"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_dce47858d97d4485a8cdad708e8fc53f"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-3]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_3_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_3_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_3_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_427c12b20fc044eaaeeca98606215639",
+      "--to",
+      "snapshot:snapshot_debf103ab26e46bb912289c8383d2b2b",
+      "--mapping-revision",
+      "mapping_0ef1f238cb4e4ac8acbe0f8cce91e06e"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:00",
+          "finish_delta_seconds": 0.0,
+          "finish_delta_calendar_days": 0.0
+        },
+        "links_removed": [
+          {
+            "calendar_basis": "predecessor",
+            "lag_amount": "1",
+            "lag_calendar": null,
+            "lag_elapsed": 0,
+            "lag_raw": null,
+            "lag_units": "DAYS",
+            "link_type": "FS",
+            "predecessor_task_key": {
+              "mapped": "t1"
+            },
+            "source_json": null,
+            "successor_task_key": {
+              "mapped": "t2"
+            }
+          },
+          {
+            "calendar_basis": "predecessor",
+            "lag_amount": "1",
+            "lag_calendar": null,
+            "lag_elapsed": 0,
+            "lag_raw": null,
+            "lag_units": "DAYS",
+            "link_type": "FS",
+            "predecessor_task_key": {
+              "mapped": "t1"
+            },
+            "source_json": null,
+            "successor_task_key": {
+              "mapped": "t2"
+            }
+          }
+        ],
+        "links_added": [
+          {
+            "calendar_basis": "predecessor",
+            "lag_amount": "1",
+            "lag_calendar": null,
+            "lag_elapsed": 0,
+            "lag_raw": null,
+            "lag_units": "DAYS",
+            "link_type": "SS",
+            "predecessor_task_key": {
+              "mapped": "t1"
+            },
+            "source_json": null,
+            "successor_task_key": {
+              "mapped": "t2"
+            }
+          },
+          {
+            "calendar_basis": "predecessor",
+            "lag_amount": "1",
+            "lag_calendar": null,
+            "lag_elapsed": 0,
+            "lag_raw": null,
+            "lag_units": "DAYS",
+            "link_type": "SS",
+            "predecessor_task_key": {
+              "mapped": "t1"
+            },
+            "source_json": null,
+            "successor_task_key": {
+              "mapped": "t2"
+            }
+          }
+        ],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [],
+            "to": []
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [],
+            "to": []
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_9a803609e4db4851bc087708b7e8f62b",
+          "snapshot_a": "snapshot_427c12b20fc044eaaeeca98606215639",
+          "snapshot_b": "snapshot_debf103ab26e46bb912289c8383d2b2b",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "confirmed_mapping",
+          "mapping_revision_id": "mapping_0ef1f238cb4e4ac8acbe0f8cce91e06e",
+          "evidence_id": "artifact_16f6bc1027ea41d9a4820bb43d867293",
+          "evidence_sha256": "d5d6cfe962aba4bd85e7a28427b0a3a311aa2e30bdf16ccf9360fc9af0335f24",
+          "identity_scope": {
+            "plan_id": "plan_9a803609e4db4851bc087708b7e8f62b",
+            "from_snapshot_id": "snapshot_427c12b20fc044eaaeeca98606215639",
+            "to_snapshot_id": "snapshot_debf103ab26e46bb912289c8383d2b2b",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "assignment",
+              "from_key": "a1",
+              "to_key": "a1",
+              "identity_key": "assignment:a1"
+            },
+            {
+              "entity_kind": "calendar",
+              "from_key": "c1",
+              "to_key": "c1",
+              "identity_key": "calendar:c1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r1",
+              "to_key": "r1",
+              "identity_key": "resource:r1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r2",
+              "to_key": "r2",
+              "identity_key": "resource:r2"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:t1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t2",
+              "to_key": "t2",
+              "identity_key": "task:t2"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:04+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_427c12b20fc044eaaeeca98606215639"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_debf103ab26e46bb912289c8383d2b2b"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-4]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_4_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_4_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_4_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_a8810b39cd5c4fada804ae3d254d0fb3",
+      "--to",
+      "snapshot:snapshot_3e1a8779ddd0408cb8a622d3c98c2a20",
+      "--mapping-revision",
+      "mapping_92a0109d9f7245df8fcaf7177584fdc5"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:00",
+          "finish_delta_seconds": 0.0,
+          "finish_delta_calendar_days": 0.0
+        },
+        "links_removed": [
+          {
+            "calendar_basis": "predecessor",
+            "lag_amount": "1",
+            "lag_calendar": null,
+            "lag_elapsed": 0,
+            "lag_raw": null,
+            "lag_units": "DAYS",
+            "link_type": "FS",
+            "predecessor_task_key": {
+              "mapped": "t1"
+            },
+            "source_json": null,
+            "successor_task_key": {
+              "mapped": "t2"
+            }
+          },
+          {
+            "calendar_basis": "predecessor",
+            "lag_amount": "1",
+            "lag_calendar": null,
+            "lag_elapsed": 0,
+            "lag_raw": null,
+            "lag_units": "DAYS",
+            "link_type": "FS",
+            "predecessor_task_key": {
+              "mapped": "t1"
+            },
+            "source_json": null,
+            "successor_task_key": {
+              "mapped": "t2"
+            }
+          }
+        ],
+        "links_added": [
+          {
+            "calendar_basis": "resource",
+            "lag_amount": "-2",
+            "lag_calendar": null,
+            "lag_elapsed": 1,
+            "lag_raw": null,
+            "lag_units": "HOURS",
+            "link_type": "FS",
+            "predecessor_task_key": {
+              "mapped": "t1"
+            },
+            "source_json": null,
+            "successor_task_key": {
+              "mapped": "t2"
+            }
+          },
+          {
+            "calendar_basis": "resource",
+            "lag_amount": "-2",
+            "lag_calendar": null,
+            "lag_elapsed": 1,
+            "lag_raw": null,
+            "lag_units": "HOURS",
+            "link_type": "FS",
+            "predecessor_task_key": {
+              "mapped": "t1"
+            },
+            "source_json": null,
+            "successor_task_key": {
+              "mapped": "t2"
+            }
+          }
+        ],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [],
+            "to": []
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [],
+            "to": []
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_5bef95daa6604fba8e3668cd5e4d8af5",
+          "snapshot_a": "snapshot_a8810b39cd5c4fada804ae3d254d0fb3",
+          "snapshot_b": "snapshot_3e1a8779ddd0408cb8a622d3c98c2a20",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "confirmed_mapping",
+          "mapping_revision_id": "mapping_92a0109d9f7245df8fcaf7177584fdc5",
+          "evidence_id": "artifact_0897972367eb444c96c03880c49602e4",
+          "evidence_sha256": "d5d6cfe962aba4bd85e7a28427b0a3a311aa2e30bdf16ccf9360fc9af0335f24",
+          "identity_scope": {
+            "plan_id": "plan_5bef95daa6604fba8e3668cd5e4d8af5",
+            "from_snapshot_id": "snapshot_a8810b39cd5c4fada804ae3d254d0fb3",
+            "to_snapshot_id": "snapshot_3e1a8779ddd0408cb8a622d3c98c2a20",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "assignment",
+              "from_key": "a1",
+              "to_key": "a1",
+              "identity_key": "assignment:a1"
+            },
+            {
+              "entity_kind": "calendar",
+              "from_key": "c1",
+              "to_key": "c1",
+              "identity_key": "calendar:c1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r1",
+              "to_key": "r1",
+              "identity_key": "resource:r1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r2",
+              "to_key": "r2",
+              "identity_key": "resource:r2"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:t1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t2",
+              "to_key": "t2",
+              "identity_key": "task:t2"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:05+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_a8810b39cd5c4fada804ae3d254d0fb3"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_3e1a8779ddd0408cb8a622d3c98c2a20"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-5]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_5_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_5_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_5_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_57be3711007b4d87906d9a89f99c55bd",
+      "--to",
+      "snapshot:snapshot_9ac7df4bfd8741348703d2947ecc1f69",
+      "--mapping-revision",
+      "mapping_ffdd759b8eca4059aa194af681764ea4"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [
+          {
+            "from_key": "c1",
+            "to_key": "c1",
+            "task_key": null,
+            "uid": null,
+            "changes": {
+              "intervals": {
+                "from": [
+                  {
+                    "interval_kind": "weekday",
+                    "day_or_date": "MONDAY",
+                    "working": 1,
+                    "time_from": "09:00",
+                    "time_to": "12:00"
+                  }
+                ],
+                "to": [
+                  {
+                    "interval_kind": "exception",
+                    "day_or_date": "2026-11-01",
+                    "working": 0,
+                    "time_from": null,
+                    "time_to": null
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:00",
+          "finish_delta_seconds": 0.0,
+          "finish_delta_calendar_days": 0.0
+        },
+        "links_removed": [],
+        "links_added": [],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [],
+            "to": []
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [],
+            "to": []
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_f957d2b2826b4e959a1813b0cfbd1358",
+          "snapshot_a": "snapshot_57be3711007b4d87906d9a89f99c55bd",
+          "snapshot_b": "snapshot_9ac7df4bfd8741348703d2947ecc1f69",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "confirmed_mapping",
+          "mapping_revision_id": "mapping_ffdd759b8eca4059aa194af681764ea4",
+          "evidence_id": "artifact_67d7ddc0b8ee4551ba7c07486c6035f0",
+          "evidence_sha256": "d5d6cfe962aba4bd85e7a28427b0a3a311aa2e30bdf16ccf9360fc9af0335f24",
+          "identity_scope": {
+            "plan_id": "plan_f957d2b2826b4e959a1813b0cfbd1358",
+            "from_snapshot_id": "snapshot_57be3711007b4d87906d9a89f99c55bd",
+            "to_snapshot_id": "snapshot_9ac7df4bfd8741348703d2947ecc1f69",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "assignment",
+              "from_key": "a1",
+              "to_key": "a1",
+              "identity_key": "assignment:a1"
+            },
+            {
+              "entity_kind": "calendar",
+              "from_key": "c1",
+              "to_key": "c1",
+              "identity_key": "calendar:c1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r1",
+              "to_key": "r1",
+              "identity_key": "resource:r1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r2",
+              "to_key": "r2",
+              "identity_key": "resource:r2"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:t1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t2",
+              "to_key": "t2",
+              "identity_key": "task:t2"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:06+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_57be3711007b4d87906d9a89f99c55bd"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_9ac7df4bfd8741348703d2947ecc1f69"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-6]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_6_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_6_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_6_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_9de7b0c1ddf54db381c0135016560d62",
+      "--to",
+      "snapshot:snapshot_0a017ff85cf24085aa3be04389335f8c",
+      "--mapping-revision",
+      "mapping_7b58d88f9165492c979f46b9d3074513"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [
+          {
+            "from_key": "a1",
+            "to_key": "a1",
+            "task_key": null,
+            "uid": "1",
+            "changes": {
+              "finish_raw": {
+                "from": null,
+                "to": "2026-11-02T09:00"
+              },
+              "resource_key": {
+                "from": {
+                  "mapped": "r1"
+                },
+                "to": {
+                  "mapped": "r2"
+                }
+              },
+              "task_key": {
+                "from": {
+                  "mapped": "t1"
+                },
+                "to": {
+                  "mapped": "t2"
+                }
+              },
+              "units_decimal": {
+                "from": null,
+                "to": "50"
+              },
+              "work_amount": {
+                "from": "8",
+                "to": "9"
+              }
+            }
+          }
+        ],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:00",
+          "finish_delta_seconds": 0.0,
+          "finish_delta_calendar_days": 0.0
+        },
+        "links_removed": [],
+        "links_added": [],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [],
+            "to": []
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [],
+            "to": []
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_6060d857f25440c9b6bc59b27b8812f3",
+          "snapshot_a": "snapshot_9de7b0c1ddf54db381c0135016560d62",
+          "snapshot_b": "snapshot_0a017ff85cf24085aa3be04389335f8c",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "confirmed_mapping",
+          "mapping_revision_id": "mapping_7b58d88f9165492c979f46b9d3074513",
+          "evidence_id": "artifact_a44e7ab297df4565b7efc915c5066b1b",
+          "evidence_sha256": "d5d6cfe962aba4bd85e7a28427b0a3a311aa2e30bdf16ccf9360fc9af0335f24",
+          "identity_scope": {
+            "plan_id": "plan_6060d857f25440c9b6bc59b27b8812f3",
+            "from_snapshot_id": "snapshot_9de7b0c1ddf54db381c0135016560d62",
+            "to_snapshot_id": "snapshot_0a017ff85cf24085aa3be04389335f8c",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "assignment",
+              "from_key": "a1",
+              "to_key": "a1",
+              "identity_key": "assignment:a1"
+            },
+            {
+              "entity_kind": "calendar",
+              "from_key": "c1",
+              "to_key": "c1",
+              "identity_key": "calendar:c1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r1",
+              "to_key": "r1",
+              "identity_key": "resource:r1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r2",
+              "to_key": "r2",
+              "identity_key": "resource:r2"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:t1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t2",
+              "to_key": "t2",
+              "identity_key": "task:t2"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:07+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_9de7b0c1ddf54db381c0135016560d62"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_0a017ff85cf24085aa3be04389335f8c"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-7]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_7_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_7_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_7_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_cc1ef549ed9340e2b6b295dfc0e6954e",
+      "--to",
+      "snapshot:snapshot_e5ccf5dc96a54e0bb2d00f16b7d4e6a7"
+    ],
+    "rc": 4,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 4,
+      "result": null,
+      "error": {
+        "code": "selector_project_mismatch",
+        "message": "selector_project_mismatch"
+      }
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-7]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_7_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_7_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_7_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_e5ccf5dc96a54e0bb2d00f16b7d4e6a7",
+      "--to",
+      "snapshot:snapshot_cc1ef549ed9340e2b6b295dfc0e6954e"
+    ],
+    "rc": 4,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 4,
+      "result": null,
+      "error": {
+        "code": "selector_project_mismatch",
+        "message": "selector_project_mismatch"
+      }
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-8]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_8_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_8_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_8_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_507a195827904891a02588f48ea574ef",
+      "--to",
+      "snapshot:snapshot_019faf3f32284ee68f3177672c865a0c",
+      "--mapping-revision",
+      "mapping_fcc7fe9b43f842b7af8c913860f4193a"
+    ],
+    "rc": 4,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 4,
+      "result": null,
+      "error": {
+        "code": "mapping_revision_scope_mismatch",
+        "message": "mapping_revision_scope_mismatch"
+      }
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-9]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_9_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_9_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_9_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_d551507bb7d14ffa8c26c1ce75ff480f",
+      "--to",
+      "snapshot:snapshot_f7dda35bf2a14fe28e89e615eee4ba4b"
+    ],
+    "rc": 3,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 3,
+      "result": null,
+      "error": {
+        "code": "mapping_ambiguous",
+        "message": "mapping_ambiguous"
+      }
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-9]",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_9_0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_9_0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_ac24_cli_AC24_9_0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_d551507bb7d14ffa8c26c1ce75ff480f",
+      "--to",
+      "snapshot:snapshot_f7dda35bf2a14fe28e89e615eee4ba4b",
+      "--mapping-revision",
+      "mapping_e5ca5ac361d9414eb1dad25b3f14f954"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:00",
+          "finish_delta_seconds": 0.0,
+          "finish_delta_calendar_days": 0.0
+        },
+        "links_removed": [],
+        "links_added": [],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [],
+            "to": []
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [],
+            "to": []
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_a5d56d63f0634e7884e90005dd77538f",
+          "snapshot_a": "snapshot_d551507bb7d14ffa8c26c1ce75ff480f",
+          "snapshot_b": "snapshot_f7dda35bf2a14fe28e89e615eee4ba4b",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "confirmed_mapping",
+          "mapping_revision_id": "mapping_e5ca5ac361d9414eb1dad25b3f14f954",
+          "evidence_id": "artifact_4833be3a3fb74c2f8f0d0ad35f1e5627",
+          "evidence_sha256": "d5d6cfe962aba4bd85e7a28427b0a3a311aa2e30bdf16ccf9360fc9af0335f24",
+          "identity_scope": {
+            "plan_id": "plan_a5d56d63f0634e7884e90005dd77538f",
+            "from_snapshot_id": "snapshot_d551507bb7d14ffa8c26c1ce75ff480f",
+            "to_snapshot_id": "snapshot_f7dda35bf2a14fe28e89e615eee4ba4b",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "assignment",
+              "from_key": "a1",
+              "to_key": "a1",
+              "identity_key": "assignment:a1"
+            },
+            {
+              "entity_kind": "calendar",
+              "from_key": "c1",
+              "to_key": "c1",
+              "identity_key": "calendar:c1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r1",
+              "to_key": "r1",
+              "identity_key": "resource:r1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r2",
+              "to_key": "r2",
+              "identity_key": "resource:r2"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:t1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t2",
+              "to_key": "t2",
+              "identity_key": "task:t2"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:11+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_d551507bb7d14ffa8c26c1ce75ff480f"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_f7dda35bf2a14fe28e89e615eee4ba4b"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_compare_exact_publication_ids_same_v2_on_different_pages",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_exact_publication0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_exact_publication0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_exact_publication0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "publication:pub_539addf1f329450fbb311e1adcd832f2",
+      "--to",
+      "publication:pub_e7ce41393ebd4290b2b1866a8bbf6909"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "links_added": [],
+        "links_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [
+              {
+                "id": 1
+              }
+            ],
+            "to": [
+              {
+                "id": 1
+              }
+            ]
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [],
+            "to": []
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "root": {
+          "finish_delta_calendar_days": null
+        },
+        "receipt": {
+          "mapping": "unknown",
+          "mapping_revision_id": null,
+          "completeness": "partial",
+          "calendar": "unknown",
+          "known_at": "2026-11-17T05:29:12+00:00",
+          "representation": "gantt_json",
+          "publication_a": "pub_539addf1f329450fbb311e1adcd832f2",
+          "publication_b": "pub_e7ce41393ebd4290b2b1866a8bbf6909",
+          "hash_a": "7ad0dcf121699d435767e43abc8e8c859773b82f62672a1cbe62579f15887954",
+          "hash_b": "7ad0dcf121699d435767e43abc8e8c859773b82f62672a1cbe62579f15887954",
+          "trust_a": "legacy_unverified",
+          "trust_b": "legacy_unverified",
+          "publication_verified": false,
+          "link_quality_a": "unknown",
+          "link_quality_b": "unknown",
+          "comparison_scope": "unmatched_publication_structures",
+          "plan_id": "plan_d902ec7850294a188f998696aa05a6aa",
+          "version_a": {
+            "kind": "publication",
+            "publication_id": "pub_539addf1f329450fbb311e1adcd832f2"
+          },
+          "version_b": {
+            "kind": "publication",
+            "publication_id": "pub_e7ce41393ebd4290b2b1866a8bbf6909"
+          }
+        },
+        "content_identical": true,
+        "publications": {
+          "from": {
+            "publication_id": "pub_539addf1f329450fbb311e1adcd832f2",
+            "plan_id": "plan_d902ec7850294a188f998696aa05a6aa",
+            "lineage_id": "lineage_3ee83e6b0e074e86b3bf2cf86f36ec73",
+            "artifact_id": "artifact_8ceba24719704c5bbf8a0fd3b7518aaa",
+            "source_namespace": "test",
+            "attachment_id": "att-test-page-1",
+            "attachment_version": 2,
+            "page_id": "test-page-1",
+            "macro_id": null,
+            "filename": "gantt.json",
+            "published_at": null,
+            "observed_at": null,
+            "recorded_at": "2026-11-17T05:29:11+00:00",
+            "page_version": null,
+            "raw_sha256": "7ad0dcf121699d435767e43abc8e8c859773b82f62672a1cbe62579f15887954",
+            "trust": "legacy_unverified",
+            "historical_status": null,
+            "snapshot_links": [],
+            "snapshot_id": null,
+            "snapshot_link_quality": "unknown",
+            "selector": {
+              "kind": "publication",
+              "publication_id": "pub_539addf1f329450fbb311e1adcd832f2"
+            },
+            "artifact_quality": "verified_bytes",
+            "publication_verified": false
+          },
+          "to": {
+            "publication_id": "pub_e7ce41393ebd4290b2b1866a8bbf6909",
+            "plan_id": "plan_d902ec7850294a188f998696aa05a6aa",
+            "lineage_id": "lineage_781a01be05244535832c7e75c48d7c46",
+            "artifact_id": "artifact_8ceba24719704c5bbf8a0fd3b7518aaa",
+            "source_namespace": "test",
+            "attachment_id": "att-test-page-2",
+            "attachment_version": 2,
+            "page_id": "test-page-2",
+            "macro_id": null,
+            "filename": "gantt.json",
+            "published_at": null,
+            "observed_at": null,
+            "recorded_at": "2026-11-17T05:29:11+00:00",
+            "page_version": null,
+            "raw_sha256": "7ad0dcf121699d435767e43abc8e8c859773b82f62672a1cbe62579f15887954",
+            "trust": "legacy_unverified",
+            "historical_status": null,
+            "snapshot_links": [],
+            "snapshot_id": null,
+            "snapshot_link_quality": "unknown",
+            "selector": {
+              "kind": "publication",
+              "publication_id": "pub_e7ce41393ebd4290b2b1866a8bbf6909"
+            },
+            "artifact_quality": "verified_bytes",
+            "publication_verified": false
+          }
+        },
+        "representation_fields": {
+          "from": {},
+          "to": {}
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_compare_exact_publication_ids_same_v2_on_different_pages",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_exact_publication0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_exact_publication0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_exact_publication0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "v2",
+      "--to",
+      "publication:pub_539addf1f329450fbb311e1adcd832f2"
+    ],
+    "rc": 2,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 2,
+      "result": null,
+      "error": {
+        "code": "exact_selector_required",
+        "message": "exact_selector_required"
+      }
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_compare_exact_publication_ids_same_v2_on_different_pages",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_exact_publication0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_exact_publication0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_exact_publication0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_ab5debeb6d1a4a62b9b7d9ae3ddef866",
+      "--to",
+      "publication:pub_539addf1f329450fbb311e1adcd832f2"
+    ],
+    "rc": 4,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 4,
+      "result": {
+        "result_class": "representation_mismatch",
+        "exit_code": 4,
+        "reason": "confirmed_gantt_snapshot_and_mapping_required",
+        "receipt": {
+          "mapping": "unknown",
+          "known_at": "2026-11-17T05:29:14+00:00",
+          "plan_id": "plan_d902ec7850294a188f998696aa05a6aa",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_ab5debeb6d1a4a62b9b7d9ae3ddef866"
+          },
+          "version_b": {
+            "kind": "publication",
+            "publication_id": "pub_539addf1f329450fbb311e1adcd832f2"
+          }
+        }
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_compare_same_source_precision_unknown_zone_and_causality",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_same_source_preci0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_same_source_preci0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_same_source_preci0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_7b12ca2500d74ab59f411abd4a850a36",
+      "--to",
+      "snapshot:snapshot_d841ecd6bfaa4b70a53cad637674f8ee"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [
+          {
+            "from_key": "t1",
+            "to_key": "t1",
+            "task_key": "t1",
+            "uid": "1",
+            "changes": {
+              "finish_raw": {
+                "from": "2026-11-01T09:00:00",
+                "to": "2026-11-01T09:00:30"
+              }
+            }
+          }
+        ],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:30",
+          "finish_delta_seconds": 30.0,
+          "finish_delta_calendar_days": 0.00034722222222222224
+        },
+        "links_removed": [],
+        "links_added": [],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [],
+            "to": []
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [],
+            "to": []
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_aa4063ea81f347b5b9e74a91b9c96efb",
+          "snapshot_a": "snapshot_7b12ca2500d74ab59f411abd4a850a36",
+          "snapshot_b": "snapshot_d841ecd6bfaa4b70a53cad637674f8ee",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "confirmed_mapping",
+          "mapping_revision_id": "mapping_1618d6db1fe24a51ad30de1d39adf4bf",
+          "evidence_id": "artifact_575c7f1be6f24d0fab776418a9b54537",
+          "evidence_sha256": "d5d6cfe962aba4bd85e7a28427b0a3a311aa2e30bdf16ccf9360fc9af0335f24",
+          "identity_scope": {
+            "plan_id": "plan_aa4063ea81f347b5b9e74a91b9c96efb",
+            "from_snapshot_id": "snapshot_7b12ca2500d74ab59f411abd4a850a36",
+            "to_snapshot_id": "snapshot_d841ecd6bfaa4b70a53cad637674f8ee",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "assignment",
+              "from_key": "a1",
+              "to_key": "a1",
+              "identity_key": "assignment:a1"
+            },
+            {
+              "entity_kind": "calendar",
+              "from_key": "c1",
+              "to_key": "c1",
+              "identity_key": "calendar:c1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r1",
+              "to_key": "r1",
+              "identity_key": "resource:r1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r2",
+              "to_key": "r2",
+              "identity_key": "resource:r2"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:t1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t2",
+              "to_key": "t2",
+              "identity_key": "task:t2"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:15+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_7b12ca2500d74ab59f411abd4a850a36"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_d841ecd6bfaa4b70a53cad637674f8ee"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_compare_same_source_precision_unknown_zone_and_causality",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_same_source_preci0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_same_source_preci0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_same_source_preci0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_7b12ca2500d74ab59f411abd4a850a36",
+      "--to",
+      "snapshot:snapshot_7b12ca2500d74ab59f411abd4a850a36"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:00",
+          "finish_delta_seconds": 0.0,
+          "finish_delta_calendar_days": 0.0
+        },
+        "links_removed": [],
+        "links_added": [],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [],
+            "to": []
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [],
+            "to": []
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_aa4063ea81f347b5b9e74a91b9c96efb",
+          "snapshot_a": "snapshot_7b12ca2500d74ab59f411abd4a850a36",
+          "snapshot_b": "snapshot_7b12ca2500d74ab59f411abd4a850a36",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "same_source",
+          "mapping_revision_id": null,
+          "evidence_id": null,
+          "evidence_sha256": null,
+          "identity_scope": {
+            "plan_id": "plan_aa4063ea81f347b5b9e74a91b9c96efb",
+            "from_snapshot_id": "snapshot_7b12ca2500d74ab59f411abd4a850a36",
+            "to_snapshot_id": "snapshot_7b12ca2500d74ab59f411abd4a850a36",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "Europe/Moscow"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:t1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t2",
+              "to_key": "t2",
+              "identity_key": "task:t2"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r1",
+              "to_key": "r1",
+              "identity_key": "resource:r1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r2",
+              "to_key": "r2",
+              "identity_key": "resource:r2"
+            },
+            {
+              "entity_kind": "calendar",
+              "from_key": "c1",
+              "to_key": "c1",
+              "identity_key": "calendar:c1"
+            },
+            {
+              "entity_kind": "assignment",
+              "from_key": "a1",
+              "to_key": "a1",
+              "identity_key": "assignment:a1"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": "Europe/Moscow",
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:15+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_7b12ca2500d74ab59f411abd4a850a36"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_7b12ca2500d74ab59f411abd4a850a36"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  },
+  {
+    "test_id": "test_compare_e2e.py::test_compare_same_source_precision_unknown_zone_and_causality",
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_same_source_preci0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_same_source_preci0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_compare_same_source_preci0/cache",
+      "compare",
+      "--project-slug",
+      "stage11",
+      "--from",
+      "snapshot:snapshot_7b12ca2500d74ab59f411abd4a850a36",
+      "--to",
+      "snapshot:snapshot_cfdb33f2cd174424bff95d199ffd350a"
+    ],
+    "rc": 0,
+    "result": {
+      "schema_version": 1,
+      "action": "compare",
+      "exit_code": 0,
+      "result": {
+        "result_class": "observed_diff",
+        "changed_tasks": [],
+        "changed_resources": [],
+        "changed_calendars": [],
+        "changed_assignments": [],
+        "project_changes": {},
+        "root": {
+          "finish_a": "2026-11-01T09:00:00",
+          "finish_b": "2026-11-01T09:00:00",
+          "finish_delta_seconds": null,
+          "finish_delta_calendar_days": null
+        },
+        "links_removed": [],
+        "links_added": [],
+        "task_uids_added": [],
+        "task_uids_removed": [],
+        "unmatched_entities": {
+          "task": {
+            "from": [],
+            "to": []
+          },
+          "resource": {
+            "from": [],
+            "to": []
+          },
+          "calendar": {
+            "from": [],
+            "to": []
+          },
+          "assignment": {
+            "from": [],
+            "to": []
+          },
+          "dependency": {
+            "from": [],
+            "to": []
+          },
+          "external_dependency": {
+            "from": [],
+            "to": []
+          }
+        },
+        "working_drift": "unavailable",
+        "receipt": {
+          "plan_id": "plan_aa4063ea81f347b5b9e74a91b9c96efb",
+          "snapshot_a": "snapshot_7b12ca2500d74ab59f411abd4a850a36",
+          "snapshot_b": "snapshot_cfdb33f2cd174424bff95d199ffd350a",
+          "representation": "mpp",
+          "representations": [
+            "mpp",
+            "mpp"
+          ],
+          "mapping": "confirmed_mapping",
+          "mapping_revision_id": "mapping_b976dca9d71341bbae7bd0f1d65af3e0",
+          "evidence_id": "artifact_575c7f1be6f24d0fab776418a9b54537",
+          "evidence_sha256": "d5d6cfe962aba4bd85e7a28427b0a3a311aa2e30bdf16ccf9360fc9af0335f24",
+          "identity_scope": {
+            "plan_id": "plan_aa4063ea81f347b5b9e74a91b9c96efb",
+            "from_snapshot_id": "snapshot_7b12ca2500d74ab59f411abd4a850a36",
+            "to_snapshot_id": "snapshot_cfdb33f2cd174424bff95d199ffd350a",
+            "from_representation": "mpp",
+            "to_representation": "mpp",
+            "from_source_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "to_source_sha256": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+            "from_profile": null,
+            "to_profile": null,
+            "from_timezone": "Europe/Moscow",
+            "to_timezone": "unknown"
+          },
+          "confirmed_pairs": [
+            {
+              "entity_kind": "assignment",
+              "from_key": "a1",
+              "to_key": "a1",
+              "identity_key": "assignment:a1"
+            },
+            {
+              "entity_kind": "calendar",
+              "from_key": "c1",
+              "to_key": "c1",
+              "identity_key": "calendar:c1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r1",
+              "to_key": "r1",
+              "identity_key": "resource:r1"
+            },
+            {
+              "entity_kind": "resource",
+              "from_key": "r2",
+              "to_key": "r2",
+              "identity_key": "resource:r2"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t1",
+              "to_key": "t1",
+              "identity_key": "task:t1"
+            },
+            {
+              "entity_kind": "task",
+              "from_key": "t2",
+              "to_key": "t2",
+              "identity_key": "task:t2"
+            }
+          ],
+          "quality_a": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "quality_b": {
+            "collections": {},
+            "completeness": "partial",
+            "calendar": "unknown"
+          },
+          "calendar": "unknown",
+          "timezone": null,
+          "time_precision": "raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta",
+          "completeness": "partial",
+          "limitations": [
+            "working_time_drift_and_causal_attribution_not_calculated"
+          ],
+          "known_at": "2026-11-17T05:29:16+00:00",
+          "version_a": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_7b12ca2500d74ab59f411abd4a850a36"
+          },
+          "version_b": {
+            "kind": "snapshot",
+            "snapshot_id": "snapshot_cfdb33f2cd174424bff95d199ffd350a"
+          }
+        },
+        "exit_code": 0
+      },
+      "error": null
+    }
+  }
+]

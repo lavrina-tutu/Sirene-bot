@@ -1,0 +1,44 @@
+........................................................................ [ 35%]
+........................................................................ [ 70%]
+...F.........................................................            [100%]
+=================================== FAILURES ===================================
+______ test_same_source_distinct_snapshots_same_profile_not_uid_inference ______
+
+conn = <sqlite3.Connection object at 0x7f1dafa55a80>
+tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/mofs-final-checked/test_same_source_distinct_snap0')
+
+    def test_same_source_distinct_snapshots_same_profile_not_uid_inference(conn,tmp_path):
+        import hashlib
+        raw=b'Identical synthetic bytes';digest=hashlib.sha256(raw).hexdigest();path=tmp_path/'source.mpp';path.write_bytes(raw)
+        artifact=w.record_artifact(conn,digest,'mpp',str(path));plan=w.ensure_plan(conn,'same-source')
+        snapshots=[]
+        for name in ('one','two'):
+            line=w.ensure_lineage(conn,plan,'local:'+name)
+>           snapshots.append(w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=plan,lineage_id=line,representation='mpp',
+                source_artifact_id=artifact,source_mpp_sha256=digest,normalization_profile_fingerprint='f'*64,
+                tasks=(w.TaskVersionSpec('t1',uid='1'),))))
+
+tests/plan/test_query.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+mofs_index/plan/writer.py:845: in ingest_snapshot
+    snapshot_id = _find_snapshot(conn, spec)
+mofs_index/plan/writer.py:1318: in _find_snapshot
+    key = snapshot_dedup_key(spec)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+spec = SnapshotSpec(plan_id='plan_9b017a6cdba043508e6485443cd83589', representation='mpp', lineage_id='lineage_5b0892a906c342...a256='6d5a8d6c2b22bf6e5c88d6a195b55884473381fa11fe0689b65331313a0a6d4b', normalized_data_sha256=None, source_json=None)
+
+    def snapshot_dedup_key(spec: SnapshotSpec) -> str | None:
+        if not spec.normalization_profile_fingerprint:
+            return None  # Historical snapshots are never guessed equivalent.
+        if not spec.lineage_id or not spec.source_mpp_sha256 or not spec.source_artifact_id:
+            raise PlanWriterError("profiled snapshot requires lineage, source hash and artifact")
+        if spec.resolved_timezone != normalize_timezone(spec.resolved_timezone):
+>           raise PlanWriterError("resolved_timezone must be normalized IANA or unknown")
+E           mofs_index.plan.writer.PlanWriterError: resolved_timezone must be normalized IANA or unknown
+
+mofs_index/plan/writer.py:1263: PlanWriterError
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/reports/mofs-junit.xml -
+=========================== short test summary info ============================
+FAILED tests/plan/test_query.py::test_same_source_distinct_snapshots_same_profile_not_uid_inference
+1 failed, 204 passed in 40.49s

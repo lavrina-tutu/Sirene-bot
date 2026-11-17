@@ -168,6 +168,8 @@ def import_history(
                     page_id=page_id,
                     filename=filename,
                     raw_sha256=sha256,
+                    # A GET import registers bytes, never historical publication proof.
+                    trust="legacy_unverified",
                 ),
             )
             plan_writer.record_event(

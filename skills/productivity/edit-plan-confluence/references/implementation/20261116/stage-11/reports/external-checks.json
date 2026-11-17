@@ -1,0 +1,109 @@
+{
+  "gate": "passed",
+  "mofs_tests": {
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "tests/plan",
+      "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/mofs-acceptance-final",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/reports/mofs-junit.xml",
+      "-q"
+    ],
+    "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+    "rc": 0,
+    "passed": 206,
+    "counts": {
+      "tests": 206,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "stdout": "mofs-stdout.txt",
+    "stderr": "mofs-stderr.txt",
+    "junit": "mofs-junit.xml",
+    "environment": {
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+    }
+  },
+  "restore": {
+    "status": "passed",
+    "command": [
+      "patch",
+      "--batch",
+      "-p1",
+      "-i",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-11/usertools/MofsIndex/changes.patch"
+    ],
+    "rc": 0,
+    "files": 6,
+    "patch_restore": true,
+    "after_copy_restore": true,
+    "working_tree_matches_after": true,
+    "hashes_and_modes": true,
+    "manifest_sha256": "aaa45831b85045af6af399a549ff8a6fc304ea7461be6e953bff18edb4c83274"
+  },
+  "protected_files_checked": 1273,
+  "changed_protected_files": [],
+  "development_checks": [
+    {
+      "command": "M/tests/plan/test_query.py + test_render.py before strict-selector expectation migration",
+      "result": "5 failed, 9 passed; expected old-selector/positional expectations replaced within Stage 11"
+    },
+    {
+      "command": "M/tests/plan before IdentityError compatibility fix",
+      "rc": 1,
+      "result": "1 failed, 201 passed",
+      "stdout": "mofs-review-stdout.txt",
+      "junit": "mofs-review-junit.xml"
+    },
+    {
+      "command": "M/tests/plan before same-source fixture corrections",
+      "rc": 1,
+      "result": "1 failed, 204 passed; invalid fixture lineage keyword, then missing normalized timezone",
+      "logs": [
+        "mofs-before-fixture-fix-stdout.txt",
+        "mofs-before-timezone-fixture-fix-stdout.txt"
+      ]
+    },
+    {
+      "command": "S/tests/test_compare_e2e.py + test_publication_verify.py --test-root /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/dev-tests2",
+      "rc": 0,
+      "result": "27 passed; includes real GET-only live and loopback; later additions covered by final run"
+    },
+    {
+      "command": "S mandatory stage-11 run before source-endpoint canonicalization",
+      "rc": 1,
+      "result": "interrupted intentionally for semantic audit; pytest teardown reported stash KeyError after KeyboardInterrupt; no gate accepted",
+      "logs": "interrupted-semantic-audit/"
+    },
+    {
+      "command": "mandatory S stage-11 full run without isolated browser runtime",
+      "rc": 1,
+      "result": "597 passed, 1 failed, 13 deselected; sole failure ModuleNotFoundError: playwright before any plugin-control POST",
+      "artifacts": "failed-browser-runtime/reports/"
+    }
+  ],
+  "schema_writer_unchanged": true,
+  "new_migrations": [],
+  "canon_excluded": true,
+  "canon_initial_git_status": "clean",
+  "canon_sha256": "a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892",
+  "browser_runtime": {
+    "status": "passed",
+    "python": "/usr/bin/python3.9",
+    "playwright": "1.60.0",
+    "greenlet": "3.2.5",
+    "chromium": "148.0.7778.96",
+    "origin": "stage10-20261116T193250/stage-10 isolated browser runtime copied into stage-11",
+    "probe": "sync_playwright chromium.launch(headless=True,args=[--no-sandbox]); browser.close()",
+    "runtime_scope": "test dependency only; no global installation/configuration changes"
+  },
+  "runtime_recovery": {
+    "reason": "missing test dependency in fresh isolated root",
+    "action": "copy previous accepted stage-10 browser-deps and browsers into T/stage-11; actual Chromium launch/close rc=0",
+    "production_changes": false,
+    "code_changes": false,
+    "probe_rc": 0
+  }
+}

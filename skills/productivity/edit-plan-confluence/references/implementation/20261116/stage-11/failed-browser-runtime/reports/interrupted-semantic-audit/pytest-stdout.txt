@@ -1,0 +1,55 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests
+configfile: pytest.ini
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 611 items / 13 deselected / 598 selected
+
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_admission.py . [  0%]
+....................................................                     [  8%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_child_page.py . [  9%]
+....................                                                     [ 12%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_cli.py . [ 12%]
+.....                                                                    [ 13%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_env.py . [ 13%]
+....                                                                     [ 14%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py . [ 14%]
+..........                                                               [ 16%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gate_diff.py . [ 16%]
+...                                                                      [ 16%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_identity_resume_e2e.py . [ 16%]
+.........                                                                [ 18%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_itogo.py . [ 18%]
+..........................                                               [ 22%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_macro.py . [ 23%]
+..                                                                       [ 23%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py . [ 23%]
+...                                                                      [ 24%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py . [ 24%]
+.......................                                                  [ 28%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_input.py . [ 28%]
+.......................                                                  [ 32%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_pipeline.py . [ 32%]
+......................                                                   [ 35%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_cache.py . [ 36%]
+.............                                                            [ 38%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_manifest.py . [ 38%]
+......................                                                   [ 42%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py . [ 42%]
+..................                                                       [ 45%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_rules.py . [ 45%]
+........                                                                 [ 46%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_verify.py . [ 46%]
+.................                                                        [ 49%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_profile.py . [ 50%]
+........                                                                 [ 51%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_prepared_plan.py . [ 51%]
+.............................                                            [ 56%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publication_verify.py . [ 56%]
+............                                                             [ 58%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publish_conflicts.py . [ 58%]
+.......
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/home/tkachenkoav/.local/lib/python3.9/site-packages/yaml/reader.py:89: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)

@@ -1,0 +1,11 @@
+{
+  "test_python": "Python 3.9.25",
+  "cli_python": "Python 3.9.25",
+  "pytest": "pytest 8.4.2",
+  "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+  "EDITPLAN_LIVE": "1",
+  "platform": "Linux-5.14.0-611.16.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11",
+  "network_scope": "stage-11 GET-only existing dedicated page 537572835; previous-stage live regressions use newly created dedicated acceptance pages",
+  "secrets": "credentials loaded through existing loader; values not recorded"
+}

@@ -184,6 +184,23 @@ def cmd_identity(args):
     return result['exit_code']
 
 
+def cmd_compare(args):
+    from plan_queries import query_compare
+    result = query_compare(project_slug=args.project_slug, from_selector=args.from_selector,
+        to_selector=args.to_selector, mapping_revision=args.mapping_revision,
+        db_path=args.db, workvault=args.workvault, cache_dir=args.cache_dir)
+    print(json.dumps(result, ensure_ascii=False))
+    return result['exit_code']
+
+
+def cmd_publication_verify(args):
+    from plan_publication_verify import verify_publication
+    result = verify_publication(project_slug=args.project_slug, publication_id=args.publication_id,
+        scope=args.scope, db_path=args.db, workvault=args.workvault, cache_dir=args.cache_dir)
+    print(json.dumps(result, ensure_ascii=False))
+    return result['exit_code']
+
+
 class JsonArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         # Stable error; argument strings can contain secrets. Details go to stderr.
@@ -328,6 +345,23 @@ def build_parser() -> argparse.ArgumentParser:
     resume.add_argument('--rule-scope', choices=('once', 'project'), default='once')
     resume.add_argument('--reason')
     resume.set_defaults(func=cmd_resume)
+    compare = sub.add_parser('compare', help='Compare exact snapshot/publication selectors')
+    compare.result_action = 'compare'
+    compare.add_argument('--project-slug', required=True)
+    compare.add_argument('--from', dest='from_selector', required=True)
+    compare.add_argument('--to', dest='to_selector', required=True)
+    compare.add_argument('--mapping-revision')
+    compare.set_defaults(func=cmd_compare)
+
+    publication = sub.add_parser('publication', help='Publication observations')
+    publication_sub = publication.add_subparsers(dest='publication_command', required=True)
+    verify = publication_sub.add_parser('verify', help='GET-only verification; append an observation')
+    verify.result_action = 'publication verify'
+    verify.add_argument('--project-slug', required=True)
+    verify.add_argument('--publication-id', required=True)
+    verify.add_argument('--scope', choices=('current_state','historical_version'), default='current_state')
+    verify.set_defaults(func=cmd_publication_verify)
+
     history = sub.add_parser('history', help='Typed arrivals/snapshots/publications history')
     history.result_action = 'history'
     history.add_argument('--project-slug', required=True)
@@ -376,7 +410,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.command:
         parser.print_help()
         return 0
-    if args.command not in ("save", "batch", "operation", "resume", "history", "identity", "publish", "diff", "apply") and any((args.db, args.workvault, args.cache_dir)):
+    if args.command not in ("save", "batch", "operation", "resume", "history", "identity", "publish", "diff", "apply", "compare", "publication") and any((args.db, args.workvault, args.cache_dir)):
         parser.error("path overrides are supported for save and batch")
     if args.command=='resume' and ((args.accept_proposal and (not args.reason or not args.reason.strip())) or
             (not args.accept_proposal and (args.reason or args.rule_scope!='once'))):

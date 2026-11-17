@@ -1,0 +1,59 @@
+.................................................F...................... [ 35%]
+........................................................................ [ 71%]
+..........................................................               [100%]
+=================================== FAILURES ===================================
+__________ test_pair_project_representation_scope_and_no_transitivity __________
+
+db = <sqlite3.Connection object at 0x7f612c3f67b0>
+tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/mofs-review/test_pair_project_representati0')
+
+    def test_pair_project_representation_scope_and_no_transitivity(db,tmp_path):
+        a,b=make_snapshot(db),make_snapshot(db,tag='b')
+        rev=revision(db,tmp_path,a,b)
+        foreign=make_snapshot(db,slug='foreign',tag='f')
+        c=make_snapshot(db,tag='c')
+        gantt=make_snapshot(db,tag='g',representation='gantt_json')
+        for left,right,code in ((a,foreign,'selector_project_mismatch'),(a,gantt,'continuity_requires_mpp')):
+            with pytest.raises(i.IdentityError,match=code):
+                revision(db,tmp_path,left,right)
+        for left,right in ((a,c),(b,a)):
+            with pytest.raises(i.IdentityError,match='mapping_revision_scope_mismatch'):
+                i.resolve_identity(db,rev['plan_id'],left,right,rev['mapping_revision_id'])
+        with pytest.raises(i.IdentityError,match='mapping_revision_scope_mismatch'):
+            i.show_revision(db,'foreign',rev['mapping_revision_id'])
+        with pytest.raises(i.IdentityError,match='selector_project_mismatch'):
+>           q._diff_snapshots(db,rev['plan_id'],a,foreign)
+
+tests/plan/test_identity.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+mofs_index/plan/query.py:279: in _diff_snapshots
+    resolve_pair(conn,plan_id,{'kind':'snapshot','snapshot_id':snap_a},{'kind':'snapshot','snapshot_id':snap_b})
+mofs_index/plan/selectors.py:69: in resolve_pair
+    return resolve_selector(conn, plan_id, a), resolve_selector(conn, plan_id, b)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+conn = <sqlite3.Connection object at 0x7f612c3f67b0>
+plan_id = 'plan_cc6deeab0c2d40829f5b98aee8cb1660'
+selector = {'kind': 'snapshot', 'snapshot_id': 'snapshot_b2ae074f941f49a3a8722efd4a2b93ae'}
+
+    def resolve_selector(conn, plan_id, selector):
+        if not isinstance(selector, dict) or selector.get('kind') not in ('snapshot', 'publication'):
+            raise PlanQueryError('exact_selector_required', 2)
+        kind = selector['kind']
+        key = kind + '_id'
+        allowed = {'kind', key} | ({'page_id', 'attachment_id', 'attachment_version', 'snapshot_id'} if kind == 'publication' else set())
+        if set(selector) - allowed or not isinstance(selector.get(key), str) or not selector[key].strip():
+            raise PlanQueryError('exact_publication_id_required' if kind == 'publication' else 'exact_snapshot_id_required', 2)
+        rows = records(conn, 'SELECT * FROM plan_' + kind + ' WHERE ' + key + '=?', (selector[key],))
+        if not rows:
+            raise PlanQueryError(kind + '_not_found')
+        row = rows[0]
+        if row['plan_id'] != plan_id:
+>           raise PlanQueryError('selector_project_mismatch')
+E           mofs_index.plan.selectors.PlanQueryError: selector_project_mismatch
+
+mofs_index/plan/selectors.py:38: PlanQueryError
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/reports/mofs-review-junit.xml -
+=========================== short test summary info ============================
+FAILED tests/plan/test_identity.py::test_pair_project_representation_scope_and_no_transitivity
+1 failed, 201 passed in 39.54s

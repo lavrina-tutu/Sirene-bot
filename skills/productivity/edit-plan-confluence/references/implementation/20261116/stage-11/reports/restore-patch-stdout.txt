@@ -1,0 +1,6 @@
+patching file mofs_index/plan/query.py
+patching file mofs_index/plan/selectors.py
+patching file mofs_index/plan/history.py
+patching file mofs_index/plan/render.py
+patching file tests/plan/test_query.py
+patching file tests/plan/test_render.py

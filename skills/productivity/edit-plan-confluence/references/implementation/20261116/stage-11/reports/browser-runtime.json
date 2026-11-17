@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "python": "/usr/bin/python3.9",
+  "playwright": "1.60.0",
+  "greenlet": "3.2.5",
+  "chromium": "148.0.7778.96",
+  "origin": "stage10-20261116T193250/stage-10 isolated browser runtime copied into stage-11",
+  "probe": "sync_playwright chromium.launch(headless=True,args=[--no-sandbox]); browser.close()",
+  "runtime_scope": "test dependency only; no global installation/configuration changes"
+}

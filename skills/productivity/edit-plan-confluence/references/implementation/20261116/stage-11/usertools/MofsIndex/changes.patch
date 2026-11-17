@@ -1,0 +1,1397 @@
+--- a/mofs_index/plan/query.py
++++ b/mofs_index/plan/query.py
+@@ -9,7 +9,7 @@
+ Две "версии" плана в этом архиве — разные представления с разным
+ идентификатором:
+   * Confluence-публикация Gantt JSON — ``{"kind": "publication",
+-    "attachment_version": N}`` (плотная история v1..v6 ZD, только Gantt-id,
++    "publication_id": "..."}`` (плотная история v1..v6 ZD, только Gantt-id,
+     без UID).
+   * MPP snapshot — ``{"kind": "snapshot", "snapshot_id": "..."}`` (полный
+     граф с UID/ES-EF-LS-LF/календарями, но только те версии, для которых
+@@ -24,20 +24,17 @@
+ 
+ import json
+ import sqlite3
+-from dataclasses import dataclass, field
+ from datetime import datetime, timezone
+ from pathlib import Path
+-from typing import Any, Literal
++from typing import Any
++
++from .selectors import PlanQueryError
+ 
+ VersionSelector = dict[str, Any]
+ 
+ 
+ def _now() -> str:
+     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+-
+-
+-class PlanQueryError(RuntimeError):
+-    """Селектор не разрешается в конкретную запись / неоднозначен (R-026)."""
+ 
+ 
+ # ─────────────────────────────────────────────────────────────────────────
+@@ -74,326 +71,323 @@
+     }
+ 
+ 
+-def list_versions(conn: sqlite3.Connection, plan_id: str) -> dict[str, Any]:
+-    """Все известные версии плана — публикации (Gantt JSON) и снимки (MPP),
+-    в одном хронологическом списке, с явной пометкой representation."""
+-    publications = conn.execute(
+-        "SELECT publication_id, attachment_version, raw_sha256, filename, "
+-        "recorded_at, observed_at, published_at, trust, historical_status FROM plan_publication "
+-        "WHERE plan_id = ? ORDER BY attachment_version",
+-        (plan_id,),
+-    ).fetchall()
+-    snapshots = conn.execute(
+-        "SELECT snapshot_id, representation, status_date, observed_at, "
+-        "recorded_at, source_artifact_id FROM plan_snapshot "
+-        "WHERE plan_id = ? ORDER BY recorded_at",
+-        (plan_id,),
+-    ).fetchall()
+-
+-    versions: list[dict[str, Any]] = []
+-    for pub_id, ver, sha, filename, recorded_at, observed_at, published_at, trust, historical_status in publications:
+-        versions.append({
+-            "kind": "publication",
+-            "publication_id": pub_id,
+-            "trust": trust,
+-            "historical_status": historical_status,
+-            "publication_verified": trust == "verified_v1",
+-            "attachment_version": ver,
+-            "representation": "gantt_json",
+-            "raw_sha256": sha,
+-            "filename": filename,
+-            "recorded_at": recorded_at,
+-            "observed_at": observed_at,
+-            "published_at": published_at,
+-        })
+-    for snap_id, repr_, status_date, observed_at, recorded_at, artifact_id in snapshots:
+-        versions.append({
+-            "kind": "snapshot",
+-            "snapshot_id": snap_id,
+-            "representation": repr_,
+-            "status_date": status_date,
+-            "observed_at": observed_at,
+-            "recorded_at": recorded_at,
+-            "source_artifact_id": artifact_id,
+-        })
+-    return {
+-        "plan_id": plan_id,
+-        "versions": versions,
+-        "receipt": {
+-            "plan_id": plan_id,
+-            "publication_count": len(publications),
+-            "snapshot_count": len(snapshots),
+-            "known_at": _now(),
+-        },
+-    }
+-
+-
+-# ─────────────────────────────────────────────────────────────────────────
+-# Внутренние загрузчики по представлению
+-# ─────────────────────────────────────────────────────────────────────────
+-
+-
+-def _load_publication(conn: sqlite3.Connection, plan_id: str, attachment_version: int) -> dict[str, Any]:
+-    row = conn.execute(
+-        "SELECT p.publication_id, p.raw_sha256, a.path, p.recorded_at, p.trust, p.historical_status "
+-        "FROM plan_publication p JOIN plan_artifact a ON a.artifact_id = p.artifact_id "
+-        "WHERE p.plan_id = ? AND p.attachment_version = ?",
+-        (plan_id, attachment_version),
+-    ).fetchone()
+-    if row is None:
+-        raise PlanQueryError(f"публикация v{attachment_version} не найдена для plan_id={plan_id}")
+-    publication_id, sha256, path, recorded_at, trust, historical_status = row
+-    body = json.loads(Path(path).read_text(encoding="utf-8"))
+-    return {
+-        "publication_id": publication_id,
+-        "trust": trust,
+-        "historical_status": historical_status,
+-        "publication_verified": trust == "verified_v1",
+-        "attachment_version": attachment_version,
+-        "raw_sha256": sha256,
+-        "recorded_at": recorded_at,
+-        "body": body,
+-    }
+-
+-
+-def _flatten_gantt(events: list[dict[str, Any]]) -> dict[int, dict[str, Any]]:
+-    out: dict[int, dict[str, Any]] = {}
+-
+-    def walk(node: dict[str, Any]) -> None:
+-        out[node["id"]] = node
+-        for child in node.get("children", ()):
+-            walk(child)
+-
+-    for root in events:
+-        walk(root)
+-    return out
+-
+-
+-def _load_snapshot(conn: sqlite3.Connection, snapshot_id: str) -> dict[str, Any]:
+-    snap_row = conn.execute(
+-        "SELECT plan_id, representation, timezone_hint, status_date, recorded_at "
+-        "FROM plan_snapshot WHERE snapshot_id = ?",
+-        (snapshot_id,),
+-    ).fetchone()
+-    if snap_row is None:
+-        raise PlanQueryError(f"snapshot_id={snapshot_id} не найден")
+-    plan_id, representation, timezone_hint, status_date, recorded_at = snap_row
+-    tasks = conn.execute(
+-        "SELECT task_key, uid, name, start_raw, finish_raw, duration_raw, "
+-        "early_start, early_finish, late_start, late_finish, percent_complete, "
+-        "constraint_type, constraint_date, outline_level "
+-        "FROM plan_task_version WHERE snapshot_id = ?",
+-        (snapshot_id,),
+-    ).fetchall()
+-    tasks_by_uid: dict[str, dict[str, Any]] = {}
+-    tasks_by_key: dict[str, dict[str, Any]] = {}
+-    cols = ("task_key", "uid", "name", "start", "finish", "duration", "early_start",
+-            "early_finish", "late_start", "late_finish", "percent_complete",
+-            "constraint_type", "constraint_date", "outline_level")
+-    for row in tasks:
+-        rec = dict(zip(cols, row))
+-        tasks_by_key[rec["task_key"]] = rec
+-        if rec["uid"] is not None:
+-            tasks_by_uid[rec["uid"]] = rec
+-    deps = conn.execute(
+-        "SELECT predecessor_task_key, successor_task_key, link_type, lag_raw "
+-        "FROM plan_dependency_version WHERE snapshot_id = ?",
+-        (snapshot_id,),
+-    ).fetchall()
+-    return {
+-        "snapshot_id": snapshot_id,
+-        "plan_id": plan_id,
+-        "representation": representation,
+-        "timezone_hint": timezone_hint,
+-        "status_date": status_date,
+-        "recorded_at": recorded_at,
+-        "tasks_by_key": tasks_by_key,
+-        "tasks_by_uid": tasks_by_uid,
+-        "dependencies": [
+-            {"predecessor_task_key": p, "successor_task_key": s, "link_type": t, "lag_raw": lag}
+-            for p, s, t, lag in deps
+-        ],
+-    }
+-
+-
+-# ─────────────────────────────────────────────────────────────────────────
+-# diff_versions (P3.RAG.2, R-023/R-036, AC-124)
+-# ─────────────────────────────────────────────────────────────────────────
+-
+-
+-def diff_versions(
+-    conn: sqlite3.Connection,
+-    plan_id: str,
+-    version_a: VersionSelector,
+-    version_b: VersionSelector,
+-    *, mapping_revision_id: str | None = None,
+-) -> dict[str, Any]:
+-    """Δ между двумя версиями одного представления.
+-
+-    ``version_a``/``version_b`` — ``{"kind": "publication", "attachment_version": N}``
+-    или ``{"kind": "snapshot", "snapshot_id": "..."}``. Разные ``kind`` в
+-    одном вызове дают явный ``representation_mismatch`` (не "подогнанный"
+-    diff по случайно совпавшим числовым id, R-029).
+-    """
+-    known_at = _now()
+-    if version_a.get("kind") != version_b.get("kind"):
+-        return {
+-            "result_class": "representation_mismatch",
+-            "reason": (
+-                f"version_a.kind={version_a.get('kind')!r} != "
+-                f"version_b.kind={version_b.get('kind')!r}: нельзя напрямую "
+-                "сравнить Gantt-id (publication) и MPP-uid (snapshot) без "
+-                "подтверждённого mapping"
+-            ),
+-            "receipt": {"plan_id": plan_id, "version_a": version_a, "version_b": version_b, "known_at": known_at},
+-        }
+-    if version_a["kind"] == "publication":
+-        return _diff_publications(conn, plan_id, version_a["attachment_version"], version_b["attachment_version"])
+-    return _diff_snapshots(conn, plan_id, version_a["snapshot_id"], version_b["snapshot_id"], mapping_revision_id=mapping_revision_id)
+-
+-
+-def _diff_publications(conn: sqlite3.Connection, plan_id: str, ver_a: int, ver_b: int) -> dict[str, Any]:
+-    known_at = _now()
+-    a = _load_publication(conn, plan_id, ver_a)
+-    b = _load_publication(conn, plan_id, ver_b)
+-    if a["raw_sha256"] == b["raw_sha256"]:
+-        return {
+-            "result_class": "observed_diff",
+-            "content_identical": True,
+-            "delta": {},
+-            "publications_a": a["attachment_version"],
+-            "publications_b": b["attachment_version"],
+-            "receipt": {
+-                "plan_id": plan_id, "representation": "gantt_json",
+-                "version_a": ver_a, "version_b": ver_b,
+-                "hash_a": a["raw_sha256"], "hash_b": b["raw_sha256"],
+-                "trust_a": a["trust"], "trust_b": b["trust"],
+-                "publication_verified": a["publication_verified"] and b["publication_verified"],
+-                "completeness": "complete", "known_at": known_at,
+-            },
+-        }
+-
+-    fa = _flatten_gantt(a["body"].get("eventsData", ()))
+-    fb = _flatten_gantt(b["body"].get("eventsData", ()))
+-    root_a = fa.get(1, {})
+-    root_b = fb.get(1, {})
+-
+-    deps_a = {(d.get("from"), d.get("to")): d for d in a["body"].get("dependenciesData", ())}
+-    deps_b = {(d.get("from"), d.get("to")): d for d in b["body"].get("dependenciesData", ())}
+-    removed_links = sorted(set(deps_a) - set(deps_b))
+-    added_links = sorted(set(deps_b) - set(deps_a))
+-
+-    def _parse(dt: str | None) -> datetime | None:
+-        if not dt:
+-            return None
+-        return datetime.fromisoformat(dt)
+-
+-    start_a, start_b = _parse(root_a.get("startDate")), _parse(root_b.get("startDate"))
+-    finish_a, finish_b = _parse(root_a.get("endDate")), _parse(root_b.get("endDate"))
+-    dur_a, dur_b = root_a.get("duration"), root_b.get("duration")
+-
+-    finish_delta_days = (finish_b - finish_a).days if (finish_a and finish_b) else None
+-    start_delta_days = (start_b - start_a).days if (start_a and start_b) else None
+-
+-    changed_tasks = []
+-    common_ids = set(fa) & set(fb)
+-    for gid in sorted(common_ids):
+-        ta, tb = fa[gid], fb[gid]
+-        changes = {}
+-        for field_name in ("name", "startDate", "endDate", "duration", "parentId"):
+-            if ta.get(field_name) != tb.get(field_name):
+-                changes[field_name] = {"from": ta.get(field_name), "to": tb.get(field_name)}
+-        if changes:
+-            changed_tasks.append({"gantt_id": gid, "changes": changes})
+-    added_ids = sorted(set(fb) - set(fa))
+-    removed_ids = sorted(set(fa) - set(fb))
+-
+-    return {
+-        "result_class": "observed_diff",
+-        "content_identical": False,
+-        "root": {
+-            "finish_delta_calendar_days": finish_delta_days,
+-            "start_delta_calendar_days": start_delta_days,
+-            "duration_a": dur_a,
+-            "duration_b": dur_b,
+-            "duration_delta": (dur_b - dur_a) if (dur_a is not None and dur_b is not None) else None,
+-            "finish_a": root_a.get("endDate"),
+-            "finish_b": root_b.get("endDate"),
+-        },
+-        "links_removed": [{"from": f, "to": t} for f, t in removed_links],
+-        "links_added": [{"from": f, "to": t} for f, t in added_links],
+-        "task_ids_added": added_ids,
+-        "task_ids_removed": removed_ids,
+-        "changed_tasks": changed_tasks,
+-        "caveat": (
+-            "Gantt-id — позиционный идентификатор представления, не подтверждённая "
+-            "идентичность задачи между версиями (identity mapping не выполнен на "
+-            "этом уровне представления, R-023/S3). Изменённые/добавленные/удалённые "
+-            "id — наблюдаемый факт расписания JSON, не доказанное переименование."
+-        ),
+-        "receipt": {
+-            "plan_id": plan_id, "representation": "gantt_json",
+-            "version_a": ver_a, "version_b": ver_b,
+-            "hash_a": a["raw_sha256"], "hash_b": b["raw_sha256"],
+-                "trust_a": a["trust"], "trust_b": b["trust"],
+-                "publication_verified": a["publication_verified"] and b["publication_verified"],
+-            "mapping": "positional_gantt_id", "calendar": "unknown_from_json",
+-            "timezone": "Europe/Moscow" if plan_id else None,
+-            "completeness": "complete", "known_at": known_at,
+-        },
+-    }
+-
+-
+-def _diff_snapshots(conn: sqlite3.Connection, plan_id: str, snap_a: str, snap_b: str,
+-                    *, mapping_revision_id=None) -> dict[str, Any]:
+-    from .identity import resolve_identity, entities
+-    proof = resolve_identity(conn, plan_id, snap_a, snap_b, mapping_revision_id)
+-    a, b = _load_snapshot(conn, snap_a), _load_snapshot(conn, snap_b)
+-    task_pairs = [p for p in proof['pairs'] if p['entity_kind'] == 'task']
+-    changed = []
+-    for pair in task_pairs:
+-        ta, tb = a['tasks_by_key'][pair['from_key']], b['tasks_by_key'][pair['to_key']]
+-        fields = ('start','finish','duration','name','constraint_type','constraint_date','outline_level')
+-        changes = {f:{'from':ta.get(f),'to':tb.get(f)} for f in fields if ta.get(f) != tb.get(f)}
+-        if changes:
+-            changed.append({'uid':tb['uid'], 'task_key':tb['task_key'], **pair, 'changes':changes})
+-    unmatched = {}
+-    for kind in ('task','resource','calendar','assignment'):
+-        pairs = [p for p in proof['pairs'] if p['entity_kind']==kind]
+-        left, key = entities(conn,snap_a,kind)
+-        right, _ = entities(conn,snap_b,kind)
+-        unmatched[kind] = {'from':[r for r in left if r[key] not in {p['from_key'] for p in pairs}],
+-                           'to':[r for r in right if r[key] not in {p['to_key'] for p in pairs}]}
+-    # Only proven endpoints may participate in a link comparison. Full multiset
+-    # semantics/calendar/assignment deltas are the separate stage-11 contract.
+-    mapping = {p['from_key']:p['to_key'] for p in task_pairs}
+-    deps_a = {(mapping[d['predecessor_task_key']],mapping[d['successor_task_key']]) for d in a['dependencies']
+-              if d['predecessor_task_key'] in mapping and d['successor_task_key'] in mapping}
+-    deps_b = {(d['predecessor_task_key'],d['successor_task_key']) for d in b['dependencies']
+-              if d['predecessor_task_key'] in mapping.values() and d['successor_task_key'] in mapping.values()}
+-    root_pair = next((p for p in task_pairs if a['tasks_by_key'][p['from_key']].get('outline_level')==1
+-                     and b['tasks_by_key'][p['to_key']].get('outline_level')==1),None)
+-    ra = a['tasks_by_key'][root_pair['from_key']] if root_pair else {}
+-    rb = b['tasks_by_key'][root_pair['to_key']] if root_pair else {}
+-    delta = None
+-    if a['timezone_hint'] and b['timezone_hint'] and ra.get('finish') and rb.get('finish'):
++def publication_observations(conn, publication_id, *, watermark=None):
++    sql = ('SELECT o.*,l.link_revision_id,l.link_kind,l.confidence,l.evidence FROM plan_publication_page_link l '
++           'JOIN plan_page_observation o USING(observation_id) WHERE l.publication_id=?')
++    args = [publication_id]
++    if watermark is not None:
++        sql += ' AND l.rowid<=?'
++        args.append(watermark)
++    rows = _records(conn, sql + ' ORDER BY l.rowid', args)
++    for row in rows:
++        row['verified_at'] = row['fetched_at']
++        row['verification'] = json.loads(row.pop('verification_json') or '{}')
++    return rows
++
++
++def list_versions(conn, plan_id):
++    versions = []
++    for row in _records(conn, 'SELECT * FROM plan_publication WHERE plan_id=? ORDER BY recorded_at,publication_id', (plan_id,)):
++        # Listing remains possible for incomplete legacy records.
++        links = _records(conn, 'SELECT * FROM plan_publication_snapshot WHERE publication_id=? ORDER BY rowid', (row['publication_id'],))
++        versions.append({**row, 'kind': 'publication', 'representation': 'gantt_json',
++            'publication_verified': row['trust'] == 'verified_v1', 'snapshot_links': links,
++            'observations': publication_observations(conn, row['publication_id'])})
++    for row in _records(conn, 'SELECT * FROM plan_snapshot WHERE plan_id=? ORDER BY recorded_at,snapshot_id', (plan_id,)):
++        row.pop('source_json', None)
++        row['publication_links'] = _records(conn, 'SELECT l.*,p.trust,p.page_id,p.attachment_id,p.attachment_version '
++            'FROM plan_publication_snapshot l JOIN plan_publication p USING(publication_id) WHERE snapshot_id=?', (row['snapshot_id'],))
++        versions.append({**row, 'kind': 'snapshot'})
++    return {'plan_id': plan_id, 'versions': versions, 'receipt': {'plan_id': plan_id,
++        'publication_count': sum(v['kind']=='publication' for v in versions),
++        'snapshot_count': sum(v['kind']=='snapshot' for v in versions), 'known_at': _now()}}
++
++
++def _load_publication(conn, plan_id, publication_id):
++    from .selectors import resolve_selector
++    import hashlib
++    row = resolve_selector(conn, plan_id, {'kind':'publication', 'publication_id':publication_id})
++    row.update(body=None, artifact_quality='unavailable', publication_verified=row['trust']=='verified_v1')
++    artifact = get_artifact(conn, row['artifact_id']) if row['artifact_id'] else None
++    if artifact:
+         try:
+-            fa, fb = datetime.fromisoformat(ra['finish']), datetime.fromisoformat(rb['finish'])
+-            if fa.tzinfo and fb.tzinfo:
+-                delta = (fb-fa).total_seconds()/86400
+-        except ValueError:
++            raw = Path(artifact['path']).read_bytes()
++            if hashlib.sha256(raw).hexdigest() == artifact['raw_sha256'] == row['raw_sha256']:
++                row['body'] = json.loads(raw)
++                row['artifact_quality'] = 'verified_bytes'
++            else:
++                row['artifact_quality'] = 'hash_mismatch'
++        except (OSError, ValueError):
+             pass
+-    return {'result_class':'observed_diff', 'changed_tasks':changed,
+-        'root':{'finish_a':ra.get('finish'),'finish_b':rb.get('finish'),'finish_delta_calendar_days':delta},
+-        'links_removed':sorted(deps_a-deps_b), 'links_added':sorted(deps_b-deps_a),
+-        'task_uids_added':[], 'task_uids_removed':[], 'unmatched_entities':unmatched,
+-        'working_drift':'unavailable',
+-        'receipt':{'plan_id':plan_id,'representation':a['representation'],'snapshot_a':snap_a,'snapshot_b':snap_b,
+-            'mapping':proof['mapping'],'mapping_revision_id':proof['mapping_revision_id'],
+-            'evidence_id':proof['evidence_id'],'evidence_sha256':proof['evidence_sha256'],
+-            'identity_scope':proof['scope'],'confirmed_pairs':proof['pairs'],
+-            'calendar':'unknown','timezone':a['timezone_hint'] if a['timezone_hint']==b['timezone_hint'] else None,
+-            'completeness':'partial','limitations':['full_semantic_diff_pending_stage_11'], 'known_at':_now()}}
++    return row
++
++
++def _clean(row):
++    metadata = {'snapshot_id','plan_id','recorded_at','task_version_id','dependency_version_id',
++        'resource_version_id','assignment_version_id','calendar_version_id','segment_id','availability_id',
++        'interval_id','timephased_id','baseline_value_id','external_dependency_id'}
++    result = {k:v for k,v in row.items() if k not in metadata}
++    for key in ('source_json','extensions'):
++        if isinstance(result.get(key), str):
++            try:
++                result[key] = json.loads(result[key])
++            except ValueError:
++                pass
++    return result
++
++
++def _load_snapshot(conn, snapshot_id, plan_id=None):
++    from .selectors import resolve_selector
++    meta = get_snapshot(conn, snapshot_id)
++    if not meta:
++        raise PlanQueryError('snapshot_not_found')
++    meta = resolve_selector(conn, plan_id or meta['plan_id'], {'kind':'snapshot','snapshot_id':snapshot_id})
++    groups = {}
++    children = {'task': [('segments','plan_task_segment','task_version_id'),
++                         ('baseline_values','plan_embedded_baseline_value','task_version_id')],
++                'resource':[('availability','plan_resource_availability','resource_version_id')],
++                'assignment':[('timephased','plan_assignment_timephased','assignment_version_id')],
++                'calendar':[('intervals','plan_calendar_interval','calendar_version_id')]}
++    for kind in ('task','resource','calendar','assignment','dependency'):
++        rows = _records(conn, 'SELECT * FROM plan_'+kind+'_version WHERE snapshot_id=? ORDER BY rowid', (snapshot_id,))
++        for row in rows:
++            for name, table, fk in children.get(kind, []):
++                row[name] = [_clean(r) for r in _records(conn, 'SELECT * FROM '+table+' WHERE '+fk+'=? ORDER BY rowid', (row[fk],))]
++                row[name].sort(key=_canonical)
++        groups[kind] = [_clean(r) for r in rows]
++    meta['entities'] = groups
++    meta['tasks_by_key'] = {r['task_key']:r for r in groups['task']}
++    # No lossy by-UID index: duplicated UIDs remain independent records.
++    meta['dependencies'] = groups['dependency']
++    meta['external_dependencies'] = [_clean(r) for r in _records(conn,'SELECT * FROM plan_external_dependency WHERE snapshot_id=?', (snapshot_id,))]
++    meta['collections'] = _records(conn, 'SELECT * FROM plan_snapshot_collection WHERE snapshot_id=?', (snapshot_id,))
++    meta['quality_issues'] = _records(conn, 'SELECT * FROM plan_quality_issue WHERE snapshot_id=?', (snapshot_id,))
++    meta['source'] = json.loads(meta['source_json']) if meta['source_json'] else {}
++    return meta
++
++
++def _canonical(value):
++    return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',',':'))
++
++
++def _quality(snapshot):
++    required = {'tasks','dependencies','resources','assignments','calendars','external_dependencies'}
++    states = {r['collection_kind']:r['status'] for r in snapshot['collections']}
++    def incomplete(value):
++        if isinstance(value, dict):
++            if 'quality' in value and value['quality'] not in ('complete','known','ok'):
++                return True
++            return any(incomplete(v) for v in value.values())
++        return isinstance(value,list) and any(incomplete(v) for v in value)
++    complete = (required <= states.keys() and all(states[k]=='complete' for k in required)
++        and bool(snapshot['source']) and not incomplete(snapshot['source']) and not snapshot['quality_issues']
++        and all(row.get('quality')=='complete' for row in snapshot['entities']['task'])
++        and all(row.get('source_json') is not None for kind in ('calendar','resource','assignment','dependency')
++                for row in snapshot['entities'][kind]))
++    return {'collections':states, 'completeness':'complete' if complete else 'partial',
++        'calendar':'known' if complete and snapshot['entities']['calendar'] else 'unknown'}
++
++
++def _absolute_delta(a, b, zone_a, zone_b):
++    # Date-only and unknown zones have no absolute instant. Keep raw values.
++    if not zone_a or not zone_b or zone_a=='unknown' or zone_b=='unknown' or not a or not b or 'T' not in a or 'T' not in b:
++        return None
++    from zoneinfo import ZoneInfo
++    try:
++        left, right = (datetime.fromisoformat(v.replace('Z','+00:00')) for v in (a,b))
++        if left.tzinfo is None:
++            left = left.replace(tzinfo=ZoneInfo(zone_a))
++            if left.fold == 0 and left.utcoffset() != left.replace(fold=1).utcoffset():
++                return None
++        if right.tzinfo is None:
++            right = right.replace(tzinfo=ZoneInfo(zone_b))
++            if right.fold == 0 and right.utcoffset() != right.replace(fold=1).utcoffset():
++                return None
++        return (right.astimezone(timezone.utc)-left.astimezone(timezone.utc)).total_seconds()
++    except (ValueError, TypeError, KeyError):
++        return None
++
++
++def diff_versions(conn, plan_id, version_a, version_b, *, mapping_revision_id=None):
++    from .selectors import resolve_pair
++    a,b = resolve_pair(conn, plan_id, version_a, version_b)
++    kinds = (version_a['kind'],version_b['kind'])
++    if kinds == ('snapshot','snapshot'):
++        result = _diff_snapshots(conn,plan_id,a['snapshot_id'],b['snapshot_id'],mapping_revision_id=mapping_revision_id)
++    elif kinds == ('publication','publication'):
++        result = _diff_publications(conn,plan_id,a['publication_id'],b['publication_id'],
++            mapping_revision_id=mapping_revision_id, selections=(a,b))
++    else:
++        pub = a if kinds[0]=='publication' else b
++        snap = b if kinds[0]=='publication' else a
++        linked = get_snapshot(conn,pub['snapshot_id']) if pub['snapshot_id'] else None
++        archive = _load_publication(conn,plan_id,pub['publication_id'])
++        if not linked or linked['representation'] != 'gantt_json' or archive['artifact_quality']!='verified_bytes':
++            result = {'result_class':'representation_mismatch','exit_code':4,
++                'reason':'confirmed_gantt_snapshot_and_mapping_required','receipt':{'mapping':'unknown','known_at':_now()}}
++        else:
++            sa,sb = (linked['snapshot_id'],snap['snapshot_id']) if kinds[0]=='publication' else (snap['snapshot_id'],linked['snapshot_id'])
++            result = _diff_snapshots(conn,plan_id,sa,sb,mapping_revision_id=mapping_revision_id)
++    result.setdefault('exit_code',0)
++    result.setdefault('receipt',{}).update(plan_id=plan_id,version_a=a['selector'],version_b=b['selector'])
++    return result
++
++
++def _diff_publications(conn, plan_id, publication_a, publication_b, *, mapping_revision_id=None, selections=None):
++    from .selectors import resolve_pair
++    resolve_pair(conn,plan_id,{'kind':'publication','publication_id':publication_a},
++                 {'kind':'publication','publication_id':publication_b})
++    a,b = (_load_publication(conn,plan_id,p) for p in (publication_a,publication_b))
++    if selections:
++        for loaded,selected in zip((a,b),selections):
++            loaded.update({k:selected[k] for k in ('snapshot_id','snapshot_links','snapshot_link_quality','selector')})
++    # A source MPP link proves source provenance, not identity of positional Gantt IDs.
++    matching = all(p['artifact_quality']=='verified_bytes' and p['snapshot_id']
++        and get_snapshot(conn,p['snapshot_id'])['representation']=='gantt_json' for p in (a,b))
++    if matching:
++        result = _diff_snapshots(conn,plan_id,a['snapshot_id'],b['snapshot_id'],mapping_revision_id=mapping_revision_id)
++    else:
++        if mapping_revision_id:
++            raise PlanQueryError('publication_mapping_scope_unproven')
++        result = {'result_class':'observed_diff','changed_tasks':[],'links_added':[],'links_removed':[],
++            'unmatched_entities':{},'root':{'finish_delta_calendar_days':None},
++            'receipt':{'mapping':'unknown','mapping_revision_id':None,'completeness':'partial','calendar':'unknown','known_at':_now()}}
++    result['content_identical'] = bool(a['body'] is not None and b['body'] is not None and a['raw_sha256']==b['raw_sha256'])
++    result['publications'] = {'from':{k:v for k,v in a.items() if k!='body'},'to':{k:v for k,v in b.items() if k!='body'}}
++    collection_fields = {'eventsData','dependenciesData','resourcesData','calendarsData','assignmentsData'}
++    result['representation_fields'] = {side:{k:v for k,v in (p['body'] or {}).items() if k not in collection_fields}
++        for side,p in (('from',a),('to',b)) if isinstance(p['body'],dict)}
++    if not matching:
++        def structure(body):
++            body = body if isinstance(body,dict) else {}
++            tasks = []
++            def walk(nodes):
++                for node in nodes:
++                    tasks.append({k:v for k,v in node.items() if k!='children'})
++                    walk(node.get('children',[]))
++            walk(body.get('eventsData',[]))
++            return {'task':tasks,'resource':body.get('resourcesData',[]),
++                'calendar':body.get('calendarsData',[]),'assignment':body.get('assignmentsData',[]),
++                'dependency':body.get('dependenciesData',[])}
++        left,right = structure(a['body']),structure(b['body'])
++        result['unmatched_entities'] = {kind:{'from':left[kind],'to':right[kind]} for kind in left}
++    result['receipt'].update(representation='gantt_json',publication_a=publication_a,publication_b=publication_b,
++        hash_a=a['raw_sha256'],hash_b=b['raw_sha256'],trust_a=a['trust'],trust_b=b['trust'],
++        publication_verified=a['publication_verified'] and b['publication_verified'],
++        link_quality_a=a['snapshot_link_quality'],link_quality_b=b['snapshot_link_quality'],
++        comparison_scope='linked_gantt_snapshots' if matching else 'unmatched_publication_structures')
++    return result
++
++
++def _diff_snapshots(conn, plan_id, snap_a, snap_b, *, mapping_revision_id=None):
++    from .identity import resolve_identity
++    from .selectors import resolve_pair
++    resolve_pair(conn,plan_id,{'kind':'snapshot','snapshot_id':snap_a},{'kind':'snapshot','snapshot_id':snap_b})
++    a,b = _load_snapshot(conn,snap_a,plan_id),_load_snapshot(conn,snap_b,plan_id)
++    proof = resolve_identity(conn,plan_id,snap_a,snap_b,mapping_revision_id)
++    if a['representation'] != b['representation'] and proof['mapping'] not in ('confirmed_mapping',):
++        return {'result_class':'representation_mismatch','exit_code':4,'receipt':{'mapping':proof['mapping'],'known_at':_now()}}
++    maps = {kind:{p['from_key']:p['to_key'] for p in proof['pairs'] if p['entity_kind']==kind}
++            for kind in ('task','resource','calendar','assignment')}
++    references = {'parent_task_key':'task','task_key':'task','local_task_key':'task',
++        'predecessor_task_key':'task','successor_task_key':'task','resource_key':'resource',
++        'calendar_key':'calendar','effective_calendar_key':'calendar','base_calendar_key':'calendar','parent_key':'calendar',
++        'default_calendar_key':'calendar','project_calendar_key':'calendar'}
++    def translated(row, side, *, own=None):
++        row = dict(row)
++        for key,kind in references.items():
++            if key==own or row.get(key) is None:
++                continue
++            value = row[key]
++            if side=='from':
++                row[key] = {'mapped':maps[kind][value]} if value in maps[kind] else {'unmatched_from':value}
++            else:
++                row[key] = {'mapped':value} if value in maps[kind].values() else {'unmatched_to':value}
++        return row
++    changed, unmatched = {}, {}
++    for kind,mapping in maps.items():
++        key = kind+'_key'
++        left,right = a['entities'][kind],b['entities'][kind]
++        indexed_a = {r.get(key):r for r in left if r.get(key)}
++        indexed_b = {r.get(key):r for r in right if r.get(key)}
++        changed[kind] = []
++        for ka,kb in sorted(mapping.items()):
++            ta,tb = translated(indexed_a[ka],'from',own=key),translated(indexed_b[kb],'to',own=key)
++            fields = (set(ta)|set(tb))-{key}
++            changes = {f:{'from':ta.get(f),'to':tb.get(f)} for f in sorted(fields) if ta.get(f)!=tb.get(f)}
++            if changes:
++                changed[kind].append({'from_key':ka,'to_key':kb,'task_key':kb if kind=='task' else None,
++                    'uid':tb.get('uid'),'changes':changes})
++        unmatched[kind] = {'from':[r for r in left if r.get(key) not in mapping],
++                           'to':[r for r in right if r.get(key) not in mapping.values()]}
++    from collections import Counter
++    def dep_partition(snapshot, side):
++        matched,rest = [],[]
++        keys = maps['task'] if side=='from' else set(maps['task'].values())
++        for d in snapshot['dependencies']:
++            if all(d[k] in keys for k in ('predecessor_task_key','successor_task_key')):
++                # Local dependency keys and raw positional source JSON are provenance,
++                # not cross-snapshot identity. Every semantic column is retained.
++                rec = {k:v for k,v in translated(d,side).items() if k not in ('dependency_key','source_json')}
++                # Source endpoint IDs/UIDs are redundant local references, not
++                # relation changes after the endpoints have been mapped.
++                local_identifiers = {'dependency_key','uid','predecessor_id','successor_id',
++                                     'predecessor_uid','successor_uid'}
++                def source(value):
++                    if isinstance(value,list):
++                        return [source(v) for v in value]
++                    if not isinstance(value,dict):
++                        return value
++                    value = {k:source(v) for k,v in value.items() if k not in local_identifiers}
++                    for field,kind in references.items():
++                        if field in value and value[field] is not None:
++                            wrapped = isinstance(value[field],dict) and 'value' in value[field]
++                            raw = value[field]['value'] if wrapped else value[field]
++                            if isinstance(raw,str):
++                                mapped = translated({field:raw},side)[field]
++                                value[field] = {**value[field],'value':mapped} if wrapped else mapped
++                    return value
++                rec['source_json'] = source(d.get('source_json'))
++                matched.append(rec)
++            else:
++                rest.append(d)
++        return Counter(_canonical(d) for d in matched),rest
++    da,ua = dep_partition(a,'from');db,ub = dep_partition(b,'to')
++    unmatched['dependency'] = {'from':ua,'to':ub}
++    decode = lambda counter:[json.loads(rec) for rec in sorted(counter) for _ in range(counter[rec])]
++    # External records remain visible and do not become proven removals/additions.
++    unmatched['external_dependency'] = {'from':a['external_dependencies'],'to':b['external_dependencies']}
++    root_pairs = [(a['tasks_by_key'][ka],b['tasks_by_key'][kb]) for ka,kb in maps['task'].items()
++        if a['tasks_by_key'][ka].get('outline_level')==1 and b['tasks_by_key'][kb].get('outline_level')==1]
++    ra,rb = root_pairs[0] if len(root_pairs)==1 else ({},{})
++    za,zb = a['resolved_timezone'] or a['timezone_hint'], b['resolved_timezone'] or b['timezone_hint']
++    seconds = _absolute_delta(ra.get('finish_raw'),rb.get('finish_raw'),za,zb)
++    qa,qb = _quality(a),_quality(b)
++    def project(snapshot, side):
++        value = dict(snapshot['source'].get('project',{}))
++        for key in ('default_calendar_key','project_calendar_key'):
++            if key in value:
++                wrapped = isinstance(value[key],dict) and 'value' in value[key]
++                raw = value[key]['value'] if wrapped else value[key]
++                mapped = translated({key:raw},side)[key]
++                value[key] = {**value[key],'value':mapped} if wrapped else mapped
++        return value
++    project_a,project_b = project(a,'from'),project(b,'to')
++    project_changes = {k:{'from':project_a.get(k),'to':project_b.get(k)} for k in sorted(set(project_a)|set(project_b)) if project_a.get(k)!=project_b.get(k)}
++    return {'result_class':'observed_diff','changed_tasks':changed['task'],'changed_resources':changed['resource'],
++        'changed_calendars':changed['calendar'],'changed_assignments':changed['assignment'],'project_changes':project_changes,
++        'root':{'finish_a':ra.get('finish_raw'),'finish_b':rb.get('finish_raw'),'finish_delta_seconds':seconds,
++                'finish_delta_calendar_days':None if seconds is None else seconds/86400},
++        'links_removed':decode(da-db),'links_added':decode(db-da),
++        'task_uids_added':[],'task_uids_removed':[],'unmatched_entities':unmatched,'working_drift':'unavailable',
++        'receipt':{'plan_id':plan_id,'snapshot_a':snap_a,'snapshot_b':snap_b,'representation':a['representation'],
++            'representations':[a['representation'],b['representation']],
++            **{k:proof[k] for k in ('mapping','mapping_revision_id','evidence_id','evidence_sha256')},
++            'identity_scope':proof['scope'],'confirmed_pairs':proof['pairs'],'quality_a':qa,'quality_b':qb,
++            'calendar':'known' if qa['calendar']==qb['calendar']=='known' else 'unknown',
++            'timezone':za if za==zb else None,'time_precision':'raw values retained; absolute deltas in seconds; no date-only/unknown-zone delta',
++            'completeness':'complete' if qa['completeness']==qb['completeness']=='complete' and not any(any(v.values()) for v in unmatched.values()) else 'partial',
++            'limitations':['working_time_drift_and_causal_attribution_not_calculated'],'known_at':_now()}}
+ 
+ 
+ # ─────────────────────────────────────────────────────────────────────────
+@@ -413,6 +407,9 @@
+                'mapping_revision_id':None,'evidence_id':None,'snapshot_count':len({r['snapshot_id'] for r in rows}),
+                'completeness':'partial','known_at':_now()}
+     caveat = 'Перенос задачи не доказывает перенос финала проекта; неизвестная идентичность не объединяет задачи.'
++    for sid in (from_snapshot_id, to_snapshot_id):
++        if sid:
++            snapshot(conn,plan_id,sid)
+     if not rows:
+         return {'result_class':'insufficient_data','reason':'task_not_found','receipt':receipt}
+     if mapping_revision_id and not (from_snapshot_id and to_snapshot_id):
+@@ -460,6 +457,7 @@
+     (0..10). Отсутствующий слот у задачи — известный пропуск, не нулевое
+     отклонение (R-014)."""
+     known_at = _now()
++    snap = _load_snapshot(conn, snapshot_id, plan_id)
+     rows = conn.execute(
+         "SELECT tv.task_key, tv.name, tv.finish_raw, bv.baseline_finish "
+         "FROM plan_task_version tv LEFT JOIN plan_embedded_baseline_value bv "
+@@ -483,7 +481,8 @@
+             continue
+         delta_days = None
+         try:
+-            delta_days = (datetime.fromisoformat(finish) - datetime.fromisoformat(baseline_finish)).days
++            seconds = _absolute_delta(baseline_finish, finish, snap["resolved_timezone"] or snap["timezone_hint"], snap["resolved_timezone"] or snap["timezone_hint"])
++            delta_days = None if seconds is None else seconds / 86400
+         except (ValueError, TypeError):
+             pass
+         comparisons.append({
+@@ -498,7 +497,7 @@
+         "missing_baseline_count": missing_baseline,
+         "receipt": {
+             "plan_id": plan_id, "snapshot_id": snapshot_id, "baseline_slot": baseline_slot,
+-            "completeness": "partial" if missing_baseline else "complete",
++            "completeness": "partial" if missing_baseline or any(r.get('delta_calendar_days') is None for r in comparisons) else "complete",
+             "known_at": known_at,
+         },
+     }
+@@ -516,21 +515,18 @@
+     version_b: VersionSelector,
+     *,
+     target_task_key: str | None = None,
++    mapping_revision_id: str | None = None,
+ ) -> dict[str, Any]:
+-    """Вопрос «за счёт каких работ финал ушёл».
+-
+-    На паре двух MPP snapshot-ов (confirmed uid mapping, полный replay
+-    доступен) — вызывает ``plan_attribution``/``plan_scheduler`` (MppReader,
+-    через subprocess с JVM, см. ``MppReader/mpp_input.py::_pick_python``) и
+-    персистирует через ``writer.record_analysis_run`` → ``validated_attribution``.
+-    На паре Gantt-публикаций (UID недоступен, изначальный MPP не сохранён)
+-    возвращает честный ``observed_diff`` с явными блокерами — не выдумывает
+-    атрибуцию (R-035, AC-139: "Исторический вопрос про ZD v4→v5 (+14) даёт
+-    observed_diff с явными блокерами, не validated_attribution").
++    """Observed change groups only. Identity proof never establishes causality.
++
++    build_groups does not schedule or replay the project; no query in this
++    path claims validated_attribution. Publication selectors remain exact.
+     """
+     known_at = _now()
+     if version_a.get("kind") != "snapshot" or version_b.get("kind") != "snapshot":
+-        diff = diff_versions(conn, plan_id, version_a, version_b)
++        diff = diff_versions(conn, plan_id, version_a, version_b, mapping_revision_id=mapping_revision_id)
++        if diff.get('result_class') == 'representation_mismatch':
++            return diff
+         blockers = [
+             "представление не MPP snapshot (нет подтверждённого mapping по uid)",
+             "полный replay через MicrosoftScheduler недоступен без исходного MPP для этой пары",
+@@ -552,19 +548,21 @@
+ 
+     # Snapshot-пара: вызов MppReader (plan_attribution.build_groups +
+     # sequential_attribution/exact_shapley) через subprocess с python3.9/JVM.
+-    return _explain_via_mppreader(conn, plan_id, version_a["snapshot_id"], version_b["snapshot_id"], target_task_key)
++    return _explain_via_mppreader(conn, plan_id, version_a["snapshot_id"], version_b["snapshot_id"], target_task_key, mapping_revision_id)
+ 
+ 
+ def _explain_via_mppreader(
+-    conn: sqlite3.Connection, plan_id: str, snap_a: str, snap_b: str, target_task_key: str | None,
++    conn: sqlite3.Connection, plan_id: str, snap_a: str, snap_b: str, target_task_key: str | None, mapping_revision_id=None,
+ ) -> dict[str, Any]:
+     import subprocess
+     import sys
+ 
+     known_at = _now()
+     from .identity import resolve_identity
+-    proof = resolve_identity(conn,plan_id,snap_a,snap_b)
+-    diff = _diff_snapshots(conn,plan_id,snap_a,snap_b)
++    proof = resolve_identity(conn,plan_id,snap_a,snap_b,mapping_revision_id)
++    diff = _diff_snapshots(conn,plan_id,snap_a,snap_b,mapping_revision_id=mapping_revision_id)
++    if diff.get('result_class')=='representation_mismatch':
++        return diff
+     if proof['mapping']=='unknown' or any(p['from_key'] != p['to_key'] for p in proof['pairs']) or any(
+             diff['unmatched_entities']['task'].values()):
+         return {'result_class':'insufficient_data','blockers':['confirmed_complete_identity_required'],
+@@ -573,11 +571,11 @@
+     b = _load_snapshot(conn, snap_b)
+ 
+     tasks_a = [
+-        {"task_key": k, "duration_raw": v.get("duration"), "constraint_type": v.get("constraint_type")}
++        {"task_key": k, "duration_raw": v.get("duration_raw"), "constraint_type": v.get("constraint_type")}
+         for k, v in a["tasks_by_key"].items()
+     ]
+     tasks_b = [
+-        {"task_key": k, "duration_raw": v.get("duration"), "constraint_type": v.get("constraint_type")}
++        {"task_key": k, "duration_raw": v.get("duration_raw"), "constraint_type": v.get("constraint_type")}
+         for k, v in b["tasks_by_key"].items()
+     ]
+     payload = {
+@@ -629,7 +627,8 @@
+         }
+     result = json.loads(proc.stdout)
+     return {
+-        "result_class": "validated_attribution" if not result["uncovered"] else "insufficient_data",
++        "result_class": "observed_diff" if not result["uncovered"] else "insufficient_data",
++        "causality": "not_established", "blockers": ["change_groups_are_not_schedule_replay"],
+         "groups": result["groups"],
+         "categories": result["categories"],
+         "uncovered": result["uncovered"],
+@@ -637,7 +636,7 @@
+             "plan_id": plan_id, "snapshot_a": snap_a, "snapshot_b": snap_b,
+             "mapping": proof["mapping"], "mapping_revision_id": proof["mapping_revision_id"],
+             "evidence_id": proof["evidence_id"], "method": "sequential+shapley (groups only, not scheduled)",
+-            "completeness": "complete" if not result["uncovered"] else "partial",
++            "completeness": "partial",
+             "known_at": known_at,
+         },
+     }
+--- /dev/null
++++ b/mofs_index/plan/selectors.py
+@@ -0,0 +1,77 @@
++"""Exact selectors shared by every plan reader. No latest/vN fallback."""
++from __future__ import annotations
++
++from .identity import IdentityError
++
++
++class PlanQueryError(IdentityError, RuntimeError):
++    def __init__(self, code, exit_code=4):
++        super().__init__(code, exit_code)
++
++
++def records(conn, sql, args=()):
++    cur = conn.execute(sql, args)
++    return [dict(zip((c[0] for c in cur.description), row)) for row in cur.fetchall()]
++
++
++def parse_selector(value):
++    if not isinstance(value, str) or ':' not in value:
++        raise PlanQueryError('exact_selector_required', 2)
++    kind, ident = value.split(':', 1)
++    if kind not in ('snapshot', 'publication') or not ident.strip():
++        raise PlanQueryError('exact_selector_required', 2)
++    return {'kind': kind, kind + '_id': ident}
++
++
++def resolve_selector(conn, plan_id, selector):
++    if not isinstance(selector, dict) or selector.get('kind') not in ('snapshot', 'publication'):
++        raise PlanQueryError('exact_selector_required', 2)
++    kind = selector['kind']
++    key = kind + '_id'
++    allowed = {'kind', key} | ({'page_id', 'attachment_id', 'attachment_version', 'snapshot_id'} if kind == 'publication' else set())
++    if set(selector) - allowed or not isinstance(selector.get(key), str) or not selector[key].strip():
++        raise PlanQueryError('exact_publication_id_required' if kind == 'publication' else 'exact_snapshot_id_required', 2)
++    rows = records(conn, 'SELECT * FROM plan_' + kind + ' WHERE ' + key + '=?', (selector[key],))
++    if not rows:
++        raise PlanQueryError(kind + '_not_found')
++    row = rows[0]
++    if row['plan_id'] != plan_id:
++        raise PlanQueryError('selector_project_mismatch')
++    if kind == 'publication':
++        for field in ('page_id', 'attachment_id', 'attachment_version'):
++            if field in selector and selector[field] != row[field]:
++                raise PlanQueryError('publication_' + field + '_mismatch')
++        if not row['page_id'] or not row['attachment_id'] or not row['filename'] or type(row['attachment_version']) is not int or row['attachment_version'] < 1:
++            raise PlanQueryError('publication_target_incomplete', 5)
++        if row['lineage_id']:
++            line = records(conn, 'SELECT * FROM plan_lineage WHERE lineage_id=?', (row['lineage_id'],))
++            if not line or line[0]['plan_id'] != plan_id or (line[0]['page_id'] and line[0]['page_id'] != row['page_id']):
++                raise PlanQueryError('publication_lineage_mismatch')
++        links = records(conn, 'SELECT l.*,s.plan_id AS snapshot_plan_id,s.representation,s.source_artifact_id FROM plan_publication_snapshot l '
++            'JOIN plan_snapshot s USING(snapshot_id) WHERE publication_id=? ORDER BY l.rowid', (row[key],))
++        if any(link['snapshot_plan_id'] != plan_id for link in links):
++            raise PlanQueryError('selector_project_mismatch')
++        if 'snapshot_id' in selector:
++            links = [link for link in links if link['snapshot_id'] == selector['snapshot_id']]
++            if not links:
++                raise PlanQueryError('publication_snapshot_mismatch')
++        def usable(link):
++            if link['confidence'] != 'confirmed' or not link['evidence']:
++                return False
++            if link['representation']=='gantt_json':
++                artifact = records(conn,'SELECT raw_sha256 FROM plan_artifact WHERE artifact_id=?',(link['source_artifact_id'],))
++                return bool(artifact and artifact[0]['raw_sha256']==row['raw_sha256'])
++            return True  # Source provenance only; never positional Gantt identity.
++        confirmed = sorted({link['snapshot_id'] for link in links if usable(link)})
++        row['snapshot_links'] = links
++        row['snapshot_id'] = confirmed[0] if len(confirmed) == 1 else None
++        row['snapshot_link_quality'] = 'confirmed' if len(confirmed) == 1 else 'ambiguous' if confirmed else 'unknown'
++        row['selector'] = {k: selector[k] for k in sorted(selector)}
++    else:
++        row['selector'] = {'kind': kind, key: row[key]}
++    return row
++
++
++def resolve_pair(conn, plan_id, a, b):
++    # Both owners are checked before representation/mapping/content comparison.
++    return resolve_selector(conn, plan_id, a), resolve_selector(conn, plan_id, b)
+--- a/mofs_index/plan/history.py
++++ b/mofs_index/plan/history.py
+@@ -75,6 +75,13 @@
+     """One arrival per item; one snapshot per snapshot; one publication per ID."""
+     publications = q._records(conn, 'SELECT u.rowid AS sequence,u.* FROM plan_publication u JOIN plan p USING(plan_id) '
+         'WHERE u.rowid<=? AND p.project_slug=?', (marks['publications'], slug))
++    for publication in publications:
++        observations = q.publication_observations(conn,publication['publication_id'],watermark=marks['observations'])
++        publication['observations'] = [{key:o[key] for key in ('observation_id','page_version','verified_at',
++            'verification_status','verification_scope','verification_profile','confidence')} for o in observations]
++        publication['verified_at'] = observations[-1]['verified_at'] if observations else None
++        publication['representation'] = 'gantt_json'
++        publication['publication_verified'] = publication['trust']=='verified_v1'
+     links = q._records(conn, 'SELECT l.* FROM plan_publication_snapshot l JOIN plan_publication u USING(publication_id) '
+         'JOIN plan p ON p.plan_id=u.plan_id WHERE l.rowid<=? AND p.project_slug=?', (marks['links'], slug))
+     commits = q._records(conn, 'SELECT a.item_id,e.created_at FROM plan_attempt_event e '
+@@ -107,8 +114,8 @@
+     def enrich(row):
+         pubs = by_snapshot.get(row.get('snapshot_id'), [])
+         known = [p['published_at'] for p in pubs if _time(p['published_at'])]
+-        row['publications'] = [{'publication_id': p['publication_id'], 'published_at': p['published_at'],
+-                                'trust': p['trust'], 'observed_at': p['observed_at'], 'link_evidence': p['link_evidence']} for p in pubs]
++        row['publications'] = [{key:p[key] for key in ('publication_id','page_id','attachment_id','attachment_version',
++            'published_at','observed_at','recorded_at','verified_at','trust','historical_status','observations','link_evidence')} for p in pubs]
+         # A source snapshot's NULL published_at does not deny linked publications.
+         row['published_at'] = min(known, key=_time) if known else None
+         return row
+@@ -144,7 +151,8 @@
+     for row in publications:
+         if row['plan_id'] != plan_id:
+             continue
+-        row['snapshot_ids'] = [link['snapshot_id'] for link in links if link['publication_id'] == row['publication_id']]
++        row['snapshot_links'] = [link for link in links if link['publication_id'] == row['publication_id']]
++        row['snapshot_ids'] = sorted({link['snapshot_id'] for link in row['snapshot_links']})
+         row['received_at'] = row['observed_at']
+         row['source_version_date'] = None  # An import time is not a historical version date.
+         rows.append(row)
+@@ -173,7 +181,7 @@
+         raise HistoryQueryError('caller_transaction_forbidden')
+     conn.execute('BEGIN')
+     try:
+-        tables = {'files': 'plan_import_item', 'snapshots': 'plan_snapshot', 'publications': 'plan_publication', 'links': 'plan_publication_snapshot', 'events': 'plan_attempt_event'}
++        tables = {'files': 'plan_import_item', 'snapshots': 'plan_snapshot', 'publications': 'plan_publication', 'links': 'plan_publication_snapshot', 'events': 'plan_attempt_event', 'observations':'plan_publication_page_link'}
+         marks = {name: conn.execute('SELECT coalesce(max(rowid),0) FROM ' + table).fetchone()[0] for name, table in tables.items()}
+         if cursor:
+             marks = cursor.get('watermarks')
+--- a/mofs_index/plan/render.py
++++ b/mofs_index/plan/render.py
+@@ -72,13 +72,14 @@
+     lines.append("---")
+     lines.append("")
+     lines.append(f"# Архив слепков плана — {plan_meta.get('name') or plan_meta['project_slug']}")
++    lines.append("Витрина — производная проекция. Точные ID и свидетельства проверяются typed API; порядок регистрации не гарантирует актуальность страницы.")
+     lines.append("")
+ 
+     if publications:
+         latest = publications[-1]
+         lines.append("## Последняя регистрация публикации")
+         lines.append("")
+-        lines.append(f"- Версия: {latest['attachment_version']}")
++        lines.append(f"- ID: `{latest['publication_id']}`; страница `{latest['page_id']}`; attachment `{latest['attachment_id']}`; версия {latest['attachment_version']}")
+         lines.append(f"- Доверие: {latest['trust']}; подтверждение полным конвейером: {latest['publication_verified']}")
+         lines.append("- Регистрация и текущее read-back-наблюдение не доказывают историческую публикацию.")
+         lines.append(f"- Hash: `{latest['raw_sha256']}`")
+@@ -87,70 +88,47 @@
+ 
+     lines.append("## Публикации (Gantt JSON)")
+     lines.append("")
+-    lines.append("| Версия | Hash | Записано | Доверие |")
+-    lines.append("|---|---|---|---|")
++    lines.append("| publication_id | Страница / attachment / версия | Representation | Hash | Записано | Доверие |")
++    lines.append("|---|---|---|---|---|---|---|---|")
+     for p in publications:
+-        lines.append(f"| {p['attachment_version']} | `{(p['raw_sha256'] or '')[:12]}…` | {_fmt_dt(p['recorded_at'])} | {p['trust']} |")
++        lines.append(f"| `{p['publication_id']}` | {p['page_id']} / {p['attachment_id']} / {p['attachment_version']} | gantt_json | `{(p['raw_sha256'] or '')[:12]}` | {_fmt_dt(p['recorded_at'])} | {p['trust']} |")
++        for obs in p['observations']:
++            lines.append(f"- Наблюдение `{obs['observation_id']}`: {obs['verified_at']}, {obs['verification_scope']}, {obs['verification_status']}; историческая дата не восстановлена.")
++        for link in p['snapshot_links']:
++            lines.append(f"- Snapshot `{link['snapshot_id']}`: link quality `{link['confidence']}`, evidence `{link['evidence']}`.")
+     lines.append("")
+ 
+     if snapshots:
+-        lines.append("## Снимки MPP (полный граф, UID/ES-EF-LS-LF)")
+-        lines.append("")
+-        lines.append("| snapshot_id | observed_at | source_artifact_id |")
+-        lines.append("|---|---|---|")
++        lines.append("## Снимки и качество сохранённых представлений")
++        lines.append("")
++        lines.append("| snapshot_id | representation / качество | observed_at | source_artifact_id |")
++        lines.append("|---|---|---|---|")
+         for s in snapshots:
+             lines.append(
+-                f"| `{s['snapshot_id']}` | {_fmt_dt(s['observed_at'])} | "
++                f"| `{s['snapshot_id']}` | {s['representation']} / качество через typed compare | {_fmt_dt(s['observed_at'])} | "
+                 f"`{s['source_artifact_id']}` |"
+             )
+         lines.append("")
+ 
+-    lines.append("## Сравнения между соседними публикациями")
+-    lines.append("")
+-    for a, b in zip(publications, publications[1:]):
+-        d = plan_query.diff_versions(
+-            conn, plan_id,
+-            {"kind": "publication", "attachment_version": a["attachment_version"]},
+-            {"kind": "publication", "attachment_version": b["attachment_version"]},
+-        )
+-        lines.append(f"### v{a['attachment_version']} → v{b['attachment_version']}")
+-        lines.append("")
+-        if d.get("content_identical"):
+-            lines.append("Байты идентичны (diff=0).")
+-        else:
+-            root = d.get("root", {})
+-            lines.append(
+-                f"- Финал: {root.get('finish_a')} → {root.get('finish_b')} "
+-                f"({root.get('finish_delta_calendar_days'):+} календарных суток)"
+-                if root.get("finish_delta_calendar_days") is not None else "- Финал: без изменений"
+-            )
+-            if root.get("duration_delta") is not None:
+-                lines.append(f"- Длительность: {root.get('duration_a')} → {root.get('duration_b')} ({root.get('duration_delta'):+})")
+-            if d.get("links_removed"):
+-                lines.append(f"- Удалены связи: {d['links_removed']}")
+-            if d.get("links_added"):
+-                lines.append(f"- Добавлены связи: {d['links_added']}")
+-            lines.append(f"- {d.get('caveat', '')}")
+-        lines.append("")
+-
+-    if len(snapshots) >= 2:
+-        lines.append("## Сравнение MPP-снимков (UID-уровень)")
+-        lines.append("")
+-        sd = plan_query.diff_versions(
+-            conn, plan_id,
+-            {"kind": "snapshot", "snapshot_id": snapshots[0]["snapshot_id"]},
+-            {"kind": "snapshot", "snapshot_id": snapshots[-1]["snapshot_id"]},
+-        )
+-        lines.append(f"- Финал: {sd['root'].get('finish_a')} → {sd['root'].get('finish_b')} "
+-                     f"({sd['root'].get('finish_delta_calendar_days')} календарных суток)")
+-        if sd.get("changed_tasks"):
+-            lines.append("")
+-            lines.append("| UID | Задача | Было | Стало |")
+-            lines.append("|---|---|---|---|")
+-            for ct in sd["changed_tasks"]:
+-                fin = ct["changes"].get("finish")
+-                if fin:
+-                    lines.append(f"| {ct['uid']} | {ct.get('task_key')} | {fin['from']} | {fin['to']} |")
++    lines.append("## Сравнения точных записей")
++    lines.append("")
++    pairs = list(zip(publications,publications[1:]))
++    if len(snapshots)>=2:
++        pairs.append((snapshots[0],snapshots[-1]))
++    for a,b in pairs:
++        sa = {'kind':a['kind'],a['kind']+'_id':a[a['kind']+'_id']}
++        sb = {'kind':b['kind'],b['kind']+'_id':b[b['kind']+'_id']}
++        lines.append(f"- `{sa}` → `{sb}`")
++        try:
++            d = plan_query.diff_versions(conn,plan_id,sa,sb)
++            receipt = d['receipt']
++            lines.append(f"  Mapping: `{receipt.get('mapping')}`; revision: `{receipt.get('mapping_revision_id')}`; evidence: `{receipt.get('evidence_id')}`; completeness: `{receipt.get('completeness')}`; calendar: `{receipt.get('calendar')}`.")
++            if d.get('content_identical'):
++                lines.append("  Байты идентичны; идентичность задач и историческое доверие проверяются отдельно.")
++            lines.append(f"  Изменения: задачи={len(d.get('changed_tasks',[]))}, связи -{len(d.get('links_removed',[]))}/+{len(d.get('links_added',[]))}, календари={len(d.get('changed_calendars',[]))}, назначения={len(d.get('changed_assignments',[]))}.")
++            lines.append("  Несопоставленные сущности: " + str({k:{side:len(rows) for side,rows in v.items()} for k,v in d.get('unmatched_entities',{}).items()}))
++        except (plan_query.PlanQueryError, ValueError) as exc:
++            lines.append(f"  Сравнение недоступно: `{getattr(exc,'code',type(exc).__name__)}`.")
+         lines.append("")
+ 
+     lines.append("---")
+--- a/tests/plan/test_query.py
++++ b/tests/plan/test_query.py
+@@ -51,12 +51,12 @@
+     plan_id = w.ensure_plan(conn, "zd")
+     lineage_id = w.ensure_lineage(conn, plan_id, "confluence", page_id="p1")
+     body = {"eventsData": [{"id": 1, "startDate": "2026-01-01T09:00:00", "endDate": "2026-01-10T18:00:00", "duration": 9.0, "children": []}], "dependenciesData": []}
+-    _publish_json(conn, plan_id, lineage_id, 1, body, tmp_path=tmp_path)
+-    _publish_json(conn, plan_id, lineage_id, 2, body, tmp_path=tmp_path)
++    pub1 = _publish_json(conn, plan_id, lineage_id, 1, body, tmp_path=tmp_path)
++    pub2 = _publish_json(conn, plan_id, lineage_id, 2, body, tmp_path=tmp_path)
+ 
+     d = q.diff_versions(conn, plan_id,
+-                         {"kind": "publication", "attachment_version": 1},
+-                         {"kind": "publication", "attachment_version": 2})
++                         {"kind": "publication", "publication_id": pub1},
++                         {"kind": "publication", "publication_id": pub2})
+     assert d["content_identical"] is True
+     assert d["receipt"]["hash_a"] == d["receipt"]["hash_b"]
+ 
+@@ -76,23 +76,25 @@
+         ]}],
+         "dependenciesData": [],
+     }
+-    _publish_json(conn, plan_id, lineage_id, 1, body_a, tmp_path=tmp_path)
+-    _publish_json(conn, plan_id, lineage_id, 2, body_b, tmp_path=tmp_path)
++    pub1 = _publish_json(conn, plan_id, lineage_id, 1, body_a, tmp_path=tmp_path)
++    pub2 = _publish_json(conn, plan_id, lineage_id, 2, body_b, tmp_path=tmp_path)
+ 
+     d = q.diff_versions(conn, plan_id,
+-                         {"kind": "publication", "attachment_version": 1},
+-                         {"kind": "publication", "attachment_version": 2})
++                         {"kind": "publication", "publication_id": pub1},
++                         {"kind": "publication", "publication_id": pub2})
+     assert d["content_identical"] is False
+-    assert {"from": 1, "to": 2} in d["links_removed"]
+-    assert d["root"]["finish_delta_calendar_days"] == 14
+-
+-
+-def test_diff_versions_representation_mismatch_is_explicit(conn):
+-    plan_id = w.ensure_plan(conn, "zd")
+-    d = q.diff_versions(conn, plan_id,
+-                         {"kind": "publication", "attachment_version": 1},
+-                         {"kind": "snapshot", "snapshot_id": "snap1"})
+-    assert d["result_class"] == "representation_mismatch"
++    assert d["links_removed"] == []  # No identity evidence for positional IDs.
++    assert d["unmatched_entities"]["dependency"]["from"] == [{"from":1,"to":2}]
++    assert d["root"]["finish_delta_calendar_days"] is None
++
++
++def test_diff_versions_representation_mismatch_is_explicit(conn, tmp_path):
++    plan_id = w.ensure_plan(conn, "zd")
++    line = w.ensure_lineage(conn, plan_id, 'test', page_id='p1')
++    pub1 = _publish_json(conn,plan_id,line,1,{'eventsData':[]},tmp_path=tmp_path)
++    snap = w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=plan_id,representation='mpp'))
++    d = q.diff_versions(conn,plan_id,{'kind':'publication','publication_id':pub1}, {'kind':'snapshot','snapshot_id':snap})
++    assert d['result_class']=='representation_mismatch' and d['exit_code']==4
+ 
+ 
+ def test_task_history_by_uid_and_caveat(conn):
+@@ -157,13 +159,13 @@
+     lineage_id = w.ensure_lineage(conn, plan_id, "confluence", page_id="p1")
+     body_a = {"eventsData": [{"id": 1, "startDate": "2026-01-01T09:00:00", "endDate": "2026-01-10T18:00:00", "duration": 9.0, "children": []}], "dependenciesData": []}
+     body_b = {"eventsData": [{"id": 1, "startDate": "2026-01-01T09:00:00", "endDate": "2026-01-24T18:00:00", "duration": 23.0, "children": []}], "dependenciesData": []}
+-    _publish_json(conn, plan_id, lineage_id, 4, body_a, tmp_path=tmp_path)
+-    _publish_json(conn, plan_id, lineage_id, 5, body_b, tmp_path=tmp_path)
++    pub4 = _publish_json(conn, plan_id, lineage_id, 4, body_a, tmp_path=tmp_path)
++    pub5 = _publish_json(conn, plan_id, lineage_id, 5, body_b, tmp_path=tmp_path)
+ 
+     result = q.explain_finish_change(
+         conn, plan_id,
+-        {"kind": "publication", "attachment_version": 4},
+-        {"kind": "publication", "attachment_version": 5},
++        {"kind": "publication", "publication_id": pub4},
++        {"kind": "publication", "publication_id": pub5},
+     )
+     assert result["result_class"] == "observed_diff"
+     assert result["blockers"]
+@@ -177,7 +179,7 @@
+     assert versions[0]["publication_id"] == pub
+     assert versions[0]["trust"] == "legacy_unverified"
+     assert versions[0]["publication_verified"] is False
+-    loaded = q._load_publication(conn,plan,1)
++    loaded = q._load_publication(conn,plan,pub)
+     assert loaded["trust"] == "legacy_unverified"
+     assert loaded["publication_verified"] is False
+     from mofs_index.plan.render import _build_markdown
+@@ -186,3 +188,234 @@
+     assert "legacy_unverified" in md
+     assert "Последняя регистрация" in md
+     assert "подтверждение полным конвейером: False" in md
++
++
++def semantic_pair(conn, tmp_path, *, task_changes=None, dep_changes=None, cal_changes=None, assignment_changes=None, source_b='b', timezone='Europe/Moscow'):
++    from dataclasses import replace
++    plan = w.ensure_plan(conn,'semantic')
++    tasks = (w.TaskVersionSpec(task_key='t1',uid='1',outline_level=1,name='Root',finish_raw='2026-11-01T09:00:00',
++                 calendar_key='c1',summary=True), w.TaskVersionSpec(task_key='t2',uid='2',name='Child',parent_task_key='t1'))
++    dep = w.DependencyVersionSpec('t1','t2',link_type='FS',lag_raw='1 day',lag_amount='1',lag_units='DAYS',lag_elapsed=False,calendar_basis='predecessor')
++    cal = w.CalendarVersionSpec('c1',minutes_per_day_decimal='480',intervals=(w.CalendarIntervalSpec('weekday','MONDAY',True,'09:00','12:00'),))
++    assignment = w.AssignmentVersionSpec('t1','r1',assignment_key='a1',uid='1',units_decimal='100',work_amount='8',work_units='HOURS',effective_calendar_key='c1')
++    snapshots=[]
++    for tag in ('a',source_b):
++        modified = tag != 'a'
++        spec = w.SnapshotSpec(plan_id=plan,representation='mpp',source_mpp_sha256=tag*64,
++            resolved_timezone=timezone,
++            tasks=(replace(tasks[0],**(task_changes or {})),tasks[1]) if modified else tasks,
++            dependencies=(replace(dep,**(dep_changes or {})),dep) if modified else (dep,dep),
++            calendars=(replace(cal,**(cal_changes or {})),) if modified else (cal,),
++            resources=(w.ResourceVersionSpec('r1',uid='1'),w.ResourceVersionSpec('r2',uid='2')),
++            assignments=(replace(assignment,**(assignment_changes or {})),) if modified else (assignment,))
++        snapshots.append(w.ingest_snapshot(conn,spec))
++    return plan,*snapshots
++
++
++def confirm_pair(conn,tmp_path,a,b,*,mode='mapping',partial=False,reason='fixture explicit assertion'):
++    import hashlib
++    from mofs_index.plan.identity import MappingPair
++    raw=b'Explicit synthetic test assertion of pair identity'
++    path=tmp_path/'assertion.txt';path.write_bytes(raw)
++    digest=hashlib.sha256(raw).hexdigest()
++    evidence=w.record_artifact(conn,digest,'other',str(path),size_bytes=len(raw))
++    pairs=tuple(MappingPair(kind,key,key,kind+':'+key) for kind,keys in (
++        ('task',('t1',) if partial else ('t1','t2')),('resource',() if partial else ('r1','r2')),
++        ('calendar',() if partial else ('c1',)),('assignment',() if partial else ('a1',))) for key in keys)
++    return w.register_identity_confirmation(conn,w.IdentityConfirmationSpec('semantic',a,b,mode,evidence,digest,
++        reason,'test','pytest',pairs=() if mode=='continuity' else pairs))['mapping_revision_id']
++
++
++def diff_pair(conn,plan,a,b,revision=None):
++    return q.diff_versions(conn,plan,{'kind':'snapshot','snapshot_id':a},{'kind':'snapshot','snapshot_id':b},mapping_revision_id=revision)
++
++
++@pytest.mark.parametrize('changes', [
++    {'link_type':'SS'},{'link_type':'FF'},{'link_type':'SF'}, {'lag_amount':'-1'},{'lag_amount':'2'},
++    {'lag_units':'HOURS'},{'lag_elapsed':True},{'calendar_basis':'successor'},{'lag_calendar':'resource'}])
++def test_full_dependency_multiset_semantics(conn,tmp_path,changes):
++    plan,a,b=semantic_pair(conn,tmp_path,dep_changes=changes)
++    revision=confirm_pair(conn,tmp_path,a,b)
++    d=diff_pair(conn,plan,a,b,revision)
++    assert len(d['links_added'])==len(d['links_removed'])==1
++    assert all(d['links_added'][0][key]==value for key,value in changes.items())
++    assert d['receipt']['mapping_revision_id']==revision
++
++
++@pytest.mark.parametrize('changes', [
++    {'name':'Rename'}, {'wbs':'1.2'}, {'source_id':'77'}, {'milestone':True},{'summary':False}, {'task_mode':'manual'},
++    {'actual_start':'2026-10-01T09:00'}, {'actual_finish':'2026-10-02T09:00'}, {'actual_duration_raw':'2 days'},
++    {'remaining_duration_raw':'3 days'},{'percent_complete_decimal':'52.125'}, {'work_amount':'8.5'},
++    {'duration_units':'HOURS'},{'duration_elapsed':True}, {'notes':'saved notes'}, {'calendar_key':None},
++    {'effective_calendar_key':'c1'}, {'parent_task_key':'t2'}, {'constraint_date':'2026-11-12'},
++    {'early_start':'2026-01-01'}, {'late_finish':'2026-11-02'},
++    {'segments':(w.TaskSegmentSpec('2026-01-01T09:00','2026-01-01T10:00'),)},
++    {'baseline_values':(w.BaselineValueSpec(0,baseline_start='2026-01-01'),)},
++    {'extensions':'{"mode":"custom"}'}, {'source_json':'{"extra_saved_field":"value"}'}])
++def test_every_saved_task_field_is_compared(conn,tmp_path,changes):
++    plan,a,b=semantic_pair(conn,tmp_path,task_changes=changes)
++    confirm_pair(conn,tmp_path,a,b)
++    d=diff_pair(conn,plan,a,b)
++    assert len(d['changed_tasks'])==1
++    key=next(iter(changes)); key={'segments':'segments','baseline_values':'baseline_values'}.get(key,key)
++    assert key in d['changed_tasks'][0]['changes']
++
++
++@pytest.mark.parametrize('changes',[
++    {'intervals':(w.CalendarIntervalSpec('weekday','MONDAY',True,'09:30','12:00'),)},
++    {'intervals':(w.CalendarIntervalSpec('exception','2026-11-01',False),)},
++    {'parent_key':'other'}, {'base_calendar_key':'other'}, {'minutes_per_day_decimal':'420'}])
++def test_calendar_intervals_exceptions_inheritance_parameters(conn,tmp_path,changes):
++    plan,a,b=semantic_pair(conn,tmp_path,cal_changes=changes)
++    confirm_pair(conn,tmp_path,a,b)
++    assert diff_pair(conn,plan,a,b)['changed_calendars']
++
++
++@pytest.mark.parametrize('changes',[{'resource_key':'r2'},{'task_key':'t2'},{'units_decimal':'50'},
++    {'work_amount':'9'},{'work_units':'DAYS'},{'start_raw':'2026-11-02T09:00'}, {'finish_raw':'2026-11-03T09:00'},
++    {'effective_calendar_key':None},{'actual_work_raw':'2 hours'},{'remaining_work_raw':'6 hours'},
++    {'timephased':(w.TimephasedSpec('2026-11-01T09:00','2026-11-01T10:00',work_amount='1',work_units='HOURS'),)}])
++def test_assignment_full_semantics(conn,tmp_path,changes):
++    plan,a,b=semantic_pair(conn,tmp_path,assignment_changes=changes)
++    confirm_pair(conn,tmp_path,a,b)
++    assert diff_pair(conn,plan,a,b)['changed_assignments']
++
++
++def test_same_source_unknown_identity_partial_and_exact_revision(conn,tmp_path):
++    plan,a,b=semantic_pair(conn,tmp_path)
++    unknown=diff_pair(conn,plan,a,b)
++    assert unknown['receipt']['mapping']=='unknown' and not unknown['links_added']
++    assert all(unknown['unmatched_entities'][kind]['from'] for kind in ('task','calendar','assignment'))
++    partial=confirm_pair(conn,tmp_path,a,b,partial=True)
++    d=diff_pair(conn,plan,a,b,partial)
++    assert d['unmatched_entities']['calendar']['from'] and d['unmatched_entities']['assignment']['to']
++    assert len(d['unmatched_entities']['task']['to'])==1
++    assert d['receipt']['completeness']=='partial' and d['receipt']['calendar']=='unknown'
++    assert diff_pair(conn,plan,a,a)['receipt']['mapping']=='same_source'
++
++
++def test_selector_owner_checked_before_diff_or_representation(conn,tmp_path,monkeypatch):
++    plan,a,b=semantic_pair(conn,tmp_path)
++    other=w.ensure_plan(conn,'foreign')
++    foreign=w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=other,representation='gantt_json'))
++    def forbidden(*args,**kwargs):
++        raise AssertionError('diff must not start')
++    monkeypatch.setattr(q,'_diff_snapshots',forbidden)
++    for x,y in ((a,foreign),(foreign,a)):
++        with pytest.raises(q.PlanQueryError,match='selector_project_mismatch'):
++            diff_pair(conn,plan,x,y)
++    with pytest.raises(q.PlanQueryError,match='selector_project_mismatch'):
++        q.compare_baseline(conn,plan,foreign)
++    from mofs_index.plan.identity import IdentityError
++    with pytest.raises(IdentityError,match='selector_project_mismatch'):
++        q.task_history(conn,plan,'1',from_snapshot_id=foreign)
++
++
++def test_time_precision_unknown_timezone_not_completeness(conn,tmp_path):
++    plan,a,b=semantic_pair(conn,tmp_path,task_changes={'finish_raw':'2026-11-01T09:00:30'},timezone='Europe/Moscow')
++    confirm_pair(conn,tmp_path,a,b)
++    d=diff_pair(conn,plan,a,b)
++    assert d['root']['finish_delta_seconds']==30
++    assert d['receipt']['completeness']=='partial' and d['receipt']['calendar']=='unknown'
++    assert q._absolute_delta('2026-11-01T09:00','2026-11-01T10:00',None,None) is None
++    assert q._absolute_delta('2026-11-01','2026-11-02','UTC','UTC') is None
++    assert q._absolute_delta('2026-11-01T01:30','2026-11-01T02:00','America/New_York','America/New_York') is None
++
++
++def test_exact_publications_same_v2_two_pages_and_untrusted_link(conn,tmp_path):
++    import hashlib
++    plan=w.ensure_plan(conn,'pages')
++    raw=b'{"eventsData":[{"id":1,"name":"root"}]}'
++    digest=hashlib.sha256(raw).hexdigest();path=tmp_path/'gantt.json';path.write_bytes(raw)
++    artifact=w.record_artifact(conn,digest,'downloaded_json',str(path))
++    pubs=[]
++    for page in ('p1','p2'):
++        line=w.ensure_lineage(conn,plan,'test',page_id=page)
++        pubs.append(w.record_publication(conn,w.PublicationSpec(plan,'test','attachment-'+page,2,
++            lineage_id=line,artifact_id=artifact,page_id=page,filename='gantt.json',raw_sha256=digest)))
++    with pytest.raises(q.PlanQueryError,match='exact_publication_id_required'):
++        q.diff_versions(conn,plan,{'kind':'publication','attachment_version':2},{'kind':'publication','publication_id':pubs[0]})
++    d=q.diff_versions(conn,plan,*[{'kind':'publication','publication_id':p} for p in pubs])
++    assert d['content_identical'] and d['receipt']['mapping']=='unknown'
++    assert d['publications']['from']['page_id']=='p1' and d['publications']['to']['page_id']=='p2'
++    from mofs_index.plan.selectors import resolve_selector
++    with pytest.raises(q.PlanQueryError,match='publication_page_id_mismatch'):
++        resolve_selector(conn,plan,{'kind':'publication','publication_id':pubs[0],'page_id':'p2'})
++    foreign=w.ensure_plan(conn,'foreign-publication')
++    sid=w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=foreign,representation='mpp'))
++    # Typed writer rejects cross-project links before any query can use them.
++    with pytest.raises(w.PlanWriterError):
++        w.link_publication_snapshot(conn,pubs[0],sid,confidence='confirmed',evidence='test')
++
++
++def test_mixed_representation_requires_actual_gantt_snapshot_mapping(conn,tmp_path):
++    import hashlib
++    from mofs_index.plan.identity import MappingPair
++    plan,a,_=semantic_pair(conn,tmp_path)
++    raw=b'{"eventsData":[{"id":1,"name":"Gantt root"}]}'
++    digest=hashlib.sha256(raw).hexdigest();path=tmp_path/'published.json';path.write_bytes(raw)
++    artifact=w.record_artifact(conn,digest,'published_json',str(path))
++    b=w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=plan,representation='gantt_json',source_artifact_id=artifact,
++        source_mpp_sha256=digest,tasks=(w.TaskVersionSpec('gantt:1',name='Gantt root'),)))
++    pub=w.record_publication(conn,w.PublicationSpec(plan,'test','mixed-att',1,page_id='p1',filename='gantt.json',artifact_id=artifact,raw_sha256=digest))
++    w.link_publication_snapshot(conn,pub,b,confidence='confirmed',evidence='synthetic exact Gantt bytes')
++    selectors=({'kind':'snapshot','snapshot_id':a},{'kind':'publication','publication_id':pub})
++    assert q.diff_versions(conn,plan,*selectors)['result_class']=='representation_mismatch'
++    eid=w.record_artifact(conn,digest,'other',str(path))
++    rev=w.register_identity_confirmation(conn,w.IdentityConfirmationSpec('semantic',a,b,'mapping',eid,digest,
++        'explicit mixed representation mapping fixture','test','pytest',pairs=(MappingPair('task','t1','gantt:1','root'),)))
++    result=q.diff_versions(conn,plan,*selectors,mapping_revision_id=rev['mapping_revision_id'])
++    assert result['receipt']['mapping']=='confirmed_mapping'
++    assert result['changed_tasks'][0]['to_key']=='gantt:1'
++    assert result['unmatched_entities']['task']['from'][0]['task_key']=='t2'
++
++
++def test_calendar_project_task_resource_assignment_bindings(conn,tmp_path):
++    plan,a,b=semantic_pair(conn,tmp_path,task_changes={'calendar_key':None})
++    confirm_pair(conn,tmp_path,a,b)
++    d=diff_pair(conn,plan,a,b)
++    assert 'calendar_key' in d['changed_tasks'][0]['changes']
++    c=w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=plan,representation='mpp',source_mpp_sha256='c'*64,
++        source_json='{"project":{"default_calendar_key":{"value":"c1","quality":"known"}}}',
++        tasks=(w.TaskVersionSpec('t1',uid='1'),)))
++    e=w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=plan,representation='mpp',source_mpp_sha256='d'*64,
++        source_json='{"project":{"default_calendar_key":{"value":null,"quality":"known"}}}',
++        tasks=(w.TaskVersionSpec('t1',uid='1'),)))
++    confirm_pair(conn,tmp_path,c,e,partial=True)
++    assert diff_pair(conn,plan,c,e)['project_changes']['default_calendar_key']
++
++
++def test_same_source_distinct_snapshots_same_profile_not_uid_inference(conn,tmp_path):
++    import hashlib
++    raw=b'Identical synthetic bytes';digest=hashlib.sha256(raw).hexdigest();path=tmp_path/'source.mpp';path.write_bytes(raw)
++    artifact=w.record_artifact(conn,digest,'mpp',str(path));plan=w.ensure_plan(conn,'same-source')
++    snapshots=[]
++    for name in ('one','two'):
++        line=w.ensure_lineage(conn,plan,'local:'+name)
++        snapshots.append(w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=plan,lineage_id=line,representation='mpp',
++            source_artifact_id=artifact,source_mpp_sha256=digest,normalization_profile_fingerprint='f'*64,resolved_timezone='unknown',
++            tasks=(w.TaskVersionSpec('t1',uid='1'),))))
++    result=diff_pair(conn,plan,*snapshots)
++    assert result['receipt']['mapping']=='same_source' and not result['changed_tasks']
++    assert result['receipt']['mapping_revision_id'] is None
++
++
++def test_dependency_source_endpoint_ids_follow_confirmed_mapping(conn,tmp_path):
++    import hashlib
++    from mofs_index.plan.identity import MappingPair
++    plan=w.ensure_plan(conn,'renumbered')
++    snapshots=[]
++    for tag,first,last in (('a','1','2'),('b','101','102')):
++        snapshots.append(w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=plan,representation='mpp',source_mpp_sha256=tag*64,
++            tasks=(w.TaskVersionSpec('t'+first,uid=first),w.TaskVersionSpec('t'+last,uid=last)),
++            dependencies=(w.DependencyVersionSpec('t'+first,'t'+last,link_type='FS',lag_amount='-1',lag_units='HOURS',lag_elapsed=True,
++                source_json=json.dumps({'predecessor_uid':first,'successor_uid':last,'predecessor_id':int(first),
++                    'successor_id':int(last),'uid':'local-'+tag,'dependency_key':'local-'+tag,
++                    'predecessor_task_key':'t'+first,'successor_task_key':'t'+last,'driving':True})),))))
++    raw=b'Explicit synthetic renumbering mapping';path=tmp_path/'renumbering.txt';path.write_bytes(raw)
++    digest=hashlib.sha256(raw).hexdigest();eid=w.record_artifact(conn,digest,'other',str(path))
++    rev=w.register_identity_confirmation(conn,w.IdentityConfirmationSpec('renumbered',*snapshots,'mapping',eid,digest,
++        'Confirmed synthetic endpoints only','test','pytest',pairs=(MappingPair('task','t1','t101','first'),MappingPair('task','t2','t102','last'))))
++    result=diff_pair(conn,plan,*snapshots,rev['mapping_revision_id'])
++    assert result['links_added']==result['links_removed']==[]
++    assert result['receipt']['mapping']=='confirmed_mapping'
+--- a/tests/plan/test_render.py
++++ b/tests/plan/test_render.py
+@@ -87,3 +87,24 @@
+     plan_id = w.ensure_plan(conn, "noslugpath")
+     with pytest.raises(ValueError):
+         r.render_plan_md(conn, plan_id)
++
++
++def test_render_uses_exact_publication_ids_quality_and_linked_source(conn,tmp_path,monkeypatch):
++    import hashlib
++    monkeypatch.setattr(r,'WORKVAULT_ROOT',tmp_path)
++    plan=w.ensure_plan(conn,'render-stage11',md_path='Entities/render-stage11/Pages/render-stage11.ganttchart.md')
++    line=w.ensure_lineage(conn,plan,'confluence',page_id='p1')
++    pub1=_publish_json(conn,plan,line,2,{'eventsData':[]},tmp_path)
++    second=w.ensure_lineage(conn,plan,'confluence',page_id='p2')
++    raw=b'{"eventsData":[]}'
++    digest=hashlib.sha256(raw).hexdigest();path=tmp_path/'second.json';path.write_bytes(raw)
++    artifact=w.record_artifact(conn,digest,'downloaded_json',str(path))
++    pub2=w.record_publication(conn,w.PublicationSpec(plan,'confluence','att2',2,lineage_id=second,
++        page_id='p2',filename='gantt.json',artifact_id=artifact,raw_sha256=digest))
++    snap=w.ingest_snapshot(conn,w.SnapshotSpec(plan_id=plan,representation='mpp',tasks=(w.TaskVersionSpec('t1',uid='1'),)))
++    w.link_publication_snapshot(conn,pub1,snap,confidence='confirmed',evidence='synthetic fixture link')
++    result=r.render_plan_md(conn,plan)
++    md=result.md_path.read_text()
++    assert all(value in md for value in (pub1,pub2,'p1','p2','legacy_unverified',snap,'revision','unknown','partial'))
++    assert 'восстановлена' not in md or 'не восстановлена' in md
++    assert 'производная проекция' in md

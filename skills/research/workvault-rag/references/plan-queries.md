@@ -1,142 +1,90 @@
-# Планы (gantt/mpp) — typed query API (code snippets)
+# Планы — точные selectors, mapping и доверие
 
-Справочный материал к `SKILL.md`, секция «Планы (gantt/mpp)». Модуль:
-`/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py` (+ `render.py` —
-MD-витрина, `writer.py`/`schema.py` — persistence). Источник истины — SQLite
-(`~/USERTOOLS/MofsIndex/state/index.sqlite`), пилот-витрина
-`Entities/zd/Pages/zd.ganttchart.md` — производная (рендерится из тех же таблиц,
-Q2 DECISIONS-owner.md). ТЗ: `WorkVault/Hermes-Backlog/dev/pochinka-tz-arhiv-plana-
-20261113/out/FINAL-TZ-arhiv-plana.md` (R-023…R-036).
-
-## Импорт
+Источник истины — typed API MofsIndex (`mofs_index.plan.query`, `history`),
+существующая plan-схема и архив байтов WorkVault. MD `<slug>.ganttchart.md` —
+производная проекция. Свободный SQL и вывод идентичности из MD запрещены.
 
 ```python
 import sys
 sys.path.insert(0, '/home/tkachenkoav/USERTOOLS/MofsIndex')
 from mofs_index.db import connect_durable
-from mofs_index import (
-    resolve_plan, list_versions, diff_versions, task_history,
-    compare_baseline, explain_finish_change,
-)
-
-conn = connect_durable()
-plan = resolve_plan(conn, 'zd')
-plan_id = plan['plan_id']
+from mofs_index.plan.query import resolve_plan, list_versions, diff_versions, task_history, explain_finish_change
 ```
 
-Каждая функция возвращает `dict` с обязательным полем `receipt` — приводить
-вместе с числом в ответе, не только голое число (R-026).
+## Точные селекторы и сравнение
 
-## Представления версий — не смешивать
-
-- Confluence-публикация (Gantt JSON): `{"kind": "publication", "attachment_version": N}`
-  — числовой gantt-id, **нет** UID, история плотная (v1..v6 ZD).
-- MPP-снимок: `{"kind": "snapshot", "snapshot_id": "..."}` — локальный `uid` (сам по себе не доказывает идентичность),
-  полный граф (ES/EF/LS/LF/календари), но только для версий с реально сохранённым
-  исходным MPP (R-036 — не для всех публикаций MPP сохранён).
-
-`diff_versions()` с разными `kind` в `version_a`/`version_b` даёт
-`result_class == "representation_mismatch"` — это честный ответ (разные
-пространства идентичности, S3 RS1-collect.md), не ошибка вызова.
+`list_versions(conn, plan_id)` возвращает publication ID, страницу, attachment ID,
+версию, trust, snapshot links и наблюдения; у снимков — snapshot ID,
+representation и связи публикаций. Выбрать обе записи до сравнения.
+Один номер «v2» неоднозначен: нужны страница и вложение для разрешения
+точного publication ID; произвольную подходящую строку не выбирать.
 
 ```python
-versions = list_versions(conn, plan_id)['versions']
-publications = [v for v in versions if v['kind'] == 'publication']
-snapshots = [v for v in versions if v['kind'] == 'snapshot']
-```
-
-## Сценарий 1 — «Что поменялось в ZD [между версиями]?»
-
-```python
+# pub_a/pub_b — точные ID из списка, разрешённые с пользователем по странице/attachment.
 d = diff_versions(conn, plan_id,
-                   {'kind': 'publication', 'attachment_version': 3},
-                   {'kind': 'publication', 'attachment_version': 4})
-d['links_removed']   # [{'from': 28, 'to': 19}]  — реальное число на боевой БД
-d['content_identical']  # False
+    {'kind': 'publication', 'publication_id': pub_a},
+    {'kind': 'publication', 'publication_id': pub_b})
+# d['receipt']: exact version_a/version_b, publication_a/publication_b,
+# trust_a/trust_b, hash_a/hash_b, link_quality_a/link_quality_b,
+# mapping, mapping_revision_id, completeness и known_at.
 ```
 
-## Сценарий 2 — «На сколько дней уехал финал?»
+Оба селектора проверяются по проекту до diff. Дополнительные typed assertions
+`page_id`, `attachment_id`, `attachment_version`, `snapshot_id` допустимы
+только вместе с publication ID и проверяются на совпадение.
+Отсутствующий/чужой ID не превращается в другую версию. CLI:
 
-```python
-d = diff_versions(conn, plan_id,
-                   {'kind': 'publication', 'attachment_version': 4},
-                   {'kind': 'publication', 'attachment_version': 5})
-d['root']['finish_delta_calendar_days']  # 14 (реально, боевая БД ZD)
-d['root']['duration_delta']               # 3.0 (37 -> 40), отдельно от финала (R-031)
+```text
+cli.py --db /isolated/state/index.sqlite --workvault /isolated/WorkVault --cache-dir /isolated/cache compare --project-slug trisigma --from publication:<id-a> --to publication:<id-b>
+cli.py --db /isolated/state/index.sqlite --workvault /isolated/WorkVault --cache-dir /isolated/cache compare --project-slug trisigma --from snapshot:<id-a> --to snapshot:<id-b> --mapping-revision <revision-id>
 ```
 
-## Сценарий 3 — «Как менялись сроки у юристов/конкретной задачи?»
+MPP и Gantt принадлежат разным пространствам. Без подтверждённого mapping
+точной пары Gantt/MPP snapshot — `representation_mismatch / 4`.
+Связь публикации с исходным MPP подтверждает provenance источника, но не
+позиционные Gantt ID. Без доказанной связи с Gantt snapshot результат
+сохраняет `representation_fields` и `unmatched_entities`, `mapping:unknown`;
+совпадение raw bytes сообщается независимо. Исторический diff позиционных
+ID нельзя повторять как доказанные добавления/удаления задач.
 
-UID служит локальным ключом поиска. Без явного основания совпавшие UID разных MPP
-возвращаются как `unmatched_tasks`; общая история и перенос не вычисляются.
-Для доказанной истории нужны опорный snapshot и прямое подтверждение каждой
-пары; подтверждение A→B и B→C не создаёт A→C.
+Snapshot diff сравнивает все сохранённые значимые поля задач, splits и baseline,
+полные мультимножества зависимостей (тип, signed lag, units, elapsed,
+calendar basis), интервалы/исключения/наследование/привязки календарей,
+ресурсы, назначения, units/work, даты и timephased. Частичный mapping
+не скрывает остатки. Коллекции/поля неполны → `completeness:partial`.
+Timezone не доказывает полноту календаря. Неизвестная timezone или date-only
+не дают абсолютного date delta; секундная разница сохраняется без округления
+до целых суток. Working-time drift остаётся `unavailable`.
 
-```python
-hist = task_history(conn, plan_id, '744', from_snapshot_id=snap_a,
-                    to_snapshot_id=snap_b, mapping_revision_id=revision_id)
-# hist['receipt']: mapping, mapping_revision_id, evidence_id, identity_proofs.
-# Изменившийся UID разрешается по выбранному mapping, а не по совпадению номера.
-# Перенос задачи не доказывает перенос финала проекта.
+`task_history(conn, plan_id, uid, from_snapshot_id=..., to_snapshot_id=...,
+mapping_revision_id=...)` объединяет только непосредственно подтверждённые
+пары; UID без anchor — локальный поиск с несопоставленными остатками.
+`explain_finish_change` сообщает наблюдаемые группы изменений и блокеры;
+`build_groups` без schedule replay не даёт `validated_attribution`.
+Перенос задачи не доказывает причину сдвига финала.
+
+## Проверка публикаций и времена
+
+```text
+cli.py publication verify --project-slug trisigma --publication-id <id> --scope current_state
+cli.py publication verify --project-slug trisigma --publication-id <id> --scope historical_version
 ```
 
-## Сценарий 4 — «Какие связи удалили?»
+Использовать тот же CLI edit-plan-confluence. Запросы Confluence — только GET,
+в том числе точная версия и свежая актуальность для current scope. Новая
+проверка добавляет наблюдение MofsIndex; страница, версия вложения, прежние
+события, trust и published_at не переписываются. Нет ожидаемых bytes,
+storage либо подтверждённой связи snapshot → `not_verified / 5` с причинами.
+Проверка страницы и байтов не повышает `schedule:not_verified`.
 
-```python
-d = diff_versions(conn, plan_id,
-                   {'kind': 'publication', 'attachment_version': 3},
-                   {'kind': 'publication', 'attachment_version': 4})
-d['links_removed']  # [{'from': 28, 'to': 19}]
-```
-
-## Сценарий 5 — «За счёт каких работ финал ушёл?»
-
-```python
-result = explain_finish_change(conn, plan_id,
-                                {'kind': 'snapshot', 'snapshot_id': snap_a},
-                                {'kind': 'snapshot', 'snapshot_id': snap_b})
-result['result_class']  # без прямого подтверждённого соответствия — insufficient_data;
-                         # на паре публикаций — observed_diff с blockers.
-                         # Статус групп не доказывает расписание или причинность.
-```
-
-На ПАРЕ ПУБЛИКАЦИЙ (не snapshot) `explain_finish_change()` сразу возвращает
-`observed_diff` + явные `blockers` ("представление не MPP snapshot", "полный
-replay недоступен без исходного MPP") — это ожидаемо для исторических вопросов
-без сохранённого исходника (напр. ZD v4→v5 +14 — задокументированный пример
-честного отказа в R-036 §10 ТЗ).
-
-## Сценарий 6 — «Что знали на дату X (known_at)?»
-
-```python
-versions = list_versions(conn, plan_id)
-versions['receipt']['known_at']  # момент вызова — снимок знания "сейчас",
-                                   # не "текущая правда задним числом"
-```
-
-Каждый `receipt` несёт `known_at` отдельно — при вопросах про состояние
-знания на прошлую дату сверяться с `recorded_at`/`observed_at` конкретных
-версий (`list_versions`), а не с `known_at` ответа (это всегда "сейчас").
-
-## Реальные числа ZD (боевая БД, сверено с R-036 §10 ТЗ)
-
-| Пара | Факт | Источник |
-|---|---|---|
-| v1→v3 | байты идентичны, diff=0, три публикации | `diff_versions` (publication) |
-| v3→v4 | удалена связь `28→19` | `diff_versions` → `links_removed` |
-| v4→v5 | финал +14 календарных суток (30.12.2026→13.01.2027), duration 37→40 (+3) | `diff_versions` → `root` |
-| v5↔v6 (MPP-пара) | финал неизменен (13.01.2027), UID 744 +4 суток (12→16 ноября), UID 748 +2 суток (18→20 ноября) | историческое наблюдение; новый task_history требует прямую revision/evidence |
-
-## Ограничения (честно)
-
-- Полный `explain_finish_change` уровня В (`validated_attribution` через
-  `plan_scheduler.replay`) на реальных MPP ZD заблокирован split-сегментами
-  в исходнике (`UnsupportedProfileError`, см. MppReader
-  `references/scheduler-capability-matrix.md`) — для ZD пока доступен только
-  уровень групп изменений (`build_groups`) без полного CPM-пересчёта.
-- `plan_fts` (R-027) разрешает "последний" через typed SQL `list_versions`/
-  `diff_versions`, не через FTS rank — FTS используется только для
-  полнотекстового поиска по MD-телу, не для разрешения версии.
+Сохранённый trust регистрации (`legacy_unverified` / `verified_v1`) и
+результаты наблюдений (`verified_observation`, `verification_failed`,
+`not_verified`) показываются отдельно. Каждый observation содержит scope
+`current_state` или `historical_version`, ID и verified_at. Текущее совпадение
+не восстанавливает доказательство прежней даты публикации. Историческая
+версия может совпасть при уже изменившейся текущей цели.
+Без свежего наблюдения говорить «последняя известная регистрация на момент …».
+`known_at` — время запроса, а не историческая дата знания.
 
 ## История поступлений, snapshot и публикаций (§20, этап 06)
 
@@ -231,7 +179,6 @@ Confirm сохраняет явное пользовательское свид�
 mapping не занимает слот выбора. Для B/C достаточно только соответствия обеих
 задач и всех остальных требуемых сущностей; применение правил относится к этапу 09.
 
-В этапе 07 снято ложное подтверждение UID; полное семантическое сравнение связей,
-календарей/назначений и точные publication selectors относятся к этапу 11.
-Текущий snapshot diff сообщает `completeness:partial`, `calendar:unknown` и
-свою ограниченную область. Наличие таймзоны не доказывает полноту календаря.
+Этап 11 использует тот же механизм identity для полного семантического diff.
+Наличие таймзоны не доказывает полноту календаря; неполные поля и коллекции
+сохраняют `completeness:partial`, а неизвестное соответствие — структурные остатки.

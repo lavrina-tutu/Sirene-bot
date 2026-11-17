@@ -291,8 +291,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 through 10")
+    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 11")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -312,6 +312,8 @@ def pytest_configure(config):
         config._acceptance_start_hashes=_stage09_sources()
     if stage=='10':
         config._acceptance_start_hashes=_stage10_sources()
+    if stage=='11':
+        config._acceptance_start_hashes=_stage11_sources()
 
 
 @pytest.hookimpl(tryfirst=True)
@@ -330,7 +332,7 @@ def pytest_collection_modifyitems(config, items):
         else:
             group = "unit"
         item.add_marker(getattr(pytest.mark, group))
-    if config.getoption('--acceptance-stage') in ('08','09','10'):
+    if config.getoption('--acceptance-stage') in ('08','09','10','11'):
         order={'unit':0,'archive_integration':1,'mpp_fixtures':2,'confluence_live':3}
         items.sort(key=lambda item:(max(order[g] for g in GROUPS if item.get_closest_marker(g)),item.nodeid))
 
@@ -340,7 +342,7 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED, "09": STAGE09_REQUIRED, "10": STAGE10_REQUIRED}[stage]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED, "09": STAGE09_REQUIRED, "10": STAGE10_REQUIRED, "11": STAGE11_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -359,6 +361,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption('--acceptance-stage') == '11':
+        _stage11_report(session,exitstatus,root)
         return
     if config.getoption('--acceptance-stage') == '10':
         _stage10_report(session,exitstatus,root)
@@ -1543,5 +1548,110 @@ def _stage10_report(session,exitstatus,root):
         'HTTP dedicated pages: stage10-live.json; plugin controls: stage08-live.json; реальный process-death/HTTP: stage10-process-*.json.',
         '',f"Live stage10: {report['counters']['live_stage10']}. Проверенное дерево: `{report['source_tree_sha256']}`.",
         '',f'Защищённых файлов: {len(protected)}, изменено: {len(changed)}. canon.md исключён из поставки; hash проверен.',
+        '', 'Ограничения:','']+['- '+value for value in limitations]
+    (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')
+
+
+# Existing stage sets/report builders above remain independent and unchanged.
+STAGE11_REQUIRED = STAGE07_REQUIRED | STAGE10_REQUIRED | {
+    'test_compare_e2e.py::test_ac24_cli[AC24-'+str(n)+']' for n in range(1,11)}
+STAGE11_REQUIRED |= {'test_compare_e2e.py::'+name for name in (
+    'test_compare_same_source_precision_unknown_zone_and_causality',
+    'test_compare_exact_publication_ids_same_v2_on_different_pages')}
+STAGE11_REQUIRED |= {'test_publication_verify.py::'+name for name in (
+    'test_verify_transport_technically_forbids_writes',
+    'test_verify_current_repeat_append_only_no_attachment_version',
+    'test_verify_current_does_not_restore_historical_date',
+    'test_verify_mismatch_retains_previous_observations',
+    'test_verify_legacy_missing_expected_bytes_storage_or_link',
+    'test_verify_wrong_project_has_zero_requests',
+    'test_verify_cli_loopback_concurrent_reads_append_observations',
+    'test_stage11_live_verify_only_get_repeat_and_historical_scope')}
+STAGE11_REQUIRED |= {'test_publication_verify.py::test_verify_transport_technically_forbids_writes['+method+']'
+                     for method in ('POST','PUT','PATCH','DELETE')}
+STAGE11_REQUIRED |= {'test_publication_verify.py::test_verify_mismatch_retains_previous_observations['+case+']'
+                     for case in ('bytes','storage','current_version','page_id','attachment_id')}
+
+
+def _stage11_sources():
+    hashes=_stage10_sources()
+    q=SKILL_ROOT.parents[1]/'research/workvault-rag'
+    for p in (q/'SKILL.md',q/'references/plan-queries.md'):
+        hashes[str(p)]=hashlib.sha256(p.read_bytes()).hexdigest()
+    return hashes
+
+
+def _stage11_report(session,exitstatus,root):
+    config=session.config
+    def read(name):
+        p=root/'reports'/name
+        return json.loads(p.read_text()) if p.is_file() else {}
+    initial,external,live,loopback=(read(n) for n in ('initial-state.json','external-checks.json','stage11-live.json','stage11-loopback.json'))
+    comparisons=[json.loads(line) for p in sorted((root/'pytest-tmp').rglob('cli-results.jsonl'))
+                 for line in p.read_text().splitlines() if line]
+    (root/'reports/stage11-compare-cli.json').write_text(json.dumps(comparisons,ensure_ascii=False,indent=2)+'\n')
+    protected=initial.get('protected_hashes',{})
+    changed=[p for p,h in protected.items() if not Path(p).is_file() or hashlib.sha256(Path(p).read_bytes()).hexdigest()!=h]
+    hashes=_stage11_sources()
+    start=config._acceptance_start_hashes
+    drift=sorted(set(hashes)^set(start) | {p for p,h in hashes.items() if start.get(p)!=h})
+    results=config._acceptance_results
+    passed=lambda r:r['status']=='passed' or (r['status']=='skipped' and r['test_id'].endswith('test_rest_live.py::test_live_get_test_page'))
+    good=(int(exitstatus)==0 and bool(session.items) and bool(results) and all(passed(r) for r in results)
+        and bool(protected) and not changed and not drift and external.get('gate')=='passed'
+        and live.get('status')=='passed' and loopback.get('status')=='passed'
+        and live.get('POST')==live.get('PUT')==loopback.get('POST')==loopback.get('PUT')==0)
+    master=Path.home()/'WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md'
+    plan=master.parent/'plans/HF-plan_EditPlanConfluence_20261116.md'
+    schema=Path.home()/'WorkVault/Registries/EcosystemConfig.schema.json'
+    implemented={
+        'M/mofs_index/plan/selectors.py':'exact snapshot/publication IDs, project/page/attachment/lineage/snapshot link checks before diff',
+        'M/mofs_index/plan/query.py':'all saved task fields/nested data, dependency multisets, calendar/assignment/resource semantics, structured unmatched records, precise dates, identity-safe dependent queries',
+        'M/mofs_index/plan/history.py':'scoped publications/links and append-only verification observations with distinct times and stable cursor watermark',
+        'M/mofs_index/plan/render.py':'derived MD with exact IDs/page/attachment/representation/revision/evidence/completeness; no positional proof',
+        'S/scripts/plan_queries.py + cli.py':'compare, final history, publication verify; global isolated paths and structured exit codes',
+        'S/scripts/plan_publication_verify.py':'GET-only request/download guard; expected bytes, exact metadata, archived storage, historical/current scopes, fresh target checks and append-only local observations',
+        'S/scripts/plan_history.py':'archive-history remains legacy_unverified; archived bytes do not prove historical publication',
+        'M/tests/plan/test_query.py + test_render.py':'direct typed API regressions and semantic field matrix',
+        'S/tests/test_compare_e2e.py + test_publication_verify.py':'all ten AC-24 subcases via CLI, exact v2 IDs, GET guard, actual loopback concurrency and dedicated live reads',
+        'S/tests/conftest.py':'stage-11 mandatory set, group ordering and evidence-derived gate; stages 01–10 preserved',
+        'Q/SKILL.md + references/plan-queries.md':'same typed API, exact selectors, mapping/trust and distinct observation times'}
+    limitations=[
+        'Only stage 11; stages 12/13, active skill delivery and full §20/§19 acceptance are not claimed.',
+        'Unknown or partial identity remains structured unmatched data. Positional Gantt IDs never prove entity identity; unlinked/MPP-source publications expose raw structures with unknown mapping.',
+        'Completeness is conservative. Timezone alone does not establish calendar/field completeness. Working-time drift and causal schedule attribution are not calculated.',
+        'Read-back is scoped to observed versions and time; current_state never restores a historical publication date. Insufficient expected bytes/storage/link yields not_verified/5.',
+        'Live stage-11 uses immutable synthetic stage-10 evidence on a dedicated page: historical version matches, current attachment deliberately differs. No arbitrary real-MPP schedule equality is claimed.',
+        'Master on disk is 0.5.1 with separate §21; only agreed §20 is implemented. No schema/config/previous-stage evidence modifications.',
+        'canon.md was clean at entry; its original bytes are protected and it is excluded from the commit. OwnCloud sync is not confirmed.',
+        'Production DB/WorkVault plan data and A–D/AB pages, Gateway, crons, watchers and schedules are unchanged. Existing live regression tests create only dedicated acceptance targets.']
+    report={'stage':'11','gate':'passed' if good else 'failed','exit_code':int(exitstatus),'base_commit':initial.get('base_commit'),
+        'command':[sys.executable,'-m','pytest',*config.invocation_params.args],
+        'environment':{'python':sys.executable,'version':platform.python_version(),'cli_python':'/usr/bin/python3',
+            'PYTHONPATH':os.environ.get('PYTHONPATH'),'test_root':str(root)},
+        'master':{'path':str(master),'version':master.read_text().split('version:',1)[1].splitlines()[0].strip(),
+            'sha256':hashlib.sha256(master.read_bytes()).hexdigest(),
+            'section20_sha256':hashlib.sha256(master.read_text().split('## 20. ')[1].split('## 21. ')[0].encode()).hexdigest()},
+        'plan':{'path':str(plan),'normative_prefix_sha256':hashlib.sha256(plan.read_text().split('## Журнал исполнения')[0].encode()).hexdigest()},
+        'config_contract_sha256':hashlib.sha256(schema.read_bytes()).hexdigest(),
+        'source_files':hashes,'source_tree_sha256':hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),
+        'implemented_files':implemented,'migrations':[],'schema_writer_unchanged':True,
+        'protected_files_checked':len(protected),'changed_protected_files':changed,'changed_during_test_run':drift,
+        'tests':results,'selected':len(session.items),'mandatory_test_ids':sorted(STAGE11_REQUIRED),'external_checks':external,
+        'live_evidence':'stage11-live.json','loopback_evidence':'stage11-loopback.json','compare_cli_evidence':'stage11-compare-cli.json',
+        'counters':{'stage11_live':{k:live.get(k) for k in ('GET','POST','PUT')},
+            'stage11_loopback':{k:loopback.get(k) for k in ('GET','POST','PUT')},'regression':config._acceptance_counters},
+        'covered_requirements':['§20/AC-23','§20/AC-24','§20/AC-25','§20/AC-27'],
+        'limitations':limitations,'generated_at':datetime.now(timezone.utc).isoformat()}
+    (root/'reports/stage-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    lines=['# Этап 11 — доказательное сравнение и доверие к публикациям','',
+        f"Gate: **{report['gate']}**; S rc={exitstatus}; selected={len(session.items)}; passed={sum(r['status']=='passed' for r in results)}.",'',
+        'Покрытие: §20/AC-23, AC-24 (все десять подслучаев), AC-25, AC-27 в объёме этапа 11.','']
+    lines+=['- `'+name+'`: '+value+'.' for name,value in implemented.items()]
+    lines+=['','Команда S:','','```text',' '.join(report['command']),'```','',
+        'Отдельные команды/rc/JUnit MofsIndex, проверка восстановления patch и after-copy: external-checks.json.',
+        '',f"Live GET-only: {report['counters']['stage11_live']}; concurrent CLI loopback: {report['counters']['stage11_loopback']}.",
+        '',f"Дерево исходников: `{report['source_tree_sha256']}`. Защищено файлов: {len(protected)}, изменено: {len(changed)}.",
+        '', 'Завершающий SHA записывается после commit в журнал канонического плана. canon.md в поставку не включается.',
         '', 'Ограничения:','']+['- '+value for value in limitations]
     (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')

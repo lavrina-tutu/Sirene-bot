@@ -1,0 +1,137 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests
+configfile: pytest.ini
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 611 items / 13 deselected / 598 selected
+
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_admission.py . [  0%]
+....................................................                     [  8%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_child_page.py . [  9%]
+....................                                                     [ 12%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_cli.py . [ 12%]
+.....                                                                    [ 13%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_env.py . [ 13%]
+....                                                                     [ 14%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gantt_attachment.py . [ 14%]
+..........                                                               [ 16%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_gate_diff.py . [ 16%]
+...                                                                      [ 16%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_identity_resume_e2e.py . [ 16%]
+.........                                                                [ 18%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_itogo.py . [ 18%]
+..........................                                               [ 22%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_macro.py . [ 23%]
+..                                                                       [ 23%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py . [ 23%]
+...                                                                      [ 24%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py . [ 24%]
+.......................                                                  [ 28%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_mpp_input.py . [ 28%]
+.......................                                                  [ 32%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_pipeline.py . [ 32%]
+......................                                                   [ 35%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_cache.py . [ 36%]
+.............                                                            [ 38%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_manifest.py . [ 38%]
+......................                                                   [ 42%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_receipt.py . [ 42%]
+..................                                                       [ 45%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_rules.py . [ 45%]
+........                                                                 [ 46%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_verify.py . [ 46%]
+.................                                                        [ 49%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_profile.py . [ 50%]
+........                                                                 [ 51%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_prepared_plan.py . [ 51%]
+.............................                                            [ 56%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publication_verify.py . [ 56%]
+............                                                             [ 58%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publish_conflicts.py . [ 58%]
+...........                                                              [ 60%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publish_idempotency.py . [ 60%]
+....                                                                     [ 61%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publish_prepare.py . [ 61%]
+..............                                                           [ 63%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publish_resume.py . [ 64%]
+..............................                                           [ 69%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_batch_decisions.py . [ 69%]
+................                                                         [ 71%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_batch_resume.py . [ 72%]
+.................                                                        [ 74%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_compare_e2e.py . [ 75%]
+...........                                                              [ 76%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_history_queries.py . [ 77%]
+....................                                                     [ 80%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_import_atomicity.py . [ 80%]
+.............                                                            [ 82%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_archive.py . [ 82%]
+.......                                                                  [ 84%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_batch.py . [ 84%]
+.................                                                        [ 87%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_history.py . [ 87%]
+......                                                                   [ 88%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_identity.py . [ 88%]
+.................                                                        [ 91%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_lock.py . [ 91%]
+.                                                                        [ 91%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_reconcile.py . [ 91%]
+....                                                                     [ 92%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_save.py . [ 92%]
+.......................                                                  [ 96%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_verify.py . [ 96%]
+                                                                         [ 96%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_identity_resume_e2e.py . [ 96%]
+..                                                                       [ 97%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_batch.py . [ 97%]
+...                                                                      [ 97%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plan_cache.py . [ 97%]
+                                                                         [ 97%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_controls_live.py F [ 98%]
+                                                                         [ 98%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publication_verify.py . [ 98%]
+.                                                                        [ 98%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publish_live.py . [ 98%]
+                                                                         [ 98%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publish_resume.py . [ 98%]
+.....                                                                    [ 99%]
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_rest_live.py . [ 99%]
+.                                                                        [100%]
+
+=================================== FAILURES ===================================
+_____________________ test_installed_plugin_controls_live ______________________
+
+request = <FixtureRequest for <Function test_installed_plugin_controls_live>>
+tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/pytest-tmp/test_installed_plugin_controls0')
+
+    def test_installed_plugin_controls_live(request,tmp_path):
+        from env import load_confluence_env
+        from conf_client import ConfluenceClient
+        from macro import new_macro_ids,build_macro_html,find_macro
+        from gantt_attachment import _create_attachment,_post_attachment_data
+        from prepared_plan import canonical_bytes
+        root=getattr(request.config,'_acceptance_root',tmp_path)
+        evidence=root/'live';evidence.mkdir(exist_ok=True)
+        status={'status':'not_run','test_parent':TEST_PARENT,'POST':0,'PUT':0,'cases':[],
+                'observed_at':datetime.now(timezone.utc).isoformat()}
+        try:
+            token=load_confluence_env(Path.home()/'USERTOOLS/ConfluenceSync/.env')['CONFLUENCE_TOKEN']
+            # Browser is a test dependency, never a product runtime dependency.
+            deps=root/'browser-deps'
+            if deps.is_dir():sys.path.insert(0,str(deps))
+            if (root/'browsers').is_dir():os.environ['PLAYWRIGHT_BROWSERS_PATH']=str(root/'browsers')
+>           from playwright.sync_api import sync_playwright
+E           ModuleNotFoundError: No module named 'playwright'
+
+hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_controls_live.py:38: ModuleNotFoundError
+=============================== warnings summary ===============================
+test_mpp_input.py::test_zip_collisions[names0]
+  /usr/lib64/python3.9/zipfile.py:1535: UserWarning: Duplicate name: 'x.mpp'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/reports/junit.xml -
+=========================== short test summary info ============================
+FAILED hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_controls_live.py::test_installed_plugin_controls_live
+===== 1 failed, 597 passed, 13 deselected, 1 warning in 730.96s (0:12:10) ======

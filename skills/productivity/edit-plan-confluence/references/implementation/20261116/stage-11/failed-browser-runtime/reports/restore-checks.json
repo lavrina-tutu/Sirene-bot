@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "command": [
+    "patch",
+    "--batch",
+    "-p1",
+    "-i",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-11/usertools/MofsIndex/changes.patch"
+  ],
+  "rc": 0,
+  "files": 6,
+  "patch_restore": true,
+  "after_copy_restore": true,
+  "working_tree_matches_after": true,
+  "hashes_and_modes": true,
+  "manifest_sha256": "aaa45831b85045af6af399a549ff8a6fc304ea7461be6e953bff18edb4c83274"
+}

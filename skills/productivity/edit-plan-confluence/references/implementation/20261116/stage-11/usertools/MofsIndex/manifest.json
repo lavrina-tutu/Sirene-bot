@@ -1,0 +1,68 @@
+{
+  "component": "MofsIndex",
+  "stage": "11",
+  "base_commit": "96c629c35c7486fe90224a27d297936ec72d084c",
+  "files": [
+    {
+      "relative_path": "mofs_index/plan/query.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py",
+      "change": "modified",
+      "before_sha256": "29a2a4da0ea163d0d6b13ce9ffe848d4b46abd8e376f7e079131e76984b9e090",
+      "after_sha256": "b9ed05721962926e382e818ed1bc57a60ae716f46b574cfa6c2ae4f3de99a083",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "reason": "Stage 11 approved plan §13: exact selectors, complete comparison, history/render and direct typed API tests"
+    },
+    {
+      "relative_path": "mofs_index/plan/selectors.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/selectors.py",
+      "change": "created",
+      "before_sha256": null,
+      "after_sha256": "215e07e1ea1d9f9f76b1c6ae9dd4230ed083094b6c80a19a7d70cb16bac38248",
+      "before_mode": null,
+      "after_mode": "0o644",
+      "reason": "Stage 11 approved plan §13: exact selectors, complete comparison, history/render and direct typed API tests"
+    },
+    {
+      "relative_path": "mofs_index/plan/history.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/history.py",
+      "change": "modified",
+      "before_sha256": "b18ffd69506983bf383f27e69484579814cff4aa64c7f5113968bfcd23823ea7",
+      "after_sha256": "68d94eabb3e6577af9b4b01add552ba91bc1d8b8b97ee9df4360be6cb8f6407f",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "reason": "Stage 11 approved plan §13: exact selectors, complete comparison, history/render and direct typed API tests"
+    },
+    {
+      "relative_path": "mofs_index/plan/render.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/render.py",
+      "change": "modified",
+      "before_sha256": "c7b33e96147a47f4f9f0c62f7a94dbd74c9024bb244b33f381bcadb432492e77",
+      "after_sha256": "2f27a5b0ff67e891143684089403eb6ad95beac2bee2773236291ab97431bd20",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "reason": "Stage 11 approved plan §13: exact selectors, complete comparison, history/render and direct typed API tests"
+    },
+    {
+      "relative_path": "tests/plan/test_query.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_query.py",
+      "change": "modified",
+      "before_sha256": "72c07497963cd0c05e70949b38a5e4b3d7bf7309c7405a98d1655945a54d9f9a",
+      "after_sha256": "f2605d78aa40f336d06fe140c799461f77e1b863fbb13352a193345e45532b95",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "reason": "Stage 11 approved plan §13: exact selectors, complete comparison, history/render and direct typed API tests"
+    },
+    {
+      "relative_path": "tests/plan/test_render.py",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_render.py",
+      "change": "modified",
+      "before_sha256": "c730a5eff7e6e871ab82451a1e05d53e90b879437163077b1856ff8fdabc211e",
+      "after_sha256": "6074e07fc7de636a8ce3935c3742245e1344aa81719b9c24e3fdc5e8937406db",
+      "before_mode": "0o644",
+      "after_mode": "0o644",
+      "reason": "Stage 11 approved plan §13: exact selectors, complete comparison, history/render and direct typed API tests"
+    }
+  ],
+  "changes_patch_sha256": "541d6e62c0d11770c2e810a1f513636f028c47034a714fcd62eae8b3c8fe2e49"
+}

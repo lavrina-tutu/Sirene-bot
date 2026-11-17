@@ -145,26 +145,39 @@ task_history, compare_baseline, explain_finish_change` (после `sys.path.ins
 — всегда приводить вместе с числом, не только голое число.
 
 **Два представления одной версии** — не путать идентичность: Confluence-публикация
-(Gantt JSON, `{"kind": "publication", "attachment_version": N}`, числовой gantt-id,
-без UID) и MPP-снимок (`{"kind": "snapshot", "snapshot_id": "..."}`, подтверждённый
-`uid`, полный ES/EF/LS/LF). Смешение представлений в одном `diff_versions()` —
-`representation_mismatch`, это честный ответ, не ошибка вызова.
+(Gantt JSON, `{"kind": "publication", "publication_id": "..."}`, числовой gantt-id,
+без UID) и MPP-снимок (`{"kind": "snapshot", "snapshot_id": "..."}`, локальный
+`uid`, доступные ES/EF/LS/LF). Смешение представлений в одном `diff_versions()` —
+`representation_mismatch / 4` без подтверждённого mapping точной пары.
+Оба селектора проверяются по проекту; публикация также по странице, attachment,
+snapshot и качеству связи. Один номер v2 не определяет публикацию.
 
 | Русский сценарий (§8.4 ТЗ) | Typed-функция |
 |---|---|
 | «Что поменялось в ZD [между версиями]?» | `list_versions()` → выбрать пару → `diff_versions()` |
 | «На сколько дней уехал финал?» | `diff_versions()` → `result["root"]["finish_delta_calendar_days"]` |
-| «Как менялись сроки у юристов/конкретной задачи?» | `task_history(plan_id, uid)` — по подтверждённому MPP `uid`, не по имени |
+| «Как менялись сроки у юристов/конкретной задачи?» | `task_history(conn, plan_id, uid, from_snapshot_id=..., to_snapshot_id=..., mapping_revision_id=...)` — только прямые доказанные пары |
 | «Какие связи удалили?» | `diff_versions()` → `result["links_removed"]` |
-| «За счёт каких работ финал сдвинулся?» | `explain_finish_change()` — на паре MPP snapshot даёт `validated_attribution`/честный `observed_diff` с блокерами на паре публикаций (не выдумывает атрибуцию без UID-mapping) |
+| «За счёт каких работ финал сдвинулся?» | `explain_finish_change()` — группы изменений с блокерами; без подтверждённого schedule replay причинность не установлена |
 | «Что знали на дату X (known_at)?» | `list_versions()` + `receipt.known_at` каждой функции — снимок знания на момент вызова, не "текущая правда задним числом" |
 
 Неоднозначность версии («последняя», «текущая») разрешается `list_versions()` +
-выбором конкретного `attachment_version`/`snapshot_id` ДО вызова `diff_versions`/
+выбором точного `publication_id`/`snapshot_id` ДО вызова `diff_versions`/
 `task_history` — не угадывается по тексту MD-витрины.
 
-Подробные code-snippets, реальные числа ZD (v3→v4, v4→v5, v5→v6) — `references/
-plan-queries.md`.
+Сравнение показывает revision/evidence, полные связи с лагами, календари,
+назначения и структурные несопоставленные остатки. Неизвестная идентичность —
+`mapping:unknown`; неизвестная timezone не даёт абсолютного date delta.
+Timezone не означает полноту календаря. Связь MPP-источника с публикацией
+не подтверждает позиционные Gantt ID.
+
+`publication verify --project-slug <slug> --publication-id <id>` — GET-only
+перепроверка через CLI edit-plan-confluence, с `--scope current_state|historical_version`.
+Append-only наблюдение содержит verified_at, scope и результат; исходный trust
+и историческая дата не повышаются. Недостаточные bytes/storage/snapshot-link —
+`not_verified / 5`. Текущее совпадение не доказывает состояние прежней даты.
+Без свежего наблюдения говорить «последняя известная регистрация на момент …».
+Подробные selectors, API/CLI, mapping и trust — `references/plan-queries.md`.
 
 ## Связанные файлы
 

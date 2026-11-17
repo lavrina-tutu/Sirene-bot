@@ -1,0 +1,23 @@
+........................................................................ [ 35%]
+........................................................................ [ 70%]
+...F.........................................................            [100%]
+=================================== FAILURES ===================================
+______ test_same_source_distinct_snapshots_same_profile_not_uid_inference ______
+
+conn = <sqlite3.Connection object at 0x7fef442d9a80>
+tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/mofs-final/test_same_source_distinct_snap0')
+
+    def test_same_source_distinct_snapshots_same_profile_not_uid_inference(conn,tmp_path):
+        import hashlib
+        raw=b'Identical synthetic bytes';digest=hashlib.sha256(raw).hexdigest();path=tmp_path/'source.mpp';path.write_bytes(raw)
+        artifact=w.record_artifact(conn,digest,'mpp',str(path));plan=w.ensure_plan(conn,'same-source')
+        snapshots=[]
+        for name in ('one','two'):
+>           line=w.ensure_lineage(conn,plan,'local',lineage_id='line-'+name)
+E           TypeError: ensure_lineage() got an unexpected keyword argument 'lineage_id'
+
+tests/plan/test_query.py:394: TypeError
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/20261117T045241Z/stage-11/reports/mofs-junit.xml -
+=========================== short test summary info ============================
+FAILED tests/plan/test_query.py::test_same_source_distinct_snapshots_same_profile_not_uid_inference
+1 failed, 204 passed in 38.16s

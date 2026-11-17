@@ -1,0 +1,9 @@
+{
+  "gate": "passed",
+  "secret_value_scan": "passed; no credentials recorded",
+  "source_tree_matches_tested_hashes": true,
+  "protected_files_unchanged": 1273,
+  "mofs_package_matches_runtime": true,
+  "canon_excluded": true,
+  "required_artifacts_preserved": true
+}

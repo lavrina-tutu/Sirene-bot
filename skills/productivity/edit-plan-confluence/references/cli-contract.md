@@ -355,3 +355,50 @@ POST/PUT и дублирующей публикации. После внешне
 Численные timeout/retry, состояния, конфликты, восстановление дочки и
 порядок восстановления зеркала описаны в
 [`operations-and-recovery.md`](operations-and-recovery.md).
+
+## Этап 11: compare и publication verify
+
+Глобальные `--db`, `--workvault`, `--cache-dir` располагаются перед командой.
+
+```text
+compare --project-slug <slug> --from snapshot:<id-a> --to snapshot:<id-b> [--mapping-revision <id>]
+compare --project-slug <slug> --from publication:<publication-id-a> --to publication:<publication-id-b>
+publication verify --project-slug <slug> --publication-id <id> [--scope current_state|historical_version]
+```
+
+Compare использует `mofs_index.plan.query.diff_versions`; оба селектора проверяются
+по проекту до сравнения. Один номер `v2` и selector только с attachment_version
+отклоняются (2). Чужой проект/пара/revision — конфликт (4), несколько активных
+revision — mapping_ambiguous (3). Без идентичности допустим результат (0) с
+mapping:unknown и структурными остатками; они не называются доказанными
+добавлениями/удалениями. MPP/Gantt без подтверждённого mapping точной пары —
+representation_mismatch (4). Связь публикации с MPP-источником сама по себе не
+доказывает идентичность позиционных Gantt ID. Сравнение опубликованного графа
+требует проверенных bytes и подтверждённой связи с Gantt snapshot. Остальные
+публикации возвращают несопоставленные структурные записи и качество связей.
+
+Tasks сравниваются по всем сохранённым значимым полям, включая вложенные splits
+и baseline. Dependencies — полные мультимножества с подтверждёнными концами,
+типом, signed lag, units, elapsed и calendar basis. Calendars — интервалы,
+исключения, наследование, коэффициенты и bindings; assignments — endpoints,
+units/work, даты, календарь и timephased. Unknown timezone не даёт абсолютного
+сдвига дат. Неполнота полей/коллекций не скрывается; наличие timezone не означает
+calendar:known. Результат содержит revision/evidence, точные selectors и quality.
+
+Publication verify выполняет только GET и добавляет локальное наблюдение;
+POST/PUT/PATCH/DELETE блокируются транспортом. Проверяются точные ID/page/version,
+ожидаемые архивные bytes, доступный storage и управляемые поля. Current scope
+дополнительно проверяет актуальное вложение и стабильность страницы. Historical
+scope запрашивает сохранённую версию страницы. Успешное наблюдение —
+verified_observation/0; недостаточные данные или mismatch — not_verified/5,
+с отдельным verification_status (not_verified или verification_failed).
+Повтор добавляет новый observation ID и verified_at; версия вложения не растёт.
+Исторические trust/status/published_at остаются неизменны. Current match не
+восстанавливает историческую дату; schedule остаётся not_verified.
+
+History по-прежнему разделяет поступления, snapshot и публикации, времена
+received/observed/frozen/recorded/source/status/published/verified и полуинтервал
+[since, until). Публикации содержат snapshot links, trust и scoped observations;
+NULL snapshot.published_at не отрицает наличие публикаций. Cursor фиксирует также
+границу набора наблюдений. Без свежего наблюдения результат описывает последнюю
+известную регистрацию, а не гарантированно текущее состояние страницы.

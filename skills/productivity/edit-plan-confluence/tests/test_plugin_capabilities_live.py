@@ -97,7 +97,7 @@ def test_installed_capability_control(case,capability_page,request):
         data=frame.evaluate('''async()=>{
             await Promise.race([gantt.project.commitAsync(),new Promise((_,r)=>setTimeout(()=>r(new Error('commit_timeout')),10000))]);
             const local=d=>d&&[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')+'T'+[d.getHours(),d.getMinutes(),d.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
-            const fields=['actualStartDate','actualEndDate','actualDuration','actualEffort','stopDate','resumeDate','startDate','endDate','availability'];
+            const fields=['actualStartDate','actualEndDate','actualDuration','actualEffort','stopDate','resumeDate','stop','resume','startDate','endDate','availability'];
             const native=m=>Object.fromEntries(fields.map(f=>[f,Boolean(m.getFieldDefinition?.(f))]));
             return {build:__NEXT_DATA__.buildId,engine_version:bryntum.getVersion('gantt'),
                 tasks:gantt.project.eventStore.allRecords.map(t=>({...t.toJSON(),children:undefined,startDate:local(t.startDate),endDate:local(t.endDate),calendar:t.calendar?.id??t.calendar,segments:t.segments?.map(s=>({...s.toJSON(),startDate:local(s.startDate),endDate:local(s.endDate)})),native_fields:native(t)})),

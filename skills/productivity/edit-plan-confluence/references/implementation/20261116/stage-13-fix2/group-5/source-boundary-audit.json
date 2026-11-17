@@ -1,0 +1,2475 @@
+{
+  "A": {
+    "source_evidence": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-5/final/blocker-audit/A-source.json.gz",
+    "source_evidence_sha256": "21961a0344914d399260cb4081062533ea6949ebbc5e7c119ac54702f69b3ea1",
+    "source_sha256": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89",
+    "scope": "read-only audit of cycle-1 normalized export; new actual CLI execution belongs to final stage13",
+    "converter": "prepared-gantt-v5",
+    "task_count": 58,
+    "dependencies": 53,
+    "display_profile": "322117f08b57c7a47b2baba24b03cc59c6d818c27e4122d7a72d6c2d66473184",
+    "native_calendar_proof": null
+  },
+  "B": {
+    "source_evidence": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-5/final/blocker-audit/B-source.json.gz",
+    "source_evidence_sha256": "c2917957d74a34997ba311979ced141413c9091699728816d07d64bdfb32ba66",
+    "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+    "scope": "read-only audit of cycle-1 normalized export; new actual CLI execution belongs to final stage13",
+    "converter": "prepared-gantt-v5",
+    "task_count": 62,
+    "dependencies": 60,
+    "display_profile": "322117f08b57c7a47b2baba24b03cc59c6d818c27e4122d7a72d6c2d66473184",
+    "native_calendar_proof": null,
+    "historical_relation": {
+      "dependency_key": "local:dependency:000013",
+      "driving": {
+        "quality": "ok",
+        "reason": null,
+        "value": false
+      },
+      "endpoint_quality": {
+        "predecessor": {
+          "quality": "ok",
+          "reason": null
+        },
+        "successor": {
+          "quality": "ok",
+          "reason": null
+        }
+      },
+      "external": false,
+      "lag": "0 d",
+      "lag_calendar": {
+        "quality": "ok",
+        "reason": null,
+        "value": "PREDECESSOR"
+      },
+      "lag_value": {
+        "quality": "ok",
+        "reason": null,
+        "value": {
+          "amount": "0",
+          "elapsed": false,
+          "source_units": "d",
+          "units": "DAYS"
+        }
+      },
+      "link_type": "FS",
+      "predecessor_id": {
+        "quality": "ok",
+        "reason": null,
+        "value": 16
+      },
+      "predecessor_task_key": "uid:510",
+      "predecessor_uid": {
+        "quality": "ok",
+        "reason": null,
+        "value": 510
+      },
+      "project_lag_calendar": {
+        "quality": "ok",
+        "reason": null,
+        "value": "PREDECESSOR"
+      },
+      "quality_issues": [],
+      "source_link_type": {
+        "quality": "ok",
+        "reason": null,
+        "value": "FS"
+      },
+      "successor_id": {
+        "quality": "ok",
+        "reason": null,
+        "value": 17
+      },
+      "successor_task_key": "uid:323",
+      "successor_uid": {
+        "quality": "ok",
+        "reason": null,
+        "value": 323
+      },
+      "type_quality": {
+        "quality": "ok",
+        "reason": null,
+        "value": "FS"
+      },
+      "uid": {
+        "quality": "ok",
+        "reason": null,
+        "value": 204
+      }
+    },
+    "represented_relation": {
+      "id": 142,
+      "from": 16,
+      "to": 17,
+      "type": 2,
+      "lag": 0,
+      "lagUnit": "day",
+      "active": true
+    },
+    "active_revision": null,
+    "current_removal_cause": "not_proven; exact FS/0 representation alone cannot establish necessity or harmlessness of removal",
+    "historical_rule": {
+      "rule_id": "B",
+      "revision": "historical-unresolved-v1",
+      "project_slug": "trisigma",
+      "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+      "reference_snapshot_id": null,
+      "evidence_id": null,
+      "stable_task_keys": null,
+      "basis": "EditPlanConfluence master 0.5.0 §20.3.7 and case B: historical consent exists; source-local row numbers are not stable task identity",
+      "status": "inactive",
+      "recovery": {
+        "legacy_snapshot_id": "snapshot_63235566e13645a08825b6b27a458e49",
+        "legacy_source_artifact_id": "artifact_3210c98325a44a568f289b117c227675",
+        "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+        "legacy_typed_export_sha256": "fa8a31abcd4b114d1444ac7473b6cb36f42773f3320580db8867f1eb5581f1ee",
+        "stable_task_keys": [
+          "uid:0",
+          "uid:164",
+          "uid:532",
+          "uid:373",
+          "uid:376",
+          "uid:494",
+          "uid:496",
+          "uid:536",
+          "uid:497",
+          "uid:507",
+          "uid:498",
+          "uid:291",
+          "uid:314",
+          "uid:375",
+          "uid:322",
+          "uid:511",
+          "uid:510",
+          "uid:323",
+          "uid:324",
+          "uid:325",
+          "uid:533",
+          "uid:512",
+          "uid:326",
+          "uid:327",
+          "uid:513",
+          "uid:328",
+          "uid:329",
+          "uid:330",
+          "uid:331",
+          "uid:332",
+          "uid:333",
+          "uid:334",
+          "uid:335",
+          "uid:336",
+          "uid:337",
+          "uid:338",
+          "uid:339",
+          "uid:508",
+          "uid:340",
+          "uid:341",
+          "uid:514",
+          "uid:515",
+          "uid:342",
+          "uid:534",
+          "uid:343",
+          "uid:344",
+          "uid:345",
+          "uid:346",
+          "uid:347",
+          "uid:348",
+          "uid:349",
+          "uid:292",
+          "uid:321",
+          "uid:516",
+          "uid:517",
+          "uid:535",
+          "uid:518",
+          "uid:519",
+          "uid:520",
+          "uid:521",
+          "uid:377",
+          "uid:378"
+        ],
+        "evidence_path": "references/implementation/20261116/stage-13-fix/group-3/bc-existing/manifest.json",
+        "evidence_sha256": "6e473026a432edd2aea428acdfbef2ecaa5dede82cc106183a6367a636d2684d",
+        "rule_revision": null,
+        "consent_artifact": null,
+        "reason": "legacy_source_and_snapshot_recovered_but_no_exact_addressed_rule_evidence_or_revision"
+      }
+    }
+  },
+  "C": {
+    "source_evidence": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-5/final/blocker-audit/C-source.json.gz",
+    "source_evidence_sha256": "e569a313ceeaa7381d05de93e8a6514156182b1ef4b24d9065a92f31df54b55e",
+    "source_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+    "scope": "read-only audit of cycle-1 normalized export; new actual CLI execution belongs to final stage13",
+    "converter": "prepared-gantt-v5",
+    "task_count": 62,
+    "dependencies": 61,
+    "display_profile": "322117f08b57c7a47b2baba24b03cc59c6d818c27e4122d7a72d6c2d66473184",
+    "native_calendar_proof": null,
+    "historical_relation": {
+      "dependency_key": "local:dependency:000013",
+      "driving": {
+        "quality": "ok",
+        "reason": null,
+        "value": false
+      },
+      "endpoint_quality": {
+        "predecessor": {
+          "quality": "ok",
+          "reason": null
+        },
+        "successor": {
+          "quality": "ok",
+          "reason": null
+        }
+      },
+      "external": false,
+      "lag": "0 d",
+      "lag_calendar": {
+        "quality": "ok",
+        "reason": null,
+        "value": "PREDECESSOR"
+      },
+      "lag_value": {
+        "quality": "ok",
+        "reason": null,
+        "value": {
+          "amount": "0",
+          "elapsed": false,
+          "source_units": "d",
+          "units": "DAYS"
+        }
+      },
+      "link_type": "FS",
+      "predecessor_id": {
+        "quality": "ok",
+        "reason": null,
+        "value": 16
+      },
+      "predecessor_task_key": "uid:510",
+      "predecessor_uid": {
+        "quality": "ok",
+        "reason": null,
+        "value": 510
+      },
+      "project_lag_calendar": {
+        "quality": "ok",
+        "reason": null,
+        "value": "PREDECESSOR"
+      },
+      "quality_issues": [],
+      "source_link_type": {
+        "quality": "ok",
+        "reason": null,
+        "value": "FS"
+      },
+      "successor_id": {
+        "quality": "ok",
+        "reason": null,
+        "value": 17
+      },
+      "successor_task_key": "uid:323",
+      "successor_uid": {
+        "quality": "ok",
+        "reason": null,
+        "value": 323
+      },
+      "type_quality": {
+        "quality": "ok",
+        "reason": null,
+        "value": "FS"
+      },
+      "uid": {
+        "quality": "ok",
+        "reason": null,
+        "value": 204
+      }
+    },
+    "represented_relation": {
+      "id": 142,
+      "from": 16,
+      "to": 17,
+      "type": 2,
+      "lag": 0,
+      "lagUnit": "day",
+      "active": true
+    },
+    "active_revision": null,
+    "current_removal_cause": "not_proven; exact FS/0 representation alone cannot establish necessity or harmlessness of removal",
+    "historical_rule": {
+      "rule_id": "C",
+      "revision": "historical-unresolved-v1",
+      "project_slug": "trisigma",
+      "source_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+      "reference_snapshot_id": null,
+      "evidence_id": null,
+      "stable_task_keys": null,
+      "basis": "EditPlanConfluence master 0.5.0 §20.3.7 and case C: historical consent exists; source-local row numbers are not stable task identity",
+      "status": "inactive",
+      "recovery": {
+        "legacy_snapshot_id": "snapshot_f34e96cb8e164bab9dd210ee1f4362f1",
+        "legacy_source_artifact_id": "artifact_f945f3cb5f7a4601a24cd4eab74b9ede",
+        "source_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+        "legacy_typed_export_sha256": "0e9878ba03cc4991a9f7e758017a4df6f290485e601fa4f7a3a0c385ab5e3344",
+        "stable_task_keys": [
+          "uid:0",
+          "uid:164",
+          "uid:532",
+          "uid:373",
+          "uid:376",
+          "uid:494",
+          "uid:496",
+          "uid:536",
+          "uid:497",
+          "uid:507",
+          "uid:498",
+          "uid:291",
+          "uid:314",
+          "uid:375",
+          "uid:322",
+          "uid:511",
+          "uid:510",
+          "uid:323",
+          "uid:324",
+          "uid:325",
+          "uid:533",
+          "uid:512",
+          "uid:326",
+          "uid:327",
+          "uid:513",
+          "uid:328",
+          "uid:329",
+          "uid:330",
+          "uid:331",
+          "uid:332",
+          "uid:333",
+          "uid:334",
+          "uid:335",
+          "uid:336",
+          "uid:337",
+          "uid:338",
+          "uid:339",
+          "uid:508",
+          "uid:340",
+          "uid:341",
+          "uid:514",
+          "uid:515",
+          "uid:342",
+          "uid:534",
+          "uid:343",
+          "uid:344",
+          "uid:345",
+          "uid:346",
+          "uid:347",
+          "uid:348",
+          "uid:349",
+          "uid:292",
+          "uid:321",
+          "uid:516",
+          "uid:517",
+          "uid:535",
+          "uid:518",
+          "uid:519",
+          "uid:520",
+          "uid:521",
+          "uid:377",
+          "uid:378"
+        ],
+        "evidence_path": "references/implementation/20261116/stage-13-fix/group-3/bc-existing/manifest.json",
+        "evidence_sha256": "6e473026a432edd2aea428acdfbef2ecaa5dede82cc106183a6367a636d2684d",
+        "rule_revision": null,
+        "consent_artifact": null,
+        "reason": "legacy_source_and_snapshot_recovered_but_no_exact_addressed_rule_evidence_or_revision"
+      }
+    }
+  },
+  "D": {
+    "source_evidence": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-5/final/blocker-audit/D-source.json.gz",
+    "source_evidence_sha256": "c6bed60ece51941cc2e025e70597bf37af2d1707ce640f63a5b741b3b8fdc3f9",
+    "source_sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+    "scope": "read-only audit of cycle-1 normalized export; new actual CLI execution belongs to final stage13",
+    "converter": "prepared-gantt-v5",
+    "task_count": 72,
+    "dependencies": 76,
+    "display_profile": "322117f08b57c7a47b2baba24b03cc59c6d818c27e4122d7a72d6c2d66473184",
+    "native_calendar_proof": null,
+    "unassigned": [
+      {
+        "source_field": "assignments.0",
+        "assignment": {
+          "actual_finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-03-30T09:00"
+          },
+          "actual_start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-03-30T09:00"
+          },
+          "actual_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "assignment_key": "uid:441",
+          "delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "effective_calendar_key": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:1"
+          },
+          "endpoint_quality": {
+            "resource": {
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "task": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-03-30T09:00"
+          },
+          "identity_quality": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:441"
+          },
+          "leveling_delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "overtime_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "quality_issues": [],
+          "raw_timephased": {
+            "actual_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "actual_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "planned": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            }
+          },
+          "remaining_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "resource_key": null,
+          "resource_uid": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "resume": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-03-30T09:00"
+          },
+          "segments": {
+            "quality": "ok",
+            "reason": null,
+            "value": []
+          },
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-03-30T09:00"
+          },
+          "stop": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-03-30T09:00"
+          },
+          "task_key": "uid:373",
+          "task_uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 373
+          },
+          "timephased": [],
+          "timephased_quality": {
+            "basis": "actual_plus_remaining",
+            "count": 0,
+            "reason": null,
+            "status": "complete",
+            "units": "HOURS"
+          },
+          "uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 441
+          },
+          "units": {
+            "quality": "ok",
+            "reason": null,
+            "value": "100"
+          },
+          "work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "work_contour": {
+            "quality": "ok",
+            "reason": null,
+            "value": "FLAT"
+          }
+        },
+        "task_interval": {
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-03-30T09:00"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-22T18:00"
+          }
+        },
+        "representation": null,
+        "fix_proof": null,
+        "present_in_cycle1_ledger": true,
+        "publication_blocker": true
+      },
+      {
+        "source_field": "assignments.1",
+        "assignment": {
+          "actual_finish": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "actual_start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-24T10:00"
+          },
+          "actual_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "assignment_key": "uid:443",
+          "delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "effective_calendar_key": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:1"
+          },
+          "endpoint_quality": {
+            "resource": {
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "task": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-24T10:00"
+          },
+          "identity_quality": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:443"
+          },
+          "leveling_delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "overtime_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "quality_issues": [],
+          "raw_timephased": {
+            "actual_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "actual_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "planned": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            }
+          },
+          "remaining_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "resource_key": null,
+          "resource_uid": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "resume": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-24T10:00"
+          },
+          "segments": {
+            "quality": "ok",
+            "reason": null,
+            "value": []
+          },
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-24T10:00"
+          },
+          "stop": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-24T10:00"
+          },
+          "task_key": "uid:375",
+          "task_uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 375
+          },
+          "timephased": [],
+          "timephased_quality": {
+            "basis": "actual_plus_remaining",
+            "count": 0,
+            "reason": null,
+            "status": "complete",
+            "units": "HOURS"
+          },
+          "uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 443
+          },
+          "units": {
+            "quality": "ok",
+            "reason": null,
+            "value": "100"
+          },
+          "work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "work_contour": {
+            "quality": "ok",
+            "reason": null,
+            "value": "FLAT"
+          }
+        },
+        "task_interval": {
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-24T10:00"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-24T10:00"
+          }
+        },
+        "representation": null,
+        "fix_proof": null,
+        "present_in_cycle1_ledger": true,
+        "publication_blocker": false,
+        "note": "Other absent resource endpoint; existing narrow zero-work milestone/service treatment. Not one of the four assignment_partial blockers."
+      },
+      {
+        "source_field": "assignments.2",
+        "assignment": {
+          "actual_finish": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "actual_start": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "actual_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "assignment_key": "uid:445",
+          "delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "effective_calendar_key": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:1"
+          },
+          "endpoint_quality": {
+            "resource": {
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "task": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-08-24T18:00"
+          },
+          "identity_quality": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:445"
+          },
+          "leveling_delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "overtime_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "quality_issues": [],
+          "raw_timephased": {
+            "actual_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "actual_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "planned": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            }
+          },
+          "remaining_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "resource_key": null,
+          "resource_uid": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "resume": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-08-24T18:00"
+          },
+          "segments": {
+            "quality": "ok",
+            "reason": null,
+            "value": []
+          },
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-08-24T18:00"
+          },
+          "stop": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-08-24T18:00"
+          },
+          "task_key": "uid:377",
+          "task_uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 377
+          },
+          "timephased": [],
+          "timephased_quality": {
+            "basis": "actual_plus_remaining",
+            "count": 0,
+            "reason": null,
+            "status": "complete",
+            "units": "HOURS"
+          },
+          "uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 445
+          },
+          "units": {
+            "quality": "ok",
+            "reason": null,
+            "value": "100"
+          },
+          "work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "work_contour": {
+            "quality": "ok",
+            "reason": null,
+            "value": "FLAT"
+          }
+        },
+        "task_interval": {
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-08-24T18:00"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-08-24T18:00"
+          }
+        },
+        "representation": null,
+        "fix_proof": null,
+        "present_in_cycle1_ledger": true,
+        "publication_blocker": false,
+        "note": "Other absent resource endpoint; existing narrow zero-work milestone/service treatment. Not one of the four assignment_partial blockers."
+      },
+      {
+        "source_field": "assignments.3",
+        "assignment": {
+          "actual_finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-10T18:00"
+          },
+          "actual_start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-10T18:00"
+          },
+          "actual_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "assignment_key": "uid:584",
+          "delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "effective_calendar_key": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:1"
+          },
+          "endpoint_quality": {
+            "resource": {
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "task": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-10T18:00"
+          },
+          "identity_quality": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:584"
+          },
+          "leveling_delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "overtime_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "quality_issues": [],
+          "raw_timephased": {
+            "actual_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "actual_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "planned": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            }
+          },
+          "remaining_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "resource_key": null,
+          "resource_uid": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "resume": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-10T18:00"
+          },
+          "segments": {
+            "quality": "ok",
+            "reason": null,
+            "value": []
+          },
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-10T18:00"
+          },
+          "stop": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-10T18:00"
+          },
+          "task_key": "uid:508",
+          "task_uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 508
+          },
+          "timephased": [],
+          "timephased_quality": {
+            "basis": "actual_plus_remaining",
+            "count": 0,
+            "reason": null,
+            "status": "complete",
+            "units": "HOURS"
+          },
+          "uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 584
+          },
+          "units": {
+            "quality": "ok",
+            "reason": null,
+            "value": "100"
+          },
+          "work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "work_contour": {
+            "quality": "ok",
+            "reason": null,
+            "value": "FLAT"
+          }
+        },
+        "task_interval": {
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-10T18:00"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-10T18:00"
+          }
+        },
+        "representation": null,
+        "fix_proof": null,
+        "present_in_cycle1_ledger": true,
+        "publication_blocker": false,
+        "note": "Other absent resource endpoint; existing narrow zero-work milestone/service treatment. Not one of the four assignment_partial blockers."
+      },
+      {
+        "source_field": "assignments.40",
+        "assignment": {
+          "actual_finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-27T09:00"
+          },
+          "actual_start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-27T09:00"
+          },
+          "actual_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "assignment_key": "uid:688",
+          "delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "effective_calendar_key": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:1"
+          },
+          "endpoint_quality": {
+            "resource": {
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "task": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-27T09:00"
+          },
+          "identity_quality": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:688"
+          },
+          "leveling_delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "overtime_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "quality_issues": [],
+          "raw_timephased": {
+            "actual_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "actual_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "planned": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            }
+          },
+          "remaining_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "resource_key": null,
+          "resource_uid": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "resume": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-27T09:00"
+          },
+          "segments": {
+            "quality": "ok",
+            "reason": null,
+            "value": []
+          },
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-27T09:00"
+          },
+          "stop": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-27T09:00"
+          },
+          "task_key": "uid:532",
+          "task_uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 532
+          },
+          "timephased": [],
+          "timephased_quality": {
+            "basis": "actual_plus_remaining",
+            "count": 0,
+            "reason": null,
+            "status": "complete",
+            "units": "HOURS"
+          },
+          "uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 688
+          },
+          "units": {
+            "quality": "ok",
+            "reason": null,
+            "value": "100"
+          },
+          "work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "work_contour": {
+            "quality": "ok",
+            "reason": null,
+            "value": "FLAT"
+          }
+        },
+        "task_interval": {
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-27T09:00"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-27T09:00"
+          }
+        },
+        "representation": null,
+        "fix_proof": null,
+        "present_in_cycle1_ledger": true,
+        "publication_blocker": false,
+        "note": "Other absent resource endpoint; existing narrow zero-work milestone/service treatment. Not one of the four assignment_partial blockers."
+      },
+      {
+        "source_field": "assignments.42",
+        "assignment": {
+          "actual_finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-19T18:00"
+          },
+          "actual_start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-19T18:00"
+          },
+          "actual_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "assignment_key": "uid:690",
+          "delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "effective_calendar_key": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:1"
+          },
+          "endpoint_quality": {
+            "resource": {
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "task": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-19T18:00"
+          },
+          "identity_quality": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:690"
+          },
+          "leveling_delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "overtime_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "quality_issues": [],
+          "raw_timephased": {
+            "actual_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "actual_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "planned": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            }
+          },
+          "remaining_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "resource_key": null,
+          "resource_uid": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "resume": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-19T18:00"
+          },
+          "segments": {
+            "quality": "ok",
+            "reason": null,
+            "value": []
+          },
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-19T18:00"
+          },
+          "stop": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-19T18:00"
+          },
+          "task_key": "uid:533",
+          "task_uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 533
+          },
+          "timephased": [],
+          "timephased_quality": {
+            "basis": "actual_plus_remaining",
+            "count": 0,
+            "reason": null,
+            "status": "complete",
+            "units": "HOURS"
+          },
+          "uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 690
+          },
+          "units": {
+            "quality": "ok",
+            "reason": null,
+            "value": "100"
+          },
+          "work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "work_contour": {
+            "quality": "ok",
+            "reason": null,
+            "value": "FLAT"
+          }
+        },
+        "task_interval": {
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-19T18:00"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-19T18:00"
+          }
+        },
+        "representation": null,
+        "fix_proof": null,
+        "present_in_cycle1_ledger": true,
+        "publication_blocker": false,
+        "note": "Other absent resource endpoint; existing narrow zero-work milestone/service treatment. Not one of the four assignment_partial blockers."
+      },
+      {
+        "source_field": "assignments.50",
+        "assignment": {
+          "actual_finish": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "actual_start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-25T09:00"
+          },
+          "actual_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "56",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "56 h"
+          },
+          "assignment_key": "uid:699",
+          "delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "effective_calendar_key": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:1"
+          },
+          "endpoint_quality": {
+            "resource": {
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "task": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-02T18:00"
+          },
+          "identity_quality": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:699"
+          },
+          "leveling_delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "overtime_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "quality_issues": [],
+          "raw_timephased": {
+            "actual_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "actual_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": [
+                {
+                  "period_end": {
+                    "quality": "ok",
+                    "reason": null,
+                    "value": "2026-06-02T18:00"
+                  },
+                  "period_start": {
+                    "quality": "ok",
+                    "reason": null,
+                    "value": "2026-05-25T09:00"
+                  },
+                  "work": {
+                    "quality": "ok",
+                    "quantity": {
+                      "amount": "3360",
+                      "elapsed": false,
+                      "source_units": "m",
+                      "units": "MINUTES"
+                    },
+                    "reason": null,
+                    "value": "3360 m"
+                  },
+                  "work_per_hour": {
+                    "quality": "ok",
+                    "quantity": {
+                      "amount": "60",
+                      "elapsed": false,
+                      "source_units": "m",
+                      "units": "MINUTES"
+                    },
+                    "reason": null,
+                    "value": "60 m"
+                  }
+                }
+              ]
+            },
+            "planned": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            }
+          },
+          "remaining_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "resource_key": null,
+          "resource_uid": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "resume": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-02T18:00"
+          },
+          "segments": {
+            "quality": "ok",
+            "reason": null,
+            "value": [
+              {
+                "end": {
+                  "quality": "ok",
+                  "reason": null,
+                  "value": "2026-06-02T18:00"
+                },
+                "start": {
+                  "quality": "ok",
+                  "reason": null,
+                  "value": "2026-05-25T09:00"
+                }
+              }
+            ]
+          },
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-25T09:00"
+          },
+          "stop": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-02T18:00"
+          },
+          "task_key": "uid:539",
+          "task_uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 539
+          },
+          "timephased": [
+            {
+              "period_end": {
+                "quality": "ok",
+                "reason": null,
+                "value": "2026-06-02T18:00"
+              },
+              "period_start": {
+                "quality": "ok",
+                "reason": null,
+                "value": "2026-05-25T09:00"
+              },
+              "work": {
+                "quality": "ok",
+                "quantity": {
+                  "amount": "56",
+                  "elapsed": false,
+                  "source_units": "h",
+                  "units": "HOURS"
+                },
+                "reason": null,
+                "value": "56.0h"
+              }
+            }
+          ],
+          "timephased_quality": {
+            "basis": "actual_plus_remaining",
+            "count": 1,
+            "reason": null,
+            "status": "complete",
+            "units": "HOURS"
+          },
+          "uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 699
+          },
+          "units": {
+            "quality": "ok",
+            "reason": null,
+            "value": "100"
+          },
+          "work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "56",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "56 h"
+          },
+          "work_contour": {
+            "quality": "ok",
+            "reason": null,
+            "value": "FLAT"
+          }
+        },
+        "task_interval": {
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-25T09:00"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-02T18:00"
+          }
+        },
+        "representation": null,
+        "fix_proof": null,
+        "present_in_cycle1_ledger": true,
+        "publication_blocker": true
+      },
+      {
+        "source_field": "assignments.51",
+        "assignment": {
+          "actual_finish": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "actual_start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-03T09:00"
+          },
+          "actual_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "16",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "16 h"
+          },
+          "assignment_key": "uid:700",
+          "delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "effective_calendar_key": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:1"
+          },
+          "endpoint_quality": {
+            "resource": {
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "task": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-04T18:00"
+          },
+          "identity_quality": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:700"
+          },
+          "leveling_delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "overtime_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "quality_issues": [],
+          "raw_timephased": {
+            "actual_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "actual_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": [
+                {
+                  "period_end": {
+                    "quality": "ok",
+                    "reason": null,
+                    "value": "2026-06-04T18:00"
+                  },
+                  "period_start": {
+                    "quality": "ok",
+                    "reason": null,
+                    "value": "2026-06-03T09:00"
+                  },
+                  "work": {
+                    "quality": "ok",
+                    "quantity": {
+                      "amount": "960",
+                      "elapsed": false,
+                      "source_units": "m",
+                      "units": "MINUTES"
+                    },
+                    "reason": null,
+                    "value": "960 m"
+                  },
+                  "work_per_hour": {
+                    "quality": "ok",
+                    "quantity": {
+                      "amount": "60",
+                      "elapsed": false,
+                      "source_units": "m",
+                      "units": "MINUTES"
+                    },
+                    "reason": null,
+                    "value": "60 m"
+                  }
+                }
+              ]
+            },
+            "planned": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            }
+          },
+          "remaining_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "resource_key": null,
+          "resource_uid": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "resume": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-04T18:00"
+          },
+          "segments": {
+            "quality": "ok",
+            "reason": null,
+            "value": [
+              {
+                "end": {
+                  "quality": "ok",
+                  "reason": null,
+                  "value": "2026-06-04T18:00"
+                },
+                "start": {
+                  "quality": "ok",
+                  "reason": null,
+                  "value": "2026-06-03T09:00"
+                }
+              }
+            ]
+          },
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-03T09:00"
+          },
+          "stop": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-04T18:00"
+          },
+          "task_key": "uid:540",
+          "task_uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 540
+          },
+          "timephased": [
+            {
+              "period_end": {
+                "quality": "ok",
+                "reason": null,
+                "value": "2026-06-04T18:00"
+              },
+              "period_start": {
+                "quality": "ok",
+                "reason": null,
+                "value": "2026-06-03T09:00"
+              },
+              "work": {
+                "quality": "ok",
+                "quantity": {
+                  "amount": "16",
+                  "elapsed": false,
+                  "source_units": "h",
+                  "units": "HOURS"
+                },
+                "reason": null,
+                "value": "16.0h"
+              }
+            }
+          ],
+          "timephased_quality": {
+            "basis": "actual_plus_remaining",
+            "count": 1,
+            "reason": null,
+            "status": "complete",
+            "units": "HOURS"
+          },
+          "uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 700
+          },
+          "units": {
+            "quality": "ok",
+            "reason": null,
+            "value": "100"
+          },
+          "work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "16",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "16 h"
+          },
+          "work_contour": {
+            "quality": "ok",
+            "reason": null,
+            "value": "FLAT"
+          }
+        },
+        "task_interval": {
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-03T09:00"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-04T18:00"
+          }
+        },
+        "representation": null,
+        "fix_proof": null,
+        "present_in_cycle1_ledger": true,
+        "publication_blocker": true
+      },
+      {
+        "source_field": "assignments.52",
+        "assignment": {
+          "actual_finish": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "actual_start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-25T09:00"
+          },
+          "actual_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "56",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "56 h"
+          },
+          "assignment_key": "uid:701",
+          "delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "effective_calendar_key": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:1"
+          },
+          "endpoint_quality": {
+            "resource": {
+              "quality": "missing",
+              "reason": "not_set"
+            },
+            "task": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-02T18:00"
+          },
+          "identity_quality": {
+            "quality": "ok",
+            "reason": null,
+            "value": "uid:701"
+          },
+          "leveling_delay": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "0 d"
+          },
+          "overtime_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "quality_issues": [],
+          "raw_timephased": {
+            "actual_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "actual_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": [
+                {
+                  "period_end": {
+                    "quality": "ok",
+                    "reason": null,
+                    "value": "2026-06-02T18:00"
+                  },
+                  "period_start": {
+                    "quality": "ok",
+                    "reason": null,
+                    "value": "2026-05-25T09:00"
+                  },
+                  "work": {
+                    "quality": "ok",
+                    "quantity": {
+                      "amount": "3360",
+                      "elapsed": false,
+                      "source_units": "m",
+                      "units": "MINUTES"
+                    },
+                    "reason": null,
+                    "value": "3360 m"
+                  },
+                  "work_per_hour": {
+                    "quality": "ok",
+                    "quantity": {
+                      "amount": "60",
+                      "elapsed": false,
+                      "source_units": "m",
+                      "units": "MINUTES"
+                    },
+                    "reason": null,
+                    "value": "60 m"
+                  }
+                }
+              ]
+            },
+            "planned": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_overtime": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            },
+            "remaining_regular": {
+              "quality": "ok",
+              "reason": null,
+              "value": []
+            }
+          },
+          "remaining_work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "0",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "0 h"
+          },
+          "resource_key": null,
+          "resource_uid": {
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          },
+          "resume": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-02T18:00"
+          },
+          "segments": {
+            "quality": "ok",
+            "reason": null,
+            "value": [
+              {
+                "end": {
+                  "quality": "ok",
+                  "reason": null,
+                  "value": "2026-06-02T18:00"
+                },
+                "start": {
+                  "quality": "ok",
+                  "reason": null,
+                  "value": "2026-05-25T09:00"
+                }
+              }
+            ]
+          },
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-25T09:00"
+          },
+          "stop": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-02T18:00"
+          },
+          "task_key": "uid:541",
+          "task_uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 541
+          },
+          "timephased": [
+            {
+              "period_end": {
+                "quality": "ok",
+                "reason": null,
+                "value": "2026-06-02T18:00"
+              },
+              "period_start": {
+                "quality": "ok",
+                "reason": null,
+                "value": "2026-05-25T09:00"
+              },
+              "work": {
+                "quality": "ok",
+                "quantity": {
+                  "amount": "56",
+                  "elapsed": false,
+                  "source_units": "h",
+                  "units": "HOURS"
+                },
+                "reason": null,
+                "value": "56.0h"
+              }
+            }
+          ],
+          "timephased_quality": {
+            "basis": "actual_plus_remaining",
+            "count": 1,
+            "reason": null,
+            "status": "complete",
+            "units": "HOURS"
+          },
+          "uid": {
+            "quality": "ok",
+            "reason": null,
+            "value": 701
+          },
+          "units": {
+            "quality": "ok",
+            "reason": null,
+            "value": "100"
+          },
+          "work": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "56",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "56 h"
+          },
+          "work_contour": {
+            "quality": "ok",
+            "reason": null,
+            "value": "FLAT"
+          }
+        },
+        "task_interval": {
+          "start": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-25T09:00"
+          },
+          "finish": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-06-02T18:00"
+          }
+        },
+        "representation": null,
+        "fix_proof": null,
+        "present_in_cycle1_ledger": true,
+        "publication_blocker": true
+      }
+    ]
+  }
+}

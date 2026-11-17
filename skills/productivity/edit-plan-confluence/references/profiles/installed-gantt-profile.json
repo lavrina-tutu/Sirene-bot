@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "installed-gantt-profile",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "plugin": {
     "key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
     "version": "frontend-build:H6u7SQymvwxeyojc1ur6Z",
@@ -531,7 +531,9 @@
     },
     "schedule:actual_start:native": {
       "status": "not_verified",
-      "evidence": [],
+      "evidence": [
+        "fix2_native_actuals_probe"
+      ],
       "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
       "layer": "schedule",
       "source_field": "actual_start",
@@ -556,7 +558,9 @@
     },
     "schedule:actual_finish:native": {
       "status": "not_verified",
-      "evidence": [],
+      "evidence": [
+        "fix2_native_actuals_probe"
+      ],
       "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
       "layer": "schedule",
       "source_field": "actual_finish",
@@ -581,7 +585,9 @@
     },
     "schedule:actual_duration:native": {
       "status": "not_verified",
-      "evidence": [],
+      "evidence": [
+        "fix2_native_actuals_probe"
+      ],
       "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
       "layer": "schedule",
       "source_field": "actual_duration",
@@ -606,7 +612,9 @@
     },
     "schedule:actual_work:native": {
       "status": "not_verified",
-      "evidence": [],
+      "evidence": [
+        "fix2_native_actuals_probe"
+      ],
       "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
       "layer": "schedule",
       "source_field": "actual_work",
@@ -631,7 +639,9 @@
     },
     "schedule:stop:native": {
       "status": "not_verified",
-      "evidence": [],
+      "evidence": [
+        "fix2_native_actuals_probe"
+      ],
       "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
       "layer": "schedule",
       "source_field": "stop",
@@ -656,7 +666,9 @@
     },
     "schedule:resume:native": {
       "status": "not_verified",
-      "evidence": [],
+      "evidence": [
+        "fix2_native_actuals_probe"
+      ],
       "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
       "layer": "schedule",
       "source_field": "resume",
@@ -1320,6 +1332,10 @@
     "fix2_source_values": {
       "path": "references/implementation/20261116/stage-13-fix2/group-3/live/source-values/observation.json",
       "sha256": "6644fc7c75e6a9889b84df4c6e63ecb4d2d6b028c2361bd4da57471728d968db"
+    },
+    "fix2_native_actuals_probe": {
+      "path": "references/implementation/20261116/stage-13-fix2/group-5/live/actuals-stop-resume/observation.json",
+      "sha256": "bc6d391ad8670d3e198371e4c1da039461102f05851053ff83edf162b321e325"
     }
   },
   "limitations": [

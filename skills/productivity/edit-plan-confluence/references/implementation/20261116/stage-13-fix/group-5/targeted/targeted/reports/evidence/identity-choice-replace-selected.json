@@ -1,0 +1,360 @@
+{
+  "test_id": "acceptance/test_failure_matrix.py::test_identity_choice_complete_preparation_chain[replace-selected]",
+  "observed_at": "2026-11-17T09:58:17.212372+00:00",
+  "source_kind": "explicit synthetic export; not a real MPXJ measurement",
+  "initial": {
+    "schema_version": 1,
+    "operation_id": "operation_74024561390541c29eb6c9c6cdb19100",
+    "item_id": "item_52fe7ac6466c4910ae1a08f86ce0551e",
+    "status": "needs_decision",
+    "mode": "publish",
+    "exit_code": 3,
+    "project_slug": "test",
+    "source": {
+      "name": "synthetic-source.mpp",
+      "sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
+      "size_bytes": 70
+    },
+    "snapshot_id": "snapshot_9d618e0e167b4f788dda916ad60bb938",
+    "page_id": null,
+    "page_url": null,
+    "task_count": 3,
+    "display_task_count": 3,
+    "dependency_count": 2,
+    "exceptions": [
+      {
+        "rule_id": "B",
+        "revision": "1",
+        "result": "inactive",
+        "evidence_id": "artifact_9a460fdd14f6470d987eba35572a24df"
+      }
+    ],
+    "attachment_version": null,
+    "verification": {
+      "archive": "verified",
+      "attachment": "not_applicable",
+      "storage": "not_applicable",
+      "schedule": {
+        "status": "not_verified",
+        "checks": [
+          {
+            "row": 5,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "model"
+            ]
+          },
+          {
+            "row": 6,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ]
+          },
+          {
+            "row": 9,
+            "category": "graph",
+            "code": "cycle",
+            "exit_code": 3,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "uid:2"
+            ]
+          },
+          {
+            "row": 14,
+            "category": "identity",
+            "code": "identity_confirmation_required",
+            "exit_code": 3,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "B"
+            ]
+          }
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "evidence_ids": [
+          "artifact_60de517ba3924190bce59dc5defbae1b"
+        ]
+      }
+    },
+    "published": false,
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_60de517ba3924190bce59dc5defbae1b"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_60de517ba3924190bce59dc5defbae1b"
+      }
+    ],
+    "completed_stages": [
+      "input_frozen",
+      "prepared",
+      "archived"
+    ],
+    "external_effect": "none",
+    "error": {
+      "code": "identity_confirmation_required",
+      "message": "identity_confirmation_required",
+      "retryable": false,
+      "next_action": "operation show --operation-id operation_74024561390541c29eb6c9c6cdb19100"
+    }
+  },
+  "identity": {
+    "schema_version": 1,
+    "action": "identity_confirm",
+    "status": "confirmed",
+    "exit_code": 0,
+    "project_slug": "test",
+    "from_snapshot_id": "snapshot_000964448777443193e140c1ba866958",
+    "to_snapshot_id": "snapshot_9d618e0e167b4f788dda916ad60bb938",
+    "from_source_sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "to_source_sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
+    "mapping_revision_id": "mapping_3e7b2bfdb4a542a4bde8ef981b777640",
+    "revision_status": "active",
+    "evidence_id": "artifact_9a460fdd14f6470d987eba35572a24df",
+    "evidence_sha256": "fe5fd3b0f097aca5fda7f043d3740a68253e3a2d92890eb0d8985a35cc91a1aa",
+    "published": false,
+    "error": null
+  },
+  "resumed": {
+    "schema_version": 1,
+    "operation_id": "operation_74024561390541c29eb6c9c6cdb19100",
+    "item_id": "item_52fe7ac6466c4910ae1a08f86ce0551e",
+    "status": "prepared",
+    "mode": "publish",
+    "exit_code": 0,
+    "project_slug": "test",
+    "source": {
+      "name": "synthetic-source.mpp",
+      "sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
+      "size_bytes": 70
+    },
+    "snapshot_id": "snapshot_9d618e0e167b4f788dda916ad60bb938",
+    "page_id": null,
+    "page_url": null,
+    "task_count": 3,
+    "display_task_count": 3,
+    "dependency_count": 2,
+    "exceptions": [
+      {
+        "rule_id": "B",
+        "revision": "1",
+        "result": "applied",
+        "evidence_id": "artifact_9a460fdd14f6470d987eba35572a24df"
+      }
+    ],
+    "attachment_version": null,
+    "verification": {
+      "archive": "verified",
+      "attachment": "not_applicable",
+      "storage": "not_applicable",
+      "schedule": {
+        "status": "not_verified",
+        "checks": [
+          {
+            "row": 5,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "model"
+            ]
+          },
+          {
+            "row": 6,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ]
+          }
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "evidence_ids": [
+          "artifact_ab3ea00697394f4f82d27a86f094ea5d"
+        ]
+      }
+    },
+    "published": false,
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_ab3ea00697394f4f82d27a86f094ea5d"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_ab3ea00697394f4f82d27a86f094ea5d"
+      }
+    ],
+    "completed_stages": [
+      "input_frozen",
+      "prepared",
+      "archived",
+      "admitted"
+    ],
+    "external_effect": "none",
+    "error": null
+  },
+  "repeated": {
+    "schema_version": 1,
+    "operation_id": "operation_74024561390541c29eb6c9c6cdb19100",
+    "item_id": "item_52fe7ac6466c4910ae1a08f86ce0551e",
+    "status": "conflict",
+    "mode": "publish",
+    "exit_code": 4,
+    "project_slug": "test",
+    "source": {
+      "name": "synthetic-source.mpp",
+      "sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
+      "size_bytes": 70
+    },
+    "snapshot_id": "snapshot_9d618e0e167b4f788dda916ad60bb938",
+    "page_id": null,
+    "page_url": null,
+    "task_count": 3,
+    "display_task_count": 3,
+    "dependency_count": 2,
+    "exceptions": [
+      {
+        "rule_id": "B",
+        "revision": "1",
+        "result": "inactive",
+        "evidence_id": "artifact_9a460fdd14f6470d987eba35572a24df"
+      }
+    ],
+    "attachment_version": null,
+    "verification": {
+      "archive": "verified",
+      "attachment": "not_applicable",
+      "storage": "not_applicable",
+      "schedule": {
+        "status": "not_verified",
+        "checks": [
+          {
+            "row": 5,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "model"
+            ]
+          },
+          {
+            "row": 6,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ]
+          },
+          {
+            "row": 9,
+            "category": "graph",
+            "code": "cycle",
+            "exit_code": 3,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "uid:2"
+            ]
+          },
+          {
+            "row": 14,
+            "category": "identity",
+            "code": "mapping_revision_conflict",
+            "exit_code": 4,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "B"
+            ]
+          },
+          {
+            "row": 14,
+            "category": "identity",
+            "code": "mapping_revision_scope_mismatch",
+            "exit_code": 4,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "operation"
+            ]
+          }
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "evidence_ids": [
+          "artifact_c04168e923df4d19937a399f6318998c"
+        ]
+      }
+    },
+    "published": false,
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_c04168e923df4d19937a399f6318998c"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_c04168e923df4d19937a399f6318998c"
+      }
+    ],
+    "completed_stages": [
+      "input_frozen",
+      "prepared",
+      "archived"
+    ],
+    "external_effect": "none",
+    "error": {
+      "code": "mapping_revision_conflict",
+      "message": "mapping_revision_conflict",
+      "retryable": false,
+      "next_action": "operation show --operation-id operation_74024561390541c29eb6c9c6cdb19100"
+    }
+  },
+  "selected_mapping_revision": "mapping_3e7b2bfdb4a542a4bde8ef981b777640",
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0
+  }
+}

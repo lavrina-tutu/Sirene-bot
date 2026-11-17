@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+  "observed_at": "2026-11-17T11:08:40.550928+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu1/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
+    "publish",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu1/new-binary.mpp",
+    "--page-id",
+    "537574885",
+    "--project-slug",
+    "stage13-binary-positive",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 3,
+  "duration_seconds": 5.475624506012537,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_ec7f5c41bcda407186f2d8790bed3081\", \"item_id\": \"item_4b6603a97f8f4b0bb867419556f9c06b\", \"status\": \"needs_decision\", \"mode\": \"publish\", \"exit_code\": 3, \"project_slug\": \"stage13-binary-positive\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_12cd10947325475096ca33ae13325e31\", \"page_id\": null, \"page_url\": null, \"task_count\": 6, \"display_task_count\": 6, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"new-source-publish\", \"revision\": \"binary-fixture-v1\", \"result\": \"inactive\", \"evidence_id\": \"artifact_092b920a5eca4056bad66cf410785d2e\"}], \"attachment_version\": null, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"storage\": \"not_applicable\", \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 14, \"category\": \"identity\", \"code\": \"identity_confirmation_required\", \"exit_code\": 3, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"new-source-publish\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_bf545ac2cc6c4adbab401aa8bd99f90d\"]}}, \"published\": false, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_bf545ac2cc6c4adbab401aa8bd99f90d\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_bf545ac2cc6c4adbab401aa8bd99f90d\"}], \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"external_effect\": \"none\", \"error\": {\"code\": \"identity_confirmation_required\", \"message\": \"identity_confirmation_required\", \"retryable\": false, \"next_action\": \"operation show --operation-id operation_ec7f5c41bcda407186f2d8790bed3081\"}}\n",
+  "stderr": "2026-11-17T11:08:38.325559518Z main ERROR Log4j API could not find a logging provider.\n",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 1,
+    "cache_hit": 0,
+    "cache_miss": 1,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885"
+      }
+    ]
+  }
+}

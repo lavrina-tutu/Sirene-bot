@@ -1,0 +1,427 @@
+{
+  "status": "passed",
+  "test_parent": "519501810",
+  "scope": "stage09 admission, bytes and storage; schedule:not_verified",
+  "admitted_fixture": "explicit synthetic export, no MPXJ read claimed",
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861/child/attachment"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content/537574861/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574862"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537574861/gantt-chart-0dedf6faaadd4ffaa9f7106d50d5415c.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574862"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537574861/gantt-chart-0dedf6faaadd4ffaa9f7106d50d5415c.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861/child/attachment"
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/api/content/537574861"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574862"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537574861/gantt-chart-0dedf6faaadd4ffaa9f7106d50d5415c.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574862"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537574861/gantt-chart-0dedf6faaadd4ffaa9f7106d50d5415c.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537574861/child/attachment"
+    }
+  ],
+  "page_id": "537574861",
+  "receipt": {
+    "schema_version": 1,
+    "operation_id": "operation_d5b0d65b82ad401dacd4f33de013c485",
+    "item_id": "item_025a80aaf9e54297969b89670f1c9f29",
+    "status": "published_with_warnings",
+    "mode": "publish",
+    "exit_code": 0,
+    "project_slug": "stage09-live-test",
+    "source": {
+      "name": "synthetic-parsed-contract.mpp",
+      "sha256": "b7432224b0956ae3d08c6fd89722f2d02873c24dc7f16ba4fa49278be7cb0788",
+      "size_bytes": 59
+    },
+    "snapshot_id": "snapshot_fbff40855cdc42a6adb75ebc24adbe10",
+    "page_id": "537574861",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537574861",
+    "task_count": 3,
+    "display_task_count": 3,
+    "dependency_count": 1,
+    "exceptions": [],
+    "attachment_version": 1,
+    "verification": {
+      "archive": "verified",
+      "attachment": "verified",
+      "storage": "verified",
+      "schedule": {
+        "status": "not_verified",
+        "checks": [
+          {
+            "row": 5,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "model"
+            ]
+          },
+          {
+            "row": 6,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ]
+          }
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "evidence_ids": [
+          "artifact_e8a252b4c8644b4383b4e1689af8783b"
+        ]
+      }
+    },
+    "published": true,
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_e8a252b4c8644b4383b4e1689af8783b"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_e8a252b4c8644b4383b4e1689af8783b"
+      }
+    ],
+    "completed_stages": [
+      "prepared",
+      "archived",
+      "admitted",
+      "attachment_uploaded",
+      "attachment_verified",
+      "storage_written",
+      "storage_verified",
+      "confirmed"
+    ],
+    "external_effect": "storage_written",
+    "error": null
+  },
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 1,
+    "PUT": 1
+  },
+  "attachment_id": "537574862",
+  "received_sha256": "cb143874616ca69a1c75579b772d7f8652b6f76ee6df8790b73b083f1f2571a5",
+  "page_version": 2,
+  "binary": {
+    "receipt": {
+      "schema_version": 1,
+      "operation_id": "operation_7678589ff4084199ad6bd48b10c628fc",
+      "item_id": "item_6eee3323013842c7a6894bd4d051a4eb",
+      "status": "failed",
+      "mode": "publish",
+      "exit_code": 5,
+      "project_slug": "stage09-binary-test",
+      "source": {
+        "name": "real-input.mpp",
+        "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+        "size_bytes": 180736
+      },
+      "snapshot_id": "snapshot_2f20ea006f794be1b776cc72878d2b17",
+      "page_id": null,
+      "page_url": null,
+      "task_count": 6,
+      "display_task_count": 5,
+      "dependency_count": 4,
+      "exceptions": [],
+      "attachment_version": null,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_applicable",
+        "storage": "not_applicable",
+        "schedule": {
+          "status": "not_verified",
+          "checks": [
+            {
+              "row": 5,
+              "category": "local_unsupported",
+              "code": "local_scheduler_prepared_unsupported",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "model"
+              ]
+            },
+            {
+              "row": 6,
+              "category": "plugin_unobserved",
+              "code": "specific_plan_plugin_result_not_verified",
+              "exit_code": 0,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "plugin"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "assignment_partial",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "assignment_semantics_unrepresented:finish",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "uid:5"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "assignment_semantics_unrepresented:segments",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "uid:5"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "assignment_semantics_unrepresented:start",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "uid:5"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "dependency_combination_unverified",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "local:dependency:000001"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "dependency_lag_unit_unsupported",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "local:dependency:000001"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "summary_root_missing",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "summary"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "task_semantics_unrepresented:effort_driven",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 5,
+              "example_entities": [
+                "uid:1",
+                "uid:2",
+                "uid:3"
+              ]
+            },
+            {
+              "row": 8,
+              "category": "unsupported_semantics",
+              "code": "task_semantics_unrepresented:segments",
+              "exit_code": 5,
+              "accepted_deviation": false,
+              "count": 1,
+              "example_entities": [
+                "uid:5"
+              ]
+            }
+          ],
+          "limitations": [
+            "local_scheduler_not_run",
+            "plan_plugin_result_not_verified"
+          ],
+          "evidence_ids": [
+            "artifact_9f604854df0949d38dd2e2e613072aa7"
+          ]
+        }
+      },
+      "published": false,
+      "warnings": [
+        {
+          "code": "local_scheduler_prepared_unsupported",
+          "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_9f604854df0949d38dd2e2e613072aa7"
+        },
+        {
+          "code": "specific_plan_plugin_result_not_verified",
+          "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+          "details_ref": "artifact:artifact_9f604854df0949d38dd2e2e613072aa7"
+        }
+      ],
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived"
+      ],
+      "external_effect": "none",
+      "error": {
+        "code": "assignment_semantics_unrepresented:start",
+        "message": "assignment_semantics_unrepresented:start",
+        "retryable": false,
+        "next_action": "operation show --operation-id operation_7678589ff4084199ad6bd48b10c628fc"
+      }
+    },
+    "counters": {
+      "MPXJ_read": 1,
+      "cache_hit": 0,
+      "cache_miss": 1,
+      "POST": 0,
+      "PUT": 0
+    },
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574861"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574861/child/attachment"
+      }
+    ]
+  },
+  "POST": 2,
+  "PUT": 1
+}

@@ -1,0 +1,102 @@
+{
+  "test_id": "acceptance/test_user_journeys.py::test_real_ef_batch_and_exact_compare",
+  "observed_at": "2026-11-17T10:15:45.380493+00:00",
+  "cases": [
+    "E",
+    "F",
+    "G"
+  ],
+  "receipt": {
+    "schema_version": 1,
+    "batch_id": "real-EF",
+    "mode": "batch_save",
+    "status": "completed",
+    "exit_code": 0,
+    "manifest_sha256": "f49f6871e1c49171092a97da863b39f186ea9569a4653d2d7df3d8cd0be852bf",
+    "inputs_frozen_at": "2026-11-17T10:15:31+00:00",
+    "on_error": "continue",
+    "counts": {
+      "total": 2,
+      "saved": 2,
+      "saved_with_warnings": 2,
+      "unchanged": 0,
+      "failed": 0,
+      "needs_decision": 0,
+      "not_started": 0
+    },
+    "items": [
+      {
+        "item_id": "1",
+        "position": 1,
+        "status": "saved_with_warnings",
+        "operation_id": "batch-op-31d793363a9f2e5386f19684ccdb5bb4e7ce9a525628fe8b1ea92479702debc7",
+        "snapshot_id": "snapshot_be49e23506e94de483e2e920466902cb",
+        "sha256": "04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a",
+        "receipt_ref": "_plan-receipts/batch-op-31d793363a9f2e5386f19684ccdb5bb4e7ce9a525628fe8b1ea92479702debc7/save.json",
+        "error": null,
+        "warnings": [
+          {
+            "code": "timezone_unknown",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fc757c5931ab8f3dde36dec44a80fa29ca3e00ac5e694fb542de88c18b525221.json",
+            "message": "Исходные даты сохранены без подтверждённой таймзоны"
+          },
+          {
+            "code": "fields_missing",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fc757c5931ab8f3dde36dec44a80fa29ca3e00ac5e694fb542de88c18b525221.json",
+            "message": "Часть исходных полей имеет качество missing"
+          },
+          {
+            "code": "fields_unsupported",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/fc757c5931ab8f3dde36dec44a80fa29ca3e00ac5e694fb542de88c18b525221.json",
+            "message": "Часть исходных полей имеет качество unsupported"
+          }
+        ]
+      },
+      {
+        "item_id": "2",
+        "position": 2,
+        "status": "saved_with_warnings",
+        "operation_id": "batch-op-e74a53c9a440e355740396873dc3ac6ca81a5e1bfda9e258a378fe283c75e995",
+        "snapshot_id": "snapshot_a46defcafaf8417399c35f364832029b",
+        "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+        "receipt_ref": "_plan-receipts/batch-op-e74a53c9a440e355740396873dc3ac6ca81a5e1bfda9e258a378fe283c75e995/save.json",
+        "error": null,
+        "warnings": [
+          {
+            "code": "timezone_unknown",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/3ecf4061d8090e02f81d5e466198fdadc0c94162b0a32eff9406b0432fe4155b.json",
+            "message": "Исходные даты сохранены без подтверждённой таймзоны"
+          },
+          {
+            "code": "fields_missing",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/3ecf4061d8090e02f81d5e466198fdadc0c94162b0a32eff9406b0432fe4155b.json",
+            "message": "Часть исходных полей имеет качество missing"
+          },
+          {
+            "code": "fields_unsupported",
+            "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_real_ef_batch_and_exact_c0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/3ecf4061d8090e02f81d5e466198fdadc0c94162b0a32eff9406b0432fe4155b.json",
+            "message": "Часть исходных полей имеет качество unsupported"
+          }
+        ]
+      }
+    ],
+    "published": false,
+    "error": null
+  },
+  "baseline_before": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3bca1e9ffaaf4c47b87fd1fcc707740c','plan_e08b4d47d7bb48efae9b1c05b0117e4c','snapshot_c42c4fda112248dc9027e43a8af0304f',0,1,'test owner before acceptance',NULL,'2026-11-17T10:15:29+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_53fbb97b682c4b0f8916f5258a0c8994','lineage_029f9237cbd74136bdc94dcb05da142b','snapshot_c42c4fda112248dc9027e43a8af0304f',1,'test owner before acceptance',NULL,'2026-11-17T10:15:29+00:00');"
+    ]
+  },
+  "baseline_after": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3bca1e9ffaaf4c47b87fd1fcc707740c','plan_e08b4d47d7bb48efae9b1c05b0117e4c','snapshot_c42c4fda112248dc9027e43a8af0304f',0,1,'test owner before acceptance',NULL,'2026-11-17T10:15:29+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_53fbb97b682c4b0f8916f5258a0c8994','lineage_029f9237cbd74136bdc94dcb05da142b','snapshot_c42c4fda112248dc9027e43a8af0304f',1,'test owner before acceptance',NULL,'2026-11-17T10:15:29+00:00');"
+    ]
+  }
+}

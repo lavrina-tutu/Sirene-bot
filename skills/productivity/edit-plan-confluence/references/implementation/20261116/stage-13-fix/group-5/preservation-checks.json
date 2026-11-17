@@ -1,0 +1,105 @@
+{
+  "protected_file_count": 2122,
+  "changed_protected_files": [],
+  "unchanged_vs_92bea3f": {
+    "pipeline.py": true,
+    "cli.py": true
+  },
+  "canon_sha256": "a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892",
+  "production_db_sha256": "b74b632bbc1b5d02e86396786c6b07220ffc5b0a3cf6d026ebc6467e3bce6c27",
+  "original_stage13": {
+    "commit": "92bea3f",
+    "gate": "failed",
+    "preserved": true,
+    "report_sha256": "6bd378d7c6e0864006e81aacd4ded3dca000e8122a06d0b7eb23f9ed3b6d63cf"
+  },
+  "original_stages_1_to_12": [
+    {
+      "stage": 1,
+      "commit": "8b04ce1945b88409fae036b4a0f0d69a52dfceea",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-01/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "46644181bc4db9970495e91d362354320ad85eded7a33762abe34ad9111fafdb"
+    },
+    {
+      "stage": 2,
+      "commit": "e9f13dd82b51e2aa4e2515901ce6ed29772677d3",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-02/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "a6587d2ca3964a31648f84740f0ce2d53b764844d26c90a5085bb018f924d467"
+    },
+    {
+      "stage": 3,
+      "commit": "8901b8d4ae43cf13a7173dc306546899811ace3f",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-03/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "1c7541a336c4f341d6ffe2749fc13812fb968a1c70a1a0345ef33918f2cbe916"
+    },
+    {
+      "stage": 4,
+      "commit": "3028885786c570e43386d4f0ec1033e396429927",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-04/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "4bbcdfcd61d9389aff518dffd4e724fa86b72e75d90e9acb0683a8165bfcf2d8"
+    },
+    {
+      "stage": 5,
+      "commit": "644b4bf5347b2be1960d3818bc26bff1d924a56f",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-05/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "ab635a0b2665c98f30402c7a83c6816d6dee3bbae6f0c16b881f60b6062566dc"
+    },
+    {
+      "stage": 6,
+      "commit": "ff11e6f1d3f45e0c58c523da44d53fe4989688fe",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-06/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "9f5cfe9190d6320bdc344dc6b665190f886f598ed8c8c88494458ab777f3480c"
+    },
+    {
+      "stage": 7,
+      "commit": "8762e44672c1bc3c1f8313d889f520ed38068086",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-07/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "e23ad45d3acf2e363d47ed7e053f397a0dd672de97fc55f5be71a7f00ae7ff94"
+    },
+    {
+      "stage": 8,
+      "commit": "40b809e8553eabb56695d0f5d330e1d498925a73",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-08/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "4e8d8729b133a17b6521b06e9e068e2fbe4296d52341f1f3c8c7981aa019992b"
+    },
+    {
+      "stage": 9,
+      "commit": "60eaf8b8fdf0280bd5ec181ee755a28531dfd3fb",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-09/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "eb099fa08c5a6bfd15bd773523f9afb0a0cee611dd4d51caced6d37db12467fc"
+    },
+    {
+      "stage": 10,
+      "commit": "ca438286d302fc7ab30c3b1fb8b759c94b2249d6",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-10/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "e4762986bac7e92ffa691a93a9fb94cfcb7408be554abf1033ddecdece72834a"
+    },
+    {
+      "stage": 11,
+      "commit": "e55f284b5997967036a9176084a256ecbb6b04fd",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-11/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "4fd85228478c0c0860fb9bb647f5fb369a8e62ec7bb7cbd15cc44b38adaf1815"
+    },
+    {
+      "stage": 12,
+      "commit": "3b0ddbb79dab1d294c9b2b7b08172fb4fbb905b7",
+      "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-12/stage-report.json",
+      "recorded_gate": "passed",
+      "report_sha256": "6e5a419d188a099b1c0bf148c18f08b8c10fb1cd0fe6f8f5b4eb02f82993b821"
+    }
+  ],
+  "external_sources_restorable": true,
+  "source_tree_sha256": "6ebede7f67be8a4db781a08390c135540d1fc2514f6ce2a5d9f58ec33e26912d",
+  "sources_stable": true
+}

@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+  "observed_at": "2026-11-17T10:23:12.949954+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_new_binary_identity_to_pu0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_new_binary_identity_to_pu0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_new_binary_identity_to_pu0/cache",
+    "identity",
+    "confirm",
+    "--project-slug",
+    "stage13-binary-positive",
+    "--from",
+    "snapshot:snapshot_bda2337ab2174b7dbf7d5612d15a1d92",
+    "--to",
+    "snapshot:snapshot_1403bfcf642b4c01b2b46ec958819e66",
+    "--mode",
+    "continuity",
+    "--evidence",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/pytest-tmp/test_new_binary_identity_to_pu0/test-only-user-evidence.txt",
+    "--reason",
+    "Explicit test fixture identity: same documented binary recipe and stable task UIDs"
+  ],
+  "rc": 0,
+  "duration_seconds": 0.7077082580071874,
+  "stdout": "{\"schema_version\": 1, \"action\": \"identity_confirm\", \"status\": \"confirmed\", \"exit_code\": 0, \"project_slug\": \"stage13-binary-positive\", \"from_snapshot_id\": \"snapshot_bda2337ab2174b7dbf7d5612d15a1d92\", \"to_snapshot_id\": \"snapshot_1403bfcf642b4c01b2b46ec958819e66\", \"from_source_sha256\": \"7aea0277b7a3d08fc19d17a67529022f35cea0a35e5938110c1ab433c9a02b4b\", \"to_source_sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"mapping_revision_id\": \"mapping_c7a3ef96aaa3438f98a2d230fc50e040\", \"revision_status\": \"active\", \"evidence_id\": \"artifact_9476a130a31347c2b68e3a27e9c6aa52\", \"evidence_sha256\": \"99cd720acf36d9e4e0ff602a8ded67afabf1b34dc270ad69bfcedd08ebd4f9de\", \"published\": false, \"error\": null}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0,
+    "calls": []
+  }
+}

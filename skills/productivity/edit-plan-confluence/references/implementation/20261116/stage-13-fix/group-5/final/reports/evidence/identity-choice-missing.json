@@ -1,0 +1,126 @@
+{
+  "test_id": "acceptance/test_failure_matrix.py::test_identity_choice_complete_preparation_chain[missing]",
+  "observed_at": "2026-11-17T10:51:27.192240+00:00",
+  "receipt": {
+    "schema_version": 1,
+    "operation_id": "operation_6a00059e941246c28b3bedede3497809",
+    "item_id": "item_2b936cfd6bf74e318f50f1e79482aa4d",
+    "status": "needs_decision",
+    "mode": "publish",
+    "exit_code": 3,
+    "project_slug": "test",
+    "source": {
+      "name": "synthetic-source.mpp",
+      "sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
+      "size_bytes": 70
+    },
+    "snapshot_id": "snapshot_6104165e3dbf436daf03676ca9ee2dd8",
+    "page_id": null,
+    "page_url": null,
+    "task_count": 3,
+    "display_task_count": 3,
+    "dependency_count": 2,
+    "exceptions": [
+      {
+        "rule_id": "B",
+        "revision": "1",
+        "result": "inactive",
+        "evidence_id": "artifact_0090363a5665493b9f04915f6351e097"
+      }
+    ],
+    "attachment_version": null,
+    "verification": {
+      "archive": "verified",
+      "attachment": "not_applicable",
+      "storage": "not_applicable",
+      "schedule": {
+        "status": "not_verified",
+        "checks": [
+          {
+            "row": 5,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "model"
+            ]
+          },
+          {
+            "row": 6,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ]
+          },
+          {
+            "row": 9,
+            "category": "graph",
+            "code": "cycle",
+            "exit_code": 3,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "uid:2"
+            ]
+          },
+          {
+            "row": 14,
+            "category": "identity",
+            "code": "identity_confirmation_required",
+            "exit_code": 3,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "B"
+            ]
+          }
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "evidence_ids": [
+          "artifact_f149e7c32eac47778a3ac841c3303d85"
+        ]
+      }
+    },
+    "published": false,
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_f149e7c32eac47778a3ac841c3303d85"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_f149e7c32eac47778a3ac841c3303d85"
+      }
+    ],
+    "completed_stages": [
+      "input_frozen",
+      "prepared",
+      "archived"
+    ],
+    "external_effect": "none",
+    "error": {
+      "code": "identity_confirmation_required",
+      "message": "identity_confirmation_required",
+      "retryable": false,
+      "next_action": "operation show --operation-id operation_6a00059e941246c28b3bedede3497809"
+    }
+  },
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0
+  }
+}

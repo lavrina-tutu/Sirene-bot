@@ -1,0 +1,7 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_installed_names_after_live",
+  "observed_at": "2026-11-17T10:24:40.072279+00:00",
+  "status": "passed",
+  "source": "installed Hermes skill_view; both names and qualified names",
+  "compatible_commands_parsed": 55
+}

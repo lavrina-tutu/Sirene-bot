@@ -1,0 +1,4 @@
+Skill security warning for 'edit-plan-confluence': skill file is outside the trusted skills directory (~/.hermes/skills/): /home/tkachenkoav/.hermes/skills/productivity/edit-plan-confluence/SKILL.md
+Skill security warning for 'confluence-gantt-plan': skill file is outside the trusted skills directory (~/.hermes/skills/): /home/tkachenkoav/.hermes/skills/productivity/confluence-gantt-plan/SKILL.md
+Skill security warning for 'productivity/edit-plan-confluence': skill file is outside the trusted skills directory (~/.hermes/skills/): /home/tkachenkoav/.hermes/skills/productivity/edit-plan-confluence/SKILL.md
+Skill security warning for 'productivity/confluence-gantt-plan': skill file is outside the trusted skills directory (~/.hermes/skills/): /home/tkachenkoav/.hermes/skills/productivity/confluence-gantt-plan/SKILL.md

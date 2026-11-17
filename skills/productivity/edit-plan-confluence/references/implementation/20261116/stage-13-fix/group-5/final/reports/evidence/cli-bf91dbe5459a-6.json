@@ -1,0 +1,51 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+  "observed_at": "2026-11-17T11:08:28.442499+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu0/cache",
+    "resume",
+    "--operation-id",
+    "operation_ec88c1177d434ffb9b5ed2864fbff95c"
+  ],
+  "rc": 0,
+  "duration_seconds": 2.904509212996345,
+  "stdout": "{\"attachment_version\": 1, \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"dependency_count\": 4, \"display_task_count\": 6, \"error\": null, \"exceptions\": [{\"evidence_id\": \"artifact_3d48071a87724bdf8aec8c025b4d6dbe\", \"result\": \"applied\", \"revision\": \"binary-fixture-v1\", \"rule_id\": \"new-source-diff\"}], \"exit_code\": 0, \"external_effect\": \"none\", \"item_id\": \"item_742f48d50b7a4b07bd454b8e361229ba\", \"mode\": \"publish\", \"operation_id\": \"operation_ec88c1177d434ffb9b5ed2864fbff95c\", \"page_id\": \"537574877\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537574877\", \"project_slug\": \"stage13-binary-positive\", \"published\": true, \"schema_version\": 1, \"snapshot_id\": \"snapshot_fe361e8ef08c4e3b941a5e9afd59d17c\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"status\": \"unchanged\", \"task_count\": 6, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"schedule\": {\"checks\": [{\"accepted_deviation\": false, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"count\": 1, \"example_entities\": [\"model\"], \"exit_code\": 0, \"row\": 5}, {\"accepted_deviation\": false, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"count\": 1, \"example_entities\": [\"plugin\"], \"exit_code\": 0, \"row\": 6}], \"evidence_ids\": [\"artifact_b12fa6899137450088d32b5bcbab66b0\"], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"status\": \"not_verified\"}, \"storage\": \"verified\"}, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"details_ref\": \"artifact:artifact_b12fa6899137450088d32b5bcbab66b0\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"details_ref\": \"artifact:artifact_b12fa6899137450088d32b5bcbab66b0\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\"}]}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574877"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574877/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574883"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537574877/gantt-chart-eb58728a6ff442afb57e9cd2781cd4c9.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574877/child/attachment"
+      }
+    ]
+  }
+}

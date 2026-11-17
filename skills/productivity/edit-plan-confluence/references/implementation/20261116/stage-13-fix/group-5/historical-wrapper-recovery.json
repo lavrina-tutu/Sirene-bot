@@ -1,0 +1,238 @@
+{
+  "source": "8b04ce19^:skills/productivity/confluence-gantt-plan/SKILL.md",
+  "git_blob": "df19ee33b0b49c01b3b19a230179f63256722509",
+  "sha256": "b459bddcf46169a7a9894313fa283d2c1881a9887969e8bb5402e13eba656f70",
+  "line": 75,
+  "historical_statement": "- **‎ПО УМОЛЧАНИЮ ВСЕГДА исключать сбойные зависимости** (решение Саши 16.11.2026). Плагин gantt-chart-planner **сам пересчитывает срок проекта как критический путь по связям** (игнорирует записанные в JSON start/end). Перед каждым apply сверять критический путь с корнем MPP (пересчёт longest-path по predecessors из `__tasks.csv`): если расходится — это лишняя зависимость, сериализующая параллельные ветки (типичный виновник: «1.0 Согласование архитектуры» → «1.1 Подготовка registry», связь 16→17, тянущая +13 дней); исключить её через `--drop-dep FROM:TO` и перепроверить путь = корню. Применить `--drop-dep` для каждой связи, чьё исключение возвращает путь к корню (можно несколько). Только если путь уже == корню — заливать как есть без drop. Расчёт: forward longest-path по duration leaf-задач вдоль самой длинной цепочки `dependenciesData` (type=2 FS, lag=0). Сбойная связь не всегда 16→17 в новых версиях — пересчитывать из актуальных predecessors.",
+  "status": "recovered_but_not_an_active_rule",
+  "cases": [
+    {
+      "case": "B",
+      "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+      "tasks": [
+        {
+          "task_key": "uid:510",
+          "uid": 510,
+          "id": 16,
+          "name": "1.0.Согласование архитектуры на пилот",
+          "wbs": "1.3.3.2",
+          "parent_task_key": {
+            "value": "uid:322",
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "task_key": "uid:323",
+          "uid": 323,
+          "id": 17,
+          "name": "1.1 Подготовка registry и Kubernetes runtime",
+          "wbs": "1.3.3.3",
+          "parent_task_key": {
+            "value": "uid:322",
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "relations": [
+        {
+          "dependency_key": "local:dependency:000013",
+          "uid": {
+            "value": 204,
+            "quality": "ok",
+            "reason": null
+          },
+          "predecessor_task_key": "uid:510",
+          "successor_task_key": "uid:323",
+          "predecessor_id": {
+            "value": 16,
+            "quality": "ok",
+            "reason": null
+          },
+          "predecessor_uid": {
+            "value": 510,
+            "quality": "ok",
+            "reason": null
+          },
+          "successor_id": {
+            "value": 17,
+            "quality": "ok",
+            "reason": null
+          },
+          "successor_uid": {
+            "value": 323,
+            "quality": "ok",
+            "reason": null
+          },
+          "source_link_type": {
+            "value": "FS",
+            "quality": "ok",
+            "reason": null
+          },
+          "link_type": "FS",
+          "type_quality": {
+            "value": "FS",
+            "quality": "ok",
+            "reason": null
+          },
+          "lag": "0 d",
+          "lag_value": {
+            "value": {
+              "amount": "0",
+              "units": "DAYS",
+              "source_units": "d",
+              "elapsed": false
+            },
+            "quality": "ok",
+            "reason": null
+          },
+          "lag_calendar": {
+            "value": "PREDECESSOR",
+            "quality": "ok",
+            "reason": null
+          },
+          "project_lag_calendar": {
+            "value": "PREDECESSOR",
+            "quality": "ok",
+            "reason": null
+          },
+          "driving": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "endpoint_quality": {
+            "predecessor": {
+              "quality": "ok",
+              "reason": null
+            },
+            "successor": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "external": false,
+          "quality_issues": []
+        }
+      ]
+    },
+    {
+      "case": "C",
+      "source_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+      "tasks": [
+        {
+          "task_key": "uid:510",
+          "uid": 510,
+          "id": 16,
+          "name": "1.0.Согласование архитектуры на пилот",
+          "wbs": "1.3.3.2",
+          "parent_task_key": {
+            "value": "uid:322",
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        {
+          "task_key": "uid:323",
+          "uid": 323,
+          "id": 17,
+          "name": "1.1 Подготовка registry и Kubernetes runtime",
+          "wbs": "1.3.3.3",
+          "parent_task_key": {
+            "value": "uid:322",
+            "quality": "ok",
+            "reason": null
+          }
+        }
+      ],
+      "relations": [
+        {
+          "dependency_key": "local:dependency:000013",
+          "uid": {
+            "value": 204,
+            "quality": "ok",
+            "reason": null
+          },
+          "predecessor_task_key": "uid:510",
+          "successor_task_key": "uid:323",
+          "predecessor_id": {
+            "value": 16,
+            "quality": "ok",
+            "reason": null
+          },
+          "predecessor_uid": {
+            "value": 510,
+            "quality": "ok",
+            "reason": null
+          },
+          "successor_id": {
+            "value": 17,
+            "quality": "ok",
+            "reason": null
+          },
+          "successor_uid": {
+            "value": 323,
+            "quality": "ok",
+            "reason": null
+          },
+          "source_link_type": {
+            "value": "FS",
+            "quality": "ok",
+            "reason": null
+          },
+          "link_type": "FS",
+          "type_quality": {
+            "value": "FS",
+            "quality": "ok",
+            "reason": null
+          },
+          "lag": "0 d",
+          "lag_value": {
+            "value": {
+              "amount": "0",
+              "units": "DAYS",
+              "source_units": "d",
+              "elapsed": false
+            },
+            "quality": "ok",
+            "reason": null
+          },
+          "lag_calendar": {
+            "value": "PREDECESSOR",
+            "quality": "ok",
+            "reason": null
+          },
+          "project_lag_calendar": {
+            "value": "PREDECESSOR",
+            "quality": "ok",
+            "reason": null
+          },
+          "driving": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "endpoint_quality": {
+            "predecessor": {
+              "quality": "ok",
+              "reason": null
+            },
+            "successor": {
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          "external": false,
+          "quality_issues": []
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Statement is an old broad auto-exclusion instruction; master §20 overrides its longest-path criterion and blanket deletion.",
+    "Exact typed rule revision/consent artifact not found; legacy snapshots lack source_id and parent context.",
+    "Candidate relation is source-addressed via current pinned MPP, not inferred continuity across independent binaries.",
+    "Current cause must be verified after full semantics including actuals; conversion of the candidate alone cannot prove a schedule exception needed."
+  ]
+}

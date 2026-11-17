@@ -1,0 +1,2718 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]",
+  "observed_at": "2026-11-17T11:09:16.463795+00:00",
+  "case": "B",
+  "fixture": {
+    "id": "B",
+    "path": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317.mpp",
+    "sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+    "size_bytes": 586240,
+    "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317/doc_2f274d74d3ad_Переход_на_Trisigma_Только_пилот_190526.mpp",
+    "evidence": "master §20.7.4; user evidence 2026-11-16",
+    "identity_status": "source_bytes_verified",
+    "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317.mpp",
+    "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/fixtures/real/216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317.mpp",
+    "status": "verified",
+    "original_verified": false,
+    "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
+    "functional_status": "not_run",
+    "expected": {
+      "archive_task_count": 62,
+      "display_task_count": 61,
+      "dependency_count": 60,
+      "work_hours": "2096"
+    }
+  },
+  "receipt": {
+    "schema_version": 1,
+    "operation_id": "operation_a5dfdee3d85344d39a6c106c9bbf53a9",
+    "item_id": "item_648bc3d976364cc185da859ba91d54b3",
+    "status": "failed",
+    "mode": "publish",
+    "exit_code": 5,
+    "project_slug": "trisigma",
+    "source": {
+      "name": "B.mpp",
+      "sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+      "size_bytes": 586240
+    },
+    "snapshot_id": "snapshot_ad62d3fc2089476a9bb4cd58abd7fbad",
+    "page_id": null,
+    "page_url": null,
+    "task_count": 62,
+    "display_task_count": 61,
+    "dependency_count": 60,
+    "exceptions": [
+      {
+        "rule_id": "B",
+        "revision": "historical-unresolved-v1",
+        "result": "inactive",
+        "evidence_id": null
+      }
+    ],
+    "attachment_version": null,
+    "verification": {
+      "archive": "verified",
+      "attachment": "not_applicable",
+      "storage": "not_applicable",
+      "schedule": {
+        "status": "not_verified",
+        "checks": [
+          {
+            "row": 5,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "model"
+            ]
+          },
+          {
+            "row": 6,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "exit_code": 0,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ]
+          },
+          {
+            "row": 8,
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_duration",
+            "exit_code": 5,
+            "accepted_deviation": false,
+            "count": 5,
+            "example_entities": [
+              "uid:164",
+              "uid:376",
+              "uid:322"
+            ]
+          },
+          {
+            "row": 8,
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_finish",
+            "exit_code": 5,
+            "accepted_deviation": false,
+            "count": 2,
+            "example_entities": [
+              "uid:323",
+              "uid:324"
+            ]
+          },
+          {
+            "row": 8,
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_start",
+            "exit_code": 5,
+            "accepted_deviation": false,
+            "count": 5,
+            "example_entities": [
+              "uid:164",
+              "uid:376",
+              "uid:322"
+            ]
+          },
+          {
+            "row": 8,
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_work",
+            "exit_code": 5,
+            "accepted_deviation": false,
+            "count": 5,
+            "example_entities": [
+              "uid:164",
+              "uid:376",
+              "uid:322"
+            ]
+          },
+          {
+            "row": 8,
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:resume",
+            "exit_code": 5,
+            "accepted_deviation": false,
+            "count": 5,
+            "example_entities": [
+              "uid:164",
+              "uid:376",
+              "uid:322"
+            ]
+          },
+          {
+            "row": 8,
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:stop",
+            "exit_code": 5,
+            "accepted_deviation": false,
+            "count": 5,
+            "example_entities": [
+              "uid:164",
+              "uid:376",
+              "uid:322"
+            ]
+          },
+          {
+            "row": 14,
+            "category": "identity",
+            "code": "rule_reference_or_evidence_missing",
+            "exit_code": 3,
+            "accepted_deviation": false,
+            "count": 1,
+            "example_entities": [
+              "B"
+            ]
+          }
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "evidence_ids": [
+          "artifact_b0dca686b83545eb9ad92630e5a95051"
+        ]
+      }
+    },
+    "published": false,
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_b0dca686b83545eb9ad92630e5a95051"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+        "details_ref": "artifact:artifact_b0dca686b83545eb9ad92630e5a95051"
+      }
+    ],
+    "completed_stages": [
+      "input_frozen",
+      "prepared",
+      "archived"
+    ],
+    "external_effect": "none",
+    "error": {
+      "code": "rule_reference_or_evidence_missing",
+      "message": "rule_reference_or_evidence_missing",
+      "retryable": false,
+      "next_action": "operation show --operation-id operation_a5dfdee3d85344d39a6c106c9bbf53a9"
+    }
+  },
+  "counters": {
+    "MPXJ_read": 1,
+    "cache_hit": 0,
+    "cache_miss": 1,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574892"
+      }
+    ]
+  },
+  "page_id": "537574892",
+  "page_version_before": 1,
+  "page_version_after": 1,
+  "storage_from_GET": "<p>Stage 13 acceptance neighbour</p>",
+  "preparation": {
+    "result_id": "preparation_result_a507208b2c2245f7970853691f5cf801",
+    "operation_id": "operation_a5dfdee3d85344d39a6c106c9bbf53a9",
+    "preparation_revision": 1,
+    "state": "blocked",
+    "representation_artifact_id": "artifact_985e1875881d443cae8984cf93e5f2e0",
+    "evidence_artifact_id": "artifact_b0dca686b83545eb9ad92630e5a95051",
+    "created_at": "2026-11-17T11:09:16+00:00",
+    "admission": {
+      "allowed": false,
+      "blockers": [
+        {
+          "category": "identity",
+          "code": "rule_reference_or_evidence_missing",
+          "entity": "B",
+          "exit_code": 3,
+          "finding_sha256": "131e6dccada15a6045d8647c6b6481c19f1538ce40ac7dfcc5ea00b946ecb683",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 14,
+          "source": {
+            "basis": "EditPlanConfluence master 0.5.0 §20.3.7 and case B: historical consent exists; source-local row numbers are not stable task identity",
+            "evidence_id": null,
+            "project_slug": "trisigma",
+            "recovery": {
+              "consent_artifact": null,
+              "evidence_path": "references/implementation/20261116/stage-13-fix/group-3/bc-existing/manifest.json",
+              "evidence_sha256": "6e473026a432edd2aea428acdfbef2ecaa5dede82cc106183a6367a636d2684d",
+              "legacy_snapshot_id": "snapshot_63235566e13645a08825b6b27a458e49",
+              "legacy_source_artifact_id": "artifact_3210c98325a44a568f289b117c227675",
+              "legacy_typed_export_sha256": "fa8a31abcd4b114d1444ac7473b6cb36f42773f3320580db8867f1eb5581f1ee",
+              "reason": "legacy_source_and_snapshot_recovered_but_no_exact_addressed_rule_evidence_or_revision",
+              "rule_revision": null,
+              "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+              "stable_task_keys": [
+                "uid:0",
+                "uid:164",
+                "uid:532",
+                "uid:373",
+                "uid:376",
+                "uid:494",
+                "uid:496",
+                "uid:536",
+                "uid:497",
+                "uid:507",
+                "uid:498",
+                "uid:291",
+                "uid:314",
+                "uid:375",
+                "uid:322",
+                "uid:511",
+                "uid:510",
+                "uid:323",
+                "uid:324",
+                "uid:325",
+                "uid:533",
+                "uid:512",
+                "uid:326",
+                "uid:327",
+                "uid:513",
+                "uid:328",
+                "uid:329",
+                "uid:330",
+                "uid:331",
+                "uid:332",
+                "uid:333",
+                "uid:334",
+                "uid:335",
+                "uid:336",
+                "uid:337",
+                "uid:338",
+                "uid:339",
+                "uid:508",
+                "uid:340",
+                "uid:341",
+                "uid:514",
+                "uid:515",
+                "uid:342",
+                "uid:534",
+                "uid:343",
+                "uid:344",
+                "uid:345",
+                "uid:346",
+                "uid:347",
+                "uid:348",
+                "uid:349",
+                "uid:292",
+                "uid:321",
+                "uid:516",
+                "uid:517",
+                "uid:535",
+                "uid:518",
+                "uid:519",
+                "uid:520",
+                "uid:521",
+                "uid:377",
+                "uid:378"
+              ]
+            },
+            "reference_snapshot_id": null,
+            "revision": "historical-unresolved-v1",
+            "rule_id": "B",
+            "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+            "stable_task_keys": null,
+            "status": "inactive"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "06df2de9a1a53ac8e70921e883f1c0ee9636751317360cd26080883017cbc016",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "3f8fc229a25aa46eb2e9de77eda11efd8cf463155f79fe77a82d2c5bd032a053",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "1.6641666666666666",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "1.6641666666666666 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "14d8dd957b1198f5c0e73c1d948969af0bb90243d78dc6de3b85e5d3ae0c5f18",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "40",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "40 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "94c5c48782322f829d849e4279cd5a1477747c6f598c58a7e55693f605af97cf",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "cd8362d16274827923b5eb473c741a4d98211948c2d704d529e6330f3857a266",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "e301a2980530ab997e2bd5a8bd2e0fd47dba22fe0251179b0cae920e10138dc1",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "e2a87b145845f93a8b01c391082a85c94f0d41ad65012744b0c03c74bddf7cd7",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "1.6641666666666666",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "1.6641666666666666 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "276337af1a618759f1bc7d5de747a4fdd932a5ad2d9e29d39590114cbf522984",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "40",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "40 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "cc9a91d95984eb08739a662e1567fdc23804450e51fce437ed473ed3137f716a",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "eec5bb9a23ceb943fae952f1b698334dbe744e375927826df0b4859c71d8146c",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "8ae657fd4b02af5145226f0b533e93f7e418c2b8a76a19095f7386d5efbe05c2",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "28483234c3ee0fe798b6c902c7ab643eec258c1d20b15038cd66151222a3fe9c",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "3.9583333333333335",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "3.9583333333333335 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "fed22caea6e775e684dadef41b039d4b314107023bd22733a42c9fe45a58219a",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "40",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "40 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "e90b284dec6e35caa0a2551714b25820ab666a8f4d5fedc6a27ef4a688f0c0ac",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "b7e475a97ec80d7754a53c80d38fcf98849d0671267ef6f37f71f81b6f03a3c1",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "f448ce5369abdb57390ea12c603203d8d24b860bd7200f676cfcbe757e0eb290",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-30T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_finish",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "7ee34536c988fe611a110b040df6ca8802dc91d01b4369a66aba1078b4971b54",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-05T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "a7633a29b6c45188a1415b89886f86778c32ed50dc74b5f467f651b833407c5e",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "3",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "3 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "e2f72328570bfd45f9c40dfc7f2307da7a3a2584f2e051fcc407afb03b0b7a22",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "24",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "24 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "cbe224714d54ab90452dc83b4d953821cd8dc475f83d289438f1814ced0e3e1f",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-05T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "8d7739cea1e220728a2b70746185e36a40ad097d35877a11f4b5f321f53c3aec",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-05T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "8f4a1f4bbff36a97028adb587db092b755f03ebee109fa89e348f75d20f78563",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-06T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_finish",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "e4aea9712337e347b839194276ed813f4e2d1fbaea7ee89b8aeed353ecd91029",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-07T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "53a078ec003f783558a7a5ce9781aca53abe5fe0c6b74f5809247f8d53e09807",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "2",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "2 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "7ff0825700f33b2e92d4c7797ffd56c660ff702d6d1e002eaf4e3bc8e3f7c536",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "16",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "16 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "7ac2157bb3c6494fbf9db4392713bef3dd0fc8abfe2b351cb2ffb97f87679e05",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-07T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "27444223f3683c1a704ecf5ad8a7d8aa33e9077dd7528e2ca879eb84f8c71fd6",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-07T18:00"
+          }
+        }
+      ],
+      "checks": [
+        {
+          "category": "identity",
+          "code": "rule_reference_or_evidence_missing",
+          "entity": "B",
+          "exit_code": 3,
+          "finding_sha256": "131e6dccada15a6045d8647c6b6481c19f1538ce40ac7dfcc5ea00b946ecb683",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 14,
+          "source": {
+            "basis": "EditPlanConfluence master 0.5.0 §20.3.7 and case B: historical consent exists; source-local row numbers are not stable task identity",
+            "evidence_id": null,
+            "project_slug": "trisigma",
+            "recovery": {
+              "consent_artifact": null,
+              "evidence_path": "references/implementation/20261116/stage-13-fix/group-3/bc-existing/manifest.json",
+              "evidence_sha256": "6e473026a432edd2aea428acdfbef2ecaa5dede82cc106183a6367a636d2684d",
+              "legacy_snapshot_id": "snapshot_63235566e13645a08825b6b27a458e49",
+              "legacy_source_artifact_id": "artifact_3210c98325a44a568f289b117c227675",
+              "legacy_typed_export_sha256": "fa8a31abcd4b114d1444ac7473b6cb36f42773f3320580db8867f1eb5581f1ee",
+              "reason": "legacy_source_and_snapshot_recovered_but_no_exact_addressed_rule_evidence_or_revision",
+              "rule_revision": null,
+              "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+              "stable_task_keys": [
+                "uid:0",
+                "uid:164",
+                "uid:532",
+                "uid:373",
+                "uid:376",
+                "uid:494",
+                "uid:496",
+                "uid:536",
+                "uid:497",
+                "uid:507",
+                "uid:498",
+                "uid:291",
+                "uid:314",
+                "uid:375",
+                "uid:322",
+                "uid:511",
+                "uid:510",
+                "uid:323",
+                "uid:324",
+                "uid:325",
+                "uid:533",
+                "uid:512",
+                "uid:326",
+                "uid:327",
+                "uid:513",
+                "uid:328",
+                "uid:329",
+                "uid:330",
+                "uid:331",
+                "uid:332",
+                "uid:333",
+                "uid:334",
+                "uid:335",
+                "uid:336",
+                "uid:337",
+                "uid:338",
+                "uid:339",
+                "uid:508",
+                "uid:340",
+                "uid:341",
+                "uid:514",
+                "uid:515",
+                "uid:342",
+                "uid:534",
+                "uid:343",
+                "uid:344",
+                "uid:345",
+                "uid:346",
+                "uid:347",
+                "uid:348",
+                "uid:349",
+                "uid:292",
+                "uid:321",
+                "uid:516",
+                "uid:517",
+                "uid:535",
+                "uid:518",
+                "uid:519",
+                "uid:520",
+                "uid:521",
+                "uid:377",
+                "uid:378"
+              ]
+            },
+            "reference_snapshot_id": null,
+            "revision": "historical-unresolved-v1",
+            "rule_id": "B",
+            "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+            "stable_task_keys": null,
+            "status": "inactive"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "06df2de9a1a53ac8e70921e883f1c0ee9636751317360cd26080883017cbc016",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "3f8fc229a25aa46eb2e9de77eda11efd8cf463155f79fe77a82d2c5bd032a053",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "1.6641666666666666",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "1.6641666666666666 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "14d8dd957b1198f5c0e73c1d948969af0bb90243d78dc6de3b85e5d3ae0c5f18",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "40",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "40 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "94c5c48782322f829d849e4279cd5a1477747c6f598c58a7e55693f605af97cf",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:164",
+          "exit_code": 5,
+          "finding_sha256": "cd8362d16274827923b5eb473c741a4d98211948c2d704d529e6330f3857a266",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "e301a2980530ab997e2bd5a8bd2e0fd47dba22fe0251179b0cae920e10138dc1",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "e2a87b145845f93a8b01c391082a85c94f0d41ad65012744b0c03c74bddf7cd7",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "1.6641666666666666",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "1.6641666666666666 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "276337af1a618759f1bc7d5de747a4fdd932a5ad2d9e29d39590114cbf522984",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "40",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "40 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "cc9a91d95984eb08739a662e1567fdc23804450e51fce437ed473ed3137f716a",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:376",
+          "exit_code": 5,
+          "finding_sha256": "eec5bb9a23ceb943fae952f1b698334dbe744e375927826df0b4859c71d8146c",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "8ae657fd4b02af5145226f0b533e93f7e418c2b8a76a19095f7386d5efbe05c2",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "28483234c3ee0fe798b6c902c7ab643eec258c1d20b15038cd66151222a3fe9c",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "3.9583333333333335",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "3.9583333333333335 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "fed22caea6e775e684dadef41b039d4b314107023bd22733a42c9fe45a58219a",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "40",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "40 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "e90b284dec6e35caa0a2551714b25820ab666a8f4d5fedc6a27ef4a688f0c0ac",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:322",
+          "exit_code": 5,
+          "finding_sha256": "b7e475a97ec80d7754a53c80d38fcf98849d0671267ef6f37f71f81b6f03a3c1",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-23T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "f448ce5369abdb57390ea12c603203d8d24b860bd7200f676cfcbe757e0eb290",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-04-30T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_finish",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "7ee34536c988fe611a110b040df6ca8802dc91d01b4369a66aba1078b4971b54",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-05T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "a7633a29b6c45188a1415b89886f86778c32ed50dc74b5f467f651b833407c5e",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "3",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "3 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "e2f72328570bfd45f9c40dfc7f2307da7a3a2584f2e051fcc407afb03b0b7a22",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "24",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "24 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "cbe224714d54ab90452dc83b4d953821cd8dc475f83d289438f1814ced0e3e1f",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-05T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:323",
+          "exit_code": 5,
+          "finding_sha256": "8d7739cea1e220728a2b70746185e36a40ad097d35877a11f4b5f321f53c3aec",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-05T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_start",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "8f4a1f4bbff36a97028adb587db092b755f03ebee109fa89e348f75d20f78563",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-06T09:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_finish",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "e4aea9712337e347b839194276ed813f4e2d1fbaea7ee89b8aeed353ecd91029",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-07T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_duration",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "53a078ec003f783558a7a5ce9781aca53abe5fe0c6b74f5809247f8d53e09807",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "2",
+              "elapsed": false,
+              "source_units": "d",
+              "units": "DAYS"
+            },
+            "reason": null,
+            "value": "2 d"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:actual_work",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "7ff0825700f33b2e92d4c7797ffd56c660ff702d6d1e002eaf4e3bc8e3f7c536",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "quantity": {
+              "amount": "16",
+              "elapsed": false,
+              "source_units": "h",
+              "units": "HOURS"
+            },
+            "reason": null,
+            "value": "16 h"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:stop",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "7ac2157bb3c6494fbf9db4392713bef3dd0fc8abfe2b351cb2ffb97f87679e05",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-07T18:00"
+          }
+        },
+        {
+          "category": "unsupported_semantics",
+          "code": "task_actuals_unrepresented:resume",
+          "entity": "uid:324",
+          "exit_code": 5,
+          "finding_sha256": "27444223f3683c1a704ecf5ad8a7d8aa33e9077dd7528e2ca879eb84f8c71fd6",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 8,
+          "source": {
+            "quality": "ok",
+            "reason": null,
+            "value": "2026-05-07T18:00"
+          }
+        },
+        {
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "entity": "model",
+          "finding_sha256": "346c0b491f627540345e4669dac37935391128234694e5233087e04ea87c0820",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 5,
+          "source": null
+        },
+        {
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "entity": "plugin",
+          "finding_sha256": "4629a102822b74610f5a393cf708b1f81049f68fce5022497e908cd0c0db74a3",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 6,
+          "source": null
+        }
+      ],
+      "exit_code": 5,
+      "policy_revision": "publication-admission-v1",
+      "schedule": {
+        "checks": [
+          {
+            "category": "identity",
+            "code": "rule_reference_or_evidence_missing",
+            "entity": "B",
+            "exit_code": 3,
+            "finding_sha256": "131e6dccada15a6045d8647c6b6481c19f1538ce40ac7dfcc5ea00b946ecb683",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 14,
+            "source": {
+              "basis": "EditPlanConfluence master 0.5.0 §20.3.7 and case B: historical consent exists; source-local row numbers are not stable task identity",
+              "evidence_id": null,
+              "project_slug": "trisigma",
+              "recovery": {
+                "consent_artifact": null,
+                "evidence_path": "references/implementation/20261116/stage-13-fix/group-3/bc-existing/manifest.json",
+                "evidence_sha256": "6e473026a432edd2aea428acdfbef2ecaa5dede82cc106183a6367a636d2684d",
+                "legacy_snapshot_id": "snapshot_63235566e13645a08825b6b27a458e49",
+                "legacy_source_artifact_id": "artifact_3210c98325a44a568f289b117c227675",
+                "legacy_typed_export_sha256": "fa8a31abcd4b114d1444ac7473b6cb36f42773f3320580db8867f1eb5581f1ee",
+                "reason": "legacy_source_and_snapshot_recovered_but_no_exact_addressed_rule_evidence_or_revision",
+                "rule_revision": null,
+                "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+                "stable_task_keys": [
+                  "uid:0",
+                  "uid:164",
+                  "uid:532",
+                  "uid:373",
+                  "uid:376",
+                  "uid:494",
+                  "uid:496",
+                  "uid:536",
+                  "uid:497",
+                  "uid:507",
+                  "uid:498",
+                  "uid:291",
+                  "uid:314",
+                  "uid:375",
+                  "uid:322",
+                  "uid:511",
+                  "uid:510",
+                  "uid:323",
+                  "uid:324",
+                  "uid:325",
+                  "uid:533",
+                  "uid:512",
+                  "uid:326",
+                  "uid:327",
+                  "uid:513",
+                  "uid:328",
+                  "uid:329",
+                  "uid:330",
+                  "uid:331",
+                  "uid:332",
+                  "uid:333",
+                  "uid:334",
+                  "uid:335",
+                  "uid:336",
+                  "uid:337",
+                  "uid:338",
+                  "uid:339",
+                  "uid:508",
+                  "uid:340",
+                  "uid:341",
+                  "uid:514",
+                  "uid:515",
+                  "uid:342",
+                  "uid:534",
+                  "uid:343",
+                  "uid:344",
+                  "uid:345",
+                  "uid:346",
+                  "uid:347",
+                  "uid:348",
+                  "uid:349",
+                  "uid:292",
+                  "uid:321",
+                  "uid:516",
+                  "uid:517",
+                  "uid:535",
+                  "uid:518",
+                  "uid:519",
+                  "uid:520",
+                  "uid:521",
+                  "uid:377",
+                  "uid:378"
+                ]
+              },
+              "reference_snapshot_id": null,
+              "revision": "historical-unresolved-v1",
+              "rule_id": "B",
+              "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+              "stable_task_keys": null,
+              "status": "inactive"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_start",
+            "entity": "uid:164",
+            "exit_code": 5,
+            "finding_sha256": "06df2de9a1a53ac8e70921e883f1c0ee9636751317360cd26080883017cbc016",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-23T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_duration",
+            "entity": "uid:164",
+            "exit_code": 5,
+            "finding_sha256": "3f8fc229a25aa46eb2e9de77eda11efd8cf463155f79fe77a82d2c5bd032a053",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "1.6641666666666666",
+                "elapsed": false,
+                "source_units": "d",
+                "units": "DAYS"
+              },
+              "reason": null,
+              "value": "1.6641666666666666 d"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_work",
+            "entity": "uid:164",
+            "exit_code": 5,
+            "finding_sha256": "14d8dd957b1198f5c0e73c1d948969af0bb90243d78dc6de3b85e5d3ae0c5f18",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "40",
+                "elapsed": false,
+                "source_units": "h",
+                "units": "HOURS"
+              },
+              "reason": null,
+              "value": "40 h"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:stop",
+            "entity": "uid:164",
+            "exit_code": 5,
+            "finding_sha256": "94c5c48782322f829d849e4279cd5a1477747c6f598c58a7e55693f605af97cf",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-23T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:resume",
+            "entity": "uid:164",
+            "exit_code": 5,
+            "finding_sha256": "cd8362d16274827923b5eb473c741a4d98211948c2d704d529e6330f3857a266",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-23T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_start",
+            "entity": "uid:376",
+            "exit_code": 5,
+            "finding_sha256": "e301a2980530ab997e2bd5a8bd2e0fd47dba22fe0251179b0cae920e10138dc1",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-23T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_duration",
+            "entity": "uid:376",
+            "exit_code": 5,
+            "finding_sha256": "e2a87b145845f93a8b01c391082a85c94f0d41ad65012744b0c03c74bddf7cd7",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "1.6641666666666666",
+                "elapsed": false,
+                "source_units": "d",
+                "units": "DAYS"
+              },
+              "reason": null,
+              "value": "1.6641666666666666 d"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_work",
+            "entity": "uid:376",
+            "exit_code": 5,
+            "finding_sha256": "276337af1a618759f1bc7d5de747a4fdd932a5ad2d9e29d39590114cbf522984",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "40",
+                "elapsed": false,
+                "source_units": "h",
+                "units": "HOURS"
+              },
+              "reason": null,
+              "value": "40 h"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:stop",
+            "entity": "uid:376",
+            "exit_code": 5,
+            "finding_sha256": "cc9a91d95984eb08739a662e1567fdc23804450e51fce437ed473ed3137f716a",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-23T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:resume",
+            "entity": "uid:376",
+            "exit_code": 5,
+            "finding_sha256": "eec5bb9a23ceb943fae952f1b698334dbe744e375927826df0b4859c71d8146c",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-23T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_start",
+            "entity": "uid:322",
+            "exit_code": 5,
+            "finding_sha256": "8ae657fd4b02af5145226f0b533e93f7e418c2b8a76a19095f7386d5efbe05c2",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-23T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_duration",
+            "entity": "uid:322",
+            "exit_code": 5,
+            "finding_sha256": "28483234c3ee0fe798b6c902c7ab643eec258c1d20b15038cd66151222a3fe9c",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "3.9583333333333335",
+                "elapsed": false,
+                "source_units": "d",
+                "units": "DAYS"
+              },
+              "reason": null,
+              "value": "3.9583333333333335 d"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_work",
+            "entity": "uid:322",
+            "exit_code": 5,
+            "finding_sha256": "fed22caea6e775e684dadef41b039d4b314107023bd22733a42c9fe45a58219a",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "40",
+                "elapsed": false,
+                "source_units": "h",
+                "units": "HOURS"
+              },
+              "reason": null,
+              "value": "40 h"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:stop",
+            "entity": "uid:322",
+            "exit_code": 5,
+            "finding_sha256": "e90b284dec6e35caa0a2551714b25820ab666a8f4d5fedc6a27ef4a688f0c0ac",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-23T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:resume",
+            "entity": "uid:322",
+            "exit_code": 5,
+            "finding_sha256": "b7e475a97ec80d7754a53c80d38fcf98849d0671267ef6f37f71f81b6f03a3c1",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-23T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_start",
+            "entity": "uid:323",
+            "exit_code": 5,
+            "finding_sha256": "f448ce5369abdb57390ea12c603203d8d24b860bd7200f676cfcbe757e0eb290",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-04-30T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_finish",
+            "entity": "uid:323",
+            "exit_code": 5,
+            "finding_sha256": "7ee34536c988fe611a110b040df6ca8802dc91d01b4369a66aba1078b4971b54",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-05-05T18:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_duration",
+            "entity": "uid:323",
+            "exit_code": 5,
+            "finding_sha256": "a7633a29b6c45188a1415b89886f86778c32ed50dc74b5f467f651b833407c5e",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "3",
+                "elapsed": false,
+                "source_units": "d",
+                "units": "DAYS"
+              },
+              "reason": null,
+              "value": "3 d"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_work",
+            "entity": "uid:323",
+            "exit_code": 5,
+            "finding_sha256": "e2f72328570bfd45f9c40dfc7f2307da7a3a2584f2e051fcc407afb03b0b7a22",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "24",
+                "elapsed": false,
+                "source_units": "h",
+                "units": "HOURS"
+              },
+              "reason": null,
+              "value": "24 h"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:stop",
+            "entity": "uid:323",
+            "exit_code": 5,
+            "finding_sha256": "cbe224714d54ab90452dc83b4d953821cd8dc475f83d289438f1814ced0e3e1f",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-05-05T18:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:resume",
+            "entity": "uid:323",
+            "exit_code": 5,
+            "finding_sha256": "8d7739cea1e220728a2b70746185e36a40ad097d35877a11f4b5f321f53c3aec",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-05-05T18:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_start",
+            "entity": "uid:324",
+            "exit_code": 5,
+            "finding_sha256": "8f4a1f4bbff36a97028adb587db092b755f03ebee109fa89e348f75d20f78563",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-05-06T09:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_finish",
+            "entity": "uid:324",
+            "exit_code": 5,
+            "finding_sha256": "e4aea9712337e347b839194276ed813f4e2d1fbaea7ee89b8aeed353ecd91029",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-05-07T18:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_duration",
+            "entity": "uid:324",
+            "exit_code": 5,
+            "finding_sha256": "53a078ec003f783558a7a5ce9781aca53abe5fe0c6b74f5809247f8d53e09807",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "2",
+                "elapsed": false,
+                "source_units": "d",
+                "units": "DAYS"
+              },
+              "reason": null,
+              "value": "2 d"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:actual_work",
+            "entity": "uid:324",
+            "exit_code": 5,
+            "finding_sha256": "7ff0825700f33b2e92d4c7797ffd56c660ff702d6d1e002eaf4e3bc8e3f7c536",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "quantity": {
+                "amount": "16",
+                "elapsed": false,
+                "source_units": "h",
+                "units": "HOURS"
+              },
+              "reason": null,
+              "value": "16 h"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:stop",
+            "entity": "uid:324",
+            "exit_code": 5,
+            "finding_sha256": "7ac2157bb3c6494fbf9db4392713bef3dd0fc8abfe2b351cb2ffb97f87679e05",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-05-07T18:00"
+            }
+          },
+          {
+            "category": "unsupported_semantics",
+            "code": "task_actuals_unrepresented:resume",
+            "entity": "uid:324",
+            "exit_code": 5,
+            "finding_sha256": "27444223f3683c1a704ecf5ad8a7d8aa33e9077dd7528e2ca879eb84f8c71fd6",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 8,
+            "source": {
+              "quality": "ok",
+              "reason": null,
+              "value": "2026-05-07T18:00"
+            }
+          },
+          {
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "entity": "model",
+            "finding_sha256": "346c0b491f627540345e4669dac37935391128234694e5233087e04ea87c0820",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 5,
+            "source": null
+          },
+          {
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "entity": "plugin",
+            "finding_sha256": "4629a102822b74610f5a393cf708b1f81049f68fce5022497e908cd0c0db74a3",
+            "model": null,
+            "observed": null,
+            "represented": null,
+            "row": 6,
+            "source": null
+          }
+        ],
+        "evidence_ids": [],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified"
+        ],
+        "status": "not_verified"
+      },
+      "status": "failed",
+      "warnings": [
+        {
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "entity": "model",
+          "finding_sha256": "346c0b491f627540345e4669dac37935391128234694e5233087e04ea87c0820",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 5,
+          "source": null
+        },
+        {
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "entity": "plugin",
+          "finding_sha256": "4629a102822b74610f5a393cf708b1f81049f68fce5022497e908cd0c0db74a3",
+          "model": null,
+          "observed": null,
+          "represented": null,
+          "row": 6,
+          "source": null
+        }
+      ]
+    },
+    "result": {
+      "basis_sha256": "03e4a9a509186da57d7fcc8e1ab63a13041e5c5cdb779acd980ed79a8c1bc167",
+      "receipt": {
+        "attachment_version": null,
+        "completed_stages": [
+          "input_frozen",
+          "prepared",
+          "archived"
+        ],
+        "dependency_count": 60,
+        "display_task_count": 61,
+        "error": {
+          "code": "rule_reference_or_evidence_missing",
+          "message": "rule_reference_or_evidence_missing",
+          "next_action": "operation show --operation-id operation_a5dfdee3d85344d39a6c106c9bbf53a9",
+          "retryable": false
+        },
+        "exceptions": [
+          {
+            "evidence_id": null,
+            "result": "inactive",
+            "revision": "historical-unresolved-v1",
+            "rule_id": "B"
+          }
+        ],
+        "exit_code": 5,
+        "external_effect": "none",
+        "item_id": "item_648bc3d976364cc185da859ba91d54b3",
+        "mode": "publish",
+        "operation_id": "operation_a5dfdee3d85344d39a6c106c9bbf53a9",
+        "page_id": null,
+        "page_url": null,
+        "project_slug": "trisigma",
+        "published": false,
+        "schema_version": 1,
+        "snapshot_id": "snapshot_ad62d3fc2089476a9bb4cd58abd7fbad",
+        "source": {
+          "name": "B.mpp",
+          "sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+          "size_bytes": 586240
+        },
+        "status": "failed",
+        "task_count": 62,
+        "verification": {
+          "archive": "verified",
+          "attachment": "not_applicable",
+          "schedule": {
+            "checks": [
+              {
+                "accepted_deviation": false,
+                "category": "local_unsupported",
+                "code": "local_scheduler_prepared_unsupported",
+                "count": 1,
+                "example_entities": [
+                  "model"
+                ],
+                "exit_code": 0,
+                "row": 5
+              },
+              {
+                "accepted_deviation": false,
+                "category": "plugin_unobserved",
+                "code": "specific_plan_plugin_result_not_verified",
+                "count": 1,
+                "example_entities": [
+                  "plugin"
+                ],
+                "exit_code": 0,
+                "row": 6
+              },
+              {
+                "accepted_deviation": false,
+                "category": "unsupported_semantics",
+                "code": "task_actuals_unrepresented:actual_duration",
+                "count": 5,
+                "example_entities": [
+                  "uid:164",
+                  "uid:376",
+                  "uid:322"
+                ],
+                "exit_code": 5,
+                "row": 8
+              },
+              {
+                "accepted_deviation": false,
+                "category": "unsupported_semantics",
+                "code": "task_actuals_unrepresented:actual_finish",
+                "count": 2,
+                "example_entities": [
+                  "uid:323",
+                  "uid:324"
+                ],
+                "exit_code": 5,
+                "row": 8
+              },
+              {
+                "accepted_deviation": false,
+                "category": "unsupported_semantics",
+                "code": "task_actuals_unrepresented:actual_start",
+                "count": 5,
+                "example_entities": [
+                  "uid:164",
+                  "uid:376",
+                  "uid:322"
+                ],
+                "exit_code": 5,
+                "row": 8
+              },
+              {
+                "accepted_deviation": false,
+                "category": "unsupported_semantics",
+                "code": "task_actuals_unrepresented:actual_work",
+                "count": 5,
+                "example_entities": [
+                  "uid:164",
+                  "uid:376",
+                  "uid:322"
+                ],
+                "exit_code": 5,
+                "row": 8
+              },
+              {
+                "accepted_deviation": false,
+                "category": "unsupported_semantics",
+                "code": "task_actuals_unrepresented:resume",
+                "count": 5,
+                "example_entities": [
+                  "uid:164",
+                  "uid:376",
+                  "uid:322"
+                ],
+                "exit_code": 5,
+                "row": 8
+              },
+              {
+                "accepted_deviation": false,
+                "category": "unsupported_semantics",
+                "code": "task_actuals_unrepresented:stop",
+                "count": 5,
+                "example_entities": [
+                  "uid:164",
+                  "uid:376",
+                  "uid:322"
+                ],
+                "exit_code": 5,
+                "row": 8
+              },
+              {
+                "accepted_deviation": false,
+                "category": "identity",
+                "code": "rule_reference_or_evidence_missing",
+                "count": 1,
+                "example_entities": [
+                  "B"
+                ],
+                "exit_code": 3,
+                "row": 14
+              }
+            ],
+            "evidence_ids": [
+              "artifact_b0dca686b83545eb9ad92630e5a95051"
+            ],
+            "limitations": [
+              "local_scheduler_not_run",
+              "plan_plugin_result_not_verified"
+            ],
+            "status": "not_verified"
+          },
+          "storage": "not_applicable"
+        },
+        "warnings": [
+          {
+            "code": "local_scheduler_prepared_unsupported",
+            "details_ref": "artifact:artifact_b0dca686b83545eb9ad92630e5a95051",
+            "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+          },
+          {
+            "code": "specific_plan_plugin_result_not_verified",
+            "details_ref": "artifact:artifact_b0dca686b83545eb9ad92630e5a95051",
+            "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+          }
+        ]
+      },
+      "summary": {
+        "coefficients": {
+          "minutes_per_day": "480"
+        },
+        "counts": {
+          "archive_task_count": 62,
+          "dependency_count": 60,
+          "display_task_count": 61,
+          "external_dependency_count": 0,
+          "service_task_count": 1,
+          "task_count": 62,
+          "task_extraction_errors": 0
+        },
+        "d1": "23.04.26",
+        "d2": "24.08.26",
+        "duration_working_days": "84.875",
+        "explicit_root_choice": false,
+        "finish": "2026-08-24T18:00",
+        "n_days": 85,
+        "profile": "summary-v1",
+        "profile_fingerprint": "716c94354368c0642f1284f48213e6de246ec92f0024b5b533c45f4c3f1abc70",
+        "publishable": true,
+        "reasons": [],
+        "root_candidates": [
+          "uid:164"
+        ],
+        "root_task_key": "uid:164",
+        "source_duration": {
+          "quality": "ok",
+          "quantity": {
+            "amount": "84.875",
+            "elapsed": false,
+            "source_units": "d",
+            "units": "DAYS"
+          },
+          "reason": null,
+          "value": "84.875 d"
+        },
+        "start": "2026-04-23T09:00",
+        "storage_html": "<p><strong>Итого: с 23.04.26 по 24.08.26 - 85 рабочих дней</strong></p>",
+        "work": {
+          "display_hours": "2096",
+          "excluded_assignments": 0,
+          "hours": "2096",
+          "known_assignments": 49,
+          "missing_assignments": 0,
+          "per_task": {
+            "uid:292": {
+              "hours": "160",
+              "known": 1,
+              "known_hours": "160",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:314": {
+              "hours": "200",
+              "known": 1,
+              "known_hours": "200",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:321": {
+              "hours": "8",
+              "known": 1,
+              "known_hours": "8",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:323": {
+              "hours": "24",
+              "known": 1,
+              "known_hours": "24",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:324": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:326": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:327": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:329": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:330": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:331": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:332": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:334": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:335": {
+              "hours": "24",
+              "known": 1,
+              "known_hours": "24",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:337": {
+              "hours": "32",
+              "known": 2,
+              "known_hours": "32",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:339": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:341": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:342": {
+              "hours": "24",
+              "known": 1,
+              "known_hours": "24",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:343": {
+              "hours": "24",
+              "known": 1,
+              "known_hours": "24",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:344": {
+              "hours": "80",
+              "known": 2,
+              "known_hours": "80",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:346": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:347": {
+              "hours": "8",
+              "known": 1,
+              "known_hours": "8",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:348": {
+              "hours": "8",
+              "known": 1,
+              "known_hours": "8",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:373": {
+              "hours": "0",
+              "known": 1,
+              "known_hours": "0",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:375": {
+              "hours": "0",
+              "known": 1,
+              "known_hours": "0",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:377": {
+              "hours": "0",
+              "known": 1,
+              "known_hours": "0",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:378": {
+              "hours": "32",
+              "known": 1,
+              "known_hours": "32",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:496": {
+              "hours": "176",
+              "known": 1,
+              "known_hours": "176",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:497": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:498": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:507": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:508": {
+              "hours": "0",
+              "known": 1,
+              "known_hours": "0",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:510": {
+              "hours": "152",
+              "known": 1,
+              "known_hours": "152",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:511": {
+              "hours": "0",
+              "known": 1,
+              "known_hours": "0",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:512": {
+              "hours": "40",
+              "known": 1,
+              "known_hours": "40",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:513": {
+              "hours": "80",
+              "known": 1,
+              "known_hours": "80",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:514": {
+              "hours": "32",
+              "known": 1,
+              "known_hours": "32",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:515": {
+              "hours": "80",
+              "known": 1,
+              "known_hours": "80",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:517": {
+              "hours": "160",
+              "known": 1,
+              "known_hours": "160",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:518": {
+              "hours": "160",
+              "known": 1,
+              "known_hours": "160",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:519": {
+              "hours": "160",
+              "known": 1,
+              "known_hours": "160",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:520": {
+              "hours": "80",
+              "known": 1,
+              "known_hours": "80",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:521": {
+              "hours": "40",
+              "known": 1,
+              "known_hours": "40",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:532": {
+              "hours": "0",
+              "known": 1,
+              "known_hours": "0",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:533": {
+              "hours": "0",
+              "known": 1,
+              "known_hours": "0",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:534": {
+              "hours": "16",
+              "known": 1,
+              "known_hours": "16",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:535": {
+              "hours": "40",
+              "known": 1,
+              "known_hours": "40",
+              "missing": 0,
+              "quality": "complete"
+            },
+            "uid:536": {
+              "hours": "32",
+              "known": 1,
+              "known_hours": "32",
+              "missing": 0,
+              "quality": "complete"
+            }
+          },
+          "quality": "complete",
+          "reasons": []
+        }
+      },
+      "target": {
+        "attachment": null,
+        "macro": null,
+        "managed": {
+          "blocks": [],
+          "macro": "<root></root>",
+          "marker_texts": [],
+          "sha256": "ae73bd827a76eefe11882fc98e142c053a4db68ddadf02fbfed54e57d6baae54",
+          "summary_above_macro": false
+        },
+        "page_id": "537574892",
+        "page_version": 1,
+        "sha256": "4c7eddfd84469a1d4cafe29d2e01658d717c240623eb3e09a620157e850eae33",
+        "storage_sha256": "6a02d45d1dde100a76f99c622063f34c60ce5930c0f0e2b1ceae60912e63ea92"
+      }
+    }
+  },
+  "versions": {
+    "plan_id": "plan_9fa520b331934b73bfd9aba146686bee",
+    "versions": [
+      {
+        "snapshot_id": "snapshot_ad62d3fc2089476a9bb4cd58abd7fbad",
+        "plan_id": "plan_9fa520b331934b73bfd9aba146686bee",
+        "lineage_id": "lineage_66b004d2857e43c29d1b2b4962a8509e",
+        "source_artifact_id": "artifact_7c7d16f4e9e34a33aeed699ae7b99357",
+        "representation": "mpp",
+        "timezone_hint": null,
+        "status_date": null,
+        "published_at": null,
+        "observed_at": null,
+        "recorded_at": "2026-11-17T11:09:12+00:00",
+        "normalization_profile_fingerprint": "a22b622f83306016a9f82dd98f34995b6956eadf17de10d0101af877342c28ce",
+        "resolved_timezone": "Europe/Moscow",
+        "source_mpp_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+        "dedup_key": "a4f59e9508c8adde6b346ee96bc42ecf334481b61a565dfc6727bcfbf26cdde3",
+        "normalized_data_sha256": "8c96801c0edcec20d63fa19192bd95ab86f234aef3ac3af837cb71aaed1e575c",
+        "version_counts_json": "{\"plan_assignment_timephased\":42,\"plan_assignment_version\":43,\"plan_calendar_interval\":515,\"plan_calendar_version\":69,\"plan_dependency_version\":60,\"plan_embedded_baseline_value\":682,\"plan_external_dependency\":0,\"plan_quality_issue\":1,\"plan_resource_availability\":67,\"plan_resource_version\":67,\"plan_snapshot_collection\":7,\"plan_task_segment\":40,\"plan_task_version\":62}",
+        "publication_links": [],
+        "kind": "snapshot"
+      }
+    ],
+    "receipt": {
+      "plan_id": "plan_9fa520b331934b73bfd9aba146686bee",
+      "publication_count": 0,
+      "snapshot_count": 1,
+      "known_at": "2026-11-17T11:09:16+00:00"
+    }
+  },
+  "baseline_before": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_2772664f819649d38ac37878b5a7078b','plan_db1f2cd527ef489d97bdf14d412e1bde','snapshot_da70327398fe476794feee1ef5eeb90b',0,1,'test owner before acceptance',NULL,'2026-11-17T11:09:04+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e3adbcbf46b14a738db2057170f56749','lineage_abe00ab484a04d01b7ab45f1e57db6bf','snapshot_da70327398fe476794feee1ef5eeb90b',1,'test owner before acceptance',NULL,'2026-11-17T11:09:04+00:00');"
+    ]
+  },
+  "baseline_after": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_2772664f819649d38ac37878b5a7078b','plan_db1f2cd527ef489d97bdf14d412e1bde','snapshot_da70327398fe476794feee1ef5eeb90b',0,1,'test owner before acceptance',NULL,'2026-11-17T11:09:04+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e3adbcbf46b14a738db2057170f56749','lineage_abe00ab484a04d01b7ab45f1e57db6bf','snapshot_da70327398fe476794feee1ef5eeb90b',1,'test owner before acceptance',NULL,'2026-11-17T11:09:04+00:00');"
+    ]
+  },
+  "functional_status": "failed",
+  "plugin_observation": null,
+  "limitation": "Real public pipeline did not admit this MPP; no direct-upload fallback"
+}

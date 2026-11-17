@@ -1,0 +1,113 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+  "observed_at": "2026-11-17T11:08:47.755877+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu1/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
+    "resume",
+    "--operation-id",
+    "operation_ec7f5c41bcda407186f2d8790bed3081",
+    "--mapping-revision",
+    "mapping_6f89a9bafd5d478cb1b3cee5ab8b8549"
+  ],
+  "rc": 0,
+  "duration_seconds": 5.629033981997054,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_ec7f5c41bcda407186f2d8790bed3081\", \"item_id\": \"item_4b6603a97f8f4b0bb867419556f9c06b\", \"status\": \"published_with_warnings\", \"mode\": \"publish\", \"exit_code\": 0, \"project_slug\": \"stage13-binary-positive\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_12cd10947325475096ca33ae13325e31\", \"page_id\": \"537574885\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537574885\", \"task_count\": 6, \"display_task_count\": 6, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"new-source-publish\", \"revision\": \"binary-fixture-v1\", \"result\": \"applied\", \"evidence_id\": \"artifact_092b920a5eca4056bad66cf410785d2e\"}], \"attachment_version\": 1, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"storage\": \"verified\", \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_2cc4daff7c824b30896329f3795720ae\"]}}, \"published\": true, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_2cc4daff7c824b30896329f3795720ae\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_2cc4daff7c824b30896329f3795720ae\"}], \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"external_effect\": \"storage_written\", \"error\": null}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 1,
+    "PUT": 1,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885/child/attachment"
+      },
+      {
+        "method": "POST",
+        "path": "/rest/api/content/537574885/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574888"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537574885/gantt-chart-44260c70e2034d2bb8488a8da0ef1741.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574888"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537574885/gantt-chart-44260c70e2034d2bb8488a8da0ef1741.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885/child/attachment"
+      },
+      {
+        "method": "PUT",
+        "path": "/rest/api/content/537574885"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574888"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537574885/gantt-chart-44260c70e2034d2bb8488a8da0ef1741.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574885/child/attachment"
+      }
+    ]
+  }
+}

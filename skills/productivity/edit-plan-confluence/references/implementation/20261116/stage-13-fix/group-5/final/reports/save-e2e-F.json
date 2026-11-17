@@ -1,0 +1,228 @@
+{
+  "case": "F",
+  "cold": {
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/cache",
+      "save",
+      "--mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/F.mpp",
+      "--project-slug",
+      "acceptance-project",
+      "--source-version-date",
+      "2026-11-15"
+    ],
+    "rc": 0,
+    "receipt": {
+      "schema_version": 1,
+      "operation_id": "operation_443fc4e715eb4445af1253e968751a04",
+      "item_id": "item_79c2cb241c3a4737989d750d4f944304",
+      "status": "saved_with_warnings",
+      "mode": "save",
+      "exit_code": 0,
+      "project_slug": "acceptance-project",
+      "source": {
+        "name": "F.mpp",
+        "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+        "size_bytes": 567808
+      },
+      "snapshot_id": "snapshot_b41bbd8a2f14476ab80e11ff2953a5f7",
+      "page_id": null,
+      "page_url": null,
+      "task_count": 86,
+      "display_task_count": 85,
+      "dependency_count": 93,
+      "exceptions": [],
+      "attachment_version": null,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_applicable",
+        "storage": "not_applicable",
+        "schedule": {
+          "status": "not_verified",
+          "checks": [],
+          "limitations": [
+            "timezone_unknown",
+            "fields_missing",
+            "fields_unsupported",
+            "schedule_not_verified"
+          ],
+          "evidence_ids": []
+        }
+      },
+      "published": false,
+      "warnings": [
+        {
+          "code": "timezone_unknown",
+          "message": "Исходные даты сохранены без подтверждённой таймзоны",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/3ecf4061d8090e02f81d5e466198fdadc0c94162b0a32eff9406b0432fe4155b.json"
+        },
+        {
+          "code": "fields_missing",
+          "message": "Часть исходных полей имеет качество missing",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/3ecf4061d8090e02f81d5e466198fdadc0c94162b0a32eff9406b0432fe4155b.json"
+        },
+        {
+          "code": "fields_unsupported",
+          "message": "Часть исходных полей имеет качество unsupported",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/3ecf4061d8090e02f81d5e466198fdadc0c94162b0a32eff9406b0432fe4155b.json"
+        }
+      ],
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived"
+      ],
+      "external_effect": "none",
+      "error": null
+    },
+    "counters": {
+      "MPXJ_read": 1,
+      "cache_hit": 0,
+      "cache_miss": 1,
+      "POST": 0,
+      "PUT": 0
+    },
+    "duration_seconds": 6.008789600979071,
+    "stage_durations_seconds": {
+      "readback": 0.23298368591349572,
+      "parse_cache": 3.132140190980863,
+      "normalization_quality": 2.2420374309876934,
+      "archive_commit": 0.3905337949981913
+    },
+    "versions": {
+      "reader": "read-mpp-v3",
+      "mpxj": "16.4.0",
+      "jpype": "1.7.1",
+      "export": "full-export-v2",
+      "normalization": {
+        "fingerprint": "26f75d00b4daf3847545115420e36fea574c96044530ae1847dd0c81399efcad",
+        "id": "normalization-v1",
+        "normalizer_version": "prepared-v1",
+        "version": "1.0.0"
+      },
+      "resolved_timezone": null
+    }
+  },
+  "warm": {
+    "command": [
+      "/usr/bin/python3",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+      "--db",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/state/index.sqlite",
+      "--workvault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault",
+      "--cache-dir",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/cache",
+      "save",
+      "--mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/F-renamed.mpp",
+      "--project-slug",
+      "acceptance-project"
+    ],
+    "rc": 0,
+    "receipt": {
+      "schema_version": 1,
+      "operation_id": "operation_c30a6df827bc4512bd647c13651d02b1",
+      "item_id": "item_e7c9dd1560fb48b9819aac067073d2bc",
+      "status": "unchanged",
+      "mode": "save",
+      "exit_code": 0,
+      "project_slug": "acceptance-project",
+      "source": {
+        "name": "F-renamed.mpp",
+        "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+        "size_bytes": 567808
+      },
+      "snapshot_id": "snapshot_b41bbd8a2f14476ab80e11ff2953a5f7",
+      "page_id": null,
+      "page_url": null,
+      "task_count": 86,
+      "display_task_count": 85,
+      "dependency_count": 93,
+      "exceptions": [],
+      "attachment_version": null,
+      "verification": {
+        "archive": "verified",
+        "attachment": "not_applicable",
+        "storage": "not_applicable",
+        "schedule": {
+          "status": "not_verified",
+          "checks": [],
+          "limitations": [
+            "timezone_unknown",
+            "fields_missing",
+            "fields_unsupported",
+            "schedule_not_verified"
+          ],
+          "evidence_ids": []
+        }
+      },
+      "published": false,
+      "warnings": [
+        {
+          "code": "timezone_unknown",
+          "message": "Исходные даты сохранены без подтверждённой таймзоны",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/3ecf4061d8090e02f81d5e466198fdadc0c94162b0a32eff9406b0432fe4155b.json"
+        },
+        {
+          "code": "fields_missing",
+          "message": "Часть исходных полей имеет качество missing",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/3ecf4061d8090e02f81d5e466198fdadc0c94162b0a32eff9406b0432fe4155b.json"
+        },
+        {
+          "code": "fields_unsupported",
+          "message": "Часть исходных полей имеет качество unsupported",
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v4/final/pytest-tmp/test_real_cli_cold_warm_save_F0/WorkVault/Entities/acceptance-project/Sources/plans/acceptance-project.ganttchart/artifacts/3ecf4061d8090e02f81d5e466198fdadc0c94162b0a32eff9406b0432fe4155b.json"
+        }
+      ],
+      "completed_stages": [
+        "input_frozen",
+        "prepared",
+        "archived"
+      ],
+      "external_effect": "none",
+      "error": null
+    },
+    "counters": {
+      "MPXJ_read": 0,
+      "cache_hit": 1,
+      "cache_miss": 0,
+      "POST": 0,
+      "PUT": 0
+    },
+    "duration_seconds": 3.6305704539990984,
+    "stage_durations_seconds": {
+      "readback": 0.2080754559719935,
+      "parse_cache": 0.9217753930133767,
+      "normalization_quality": 2.178756361012347,
+      "archive_commit": 0.3119568740366958
+    },
+    "versions": {
+      "reader": "read-mpp-v3",
+      "mpxj": "16.4.0",
+      "jpype": "1.7.1",
+      "export": "full-export-v2",
+      "normalization": {
+        "fingerprint": "26f75d00b4daf3847545115420e36fea574c96044530ae1847dd0c81399efcad",
+        "id": "normalization-v1",
+        "normalizer_version": "prepared-v1",
+        "version": "1.0.0"
+      },
+      "resolved_timezone": null
+    }
+  },
+  "client_import": "forbidden",
+  "python_socket": "forbidden",
+  "baseline_before": [],
+  "baseline_after": [],
+  "publication_rows": 0,
+  "POST": 0,
+  "PUT": 0
+}

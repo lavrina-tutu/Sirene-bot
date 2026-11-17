@@ -1,0 +1,663 @@
+{
+  "status": "passed",
+  "test_parent": "519501810",
+  "POST": 12,
+  "PUT": 0,
+  "cases": [
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-09T18:00:00",
+          "duration": 3,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-09T09:00:00",
+          "finish": "2026-01-09T18:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 2,
+          "lag": 0,
+          "lagUnit": "day"
+        }
+      ],
+      "resources": [],
+      "assignments": [],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "FS",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 1,
+      "input_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+      "received_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-07T18:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 0,
+          "lag": 0,
+          "lagUnit": "day"
+        }
+      ],
+      "resources": [],
+      "assignments": [],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "SS",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 2,
+      "input_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+      "received_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-08T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 3,
+          "lag": 0,
+          "lagUnit": "day"
+        }
+      ],
+      "resources": [],
+      "assignments": [],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "FF",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 3,
+      "input_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+      "received_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-06T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 3,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-06T09:00:00",
+          "finish": "2026-01-07T09:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 1,
+          "lag": 0,
+          "lagUnit": "day"
+        }
+      ],
+      "resources": [],
+      "assignments": [],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "SF",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 4,
+      "input_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+      "received_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-13T18:00:00",
+          "duration": 5,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-13T09:00:00",
+          "finish": "2026-01-13T18:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 2,
+          "lag": 2,
+          "lagUnit": "day"
+        }
+      ],
+      "resources": [],
+      "assignments": [],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "positive-lag",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 5,
+      "input_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+      "received_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-08T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 2,
+          "lag": -1,
+          "lagUnit": "day"
+        }
+      ],
+      "resources": [],
+      "assignments": [],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "negative-lag",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 6,
+      "input_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+      "received_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-12T11:00:00",
+          "duration": 3.25,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-09T11:00:00",
+          "finish": "2026-01-12T11:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 2,
+          "lag": 2,
+          "lagUnit": "hour"
+        }
+      ],
+      "resources": [],
+      "assignments": [],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "hour-lag",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 7,
+      "input_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+      "received_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "case": "elapsed-lag",
+      "page_id": "537574849",
+      "status": "not_verified",
+      "reason": "attempted_eday_encoding_has_no_verified_schedule",
+      "tasks": [],
+      "runtime_errors": [
+        "generateDropDownMenu is not defined",
+        "Conversion unit not provided"
+      ],
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 8,
+      "input_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+      "received_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-12T18:00:00",
+          "duration": 3,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-12T09:00:00",
+          "finish": "2026-01-12T18:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 2,
+          "lag": 0,
+          "lagUnit": "day"
+        }
+      ],
+      "resources": [],
+      "assignments": [],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "calendar-exception",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 9,
+      "input_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+      "received_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-12T17:00:00",
+          "duration": 3,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-09T10:00:00",
+          "finish": "2026-01-12T17:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 2,
+          "lag": 0,
+          "lagUnit": "day"
+        }
+      ],
+      "resources": [],
+      "assignments": [],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "calendar-working-exception",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 10,
+      "input_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+      "received_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710"
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "relation_codes": {
+        "StartToStart": 0,
+        "StartToEnd": 1,
+        "EndToStart": 2,
+        "EndToEnd": 3
+      },
+      "hours_per_day": 8,
+      "dependency_calendar": "ToEvent",
+      "tasks": [
+        {
+          "id": 1,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-09T18:00:00",
+          "duration": 3,
+          "duration_unit": "day"
+        },
+        {
+          "id": 2,
+          "start": "2026-01-07T09:00:00",
+          "finish": "2026-01-08T18:00:00",
+          "duration": 2,
+          "duration_unit": "day"
+        },
+        {
+          "id": 3,
+          "start": "2026-01-09T09:00:00",
+          "finish": "2026-01-09T18:00:00",
+          "duration": 1,
+          "duration_unit": "day"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": 4,
+          "type": 2,
+          "lag": 0,
+          "lagUnit": "day"
+        }
+      ],
+      "resources": [
+        {
+          "id": 5,
+          "name": "Same name"
+        },
+        {
+          "id": 6,
+          "name": "Same name"
+        }
+      ],
+      "assignments": [
+        {
+          "id": 7,
+          "event": 2,
+          "resource": 5,
+          "units": 0
+        },
+        {
+          "id": 8,
+          "event": 3,
+          "resource": 6,
+          "units": 50
+        }
+      ],
+      "calendars": [
+        {
+          "id": "general",
+          "name": "General",
+          "parentId": null
+        }
+      ],
+      "case": "resources-assignments",
+      "page_id": "537574849",
+      "page_version": 1,
+      "attachment_id": "537574850",
+      "attachment_version": 11,
+      "input_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+      "received_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+      "confluence_version": "8.9.4",
+      "browser_received_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be"
+    }
+  ],
+  "observed_at": "2026-11-17T11:06:14.829463+00:00",
+  "page_id": "537574849",
+  "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe"
+}

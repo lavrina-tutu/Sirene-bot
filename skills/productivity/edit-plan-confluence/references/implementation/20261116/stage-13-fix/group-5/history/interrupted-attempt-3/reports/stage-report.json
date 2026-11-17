@@ -1,0 +1,480 @@
+{
+  "schema_version": 1,
+  "stage": "13",
+  "gate": "failed",
+  "exit_code": 2,
+  "acceptance_report": "../../final/reports/acceptance-report.json",
+  "gate_checks": {
+    "nonempty_results": true,
+    "all_required_selected": true,
+    "all_required_passed": false,
+    "all_AC_passed": false,
+    "all_cases_passed": false,
+    "all_journeys_passed": false,
+    "fixtures_verified": true,
+    "populated_baseline_preserved": false,
+    "protected_files_unchanged": true,
+    "sources_stable": true,
+    "external_regression_passed": true,
+    "external_sources_restorable": true,
+    "prior_twelve_commits": true,
+    "original_stage13_failed_preserved": true,
+    "no_production_live_targets": true,
+    "pytest_exit_zero": false,
+    "ordered_phases_2_through_11": true,
+    "ordered_unit_archive_mpp_live": true
+  },
+  "source_tree_sha256": "39c4185b7a5fb9538e788117010c56ac672c48396568a2d640eede133f7ad4ce",
+  "command": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "-c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+    "--acceptance-stage",
+    "13",
+    "--test-root",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final",
+    "-m",
+    "unit or archive_integration or mpp_fixtures or confluence_live",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/junit.xml",
+    "-q"
+  ],
+  "summary": {
+    "passed": 438,
+    "failed": 0,
+    "skipped": 0
+  },
+  "external_checks": {
+    "gate": "passed",
+    "restoration_ok": true,
+    "restoration_packages": [
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-01/usertools/MofsIndex/manifest.json",
+        "sha256": "1dcc5bb88179326b5770a79dee96e7859a1624148c37bba116e747409ba2940e",
+        "files_restored": 9
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-02/usertools/MppReader/manifest.json",
+        "sha256": "8e80668dd5f946ef534e39ef7237a81f97cb1d1ad35d7e5150b852e525743ff4",
+        "files_restored": 5
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-03/usertools/MofsIndex/manifest.json",
+        "sha256": "223bc8158ccd8e79f3611cd12c59bfbb6695e721c0975c179f491270865d014a",
+        "files_restored": 9
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-05/usertools/MofsIndex/manifest.json",
+        "sha256": "4fd96f6f17cf93fd008e2dc3275d10df366b696b0191da3525d80fca74ec207c",
+        "files_restored": 3
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-06/usertools/MofsIndex/manifest.json",
+        "sha256": "b9c5c602af55fa596b69f7a5bf1556327bbd5718678863c8592c2aae593d356b",
+        "files_restored": 6
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-06/usertools/workvault-rag/manifest.json",
+        "sha256": "b7a8fd9b965c03a628de7cdec40e0517bf71658b2147576717a6cb12a380a40a",
+        "files_restored": 2
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-07/usertools/MofsIndex/manifest.json",
+        "sha256": "db7d7c435e847738ed6779573c25c53e70dba24c5654134731ca5f452484d662",
+        "files_restored": 8
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-07/usertools/workvault-rag/manifest.json",
+        "sha256": "7cba170239fa4c9e59cd793442165a59cccc7ae324800b336e2b46c269591a03",
+        "files_restored": 1
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-09/usertools/MofsIndex/manifest.json",
+        "sha256": "b5f200c48f4a2dfb99dff7bfdef0280ee09e821f2a40c8e50b4f747f72b65e50",
+        "files_restored": 6
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-10/usertools/MofsIndex/manifest.json",
+        "sha256": "6e45df2403e023cd4299217961ff975d58235af1d49423565425efc071046169",
+        "files_restored": 7
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-11/usertools/MofsIndex/manifest.json",
+        "sha256": "aaa45831b85045af6af399a549ff8a6fc304ea7461be6e953bff18edb4c83274",
+        "files_restored": 6
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-12/usertools/MofsIndex/manifest.json",
+        "sha256": "4ba58b89261513661ad1d134719619f05b897a0a8a74fec0dad4935d2a8d416c",
+        "files_restored": 1
+      },
+      {
+        "manifest": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-12/usertools/MppReader/manifest.json",
+        "sha256": "47c197adbfa9eb2ae8758382b2348b4da6d35b20c9558af8466cc1a1522763c8",
+        "files_restored": 1
+      }
+    ],
+    "latest_external_sources": [
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/README.md",
+        "sha256": "06960b1fc9ea93a6a603c3a8a8ec45b62fcac7a29aa3ab483e7af629507c2350",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/plan_export.py",
+        "sha256": "5ebb2836da2bdedd3b47c356f120078440a36c7e853ca707686736d628fccb15",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/read_mpp.py",
+        "sha256": "2b6ff899cb57414c852c38f89d5ad1f6920bfc18766948359c95d9ee4fbfd5b8",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/README.md",
+        "sha256": "f6c9dbb49f201818c168777079d7a29150cf9b925667ac21db26f685573c0050",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/tests/test_plan_export.py",
+        "sha256": "1dc089f4163d241d7a17de4a11274e1b4da988193ef9e2bc2ee9a26a93066bdb",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/tests/test_read_mpp_regression.py",
+        "sha256": "ff62fc55adee4974eb5f4d7df77b13b4f48ecec535287b2f8082e358e963817e",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/tests/conftest.py",
+        "sha256": "0433dccd1d53248e072b930fecf79013ff4db4e4fc84d6b10e7cfce444fd383a",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/mpxj-16.4.0-observation/ConstraintFactory.upstream.java",
+        "sha256": "70a8a4489c944bacd2328b63480e83330859e817cc845397b2452080b29123c6",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/mpxj-16.4.0-observation/README.md",
+        "sha256": "cdcb81ee272078efb320b3d3a1864a23e28aec1aa12792aecfc4b219d4266d4e",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/mpxj-16.4.0-observation/build.py",
+        "sha256": "d9fbed7ce5e05429a0a9912355b4246d5f2f4f20081d1ea55a7e14b386bb569c",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/mpxj-16.4.0-observation/ecj.jar",
+        "sha256": "f7686c4960cf70c2ebc5c500a73a8cfc04541b730c18f1c5c21329889b137f45",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/mpxj-16.4.0-observation/manifest.json",
+        "sha256": "e31a08d764ead6b9fa74e91855b1beb56e40173e8106b8f88e0a2c6888a80a7a",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/mpxj-16.4.0-observation/mpxj-observation.jar",
+        "sha256": "6d77ac02ba9de195e26e54045369c983cb94940abafcb3afb5541f100cbd0e38",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/mpxj-16.4.0-observation/mpxj-sources.jar",
+        "sha256": "df43a054f70b3c96083404b5bc2a663af8cc917762c7ac44cf571de82e81312d",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/mpxj-16.4.0-observation/source/org/mpxj/mpp/ConstraintFactory.java",
+        "sha256": "d49f900b583217bfcb791d80e58f049b40a8fed6e02c0978ce4d89ea435b9029",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MppReader/references/mpxj-16.4.0-observation/source/org/mpxj/mpp/RelationReadAudit.java",
+        "sha256": "23424012e0bd487d7abcd0c107d12a8915e485a022b15dab1572d4268f46ba89",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_migrate.py",
+        "sha256": "1855da1b4d8bb7c588f9a4e51035868f9fbc656242d13fe58146c3171a99044a",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer.py",
+        "sha256": "36576556d98c1b43b1d7fbf5c640f79ce6aff0d010aff965719af7b733115d52",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_query.py",
+        "sha256": "f2605d78aa40f336d06fe140c799461f77e1b863fbb13352a193345e45532b95",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/conftest.py",
+        "sha256": "7f45c7ca866a7c878e4e4a7cc719a7937a81e59126c75fc506bf09919390b7f4",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_backup.py",
+        "sha256": "cc2907bfa0f2233c34ff0a27a5acaab687119a72d1a9f7484db1d7cadd6c1534",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_schema.py",
+        "sha256": "509502b25a4f2294d694263f607af4daf53ccf9a04ee56925521f96e85972831",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_writer_snapshot.py",
+        "sha256": "29ffc93cef76740ba962e30947a1f0bd3705682e92f806dc4f5b9b4de0c3ccbd",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_batch.py",
+        "sha256": "a38e57e44de3bb161b0b1d0aad5606b8361853d451efa5018ea2cb72ed4722e2",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_batch_decisions.py",
+        "sha256": "a233ad015172b5e7b5785333d45e6e2a01e4f9d79cfb588cb034f098cfb90e28",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_identity.py",
+        "sha256": "79939838a578e60e27efababc28d243f1bb5440581e57fe23e37f0edc12337e7",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_preparation.py",
+        "sha256": "736d1b2ea3ec742f4683e4e7389470439013e61587981da7aaa7566aceb25dbd",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_confirmation.py",
+        "sha256": "c6dd59da748602632f18b3d8456782477b2c933274b833c34c41558c29b29e6a",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/tests/plan/test_render.py",
+        "sha256": "6074e07fc7de636a8ce3935c3742245e1344aa81719b9c24e3fdc5e8937406db",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/schema.py",
+        "sha256": "fc8bd4da2e8d5bfa68cd0b732fe337b84668201ddb230678856b65e05ae4f038",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/migrate.py",
+        "sha256": "a4a1bd4460e1c52d319511f3b8bf396e05fbad3f985fe492cca4b66aa8680d8f",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/writer.py",
+        "sha256": "911e83d180860227c66c3ade61a7e2715ef964cdcd9cf05ca846e5d01d9259d7",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/query.py",
+        "sha256": "b9ed05721962926e382e818ed1bc57a60ae716f46b574cfa6c2ae4f3de99a083",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/render.py",
+        "sha256": "2f27a5b0ff67e891143684089403eb6ad95beac2bee2773236291ab97431bd20",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/ingest_mpp.py",
+        "sha256": "6cab3fa6f28c571b749a2593b1fd59b3e29097cabc2b260d6b8dec00711970e0",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/history.py",
+        "sha256": "68d94eabb3e6577af9b4b01add552ba91bc1d8b8b97ee9df4360be6cb8f6407f",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/identity.py",
+        "sha256": "eb702389d0c87d769565f64357316e24096fca458c5e6b0e2f3398e0011e61b7",
+        "matches": true
+      },
+      {
+        "path": "/home/tkachenkoav/USERTOOLS/MofsIndex/mofs_index/plan/selectors.py",
+        "sha256": "215e07e1ea1d9f9f76b1c6ae9dd4230ed083094b6c80a19a7d70cb16bac38248",
+        "matches": true
+      }
+    ],
+    "previous_stage_commits": [
+      {
+        "stage": 1,
+        "commit": "8b04ce1945b88409fae036b4a0f0d69a52dfceea",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-01/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "46644181bc4db9970495e91d362354320ad85eded7a33762abe34ad9111fafdb"
+      },
+      {
+        "stage": 2,
+        "commit": "e9f13dd82b51e2aa4e2515901ce6ed29772677d3",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-02/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "a6587d2ca3964a31648f84740f0ce2d53b764844d26c90a5085bb018f924d467"
+      },
+      {
+        "stage": 3,
+        "commit": "8901b8d4ae43cf13a7173dc306546899811ace3f",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-03/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "1c7541a336c4f341d6ffe2749fc13812fb968a1c70a1a0345ef33918f2cbe916"
+      },
+      {
+        "stage": 4,
+        "commit": "3028885786c570e43386d4f0ec1033e396429927",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-04/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "4bbcdfcd61d9389aff518dffd4e724fa86b72e75d90e9acb0683a8165bfcf2d8"
+      },
+      {
+        "stage": 5,
+        "commit": "644b4bf5347b2be1960d3818bc26bff1d924a56f",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-05/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "ab635a0b2665c98f30402c7a83c6816d6dee3bbae6f0c16b881f60b6062566dc"
+      },
+      {
+        "stage": 6,
+        "commit": "ff11e6f1d3f45e0c58c523da44d53fe4989688fe",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-06/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "9f5cfe9190d6320bdc344dc6b665190f886f598ed8c8c88494458ab777f3480c"
+      },
+      {
+        "stage": 7,
+        "commit": "8762e44672c1bc3c1f8313d889f520ed38068086",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-07/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "e23ad45d3acf2e363d47ed7e053f397a0dd672de97fc55f5be71a7f00ae7ff94"
+      },
+      {
+        "stage": 8,
+        "commit": "40b809e8553eabb56695d0f5d330e1d498925a73",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-08/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "4e8d8729b133a17b6521b06e9e068e2fbe4296d52341f1f3c8c7981aa019992b"
+      },
+      {
+        "stage": 9,
+        "commit": "60eaf8b8fdf0280bd5ec181ee755a28531dfd3fb",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-09/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "eb099fa08c5a6bfd15bd773523f9afb0a0cee611dd4d51caced6d37db12467fc"
+      },
+      {
+        "stage": 10,
+        "commit": "ca438286d302fc7ab30c3b1fb8b759c94b2249d6",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-10/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "e4762986bac7e92ffa691a93a9fb94cfcb7408be554abf1033ddecdece72834a"
+      },
+      {
+        "stage": 11,
+        "commit": "e55f284b5997967036a9176084a256ecbb6b04fd",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-11/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "4fd85228478c0c0860fb9bb647f5fb369a8e62ec7bb7cbd15cc44b38adaf1815"
+      },
+      {
+        "stage": 12,
+        "commit": "3b0ddbb79dab1d294c9b2b7b08172fb4fbb905b7",
+        "report": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-12/stage-report.json",
+        "recorded_gate": "passed",
+        "report_sha256": "6e5a419d188a099b1c0bf148c18f08b8c10fb1cd0fe6f8f5b4eb02f82993b821"
+      }
+    ],
+    "original_stage13": {
+      "commit": "92bea3f",
+      "gate": "failed",
+      "preserved": true,
+      "report_sha256": "6bd378d7c6e0864006e81aacd4ded3dca000e8122a06d0b7eb23f9ed3b6d63cf"
+    },
+    "restored_file_count": 38,
+    "original_external_file_count": 64,
+    "runs": [
+      {
+        "component": "MppReader",
+        "rc": 0,
+        "results": {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "1",
+          "tests": "82",
+          "time": "7.881",
+          "timestamp": "2026-11-17T13:34:34.710126+03:00",
+          "hostname": "hermes-agents.devel.tutu.ru"
+        },
+        "junit": "reports/reader-v2.xml",
+        "log": "reports/reader-v2.log",
+        "cwd": "/home/tkachenkoav/USERTOOLS/MppReader",
+        "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+        "command": [
+          "/usr/bin/python3.9",
+          "-m",
+          "pytest",
+          "tests",
+          "-q",
+          "-o",
+          "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/external/reader/cache",
+          "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/external/reader/tmp",
+          "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/reports/reader-v2.xml"
+        ],
+        "optional_legacy_case": "One §19 legacy ZD test; all §20 required checks ran."
+      },
+      {
+        "component": "MofsIndex",
+        "rc": 0,
+        "results": {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "206",
+          "time": "38.512",
+          "timestamp": "2026-11-17T13:36:01.204849+03:00",
+          "hostname": "hermes-agents.devel.tutu.ru"
+        },
+        "junit": "reports/mofs-v2.xml",
+        "log": "reports/mofs-v2.log",
+        "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+        "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+        "command": [
+          "/usr/bin/python3.9",
+          "-m",
+          "pytest",
+          "tests/plan",
+          "-q",
+          "-o",
+          "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/external/mofs/cache",
+          "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/external/mofs/tmp",
+          "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/reports/mofs-v2.xml"
+        ]
+      }
+    ],
+    "reuse_note": "External R/M source hashes unchanged; successful separate-process regressions immediately preceding interrupted v2 retained without repetition."
+  },
+  "changed_files": [
+    "S/tests/acceptance/ac-matrix.json",
+    "S/tests/acceptance/test_user_journeys.py",
+    "S/tests/acceptance/test_cases_trisigma.py",
+    "S/tests/acceptance/test_failure_matrix.py",
+    "S/tests/acceptance/test_migration_preservation.py",
+    "S/tests/acceptance/test_live_publication.py",
+    "S/tests/conftest.py",
+    "S/tests/pytest.ini"
+  ],
+  "migrations_added": [],
+  "protected_files_changed": []
+}

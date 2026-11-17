@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+  "observed_at": "2026-11-17T09:59:49.463865+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-5/binary-live/pytest-tmp/test_new_binary_identity_to_pu0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-5/binary-live/pytest-tmp/test_new_binary_identity_to_pu0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-5/binary-live/pytest-tmp/test_new_binary_identity_to_pu0/cache",
+    "diff",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-5/binary-live/pytest-tmp/test_new_binary_identity_to_pu0/new-binary.mpp",
+    "--page-id",
+    "537574221",
+    "--project-slug",
+    "stage13-binary-positive",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 3,
+  "duration_seconds": 5.142786346958019,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_354d55b405b2441c9f7cdcbdde186db8\", \"item_id\": \"item_4ef1319633444a96a57564523a9fb71f\", \"status\": \"needs_decision\", \"mode\": \"publish\", \"exit_code\": 3, \"project_slug\": \"stage13-binary-positive\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_0f1d98db68484db0b8c9e8003eb4acab\", \"page_id\": null, \"page_url\": null, \"task_count\": 6, \"display_task_count\": 6, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"new-source-diff\", \"revision\": \"binary-fixture-v1\", \"result\": \"inactive\", \"evidence_id\": \"artifact_e9105c369a4e466d97ea0ec6215cf560\"}], \"attachment_version\": null, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"storage\": \"not_applicable\", \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 14, \"category\": \"identity\", \"code\": \"identity_confirmation_required\", \"exit_code\": 3, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"new-source-diff\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_3afd32fc0f6c418eaebd70895b4ea750\"]}}, \"published\": false, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3afd32fc0f6c418eaebd70895b4ea750\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_3afd32fc0f6c418eaebd70895b4ea750\"}], \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"external_effect\": \"none\", \"error\": {\"code\": \"identity_confirmation_required\", \"message\": \"identity_confirmation_required\", \"retryable\": false, \"next_action\": \"operation show --operation-id operation_354d55b405b2441c9f7cdcbdde186db8\"}}\n",
+  "stderr": "2026-11-17T09:59:47.168849163Z main ERROR Log4j API could not find a logging provider.\n",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 1,
+    "cache_hit": 0,
+    "cache_miss": 1,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537574221"
+      }
+    ]
+  }
+}

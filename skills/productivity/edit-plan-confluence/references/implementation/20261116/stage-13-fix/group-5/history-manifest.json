@@ -1,0 +1,2872 @@
+[
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/initial-state.json",
+    "artifact": "history/full-attempt-1/reports/initial-state.json.gz",
+    "source_sha256": "d83b6c69dbd0a8b97723540403d9d4f3ae4f1ff383b98bafbb6927dd82e93d8b",
+    "artifact_sha256": "9b50802786259e454f305cc3c1bb917cd1cee3a5aa444d2589548c8f40fc1b04",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/external-checks.json",
+    "artifact": "history/full-attempt-1/reports/external-checks.json",
+    "source_sha256": "c87644158b0cfed41a4cffb1475e06704c213f16924b13fc7f5448293870bfcb",
+    "artifact_sha256": "c87644158b0cfed41a4cffb1475e06704c213f16924b13fc7f5448293870bfcb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/group-5-reader-final.xml",
+    "artifact": "history/full-attempt-1/reports/group-5-reader-final.xml",
+    "source_sha256": "65f6a3165be2a2235f6f2c507ca9c96ea0359e467eb873571e5149022995baa1",
+    "artifact_sha256": "65f6a3165be2a2235f6f2c507ca9c96ea0359e467eb873571e5149022995baa1",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/group-5-reader-final.log",
+    "artifact": "history/full-attempt-1/reports/group-5-reader-final.log.gz",
+    "source_sha256": "a46e3b7f4508a2d9787fc0228795335ca469bb054fccb5e4e2d5a4bed70a3c84",
+    "artifact_sha256": "a6521e268e308f205f6375def055c53eaf0b360fddad24e42ff809f84fc6c34a",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/group-5-mofs.xml",
+    "artifact": "history/full-attempt-1/reports/group-5-mofs.xml",
+    "source_sha256": "e18f5ad52b63c88bbaebbd6ad5e29de54d77d7fdc7e437e93baf255ccd3b6c33",
+    "artifact_sha256": "e18f5ad52b63c88bbaebbd6ad5e29de54d77d7fdc7e437e93baf255ccd3b6c33",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/group-5-mofs.log",
+    "artifact": "history/full-attempt-1/reports/group-5-mofs.log.gz",
+    "source_sha256": "a8f558844b0379ae9348cf13d6ed62cd352ba7ba5ddb51415cd0a8157b85cc75",
+    "artifact_sha256": "99927433111873f44b307b1d310c995ab5f3c91242a3033160c3233721e4258f",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/pytest.log",
+    "artifact": "history/full-attempt-1/reports/pytest.log.gz",
+    "source_sha256": "74ff6d9bb073fd4824d20107c4b6dca1957845d948403331bba71a39e45aa340",
+    "artifact_sha256": "e7e455d6bc79083c4376acb52aa3f41ab5af8fd50bfb63a9c5b6e3b2c5ce958f",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/live-targets.json",
+    "artifact": "history/full-attempt-1/reports/live-targets.json",
+    "source_sha256": "307b63267668c4e45adb8cfa4b527f9252078aa03fd7c461cbd89c96c42ca2bd",
+    "artifact_sha256": "307b63267668c4e45adb8cfa4b527f9252078aa03fd7c461cbd89c96c42ca2bd",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/environment.json",
+    "artifact": "history/full-attempt-1/reports/environment.json",
+    "source_sha256": "466d06951a89ac4efb6f013f2e20c6049ba63d4f8bd4f3adf7bafdbeedb5f8c7",
+    "artifact_sha256": "466d06951a89ac4efb6f013f2e20c6049ba63d4f8bd4f3adf7bafdbeedb5f8c7",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/skill-loads.json",
+    "artifact": "history/full-attempt-1/reports/skill-loads.json",
+    "source_sha256": "ba13249b448ed4fc8a47f7857bb79a5a6ff31da2943222595378ae29c2962250",
+    "artifact_sha256": "ba13249b448ed4fc8a47f7857bb79a5a6ff31da2943222595378ae29c2962250",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/skill-loader.stderr",
+    "artifact": "history/full-attempt-1/reports/skill-loader.stderr",
+    "source_sha256": "8727643aadc9a136a957cf7e305ad10384d8d43596ef48c8c0f5ea6cc927a376",
+    "artifact_sha256": "8727643aadc9a136a957cf7e305ad10384d8d43596ef48c8c0f5ea6cc927a376",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage08-work-A.json",
+    "artifact": "history/full-attempt-1/reports/stage08-work-A.json",
+    "source_sha256": "322ee03cc3c2b90d383fa7f35e62c07045359d379f8ece9dae6ce263bacf1993",
+    "artifact_sha256": "322ee03cc3c2b90d383fa7f35e62c07045359d379f8ece9dae6ce263bacf1993",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage08-work-B.json",
+    "artifact": "history/full-attempt-1/reports/stage08-work-B.json",
+    "source_sha256": "6daeda4e8164a20b076acfcf00f6757668358115516c35b57d6220a6be5eb24e",
+    "artifact_sha256": "6daeda4e8164a20b076acfcf00f6757668358115516c35b57d6220a6be5eb24e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage08-work-C.json",
+    "artifact": "history/full-attempt-1/reports/stage08-work-C.json",
+    "source_sha256": "8b70eaea1b471e2ba8ffd6d4f6a4b768276cbb8ca770c94cce3aedcf96bc3075",
+    "artifact_sha256": "8b70eaea1b471e2ba8ffd6d4f6a4b768276cbb8ca770c94cce3aedcf96bc3075",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage08-work-D.json",
+    "artifact": "history/full-attempt-1/reports/stage08-work-D.json",
+    "source_sha256": "b70b104854e54f7de881ef881100909d30dcdce1287b3386929b99d09bcef81c",
+    "artifact_sha256": "b70b104854e54f7de881ef881100909d30dcdce1287b3386929b99d09bcef81c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/save-e2e-E.json",
+    "artifact": "history/full-attempt-1/reports/save-e2e-E.json",
+    "source_sha256": "666f93ecafe05fc9f0646d8f5cac3e9e475f603cd4fc18eeff61520d3d5a8b34",
+    "artifact_sha256": "666f93ecafe05fc9f0646d8f5cac3e9e475f603cd4fc18eeff61520d3d5a8b34",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/save-e2e-F.json",
+    "artifact": "history/full-attempt-1/reports/save-e2e-F.json",
+    "source_sha256": "59a58e3b80409898763dbbe9fd6717dfc2f1b8ae6f8e7a3bc97490cf61d2c603",
+    "artifact_sha256": "59a58e3b80409898763dbbe9fd6717dfc2f1b8ae6f8e7a3bc97490cf61d2c603",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/batch-decisions-cli.json",
+    "artifact": "history/full-attempt-1/reports/batch-decisions-cli.json",
+    "source_sha256": "ea596633392ab36309b8a0e4f176951f7fd4fda8eb4d206f75c8585890c4cbbf",
+    "artifact_sha256": "ea596633392ab36309b8a0e4f176951f7fd4fda8eb4d206f75c8585890c4cbbf",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage09-real-bootstrap.json",
+    "artifact": "history/full-attempt-1/reports/stage09-real-bootstrap.json",
+    "source_sha256": "9d29a2581a754c0409f306b3b8d5f7bb3bf5a8811f295e425f9d4238a5ca5a79",
+    "artifact_sha256": "9d29a2581a754c0409f306b3b8d5f7bb3bf5a8811f295e425f9d4238a5ca5a79",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage09-real-diff.json",
+    "artifact": "history/full-attempt-1/reports/stage09-real-diff.json",
+    "source_sha256": "69b0ccc4becf826b67c0fd954bcd2f868e2e4bb587ba8f0150531bd365bf7a3f",
+    "artifact_sha256": "69b0ccc4becf826b67c0fd954bcd2f868e2e4bb587ba8f0150531bd365bf7a3f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage09-real-publish.json",
+    "artifact": "history/full-attempt-1/reports/stage09-real-publish.json",
+    "source_sha256": "c6f0140cd6c4d1effef80d5c4f70e32e2035ba12b49bd63f71acf97cc15eeacc",
+    "artifact_sha256": "c6f0140cd6c4d1effef80d5c4f70e32e2035ba12b49bd63f71acf97cc15eeacc",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/identity-cli.json",
+    "artifact": "history/full-attempt-1/reports/identity-cli.json",
+    "source_sha256": "75c6d297b9663746e8f3569e316ba645f4ce8b3dc3c3998ce291942c8746edc9",
+    "artifact_sha256": "75c6d297b9663746e8f3569e316ba645f4ce8b3dc3c3998ce291942c8746edc9",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/identity-real-mpp.json",
+    "artifact": "history/full-attempt-1/reports/identity-real-mpp.json",
+    "source_sha256": "513f3943ffdc01bfebdb9a59fa02fbf2c5042fe64fdf72fd4128c36a1bcb4d19",
+    "artifact_sha256": "513f3943ffdc01bfebdb9a59fa02fbf2c5042fe64fdf72fd4128c36a1bcb4d19",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage08-cache.json",
+    "artifact": "history/full-attempt-1/reports/stage08-cache.json",
+    "source_sha256": "066b2ace072a3f95b8bb4faafbfebbfa7b90a95be4b9283461e93cd1c9ea5902",
+    "artifact_sha256": "066b2ace072a3f95b8bb4faafbfebbfa7b90a95be4b9283461e93cd1c9ea5902",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cache-read-evidence.json",
+    "artifact": "history/full-attempt-1/reports/cache-read-evidence.json",
+    "source_sha256": "4e75f5c5d8f511a71378c6e2983837bf7dd67805e7e373d3c25ebd52dcd5e39c",
+    "artifact_sha256": "4e75f5c5d8f511a71378c6e2983837bf7dd67805e7e373d3c25ebd52dcd5e39c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage11-loopback.json",
+    "artifact": "history/full-attempt-1/reports/stage11-loopback.json",
+    "source_sha256": "2b7c4fdc5ded884f049d1b42b84ba1047aa1286114fd1756b2b6ac64e6f4a187",
+    "artifact_sha256": "2b7c4fdc5ded884f049d1b42b84ba1047aa1286114fd1756b2b6ac64e6f4a187",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage10-process-after_confirmation.json",
+    "artifact": "history/full-attempt-1/reports/stage10-process-after_confirmation.json",
+    "source_sha256": "9ac3cc0cae3ef76e9c7af9d73b9662d9b6ff677c532496d1c598eeafae4330c7",
+    "artifact_sha256": "9ac3cc0cae3ef76e9c7af9d73b9662d9b6ff677c532496d1c598eeafae4330c7",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage10-process-after_post.json",
+    "artifact": "history/full-attempt-1/reports/stage10-process-after_post.json",
+    "source_sha256": "884426a825b9abe92cfd028109a914312680efa639c9c0ea80a756ffa7141011",
+    "artifact_sha256": "884426a825b9abe92cfd028109a914312680efa639c9c0ea80a756ffa7141011",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage10-process-after_put.json",
+    "artifact": "history/full-attempt-1/reports/stage10-process-after_put.json",
+    "source_sha256": "277f39532bbbeece8315edde464a0742232e56cf89b47494adfef17c4565a25c",
+    "artifact_sha256": "277f39532bbbeece8315edde464a0742232e56cf89b47494adfef17c4565a25c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage10-process-before_post.json",
+    "artifact": "history/full-attempt-1/reports/stage10-process-before_post.json",
+    "source_sha256": "6da08109bd6fda951fddc150bbc3af1b3acac4f760deaa809944352e42f14290",
+    "artifact_sha256": "6da08109bd6fda951fddc150bbc3af1b3acac4f760deaa809944352e42f14290",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage10-process-before_put.json",
+    "artifact": "history/full-attempt-1/reports/stage10-process-before_put.json",
+    "source_sha256": "cd140b76f506fdb12ce5563339aced8c0a67f639a5a8419dbd9351421cd7eb38",
+    "artifact_sha256": "cd140b76f506fdb12ce5563339aced8c0a67f639a5a8419dbd9351421cd7eb38",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage10-process-hold_post.json",
+    "artifact": "history/full-attempt-1/reports/stage10-process-hold_post.json",
+    "source_sha256": "c43e0d042a905f86c583de6e0e3c57438e676517cf462165fb0d09cb4d1c7e6c",
+    "artifact_sha256": "c43e0d042a905f86c583de6e0e3c57438e676517cf462165fb0d09cb4d1c7e6c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/http-observations.json",
+    "artifact": "history/full-attempt-1/reports/http-observations.json",
+    "source_sha256": "3e38c9ba006de3b3ad17d4637f05d77af5a576425b3eaac882bc0162566bbff6",
+    "artifact_sha256": "3e38c9ba006de3b3ad17d4637f05d77af5a576425b3eaac882bc0162566bbff6",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage08-live.json",
+    "artifact": "history/full-attempt-1/reports/stage08-live.json",
+    "source_sha256": "752db1a37beee26629843157dd85014ac9589826d76646341669ab4550be7955",
+    "artifact_sha256": "752db1a37beee26629843157dd85014ac9589826d76646341669ab4550be7955",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage09-live.json",
+    "artifact": "history/full-attempt-1/reports/stage09-live.json",
+    "source_sha256": "394d5b0996fbd95eece30b2e5bc643745a5c569a77792edaab3c51de903fe048",
+    "artifact_sha256": "394d5b0996fbd95eece30b2e5bc643745a5c569a77792edaab3c51de903fe048",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage10-live.json",
+    "artifact": "history/full-attempt-1/reports/stage10-live.json",
+    "source_sha256": "6566e68183000389e3d9ac3cad47f62fee955672b76ef47ed8de6b109f66b364",
+    "artifact_sha256": "6566e68183000389e3d9ac3cad47f62fee955672b76ef47ed8de6b109f66b364",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage11-live.json",
+    "artifact": "history/full-attempt-1/reports/stage11-live.json",
+    "source_sha256": "7c4ce2d29b52606be5fe3c0fea46688e820eb248a9fece216b2c3472570ae2c1",
+    "artifact_sha256": "7c4ce2d29b52606be5fe3c0fea46688e820eb248a9fece216b2c3472570ae2c1",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/junit.xml",
+    "artifact": "history/full-attempt-1/reports/junit.xml",
+    "source_sha256": "6ffef9a22d1b7c3bc8746276510441b19152b8ed23e9fcd62025b29a795d5e21",
+    "artifact_sha256": "6ffef9a22d1b7c3bc8746276510441b19152b8ed23e9fcd62025b29a795d5e21",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/execution-order.json",
+    "artifact": "history/full-attempt-1/reports/execution-order.json",
+    "source_sha256": "4411a77c86f2360c9a2ffea0d8da257a8a3c058c7bbb500e9bcb562dfe2b7073",
+    "artifact_sha256": "4411a77c86f2360c9a2ffea0d8da257a8a3c058c7bbb500e9bcb562dfe2b7073",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/acceptance-report.json",
+    "artifact": "history/full-attempt-1/reports/acceptance-report.json.gz",
+    "source_sha256": "bf649a28343bf33ff2ff2e29050d5868ef4bc19c67ca501d21f31d77205f9020",
+    "artifact_sha256": "e4fcdb8b9e45557660506652f9a9eff676388675e1612ccdbc263b0d8c8ded9a",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/acceptance-report.md",
+    "artifact": "history/full-attempt-1/reports/acceptance-report.md",
+    "source_sha256": "d8131e85f28137ea6b8c0afd64bf674b16b4c09982b9b614242c90f3a32f9991",
+    "artifact_sha256": "d8131e85f28137ea6b8c0afd64bf674b16b4c09982b9b614242c90f3a32f9991",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage-report.json",
+    "artifact": "history/full-attempt-1/reports/stage-report.json",
+    "source_sha256": "be63a8682cd01368cace0bb39660a6c9b795dab18ea8e11d54b100379ccfee0f",
+    "artifact_sha256": "be63a8682cd01368cace0bb39660a6c9b795dab18ea8e11d54b100379ccfee0f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/stage-report.md",
+    "artifact": "history/full-attempt-1/reports/stage-report.md",
+    "source_sha256": "a7a8397a8e289cdf5458e643264e1e6b29c4cbf4fdcc05a4fed2c47adce7735b",
+    "artifact_sha256": "a7a8397a8e289cdf5458e643264e1e6b29c4cbf4fdcc05a4fed2c47adce7735b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/pytest.rc",
+    "artifact": "history/full-attempt-1/reports/pytest.rc",
+    "source_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "artifact_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/new-source-diff.json",
+    "artifact": "history/full-attempt-1/reports/evidence/new-source-diff.json",
+    "source_sha256": "0999a0c5b6dae1989edbd0af1c3e3590a5d6b7ce2062e1d361ff9e1838e019d8",
+    "artifact_sha256": "0999a0c5b6dae1989edbd0af1c3e3590a5d6b7ce2062e1d361ff9e1838e019d8",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/migration-0.json",
+    "artifact": "history/full-attempt-1/reports/evidence/migration-0.json",
+    "source_sha256": "b25a65cd0f59e4479d28e7e7bca9e7f82749e4451ac0e95c5fcbf50eda97c058",
+    "artifact_sha256": "b25a65cd0f59e4479d28e7e7bca9e7f82749e4451ac0e95c5fcbf50eda97c058",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-A.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-A.json",
+    "source_sha256": "a875e44e0236eee12d14ece5bce6323b8c9a767e45db14f793dc413d1cdc7391",
+    "artifact_sha256": "a875e44e0236eee12d14ece5bce6323b8c9a767e45db14f793dc413d1cdc7391",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/migration-6.json",
+    "artifact": "history/full-attempt-1/reports/evidence/migration-6.json",
+    "source_sha256": "c4254fc271f97b36bdc67925c332da846d14d3304e1124da9d8fc5dc6c0fa480",
+    "artifact_sha256": "c4254fc271f97b36bdc67925c332da846d14d3304e1124da9d8fc5dc6c0fa480",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/G-continue-first.json",
+    "artifact": "history/full-attempt-1/reports/evidence/G-continue-first.json",
+    "source_sha256": "09d926a5d8794751df61c88ca165fcb57c45e75612caf7f6635584eb1b280ab3",
+    "artifact_sha256": "09d926a5d8794751df61c88ca165fcb57c45e75612caf7f6635584eb1b280ab3",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/identity-choice-ambiguous-explicit.json",
+    "artifact": "history/full-attempt-1/reports/evidence/identity-choice-ambiguous-explicit.json",
+    "source_sha256": "6501e00760b8395362f48c42c2a54dc203d7eff5a4eeeed6e379f4e9f72b3cdb",
+    "artifact_sha256": "6501e00760b8395362f48c42c2a54dc203d7eff5a4eeeed6e379f4e9f72b3cdb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-166c0e53f169-3.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-166c0e53f169-3.json",
+    "source_sha256": "527eb5597cafacab9ef98bb86740606d0d25a9057f8678c9fa2e4777537ab970",
+    "artifact_sha256": "527eb5597cafacab9ef98bb86740606d0d25a9057f8678c9fa2e4777537ab970",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/identity-choice-automatic.json",
+    "artifact": "history/full-attempt-1/reports/evidence/identity-choice-automatic.json",
+    "source_sha256": "dfb879771308f88b930b86b6993928e960699792e32071d4a396691332086831",
+    "artifact_sha256": "dfb879771308f88b930b86b6993928e960699792e32071d4a396691332086831",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-166c0e53f169-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-166c0e53f169-2.json",
+    "source_sha256": "d7d1faf9e88e0481cdd9560a1b8ee463bd45d2ff532bb130ca5b1ed05d87b97a",
+    "artifact_sha256": "d7d1faf9e88e0481cdd9560a1b8ee463bd45d2ff532bb130ca5b1ed05d87b97a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/identity-choice-later-revision.json",
+    "artifact": "history/full-attempt-1/reports/evidence/identity-choice-later-revision.json",
+    "source_sha256": "0dc163bc76f371e2d28263d09d08faf4d506b7a77fee531cd54f2448a0c0acc7",
+    "artifact_sha256": "0dc163bc76f371e2d28263d09d08faf4d506b7a77fee531cd54f2448a0c0acc7",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-166c0e53f169-4.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-166c0e53f169-4.json",
+    "source_sha256": "cb0d42b134d1e06a69b2e4e1bd8797dcae82c9b8f1bc11953a70da7b681a2363",
+    "artifact_sha256": "cb0d42b134d1e06a69b2e4e1bd8797dcae82c9b8f1bc11953a70da7b681a2363",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/identity-choice-missing.json",
+    "artifact": "history/full-attempt-1/reports/evidence/identity-choice-missing.json",
+    "source_sha256": "953f54649fffc8972f2389cafe321743c7c1e7918b87dc6e9bb0e7da2a3db805",
+    "artifact_sha256": "953f54649fffc8972f2389cafe321743c7c1e7918b87dc6e9bb0e7da2a3db805",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/G-continue-errors.json",
+    "artifact": "history/full-attempt-1/reports/evidence/G-continue-errors.json",
+    "source_sha256": "50402efc6e708382f3a697f5f1a0c62ae50920d6fe0a6e9d861e91560e9340f5",
+    "artifact_sha256": "50402efc6e708382f3a697f5f1a0c62ae50920d6fe0a6e9d861e91560e9340f5",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/identity-choice-replace-selected.json",
+    "artifact": "history/full-attempt-1/reports/evidence/identity-choice-replace-selected.json",
+    "source_sha256": "0286a809f2cb366738679edee9ab4e0efc0c772b256998c066517f617630359d",
+    "artifact_sha256": "0286a809f2cb366738679edee9ab4e0efc0c772b256998c066517f617630359d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/EF-batch.json",
+    "artifact": "history/full-attempt-1/reports/evidence/EF-batch.json",
+    "source_sha256": "33d83530736293b928038f64e66e92fc4a71f56830ce62ba4b04846695a97c0f",
+    "artifact_sha256": "33d83530736293b928038f64e66e92fc4a71f56830ce62ba4b04846695a97c0f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-8296694d0a3a-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-8296694d0a3a-1.json",
+    "source_sha256": "f7bb330340c74c5dcca092b2ff350f866da69fab517d144769990e405992ca8e",
+    "artifact_sha256": "f7bb330340c74c5dcca092b2ff350f866da69fab517d144769990e405992ca8e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-B.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-B.json",
+    "source_sha256": "c146e7b22ad7392257c644164c90330003fd7825772ded390fdff83f510e27bb",
+    "artifact_sha256": "c146e7b22ad7392257c644164c90330003fd7825772ded390fdff83f510e27bb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-A-cold.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-A-cold.json.gz",
+    "source_sha256": "b6faa14002e949606845ce3645ead4905102c2ca284f44b44fbf457f9932232f",
+    "artifact_sha256": "5f06f3f575dc9202af3dafdb9bd3c28c8d93da00b4ff359bb739215e872d413a",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-1145316684dd-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-1145316684dd-2.json",
+    "source_sha256": "f424824c737040cf97bdeb52d903e6682f3e678e7387f9cf1dcc3435a1cb3859",
+    "artifact_sha256": "f424824c737040cf97bdeb52d903e6682f3e678e7387f9cf1dcc3435a1cb3859",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-8296694d0a3a-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-8296694d0a3a-2.json",
+    "source_sha256": "d4123c9dda821ffca57e0345d05b405b9a3f06327f02868fba50ecbd4add2986",
+    "artifact_sha256": "d4123c9dda821ffca57e0345d05b405b9a3f06327f02868fba50ecbd4add2986",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-C.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-C.json",
+    "source_sha256": "c5c2ef7d6de56ffd03a5d4794591a55f33585d138b8dd681d8b2c262d26217f4",
+    "artifact_sha256": "c5c2ef7d6de56ffd03a5d4794591a55f33585d138b8dd681d8b2c262d26217f4",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-A-warm.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-A-warm.json",
+    "source_sha256": "dbd45c9d0b998ad355247b9067d900be2dcf7896016d67135e416cc46708706c",
+    "artifact_sha256": "dbd45c9d0b998ad355247b9067d900be2dcf7896016d67135e416cc46708706c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/G-continue-resume.json",
+    "artifact": "history/full-attempt-1/reports/evidence/G-continue-resume.json",
+    "source_sha256": "188313cbcb5cf00f2e2f6c5d369ad8e729fba9efe462814588622a9fd336ff73",
+    "artifact_sha256": "188313cbcb5cf00f2e2f6c5d369ad8e729fba9efe462814588622a9fd336ff73",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-8296694d0a3a.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-8296694d0a3a.json",
+    "source_sha256": "a7128671dea5bc7b14ba6e3a3913153c52c2c216ca475ee838507af25f75b283",
+    "artifact_sha256": "a7128671dea5bc7b14ba6e3a3913153c52c2c216ca475ee838507af25f75b283",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/EF-readback-compare.json",
+    "artifact": "history/full-attempt-1/reports/evidence/EF-readback-compare.json.gz",
+    "source_sha256": "36c1ffef1408fa26e2cc86d9d3213c23ce04c59311a321b9c909c0c8c81727de",
+    "artifact_sha256": "a2564891086c3cc4c8d2d680ac3359fece32338b0c53ad6762ce80931a3b6b23",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-0094acafda42-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-0094acafda42-1.json",
+    "source_sha256": "1ff4c422757dd32f59d2e5af7fba12cefae29930d3a21545afc1e07c268a7871",
+    "artifact_sha256": "1ff4c422757dd32f59d2e5af7fba12cefae29930d3a21545afc1e07c268a7871",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-D.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-D.json",
+    "source_sha256": "22bc047dfe9a525cb9362533bed2451d6de8a64c34c182ae2f4622f2999f2fc1",
+    "artifact_sha256": "22bc047dfe9a525cb9362533bed2451d6de8a64c34c182ae2f4622f2999f2fc1",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-B-cold.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-B-cold.json.gz",
+    "source_sha256": "2448a7380a15b212f5a8dffd9e6af70990c6143a553cbdde26b22a1edd748d7a",
+    "artifact_sha256": "4550e0d2fd80529af14f6dddf28969f7776dad2a95349febfceee38f8c64b9da",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-1145316684dd.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-1145316684dd.json",
+    "source_sha256": "d8570029cd72d8d7ec27ea4f3da470252d5eac87505d01f08eabc5d50084ee9e",
+    "artifact_sha256": "d8570029cd72d8d7ec27ea4f3da470252d5eac87505d01f08eabc5d50084ee9e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-B-history.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-B-history.json",
+    "source_sha256": "f2c1880bcb09d87f5f379342719d6b224dd57964aa16afe4cd37f9c21dc7c517",
+    "artifact_sha256": "f2c1880bcb09d87f5f379342719d6b224dd57964aa16afe4cd37f9c21dc7c517",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-d10a8ce76211-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-d10a8ce76211-1.json",
+    "source_sha256": "90ef5c58ac1b1d4428880e25a771c4f63d00be30a68d40b4af8db6a703316b52",
+    "artifact_sha256": "90ef5c58ac1b1d4428880e25a771c4f63d00be30a68d40b4af8db6a703316b52",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-0094acafda42-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-0094acafda42-2.json",
+    "source_sha256": "3c52f992ea06a290f1994ac31563620ac52baa715f31830217804a108667d667",
+    "artifact_sha256": "3c52f992ea06a290f1994ac31563620ac52baa715f31830217804a108667d667",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-B-warm.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-B-warm.json",
+    "source_sha256": "5f762d1f63539256e4c44f4a2c33b0c560c5b91644ad4717fa8df5464ab1ab05",
+    "artifact_sha256": "5f762d1f63539256e4c44f4a2c33b0c560c5b91644ad4717fa8df5464ab1ab05",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/G-continue-history.json",
+    "artifact": "history/full-attempt-1/reports/evidence/G-continue-history.json",
+    "source_sha256": "d1b10581de3842adee8523f77c54a0883b1eff96fbb4a6bb19abeb25f4ff5a8d",
+    "artifact_sha256": "d1b10581de3842adee8523f77c54a0883b1eff96fbb4a6bb19abeb25f4ff5a8d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-0094acafda42.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-0094acafda42.json",
+    "source_sha256": "fbb5659017e13e01123c6e9b8dfc9b176ff0e0cebba234f8f7bed8d52f19216d",
+    "artifact_sha256": "fbb5659017e13e01123c6e9b8dfc9b176ff0e0cebba234f8f7bed8d52f19216d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/today.json",
+    "artifact": "history/full-attempt-1/reports/evidence/today.json",
+    "source_sha256": "5cfa5f729720ede6c16b766b093bfea038817b7991e1d5dab005bda74fe30fce",
+    "artifact_sha256": "5cfa5f729720ede6c16b766b093bfea038817b7991e1d5dab005bda74fe30fce",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-21b40040b7fe-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-21b40040b7fe-1.json",
+    "source_sha256": "d0821f143b0d3dc4e55474beb7a81f19263315bae3d2c5b72232877f4df0b535",
+    "artifact_sha256": "d0821f143b0d3dc4e55474beb7a81f19263315bae3d2c5b72232877f4df0b535",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-C-cold.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-C-cold.json.gz",
+    "source_sha256": "8cde15626332c25f4fc289a156a553021140efbe0c8efb5f9112be1c9cccee01",
+    "artifact_sha256": "9d34dd17738dda627ff7200c1a5a718a5ab60c0c32145d49d251f5fddab62eef",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-d10a8ce76211.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-d10a8ce76211.json",
+    "source_sha256": "3e3658f2937bd6b949c8afed2e008d52775668c1ae9844ddfdee83a59b12a595",
+    "artifact_sha256": "3e3658f2937bd6b949c8afed2e008d52775668c1ae9844ddfdee83a59b12a595",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-C-history.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-C-history.json",
+    "source_sha256": "86317cf4d03ad13bebd80db5220d8d3b9f5ac02ef0ea5727bce3f6da476581e7",
+    "artifact_sha256": "86317cf4d03ad13bebd80db5220d8d3b9f5ac02ef0ea5727bce3f6da476581e7",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/final-baseline-audit.json",
+    "artifact": "history/full-attempt-1/reports/evidence/final-baseline-audit.json",
+    "source_sha256": "e2d1718e3d94c9eca8e25560f9a92446936de597cc8ad49fe56558bcd76807f8",
+    "artifact_sha256": "e2d1718e3d94c9eca8e25560f9a92446936de597cc8ad49fe56558bcd76807f8",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-21b40040b7fe-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-21b40040b7fe-2.json",
+    "source_sha256": "cec7abc1387430718a2506982573fac8a8ff8b9e77ed68bab842b13faa8edd2d",
+    "artifact_sha256": "cec7abc1387430718a2506982573fac8a8ff8b9e77ed68bab842b13faa8edd2d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-C-warm.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-C-warm.json",
+    "source_sha256": "9ac79657a7b306be7308675a9aef3194522262acabbc61f9b283e1441d24fdb9",
+    "artifact_sha256": "9ac79657a7b306be7308675a9aef3194522262acabbc61f9b283e1441d24fdb9",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-166c0e53f169.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-166c0e53f169.json",
+    "source_sha256": "49fdfc283be9dd95c4f5cee2070aa160b875a3fe0693671b70969fcaf177afcc",
+    "artifact_sha256": "49fdfc283be9dd95c4f5cee2070aa160b875a3fe0693671b70969fcaf177afcc",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-21b40040b7fe.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-21b40040b7fe.json",
+    "source_sha256": "e38821307068b70d58d30b9e3d5b92dd7e765cc45cebcb3c7d03ea8954109b04",
+    "artifact_sha256": "e38821307068b70d58d30b9e3d5b92dd7e765cc45cebcb3c7d03ea8954109b04",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574505.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574505.json",
+    "source_sha256": "3a5e0f090bd68db3c5ade6a42513f252b60070754323780eaa302eb30a6ef536",
+    "artifact_sha256": "3a5e0f090bd68db3c5ade6a42513f252b60070754323780eaa302eb30a6ef536",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-0e35e0a93717-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-0e35e0a93717-1.json",
+    "source_sha256": "7734f97dd042181f65311d764990db31f3ef5b7f4cc582a774f035efe3172949",
+    "artifact_sha256": "7734f97dd042181f65311d764990db31f3ef5b7f4cc582a774f035efe3172949",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf8a69a04d90-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf8a69a04d90-1.json",
+    "source_sha256": "b204b6cb3f3e2b9e8d91a02bbbb81fa30c339968d43cd16525a3631a307b91cd",
+    "artifact_sha256": "b204b6cb3f3e2b9e8d91a02bbbb81fa30c339968d43cd16525a3631a307b91cd",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-D-risks-cold.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-D-risks-cold.json.gz",
+    "source_sha256": "f54490d71b8e26b22ee7f23006ae4e4befa5bc9d20152e2bd1235785bce39655",
+    "artifact_sha256": "b4edc92bbf4d0b8d53dacafae9d7374dcd95fa09a474d3e0ee2d6502a6e54652",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf8a69a04d90-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf8a69a04d90-2.json",
+    "source_sha256": "17c890aa0dbe177f5ce6889fe2cdc868c2905e40f63731fe7f6f69417e236617",
+    "artifact_sha256": "17c890aa0dbe177f5ce6889fe2cdc868c2905e40f63731fe7f6f69417e236617",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-0e35e0a93717-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-0e35e0a93717-2.json",
+    "source_sha256": "89ae67290cfe916d4b5b60f1e03443325adabf90e7d8482efdd64df846beb27b",
+    "artifact_sha256": "89ae67290cfe916d4b5b60f1e03443325adabf90e7d8482efdd64df846beb27b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf8a69a04d90-3.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf8a69a04d90-3.json",
+    "source_sha256": "381a8a41069ae278737adf4cf2aa95979b9898c2d9bd070953b23157c8401d49",
+    "artifact_sha256": "381a8a41069ae278737adf4cf2aa95979b9898c2d9bd070953b23157c8401d49",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-D-risks-warm.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-D-risks-warm.json",
+    "source_sha256": "fd8f553000eeb4e47663ecacd7796df788749049951ca18d6471b1718790bd4e",
+    "artifact_sha256": "fd8f553000eeb4e47663ecacd7796df788749049951ca18d6471b1718790bd4e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-f2f687e667c9-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-f2f687e667c9-1.json",
+    "source_sha256": "4409eeaf7325908760ddcad6b92649f87e6c0dfe5209d7d8961189a5085982af",
+    "artifact_sha256": "4409eeaf7325908760ddcad6b92649f87e6c0dfe5209d7d8961189a5085982af",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-0e35e0a93717.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-0e35e0a93717.json",
+    "source_sha256": "7d8e8db0e2b523f20d4b13279701eee0c6f74e92e662e340bb01be695388c411",
+    "artifact_sha256": "7d8e8db0e2b523f20d4b13279701eee0c6f74e92e662e340bb01be695388c411",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/semantic-negative-diff.json",
+    "artifact": "history/full-attempt-1/reports/evidence/semantic-negative-diff.json",
+    "source_sha256": "98f2943ad15295a4c0a70e07b6b65322e0122965ed5bf2cc549c466c63dd9892",
+    "artifact_sha256": "98f2943ad15295a4c0a70e07b6b65322e0122965ed5bf2cc549c466c63dd9892",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-3d3434701e01-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-3d3434701e01-1.json",
+    "source_sha256": "1f94f39b4bec6488b3b5b471ea3f2f22a8fcc7c962ba590d41465fb1e9db434b",
+    "artifact_sha256": "1f94f39b4bec6488b3b5b471ea3f2f22a8fcc7c962ba590d41465fb1e9db434b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-D-cold.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-D-cold.json.gz",
+    "source_sha256": "033e3e483e68cf8d73f145757502c85ff29bc2c853267a31587df50d5636e3ae",
+    "artifact_sha256": "bd6001a6af6e96945804b61942efa8b1f638ffa30e662753406f808bc0368f8b",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf8a69a04d90-4.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf8a69a04d90-4.json",
+    "source_sha256": "b3cf1608b32a3a00a48b2ed3f4754e77f12bd4eb443f18550d609f6710ec219e",
+    "artifact_sha256": "b3cf1608b32a3a00a48b2ed3f4754e77f12bd4eb443f18550d609f6710ec219e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-3d3434701e01-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-3d3434701e01-2.json",
+    "source_sha256": "d5c554cc8ba576ed87b73891e296573d0fbab54e8aff4562cd5ce1e31f6bc5f0",
+    "artifact_sha256": "d5c554cc8ba576ed87b73891e296573d0fbab54e8aff4562cd5ce1e31f6bc5f0",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-D-warm.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-D-warm.json",
+    "source_sha256": "f9b4e12afaa73690f0fb2ece346aab4884de5f595747e6bcbf9380815fa1fe76",
+    "artifact_sha256": "f9b4e12afaa73690f0fb2ece346aab4884de5f595747e6bcbf9380815fa1fe76",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-f2f687e667c9.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-f2f687e667c9.json",
+    "source_sha256": "2a519f2cbc10eef664fe839616acdeb421e024ef77f8982f2846b6d2c3044b0c",
+    "artifact_sha256": "2a519f2cbc10eef664fe839616acdeb421e024ef77f8982f2846b6d2c3044b0c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-3d3434701e01.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-3d3434701e01.json",
+    "source_sha256": "7ef0bb0b123d69782f9df6e119c83effc3f762bdc1bee3ec8aafd3e7512ff274",
+    "artifact_sha256": "7ef0bb0b123d69782f9df6e119c83effc3f762bdc1bee3ec8aafd3e7512ff274",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf8a69a04d90-5.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf8a69a04d90-5.json",
+    "source_sha256": "7e4492837aadb16189760b6f4c4242336257f5561b68142973a2880134062ff2",
+    "artifact_sha256": "7e4492837aadb16189760b6f4c4242336257f5561b68142973a2880134062ff2",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-1d768dba485e-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-1d768dba485e-1.json",
+    "source_sha256": "b9810319b7a0c311c54b5f8a3e6143e8f24d2f3b451f4e5d18eb4ab9e458808d",
+    "artifact_sha256": "b9810319b7a0c311c54b5f8a3e6143e8f24d2f3b451f4e5d18eb4ab9e458808d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-E-cold.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-E-cold.json.gz",
+    "source_sha256": "c1aa5c3785661a4e5aed242779cff1a23c0e97ac75501731760de75e5f22da4b",
+    "artifact_sha256": "723a0859abec22e8b589426c8712420096d6eedf94e8ff7080e1f1985b43f51d",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-bf8a69a04d90.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-bf8a69a04d90.json",
+    "source_sha256": "a550af9a7d2e68fda1ddd33974d7450653be6151d706cfd511737c1a555bcaaf",
+    "artifact_sha256": "a550af9a7d2e68fda1ddd33974d7450653be6151d706cfd511737c1a555bcaaf",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-1d768dba485e-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-1d768dba485e-2.json",
+    "source_sha256": "2b9070f03a56e793c978d67213b200a4fdbd5c0134240540ec1e5030f8722872",
+    "artifact_sha256": "2b9070f03a56e793c978d67213b200a4fdbd5c0134240540ec1e5030f8722872",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-E-warm.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-E-warm.json",
+    "source_sha256": "ca88733f76b65d6ebaf03fd1380998f1ff911bd866b06fdc495ffa24a1df0d92",
+    "artifact_sha256": "ca88733f76b65d6ebaf03fd1380998f1ff911bd866b06fdc495ffa24a1df0d92",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/G-stop-first.json",
+    "artifact": "history/full-attempt-1/reports/evidence/G-stop-first.json",
+    "source_sha256": "9bff1968d26a2df5beb8452ce93102f1d7e9484f2d64e8cdd9490e1acbba1ba2",
+    "artifact_sha256": "9bff1968d26a2df5beb8452ce93102f1d7e9484f2d64e8cdd9490e1acbba1ba2",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-1d768dba485e.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-1d768dba485e.json",
+    "source_sha256": "4d70e3f05671ddb178d547ce5b23d13682dfe12e799dbbbf14fb5237c251c12c",
+    "artifact_sha256": "4d70e3f05671ddb178d547ce5b23d13682dfe12e799dbbbf14fb5237c251c12c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574506.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574506.json",
+    "source_sha256": "06cc83e938756657554c75a4673870b754fa96f5e33afc4ade2b7c4c5115aa21",
+    "artifact_sha256": "06cc83e938756657554c75a4673870b754fa96f5e33afc4ade2b7c4c5115aa21",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-c9ae0e089be8-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-c9ae0e089be8-1.json",
+    "source_sha256": "bd007b65dd990a1f523f7d7bba8b19a4101ec83c41ee6d5643f60dd61e520dfa",
+    "artifact_sha256": "bd007b65dd990a1f523f7d7bba8b19a4101ec83c41ee6d5643f60dd61e520dfa",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-F-cold.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-F-cold.json.gz",
+    "source_sha256": "52a3abc759bf4f54155cf240e85ae757fbf1b90f75d46fab5169a69ae6e79ade",
+    "artifact_sha256": "7e7680f2cd1912704afc477d44a69b610efec4964743f58d27286a2fedfbbe7f",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-9a487eba93f4-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-9a487eba93f4-1.json",
+    "source_sha256": "e4e3f73fc5a69e5d22ed90a8ff1af61b061ded4e3e9a818362db0bd0aefe1f58",
+    "artifact_sha256": "e4e3f73fc5a69e5d22ed90a8ff1af61b061ded4e3e9a818362db0bd0aefe1f58",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-c9ae0e089be8-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-c9ae0e089be8-2.json",
+    "source_sha256": "a90b8a0737fa64efa79fd364fb2dcb58bebd63d8392fd8abdf0b58bc908b03c4",
+    "artifact_sha256": "a90b8a0737fa64efa79fd364fb2dcb58bebd63d8392fd8abdf0b58bc908b03c4",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/case-F-warm.json",
+    "artifact": "history/full-attempt-1/reports/evidence/case-F-warm.json",
+    "source_sha256": "3c020b2c598684bf5d009a132314327c76d21b9ace171fdd487072ccc2f324d5",
+    "artifact_sha256": "3c020b2c598684bf5d009a132314327c76d21b9ace171fdd487072ccc2f324d5",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-1145316684dd-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-1145316684dd-1.json",
+    "source_sha256": "f91bf0d6144e66a32e1ddd8a2ef2d6285290eab99f9b01e539c7f54105463781",
+    "artifact_sha256": "f91bf0d6144e66a32e1ddd8a2ef2d6285290eab99f9b01e539c7f54105463781",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-c9ae0e089be8.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-c9ae0e089be8.json",
+    "source_sha256": "815c09df16c3e784db5dce1f3d467e0202ef35dd852f0795bc6edf9514f36104",
+    "artifact_sha256": "815c09df16c3e784db5dce1f3d467e0202ef35dd852f0795bc6edf9514f36104",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-9a487eba93f4-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-9a487eba93f4-2.json",
+    "source_sha256": "2f2d50c7f0183fbb5055b3b3a67e58f18ea1f6bd1e47854687a67b347fe76667",
+    "artifact_sha256": "2f2d50c7f0183fbb5055b3b3a67e58f18ea1f6bd1e47854687a67b347fe76667",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-166c0e53f169-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-166c0e53f169-1.json",
+    "source_sha256": "a9945510f92ba991b98a4242ce0153b36d9e20d01ddcca78b6a1e3c3c46d80cc",
+    "artifact_sha256": "a9945510f92ba991b98a4242ce0153b36d9e20d01ddcca78b6a1e3c3c46d80cc",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-f2f687e667c9-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-f2f687e667c9-2.json",
+    "source_sha256": "6b9a2f0061eeb8238ed3bd800054c76ecb6d78979aa36241a8cc5a7bc253b669",
+    "artifact_sha256": "6b9a2f0061eeb8238ed3bd800054c76ecb6d78979aa36241a8cc5a7bc253b669",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-9a487eba93f4-3.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-9a487eba93f4-3.json",
+    "source_sha256": "f01f0352d40ff7f07e22dac7115a5317c639779f622c912bcce1039ebd9cbdfb",
+    "artifact_sha256": "f01f0352d40ff7f07e22dac7115a5317c639779f622c912bcce1039ebd9cbdfb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/G-stop-errors.json",
+    "artifact": "history/full-attempt-1/reports/evidence/G-stop-errors.json",
+    "source_sha256": "a64481a54b8341c5ea8c25511baf860228fa4244cfd5a0a200b5a21228105b98",
+    "artifact_sha256": "a64481a54b8341c5ea8c25511baf860228fa4244cfd5a0a200b5a21228105b98",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-9a487eba93f4-4.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-9a487eba93f4-4.json",
+    "source_sha256": "e4e1955a20bb5789359edd4e81806d5c41b16b94828fac51078669797477e360",
+    "artifact_sha256": "e4e1955a20bb5789359edd4e81806d5c41b16b94828fac51078669797477e360",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-f2f687e667c9-3.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-f2f687e667c9-3.json",
+    "source_sha256": "827b76e431b0acf371817e97a9f1b7c812710ac451a97737a0a3eb55e41bec7a",
+    "artifact_sha256": "827b76e431b0acf371817e97a9f1b7c812710ac451a97737a0a3eb55e41bec7a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-9a487eba93f4-5.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-9a487eba93f4-5.json",
+    "source_sha256": "c3f335a1589aaf1f200dc53c67bdb1b01cc7169512b5f558ce90fd959f32eedc",
+    "artifact_sha256": "c3f335a1589aaf1f200dc53c67bdb1b01cc7169512b5f558ce90fd959f32eedc",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/G-stop-resume.json",
+    "artifact": "history/full-attempt-1/reports/evidence/G-stop-resume.json",
+    "source_sha256": "8c68ebde49c1b2fa23a64de594f206ecb9418e89e30f6eab09b269b729ce9a39",
+    "artifact_sha256": "8c68ebde49c1b2fa23a64de594f206ecb9418e89e30f6eab09b269b729ce9a39",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-9a487eba93f4.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-9a487eba93f4.json",
+    "source_sha256": "6be8dba3f09819e080496daebfd25c984629beb83e9de076f7b720c2a7f70cfc",
+    "artifact_sha256": "6be8dba3f09819e080496daebfd25c984629beb83e9de076f7b720c2a7f70cfc",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-f2f687e667c9-4.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-f2f687e667c9-4.json",
+    "source_sha256": "e21a4e2714709189b7479264e3173942e554b7150900b721ec670d53b6cb8734",
+    "artifact_sha256": "e21a4e2714709189b7479264e3173942e554b7150900b721ec670d53b6cb8734",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574507.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574507.json",
+    "source_sha256": "a28f989423556070b4e1058e5afe558e4c4f22c1c0af1a710ba00ef13ff9910b",
+    "artifact_sha256": "a28f989423556070b4e1058e5afe558e4c4f22c1c0af1a710ba00ef13ff9910b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/G-stop-history.json",
+    "artifact": "history/full-attempt-1/reports/evidence/G-stop-history.json",
+    "source_sha256": "5f8530f8d504e23274acbad2c30d240d6b56e814f1ac0437b07f2d5176b3f43b",
+    "artifact_sha256": "5f8530f8d504e23274acbad2c30d240d6b56e814f1ac0437b07f2d5176b3f43b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574505-calls.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574505-calls.json",
+    "source_sha256": "452164987ae7d265aa2506f795c1030686827c93bbb7bcbd56dc22ebfb1bf5db",
+    "artifact_sha256": "452164987ae7d265aa2506f795c1030686827c93bbb7bcbd56dc22ebfb1bf5db",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/semantic-negative-publish.json",
+    "artifact": "history/full-attempt-1/reports/evidence/semantic-negative-publish.json",
+    "source_sha256": "e02529d3c9714d2c3f5e96c51c00867d8c226b076f479e170e0fa59cd546bb12",
+    "artifact_sha256": "e02529d3c9714d2c3f5e96c51c00867d8c226b076f479e170e0fa59cd546bb12",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574506-calls.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574506-calls.json",
+    "source_sha256": "537069a418a469e3b2bf0bc242097410b8aba04058ee64210ecc84638bc9f1f6",
+    "artifact_sha256": "537069a418a469e3b2bf0bc242097410b8aba04058ee64210ecc84638bc9f1f6",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf91dbe5459a-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf91dbe5459a-1.json",
+    "source_sha256": "68dfbddcf0779dae36476e8f0f33d52303e8a0ff2e66b3295463bc24945a1aeb",
+    "artifact_sha256": "68dfbddcf0779dae36476e8f0f33d52303e8a0ff2e66b3295463bc24945a1aeb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf91dbe5459a-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf91dbe5459a-2.json",
+    "source_sha256": "d04984b3cb43fcf2f738fa91a04b682c4cf88979915d97f7767f71197920ff9d",
+    "artifact_sha256": "d04984b3cb43fcf2f738fa91a04b682c4cf88979915d97f7767f71197920ff9d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf91dbe5459a-3.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf91dbe5459a-3.json",
+    "source_sha256": "34764ff02385ae94adebaa10aa1ee41f00102c0adfb6c1319b84ffade2060799",
+    "artifact_sha256": "34764ff02385ae94adebaa10aa1ee41f00102c0adfb6c1319b84ffade2060799",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf91dbe5459a-4.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf91dbe5459a-4.json",
+    "source_sha256": "89640055cd750c1a4adc5e35289722037cd8ff7189b6580c64339f9b878c339c",
+    "artifact_sha256": "89640055cd750c1a4adc5e35289722037cd8ff7189b6580c64339f9b878c339c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf91dbe5459a-5.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf91dbe5459a-5.json",
+    "source_sha256": "f3f7c160b32fa298e027480a0365f9e6fc3f95c863516e3914d477aa46643861",
+    "artifact_sha256": "f3f7c160b32fa298e027480a0365f9e6fc3f95c863516e3914d477aa46643861",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-bf91dbe5459a-6.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-bf91dbe5459a-6.json",
+    "source_sha256": "b7d4c9b2c114c4bbf698fbcbce85a8bd980f90029b26964abc3cea6ab8e9710d",
+    "artifact_sha256": "b7d4c9b2c114c4bbf698fbcbce85a8bd980f90029b26964abc3cea6ab8e9710d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-bf91dbe5459a.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-bf91dbe5459a.json",
+    "source_sha256": "cd6ec78e58218a501c613db20eb620699fcf94223ef72fb393fa2394d6ce88b4",
+    "artifact_sha256": "cd6ec78e58218a501c613db20eb620699fcf94223ef72fb393fa2394d6ce88b4",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574507-calls.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574507-calls.json",
+    "source_sha256": "c408c93874334033349d0d5a36667531ae22e84e7e1455e6652a26e353058878",
+    "artifact_sha256": "c408c93874334033349d0d5a36667531ae22e84e7e1455e6652a26e353058878",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574510.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574510.json",
+    "source_sha256": "5c8ee7f2c93803dae684ab805d3d07e79deeaf9c396615b52da04a47c70db4f1",
+    "artifact_sha256": "5c8ee7f2c93803dae684ab805d3d07e79deeaf9c396615b52da04a47c70db4f1",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-7f76eca12f08-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-7f76eca12f08-1.json",
+    "source_sha256": "1705858e421416c77054c9da345f394064108f587d1ef12a9ceb4c89b26d4338",
+    "artifact_sha256": "1705858e421416c77054c9da345f394064108f587d1ef12a9ceb4c89b26d4338",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-7f76eca12f08-2.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-7f76eca12f08-2.json",
+    "source_sha256": "687d191a5286053fb2d980c1d244c7d15936b944f37822186784624e1236c935",
+    "artifact_sha256": "687d191a5286053fb2d980c1d244c7d15936b944f37822186784624e1236c935",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-7f76eca12f08-3.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-7f76eca12f08-3.json",
+    "source_sha256": "7ff08372b01940404acb88ca1d6776e6f67ff84ec2985c05420a99494908943d",
+    "artifact_sha256": "7ff08372b01940404acb88ca1d6776e6f67ff84ec2985c05420a99494908943d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/new-source-publish.json",
+    "artifact": "history/full-attempt-1/reports/evidence/new-source-publish.json",
+    "source_sha256": "d151d1a1f1b9e9482f30dc646869ec8c1bed48e19eeb92a094ecff5304178b1e",
+    "artifact_sha256": "d151d1a1f1b9e9482f30dc646869ec8c1bed48e19eeb92a094ecff5304178b1e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-7f76eca12f08-4.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-7f76eca12f08-4.json",
+    "source_sha256": "916e944b8621f85c1f3d2e466fd1ec5f7ebdfbd5a3897a14380d30c93de98e36",
+    "artifact_sha256": "916e944b8621f85c1f3d2e466fd1ec5f7ebdfbd5a3897a14380d30c93de98e36",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-7f76eca12f08-5.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-7f76eca12f08-5.json",
+    "source_sha256": "6a93af08a33b2c66465787c40d1f5bb4ef45c3bf356c9f7e08d3b817eab4f11a",
+    "artifact_sha256": "6a93af08a33b2c66465787c40d1f5bb4ef45c3bf356c9f7e08d3b817eab4f11a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-7f76eca12f08-6.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-7f76eca12f08-6.json",
+    "source_sha256": "1bac4225d2acb142d98fa84765c132076a926497b9efa13288574761da2fc876",
+    "artifact_sha256": "1bac4225d2acb142d98fa84765c132076a926497b9efa13288574761da2fc876",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-7f76eca12f08.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-7f76eca12f08.json",
+    "source_sha256": "6fd006ffa6c7fce2827c0e0352ce8a515f94914c81aa9499c5f37606fc2151fb",
+    "artifact_sha256": "6fd006ffa6c7fce2827c0e0352ce8a515f94914c81aa9499c5f37606fc2151fb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574510-calls.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574510-calls.json",
+    "source_sha256": "c3684ad35cddb0cb112a8cd3ccd0eb298a4dae3a745787730b364bbabd2a74e9",
+    "artifact_sha256": "c3684ad35cddb0cb112a8cd3ccd0eb298a4dae3a745787730b364bbabd2a74e9",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574516.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574516.json",
+    "source_sha256": "15e0ef739300fc5082ee7bba29f4bc688aa6e5493b971285006672ab89ab7505",
+    "artifact_sha256": "15e0ef739300fc5082ee7bba29f4bc688aa6e5493b971285006672ab89ab7505",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-56f032cab25f-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-56f032cab25f-1.json",
+    "source_sha256": "3830688a813d9b33bb1a13fdeb4927eb79abd6f16f05ff851561680c53c4f88a",
+    "artifact_sha256": "3830688a813d9b33bb1a13fdeb4927eb79abd6f16f05ff851561680c53c4f88a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-56f032cab25f.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-56f032cab25f.json",
+    "source_sha256": "a0c3aae613b3690a1cfaccc240e0ee2ff0f972d9cee01ff7d6e31e5f90fc7f1d",
+    "artifact_sha256": "a0c3aae613b3690a1cfaccc240e0ee2ff0f972d9cee01ff7d6e31e5f90fc7f1d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574516-calls.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574516-calls.json",
+    "source_sha256": "dde2221a005483a0f22e8c63bb60e07a29c22f28f855c3b5e475783178532a17",
+    "artifact_sha256": "dde2221a005483a0f22e8c63bb60e07a29c22f28f855c3b5e475783178532a17",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574518.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574518.json",
+    "source_sha256": "a3e561334281e43f7833e90e788a9fbf590bf6cc26ad4bb7adc95b96a0ce0c64",
+    "artifact_sha256": "a3e561334281e43f7833e90e788a9fbf590bf6cc26ad4bb7adc95b96a0ce0c64",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-62df3bd66b5d-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-62df3bd66b5d-1.json",
+    "source_sha256": "b4c8e162aa67a2778122a3df068086add1255e231e8caa48220ee15a5e88dc31",
+    "artifact_sha256": "b4c8e162aa67a2778122a3df068086add1255e231e8caa48220ee15a5e88dc31",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-62df3bd66b5d.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-62df3bd66b5d.json",
+    "source_sha256": "3d47af04040da6ce23b516308ab18babe0c4e751fd77959400a98d97a4445ac8",
+    "artifact_sha256": "3d47af04040da6ce23b516308ab18babe0c4e751fd77959400a98d97a4445ac8",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574518-calls.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574518-calls.json",
+    "source_sha256": "f7566409992ad99426d9a8e6afbb467f789690a5ae551fba364229fae96876a8",
+    "artifact_sha256": "f7566409992ad99426d9a8e6afbb467f789690a5ae551fba364229fae96876a8",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574521.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574521.json",
+    "source_sha256": "99756c63aca60ab303ffc8c4877a4f0a659391c08f76a8e691cfaeddcf2ddee4",
+    "artifact_sha256": "99756c63aca60ab303ffc8c4877a4f0a659391c08f76a8e691cfaeddcf2ddee4",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-84d8c688ab26-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-84d8c688ab26-1.json",
+    "source_sha256": "e43e1d7826840728c32c4ccee4bd882c0d72e34df11f0a7c432a5d412e7e85bc",
+    "artifact_sha256": "e43e1d7826840728c32c4ccee4bd882c0d72e34df11f0a7c432a5d412e7e85bc",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-84d8c688ab26.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-84d8c688ab26.json",
+    "source_sha256": "cc04bbe7ac65da846e39c2990e826ae84397d2cfe51de4ab8646825cc9352e3a",
+    "artifact_sha256": "cc04bbe7ac65da846e39c2990e826ae84397d2cfe51de4ab8646825cc9352e3a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574521-calls.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574521-calls.json",
+    "source_sha256": "8143d5cc99343aecbdc1626d1b187dd3a99267bbb6fad36b471cd8895c749ceb",
+    "artifact_sha256": "8143d5cc99343aecbdc1626d1b187dd3a99267bbb6fad36b471cd8895c749ceb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574524.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574524.json",
+    "source_sha256": "f917dea2c3d813be45c615365cceb31000d2f77fc970aff991bca9c581cc3ff9",
+    "artifact_sha256": "f917dea2c3d813be45c615365cceb31000d2f77fc970aff991bca9c581cc3ff9",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/cli-8ab580ae0847-1.json",
+    "artifact": "history/full-attempt-1/reports/evidence/cli-8ab580ae0847-1.json",
+    "source_sha256": "f359857b9bdc9fe31285cb8c7e1c90af2ed0ff926f71334bd697421851b7bce9",
+    "artifact_sha256": "f359857b9bdc9fe31285cb8c7e1c90af2ed0ff926f71334bd697421851b7bce9",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/baseline-8ab580ae0847.json",
+    "artifact": "history/full-attempt-1/reports/evidence/baseline-8ab580ae0847.json",
+    "source_sha256": "20dcbf0989e2580f49548c67e49cd5bf719b5c03642bb905fbd1ef6b999b1d88",
+    "artifact_sha256": "20dcbf0989e2580f49548c67e49cd5bf719b5c03642bb905fbd1ef6b999b1d88",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/live-target-537574524-calls.json",
+    "artifact": "history/full-attempt-1/reports/evidence/live-target-537574524-calls.json",
+    "source_sha256": "e85f74a1eb828196337e74571ee2fc65f6331ae140bcc857a533a644d277fe19",
+    "artifact_sha256": "e85f74a1eb828196337e74571ee2fc65f6331ae140bcc857a533a644d277fe19",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/evidence/installed-names-final.json",
+    "artifact": "history/full-attempt-1/reports/evidence/installed-names-final.json",
+    "source_sha256": "6ca3df5532263443f87e970b25d5bd04008b489f506b84fb1132b666b95c5461",
+    "artifact_sha256": "6ca3df5532263443f87e970b25d5bd04008b489f506b84fb1132b666b95c5461",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cli-output/1145316684dd-2.json",
+    "artifact": "history/full-attempt-1/reports/cli-output/1145316684dd-2.json.gz",
+    "source_sha256": "4ce8db26a1b378852a185ae47e87250ca870767f2b7fbf339a4d9bd721270422",
+    "artifact_sha256": "e44158069dbb33ffda7e68d93ddda772ed825590a5c827ce105fdc021f877032",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cli-output/bf8a69a04d90-3.json",
+    "artifact": "history/full-attempt-1/reports/cli-output/bf8a69a04d90-3.json",
+    "source_sha256": "6b0cfa9489ec4470df1d870ead9c97630ca8c641f0c933b831644fdd6d2171e3",
+    "artifact_sha256": "6b0cfa9489ec4470df1d870ead9c97630ca8c641f0c933b831644fdd6d2171e3",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cli-output/9a487eba93f4-3.json",
+    "artifact": "history/full-attempt-1/reports/cli-output/9a487eba93f4-3.json",
+    "source_sha256": "6d5f461d1d0944575921181f387addcafbad9853880c023760e6c36b01d01a16",
+    "artifact_sha256": "6d5f461d1d0944575921181f387addcafbad9853880c023760e6c36b01d01a16",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cases/A.json",
+    "artifact": "history/full-attempt-1/reports/cases/A.json",
+    "source_sha256": "ddf4c927bcef03e668277a2d61ece9c55aa1756d445fcedfe238fd6b8cc252a6",
+    "artifact_sha256": "ddf4c927bcef03e668277a2d61ece9c55aa1756d445fcedfe238fd6b8cc252a6",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cases/B.json",
+    "artifact": "history/full-attempt-1/reports/cases/B.json",
+    "source_sha256": "94e295a0e1c374476f5f3c16dadb489968ba452e8d16a061a025d2b0c611618d",
+    "artifact_sha256": "94e295a0e1c374476f5f3c16dadb489968ba452e8d16a061a025d2b0c611618d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cases/C.json",
+    "artifact": "history/full-attempt-1/reports/cases/C.json",
+    "source_sha256": "3fd59d5f3bb9f126b5bc606374f4c49f2906864a6adc99e730998180d5b0ec9f",
+    "artifact_sha256": "3fd59d5f3bb9f126b5bc606374f4c49f2906864a6adc99e730998180d5b0ec9f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cases/D.json",
+    "artifact": "history/full-attempt-1/reports/cases/D.json",
+    "source_sha256": "98c10a95a41158a731ccee7b0dbbe0fa65ab9e95d611c00583a6c7f1eb1a3379",
+    "artifact_sha256": "98c10a95a41158a731ccee7b0dbbe0fa65ab9e95d611c00583a6c7f1eb1a3379",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cases/E.json",
+    "artifact": "history/full-attempt-1/reports/cases/E.json",
+    "source_sha256": "42585fdb5a297a5c5cdd1ab555d88045f20922bb89c8a90fd3af5910179de14b",
+    "artifact_sha256": "42585fdb5a297a5c5cdd1ab555d88045f20922bb89c8a90fd3af5910179de14b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cases/F.json",
+    "artifact": "history/full-attempt-1/reports/cases/F.json",
+    "source_sha256": "8a6db17a2210fb811077a436d5776342615d43f4bad5e1704beb1960f72b938a",
+    "artifact_sha256": "8a6db17a2210fb811077a436d5776342615d43f4bad5e1704beb1960f72b938a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cases/G.json",
+    "artifact": "history/full-attempt-1/reports/cases/G.json",
+    "source_sha256": "ede96d10a0d2accbe01a5e42c76974d132ff1c16e4f42c137e0657a652462501",
+    "artifact_sha256": "ede96d10a0d2accbe01a5e42c76974d132ff1c16e4f42c137e0657a652462501",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/reports/cases/D-risks.json",
+    "artifact": "history/full-attempt-1/reports/cases/D-risks.json",
+    "source_sha256": "ac98e7cbc5baa790297fa01a8a97425b7ef12183edb5353d5d4967923a72bbfe",
+    "artifact_sha256": "ac98e7cbc5baa790297fa01a8a97425b7ef12183edb5353d5d4967923a72bbfe",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/initial-state.json",
+    "artifact": "history/interrupted-attempt-2/reports/initial-state.json.gz",
+    "source_sha256": "e68b5141a5fffb5b42ed00b0fcf9865cc34047841ebe0b0fe665d758315403d0",
+    "artifact_sha256": "0ed6cbc07ee7e23d859adcd6b439525369e3b007d4022b00724c948350731fb8",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/external-checks.json",
+    "artifact": "history/interrupted-attempt-2/reports/external-checks.json",
+    "source_sha256": "4a7da6614858d7ad626ed3745cdd96e30bfddea4fa4505541a000fd25128fdb6",
+    "artifact_sha256": "4a7da6614858d7ad626ed3745cdd96e30bfddea4fa4505541a000fd25128fdb6",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/preflight-working-tree.patch",
+    "artifact": "history/interrupted-attempt-2/reports/preflight-working-tree.patch",
+    "source_sha256": "6e53bf883dffcec3fa3e8230382bd2c6e56f5946cc2bf38ffe3a533d34f4e0e2",
+    "artifact_sha256": "6e53bf883dffcec3fa3e8230382bd2c6e56f5946cc2bf38ffe3a533d34f4e0e2",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/reader-v2.xml",
+    "artifact": "history/interrupted-attempt-2/reports/reader-v2.xml",
+    "source_sha256": "6782e7559a396e43edee32b4ed882f719fc30e3e9fdc3eeeb7d33aa13aac01d8",
+    "artifact_sha256": "6782e7559a396e43edee32b4ed882f719fc30e3e9fdc3eeeb7d33aa13aac01d8",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/reader-v2.log",
+    "artifact": "history/interrupted-attempt-2/reports/reader-v2.log.gz",
+    "source_sha256": "6de58a3f81992aa3e33ecbcff5ee7bccc2069fcdbbe0da0336edbed8c457d72f",
+    "artifact_sha256": "7d779a1787428fe9cd873e0e42cf581a5cd1d06499cd32f1138d233cb504acac",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/mofs-v2.xml",
+    "artifact": "history/interrupted-attempt-2/reports/mofs-v2.xml",
+    "source_sha256": "4e40a8dc8a606974b55ee96b1b34c843b886ea90ebeb995814f84444c1423960",
+    "artifact_sha256": "4e40a8dc8a606974b55ee96b1b34c843b886ea90ebeb995814f84444c1423960",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/mofs-v2.log",
+    "artifact": "history/interrupted-attempt-2/reports/mofs-v2.log.gz",
+    "source_sha256": "adf1d7a89de78c93121c08e6013ca241cb24f0943f4fe23a21eaa2da58333373",
+    "artifact_sha256": "70b26ef8b5cc05752915e00ad4cf7465d80917db2e1852814e061a998b841560",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/pytest.log",
+    "artifact": "history/interrupted-attempt-2/reports/pytest.log.gz",
+    "source_sha256": "ff3ff366a4fc51d6c08ed16a97d163d72ed8d49cc7772c464833fbba2b24c8fe",
+    "artifact_sha256": "5c67779d004c4921ebadad8f14c54630c2699f4d6091b49f266cefed6b8248bb",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/live-targets.json",
+    "artifact": "history/interrupted-attempt-2/reports/live-targets.json",
+    "source_sha256": "5a6bde0861137f8e8668a79a7b82323bb56961eb5868ac212d28c916db8b7f90",
+    "artifact_sha256": "5a6bde0861137f8e8668a79a7b82323bb56961eb5868ac212d28c916db8b7f90",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/environment.json",
+    "artifact": "history/interrupted-attempt-2/reports/environment.json",
+    "source_sha256": "e9adb4eebd18590aa58d18257e1e3a248b704e23f3a56bbdadbf3096f986dd29",
+    "artifact_sha256": "e9adb4eebd18590aa58d18257e1e3a248b704e23f3a56bbdadbf3096f986dd29",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/skill-loads.json",
+    "artifact": "history/interrupted-attempt-2/reports/skill-loads.json",
+    "source_sha256": "ba13249b448ed4fc8a47f7857bb79a5a6ff31da2943222595378ae29c2962250",
+    "artifact_sha256": "ba13249b448ed4fc8a47f7857bb79a5a6ff31da2943222595378ae29c2962250",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/skill-loader.stderr",
+    "artifact": "history/interrupted-attempt-2/reports/skill-loader.stderr",
+    "source_sha256": "8727643aadc9a136a957cf7e305ad10384d8d43596ef48c8c0f5ea6cc927a376",
+    "artifact_sha256": "8727643aadc9a136a957cf7e305ad10384d8d43596ef48c8c0f5ea6cc927a376",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/junit.xml",
+    "artifact": "history/interrupted-attempt-2/reports/junit.xml",
+    "source_sha256": "5f806a5f561ef8f8ff13d65bb063070c84c85ece78673c8fbf80c5e9e475f374",
+    "artifact_sha256": "5f806a5f561ef8f8ff13d65bb063070c84c85ece78673c8fbf80c5e9e475f374",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/execution-order.json",
+    "artifact": "history/interrupted-attempt-2/reports/execution-order.json",
+    "source_sha256": "fc7d7d728a5397ea3948b0e61c39244da17843cc9c14b6a4dbd3c1ccc011f3c0",
+    "artifact_sha256": "fc7d7d728a5397ea3948b0e61c39244da17843cc9c14b6a4dbd3c1ccc011f3c0",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/acceptance-report.json",
+    "artifact": "history/interrupted-attempt-2/reports/acceptance-report.json.gz",
+    "source_sha256": "54f61044d729d2018f0e1ff5bdc98e02493fff2d7fac040ed5d021efa419277d",
+    "artifact_sha256": "0e0dc8b78fea58762ea8514cfebc869c2572898ab6bdbdae68f5f47dcabec549",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/acceptance-report.md",
+    "artifact": "history/interrupted-attempt-2/reports/acceptance-report.md",
+    "source_sha256": "6aa5690dfd71f242807fa174c684a486ca48ac977e0266590ee16222b322bd78",
+    "artifact_sha256": "6aa5690dfd71f242807fa174c684a486ca48ac977e0266590ee16222b322bd78",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/stage-report.json",
+    "artifact": "history/interrupted-attempt-2/reports/stage-report.json",
+    "source_sha256": "5d51510ee9f28ade1b4a1644b9510fb8d6d72e0e6a388973596973557b8fb8ec",
+    "artifact_sha256": "5d51510ee9f28ade1b4a1644b9510fb8d6d72e0e6a388973596973557b8fb8ec",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/stage-report.md",
+    "artifact": "history/interrupted-attempt-2/reports/stage-report.md",
+    "source_sha256": "f34c67609a221b95d224ceaf72325cf2a1491439d66109129425bcbb808ae93f",
+    "artifact_sha256": "f34c67609a221b95d224ceaf72325cf2a1491439d66109129425bcbb808ae93f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/pytest.rc",
+    "artifact": "history/interrupted-attempt-2/reports/pytest.rc",
+    "source_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+    "artifact_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/evidence/migration-0.json",
+    "artifact": "history/interrupted-attempt-2/reports/evidence/migration-0.json",
+    "source_sha256": "acf1712fb7dde7d86286003c2165c0e9662956ba581c872b9500126d1a270884",
+    "artifact_sha256": "acf1712fb7dde7d86286003c2165c0e9662956ba581c872b9500126d1a270884",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/evidence/migration-6.json",
+    "artifact": "history/interrupted-attempt-2/reports/evidence/migration-6.json",
+    "source_sha256": "ccee18f857e9fb014481dc7a1298af1f95e0090f9104e6192fbde198bd88c260",
+    "artifact_sha256": "ccee18f857e9fb014481dc7a1298af1f95e0090f9104e6192fbde198bd88c260",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/evidence/identity-choice-ambiguous-explicit.json",
+    "artifact": "history/interrupted-attempt-2/reports/evidence/identity-choice-ambiguous-explicit.json",
+    "source_sha256": "90cbf7e950fa5b1517dc3d9aa87a40230d4ec3961adcc077adba29ab1a0a03f7",
+    "artifact_sha256": "90cbf7e950fa5b1517dc3d9aa87a40230d4ec3961adcc077adba29ab1a0a03f7",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/evidence/identity-choice-automatic.json",
+    "artifact": "history/interrupted-attempt-2/reports/evidence/identity-choice-automatic.json",
+    "source_sha256": "8dd39c9dcecc7c589fe9feaa4f7b3b2c393526ca8e30af26dec7517399b8fca3",
+    "artifact_sha256": "8dd39c9dcecc7c589fe9feaa4f7b3b2c393526ca8e30af26dec7517399b8fca3",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/evidence/identity-choice-later-revision.json",
+    "artifact": "history/interrupted-attempt-2/reports/evidence/identity-choice-later-revision.json",
+    "source_sha256": "ad6dddcc2ee7845a13785137868bd5ca46136dd808481ab1782a65d276dbb512",
+    "artifact_sha256": "ad6dddcc2ee7845a13785137868bd5ca46136dd808481ab1782a65d276dbb512",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/cases/A.json",
+    "artifact": "history/interrupted-attempt-2/reports/cases/A.json",
+    "source_sha256": "46508ef39bb94be27f34177fbbeab15aee2d2bd1ffe84085f77a8a3b42eb9088",
+    "artifact_sha256": "46508ef39bb94be27f34177fbbeab15aee2d2bd1ffe84085f77a8a3b42eb9088",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/cases/B.json",
+    "artifact": "history/interrupted-attempt-2/reports/cases/B.json",
+    "source_sha256": "97c797e40db0604061212dcfed5505984395cda09d24b4a8256d18ba1348af94",
+    "artifact_sha256": "97c797e40db0604061212dcfed5505984395cda09d24b4a8256d18ba1348af94",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/cases/C.json",
+    "artifact": "history/interrupted-attempt-2/reports/cases/C.json",
+    "source_sha256": "9d23f2b1f66bd07ac7310da9a25daa22d8acfd2d3f14c31f0fa291021ed52e0b",
+    "artifact_sha256": "9d23f2b1f66bd07ac7310da9a25daa22d8acfd2d3f14c31f0fa291021ed52e0b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/cases/D.json",
+    "artifact": "history/interrupted-attempt-2/reports/cases/D.json",
+    "source_sha256": "f53a37c09484fb93d1adcf4d74196a4554461d4ee70a34910b2d866d4e52ef8a",
+    "artifact_sha256": "f53a37c09484fb93d1adcf4d74196a4554461d4ee70a34910b2d866d4e52ef8a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/cases/E.json",
+    "artifact": "history/interrupted-attempt-2/reports/cases/E.json",
+    "source_sha256": "c3dd7b0a97270968ae5924e6dc1814b8919c0e4286c71d6ef1f71eaddde54681",
+    "artifact_sha256": "c3dd7b0a97270968ae5924e6dc1814b8919c0e4286c71d6ef1f71eaddde54681",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/cases/F.json",
+    "artifact": "history/interrupted-attempt-2/reports/cases/F.json",
+    "source_sha256": "9b62d384a83c59654fa2bb11923752650beeff99b7e3c76431af446a00a35a3b",
+    "artifact_sha256": "9b62d384a83c59654fa2bb11923752650beeff99b7e3c76431af446a00a35a3b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/cases/G.json",
+    "artifact": "history/interrupted-attempt-2/reports/cases/G.json",
+    "source_sha256": "1e1f8cba7069420ab0933350e30d33ea4e773549c7700b6a93a5e790dc7efb5c",
+    "artifact_sha256": "1e1f8cba7069420ab0933350e30d33ea4e773549c7700b6a93a5e790dc7efb5c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/reports/cases/D-risks.json",
+    "artifact": "history/interrupted-attempt-2/reports/cases/D-risks.json",
+    "source_sha256": "39aca9d039330ef3edc313016f3bf6b0d3e9127e93cf7ab6a67f890524b637c8",
+    "artifact_sha256": "39aca9d039330ef3edc313016f3bf6b0d3e9127e93cf7ab6a67f890524b637c8",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/initial-state.json",
+    "artifact": "history/interrupted-attempt-3/reports/initial-state.json.gz",
+    "source_sha256": "b8f7846ebc4d5de7e2fe9fbe82f19d352a57f65e8e3e6e26e8f75df86ce3ce7a",
+    "artifact_sha256": "9811e2cfd40e59df1dbaf93a3e8938e736e399fc6f7dd83ead9d21703b51b240",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/external-checks.json",
+    "artifact": "history/interrupted-attempt-3/reports/external-checks.json",
+    "source_sha256": "dd8b2bc2b207c2cf6fd96a0a52fe404972e6c5d8290fe0ee86febd8f8ab18f69",
+    "artifact_sha256": "dd8b2bc2b207c2cf6fd96a0a52fe404972e6c5d8290fe0ee86febd8f8ab18f69",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/reader-v2.xml",
+    "artifact": "history/interrupted-attempt-3/reports/reader-v2.xml",
+    "source_sha256": "6782e7559a396e43edee32b4ed882f719fc30e3e9fdc3eeeb7d33aa13aac01d8",
+    "artifact_sha256": "6782e7559a396e43edee32b4ed882f719fc30e3e9fdc3eeeb7d33aa13aac01d8",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/reader-v2.log",
+    "artifact": "history/interrupted-attempt-3/reports/reader-v2.log.gz",
+    "source_sha256": "6de58a3f81992aa3e33ecbcff5ee7bccc2069fcdbbe0da0336edbed8c457d72f",
+    "artifact_sha256": "7d779a1787428fe9cd873e0e42cf581a5cd1d06499cd32f1138d233cb504acac",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/mofs-v2.xml",
+    "artifact": "history/interrupted-attempt-3/reports/mofs-v2.xml",
+    "source_sha256": "4e40a8dc8a606974b55ee96b1b34c843b886ea90ebeb995814f84444c1423960",
+    "artifact_sha256": "4e40a8dc8a606974b55ee96b1b34c843b886ea90ebeb995814f84444c1423960",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/mofs-v2.log",
+    "artifact": "history/interrupted-attempt-3/reports/mofs-v2.log.gz",
+    "source_sha256": "adf1d7a89de78c93121c08e6013ca241cb24f0943f4fe23a21eaa2da58333373",
+    "artifact_sha256": "70b26ef8b5cc05752915e00ad4cf7465d80917db2e1852814e061a998b841560",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/preflight-working-tree.patch",
+    "artifact": "history/interrupted-attempt-3/reports/preflight-working-tree.patch",
+    "source_sha256": "6e53bf883dffcec3fa3e8230382bd2c6e56f5946cc2bf38ffe3a533d34f4e0e2",
+    "artifact_sha256": "6e53bf883dffcec3fa3e8230382bd2c6e56f5946cc2bf38ffe3a533d34f4e0e2",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/pytest.log",
+    "artifact": "history/interrupted-attempt-3/reports/pytest.log.gz",
+    "source_sha256": "6af886cf612850e74dfb2b09a03a861c615bd200382e8dfc6b3f7e293d3a57b5",
+    "artifact_sha256": "c5c7f55c986879789d1bd190c7020072b73d4a21dc87d9615019f48e226c37db",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/live-targets.json",
+    "artifact": "history/interrupted-attempt-3/reports/live-targets.json",
+    "source_sha256": "5a6bde0861137f8e8668a79a7b82323bb56961eb5868ac212d28c916db8b7f90",
+    "artifact_sha256": "5a6bde0861137f8e8668a79a7b82323bb56961eb5868ac212d28c916db8b7f90",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/environment.json",
+    "artifact": "history/interrupted-attempt-3/reports/environment.json",
+    "source_sha256": "152f0298647d37bf2677416d3b0f45857552810874eb48d04710c29a23981cc0",
+    "artifact_sha256": "152f0298647d37bf2677416d3b0f45857552810874eb48d04710c29a23981cc0",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/skill-loads.json",
+    "artifact": "history/interrupted-attempt-3/reports/skill-loads.json",
+    "source_sha256": "ba13249b448ed4fc8a47f7857bb79a5a6ff31da2943222595378ae29c2962250",
+    "artifact_sha256": "ba13249b448ed4fc8a47f7857bb79a5a6ff31da2943222595378ae29c2962250",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/skill-loader.stderr",
+    "artifact": "history/interrupted-attempt-3/reports/skill-loader.stderr",
+    "source_sha256": "8727643aadc9a136a957cf7e305ad10384d8d43596ef48c8c0f5ea6cc927a376",
+    "artifact_sha256": "8727643aadc9a136a957cf7e305ad10384d8d43596ef48c8c0f5ea6cc927a376",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/junit.xml",
+    "artifact": "history/interrupted-attempt-3/reports/junit.xml",
+    "source_sha256": "b7ea98d8c30e5dcf725f722ab9d62351f66f905d458f19ac4d40bb7940acba52",
+    "artifact_sha256": "b7ea98d8c30e5dcf725f722ab9d62351f66f905d458f19ac4d40bb7940acba52",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/execution-order.json",
+    "artifact": "history/interrupted-attempt-3/reports/execution-order.json",
+    "source_sha256": "fc7d7d728a5397ea3948b0e61c39244da17843cc9c14b6a4dbd3c1ccc011f3c0",
+    "artifact_sha256": "fc7d7d728a5397ea3948b0e61c39244da17843cc9c14b6a4dbd3c1ccc011f3c0",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/acceptance-report.json",
+    "artifact": "history/interrupted-attempt-3/reports/acceptance-report.json.gz",
+    "source_sha256": "ce8ef3d41e65784765b8f6b225269a6e07f92b0f64f4e8026c07068634d3e2be",
+    "artifact_sha256": "71b42642f221107c9eb4695fd91211651963b0a4752946bcbb479cf3fdfee05d",
+    "encoding": "gzip"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/acceptance-report.md",
+    "artifact": "history/interrupted-attempt-3/reports/acceptance-report.md",
+    "source_sha256": "dcc3db601d3189dd0692ae65632432c5782afd91bf942583dd064d34962950d2",
+    "artifact_sha256": "dcc3db601d3189dd0692ae65632432c5782afd91bf942583dd064d34962950d2",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/stage-report.json",
+    "artifact": "history/interrupted-attempt-3/reports/stage-report.json",
+    "source_sha256": "d12ae5e12694815971ef0821e1337e290cec16b9409ff3a546189d7e585acba0",
+    "artifact_sha256": "d12ae5e12694815971ef0821e1337e290cec16b9409ff3a546189d7e585acba0",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/stage-report.md",
+    "artifact": "history/interrupted-attempt-3/reports/stage-report.md",
+    "source_sha256": "f34c67609a221b95d224ceaf72325cf2a1491439d66109129425bcbb808ae93f",
+    "artifact_sha256": "f34c67609a221b95d224ceaf72325cf2a1491439d66109129425bcbb808ae93f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/pytest.rc",
+    "artifact": "history/interrupted-attempt-3/reports/pytest.rc",
+    "source_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+    "artifact_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/evidence/migration-0.json",
+    "artifact": "history/interrupted-attempt-3/reports/evidence/migration-0.json",
+    "source_sha256": "5d98358bb682af96212f1179b5941424a62ef651151a13008f2b6ade39adfe5f",
+    "artifact_sha256": "5d98358bb682af96212f1179b5941424a62ef651151a13008f2b6ade39adfe5f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/evidence/migration-6.json",
+    "artifact": "history/interrupted-attempt-3/reports/evidence/migration-6.json",
+    "source_sha256": "784d38ae893cbcd6c72cc6edf3ae1aaa1636c6f3992ffb46d5c42f2a356bd539",
+    "artifact_sha256": "784d38ae893cbcd6c72cc6edf3ae1aaa1636c6f3992ffb46d5c42f2a356bd539",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/cases/A.json",
+    "artifact": "history/interrupted-attempt-3/reports/cases/A.json",
+    "source_sha256": "fae6151fc48bef2a59224b680f37a195544cdeb1cad9b17e60f3aa0edf958a1b",
+    "artifact_sha256": "fae6151fc48bef2a59224b680f37a195544cdeb1cad9b17e60f3aa0edf958a1b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/cases/B.json",
+    "artifact": "history/interrupted-attempt-3/reports/cases/B.json",
+    "source_sha256": "dfc49b96aaab758f481f9488abc8ac3f9abefcefc48b7da905718be187ad31ed",
+    "artifact_sha256": "dfc49b96aaab758f481f9488abc8ac3f9abefcefc48b7da905718be187ad31ed",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/cases/C.json",
+    "artifact": "history/interrupted-attempt-3/reports/cases/C.json",
+    "source_sha256": "6adeb77152a67a9683262854c39ecacb0df069bf576b01e121571cf42b009323",
+    "artifact_sha256": "6adeb77152a67a9683262854c39ecacb0df069bf576b01e121571cf42b009323",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/cases/D.json",
+    "artifact": "history/interrupted-attempt-3/reports/cases/D.json",
+    "source_sha256": "98c625bedd81aed1e4a4aeb88947ef72c0e91ea5877a921d6e910a9d02e69938",
+    "artifact_sha256": "98c625bedd81aed1e4a4aeb88947ef72c0e91ea5877a921d6e910a9d02e69938",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/cases/E.json",
+    "artifact": "history/interrupted-attempt-3/reports/cases/E.json",
+    "source_sha256": "c3cf6d56df06c7f21416b8f9a6dddbcc019e0a012570aefea728bc1827b9340f",
+    "artifact_sha256": "c3cf6d56df06c7f21416b8f9a6dddbcc019e0a012570aefea728bc1827b9340f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/cases/F.json",
+    "artifact": "history/interrupted-attempt-3/reports/cases/F.json",
+    "source_sha256": "63c62a645380885a747d09d3e04c665577d47c98ba2ecd361081dd33435b6329",
+    "artifact_sha256": "63c62a645380885a747d09d3e04c665577d47c98ba2ecd361081dd33435b6329",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/cases/G.json",
+    "artifact": "history/interrupted-attempt-3/reports/cases/G.json",
+    "source_sha256": "8d5ac72499fd20533e131385819367c4f6d9d3c52f91105008ed0c4fdceb4286",
+    "artifact_sha256": "8d5ac72499fd20533e131385819367c4f6d9d3c52f91105008ed0c4fdceb4286",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/reports/cases/D-risks.json",
+    "artifact": "history/interrupted-attempt-3/reports/cases/D-risks.json",
+    "source_sha256": "6f945dce45280caea9f761525626689c79e1849ad99d4ca752e1a9c8e510945a",
+    "artifact_sha256": "6f945dce45280caea9f761525626689c79e1849ad99d4ca752e1a9c8e510945a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/target.json",
+    "artifact": "history/full-attempt-1/capability-controls/target.json",
+    "source_sha256": "b2ff1bf85359e0e05ccb36b5f532ff0f0609818f8a806a2ae337de22b3ac0690",
+    "artifact_sha256": "b2ff1bf85359e0e05ccb36b5f532ff0f0609818f8a806a2ae337de22b3ac0690",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/actuals/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/actuals/input.json",
+    "source_sha256": "4e13475254ee2b191d770c94617f44b8f131a2dcbf56f28cddbd10a4a710e4d6",
+    "artifact_sha256": "4e13475254ee2b191d770c94617f44b8f131a2dcbf56f28cddbd10a4a710e4d6",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/actuals/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/actuals/received.json",
+    "source_sha256": "4e13475254ee2b191d770c94617f44b8f131a2dcbf56f28cddbd10a4a710e4d6",
+    "artifact_sha256": "4e13475254ee2b191d770c94617f44b8f131a2dcbf56f28cddbd10a4a710e4d6",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/actuals/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/actuals/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/actuals/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/actuals/browser-received.json",
+    "source_sha256": "4e13475254ee2b191d770c94617f44b8f131a2dcbf56f28cddbd10a4a710e4d6",
+    "artifact_sha256": "4e13475254ee2b191d770c94617f44b8f131a2dcbf56f28cddbd10a4a710e4d6",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/actuals/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/actuals/observation.json",
+    "source_sha256": "bda7933245cd7249af2021cdecb066716d015902e0f62bc4076873132a9397fb",
+    "artifact_sha256": "bda7933245cd7249af2021cdecb066716d015902e0f62bc4076873132a9397fb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/actuals/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/actuals/render.png",
+    "source_sha256": "e98c3e1f1507d0a28ee3cfb4540368dcf6fb66fbcab4e8605cee4ee9fc750f5c",
+    "artifact_sha256": "e98c3e1f1507d0a28ee3cfb4540368dcf6fb66fbcab4e8605cee4ee9fc750f5c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/assignment-dates/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/assignment-dates/input.json",
+    "source_sha256": "c2c4d10ff80e033571df798f20c9c0e05450255d4e0d079c91ee993b3ce2e2ce",
+    "artifact_sha256": "c2c4d10ff80e033571df798f20c9c0e05450255d4e0d079c91ee993b3ce2e2ce",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/assignment-dates/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/assignment-dates/received.json",
+    "source_sha256": "c2c4d10ff80e033571df798f20c9c0e05450255d4e0d079c91ee993b3ce2e2ce",
+    "artifact_sha256": "c2c4d10ff80e033571df798f20c9c0e05450255d4e0d079c91ee993b3ce2e2ce",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/assignment-dates/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/assignment-dates/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/assignment-dates/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/assignment-dates/browser-received.json",
+    "source_sha256": "c2c4d10ff80e033571df798f20c9c0e05450255d4e0d079c91ee993b3ce2e2ce",
+    "artifact_sha256": "c2c4d10ff80e033571df798f20c9c0e05450255d4e0d079c91ee993b3ce2e2ce",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/assignment-dates/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/assignment-dates/observation.json",
+    "source_sha256": "244909508a6ebbcc80b174936a6826485189e72cb0dbe3ac6f7137bc0048cc52",
+    "artifact_sha256": "244909508a6ebbcc80b174936a6826485189e72cb0dbe3ac6f7137bc0048cc52",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/assignment-dates/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/assignment-dates/render.png",
+    "source_sha256": "cfeceed19fc98873a1ff7f31156905729c0082da28a1a8e9ac095a8b778fe180",
+    "artifact_sha256": "cfeceed19fc98873a1ff7f31156905729c0082da28a1a8e9ac095a8b778fe180",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/calendar-inheritance/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/calendar-inheritance/input.json",
+    "source_sha256": "052d4833c5e1e6fa02615b3213cba0a0a755d45931de4748708b59624f36a549",
+    "artifact_sha256": "052d4833c5e1e6fa02615b3213cba0a0a755d45931de4748708b59624f36a549",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/calendar-inheritance/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/calendar-inheritance/received.json",
+    "source_sha256": "052d4833c5e1e6fa02615b3213cba0a0a755d45931de4748708b59624f36a549",
+    "artifact_sha256": "052d4833c5e1e6fa02615b3213cba0a0a755d45931de4748708b59624f36a549",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/calendar-inheritance/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/calendar-inheritance/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/calendar-inheritance/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/calendar-inheritance/browser-received.json",
+    "source_sha256": "052d4833c5e1e6fa02615b3213cba0a0a755d45931de4748708b59624f36a549",
+    "artifact_sha256": "052d4833c5e1e6fa02615b3213cba0a0a755d45931de4748708b59624f36a549",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/calendar-inheritance/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/calendar-inheritance/observation.json",
+    "source_sha256": "02ebb7ce84f72faf76ed400839ab598622d45426984a40d6e2cdab69f280293c",
+    "artifact_sha256": "02ebb7ce84f72faf76ed400839ab598622d45426984a40d6e2cdab69f280293c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/calendar-inheritance/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/calendar-inheritance/render.png",
+    "source_sha256": "b6a07b38dafce35af9ca82a6f2f3d86548b1f59827ca25d2e2390d7e9dbbd290",
+    "artifact_sha256": "b6a07b38dafce35af9ca82a6f2f3d86548b1f59827ca25d2e2390d7e9dbbd290",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/coincident-assignment/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/coincident-assignment/input.json",
+    "source_sha256": "5e875897f416dd399e72627f1507d14afdc28419b62f740e936147cc16d23029",
+    "artifact_sha256": "5e875897f416dd399e72627f1507d14afdc28419b62f740e936147cc16d23029",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/coincident-assignment/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/coincident-assignment/received.json",
+    "source_sha256": "5e875897f416dd399e72627f1507d14afdc28419b62f740e936147cc16d23029",
+    "artifact_sha256": "5e875897f416dd399e72627f1507d14afdc28419b62f740e936147cc16d23029",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/coincident-assignment/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/coincident-assignment/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/coincident-assignment/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/coincident-assignment/browser-received.json",
+    "source_sha256": "5e875897f416dd399e72627f1507d14afdc28419b62f740e936147cc16d23029",
+    "artifact_sha256": "5e875897f416dd399e72627f1507d14afdc28419b62f740e936147cc16d23029",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/coincident-assignment/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/coincident-assignment/observation.json",
+    "source_sha256": "0ca4ce5ec3d905bc528fcdecf62a671993e5f09ffc20b9cb717f6890788abcea",
+    "artifact_sha256": "0ca4ce5ec3d905bc528fcdecf62a671993e5f09ffc20b9cb717f6890788abcea",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/coincident-assignment/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/coincident-assignment/render.png",
+    "source_sha256": "132196c83a81e831a1aecd756a4efb0fc123eb73ffb475f04312bbfd2f62be1f",
+    "artifact_sha256": "132196c83a81e831a1aecd756a4efb0fc123eb73ffb475f04312bbfd2f62be1f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-FINISH_NO_EARLIER_THAN/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-FINISH_NO_EARLIER_THAN/input.json",
+    "source_sha256": "052bc2f9344d5d2d81ca20a693cd67323a2360d60f8bf57647cef9b43369f300",
+    "artifact_sha256": "052bc2f9344d5d2d81ca20a693cd67323a2360d60f8bf57647cef9b43369f300",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-FINISH_NO_EARLIER_THAN/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-FINISH_NO_EARLIER_THAN/received.json",
+    "source_sha256": "052bc2f9344d5d2d81ca20a693cd67323a2360d60f8bf57647cef9b43369f300",
+    "artifact_sha256": "052bc2f9344d5d2d81ca20a693cd67323a2360d60f8bf57647cef9b43369f300",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-FINISH_NO_EARLIER_THAN/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-FINISH_NO_EARLIER_THAN/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-FINISH_NO_EARLIER_THAN/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-FINISH_NO_EARLIER_THAN/browser-received.json",
+    "source_sha256": "052bc2f9344d5d2d81ca20a693cd67323a2360d60f8bf57647cef9b43369f300",
+    "artifact_sha256": "052bc2f9344d5d2d81ca20a693cd67323a2360d60f8bf57647cef9b43369f300",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-FINISH_NO_EARLIER_THAN/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-FINISH_NO_EARLIER_THAN/observation.json",
+    "source_sha256": "c93216003fd83bf1cfa60b0be4f5286e83e51bec4f6d6801413690d0e945a611",
+    "artifact_sha256": "c93216003fd83bf1cfa60b0be4f5286e83e51bec4f6d6801413690d0e945a611",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-FINISH_NO_EARLIER_THAN/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-FINISH_NO_EARLIER_THAN/render.png",
+    "source_sha256": "326c102d81d2b1cde3c156c963e7c8aa74e3fdfaf857da529c55329f60c623ed",
+    "artifact_sha256": "326c102d81d2b1cde3c156c963e7c8aa74e3fdfaf857da529c55329f60c623ed",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-START_NO_EARLIER_THAN/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-START_NO_EARLIER_THAN/input.json",
+    "source_sha256": "621da876bf0c6e2b320518983a672d73ce3d467c0aa0c0acfc0b4ac086ebc01e",
+    "artifact_sha256": "621da876bf0c6e2b320518983a672d73ce3d467c0aa0c0acfc0b4ac086ebc01e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-START_NO_EARLIER_THAN/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-START_NO_EARLIER_THAN/received.json",
+    "source_sha256": "621da876bf0c6e2b320518983a672d73ce3d467c0aa0c0acfc0b4ac086ebc01e",
+    "artifact_sha256": "621da876bf0c6e2b320518983a672d73ce3d467c0aa0c0acfc0b4ac086ebc01e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-START_NO_EARLIER_THAN/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-START_NO_EARLIER_THAN/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-START_NO_EARLIER_THAN/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-START_NO_EARLIER_THAN/browser-received.json",
+    "source_sha256": "621da876bf0c6e2b320518983a672d73ce3d467c0aa0c0acfc0b4ac086ebc01e",
+    "artifact_sha256": "621da876bf0c6e2b320518983a672d73ce3d467c0aa0c0acfc0b4ac086ebc01e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-START_NO_EARLIER_THAN/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-START_NO_EARLIER_THAN/observation.json",
+    "source_sha256": "580f84245ffcec5285b9b925db8676c8d52d44e501876d449666cb8fffdce158",
+    "artifact_sha256": "580f84245ffcec5285b9b925db8676c8d52d44e501876d449666cb8fffdce158",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/constraint-START_NO_EARLIER_THAN/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/constraint-START_NO_EARLIER_THAN/render.png",
+    "source_sha256": "0329ede6e11e4ee272c1eec31ae28c44da1e1df65df48082ac840603c2b7880a",
+    "artifact_sha256": "0329ede6e11e4ee272c1eec31ae28c44da1e1df65df48082ac840603c2b7880a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/default-availability/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/default-availability/input.json",
+    "source_sha256": "fa99e179fe00e5488dd5ade38fef29450113d5023a494eaf7bfbfe2bd94d4b9b",
+    "artifact_sha256": "fa99e179fe00e5488dd5ade38fef29450113d5023a494eaf7bfbfe2bd94d4b9b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/default-availability/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/default-availability/received.json",
+    "source_sha256": "fa99e179fe00e5488dd5ade38fef29450113d5023a494eaf7bfbfe2bd94d4b9b",
+    "artifact_sha256": "fa99e179fe00e5488dd5ade38fef29450113d5023a494eaf7bfbfe2bd94d4b9b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/default-availability/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/default-availability/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/default-availability/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/default-availability/browser-received.json",
+    "source_sha256": "fa99e179fe00e5488dd5ade38fef29450113d5023a494eaf7bfbfe2bd94d4b9b",
+    "artifact_sha256": "fa99e179fe00e5488dd5ade38fef29450113d5023a494eaf7bfbfe2bd94d4b9b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/default-availability/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/default-availability/observation.json",
+    "source_sha256": "10f6ae0d5037b19804b5c9b37e5ffc6f0f85eb2984695fe20bc610d47b8faf31",
+    "artifact_sha256": "10f6ae0d5037b19804b5c9b37e5ffc6f0f85eb2984695fe20bc610d47b8faf31",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/default-availability/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/default-availability/render.png",
+    "source_sha256": "8b9625e1bc4a9debedf0823500fdcaa8b95893cb58591d1abcd1231488a0e79d",
+    "artifact_sha256": "8b9625e1bc4a9debedf0823500fdcaa8b95893cb58591d1abcd1231488a0e79d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/fixed-units/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/fixed-units/input.json",
+    "source_sha256": "7890a1e453416acca5ae830bb3ae2aea1b91d55257460a1d826bf6b242760e35",
+    "artifact_sha256": "7890a1e453416acca5ae830bb3ae2aea1b91d55257460a1d826bf6b242760e35",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/fixed-units/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/fixed-units/received.json",
+    "source_sha256": "7890a1e453416acca5ae830bb3ae2aea1b91d55257460a1d826bf6b242760e35",
+    "artifact_sha256": "7890a1e453416acca5ae830bb3ae2aea1b91d55257460a1d826bf6b242760e35",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/fixed-units/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/fixed-units/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/fixed-units/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/fixed-units/browser-received.json",
+    "source_sha256": "7890a1e453416acca5ae830bb3ae2aea1b91d55257460a1d826bf6b242760e35",
+    "artifact_sha256": "7890a1e453416acca5ae830bb3ae2aea1b91d55257460a1d826bf6b242760e35",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/fixed-units/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/fixed-units/observation.json",
+    "source_sha256": "8abbc3862abb4d9d7a359bff498251905984a248f30612019f1f45b6a4107598",
+    "artifact_sha256": "8abbc3862abb4d9d7a359bff498251905984a248f30612019f1f45b6a4107598",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/fixed-units/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/fixed-units/render.png",
+    "source_sha256": "3edcaf8a56e6b5b17667d13f4d842c20ef9c6cc5e445e5995b77e31fe11e7dd9",
+    "artifact_sha256": "3edcaf8a56e6b5b17667d13f4d842c20ef9c6cc5e445e5995b77e31fe11e7dd9",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/inactive/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/inactive/input.json",
+    "source_sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c",
+    "artifact_sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/inactive/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/inactive/received.json",
+    "source_sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c",
+    "artifact_sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/inactive/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/inactive/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/inactive/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/inactive/browser-received.json",
+    "source_sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c",
+    "artifact_sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/inactive/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/inactive/observation.json",
+    "source_sha256": "832d8b995a828d9ed4dbbb6d076e4d39d5661431e3502f22d0a1cadbd4ee10f6",
+    "artifact_sha256": "832d8b995a828d9ed4dbbb6d076e4d39d5661431e3502f22d0a1cadbd4ee10f6",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/inactive/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/inactive/render.png",
+    "source_sha256": "75f9234c1dd2801cc9b8f1921ccfad92c7a6493fb182e8a88aa4bc0fb5726bff",
+    "artifact_sha256": "75f9234c1dd2801cc9b8f1921ccfad92c7a6493fb182e8a88aa4bc0fb5726bff",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-availability/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/resource-availability/input.json",
+    "source_sha256": "5580bbd836f2349a3a0349973772db3bbbbacc8d22fa1570b9cbbbc9d6a713c5",
+    "artifact_sha256": "5580bbd836f2349a3a0349973772db3bbbbacc8d22fa1570b9cbbbc9d6a713c5",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-availability/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/resource-availability/received.json",
+    "source_sha256": "5580bbd836f2349a3a0349973772db3bbbbacc8d22fa1570b9cbbbc9d6a713c5",
+    "artifact_sha256": "5580bbd836f2349a3a0349973772db3bbbbacc8d22fa1570b9cbbbc9d6a713c5",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-availability/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/resource-availability/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-availability/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/resource-availability/browser-received.json",
+    "source_sha256": "5580bbd836f2349a3a0349973772db3bbbbacc8d22fa1570b9cbbbc9d6a713c5",
+    "artifact_sha256": "5580bbd836f2349a3a0349973772db3bbbbacc8d22fa1570b9cbbbc9d6a713c5",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-availability/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/resource-availability/observation.json",
+    "source_sha256": "d83f8f58978866d1d0a7803503e287dfda34bebca5a0ba0d95e0f60646058659",
+    "artifact_sha256": "d83f8f58978866d1d0a7803503e287dfda34bebca5a0ba0d95e0f60646058659",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-availability/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/resource-availability/render.png",
+    "source_sha256": "8e9470c72fdeae120da3a745f64a944f28aca946e3ce59828c5a4a5cd69c6367",
+    "artifact_sha256": "8e9470c72fdeae120da3a745f64a944f28aca946e3ce59828c5a4a5cd69c6367",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-calendar/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/resource-calendar/input.json",
+    "source_sha256": "847dd07135d4ac13f3fc8096ebff6e289a4eedb9fc13980d2fa91895e6de501c",
+    "artifact_sha256": "847dd07135d4ac13f3fc8096ebff6e289a4eedb9fc13980d2fa91895e6de501c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-calendar/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/resource-calendar/received.json",
+    "source_sha256": "847dd07135d4ac13f3fc8096ebff6e289a4eedb9fc13980d2fa91895e6de501c",
+    "artifact_sha256": "847dd07135d4ac13f3fc8096ebff6e289a4eedb9fc13980d2fa91895e6de501c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-calendar/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/resource-calendar/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-calendar/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/resource-calendar/browser-received.json",
+    "source_sha256": "847dd07135d4ac13f3fc8096ebff6e289a4eedb9fc13980d2fa91895e6de501c",
+    "artifact_sha256": "847dd07135d4ac13f3fc8096ebff6e289a4eedb9fc13980d2fa91895e6de501c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-calendar/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/resource-calendar/observation.json",
+    "source_sha256": "3994dbbdd115dc942d2b31811f0d1531d02dc07e37ffdebfcb92e327c650ca06",
+    "artifact_sha256": "3994dbbdd115dc942d2b31811f0d1531d02dc07e37ffdebfcb92e327c650ca06",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/resource-calendar/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/resource-calendar/render.png",
+    "source_sha256": "3b4b62e034395b7e6e00bbc8eab047dd04fb8b8d8dbc50a8e99fa78b934352a8",
+    "artifact_sha256": "3b4b62e034395b7e6e00bbc8eab047dd04fb8b8d8dbc50a8e99fa78b934352a8",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/segments/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/segments/input.json",
+    "source_sha256": "c434cc74c2e88d437ab77d8c1b537e6d93676a60a163685555aa5915a0682862",
+    "artifact_sha256": "c434cc74c2e88d437ab77d8c1b537e6d93676a60a163685555aa5915a0682862",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/segments/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/segments/received.json",
+    "source_sha256": "c434cc74c2e88d437ab77d8c1b537e6d93676a60a163685555aa5915a0682862",
+    "artifact_sha256": "c434cc74c2e88d437ab77d8c1b537e6d93676a60a163685555aa5915a0682862",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/segments/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/segments/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/segments/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/segments/browser-received.json",
+    "source_sha256": "c434cc74c2e88d437ab77d8c1b537e6d93676a60a163685555aa5915a0682862",
+    "artifact_sha256": "c434cc74c2e88d437ab77d8c1b537e6d93676a60a163685555aa5915a0682862",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/segments/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/segments/observation.json",
+    "source_sha256": "3d8bc35714f912c1f5dc7de8e29e2003c6b868e1dd499680cecbd3517325dc3a",
+    "artifact_sha256": "3d8bc35714f912c1f5dc7de8e29e2003c6b868e1dd499680cecbd3517325dc3a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/segments/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/segments/render.png",
+    "source_sha256": "322e8fc7a9e51cb47989fa1ad5fdd7f527def7c7aeee1744b37ec95c3de5aba0",
+    "artifact_sha256": "322e8fc7a9e51cb47989fa1ad5fdd7f527def7c7aeee1744b37ec95c3de5aba0",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/summary-dependency/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/summary-dependency/input.json",
+    "source_sha256": "f375e9fa2b0c18cd2db0b47d90b6f273e692e96106f34e0d084cb1690b30cfbb",
+    "artifact_sha256": "f375e9fa2b0c18cd2db0b47d90b6f273e692e96106f34e0d084cb1690b30cfbb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/summary-dependency/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/summary-dependency/received.json",
+    "source_sha256": "f375e9fa2b0c18cd2db0b47d90b6f273e692e96106f34e0d084cb1690b30cfbb",
+    "artifact_sha256": "f375e9fa2b0c18cd2db0b47d90b6f273e692e96106f34e0d084cb1690b30cfbb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/summary-dependency/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/summary-dependency/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/summary-dependency/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/summary-dependency/browser-received.json",
+    "source_sha256": "f375e9fa2b0c18cd2db0b47d90b6f273e692e96106f34e0d084cb1690b30cfbb",
+    "artifact_sha256": "f375e9fa2b0c18cd2db0b47d90b6f273e692e96106f34e0d084cb1690b30cfbb",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/summary-dependency/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/summary-dependency/observation.json",
+    "source_sha256": "73a677182a36ff6ba1bcd6049cf7937208d553e0893d7a51145e19f72486b265",
+    "artifact_sha256": "73a677182a36ff6ba1bcd6049cf7937208d553e0893d7a51145e19f72486b265",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/summary-dependency/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/summary-dependency/render.png",
+    "source_sha256": "a701b95fa327cf5b088ddc6397316b7819e075d5766ab5c29b3eb2cb58af4350",
+    "artifact_sha256": "a701b95fa327cf5b088ddc6397316b7819e075d5766ab5c29b3eb2cb58af4350",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/task-calendar/input.json",
+    "artifact": "history/full-attempt-1/capability-controls/task-calendar/input.json",
+    "source_sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107",
+    "artifact_sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/task-calendar/received.json",
+    "artifact": "history/full-attempt-1/capability-controls/task-calendar/received.json",
+    "source_sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107",
+    "artifact_sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/task-calendar/storage.xml",
+    "artifact": "history/full-attempt-1/capability-controls/task-calendar/storage.xml",
+    "source_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "artifact_sha256": "8996e78b09996467a3db506cf4e92a49b1ee6bce761c45901e0b84c8fe7c3cae",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/task-calendar/browser-received.json",
+    "artifact": "history/full-attempt-1/capability-controls/task-calendar/browser-received.json",
+    "source_sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107",
+    "artifact_sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/task-calendar/observation.json",
+    "artifact": "history/full-attempt-1/capability-controls/task-calendar/observation.json",
+    "source_sha256": "e1db794ed3f84736960217c454cba2adae7c480251f9d2f43bddc274f7d8e31e",
+    "artifact_sha256": "e1db794ed3f84736960217c454cba2adae7c480251f9d2f43bddc274f7d8e31e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/capability-controls/task-calendar/render.png",
+    "artifact": "history/full-attempt-1/capability-controls/task-calendar/render.png",
+    "source_sha256": "094df96379eb8174d7b719a5d2813f86b2b9e3ff74b933d256b954ab191080d3",
+    "artifact_sha256": "094df96379eb8174d7b719a5d2813f86b2b9e3ff74b933d256b954ab191080d3",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FS/input.json",
+    "artifact": "history/full-attempt-1/live/FS/input.json",
+    "source_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+    "artifact_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FS/received.json",
+    "artifact": "history/full-attempt-1/live/FS/received.json",
+    "source_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+    "artifact_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FS/storage.xml",
+    "artifact": "history/full-attempt-1/live/FS/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FS/browser-received.json",
+    "artifact": "history/full-attempt-1/live/FS/browser-received.json",
+    "source_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+    "artifact_sha256": "7cf3f79b6dd83f6f2ea17996969060dd1382bb70879bee130a296917164ab03d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FS/observation.json",
+    "artifact": "history/full-attempt-1/live/FS/observation.json",
+    "source_sha256": "ef92f7896ce42855b4ce91c5f39eb4b7133b2b9a59446d633e2f9357d5c3b20b",
+    "artifact_sha256": "ef92f7896ce42855b4ce91c5f39eb4b7133b2b9a59446d633e2f9357d5c3b20b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FS/render.png",
+    "artifact": "history/full-attempt-1/live/FS/render.png",
+    "source_sha256": "680d5fb373c4458fc3ad75f1f92af88926478dc05d8ac1560d309d67d993c150",
+    "artifact_sha256": "680d5fb373c4458fc3ad75f1f92af88926478dc05d8ac1560d309d67d993c150",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SS/input.json",
+    "artifact": "history/full-attempt-1/live/SS/input.json",
+    "source_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+    "artifact_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SS/received.json",
+    "artifact": "history/full-attempt-1/live/SS/received.json",
+    "source_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+    "artifact_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SS/storage.xml",
+    "artifact": "history/full-attempt-1/live/SS/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SS/browser-received.json",
+    "artifact": "history/full-attempt-1/live/SS/browser-received.json",
+    "source_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+    "artifact_sha256": "680c85a218b846d29657b0fbb39d6a5712745bb09efecb889f8b3583382bb175",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SS/observation.json",
+    "artifact": "history/full-attempt-1/live/SS/observation.json",
+    "source_sha256": "b31dd0df7f9fa3266f72dfe098b009d37600587d8dd7bfd25e10610f7517815f",
+    "artifact_sha256": "b31dd0df7f9fa3266f72dfe098b009d37600587d8dd7bfd25e10610f7517815f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SS/render.png",
+    "artifact": "history/full-attempt-1/live/SS/render.png",
+    "source_sha256": "c636d55a32501b511568f636263bfb227a77ccd9b83d09a59d3bc55e2dd2993b",
+    "artifact_sha256": "c636d55a32501b511568f636263bfb227a77ccd9b83d09a59d3bc55e2dd2993b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FF/input.json",
+    "artifact": "history/full-attempt-1/live/FF/input.json",
+    "source_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+    "artifact_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FF/received.json",
+    "artifact": "history/full-attempt-1/live/FF/received.json",
+    "source_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+    "artifact_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FF/storage.xml",
+    "artifact": "history/full-attempt-1/live/FF/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FF/browser-received.json",
+    "artifact": "history/full-attempt-1/live/FF/browser-received.json",
+    "source_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+    "artifact_sha256": "fff64211d98e7cff947b4b33c648d8d84a4fbe37ec4812b71b509fe7d11cd49e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FF/observation.json",
+    "artifact": "history/full-attempt-1/live/FF/observation.json",
+    "source_sha256": "2ff22436085ce5738b7fe32fcc5edefb138801662351a6579d3fffec9d91ac0c",
+    "artifact_sha256": "2ff22436085ce5738b7fe32fcc5edefb138801662351a6579d3fffec9d91ac0c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/FF/render.png",
+    "artifact": "history/full-attempt-1/live/FF/render.png",
+    "source_sha256": "224ad4c869185d9edb10c0790e3701296e8333c933608d17b07de55f57178b5c",
+    "artifact_sha256": "224ad4c869185d9edb10c0790e3701296e8333c933608d17b07de55f57178b5c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SF/input.json",
+    "artifact": "history/full-attempt-1/live/SF/input.json",
+    "source_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+    "artifact_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SF/received.json",
+    "artifact": "history/full-attempt-1/live/SF/received.json",
+    "source_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+    "artifact_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SF/storage.xml",
+    "artifact": "history/full-attempt-1/live/SF/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SF/browser-received.json",
+    "artifact": "history/full-attempt-1/live/SF/browser-received.json",
+    "source_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+    "artifact_sha256": "f664eb6a212f74915091a8e61f790687c73e151788a20c82e96dccc653bce518",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SF/observation.json",
+    "artifact": "history/full-attempt-1/live/SF/observation.json",
+    "source_sha256": "8cf5d647b03fc9509c5961a4b825fd1a47d7c36392993b80b388a4947cd04223",
+    "artifact_sha256": "8cf5d647b03fc9509c5961a4b825fd1a47d7c36392993b80b388a4947cd04223",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/SF/render.png",
+    "artifact": "history/full-attempt-1/live/SF/render.png",
+    "source_sha256": "146e3a2710b5158f85e9f272ed7da416b0180883a3102bf578c937c7e4f561ec",
+    "artifact_sha256": "146e3a2710b5158f85e9f272ed7da416b0180883a3102bf578c937c7e4f561ec",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/positive-lag/input.json",
+    "artifact": "history/full-attempt-1/live/positive-lag/input.json",
+    "source_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+    "artifact_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/positive-lag/received.json",
+    "artifact": "history/full-attempt-1/live/positive-lag/received.json",
+    "source_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+    "artifact_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/positive-lag/storage.xml",
+    "artifact": "history/full-attempt-1/live/positive-lag/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/positive-lag/browser-received.json",
+    "artifact": "history/full-attempt-1/live/positive-lag/browser-received.json",
+    "source_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+    "artifact_sha256": "e7e4be039534e160eb47c09850a1c448aa7767b6d1a5e299a9f21ebcacdddc3f",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/positive-lag/observation.json",
+    "artifact": "history/full-attempt-1/live/positive-lag/observation.json",
+    "source_sha256": "1bafea932bb46be6d505d72e6f8f4cad81db86de7db7652d6b1856db92b5b16b",
+    "artifact_sha256": "1bafea932bb46be6d505d72e6f8f4cad81db86de7db7652d6b1856db92b5b16b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/positive-lag/render.png",
+    "artifact": "history/full-attempt-1/live/positive-lag/render.png",
+    "source_sha256": "dc230a0ff97f7c6c460f6757ce36f78e44f39aa7e8d604b068eaced1fe0f2460",
+    "artifact_sha256": "dc230a0ff97f7c6c460f6757ce36f78e44f39aa7e8d604b068eaced1fe0f2460",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/negative-lag/input.json",
+    "artifact": "history/full-attempt-1/live/negative-lag/input.json",
+    "source_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+    "artifact_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/negative-lag/received.json",
+    "artifact": "history/full-attempt-1/live/negative-lag/received.json",
+    "source_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+    "artifact_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/negative-lag/storage.xml",
+    "artifact": "history/full-attempt-1/live/negative-lag/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/negative-lag/browser-received.json",
+    "artifact": "history/full-attempt-1/live/negative-lag/browser-received.json",
+    "source_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+    "artifact_sha256": "844b10e7f93c015bbe16b1d0edef095099ac17bc6817d2ceaa68d8149b1f4194",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/negative-lag/observation.json",
+    "artifact": "history/full-attempt-1/live/negative-lag/observation.json",
+    "source_sha256": "22f6c0a593a772388da15abaf5bb91f729589805c13c9c750a5fc95b58ed1c0a",
+    "artifact_sha256": "22f6c0a593a772388da15abaf5bb91f729589805c13c9c750a5fc95b58ed1c0a",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/negative-lag/render.png",
+    "artifact": "history/full-attempt-1/live/negative-lag/render.png",
+    "source_sha256": "282666e9146efeddb87c859aaf9e0cb199e5a9dc3085a6a6f81cd41d02d02d60",
+    "artifact_sha256": "282666e9146efeddb87c859aaf9e0cb199e5a9dc3085a6a6f81cd41d02d02d60",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/hour-lag/input.json",
+    "artifact": "history/full-attempt-1/live/hour-lag/input.json",
+    "source_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+    "artifact_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/hour-lag/received.json",
+    "artifact": "history/full-attempt-1/live/hour-lag/received.json",
+    "source_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+    "artifact_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/hour-lag/storage.xml",
+    "artifact": "history/full-attempt-1/live/hour-lag/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/hour-lag/browser-received.json",
+    "artifact": "history/full-attempt-1/live/hour-lag/browser-received.json",
+    "source_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+    "artifact_sha256": "6a102064c80e5652aea4fdf39d82417a6d48192319b97c30cd0bed5b5784e92b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/hour-lag/observation.json",
+    "artifact": "history/full-attempt-1/live/hour-lag/observation.json",
+    "source_sha256": "90f051ed07cbc4b1303481d79f008a38d38e84fd3fb688bff1ea2ad82764b770",
+    "artifact_sha256": "90f051ed07cbc4b1303481d79f008a38d38e84fd3fb688bff1ea2ad82764b770",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/hour-lag/render.png",
+    "artifact": "history/full-attempt-1/live/hour-lag/render.png",
+    "source_sha256": "d635983abf1b7561c5cc4eb6e64279b03020ceb3b6c8c1431cd1c9b459480f77",
+    "artifact_sha256": "d635983abf1b7561c5cc4eb6e64279b03020ceb3b6c8c1431cd1c9b459480f77",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/elapsed-lag/input.json",
+    "artifact": "history/full-attempt-1/live/elapsed-lag/input.json",
+    "source_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+    "artifact_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/elapsed-lag/received.json",
+    "artifact": "history/full-attempt-1/live/elapsed-lag/received.json",
+    "source_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+    "artifact_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/elapsed-lag/storage.xml",
+    "artifact": "history/full-attempt-1/live/elapsed-lag/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/elapsed-lag/browser-received.json",
+    "artifact": "history/full-attempt-1/live/elapsed-lag/browser-received.json",
+    "source_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+    "artifact_sha256": "1e13ff13996997a597cf927690dc9f5b815aa563af6e928f373e6921c5e8b842",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/elapsed-lag/observation.json",
+    "artifact": "history/full-attempt-1/live/elapsed-lag/observation.json",
+    "source_sha256": "8a3133c376d4a5b81f26e5bb010bc3f80832e684d17262b41c5424a30b9432da",
+    "artifact_sha256": "8a3133c376d4a5b81f26e5bb010bc3f80832e684d17262b41c5424a30b9432da",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/elapsed-lag/rendered-text.txt",
+    "artifact": "history/full-attempt-1/live/elapsed-lag/rendered-text.txt",
+    "source_sha256": "b8ac8862092bb6336a56940ac10072d4aa5e2dad146bdcd9ece70e502fe63545",
+    "artifact_sha256": "b8ac8862092bb6336a56940ac10072d4aa5e2dad146bdcd9ece70e502fe63545",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/elapsed-lag/render.png",
+    "artifact": "history/full-attempt-1/live/elapsed-lag/render.png",
+    "source_sha256": "55a4b7034c2277b40fd7b5d4bd698b7fff5e83283a6e077c841453c5e64a1119",
+    "artifact_sha256": "55a4b7034c2277b40fd7b5d4bd698b7fff5e83283a6e077c841453c5e64a1119",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-exception/input.json",
+    "artifact": "history/full-attempt-1/live/calendar-exception/input.json",
+    "source_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+    "artifact_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-exception/received.json",
+    "artifact": "history/full-attempt-1/live/calendar-exception/received.json",
+    "source_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+    "artifact_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-exception/storage.xml",
+    "artifact": "history/full-attempt-1/live/calendar-exception/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-exception/browser-received.json",
+    "artifact": "history/full-attempt-1/live/calendar-exception/browser-received.json",
+    "source_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+    "artifact_sha256": "9fddbccd94b614732b7e0a48104c79c8376d17f96e5296548c8f735a9dd6bf07",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-exception/observation.json",
+    "artifact": "history/full-attempt-1/live/calendar-exception/observation.json",
+    "source_sha256": "0f687e3cb742741c140fd730f9b9170faf080503a6ef5e6a7945f141c8a1eb0d",
+    "artifact_sha256": "0f687e3cb742741c140fd730f9b9170faf080503a6ef5e6a7945f141c8a1eb0d",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-exception/render.png",
+    "artifact": "history/full-attempt-1/live/calendar-exception/render.png",
+    "source_sha256": "fc34a8523bffda39daadf3d8ce3716253a32433fcf7f0b081f2d597d1dce2366",
+    "artifact_sha256": "fc34a8523bffda39daadf3d8ce3716253a32433fcf7f0b081f2d597d1dce2366",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-working-exception/input.json",
+    "artifact": "history/full-attempt-1/live/calendar-working-exception/input.json",
+    "source_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+    "artifact_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-working-exception/received.json",
+    "artifact": "history/full-attempt-1/live/calendar-working-exception/received.json",
+    "source_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+    "artifact_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-working-exception/storage.xml",
+    "artifact": "history/full-attempt-1/live/calendar-working-exception/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-working-exception/browser-received.json",
+    "artifact": "history/full-attempt-1/live/calendar-working-exception/browser-received.json",
+    "source_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+    "artifact_sha256": "9c45098eee8381ca7ca817a7f644b20be19e6db53b3e43e153e5b6a38ac30710",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-working-exception/observation.json",
+    "artifact": "history/full-attempt-1/live/calendar-working-exception/observation.json",
+    "source_sha256": "1d5e43842bff0ded6c719dabd04a4b35e89d5eae9382a6559e7d20af6c42d1fd",
+    "artifact_sha256": "1d5e43842bff0ded6c719dabd04a4b35e89d5eae9382a6559e7d20af6c42d1fd",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/calendar-working-exception/render.png",
+    "artifact": "history/full-attempt-1/live/calendar-working-exception/render.png",
+    "source_sha256": "2ef509ba4904cd20185922b9c5d0c58ebb2127895fe078af248d992fc6282589",
+    "artifact_sha256": "2ef509ba4904cd20185922b9c5d0c58ebb2127895fe078af248d992fc6282589",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/resources-assignments/input.json",
+    "artifact": "history/full-attempt-1/live/resources-assignments/input.json",
+    "source_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+    "artifact_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/resources-assignments/received.json",
+    "artifact": "history/full-attempt-1/live/resources-assignments/received.json",
+    "source_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+    "artifact_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/resources-assignments/storage.xml",
+    "artifact": "history/full-attempt-1/live/resources-assignments/storage.xml",
+    "source_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "artifact_sha256": "9eb2e804bc96b7dc246f5a94f7652efdd4eac35fd20b0d49e30dc5a837b28923",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/resources-assignments/browser-received.json",
+    "artifact": "history/full-attempt-1/live/resources-assignments/browser-received.json",
+    "source_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+    "artifact_sha256": "3ab70208958bc837450802ec8d4b231eb6120e4aeb8d15e3a0455c9bd3d983be",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/resources-assignments/observation.json",
+    "artifact": "history/full-attempt-1/live/resources-assignments/observation.json",
+    "source_sha256": "7cd578ad1846613eba04dc9a3e8667be20155204dc39295fdeaad044be307b9b",
+    "artifact_sha256": "7cd578ad1846613eba04dc9a3e8667be20155204dc39295fdeaad044be307b9b",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live/resources-assignments/render.png",
+    "artifact": "history/full-attempt-1/live/resources-assignments/render.png",
+    "source_sha256": "cc4f79810eb3893d25181025e6f04bc2c4bf067375c787dc55f0bc182715acd2",
+    "artifact_sha256": "cc4f79810eb3893d25181025e6f04bc2c4bf067375c787dc55f0bc182715acd2",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live-stage09/storage.xml",
+    "artifact": "history/full-attempt-1/live-stage09/storage.xml",
+    "source_sha256": "5aa1c39a81723b7f5687d5d7a1c0eddbe75ba983e9f0c24386b673f3a7ebdbea",
+    "artifact_sha256": "5aa1c39a81723b7f5687d5d7a1c0eddbe75ba983e9f0c24386b673f3a7ebdbea",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live-stage09/expected.json",
+    "artifact": "history/full-attempt-1/live-stage09/expected.json",
+    "source_sha256": "cb143874616ca69a1c75579b772d7f8652b6f76ee6df8790b73b083f1f2571a5",
+    "artifact_sha256": "cb143874616ca69a1c75579b772d7f8652b6f76ee6df8790b73b083f1f2571a5",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live-stage09/received.json",
+    "artifact": "history/full-attempt-1/live-stage09/received.json",
+    "source_sha256": "cb143874616ca69a1c75579b772d7f8652b6f76ee6df8790b73b083f1f2571a5",
+    "artifact_sha256": "cb143874616ca69a1c75579b772d7f8652b6f76ee6df8790b73b083f1f2571a5",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live-stage10/storage.xml",
+    "artifact": "history/full-attempt-1/live-stage10/storage.xml",
+    "source_sha256": "39a7f77763293fc56e60e705e1370a8493719103a37403a1cb775e286108e33e",
+    "artifact_sha256": "39a7f77763293fc56e60e705e1370a8493719103a37403a1cb775e286108e33e",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live-stage10/expected.json",
+    "artifact": "history/full-attempt-1/live-stage10/expected.json",
+    "source_sha256": "cb143874616ca69a1c75579b772d7f8652b6f76ee6df8790b73b083f1f2571a5",
+    "artifact_sha256": "cb143874616ca69a1c75579b772d7f8652b6f76ee6df8790b73b083f1f2571a5",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live-stage10/received.json",
+    "artifact": "history/full-attempt-1/live-stage10/received.json",
+    "source_sha256": "cb143874616ca69a1c75579b772d7f8652b6f76ee6df8790b73b083f1f2571a5",
+    "artifact_sha256": "cb143874616ca69a1c75579b772d7f8652b6f76ee6df8790b73b083f1f2571a5",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live-stage10/post-evidence.json",
+    "artifact": "history/full-attempt-1/live-stage10/post-evidence.json",
+    "source_sha256": "e16281a7e01d30fe053734cfe0bd86928ffdaf7046e02e51f012b22a357f3113",
+    "artifact_sha256": "e16281a7e01d30fe053734cfe0bd86928ffdaf7046e02e51f012b22a357f3113",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live-stage10/put-evidence.json",
+    "artifact": "history/full-attempt-1/live-stage10/put-evidence.json",
+    "source_sha256": "eb4d3473168f10cdc7bc4e8a2984964d49fdc24d83a733f81325edb5e0a99797",
+    "artifact_sha256": "eb4d3473168f10cdc7bc4e8a2984964d49fdc24d83a733f81325edb5e0a99797",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/live-stage10/child-evidence.json",
+    "artifact": "history/full-attempt-1/live-stage10/child-evidence.json",
+    "source_sha256": "26f86e240caaea88546798b3bd4478801b0d56912ee0112f3cbe1e26434eca4c",
+    "artifact_sha256": "26f86e240caaea88546798b3bd4478801b0d56912ee0112f3cbe1e26434eca4c",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13/final/fixtures-manifest.json",
+    "artifact": "history/full-attempt-1/fixtures-manifest.json",
+    "source_sha256": "1f87a6d6b39dbc702b68cb961b9c1b9475bdfa04903a463ef67cc304a345a525",
+    "artifact_sha256": "1f87a6d6b39dbc702b68cb961b9c1b9475bdfa04903a463ef67cc304a345a525",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v2/final/fixtures-manifest.json",
+    "artifact": "history/interrupted-attempt-2/fixtures-manifest.json",
+    "source_sha256": "b12a26a98c5f0ef30a415703685875af76e1bb5a9cfba1641f51292c84131cef",
+    "artifact_sha256": "b12a26a98c5f0ef30a415703685875af76e1bb5a9cfba1641f51292c84131cef",
+    "encoding": "identity"
+  },
+  {
+    "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/repeat-stage13-v3/final/fixtures-manifest.json",
+    "artifact": "history/interrupted-attempt-3/fixtures-manifest.json",
+    "source_sha256": "fb577c0d0b446dfc5bc9ad4de90dd509b0f6e2904b772e5d436ca4467224a097",
+    "artifact_sha256": "fb577c0d0b446dfc5bc9ad4de90dd509b0f6e2904b772e5d436ca4467224a097",
+    "encoding": "identity"
+  }
+]

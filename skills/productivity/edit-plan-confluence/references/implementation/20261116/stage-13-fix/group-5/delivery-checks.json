@@ -1,0 +1,13 @@
+{
+  "source_files_checked": 203,
+  "changed_source_files": [],
+  "artifact_files_scanned": 1210,
+  "token_occurrences": 0,
+  "failed_requirements": [
+    "AC-02",
+    "AC-03",
+    "AC-04",
+    "AC-09"
+  ],
+  "original_history_preserved": true
+}

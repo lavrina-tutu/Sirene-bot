@@ -2333,6 +2333,7 @@ def _stage13_report(session, exitstatus, root):
         'external_sources_restorable':external.get('restoration_ok') is True,
         'prior_twelve_commits':len(external.get('previous_stage_commits',[]))==12 and all(
             c.get('recorded_gate')=='passed' for c in external.get('previous_stage_commits',[])),
+        'original_stage13_failed_preserved':external.get('original_stage13',{}).get('gate')=='failed' and external.get('original_stage13',{}).get('preserved') is True,
         'no_production_live_targets':not set(live_pages)&STAGE13_PRODUCTION_PAGES,
         'pytest_exit_zero':int(exitstatus)==0}
     order = config._stage13_execution_order
@@ -2371,7 +2372,7 @@ def _stage13_report(session, exitstatus, root):
         'live_pages':live_pages, 'production_pages_excluded':sorted(STAGE13_PRODUCTION_PAGES),
         'execution_order':'execution-order.json',
         'limitations':['Acceptance of §20 only; §19 W5/ZD/AC-101…144 remains independent.',
-            'Master is actually v0.5.1 with separate §21; §20 and stages 01–12 were not edited.',
+            'Master v0.5.1 with separate §21; acceptance norms clarified before this corrective run. Original archived stages 01–13 and failed commit 92bea3f are preserved.',
             'Product defects belong to earlier stages and are reported, not repaired in stage 13.',
             'No token economy claim: tokens were not measured.',
             'Process-death tests do not model power loss. Gateway, cron and watchers are unchanged.',

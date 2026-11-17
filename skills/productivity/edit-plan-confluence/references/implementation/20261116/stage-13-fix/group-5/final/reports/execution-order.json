@@ -1,0 +1,3796 @@
+{
+  "tests": [
+    {
+      "test_id": "acceptance/test_migration_preservation.py::test_new_and_old_schema_history[0]",
+      "phase": 2,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_migration_preservation.py::test_new_and_old_schema_history[6]",
+      "phase": 2,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_accepted_date_deviation_never_becomes_verified",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_dates_each_task_and_milestone_with_matching_root[-61-5-milestone]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_dates_each_task_and_milestone_with_matching_root[-61-5-task]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_dates_each_task_and_milestone_with_matching_root[60-0-milestone]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_dates_each_task_and_milestone_with_matching_root[60-0-task]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_dates_each_task_and_milestone_with_matching_root[61-5-milestone]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_dates_each_task_and_milestone_with_matching_root[61-5-task]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_legacy_longest_path_excludes_root_and_never_proposes_auto_removal",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_local_scheduler_unsupported_and_plan_unobserved_are_warnings",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-11]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-12]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-13]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-14]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-15]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-16]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-17]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-18]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-19]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-3]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-4]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-7]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-8]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_blocker_archives_and_performs_zero_writes[row-9]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-10]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-11]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-12]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-13]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-14]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-15]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-16]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-17]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-18]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-19]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-1]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-2]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-3]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-4]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-5]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-6]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-7]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-8]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_matrix_row[row-9]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_semantic_losses_block_after_archive[assignment]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_semantic_losses_block_after_archive[calendar]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_semantic_losses_block_after_archive[dangling]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_semantic_losses_block_after_archive[external]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_semantic_losses_block_after_archive[graph_cycle]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_semantic_losses_block_after_archive[self_reference]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_semantic_losses_block_after_archive[signed_lag]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_semantic_losses_block_after_archive[type]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_specific_proposal_cannot_override_archive_or_profile",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_unknown_field_blocks_but_proven_nonimpact_warns",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_admission.py::test_unknown_timezone_never_claims_absolute_date_delta",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_build_child_storage",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[download]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[false]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_rejects_attachment_failure[hash]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_resume_changed_current_version_rejected",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[attachment]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[duplicate]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[extra_itogo]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[foreign]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[itogo]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[labour]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[macro_id]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[param_hash]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_child_storage_corruption[param_id]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_create_child_page_resume_reuses_existing_page_id",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_create_child_page_without_attempt_id_always_creates",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_default_child_title",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_legacy_child_lost_response_is_read_before_replay[attachment]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_legacy_child_lost_response_is_read_before_replay[page]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_old_confirmed_child_upload_receipt_not_proof",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_child_page.py::test_resume_rechecks_actual_bytes",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_cli.py::test_cli_apply_without_confirm_exit_2",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_cli.py::test_cli_help",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_cli.py::test_cli_rejects_unsupported_global_overrides",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_cli.py::test_cli_save_argument_errors_are_single_json",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_cli.py::test_cli_save_parser_global_paths",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_cli.py::test_cli_save_runtime_failure_is_single_json",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_adding_exact_mirror_does_not_change_classification",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_nonimpact_partial_proof_keeps_original_and_one_cause",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_partial_proof_fails_closed[complete_but_enumeration_incomplete]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_partial_proof_fails_closed[count_missing]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_partial_proof_fails_closed[enumeration_explicitly_incomplete]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_partial_proof_fails_closed[extra_cause]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_partial_proof_fails_closed[influencing]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_partial_proof_fails_closed[mirror_reason_changed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_partial_proof_fails_closed[row_missing]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_partial_proof_fails_closed[unknown_mirror]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_partial_proof_fails_closed[unknown_reason]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_policy_does_not_globally_allow_collections_assignments_or_mirrors",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_completeness.py::test_raw_discarded_records_never_become_nonimpact",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_representation.py::test_alias_only_for_calendar_without_any_override",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_representation.py::test_installed_claim_cannot_reuse_unrelated_control",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_representation.py::test_one_working_envelope_is_not_a_split_loss",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_representation.py::test_supported_fields_and_segment_working_duration",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_corrective_representation.py::test_zero_work_unassigned_milestone_never_hides_a_declared_missing_resource",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_env.py::test_load_confluence_env_ignores_foreign_keys",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_env.py::test_process_env_priority_and_no_yaml_write",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_env.py::test_python_selection_fails_closed",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_env.py::test_save_context_resumes_frozen_paths_without_loader",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_env.py::test_unified_only_credentials_do_not_read_local_env",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_exact_historical_version_even_if_latest_changed",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[id]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[page]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[title]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_download_requires_exact_metadata[version]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_find_gantt_attachment",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_no_fallback_to_unrelated_gantt_attachment",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_upload_missing_identity_fails_closed",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_upload_uses_post_data",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_verify_uploaded_hash_mismatch_is_conflict_not_crash",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gantt_attachment.py::test_verify_uploaded_matches_version_specific_get",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gate_diff.py::test_build_diff_contains_warning",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gate_diff.py::test_four_layers_include_links_calendars_assignments_without_schedule_promotion",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gate_diff.py::test_four_value_layers_never_promote_model_to_observed",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_gate_diff.py::test_is_confirmed",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_apply_itogo_line2_only_inserts_line1",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_apply_itogo_strips_line2_updates_line1",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_build_itogo_html",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_format_thousands",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_insert_itogo_above_macro_no_block",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_itogo_from_csv_080926",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_parse_itogo_text_found",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_parse_itogo_text_missing_is_none_not_fabricated",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_patch_existing_itogo",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_patch_existing_itogo_line1_only",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_multiple_roots_explicit_choice",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_source_coefficients_and_timezone",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_summary_ceil[0-0]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_summary_ceil[106.875-107]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_summary_ceil[76.875-77]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_summary_ceil[84.875-85]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[basis]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[date]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[elapsed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[timezone]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_unknown_basis_blocks_summary[units]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_work_exact_summary_service_milestone_and_timephased",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_prepared_work_missing_partial_not_zero",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_known",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_missing_is_unknown_not_fabricated",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_record_itogo_observation_two_observations_not_glued_by_number",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_itogo.py::test_strip_trudozatraty_variants",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_macro.py::test_build_macro_html",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_macro.py::test_find_macro",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_macro.py::test_new_macro_ids_unique",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_base_recurrent_intervals",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_prepared_calendar_intervals_exceptions_inheritance_bindings",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_prepared_calendar_source_day_basis_mismatch_is_explicit",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_prepared_calendar_unsupported_is_explicit",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_convert_task_count",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_copy_and_empty",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_fs_dependencies_only",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_id_counter_not_300000",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_naim_resource_added",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_only_service_header_raises",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_parse_outline_level",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_dependencies_types_signed_lag_parallel_resources",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_golden_bytes_and_storage",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_hierarchy_cycle_rejected",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_lag_basis_only_equivalent_calendars",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_no_reader_in_converter_calendar_itogo",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_summary_dependency_and_unrepresented_scheduling",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_tree_uses_parent_keys_all_roots_and_partial_assignment",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[basis]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[elapsed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[endpoint]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[external]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[lag]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[type]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_prepared_unknown_dependency_never_fs_zero[unit]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_service_header_217_after_root",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_service_header_217_first",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_convert.py::test_tree_structure",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_freeze_direct_exact_limit_and_missing",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_freeze_renamed_container_and_mpp_with_zip_suffix",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_input_changed_during_copy_is_never_accepted",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_input_path_replaced_during_copy",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_multiple_candidates_no_first_selection_preserves_container",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_resolve_mpp_from_zip",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names0]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names1]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names2]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_collisions[names3]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[MPP_MAX_BYTES-10-mpp_size_limit]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_BYTES-10-zip_size_limit]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_ENTRIES-1-zip_entries_limit]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_RATIO-1-zip_ratio_limit]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_numeric_limits[ZIP_MAX_UNPACKED_BYTES-10-zip_unpacked_limit]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_symlink_and_input_symlink_forbidden",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[../evil.mpp]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[./a.mpp]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[/absolute.mpp]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[C:/absolute.mpp]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[C:relative.mpp]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[a/../../b.mpp]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[a//b.mpp]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_mpp_input.py::test_zip_unsafe_paths[a\\\\b.mpp]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_actual_current_attachment_changed",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_existing_macro_preserves_all_ids",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_preflight_failure_blocks_all_http",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_put_409_exhausted_retries_raises",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_put_409_retries_only_storage_stage",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_apply_plan_without_confirm_writes_nothing",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[download]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[false]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[hash]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_attachment_failure_blocks_put[lying_true]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_build_plan_empty",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_get_after_put_failure_is_unconfirmed",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_live_ab_guard",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[attachment]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[duplicate]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[extra_itogo]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[foreign]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[itogo]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[labour]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[macro_id]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[param_hash]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_storage_readback_rejects_corruption[param_id]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_pipeline.py::test_success_records_get_observation_and_actual_id",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_canonical_order_paths_fields_label_policy_and_saved_defaults",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_inbox_unicode_regular_complete_nonrecursive_diagnostics",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_duplicate_ids_and_json_keys",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[expected_sha256-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[item_id- ]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[lineage_id-None]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[mode-save]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[page_id-1]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[project_slug-../bad]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[source_version_date-2026-02-30]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[source_version_date-20261116]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_item_validation[timezone_hint-Not/AZone]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[batch_id-x]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[items-None]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[items-value9]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[label-None]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[lineage_id-l]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[mode-publish]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[on_error-None]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[page_id-1]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[project_slug-p]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[schema_version-True]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_manifest.py::test_manifest_rejects_unknown_null_and_common_fields[timezone_hint-UTC]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_atomic_mirror_failure_keeps_previous_json",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[Authorization: Basic c2VjcmV0]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[Bearer s3cr3t]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[CONFLUENCE_TOKEN=s3cr3t]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_driver_strings[token: s3cr3t]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_secrets_bearer_string_anywhere",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_mask_secrets_by_key",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_read_receipt_missing_returns_none",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_read_receipt_roundtrip",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_receipt_rejects_path_escape[../escape-save]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_receipt_rejects_path_escape[op-../save]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_all_required_nullable_fields",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[attachment_version-2]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[external_effect-storage_written]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[page_id-123]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[page_url-https://invalid]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_single_receipt_save_invariants_reject_remote_effect[published-True]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_write_receipt_idempotent_path",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_receipt.py::test_write_receipt_no_secrets_on_disk",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_rules.py::test_bc_exact_mapping_and_context[context]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_rules.py::test_bc_exact_mapping_and_context[missing_reference]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_rules.py::test_bc_exact_mapping_and_context[new_uid]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_rules.py::test_bc_exact_mapping_and_context[not_needed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_rules.py::test_bc_exact_mapping_and_context[relation]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_rules.py::test_bc_exact_mapping_and_context[reorder]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_rules.py::test_changed_hierarchy_blocks_even_when_wbs_and_uid_match",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_rules.py::test_drop_dep_resolves_exact_source_and_does_not_apply_without_consent",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_rules.py::test_explicit_project_scope_persists_versioned_rule",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_attachment_sha_is_independent_of_macro_hash",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_exact_page_version_required",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_find_macro_cannot_hide_duplicate_or_incomplete_target",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_nested_and_reordered_macro_enumerated",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><ac:structured-macro ac:name=\"gantt-chart-planner\" />]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p><strong>\\u0422\\u0440\\u0443\\u0434\\u043e\\u0437\\u0430\\u0442\\u0440\\u0430\\u0442\\u044b</strong>: 10 \\u0447-\\u0447</p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p><p>\\u0422\\u0440\\u0443\\u0434\\u043e\\u0437\\u0430\\u0442\\u0440\\u0430\\u0442\\u044b: 10 \\u0447\\u0435\\u043b\\u043e\\u0432\\u0435\\u043a\\u043e-\\u0447\\u0430\\u0441\\u043e\\u0432</p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">wrong</ac:parameter></ac:structured-macro></p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">wrong</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"wrong\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u041f\\u043e\\u0441\\u0442\\u043e\\u0440\\u043e\\u043d\\u043d\\u0438\\u0439 \\u0442\\u0435\\u043a\\u0441\\u0442</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 3 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_negative_cases[<h2>\\u041f\\u0440\\u043e\\u0435\\u043a\\u0442</h2><p>\\u043f\\u043e\\u0442\\u0435\\u0440\\u044f\\u043d</p><p><strong>\\u0418\\u0442\\u043e\\u0433\\u043e: \\u0441 01.01.26 \\u043f\\u043e 02.01.26 - 2 \\u0440\\u0430\\u0431\\u043e\\u0447\\u0438\\u0445 \\u0434\\u043d\\u0435\\u0439</strong></p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"macro-1\"><ac:parameter ac:name=\"id\">id-1</ac:parameter><ac:parameter ac:name=\"hash\">macro-hash-1</ac:parameter></ac:structured-macro></p>]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_storage_positive_and_xml_attribute_order",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_test_root_rejects_production_symlink",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_verify.py::test_unit_network_is_disabled",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_context_installed_profiles_from_registry",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_installed_profile_has_only_evidence_bound_claims",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_codes_only_verified_capabilities",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[claim]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[code]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[evidence]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[hash]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[shape]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plugin_profile.py::test_profile_rejects_unverified_contract[version]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_calendar_intervals_exceptions_inheritance_and_bindings",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_context_unified_settings_cli_overrides_and_no_secrets",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_fixtures_manifest_integrity",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[collection]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[count]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[field_reason]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[nan]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[null_zero]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[task_key]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_invalid_export_is_rejected[version]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_normalization_profile_and_timezone_change_identity",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_prepared_load_rejects_changed_data",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_quality_missing_getter_errors_are_preserved",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_relations_keep_signed_elapsed_and_known_zero",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_semantic_hash_excludes_execution_provenance",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[HTTP_RETRY_LIMIT]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[HTTP_TIMEOUT_SECONDS]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[MPP_MAX_BYTES]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[MPP_READ_TIMEOUT_SECONDS]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_BYTES]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_ENTRIES]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_RATIO]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_numeric_contract_boundaries[ZIP_MAX_UNPACKED_BYTES]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[HTTP_RETRY_LIMIT-11]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[HTTP_TIMEOUT_SECONDS-86401]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[MPP_MAX_BYTES--1]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[MPP_READ_TIMEOUT_SECONDS-0]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[NORMALIZATION_PROFILE-../../bad]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[ZIP_MAX_ENTRIES-1.2]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_prepared_plan.py::test_settings_reject_invalid_ranges[ZIP_MAX_RATIO-0]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_current_does_not_restore_historical_date",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_current_repeat_append_only_no_attachment_version",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_legacy_missing_expected_bytes_storage_or_link",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_mismatch_retains_previous_observations[attachment_id]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_mismatch_retains_previous_observations[bytes]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_mismatch_retains_previous_observations[current_version]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_mismatch_retains_previous_observations[page_id]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_mismatch_retains_previous_observations[storage]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_transport_technically_forbids_writes[DELETE]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_transport_technically_forbids_writes[PATCH]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_transport_technically_forbids_writes[POST]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_transport_technically_forbids_writes[PUT]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_wrong_project_has_zero_requests",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_idempotency.py::test_confirmed_operation_never_repairs_changed_target",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_idempotency.py::test_full_confirmation_links_and_legacy_writer_cannot_promote",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_idempotency.py::test_new_expected_itogo_is_storage_only",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_idempotency.py::test_operation_show_omits_storage_from_network_journal",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_idempotency.py::test_same_source_profile_target_no_upload_put_or_duplicate_publication",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_admitted_bytes_mismatch_stops_before_put",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_archive_failure_never_writes_network[readback]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_archive_failure_never_writes_network[write]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_binding_conflict_preserves_frozen_intake",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_changed_target_invalidates_admission_and_proposal",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_durable_admission_before_network_and_actual_readback",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_false_attachment_verifier_blocks_put",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_first_diff_snapshot_before_admission",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_mpp_child_uses_shared_admission_before_page_creation",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_new_binding_without_slug_retains_input_no_resumable_id",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_new_mpp_publish_in_clean_environment_archives_when_blocked",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_prepared_artifact_corruption_never_uploads",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_prepared_branch_never_calls_legacy_readers",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_public_apply_uses_same_archive_and_admission",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_publish_prepare.py::test_unknown_timezone_archived_before_needs_decision",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_active_library_loads_both_names",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py batch resume --batch-id inbox-20261117 --retry-decisions]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py batch resume --batch-id inbox-20261117 --retry-failed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py batch resume --batch-id inbox-20261117]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py batch save --inbox /inputs/Inbox/plans-20261117 --project-slug trisigma --batch-id inbox-20261117 --on-error continue]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py batch save --manifest /inputs/batch.json --batch-id manifest-001]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py batch save --mpp /inputs/E.mpp --mpp /inputs/F.mpp --project-slug trisigma --batch-id pair-001]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py batch show --batch-id inbox-20261117 --view all]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py batch show --batch-id inbox-20261117 --view errors]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py operation show --operation-id item-operation]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[batch-and-inbox.md-cli.py resume --operation-id item-operation --accept-proposal archive-proposal --rule-scope once --reason \"\\u041f\\u043e\\u0434\\u0442\\u0432\\u0435\\u0440\\u0436\\u0434\\u0430\\u044e \\u0432\\u044b\\u0431\\u0440\\u0430\\u043d\\u043d\\u043e\\u0435 \\u0430\\u0440\\u0445\\u0438\\u0432\\u043d\\u043e\\u0435 \\u0440\\u0430\\u0437\\u043c\\u0435\\u0449\\u0435\\u043d\\u0438\\u0435\"]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py --allow-live-ab resume --operation-id test-ab-operation]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py --db /isolated/state/index.sqlite --workvault /isolated/WorkVault --cache-dir /isolated/cache publish --mpp /inputs/plan.mpp --page-id test-page --project-slug trisigma]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py --db /isolated/state/index.sqlite --workvault /isolated/WorkVault --cache-dir /isolated/cache save --mpp /inputs/plan.mpp --project-slug trisigma --page-id test-page --source-version-date 2026-11-17]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py apply --mpp /inputs/plan.mpp --page-id test-page --project-slug trisigma --confirm \\u043b\\u0435\\u0439 --child --title \"\\u0422\\u0435\\u0441\\u0442\\u043e\\u0432\\u044b\\u0439 \\u043f\\u043b\\u0430\\u043d\"]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py archive-history --page-id test-page --attachment-id test-attachment --from-version 1 --to-version 2 --project-slug trisigma]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py batch resume --batch-id review-001 --retry-decisions --retry-failed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py batch save --inbox /inputs/Inbox/review --project-slug trisigma --batch-id review-001]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py batch save --manifest /inputs/batch.json --batch-id manifest-001]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py batch save --mpp /inputs/E.mpp --mpp /inputs/F.mpp --project-slug trisigma --batch-id inbox-001 --on-error continue]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py batch show --batch-id review-001 --view errors]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py compare --project-slug trisigma --from publication:test-pub-a --to publication:test-pub-b]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py compare --project-slug trisigma --from snapshot:test-from --to snapshot:test-to --mapping-revision test-revision]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py convert --mpp /inputs/plan.mpp --out /outputs/gantt.json --out-dir /outputs/csv]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py diff --mpp /inputs/plan.mpp --page-id test-page --project-slug trisigma --timezone-hint Europe/Moscow]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py history --project-slug trisigma --view files --time-field received --since 2026-11-17T00:00:00+03:00 --until 2026-11-18T00:00:00+03:00 --limit 100]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py history --project-slug trisigma --view publications --order source --lineage-id test-lineage --cursor opaque-cursor]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py identity confirm --project-slug trisigma --from snapshot:test-from --to snapshot:test-to --mode continuity --evidence /inputs/user-statement.txt --reason \"\\u041f\\u043e\\u043b\\u044c\\u0437\\u043e\\u0432\\u0430\\u0442\\u0435\\u043b\\u044c \\u043f\\u043e\\u0434\\u0442\\u0432\\u0435\\u0440\\u0434\\u0438\\u043b \\u0441\\u043e\\u0445\\u0440\\u0430\\u043d\\u0435\\u043d\\u0438\\u0435 UID namespace\"]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py identity confirm --project-slug trisigma --from snapshot:test-from --to snapshot:test-to --mode mapping --mapping /inputs/mapping.json --evidence /inputs/user-statement.txt --reason \"\\u042f\\u0432\\u043d\\u043e\\u0435 \\u0441\\u043e\\u043e\\u0442\\u0432\\u0435\\u0442\\u0441\\u0442\\u0432\\u0438\\u0435\" --supersedes test-old-revision]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py identity show --project-slug trisigma --mapping-revision test-revision]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py operation show --operation-id test-operation]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py preview --page-id test-page]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py publication verify --project-slug trisigma --publication-id test-pub-a --scope current_state]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py publication verify --project-slug trisigma --publication-id test-pub-a --scope historical_version]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py resume --operation-id test-operation --accept-proposal test-proposal --rule-scope once --reason \"\\u041f\\u043e\\u0434\\u0442\\u0432\\u0435\\u0440\\u0436\\u0434\\u0430\\u044e \\u0432\\u044b\\u0431\\u0440\\u0430\\u043d\\u043d\\u043e\\u0435 \\u0430\\u0440\\u0445\\u0438\\u0432\\u043d\\u043e\\u0435 \\u0440\\u0430\\u0437\\u043c\\u0435\\u0449\\u0435\\u043d\\u0438\\u0435\"]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py resume --operation-id test-operation --mapping-revision test-revision]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[cli-contract.md-cli.py resume --operation-id test-operation --timezone-hint Europe/Moscow]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[history-and-verification.md-cli.py compare --project-slug trisigma --from publication:test-pub-a --to publication:test-pub-b]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[history-and-verification.md-cli.py compare --project-slug trisigma --from snapshot:test-a --to snapshot:test-b --mapping-revision test-revision]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[history-and-verification.md-cli.py history --project-slug trisigma --view files --order ingested]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[history-and-verification.md-cli.py history --project-slug trisigma --view files --time-field received --since 2026-11-17T00:00:00+03:00 --until 2026-11-18T00:00:00+03:00]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[history-and-verification.md-cli.py history --project-slug trisigma --view publications]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[history-and-verification.md-cli.py history --project-slug trisigma --view snapshots]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[history-and-verification.md-cli.py publication verify --project-slug trisigma --publication-id test-pub-a --scope current_state]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[history-and-verification.md-cli.py publication verify --project-slug trisigma --publication-id test-pub-a --scope historical_version]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py diff --mpp /inputs/new.mpp --page-id test-page --project-slug trisigma --drop-dep 16:17]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py diff --mpp /inputs/new.mpp --page-id test-page --project-slug trisigma]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py identity confirm --project-slug trisigma --from snapshot:test-anchor --to snapshot:test-new --mode continuity --evidence /inputs/user-statement.txt --reason \"\\u041f\\u043e\\u043b\\u044c\\u0437\\u043e\\u0432\\u0430\\u0442\\u0435\\u043b\\u044c \\u043f\\u043e\\u0434\\u0442\\u0432\\u0435\\u0440\\u0434\\u0438\\u043b \\u0441\\u043e\\u0445\\u0440\\u0430\\u043d\\u0435\\u043d\\u0438\\u0435 UID namespace\"]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py identity confirm --project-slug trisigma --from snapshot:test-anchor --to snapshot:test-new --mode mapping --mapping /inputs/mapping.json --evidence /inputs/user-statement.txt --reason \"\\u041f\\u043e\\u0434\\u0442\\u0432\\u0435\\u0440\\u0436\\u0434\\u0435\\u043d\\u0430 \\u0443\\u043a\\u0430\\u0437\\u0430\\u043d\\u043d\\u0430\\u044f \\u043f\\u0430\\u0440\\u0430\"]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py identity show --project-slug trisigma --mapping-revision test-revision]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py operation show --operation-id test-operation0]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py operation show --operation-id test-operation1]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py resume --operation-id test-operation --accept-proposal test-proposal --rule-scope once --reason \"\\u041f\\u043e\\u043b\\u044c\\u0437\\u043e\\u0432\\u0430\\u0442\\u0435\\u043b\\u044c \\u0441\\u043e\\u0433\\u043b\\u0430\\u0441\\u043e\\u0432\\u0430\\u043b \\u0438\\u0441\\u043a\\u043b\\u044e\\u0447\\u0435\\u043d\\u0438\\u0435 \\u0443\\u043a\\u0430\\u0437\\u0430\\u043d\\u043d\\u043e\\u0439 \\u0441\\u0432\\u044f\\u0437\\u0438 \\u0432 \\u044d\\u0442\\u043e\\u0439 \\u043e\\u043f\\u0435\\u0440\\u0430\\u0446\\u0438\\u0438\"]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py resume --operation-id test-operation --mapping-revision test-revision]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py resume --operation-id test-project-operation --accept-proposal test-project-proposal --rule-scope project --reason \"\\u041f\\u043e\\u043b\\u044c\\u0437\\u043e\\u0432\\u0430\\u0442\\u0435\\u043b\\u044c \\u044f\\u0432\\u043d\\u043e \\u0441\\u043e\\u0433\\u043b\\u0430\\u0441\\u043e\\u0432\\u0430\\u043b \\u043f\\u0440\\u0430\\u0432\\u0438\\u043b\\u043e \\u043f\\u0440\\u043e\\u0435\\u043a\\u0442\\u0430\"]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_cli_examples_parse[identity-and-rules.md-cli.py resume --operation-id timezone-operation --timezone-hint Europe/Moscow]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_documented_options_cover_parser",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_forbidden_legacy_routes_removed",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_global_parameters_cannot_follow_subcommand[--allow-live-ab-None]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_global_parameters_cannot_follow_subcommand[--cache-dir-/isolated/cache]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_global_parameters_cannot_follow_subcommand[--db-/isolated/db]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_global_parameters_cannot_follow_subcommand[--workvault-/isolated/WorkVault]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_invalid_arguments_do_not_echo_secret",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_reference_links_and_json_examples",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_today_example_uses_local_midnights_and_offsets",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_user_routes_dispatch_with_global_isolation[batch save --inbox /inputs/Inbox --project-slug trisigma --batch-id b-plan_batch-create_batch-batch]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_user_routes_dispatch_with_global_isolation[batch show --batch-id b --view errors-plan_batch-show_batch-batch-errors]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_user_routes_dispatch_with_global_isolation[compare --project-slug trisigma --from snapshot:a --to snapshot:b-plan_queries-query_compare-compare]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_user_routes_dispatch_with_global_isolation[history --project-slug trisigma --view files-plan_queries-query_history-history]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_user_routes_dispatch_with_global_isolation[publish --mpp /inputs/p.mpp --page-id test-page --project-slug trisigma-pipeline-publish_plan-publish]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_user_routes_dispatch_with_global_isolation[resume --operation-id op-plan_decision-resume_operation-resume]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_user_routes_dispatch_with_global_isolation[save --mpp /inputs/p.mpp --project-slug trisigma-plan_save-save_snapshot-save]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_skill_contract.py::test_wrapper_has_one_canon_and_no_algorithm",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_final_order_has_all_phases",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_identity_choice_complete_preparation_chain[ambiguous-explicit]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_identity_choice_complete_preparation_chain[automatic]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_identity_choice_complete_preparation_chain[later-revision]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_identity_choice_complete_preparation_chain[missing]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_identity_choice_complete_preparation_chain[replace-selected]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_matrix_requires_all_ac_and_subcases",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_pytest_cache_is_isolated",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_report_aggregate_rejects_missing_evidence",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_report_never_promotes_incomplete_execution[call-failed-failed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_report_never_promotes_incomplete_execution[call-passed-passed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_report_never_promotes_incomplete_execution[call-skipped-not_run]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_report_never_promotes_incomplete_execution[setup-failed-failed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_report_never_promotes_incomplete_execution[setup-skipped-not_run]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_report_never_promotes_incomplete_execution[teardown-failed-failed]",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "acceptance/test_failure_matrix.py::test_runtime_cache_is_not_a_protected_source",
+      "phase": 3,
+      "group": 0
+    },
+    {
+      "test_id": "test_plan_archive.py::test_artifact_corruption_is_not_duplicate_success",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_archive.py::test_explicit_slug_and_contradictory_bindings_rejected",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_archive.py::test_resolve_plan_binding_creates_and_is_idempotent",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_archive.py::test_resolve_plan_binding_different_pages_different_lineage",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_archive.py::test_resolve_plan_binding_requires_slug_for_new_page",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_archive.py::test_same_filename_different_bytes_get_different_objects",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_archive.py::test_stable_local_lineage_preserves_old_filename_lines",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_archive.py::test_store_artifact_dedup_survives_tmp_deletion",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_history.py::test_find_mpp_by_hash_missing_file_not_fabricated",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_distinguishes_403_404_timeout",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_missing_version_recorded_in_quality_issue",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_repeat_does_not_increase_counts",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_resume_attempt_id_does_not_duplicate_attempt",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_six_events_four_unique_hashes",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_history.py::test_import_history_without_resume_key_creates_new_attempt_each_call",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_import_reconcile_missing_link_is_not_reimported",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_no_candidate_gives_unknown",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_single_candidate_does_not_confirm_operation",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_two_candidates_same_version_gives_unknown",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_reconcile.py::test_reconcile_writes_event_and_receipt",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_complete_save_and_unknown_timezone_sql_status",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_corrupt_archived_source_or_export_never_duplicate_success[export]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_corrupt_archived_source_or_export_never_duplicate_success[source]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_frozen_input_never_refreezes_or_opens_original",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_invalid_arguments_before_intake[source_version_date-2026-02-30]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_invalid_arguments_before_intake[source_version_date-20261115]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_invalid_arguments_before_intake[timezone_hint-Not/AZone]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_missing_runtime_is_explicit_failure_before_read",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_quality_warnings_do_not_block_archive",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_reader_diagnostics_use_stderr_and_artifacts",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_receipt_mirror_failure_preserves_commit_and_recovers",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_recovery_after_commit_before_readback_no_reader",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_creates_snapshot_without_page_id",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_deduplicates_and_preserves_each_arrival",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_explicit_lineage_and_version_date",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_missing_input_is_failed_arrival",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_preserves_populated_baseline_and_publication_rows",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_requires_project_slug_preserves_input",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_save_with_page_id_reuses_existing_lineage",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[bad_count]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[invalid_schema]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[legacy_export]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[no_tasks]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_save.py::test_unusable_snapshot_is_not_success[wrong_source]",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_plan_verify.py::test_archive_client_construction_is_disabled",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_skill_contract.py::test_real_archive_stdout_and_receipts_redact_secrets",
+      "phase": 4,
+      "group": 1
+    },
+    {
+      "test_id": "test_cli.py::test_cli_convert_offline",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_corrective_binary_fixtures.py::test_binary_positive_recipe_and_real_admission[anchor]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_corrective_binary_fixtures.py::test_binary_positive_recipe_and_real_admission[revised]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_itogo.py::test_real_prepared_work_tolerance[A-1576]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_itogo.py::test_real_prepared_work_tolerance[B-2096]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_itogo.py::test_real_prepared_work_tolerance[C-2088]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_itogo.py::test_real_prepared_work_tolerance[D-3136]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_mpp_calendar.py::test_calendar_from_mpp_fixture",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_pipeline.py::test_build_plan_from_mpp_offline",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_cache_corruption_rebuilds_once",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_corrupt_mpp_is_failed_not_empty_plan",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_zip_intake_inside_save",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_save_e2e.py::test_cli_zip_multiple_candidates_retains_list",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_save_e2e.py::test_real_cli_cold_warm_save[E-78-84]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_save_e2e.py::test_real_cli_cold_warm_save[F-86-93]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[A]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[B]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[C]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D-risks]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[E]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[F]",
+      "phase": 5,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_context_immutable[parameters0]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_context_immutable[parameters1]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_context_immutable[parameters2]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_context_immutable[parameters3]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_continue_registration_and_explicit_consumption",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_foreign_stale_and_changed_grounds",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_lineage_two_reasons_and_stop[continue-False]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_lineage_two_reasons_and_stop[continue-True]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_lineage_two_reasons_and_stop[stop-False]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_lineage_two_reasons_and_stop[stop-True]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_no_artificial_decisions",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_process_death_after_registration_and_commit[registered]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_process_death_after_registration_and_commit[snapshot_committed]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_proved_conflict_is_item_failure",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_real_cli_registration_and_retry",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_registration_batch_busy",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_decisions.py::test_ac19_registration_transaction_rollback",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-10]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-1]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-2]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-3]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-4]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-5]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-6]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-7]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-8]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_ac24_cli[AC24-9]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_compare_exact_publication_ids_same_v2_on_different_pages",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_compare_e2e.py::test_compare_same_source_precision_unknown_zone_and_causality",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_all_views_paginate_without_duplicates[files-item_id]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_all_views_paginate_without_duplicates[publications-publication_id]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_all_views_paginate_without_duplicates[snapshots-snapshot_id]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_cli_matches_typed_api",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_cursor_cannot_change_filter",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_cursor_stable_ties_unknowns_and_new_backdated_arrival[ingested]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_cursor_stable_ties_unknowns_and_new_backdated_arrival[source]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_filter_fields_are_distinct_order_source_does_not_change_filter",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_half_open_timezone_and_equal_timestamps",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_invalid_parameters_fail_closed[parameters0]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_invalid_parameters_fail_closed[parameters1]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_invalid_parameters_fail_closed[parameters2]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_invalid_parameters_fail_closed[parameters3]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_invalid_parameters_fail_closed[parameters4]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_invalid_parameters_fail_closed[parameters5]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_invalid_parameters_fail_closed[parameters6]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_invalid_parameters_fail_closed[parameters7]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_project_lineage_scope_and_failed_arrivals",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_unknown_time_separate_count",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_history_views_and_defaults",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_history_queries.py::test_q_history_integration_uses_same_api",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_bootstrap_no_save_one_arrival_then_identity_confirm_resume",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_identity_revision_blockers[ambiguous]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_identity_revision_blockers[foreign]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_identity_revision_blockers[partial]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_identity_revision_blockers[replaced]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_identity_revision_blockers[revoked]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_mapping_resume_selects_its_exact_pair_when_another_pair_is_pending",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_real_binary_bootstrap_identity_resume_without_preliminary_save",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_real_mpp_new_snapshot_separate_clean_environments[diff]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_real_mpp_new_snapshot_separate_clean_environments[publish]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_resume_forms_are_mutually_exclusive_and_apply_has_slug",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_timezone_new_pair_never_copies_mapping_or_decision",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_identity_resume_e2e.py::test_timezone_resume_new_preparation_and_snapshot_preserves_previous",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_batch_cli_argument_errors_single_json[arguments0]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_batch_cli_argument_errors_single_json[arguments1]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_batch_cli_argument_errors_single_json[arguments2]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_batch_cli_argument_errors_single_json[arguments3]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_batch_cli_argument_errors_single_json[arguments4]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_corrupt_middle_continue_stop_freeze_whole_list[continue-expected0]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_corrupt_middle_continue_stop_freeze_whole_list[stop-expected1]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_duplicates_within_across_batches_and_same_names_different_bytes",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_existing_batch_same_request_only_state_changed_manifest_conflicts",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_fixtures_batch_hashes_and_manifest_cases",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_foreign_lineage_is_local_failure_and_new_mpp_needs_no_decision",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_freeze_all_before_first_reader_and_mutated_second_source",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_inbox_late_file_excluded_diagnostics_and_sources_preserved",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_infrastructure_after_success_has_priority_and_retains_counts",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_missing_input_and_expected_hash_known_before_first_parse",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_real_batch_cli_native_copies[inbox]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_real_batch_cli_native_copies[manifest]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_real_batch_cli_native_copies[mpp]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_real_batch_cli_native_copies[named-risks]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_receipt_balance_and_priority",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_same_bytes_different_timezone_and_profile_new_scope",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_batch.py::test_structural_errors_precede_arrivals",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_confirm_show_no_automatic_operation_start_and_evidence_copy",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_foreign_project_pair_and_unknown_uid_are_conflicts",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_mapping_rejects_duplicate_json_keys_and_continuity_mapping_argument",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_operation_requirements_partial_then_sufficient_and_fixed_revision",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_q_identity_integration_uses_same_api",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_real_cli_confirm_show_errors_and_no_resume",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_real_independent_mpp_same_uid_stays_unknown",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_schema_matches_runtime_validator",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[None]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[document1]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[document2]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[document3]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[document4]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[document5]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[document6]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[document7]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[document8]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_identity.py::test_strict_mapping_shape_before_mutation[document9]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[continue]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_user_journeys.py::test_real_ef_batch_and_exact_compare",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_user_journeys.py::test_today_cli_local_boundaries",
+      "phase": 6,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_freeze_failure_never_accepts_new_bytes_under_same_id[changed]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_freeze_failure_never_accepts_new_bytes_under_same_id[hash]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_freeze_failure_never_accepts_new_bytes_under_same_id[missing]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_journaling_failure_stops_after_confirmed_success",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_lost_frozen_artifact_infrastructure_only_identical_repair",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_mirror_failure_preserves_commit_and_restores_without_reader[batch]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_mirror_failure_preserves_commit_and_restores_without_reader[save]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_missing_mirror_recovery_verifies_committed_artifacts",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_process_death_freeze_commit_receipt_boundaries[after_first_freeze]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_process_death_freeze_commit_receipt_boundaries[after_freeze_barrier]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_process_death_freeze_commit_receipt_boundaries[after_item_result]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_process_death_freeze_commit_receipt_boundaries[after_snapshot_commit]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_process_death_freeze_commit_receipt_boundaries[before_batch_receipt]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_process_death_freeze_commit_receipt_boundaries[before_freeze_barrier]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_process_death_freeze_commit_receipt_boundaries[before_save_receipt]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_process_death_freeze_commit_receipt_boundaries[before_snapshot_commit]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_resume_rejects_changed_frozen_context",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_batch_resume.py::test_resume_stop_retries_only_explicit_retryable_same_bytes",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_different_zip_containers_same_mpp_reuse_snapshot",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_failed_zip_receipt_retains_container_locator",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_operation_repeat_preserves_item_adds_attempt",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_commit]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_event]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_item_link]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_snapshot]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[after_versions]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[before_commit]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[before_readback]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_process_death_commit_boundaries[before_receipt]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_readback_failure_retains_commit_and_no_second_parse",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_two_processes_one_snapshot_two_receipts",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_import_atomicity.py::test_unresolved_project_has_durable_input_no_fake_snapshot",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_atomic_failure_preserves_previous_entry",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_cache_deletion_does_not_delete_durable_data",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_concurrent_atomic_writes",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[checksum]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[complete]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[count]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[payload_missing_field]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[reader]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[truncated]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_cache_rebuilds_from_verified_source[version]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_corrupt_source_is_not_read_or_reused",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_derived_representation_cache_profile_template_root_and_corruption",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_independent_cache_keys",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_real_parse_cache_one_read_same_bytes_different_names",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_cache.py::test_representation_corruption_rebuilds",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_lock.py::test_lock_busy_independent_process_and_release_after_death",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_plan_lock.py::test_two_batch_handlers_busy_without_duplicate_arrivals",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publication_verify.py::test_verify_cli_loopback_concurrent_reads_append_observations",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_409_changed_owned_macro_never_retries_patch",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_bounded_409_preserves_unmanaged_neighbours[100]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_bounded_409_preserves_unmanaged_neighbours[1]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_bounded_409_preserves_unmanaged_neighbours[2]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_foreign_attachment_version_after_exact_verification_blocks_put",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_foreign_managed_change_after_upload_is_conflict[attachment]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_foreign_managed_change_after_upload_is_conflict[duplicate_macro]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_foreign_managed_change_after_upload_is_conflict[macro]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_foreign_managed_change_after_upload_is_conflict[summary]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_new_operation_same_source_cannot_overwrite_foreign_target",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_pending_child_title_cannot_be_adopted_from_foreign_macro",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_conflicts.py::test_target_live_owner_across_process_and_release_after_kill",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_archive_failure_after_post_retains_unknown_external_effect",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[crash-after-create]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[crash-after-put]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[crash-after-upload]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[crash-before-create]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[crash-before-put]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[crash-before-upload]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[timeout-after-create]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[timeout-after-put]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[timeout-after-upload]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[timeout-before-create]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[timeout-before-put]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_effect_boundary_recovers_without_duplicate[timeout-before-upload]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_journal_failure_has_no_false_success_and_resumes[confirmation]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_journal_failure_has_no_false_success_and_resumes[intent]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_journal_failure_has_no_false_success_and_resumes[mirror]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_journal_failure_has_no_false_success_and_resumes[put_observation]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_journal_failure_has_no_false_success_and_resumes[upload_observation]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_legacy_operation_without_slug_or_binding_cannot_resume",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_missing_or_corrupt_archive_blocks_every_effect[evidence_artifact_id]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_missing_or_corrupt_archive_blocks_every_effect[prepared_artifact_id]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_missing_or_corrupt_archive_blocks_every_effect[representation_artifact_id]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_missing_or_corrupt_archive_blocks_every_effect[source]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_network_error_retains_safe_type_and_status",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_real_process_death_http_reconciliation[after_confirmation]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_real_process_death_http_reconciliation[after_post]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_real_process_death_http_reconciliation[after_put]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_real_process_death_http_reconciliation[before_post]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_real_process_death_http_reconciliation[before_put]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_real_process_death_http_reconciliation[hold_post]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_resume_rechecks_ab_flag_after_effect",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_schedule_mismatch_after_write_is_durable_without_rollback",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_transport_retries_only_get_with_configured_timeout[GET]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_transport_retries_only_get_with_configured_timeout[POST]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_transport_retries_only_get_with_configured_timeout[PUT]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_unobserved_effect_does_not_authorize_foreign_summary[False]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "test_publish_resume.py::test_unobserved_effect_does_not_authorize_foreign_summary[True]",
+      "phase": 7,
+      "group": 2
+    },
+    {
+      "test_id": "acceptance/test_user_journeys.py::test_final_baseline_audit",
+      "phase": 8,
+      "group": 2
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[actuals]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[assignment-dates]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[calendar-inheritance]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-FINISH_NO_EARLIER_THAN]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-START_NO_EARLIER_THAN]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[default-availability]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[fixed-units]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[inactive]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-availability]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-calendar]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[segments]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[summary-dependency]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_rest_live.py::test_live_get_test_page",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[C]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]",
+      "phase": 9,
+      "group": 3
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "phase": 10,
+      "group": 3
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_installed_names_after_live",
+      "phase": 11,
+      "group": 3
+    }
+  ],
+  "pre_collection_phase": 1,
+  "report_phase": 12
+}

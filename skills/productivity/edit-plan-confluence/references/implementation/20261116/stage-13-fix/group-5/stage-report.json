@@ -1,0 +1,782 @@
+{
+  "schema_version": 1,
+  "group": 5,
+  "gate": "failed",
+  "acceptance_status": "§20: финальная приёмка failed; исправления обязательны",
+  "summary": {
+    "passed": 754,
+    "failed": 4,
+    "skipped": 0
+  },
+  "exit_code": 1,
+  "selected": 758,
+  "requirements_status": {
+    "passed": 23,
+    "failed": 4
+  },
+  "cases_status": {
+    "failed": 4,
+    "passed": 4
+  },
+  "journeys_status": {
+    "failed": 1,
+    "passed": 10
+  },
+  "gate_checks": {
+    "nonempty_results": true,
+    "all_required_selected": true,
+    "all_required_passed": false,
+    "all_AC_passed": false,
+    "all_cases_passed": false,
+    "all_journeys_passed": false,
+    "fixtures_verified": true,
+    "populated_baseline_preserved": true,
+    "protected_files_unchanged": true,
+    "sources_stable": true,
+    "external_regression_passed": true,
+    "external_sources_restorable": true,
+    "prior_twelve_commits": true,
+    "original_stage13_failed_preserved": true,
+    "no_production_live_targets": true,
+    "pytest_exit_zero": false,
+    "ordered_phases_2_through_11": true,
+    "ordered_unit_archive_mpp_live": true
+  },
+  "remaining_blockers": 375,
+  "source_tree_sha256": "6ebede7f67be8a4db781a08390c135540d1fc2514f6ce2a5d9f58ec33e26912d",
+  "commits": [
+    {
+      "group": 0,
+      "commit": "71352a6a7284541ca6306b76342954b16862f21e",
+      "subject": "edit-plan-confluence: docs: acceptance norms",
+      "files": [
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-0/documentation-manifest.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-0/stage-report.md"
+      ]
+    },
+    {
+      "group": 1,
+      "commit": "490fa01b8eb3308cbb4754c87591f03ef2bf46e2",
+      "subject": "edit-plan-confluence: fix export",
+      "files": [
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/r-group1-final.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/r-group1-final2.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/r-group1.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/stage-report.md",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/plan_export.py",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/read_mpp.py",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/references/mpxj-16.4.0-observation/ConstraintFactory.upstream.java",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/references/mpxj-16.4.0-observation/README.md",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/references/mpxj-16.4.0-observation/build.py",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/references/mpxj-16.4.0-observation/ecj.jar",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/references/mpxj-16.4.0-observation/manifest.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/references/mpxj-16.4.0-observation/mpxj-observation.jar",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/references/mpxj-16.4.0-observation/mpxj-sources.jar",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/references/mpxj-16.4.0-observation/source/org/mpxj/mpp/ConstraintFactory.java",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/references/mpxj-16.4.0-observation/source/org/mpxj/mpp/RelationReadAudit.java",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/after/tests/test_plan_export.py",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/before/plan_export.py",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/before/read_mpp.py",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/before/tests/test_plan_export.py",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/changes.patch",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-1/usertools/MppReader/manifest.json",
+        "skills/productivity/edit-plan-confluence/references/schemas/prepared-plan.schema.json"
+      ]
+    },
+    {
+      "group": 2,
+      "commit": "be60c4a1e069b49f8b12eb5b5b8b94d657b6c50c",
+      "subject": "edit-plan-confluence: fix representation",
+      "files": [
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/group-2-controls-complete.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/group-2-controls-final.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/group-2-controls-verified.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/group-2-controls.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/group-2-equivalence.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/group-2-summary-recheck.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/group-2-unit-complete.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/group-2-unit-final.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/group-2-unit.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/actuals/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/actuals/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/actuals/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/actuals/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/actuals/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/actuals/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/assignment-dates/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/assignment-dates/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/assignment-dates/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/assignment-dates/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/assignment-dates/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/assignment-dates/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/calendar-inheritance/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/calendar-inheritance/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/calendar-inheritance/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/calendar-inheritance/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/calendar-inheritance/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/calendar-inheritance/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-FINISH_NO_EARLIER_THAN/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-FINISH_NO_EARLIER_THAN/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-FINISH_NO_EARLIER_THAN/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-FINISH_NO_EARLIER_THAN/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-FINISH_NO_EARLIER_THAN/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-FINISH_NO_EARLIER_THAN/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-START_NO_EARLIER_THAN/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-START_NO_EARLIER_THAN/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-START_NO_EARLIER_THAN/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-START_NO_EARLIER_THAN/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-START_NO_EARLIER_THAN/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/constraint-START_NO_EARLIER_THAN/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/fixed-units/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/fixed-units/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/fixed-units/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/fixed-units/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/fixed-units/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/fixed-units/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/inactive/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/inactive/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/inactive/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/inactive/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/inactive/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/inactive/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-availability/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-availability/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-availability/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-availability/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-availability/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-availability/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-calendar/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-calendar/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-calendar/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-calendar/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-calendar/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/resource-calendar/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/segments/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/segments/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/segments/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/segments/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/segments/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/segments/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/summary-dependency/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/summary-dependency/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/summary-dependency/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/summary-dependency/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/summary-dependency/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/summary-dependency/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/target.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/task-calendar/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/task-calendar/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/task-calendar/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/task-calendar/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/task-calendar/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/flat-inheritance-and-resource-check/task-calendar/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/segments-without-duration/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/segments-without-duration/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/segments-without-duration/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/segments-without-duration/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/segments-without-duration/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/history/segments-without-duration/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/actuals/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/actuals/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/actuals/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/actuals/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/actuals/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/actuals/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/default-availability/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/default-availability/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/default-availability/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/default-availability/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/default-availability/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/default-availability/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/inactive/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/inactive/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/inactive/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/inactive/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/inactive/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/inactive/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/segments/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/segments/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/segments/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/segments/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/segments/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/segments/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/target.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/browser-received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/input.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/observation.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/received.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/render.png",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/storage.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/stage-report.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/stage-report.md",
+        "skills/productivity/edit-plan-confluence/references/profiles/installed-gantt-profile.json",
+        "skills/productivity/edit-plan-confluence/scripts/mpp_calendar.py",
+        "skills/productivity/edit-plan-confluence/scripts/mpp_convert.py",
+        "skills/productivity/edit-plan-confluence/scripts/plugin_profile.py",
+        "skills/productivity/edit-plan-confluence/tests/fixtures/golden/capability-controls.json",
+        "skills/productivity/edit-plan-confluence/tests/test_corrective_representation.py",
+        "skills/productivity/edit-plan-confluence/tests/test_mpp_calendar.py",
+        "skills/productivity/edit-plan-confluence/tests/test_plugin_capabilities_live.py"
+      ]
+    },
+    {
+      "group": 3,
+      "commit": "77c098f3d1e0ff43e0c86002b072b5f5f0813aa8",
+      "subject": "edit-plan-confluence: fix admission",
+      "files": [
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/bc-existing/manifest.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/bc-existing/snapshot_63235566e13645a08825b6b27a458e49-typed.json.gz",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/bc-existing/snapshot_f34e96cb8e164bab9dd210ee1f4362f1-typed.json.gz",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/bc-production-readonly.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/group-3-unit-final.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/group-3-unit.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/stage-report.md",
+        "skills/productivity/edit-plan-confluence/references/profiles/project-rules-v1.json",
+        "skills/productivity/edit-plan-confluence/references/profiles/publication-policy-v1.json",
+        "skills/productivity/edit-plan-confluence/scripts/plan_diagnostics.py",
+        "skills/productivity/edit-plan-confluence/scripts/plan_rules.py",
+        "skills/productivity/edit-plan-confluence/tests/test_corrective_completeness.py"
+      ]
+    },
+    {
+      "group": 4,
+      "commit": "e2ad9894b1e353c5b39188aff68d6497954e7a21",
+      "subject": "edit-plan-confluence: fix acceptance fixtures",
+      "files": [
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/baseline-7f76eca12f08.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/baseline-9a487eba93f4.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/baseline-bf8a69a04d90.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/baseline-bf91dbe5459a.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-7f76eca12f08-1.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-7f76eca12f08-2.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-7f76eca12f08-3.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-7f76eca12f08-4.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-7f76eca12f08-5.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-7f76eca12f08-6.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-9a487eba93f4-1.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-9a487eba93f4-2.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-9a487eba93f4-3.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-9a487eba93f4-4.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-9a487eba93f4-5.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf8a69a04d90-1.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf8a69a04d90-2.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf8a69a04d90-3.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf8a69a04d90-4.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf8a69a04d90-5.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf91dbe5459a-1.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf91dbe5459a-2.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf91dbe5459a-3.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf91dbe5459a-4.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf91dbe5459a-5.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/cli-bf91dbe5459a-6.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/live-target-537574119-calls.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/live-target-537574119.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/live-target-537574123-calls.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/live-target-537574123.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/live-target-537574126-calls.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/live-target-537574126.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/live-target-537574128-calls.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/live-target-537574128.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/new-source-diff.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/new-source-publish.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/semantic-negative-diff.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/evidence/semantic-negative-publish.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/group-4-binary-complete.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/group-4-binary-final.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/group-4-binary.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/group-4-live.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/stage-report.json",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/stage-report.md",
+        "skills/productivity/edit-plan-confluence/tests/acceptance/ac-matrix.json",
+        "skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py",
+        "skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary-identity-positive/anchor.mpp",
+        "skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary-identity-positive/manifest.json",
+        "skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary-identity-positive/revised.mpp",
+        "skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary-identity-positive/test-only-user-evidence.txt",
+        "skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary_recipe.py",
+        "skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/manifest.json",
+        "skills/productivity/edit-plan-confluence/tests/test_corrective_binary_fixtures.py"
+      ]
+    },
+    {
+      "group": 2,
+      "commit": "c18614e964d4b222528dc640c27fe11bffc5f471",
+      "subject": "edit-plan-confluence: fix representation boundary",
+      "files": [
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/iteration-2/representation-boundary-after.log.gz",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/iteration-2/representation-boundary-after.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/iteration-2/representation-boundary-before.log.gz",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/iteration-2/representation-boundary-before.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/iteration-2/stage-report.md",
+        "skills/productivity/edit-plan-confluence/scripts/mpp_convert.py",
+        "skills/productivity/edit-plan-confluence/tests/test_corrective_representation.py"
+      ]
+    },
+    {
+      "group": 4,
+      "commit": "bcc20299dc4664b67071779572a74a502c1ba042",
+      "subject": "edit-plan-confluence: fix acceptance fixture sources",
+      "files": [
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/iteration-2/junit.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/iteration-2/pytest.log.gz",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-4/iteration-2/stage-report.md",
+        "skills/productivity/edit-plan-confluence/tests/acceptance/ac-matrix.json",
+        "skills/productivity/edit-plan-confluence/tests/test_plan_batch.py"
+      ]
+    },
+    {
+      "group": 2,
+      "commit": "3d19d6b37900f9a1d1f67a8789e8251dfd6b26f1",
+      "subject": "edit-plan-confluence: fix representation cache revision",
+      "files": [
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/iteration-3/junit.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/iteration-3/pytest.log.gz",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-2/iteration-3/stage-report.md",
+        "skills/productivity/edit-plan-confluence/scripts/mpp_convert.py"
+      ]
+    },
+    {
+      "group": 3,
+      "commit": "6d6fe941e933b08d4a86dcb8b823a362dd573935",
+      "subject": "edit-plan-confluence: fix explicit incomplete enumeration",
+      "files": [
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/iteration-2/enum-after-v2.log.gz",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/iteration-2/enum-after-v2.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/iteration-2/enum-before.log.gz",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/iteration-2/enum-before.xml",
+        "skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-13-fix/group-3/iteration-2/stage-report.md",
+        "skills/productivity/edit-plan-confluence/references/profiles/publication-policy-v1.json",
+        "skills/productivity/edit-plan-confluence/scripts/plan_diagnostics.py",
+        "skills/productivity/edit-plan-confluence/tests/acceptance/ac-matrix.json",
+        "skills/productivity/edit-plan-confluence/tests/test_corrective_completeness.py"
+      ]
+    }
+  ],
+  "report": "stage-report.md",
+  "full_machine_report": "final/reports/acceptance-report.json.gz",
+  "blocker_ledger": "blocker-ledger.json",
+  "preservation": "preservation-checks.json",
+  "capability_controls": [
+    {
+      "id": "actuals",
+      "status": "not_verified",
+      "assertion_kind": "unsupported",
+      "capabilities": [
+        "task:actual_start",
+        "task:actual_finish",
+        "task:actual_duration",
+        "task:actual_work"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.native_fields.actualStartDate": {
+          "expected": false,
+          "actual": false,
+          "passed": true
+        },
+        "3.native_fields.actualEndDate": {
+          "expected": false,
+          "actual": false,
+          "passed": true
+        },
+        "3.native_fields.actualDuration": {
+          "expected": false,
+          "actual": false,
+          "passed": true
+        },
+        "3.native_fields.actualEffort": {
+          "expected": false,
+          "actual": false,
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "assignment-dates",
+      "status": "not_verified",
+      "assertion_kind": "unsupported",
+      "capabilities": [
+        "assignment:start",
+        "assignment:finish"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "calendar-inheritance",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "calendar:inheritance"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-12T09:00:00",
+          "actual": "2026-01-12T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-12T18:00:00",
+          "actual": "2026-01-12T18:00:00",
+          "passed": true
+        },
+        "3.calendar": {
+          "expected": "child",
+          "actual": "child",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "coincident-assignment",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "assignment:coincident_task_interval"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        },
+        "assignments.11.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "assignments.11.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "constraint-FINISH_NO_EARLIER_THAN",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "task:constraint:FINISH_NO_EARLIER_THAN"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-14T09:00:00",
+          "actual": "2026-01-14T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-14T18:00:00",
+          "actual": "2026-01-14T18:00:00",
+          "passed": true
+        },
+        "3.constraintType": {
+          "expected": "finishnoearlierthan",
+          "actual": "finishnoearlierthan",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "constraint-START_NO_EARLIER_THAN",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "task:constraint:START_NO_EARLIER_THAN"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-13T09:00:00",
+          "actual": "2026-01-13T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-13T18:00:00",
+          "actual": "2026-01-13T18:00:00",
+          "passed": true
+        },
+        "3.constraintType": {
+          "expected": "startnoearlierthan",
+          "actual": "startnoearlierthan",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "default-availability",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "resource:default_availability"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "fixed-units",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "task:task_type:FIXED_UNITS"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-12T18:00:00",
+          "actual": "2026-01-12T18:00:00",
+          "passed": true
+        },
+        "3.schedulingMode": {
+          "expected": "FixedUnits",
+          "actual": "FixedUnits",
+          "passed": true
+        },
+        "3.duration": {
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "inactive",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "task:active"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "2.inactive": {
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        "3.startDate": {
+          "expected": "2026-01-05T09:00:00",
+          "actual": "2026-01-05T09:00:00",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "resource-availability",
+      "status": "not_verified",
+      "assertion_kind": "unsupported",
+      "capabilities": [
+        "resource:availability"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "resource-calendar",
+      "status": "not_verified",
+      "assertion_kind": "unsupported",
+      "capabilities": [
+        "calendar:bindings:resources"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "segments",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "task:segments"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-13T18:00:00",
+          "actual": "2026-01-13T18:00:00",
+          "passed": true
+        },
+        "3.segments.length": {
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "summary-dependency",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "dependency:summary_endpoint"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "task-calendar",
+      "status": "passed",
+      "assertion_kind": "supported",
+      "capabilities": [
+        "calendar:bindings:tasks"
+      ],
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-12T09:00:00",
+          "actual": "2026-01-12T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-12T18:00:00",
+          "actual": "2026-01-12T18:00:00",
+          "passed": true
+        },
+        "3.calendar": {
+          "expected": "alternate",
+          "actual": "alternate",
+          "passed": true
+        }
+      }
+    }
+  ]
+}

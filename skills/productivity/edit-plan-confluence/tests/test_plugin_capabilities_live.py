@@ -36,6 +36,7 @@ def capability_page(request):
     mid,pid,phash = new_macro_ids()
     page = client.create_page('EditPlanConfluence corrective capability controls '+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f'),
         parent['space']['key'],build_macro_html(mid,pid,phash),PARENT)
+    request.config._acceptance_counters['live_POST'] += 1
     page_id = str(page['id'])
     assert page_id not in {PARENT,'496600693','499550441','499566117','506248940','519492935'}
     if hasattr(request.config,'_stage13_live_pages'): request.config._stage13_live_pages.add(page_id)

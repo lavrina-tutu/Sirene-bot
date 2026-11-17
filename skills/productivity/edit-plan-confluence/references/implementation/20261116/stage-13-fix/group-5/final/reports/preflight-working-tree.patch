@@ -1,0 +1,33 @@
+diff --git a/skills/productivity/edit-plan-confluence/tests/conftest.py b/skills/productivity/edit-plan-confluence/tests/conftest.py
+index 9480001..18f6ad0 100644
+--- a/skills/productivity/edit-plan-confluence/tests/conftest.py
++++ b/skills/productivity/edit-plan-confluence/tests/conftest.py
+@@ -2333,6 +2333,7 @@ def _stage13_report(session, exitstatus, root):
+         'external_sources_restorable':external.get('restoration_ok') is True,
+         'prior_twelve_commits':len(external.get('previous_stage_commits',[]))==12 and all(
+             c.get('recorded_gate')=='passed' for c in external.get('previous_stage_commits',[])),
++        'original_stage13_failed_preserved':external.get('original_stage13',{}).get('gate')=='failed' and external.get('original_stage13',{}).get('preserved') is True,
+         'no_production_live_targets':not set(live_pages)&STAGE13_PRODUCTION_PAGES,
+         'pytest_exit_zero':int(exitstatus)==0}
+     order = config._stage13_execution_order
+@@ -2371,7 +2372,7 @@ def _stage13_report(session, exitstatus, root):
+         'live_pages':live_pages, 'production_pages_excluded':sorted(STAGE13_PRODUCTION_PAGES),
+         'execution_order':'execution-order.json',
+         'limitations':['Acceptance of §20 only; §19 W5/ZD/AC-101…144 remains independent.',
+-            'Master is actually v0.5.1 with separate §21; §20 and stages 01–12 were not edited.',
++            'Master v0.5.1 with separate §21; acceptance norms clarified before this corrective run. Original archived stages 01–13 and failed commit 92bea3f are preserved.',
+             'Product defects belong to earlier stages and are reported, not repaired in stage 13.',
+             'No token economy claim: tokens were not measured.',
+             'Process-death tests do not model power loss. Gateway, cron and watchers are unchanged.',
+diff --git a/skills/productivity/edit-plan-confluence/tests/test_plugin_capabilities_live.py b/skills/productivity/edit-plan-confluence/tests/test_plugin_capabilities_live.py
+index 7a4f8c5..ccc5b1f 100644
+--- a/skills/productivity/edit-plan-confluence/tests/test_plugin_capabilities_live.py
++++ b/skills/productivity/edit-plan-confluence/tests/test_plugin_capabilities_live.py
+@@ -36,6 +36,7 @@ def capability_page(request):
+     mid,pid,phash = new_macro_ids()
+     page = client.create_page('EditPlanConfluence corrective capability controls '+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f'),
+         parent['space']['key'],build_macro_html(mid,pid,phash),PARENT)
++    request.config._acceptance_counters['live_POST'] += 1
+     page_id = str(page['id'])
+     assert page_id not in {PARENT,'496600693','499550441','499566117','506248940','519492935'}
+     if hasattr(request.config,'_stage13_live_pages'): request.config._stage13_live_pages.add(page_id)

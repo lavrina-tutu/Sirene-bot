@@ -1,0 +1,5 @@
+--- master.go
++++ proposed.go
+@@
+-func ListingMapper(o Offer) CalcRequest {return CalcRequest{HotelID:o.HotelID}}
++func ListingMapper(o Offer) CalcRequest {return CalcRequest{HotelID:o.HotelID,ContractID:o.ContractID}}

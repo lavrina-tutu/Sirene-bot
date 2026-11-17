@@ -1,0 +1,11 @@
+{
+  "hotel": "h7",
+  "provider_offer": {
+    "hotel_id": "h7",
+    "legal_id": "c9"
+  },
+  "enable_contract_filter": true,
+  "active_contracts": [
+    "c8"
+  ]
+}

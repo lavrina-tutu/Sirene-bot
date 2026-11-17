@@ -1,0 +1,10 @@
+interface:
+  display_name: "System Design Architect"
+  short_description: "Архитектура и Architecture Drill"
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+  brand_color: "#315BCE"
+  default_prompt: "Используй $system-design-architect в режиме Architecture Drill: наводящими вопросами найди пробелы и доведи мой System Design до цельной архитектуры."
+
+policy:
+  allow_implicit_invocation: true

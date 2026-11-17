@@ -1,0 +1,33 @@
+{
+  "critical": [
+    {
+      "id": "versions",
+      "check": "Same sample: master listing passes because contract omitted at ListingMapper; detail rejects. Proposed listing/detail both reject. Internal offer has c9 in BOTH versions."
+    },
+    {
+      "id": "flag",
+      "check": "Enabled selects whether to run filter; pass/fail depends on supplied contract and active set. Do not conflate disabled/bypassed/passed."
+    },
+    {
+      "id": "minimal-current",
+      "check": "Current listing can propagate existing verified ID; extra current Binding API is not needed for this sample."
+    },
+    {
+      "id": "historical-positive-control",
+      "check": "Later archive question requires historical semantics/owner contract; current mapping alone is insufficient. Do not claim new API is always wrong or pretend historical behavior implemented."
+    },
+    {
+      "id": "consistent-explanation",
+      "check": "Diagram/text/explicit input and output agree on both routes and versions; preserve earlier corrections."
+    }
+  ],
+  "negative_controls": [
+    "master has no contract anywhere",
+    "enabled means passed",
+    "both master routes accept c9",
+    "adding a lookup is necessary for this current sample",
+    "current binding answers historical date"
+  ],
+  "positive_control": "Current path simplification plus separately justified historical contract gap is acceptable.",
+  "grading": "Read actual source; execute matrix; judge explanation semantically. No prose keyword scoring."
+}

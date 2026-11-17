@@ -1,0 +1,10 @@
+{
+  "request-flow": [
+    "same sample master listing accepts vs proposed rejects",
+    "master internal contract exists and detail transmits it",
+    "enabled is not passed",
+    "current Listing needs mapping not Binding API",
+    "archive needs historical owner contract; distinguish justified new API",
+    "diagram matches text"
+  ]
+}

@@ -1,3 +1,7 @@
+# SUPERSEDED — historical triage only
+
+Current scope, whitelist and instructions are in ../SKILL.md and pii-rule-20260909.md. Conflicting instructions below are historical and must not be followed.
+
 # Триаж находок PIIScan в ErrorBus (из расследования 2026-09-09, архитектор cursor-grok-4.6-high, read-only)
 
 > **УСТАРЕЛО (09.09.2026):** правила зон/политика ниже перекрыты решением 09.09 —см. `references/pii-rule-20260909.md` (канон) и реализацию v1.1.0 в `PIIScan_TZ.md`. Оставляется как историческая запись расследования 647 open-строк. Фиксы РЕАЛИЗОВАНЫ и закрыты 09.09 (HF:impl→HF:test PASS, 26 pytest зелёные, CHANGE-карточка DEV/PIIScan-pii-hygiene): детектор (INTERNAL_LOGIN/PHONE/SECRET_ASSIGNMENT/Miro), whitelist+3, JSON-контекст по полю, маскирование на записи (redact.py/gateway/MFL/ExchangeMonitor/error_bus_cli), TTL 5д (TaskRefresh/llm-anomaly-audits). `pfs_batch` НЕ менялся (решение 09.09).

@@ -1,7 +1,7 @@
 ---
 name: pii-data-scanning
-description: "Use when ищем/маскируем ПДн, PIIScan, утечку email."
-version: 1.2.0
+description: "Use for PIIScan, PII detection and masking."
+version: 1.3.0
 author: agent
 license: MIT
 platforms: [linux]
@@ -11,90 +11,62 @@ metadata:
     related_skills: [workvault-entities, hermes-memory-hygiene]
 ---
 
-# PII / ПДн — детект утечек и маскирование в экосистеме
+# PIIScan: local detection and masking contract
 
-## Overview
-Единые правила, по которым в экосистеме Hermes/WorkVault ищутся и репортятся персональные данные (ПДн, ФЗ-152): что считать инцидентом, где тревожить, как маскировать на хранении, как встроен регресс-скан. Реализованный инструмент — **PIIScan** (`TZ/PIIScan/PIIScan_TZ.md`).
+Use for Hermes/WorkVault PIIScan, local findings and masking. This is Sasha's agreed operational classification, not a universal legal definition of personal data. Do not read live `~/.hermes/state.db`, even read-only. It is out of scope. Do not modify the Hermes core or ErrorBus helpers as part of a scan task. Do not run a production scan or change data without authorization.
 
-## When to Use
-- «найди перс данные / утечку email / ПДн в файлах»
-- доработка/запуск PIIScan, регресс-контроль после pii-privacy
-- вопрос «что считается утечкой ПДн» или проектирование маскирования
+## Finding definition and scope
 
-## Правило «ПДн-инцидент» (карточка человека) — согласовано с Сашей 27.08.2026, ПЕРЕСМОТРЕНО 09.09.2026
-**Инцидент = комбинация двух полей в одном контексте**, а не одиночный факт:
-1. **Идентификатор — ТОЛЬКО полное ФИО или хотя бы «Имя Фамилия» (2 слова с заглавной кириллицы).** Голый внутр. логин (`имя.фамилия`) без рядом стоящего ФИО — **НЕ ПДн** (дословно Саши: «если рядом с логином нет полного ФИО или хотя бы ФИ — это не ПДн»).
-2. **Атрибут связи** — email **или** телефон **или** messenger-handle (`@handle`) **или** должность.
+A local PII card requires **both** an identifier and an attribute in one context:
 
-Тревожит только *совпадение* полей (1)+(2) в одном контексте. Одиночный email/ФИО без атрибута, и **голый логин без ФИО** — не инцидент (иначе вал ложных critical на штатной переписке/логин-строках). Итог: `field_type` реальных инцидентов — только `fio+email|fio+phone|fio+handle|fio+position`; типы `login+*` из новых находок исчезают.
-Контекст: `.jsonl`/JSON → **одно строковое поле** = один контекст (НЕ декартово по соседним полям объекта); текст `.md`/логи → строка (±1 строка для «ФИО:\nEmail:»).
+- Identifier: full Russian FIO or at least a two-word capitalized first and last name. A bare internal login is insufficient: «если рядом с логином нет полного ФИО или хотя бы ФИ — это не ПДн».
+- Attribute: email, phone, messenger handle or position. Field types are `fio+email`, `fio+phone`, `fio+handle`, `fio+position`. A single email, name without an attribute, or bare login is not a card.
 
-## Самосогласованный план (архитектор + ревизор, 09.09)
-Полный план предотвращения оседания ПДн + план исправления сложившейся ситуации (детектор, whitelist, гигиена на записи, TTL, тесты, порядок внедрения, правки ревизора): `references/pii-rule-20260909.md`. Краткость ниже.
+For ordinary JSON/JSONL, one string field is one context; do not cross fields of an object. For multiline or long fields over 500 characters, inspect line by line to avoid a Cartesian product of unrelated names and attributes. For text and logs use the line and adjacent line where needed for a split `ФИО:\nEmail:` context.
 
-## Severity по месту нахождения
-| Зона | Severity |
-|---|---|
-| `~/.hermes/state.db` (живая переписка) | **вне охвата** (не читать — рабочий контекст, снижает нагрузку) |
-| `~/.hermes/sessions/*.jsonl` (архивы на диске) | critical |
-| `~/WorkVault`, `~/WorkVault_backup` | critical |
-| `~/.hermes/cron/output/`, `~/.hermes/logs/`, `~/.hermes/error_bus/` | critical |
+Outside exclusions, archive sessions `~/.hermes/sessions/*.jsonl`, `~/WorkVault`, `~/WorkVault_backup`, `~/.hermes/cron/output/`, `~/.hermes/logs/` and `~/.hermes/error_bus/` are critical scan zones. The live `~/.hermes/state.db` is never scanned. Do not infer that an ErrorBus severity or count equals a number of real leaks: triage the structured finding first.
 
-## Whitelist (легитимные хранилища — не сканировать совсем, ни ПДн, ни креды)
-- `~/WorkVault/Contacts/` (`contacts.enc` зашифрован)
-- `~/WorkVault/Entities/*` (открытые карточки людей/проектов — штатная рабочая база)
-- `~/WorkVault/Inbox/` и `~/WorkVault/UserManuals/` (по решению Саши)
-- `~/WorkVault/Confluence/**` (уставы, минутки, корп. документы) — добавлено 09.09
-- `~/WorkVault/Projects/**` — добавлено 09.09, **ВЕСЬ Projects/** (решение Саши, финальное: перекрывает правку ревизора «только TrisigmaFull»). Саша знает, что там 1-1 заметки сотрудников — сознательный выбор в пользу исключения всей зоны.
-- `~/WorkVault/Meetings/**` (транскрипты встреч) — добавлено 09.09
+Never scan either PII or credentials in these legitimate storage whitelist zones:
 
-**НЕ** в whitelist: `~/USERTOOLS/TaskRefresh/session/` (там TTL, не исключение; путь абсолютный — зона `~/USERTOOLS/` в §4 охвата), `Hermes-Backlog/TZ/**` (сканировать), `~/.hermes/error_bus/tests/` (сканировать).
+- `~/WorkVault/Contacts/`, `~/WorkVault/Entities/*`, `~/WorkVault/Inbox/`, `~/WorkVault/UserManuals/`;
+- all of `~/WorkVault/Confluence/**`, all of `~/WorkVault/Projects/**`, and `~/WorkVault/Meetings/**`.
 
-**Skip-решение 09.09 (развилка «поток ложных Errors после добавления обхода USERTOOLS»):** `~/USERTOOLS/**` — **skip при обходе**, кроме `~/USERTOOLS/TaskRefresh/session/` (продолжает сканироваться как TTL-кэш). Причина: исходники USERTOOLS и их pytest-фикстуры (`tests/*.py`, `tests/fixtures/*.md`) содержат **вымышленные данные тестов** (`Лякутин Валентин / lyakutin@tutu.tech`, `Иванов Иван / tk@tutu`) и **декларации полей** — это НЕ остаточный ПДн. Реализация: `ScanConfig.is_usertools_skip_path()` (skip-фильтр на уровне префикса пути в `iter_scan_files()`/`scan_file()`, по аналогии с VENDOR_DIRS), не whitelist-запись baseline (это операционные артефакты, не легитимные хранилища).
+Skip `~/USERTOOLS/**` at traversal, except `~/USERTOOLS/TaskRefresh/session/`, which remains in scope as a TTL cache. This is a traversal skip, not a baseline whitelist. `Hermes-Backlog/TZ/**` and `~/.hermes/error_bus/tests/` remain in scope. Do not silently clean values or paths in the excluded Meetings zone: email in a filename is a separate path scope that requires explicit authorization.
 
-## Первый прогон = baseline
-Первый запуск (нет `baseline.json`) фиксирует всё найденное как «известное состояние», **без critical**, одним сводным отчётом. Инциденты — только со 2-го прогона по **новым** находкам (прирост). Резолв исчезнувших — авто (`error_bus_cli.py resolve`), но исторический факт находки сохраняется в `audit_history.jsonl` без DELETE.
+Credentials are a separate category: an actual exposed key, PEM or Bearer secret outside the whitelist is critical independently of a PII card. Agreed URL embed query parameters such as `token`, `boardAccessToken` and `access_token` are excluded by the local rule. Do not classify declarations, variable passing, function calls or obvious placeholders (`AAFake*`, `Example`, `your_token_here`) as real credentials; retain detection of actual literals and secrets. Detection rules, post-filters and examples: `references/detection-and-masking.md`. Zone decisions and history: `references/pii-rule-20260909.md`.
 
-## Креды/токены — отдельная категория
-Своё правило (секрет в открытом виде = critical сам по себе, без комбинаторики), не смешивать с «карточками». В тех же зонах, минус whitelist.
+## First run, reporting and atomicity
 
-**Правка 09.09:** `token=`/`boardAccessToken=`/`access_token` в **URL-встраиваниях (query-string)** — НЕ секрет (штатный Miro/embed-механизм открывает доступ по ссылке, напр. `https://miro.com/app/live-embed/uXjV/?boardAccessToken=...`). Не считать инцидентом. Секрет = **ключи/PEM/Bearer-токены в открытом виде** (AWS/`sk-`/Bearer/PEM) вне query-string. Реальный фикс: `(?<![A-Za-z0-9_])` перед группой ключевых слов + пропуск, если перед матчем `?`/`&` или слева `https://miro.com`.
+On the first run, when `baseline.json` is absent, record all findings as known baseline, without critical incidents, and produce one summary report. From the second run report only new findings; classify found baseline items as persisting and missing keys as vanished. Resolve vanished open findings according to the supported ErrorBus interface. Never delete their historical evidence from `audit_history.jsonl`.
 
-## Питфолл: mask_pii НЕ стерилен для хранения (проверено 27.08.2026)
-`mask_pii(value, kind="email")` из `~/USERTOOLS/AnywhereContacts/anywhere_contacts/logger.py` (`_mask_email`) маскирует **только локальную часть** `@`, оставляет **домен** открытым (`git@github.com`, `i.**o@gmail.com`). Плюс `_mask_word` **не маскирует строки ≤3 симв** (`git` → без маски). Итог: не подходит для at-rest хранилища — в `baseline.json`/`audit_history.jsonl` утекали реальные адреса (4982/10312 записей).
+Produce **one summary event per run** for new findings, including count, breakdown by file/category and masked sample in detail. When there are zero new findings, write no ErrorBus event; a stdout self-check summary is allowed. Per-finding events and per-run caps were superseded.
 
-**Правило:** для **стерильного** хранения (baseline/audit/отчёты) нужна своя функция полного маскирования: email → маскировать и local, и domain (`git@github.com → gi**@gi***`), короткие значения (≤3) → `****`. `mask_pii`/`mask_contact` годятся только для вывода на экран, где видимый домен приемлем.
+Keep the crash-safe order: collect `new/persisting/vanished` in memory → report and resolve → checkpoint baseline and audit in batches of `BATCH=20`. Save baseline through a temporary file in the same directory and `os.replace`. Never mark all findings saved before a successful report: interruption would turn unreported findings into persisting findings. Preserve append-only audit history. Details: `references/baseline-and-reporting.md`.
 
-## Компоненты PIIScan (существующие)
-- `~/.hermes/pii_scan/pii_scan.py`, `patterns.py`, `redact.py`, `baseline.json`, `audit_history.jsonl`
-- `~/.hermes/scripts/pii_scan.sh` (всегда exit 0, fail-soft)
-- Стерильная маска в `pii_scan.py` (`mask_identifier`/`mask_attribute`/`mask_credential`)
-- Гигиена логов: `redact.py::redact_fio_email_phone(text)` (на базе patterns.py, без mask_pii)
-- Тесты: `~/.hermes/pii_scan/tests/` (pytest)
+If a source was removed but its event remains open, inspect whether the key exists in the baseline: automatic vanished resolution only covers baseline keys. For an out-of-baseline batch, dry-run the intended selection first, then use the existing batch API in one process (`resolve_error(conn, err_id, note)`), not raw SQL or one subprocess per event. Do not alter ErrorBus helpers. Incident and recovery history: `references/pii-incident-20260921.md`.
 
-## TTL 5 дней и гигиена на записи (решение 09.09)
-- **TTL 5 дней** (авто-удаление завершённых артефактов): `Tasks/TaskRefresh/session/history/*.json` (заверш. сессии; `current.json` остаётся) — в `session_store.py` `prune_history()` при `save_session`; `WorkVault_backup/llm-anomaly-audits/LLM-anomalies_*.json` — `find $OUTDIR -name 'LLM-anomalies_*.json' -mtime +5 -delete` в начале `llm_anomaly_scan.sh`. Питфолл ревизора: TTL(5д) < цикла крона(7д) llm-anomaly-audits — задокументировать в `hermes-cost-audit/SKILL.md`.
-- **Гигиена логов:** `~/.hermes/logs/{agent,errors,gateway}.log` и `~/.hermes/cron/output/**` (MFL-дайджест `2865cc674493`, PFS `a6e62d06249f`) — **хранить только логины, не писать ФИО/тел/email** в телах и `inbound msg=`. Общий хелпер `~/.hermes/pii_scan/redact.py` → `redact_fio_email_phone(text)`. Gateway `~/hermes-agent/gateway/run.py`: убрать `msg=`/`reply_to_text=` из INFO (локальный патч разъедется при update — фиксировать pitfall). MFL `format_post`: `first_line` тела через redact. PFS `__main__.py`: не дампить `row_xml` в stdout (или redact).
+## Masking and triage
 
-## Питфоллы выполнения
-- **Находки ErrorBus ≠ утечки.** Открытые строки `tool='PIIScan'` — это инкремент за прогон, ~70–80% штатная рабочая база, ~10–15% ложные срабатывания, и только единичные креды. Не объявлять «N открытых утечек» без триажа по `detail`. Разбирать находки ТОЛЬКО из `detail` (path с пробелами ломает `message`). Severity в ErrorBus раздут шиной (повторный хит за 24ч → critical по порогу count≥5), не читать его как оценку ФЗ-152. Баги детектора **закрыты 09.09** (HF:impl → HF:test PASS, 26 pytest зелёные): `INTERNAL_LOGIN` больше не матчит `файл.ext`/домен/`config.yaml`; ветка `PHONE` `\\d{10,15}` убрана (не матчит Telegram-chat id/unix-время); `token=` внутри `boardAccessToken=` (URL Miro) больше не даёт ложный credential. Итог: из новых находок типы `login+*` исчезли (подтверждено на прогоне; 0 сырых email в masked_value). Реальные каналы утечки формата: `gateway.log` (`inbound msg=`), MFL-дайджест `cron/output/2865cc674493`, сырой agent-JSON в `llm-anomaly-audits/*.json`, **`~/.hermes/logs/process-results/proc_*.json`** (полный stdout фоновых terminal-команд: скрипт, напечатавший список участников/emails, оседает там целиком — проверять process-results при любом массовом выводе людей). Файлы, удалённые после прошлого прогона, висят open до следующего инкремента — не ручной резолв.
-- **Credential-regex НЕ должен ловить декларации/передачу переменных (питфолл 09.09).** `SECRET_ASSIGNMENT_PATTERN` = `(?<![A-Za-z0-9_])(?:password|token|api[_-]?key|secret)\s*[:=]\s*['"]?\S{6,}` матчит НЕ только строковые секреты, но ЛЮБОЙ `password = ...` в исходниках: `password=password` (передача аргумента), `p.password = u.password or ""`, `user, password = auth.split(":", 1)`, `= parts[3]`, `= quote(...)`, `= os.environ[...]`, `= _load_api_key()`. Это декларации полей/переменных Python, а не хардкод секретов → лавина ложных `critical`-кредов в ErrorBus на любом кодовом репозитории. Реальный секрет — **строковый литерал**: `password = "qwerty123"`, `token = "sk-abc..."`. Фикс: пост-фильтр `is_plausible_secret_assignment()` (в `patterns.py`, вызывается из `detect_credentials_in_context`): строка в кавычках ≥6 символов → секрет; голый токен — только если длина ≥9 ИЛИ есть спец-символы `-:/@+=` без точки, и не типичное имя переменной; после значения не идёт `(` (исключает вызовы). Тест-маркеры: `test_secret_assignment_false_positives_not_credential` / `test_secret_assignment_real_literals_still_credential`. Сигнатура вызова важна: `is_plausible_secret_assignment(raw_str, source_text=full_text, value_end=m.end())` — параметры keyword-only, первым идёт строка матча, НЕ match-объект, иначе AttributeError. **Пересчёт по-новым-правилам** (09.09, на прогоне 05.09: 647 open): ~355 строк в whitelist-зонах, ~240 голый логин (не ПДн), ~52 реальных `fio+*` вне whitelist (ручная проверка), 3 Miro-креда. Полный согласованный план: `references/pii-rule-20260909.md` (прежний `references/pii-errorbus-triage.md` утратил актуальность — его правила зон перекрыты решением 09.09).
-- **Разбор пачки PII-ошибок: сначала группировка, потом триаж.** Все события одной пачки обычно идут из одного файла: читать `~/.hermes/error_bus/events.db`, таблица `errors`, питоновским модулем `sqlite3` (CLI `sqlite3` на VM не установлен); сгруппировать по `path='...'` из message (dedup_key не группирует — каждый инцидент отдельная запись count=1).
-- **Удаление файла-источника НЕ закрывает события, если их dedup-ключей нет в baseline.** Авто-резолв обрабатывает только vanished = ключи УЖЕ в baseline со статусом open|baseline и не найденные в новом прогоне. Если прогон был убит до `save_baseline` (см. баг атомарности), все репорты остались вне baseline — после удаления файла пачка висит open навсегда. Закрывать такой батч программно одним процессом: `from _db import resolve_error` (`~/.hermes/error_bus/_db.py`); сигнатура `resolve_error(conn, err_id, note)` — первым аргументом sqlite3-connection, НЕ id; сначала dry-run счётчик по фильтру `tool + status='open' + first_seen LIKE 'дата%'`, потом resolve. Не сырой SQL и не по одному `error_bus_cli resolve` (spawn на каждое событие = тот же таймаут, что убил прогон).
-- **Длинные строковые JSON-поля дают декартово произведение.** Сканер считает «одно строковое поле JSON = один контекст», поэтому одно поле `output` с 12 ФИО × 355 email раздувается в ~4764 находки из ~15 реальных утечек. При большом репорте из одного proc/лог-файла проверять декартово (уникальные ФИО × уникальные атрибуты ≈ размер пачки) — и в фиксах: multiline/длинные (>500 симв) поля сканировать построчно, не одним контекстом.
-- **Заглушки токенов в примерах ТЗ/планов — не креды.** `AAFake*`, `Example`, `your_token_here` в YAML-примерах дают ложные CRED; carve-out реализован в `patterns.py` (`is_fake_credential_value()`) — живой токен без маркеров-заглушек остаётся critical. Не перевыпускать боты/ключи по такому событию без проверки, что значение не placeholder.
-- **Формат репорта согласован с Сашей: РОВНО 1 сводное событие за прогон** (счётчик + разбивка по файлам/категориям + masked sample в detail); 0 новых находок → в ErrorBus ничего не писать (сводка только в stdout self-check). Per-finding репорт и потолки N/прогон — отменены решением Саши; не возвращать к ним при доработках.
+For baseline, audit and reports mask both local and domain parts of email, for example `git@github.com → gi**@gi***`; mask short values of length ≤3 completely as `****`. Use PIIScan's `mask_identifier`, `mask_attribute` and `mask_credential` for sterile storage; AnywhereContacts `mask_pii` / `mask_contact` are display masks and can leave a domain or short value exposed. Never persist raw PII in a report or audit entry.
 
-- **Точный поиск находки в файле — через raw_value сканера, не через grep.** Контекст находки склеивается из соседних строк/частей (±1 строка, нормализация), поэтому grep по маске/фрагментам ФИО в файле не находит место. Локализовать: запустить `pii_scan` как библиотеку — `scan_text_file(path, norm_path, config, result)` возвращает `Finding` с сырым `raw_value`; по нему grep-нуть точную фразу и править. После деперсонализации (ФИО → инициалы, напр. «И. И.») верифицировать тем же dry-прогоном: список находок по файлу пуст.
-- **Деперсонализация НЕ по маске, а по raw_value: служебные фразы ловятся как «ФИО+должность».** Лексикон должностей («архитектор», «автор»…) рядом с любыми двумя словами-с заглавных (в т.ч. «Решение Саши») даёт ложную pii_card. Прежде чем править файл — посмотреть `raw_value` находки; если это служебная фраза, а не человек, файл не трогать (а ложный паттерн — кандидат в carve-out лексикона).
-- **TTL process-results:** receipts фоновых terminal-команд живут 7 суток / max 64 файла, prune ленивый (при следующей записи/чтении, не крон) — сырой дамп ПДн лежит на диске до недели. Ядро Hermes (`process_registry_results.py`) править нельзя (решение Саши — ядро вне скоупа); утилизировать дамп вручную (rm) и закрывать сводное событие одним `resolve_error`.
+Group findings by structured data in `detail`, not by parsing `message`: paths may contain spaces. Locate the exact source with the scanner's `Finding.raw_value` locally because normalized adjacent-line context may not match a masked grep. Inspect raw data privately; do not copy it into reports. Before depersonalizing, verify that the raw value is an actual person rather than an administrative phrase such as «Решение Саши». Independently verify an authorized fix with the same dry scan, masking checks, and baseline/audit checks.
 
-План починки инцидента и согласованные решения: `TZ/PIIScan/plans/_fix_plan_20260921_pii_incident.md` (диагноз атомарности, декартово, производительность, ТЗ v1.3.0).
-- **Атомарность baseline (чинено в v1.3.0 — не ломать):** сбор new/persisting/vanished в памяти → один сводный репорт → чекпоинты baseline батчами BATCH=20 (audit + save) ПОСЛЕ репорта/резолва; `save_baseline` — tempfile в том же каталоге + `os.replace`. Порядок «save всех ключей до репорта» запрещён: kill между save и репортом оставит ключи persisting — событий в ErrorBus не будет никогда. Диагноз «baseline не обновился» = mtime `baseline.json` старше даты прогона; тогда ключи вне baseline → авто-резолв не сработает даже после удаления файла-источника.
-- `report_error.sh`/`error_bus_cli.py` лежат в `~/.hermes/scripts/` (не `~/.hermes/error_bus/`); логика events.db/_db.py — в `~/.hermes/error_bus/`. Не менять их, использовать обёртки.
-- `~/.hermes/state.db` не читать никогда, даже read-only (живая БД гейтвея; конкурентный риск + она вне охвата).
-- Крон `vm_selfcheck` — п.12 встраивается только ПОСЛЕ завершения `pii_impl_plan.md` (регресс-контроль поверх вычищенного).
-- Email в **именах файлов** встреч (`~/WorkVault/Meetings/.../taranov@tutu.ru - ...`) — это path, а не значение; маскировка значений его не трогает; такие файлы — легитимная находка на чистку в рамках pii-privacy.
+A large report from one long JSON field may be a cross product: compare unique names × attributes with the batch size, and apply the line-based context rule. Do not treat historical ErrorBus severity inflation or open event count as a legal assessment or a count of confirmed leaks.
 
-## Выполнение скан-задачи
-Через codex CLI (архитектор → ТЗ → исполнитель), по `tz-workflow`/`hermes-feature`. Верифицировать self-report независимо: прогонять pytest самому и проверять `baseline.json`/`audit_history.jsonl` regex-ом на сырые email (исполнитель может отрапортовать «замаскировано», а на деле — утечка).
+## Components, retention and checks
+
+PIIScan components are `~/.hermes/pii_scan/{pii_scan.py,patterns.py,redact.py}`, `baseline.json`, `audit_history.jsonl` and `~/.hermes/scripts/pii_scan.sh` (fail-soft wrapper). `report_error.sh` and `error_bus_cli.py` are under `~/.hermes/scripts/`; the ErrorBus database and `_db.py` are under `~/.hermes/error_bus/`. Use their supported interfaces; do not edit core or helpers for a scan.
+
+Check `~/.hermes/logs/process-results/proc_*.json` as a separate potential channel: background command stdout may persist there for 7 days / at most 64 files, with lazy pruning. This differs from the 5-day TTL for completed TaskRefresh session history and `WorkVault_backup/llm-anomaly-audits/LLM-anomalies_*.json`; `current.json` is retained. Keep names, phone numbers and emails out of designated logs at write time, using the established redaction helper where appropriate. Integration points and retention history: `references/retention-and-log-hygiene.md`.
+
+For an authorized implementation, follow `dev-workflow` and independently test the scanner, sterile masks and baseline/audit output; do not rely solely on an executor's self-report. Do not run a production scan, cron or delivery for a documentation check. The former `references/pii-errorbus-triage.md` is superseded; its conflicting historical instructions are not current policy.
+
+## Review checklist
+
+When asked to assess findings, establish the authorized source and scan scope first. Apply the whitelist before classification, then distinguish the local FIO-plus-attribute rule from the separate credential rule. Inspect the structured finding before describing it as an incident; the source path and category are safer grouping keys than a human-readable message containing a path with spaces.
+
+Treat suspicious masked samples as leads rather than proof. Inspect `raw_value` only locally when needed to distinguish a real person from a false positive or placeholder, and keep raw values out of the delivered report. A path containing an email address is not repaired by masking a file's contents; apply the separately authorized path scope and respect the Meetings exclusion.
+
+For a proposed fix, verify the exact interpretation of baseline state and event history. The first baseline has no critical incidents; a later new finding can generate one summary event, while zero new findings generate none. A vanished key can be resolved without deleting the original audit record. If the previous process failed between reporting and checkpoint, inspect the available baseline evidence before choosing a supported resolution path.
+
+Use local tests and controlled fixtures for validation. Check that stored samples mask both parts of emails and short values, that long JSON fields do not pair every name with every attribute, and that actual credentials still match while variable declarations and placeholders do not. Report which checks actually ran and avoid presenting ErrorBus counts, a single exit code or a historical test result as present proof of a clean system.

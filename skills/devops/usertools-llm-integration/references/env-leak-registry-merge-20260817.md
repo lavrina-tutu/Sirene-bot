@@ -56,3 +56,34 @@ find ~/USERTOOLS -name "_mark_objects_registry.json" 2>/dev/null # блужда�
 **сырой вывод команд** (`ls -la`, `len(meetings)`, `head -c 400`), а не self-report — и после
 возврата самостоятельно проверить на диске (число записей, присутствие ключевой встречи,
 равенство результата объединению бэкапов).
+
+
+## Historical source (superseded where it conflicts with SKILL.md; not current instruction)
+
+## Питфолл 1: «убегающий» реестр/состояние → env-утечка TOOL_DIR/LOGS_PATH
+
+Симптом: реестр инструмента пишется не в свою папку, а «переезжает» между соседними
+`~/USERTOOLS/*`. Причина — в **общий** `~/.hermes/profiles/default/.env` по ошибке попали
+generic-переменные `TOOL_DIR`/`LOGS_PATH` от другого тула. `pydantic-settings` даёт приоритет
+`os.environ` над локальным `.env`, поэтому `tool_dir` (→ registry/lock/logs) утекает в чужую папку.
+
+**Диагностика:**
+```bash
+grep -E "TOOL_DIR|LOGS_PATH" ~/.hermes/profiles/default/.env
+find ~/USERTOOLS -name "_mark_objects_registry.json" 2>/dev/null   # блуждающие копии
+# ВАЖНО: если .env чист, но в живом процессе env всё ещё есть — источник выше по цепочке:
+env | grep -E "TOOL_DIR|LOGS_PATH"            # что реально видит процесс
+grep -nE "TOOL_DIR|LOGS_PATH" ~/.bashrc ~/.bash_profile ~/.profile   # login-shell
+tr '\0' '\n' < /proc/<pid>/environ | grep -E "TOOL_DIR|LOGS_PATH"    # родитель/сессия
+systemctl --user show-environment | grep -E "TOOL_DIR|LOGS_PATH"     # systemd-user
+```
+**Фикс:** убрать утёкшие переменные из общего `.env` → вернуть их в `.env` конкретного тула →
+слить блуждающие копии реестра в канонический (дедуп по ключу, при коллизии брать запись с max
+`processed_at`, бэкап копий, атомарная запись tmp+os.replace, удалить осиротевшие `.mofs.lock`).
+**Питфолл 1а (НЕОБХОДИМО): чистки только общего `.env` НЕДОСТАТОЧНО.** Это было уже сделано 17.08,
+но реестр продолжал «убегать»: generic-переменные пережили чистку, т.к. лежали в живом окружении
+долгоживущего процесса/сессии (источник выше .env-файла). Поэтому структурная профилактика —
+**обязательна**, а не опция: уникальные имена (`MOFS_TOOL_DIR`/`MOFS_LOGS_PATH`) или
+`load_dotenv(..., override=True)` в пакете, чтобы локальный `.env` тула имел приоритет над чужими
+generic-переменными процесса. После фикса перепроверить в СВЕЖЕЙ сессии и в контексте крона
+(не в текущей, где переменная могла «зависнуть»). Подробности: `references/env-leak-registry-merge-20260817.md`.

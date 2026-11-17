@@ -36,3 +36,35 @@ fi
 5. Настроен default (143 симлинка) и tz-dev (74 симлинка)
 6. Исправлен `autosync_github.sh`
 7. Поставлен крон `restore-skills-daily` (3:00 ежедневно)
+
+## Historical source excerpts (not current instructions)
+
+## Критический питфолл: autosync_github.sh стирает кастомные скиллы
+
+**Симптом:** после `hermes update` или ночного автосинка кастомные скиллы исчезают из `hermes-workspace/skills/` и заменяются bundled-скиллами.
+
+**Причина:** автосинк (`~/.hermes/scripts/autosync_github.sh`) содержал блок:
+```bash
+rm -rf skills
+mkdir -p skills
+cp -r "$HERMES_HOME/skills/." skills/
+```
+Этот блок удалял ВСЕ кастомные скиллы в workspace и заменял их содержимым `~/.hermes/skills/` (только bundled). Происходило каждую ночь в 2:00.
+
+**Фикс:** заменить блок на вызов `restore-all-skills.sh`:
+```bash
+echo "[autosync] restoring skill symlinks to Hermes profiles..."
+if [ -f "$WS/restore-all-skills.sh" ]; then
+  bash "$WS/restore-all-skills.sh"
+fi
+```
+
+Автосинк должен восстанавливать симлинки в Hermes ИЗ workspace, а не наоборот.
+
+
+## Канон направления синка WorkVault ↔ hermes-workspace
+
+**`restore-all-skills.sh` синхронизирует ТОЛЬКО симлинки скиллов.** Он НЕ должен копировать ничего в WorkVault (ТЗ, entities.json) — направление синка ТЗ/данных-графа строго **WorkVault → git**, единственная точка — `~/.hermes/scripts/autosync_github.sh` (крон 02:00). WorkVault = источник правды, git-зеркало (`hermes-workspace/Hermes-Backlog`) = бэкап.
+
+Обратное (`git → WorkVault`) в `restore-all-skills.sh` или любом крон добавлено быть не должно: это откатывает дневные правки ТЗ старым зеркалом. Прецедент 16.10.2026 — блоки `cp` зеркало→WorkVault откатили ProtocolFromSummary v1.29.0 → v1.28.1; удалены.
+

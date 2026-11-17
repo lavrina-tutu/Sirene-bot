@@ -1,7 +1,7 @@
 ---
 name: meeting-ingest-pipeline
-description: "Use when: перенос встреч в Необработанные, пайплайн."
-version: 1.0.0
+description: "перенос встреч в Необработанные: проверка контура"
+version: 1.1.0
 author: Sirene
 license: MIT
 platforms: [linux]
@@ -11,188 +11,39 @@ metadata:
     related_skills: [move-from-keytalk, protocolfromsummary, mofs-operations, hermes-feature]
 ---
 
-# Meeting Ingest Pipeline — контур переноса встречи (диагностика на уровне цепочки)
+# Meeting Ingest Pipeline
 
-Единый штатный контур переноса встречи, как его называет Саша:
+## Purpose and scope
 
-```
-Move from KeyTalk (Mu/MFKT) → самаризация → MOFS → PFS → OFC
-```
+Use for «перенеси встречи в Необработанные», rewriting meetings for a period, or checking the entire ingest chain, including incorrect names, task slugs, row attributes or missing notifications. Diagnose individual tools with their own skills while checking end-to-end evidence here. The chain is MoveFromKeyTalk (MFKT) → summarization → MOFS → PFS → OFC. PFC means PFS, not a separate entity.
 
-Это скилл-«дирижёр»: детали каждого инструмента — в специализированных скиллах
-(`move-from-keytalk`, `mofs-operations`, `protocolfromsummary`); здесь — порядок проверки
-всей цепочки и правила, которые Саша требует на уровне контура.
+## Mandatory routing and recovery
 
-## When to Use
+1. **Pass 1 always ends at «Необработанные задачи» playground `523032632`.** Never publish directly to project minutes, including multisync and 1:1. Promote to project minutes is a separate pass 2, only after the row is marked «обработано» (`td3`). A minutes row without this sequence is a routing defect.
+2. Use the established tools and entrypoints. Do not repair the mechanism with manual HTML/JSON, direct Confluence curl instead of PFS, or an ad hoc bypass. For a bug trigger create the standard DevWorkflow BUGFIX case with `pipeline init --case BUGFIX` before invoking a role; repair through that workflow.
+3. Rewriting requires the full authorized replay from Obsidian transcript through summary, resolve, playground and notification. Use PFS row deletion/replacement by `row_anchor` and registry mechanisms. Republish alone is **not** replacement: `ingest_after_publish` can return `skipped_present` for an existing anchor without PUT, even with `run --confirm-republish`. Verify actual replacement with a subsequent GET. Full details: `references/replay-and-republish.md`.
+4. Do not invent utterance timestamps and represent them as meeting source data. Clearly label any explicitly requested synthetic example and keep it separate from real ingest. Manual file pair and real MOFS/PFS entrypoints: `references/manual-meeting-ingest.md`.
 
-- «перенеси встречи в Необработанные», «перепиши встречи за неделю», «проверь весь пайплайн
-  переноса встречи»;
-- жалобы «пришли без правильного резолва имён», «задачи без слагов проектов», «слайды не
-  правильные», «уведомления не пришли»;
-- диагностика одного звена контура MFKT/MOFS/PFS/OFC при работающих остальных — вести через
-  свои скиллы, но сверять всю цепочку по чек-листу ниже;
-- баг в любом звене контура → DevWorkflow BUGFIX по канону (см. Правила контура).
+## Diagnostic route
 
-## Правила контура (требования Саши)
+- Compare period source pairs `*-transcript.md` / `*-summary.md` in `WorkVault/Meetings/NewMeetings/`, the configured MOFS registry and the PFS registry `~/WorkVault/ProtocolFromSummary/_registry.json`. Resolve the MOFS registry path from the installed tool/config; historical paths differ.
+- MOFS processed (`objects_version`) **does not mean** PFS published. Confirm PFS registry and live page. When PFS record is absent, check `skipped_empty`: empty Tasks/Decisions/Blockers/Risks require normal source resummarization, not forced publication of an empty row.
+- Compare `published_at` with MOFS `processed_at`. A later MOFS pass does not repair an already published row; a complete authorized replay with replacement is needed.
+- GET playground `523032632`, locate the row by `row_anchor`, and inspect all tasks, participant/assignee `<ri:user>` links, task prefixes and the target minutes column. Logs, return codes, a code fix or a rebuilt XML alone do not prove the live row changed.
+- Classify evidence as source present / MOFS ok or bad / PFS published or missing before diagnosing a component. Do not edit registries by hand. Details and GET evidence: `references/ingest-diagnostics.md`; race and old-row incidents: `references/ingest-incident-history.md`.
 
-0. **🔥 МАРШРУТИЗАЦИЯ: ВСЕ встречи всегда сначала в «Необработанные задачи».**
-   Штатный маршрут (MFKT→самаризация→MOFS→PFS) отрабатывает, но файл/запись попадает ТОЛЬКО
-   в «Необработанные задачи» (площадка 523032632). НИКОГДА не публиковать сразу в «Минутки»
-   проекта — ни в мультисинк, ни в 1-1, ни в какой-либо другой проект. Прямая публикация прохода 1
-   в минутки (минутки синка / мультисинк / 1-1 / любой project_bind) ЗАПРЕЩЕНА всегда.
-   Promоve-переход в «Минутки» проекта — только отдельным проходом 2, ПОСЛЕ отметки «обработано»
-   (td3) на площадке. Исключений нет: одна встреча не публикуется сразу в минутки ни при каких
-   обстоятельствах. Отладчик, увидевший опубликованную в минутки строку без похода через
-   площадку и «обработано», — это дефект маршрутизации (BUG:diagnose), а не вариант работы.
-1. **Только штатные инструменты.** Любая операция переноса/перезаписи встречи — через звенья
-   контура MFKT→самаризация→MOFS→PFS→OFC. Запрещены кусочные скрипты в обход, ручная правка
-   HTML на площадке как «лечение» кривого резолва, прямой curl на Confluence вместо PFS.
-2. **Сбой звена → баг по канону.** Если звено падает или даёт кривой результат — завести
-   DevWorkflow-кейс (BUG:diagnose через `pipeline init --case BUGFIX`, корень DEV/<slug> +
-   BUG:diagnose + гейты полным батчем) и чинить до полного восстановления, а не обходить.
-   Первый шаг при баг-триггере — `pipeline init`, ДО любого invoke-role / codex CLI.
-3. **Перезапись встречи = полный цикл заново, не правка строки.** По требованию Саши:
-   удалить строки встречи со страницы «Необработанные» → из Obsidian прогнать заново
-   транскрипт → самари → резолв → запись в «Необработанные» → уведомления. Удалять и
-   перезаписывать через штатные механизмы PFS (force-route / republish / удаление строки по
-   row_anchor), не хардкодом на страницу.
-   **⚠️ Republish на площадку — НЕ замена строки:** `ingest_after_publish` при уже
-   существующем `row_anchor` на 523032632 возвращает `skipped_present` и НЕ выполняет PUT —
-   `run --confirm-republish` пересоберёт battle-XML в памяти, но строку на «Необработанных»
-   не заменит. Полный replay требует пути `replace_row_by_anchor` (П.1 багфикс-плана) или
-   удаления строки/записи реестра до повтора; что бы ни обещал лог, правку площадки
-   доказывает только GET страницы после.
-4. **«Слайды» = атрибуты/разметка строки.** У каждой задачи и каждой встречи должны быть
-   правильные атрибуты: имена как `<ri:user>`-ссылки, слаги проектов как префикс задачи,
-   корректная колонка «Цель (минутки)».
-   **Проверка слагов — по ВСЕМ задачам строки, не выборочно (требование Саши).** После фикса
-   механизма перепрогнать встречу, затем GET площадки и проверить каждую задачу в `<tr>`: если
-   хотя бы у одной нет префикса-слага — механизм ещё не готов, чинить инструмент и перепрогонять
-   заново, а не принимать встречу частично. `project_bind`/`status: hypothesized` в summary без
-   префикса на площадке = дефект механизма (§38: home-префикс обязан проставиться).
+## Slugs, contacts and notifications
 
-## Ключевые соответствия (чтобы понимать термины Саши)
+Determine each task slug from its own context and eligible binding, not the meeting title. For 1:1 retain LLM → union → home fallback: `union==0` uses route `pfs.tag` or meeting entity `{display_name}. ` with a space; project `AI-аналитик.` retains its no-space form. `union>=2` does not automatically use home. Check **every** task in the row, not a sample; missing required prefix after replay is a mechanism defect.
 
-- «Необработанные» / страница `dom.tutu.ru/...pageId=523032632` = **площадка (playground)**
-  PFS (`PLAYGROUND_PAGE_ID`). Проход 1 ингестит опубликованную строку туда; promote (проход 2)
-  уводит строку в минутки проекта после отметки «обработано» (td3).
-- «Mu from Ktalk» = MoveFromKeyTalk (MFKT): скачивает транскрипт и делает самари-пару
-  `*-transcript.md` + `*-summary.md` в `WorkVault/Meetings/NewMeetings/`.
-- «FFS/Markovчик/самаризация» = генерация summary (MoveFromFF / MoveFromKeyTalk самари).
-- «OFC» = ObsidianFromConfluence: подтверждённый протокол Confluence обратно в
-  `WorkVault/Entities/<slug>/protocol.md` (крон `bf52e6985523`, код в `~/USERTOOLS/ProtocolFromSummary`).
-- «PFC» — это PFS (ProtocolFromSummary): Саша называет его «PFC»; уточнять при расхождении
-  названий, а не плодить новых сущностей.
+For `contacts: []`, check contact-store availability, dependency in the actual cron venv and `CONTACTS_ENCRYPTION_KEY` availability before concluding people are unknown; do not expose the key. Source detail: `references/task-slugs-and-contacts.md`.
 
-## Ручной прогон одной встречи (в т.ч. имитация ingest «как будто из KTalk»)
+Pass 1 sends a notification pointing to the playground; successful promote is silent. A replay may reset `notified` and send the notification again. OFC copies a confirmed Confluence protocol to `WorkVault/Entities/<slug>/protocol.md`; assess it at the appropriate stage, and do not call the absence of a not-yet-performed promote an OFC failure.
 
-Когда Саша даёт транскрипт текстом и просит «запиши как будто получили из ktalk и проведи
-по стандартному пути» — это полный ручной цикл по контуру, без API источника:
+## Acceptance
 
-1. **Создать пару файлов** в `WorkVault/Meetings/NewMeetings/` с meeting_id в имени
-   (время — UTC, как у контура):
-   - `<дата> <время> <Название> - transcript.md` — сырьё: заголовок + `**Date (UTC):**` +
-     `**Duration:**` + `**Participants:**` + реплики `00:00:31 **Имя:** текст` (таймстампы
-     расставить с шагом ~8–22 сек на реплику — правдоподобная длительность).
-   - `<...> - summary.md` — БЕЗ frontmatter (его добавит MOFS), тело: `# Саммари:` +
-     секции `Участники:` / `Обсудили:` / `Решения:` / `Блокеры:` / `Задачи:` / `Риски:`
-     (формат Custom Skill, обязателен для PFS-парсера).
-2. **Название встречи должно содержать alias сущности** — name_match это substring-матч:
-   «Синк АиД департамента» попадает в `sink_aid` (331125844), потому что содержит «синк аид».
-3. **MOFS: dry-run → real** (meeting-id без суффикса ` - summary.md`):
-   ```bash
-   cd ~/USERTOOLS/MarkObjectsFromSummary && source ~/USERTOOLS/ProtocolFromSummary/.venv/bin/activate
-   mofs run --meeting-id "<дата> <время> <Название>" --dry-run
-   mofs run --meeting-id "<дата> <время> <Название>"
-   ```
-4. **PFS: dry-run → real** по пути summary-файла, затем верификация (реестр + GET обеих
-   страниц + MofsIndex) — чек-лист ниже:
-   ```bash
-   cd ~/USERTOOLS/ProtocolFromSummary
-   .venv/bin/python -m protocolfromsummary run "<путь>/<...> - summary.md" --dry-run
-   .venv/bin/python -m protocolfromsummary run "<путь>/<...> - summary.md"
-   ```
-5. **Уведомление прохода 1** (`notified: False` в реестре) уходит notify-кроном; promote
-   (проход 2) пойдёт после отметки «обработано» на площадке — ручной прогон их не запускает.
-
-Ограничения, которые в такой имитации НЕ чинить (это состояние контура, не баг файла):
-- однословные имена без ФИО не резолвятся в контакт и ложно матчатся на комнаты (см.
-  protocolfromsummary: комнатный substring-матч);
-- относительные дедлайны «через N дней» не парсятся → fallback +7 (см. protocolfromsummary);
-- `contacts: []` в frontmatter при недоступном `CONTACTS_ENCRYPTION_KEY` (см. Pitfalls ниже).
-
-## Диагностика «пришли криво» (порядок, read-only)
-
-Жалоба «встречи в Необработанных без правильного резолва имён / задачи без слагов» =
-проверка всей цепочки, не только одного звена:
-
-1. **Сверка трёх списков:** `WorkVault/Meetings/NewMeetings/*-summary.md` за период ↔
-   MOFS-реестр (`~/USERTOOLS/MarkObjectsFromSummary/_mark_objects_registry.json`) ↔ PFS-реестр
-   (`~/WorkVault/ProtocolFromSummary/_registry.json`).
-   **MOFS processed ≠ PFS published**: встреча может быть в NewMeetings и MOFS-обработана
-   (objects_version проставлен), но отсутствовать целиком в PFS-реестре — не опубликована.
-   «Все пришли» доказывается только записью в PFS-реестре.
-   **Но отсутствие записи может быть легитимным skip:** если у summary пусты секции
-   Задачи/Решения/Блокеры/Риски (есть только Участники+Обсудили), `summary_has_content_sections`
-   даёт false → `skipped_empty`, реестр не тронут, следующий тик перечитает файл. Сначала
-   проверить пустоту секций (`grep -E '^## (Задачи|Решения|Блокеры|Риски)' <file>`) — если пусто,
-   это дефект самаризации (пересамаривать штатной командой источника MFKT/FF), а не «PFS потерял
-   файл»; принудительная публикация пустой строки запрещена.
-2. **Гонка PFS→MOFS при диагностике «без слагов/контактов»:** `pfs_batch` (XX:10) ингестит
-   раньше `mofs_run_cron` (XX:16) — YAML `project_bind`/`contacts` на момент прохода 1 может
-   ещё не существовать, и это не сбой резолва. Сверять `published_at` (PFS-реестр) и
-   `processed_at` (MOFS-реестр): если MOFS позже — обычный повторный тик не поможет, нужен
-   реплан с заменой строки (см. Правило 3).
-2. **GET площадки** (`523032632`, Bearer `CONFLUENCE_TOKEN` из
-   `~/USERTOOLS/ConfluenceSync/.env`), вырезать `<tr>` строки по row_anchor и посчитать
-   `ri:userkey`: `0` = имена голым текстом, резолв участников/исполнителей не прошёл.
-3. **Слаги задач** — в `<ac:task-body>`: отсутствие префикса-слага при hypothesized/`slug`
-   в MOFS `project_bind` = разрыв MOFS→PFS (см. Питфолл 18 в protocolfromsummary);
-   `status: unbound` в MOFS = слаг не назначен ещё на MOFS-стороне.
-4. **frontmatter summary** — `contacts: []` при участниках в теле и `project_bind` с
-   unbound-задачами: признаки неполного MOFS; не лечить правкой HTML на площадке.
-5. **Фикс в коде ≠ строки переписаны.** Наличие token-set Pass 2 в `store.py` (§35
-   protocolfromsummary) не означает, что старые строки площадки уже залинкованы — они
-   остаются голым текстом до republish/перезаписи; факт исправления доказывает только GET.
-6. **По одному звену на вопрос.** При первичном разборе не гадать про звено: выводить
-   «сырьё есть / MOFS ok|bad / PFS published|missing» по реестрам и странице, потом отдавать
-   архитектору (BUG:diagnose) полные факты с путями и ожиданиями.
-
-## Итоговая проверка («проверили весь пайплайн»)
-
-- [ ] **НЕ опубликовано сразу в «Минутки»:** ни одна встреча проходом 1 не попала в минутки
-      проекта (мультисинк / 1-1 / любой project_bind); всё легло только в «Необработанные
-      задачи» (площадку 523032632). Проверить по PFS-реестру `promote`/`playground` — если минутки
-      заполнены без предшествующей отметки «обработано» — дефект маршрутизации
-- [ ] Сырьё: пары `*-summary.md`/`*-transcript.md` за период на месте
-- [ ] MOFS: frontmatter с `projects:`, `contacts:`, `project_bind` без unbound по задачам,
-      которым положен слаг
-- [ ] PFS: каждая встреча имеет запись в `_registry.json` (published + playground_ingested_at),
-      уведомление отправлено
-- [ ] Площадка 523032632: в `<tr>` строки `ri:userkey` > 0, задачи с префиксом-слагом,
-      колонка «Цель» ссылкой на минутки; «обработано» снято для переписываемых строк
-- [ ] Финальное звено OFC: `Entities/<slug>/protocol.md` актуален (confluence_version сверен)
-
-## Pitfalls
-
-- **🔥 Одновременно «штатный маршрут отработал» и «файл в минутки» — невозможно.** Если
-  проход 1/реализация встречи закончил в «Минутки» проекта (мультисинк/1-1/любой project_bind) —
-  это НЕ «сделали всё по контуру и сразу опубликовали результат», это дефект маршрутизации.
-  Штатный маршрут отрабатывает до «Необработанных задач», и только потом отдельный promote после
-  «обработано» может увести строку в минутки. Путь «сразу в минутки» запрещён всегда (Правило 0).
-- **Не доверять rc/статусу как доказательству.** Живой артефакт (файлы на диске, строка на
-  странице, запись в реестре) — единственное доказательство шага; это правило всей цепочки.
-- **Слаги и имена не брать «из темы встречи».** Слаги задач — из контекста задачи + MOFS
-  eligible-bind (§34 protocolfromsummary), не из названия встречи/участников.
-- **Не дёргать реестры руками.** PFS/MOFS реестры править штатными CLI/механизмами (или через
-  баг по канону), а не прямым json-редактированием из диагностики.
-- **Уведомление о записи** = уведомление прохода 1 («протокол приехал, ждёт разбора», URL на
-  площадку); успешный promote молчит. При переписи строки уведомление уходит вновь (notified
-  сбрасывается), — это ожидаемо, не дубль.
-- **1-1-задачи получают слаг через meeting-home fallback, не остаются без него.** С 2026-10 (норма §38 PFS v1.33.0) для in-scope задач слаги проставляются ВСЕМ: порядок LLM → union → home. Если у задачи 1:1 нет проектного голоса (`union==0`) — префикс = `pfs.tag` маршрута, иначе `{display_name}.` сущности встречи с **пробелом после точки** (`Кирилл 1-1. Перевести…`). Проектный `AI-аналитик.` без пробела (AC-001) НЕ менять. `kirill_1on1` по-прежнему вне closed_list и без `entities.task_slug` (kind=one_on_one, AC-010) — слагают через home, а не через closed_list. Отсутствие префикса у задачи 1:1 после перепрогона N = дефект механизма (шёл `_fail_soft_text` as-is), чинить через BUGFIX-граф, а не ручной правкой HTML. `union>=2` — по-прежнему без home, empty-warn жив (§34 D).
-- **`contacts: []` в frontmatter ≠ «люди неизвестны».** Перед выводами о резолве проверить,
-  что корзина contacts вообще работала: `markobjectsfromsummary` не зависит от
-  `anywhere-contacts` (нет в pyproject), `CONTACTS_ENCRYPTION_KEY` читается только из env — при
-  пустом ключе `store=None` молча (событие не пишется) → `contacts: []` следствие недоступного
-  стора. Диагностика: `python -c "import anywhere_contacts"` в venv крона + наличие ключа в
-  окружении; фикс — зависимость в pyproject + bootstrap ключа тем же контуром, что PFS.
+- Verify source file pairs and MOFS frontmatter (`projects`, `contacts`, `project_bind`), accounting for eligible unbound cases.
+- Verify PFS published record, `playground_ingested_at`, notification, and live playground row by GET; distinguish a legitimate `skipped_empty`.
+- Verify all required names, task prefixes and target column; pass 1 must be on `523032632` only. Confirm `td3` before any promote.
+- For replay verify the row actually changed by anchor and the full chain was rerun; inspect the actual artifact, not only logs.
+- Check OFC and `confluence_version` after the relevant publication/promote stage. Report each stage and unresolved discrepancy with evidence.

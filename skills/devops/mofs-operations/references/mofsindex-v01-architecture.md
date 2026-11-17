@@ -115,3 +115,68 @@ except Exception as e:
 
 - MofsIndex: 65/65 (test_db + test_parser + test_indexer + test_searcher + test_cli + test_hooks)
 - MOFS: 108/108 (103 оригинальных + 5 интеграционных в test_hook_integration.py)
+
+
+# Material moved from MOFS SKILL.md
+
+> История исходника (даты указаны внутри), не текущая инструкция; актуальные условия — в SKILL.md.
+
+## MofsIndex — SQLite+FTS5 индекс (реализован 21.07.2026)
+
+**Пакет:** `~/USERTOOLS/MofsIndex/` (editable в `ProtocolFromSummary/.venv`)
+**ТЗ:** `~/WorkVault/Hermes-Backlog/TZ/MofsIndex/MofsIndex_TZ.md` v0.2.0
+**Команды:**
+```bash
+mofs-index index --rebuild --yes   # полная перестройка
+mofs-index stats                   # размер БД, число записей
+mofs-index verify                  # несогласованности файлов и БД
+mofs-index vacuum                  # оптимизация FTS5
+```
+**БД:** `~/USERTOOLS/MofsIndex/state/index.sqlite` (~57 MB, WAL-режим)
+**Хуки:** автоматически после `mofs run`, `mofs rematch`, `mofs edit` (только real-mode)
+**Отключить хуки:** `MOFS_INDEX_AUTO=0`
+
+**API для workvault-rag:**
+```python
+from mofs_index import search_meetings, get_meeting, get_transcript_snippets
+hits = search_meetings(slugs={'projects': ['kirill_1on1']})   # 1.69мс
+hits = search_meetings(query='Криворотов', date_from='2026-07-01')  # 20.5мс ⚠️
+snippets = get_transcript_snippets(meeting_id, 'ключевое слово')
+```
+
+**MofsIndex v0.5 — индексация TZ-документов (27.07.2026):**
+```bash
+# Индексировать ТЗ-документы (инкрементально, <1 сек)
+mofs-index index docs
+
+# Полная перестройка индекса ТЗ
+mofs-index index docs --rebuild --yes
+```
+
+Новая таблица `docs` + `docs_fts` в той же БД `index.sqlite`. Скоуп: `~/WorkVault/Hermes-Backlog/TZ/**/*_TZ.md` + `*_impl_plan.md`. Типы: `doc_type='tz'` / `'impl_plan'`.
+
+**API для поиска по ТЗ:**
+```python
+from mofs_index import search_docs, get_doc
+# Полнотекстовый поиск по всем ТЗ (используется backlog_analyst)
+hits = search_docs('FileNameTooLong ownCloud', limit=5)
+# → top-1: MoveFromFF_TZ.md, rank=-6.18 (косвенная связь через FTS5)
+doc = get_doc('Hermes-Backlog/TZ/MoveFromFF/MoveFromFF_TZ.md')
+```
+
+**Важно:** после создания/правки ТЗ вызвать `mofs-index index docs` — иначе `backlog_analyst` и `workvault-rag` не увидят новое ТЗ до ночного rebuild. Хук встроен в процедуры A/B/C/D скилла `tz-workflow`.
+
+**Замеры (575 встреч):**
+| Операция | Результат | Цель |
+|---|---|---|
+| Full rebuild | 4.9с | <10с ✅ |
+| search по slug | 1.69мс | <10мс ✅ |
+| search FTS+дата | 20.5мс | <10мс ⚠️ тикет v0.2 |
+| Размер БД | 57 MB | <60 MB ✅ |
+
+**Архитектурные решения (отклонения от ТЗ — обоснованы техническими ограничениями):**
+- FTS5 standalone (не `content=meetings`) — external content не поддерживает DELETE по meeting_id в SQLite 3.34
+- `summary_body`/`transcript_body` только в FTS, не дублируются в `meetings` — экономия ~50 MB
+- `OR`-условия вместо `WHERE (bucket,slug) IN (...)` — row-value syntax не поддерживается SQLite 3.34
+
+**Тесты:** MofsIndex 65/65 + MOFS 108/108 (103 оригинальных + 5 интеграционных)

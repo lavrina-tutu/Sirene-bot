@@ -281,3 +281,85 @@ tail -20 ~/.hermes/logs/gateway.log | grep -i "notifications"
 - **File:** `gateway/run.py` (line 225 filter, 5917 mode load, 16049 callback)
 - **Telegram Bot API:** https://core.telegram.org/bots/api#sendmessage — `disable_notification` parameter
 - **Related issue:** User receives many notifications during agent thinking/tool execution
+
+
+## Historical extract from the original SKILL.md (not instructions)
+
+Do not follow old recipes for self-stop, restart, open access, or concurrent getUpdates; see [SKILL.md](../SKILL.md) for current restrictions and canonical addresses.
+
+## Platform Display & Notification Configuration
+
+Configure per-platform display behavior via `~/.hermes/config.yaml`. Covers interim messages, push notifications, streaming.
+
+### Telegram: Silent Interim Messages
+
+```yaml
+display:
+  platforms:
+    telegram:
+      notifications: important   # no push for tool progress / status messages
+```
+
+Or via env var: `HERMES_TELEGRAM_NOTIFICATIONS=important` (test without editing config).
+
+**Modes:** `important` — interim messages delivered silently (no sound/vibration, visible in chat). Only final responses trigger push. `all` — legacy, all messages trigger push.
+
+### Full display.platforms Structure
+
+```yaml
+display:
+  interim_assistant_messages: true   # show thinking/planning
+  tool_progress: "all"               # "off" | "compact" | "all"
+  streaming: true
+  show_reasoning: false
+  platforms:
+    telegram:
+      notifications: important
+      interim_messages: false        # hide interim status entirely
+      streaming: false               # disable streaming for this platform
+    discord:
+      streaming: false
+```
+
+### Runtime Footer (shows model/context at end of response)
+
+```yaml
+display:
+  runtime_footer:
+    enabled: true
+    fields:
+      - model        # e.g. "claude-sonnet-4-6"
+      - context_pct  # e.g. "35%"
+      - cwd
+```
+
+**⚠️ `display.runtime_header` DOES NOT EXIST** — codebase search returns no results; it is silently ignored. Use only `runtime_footer`.
+
+**Checking model context sizes:** Do not guess or rely on the model name alone. Consult official provider documentation and model cards, and explain that the value depends on the integration. For Hermes/Hosted models compare Hermes docs, provider docs, and the model card (for example, DeepSeek/OpenRouter). Prefer official provider documentation when values differ; identify integration-specific examples in Hermes docs as such.
+
+**Example findings:**
+- `gpt-5.4-mini` in Hermes docs: 400000 context for the Azure Foundry example.
+- `deepseek-v4-pro`: 1M context in official DeepSeek docs and model cards.
+- Report discrepancies separately and do not conflate API limits across providers.
+
+### How Interim Messages Work (codebase reference)
+1. Agent emits status events → `status_callback()` → `_status_callback_sync()` in `gateway/run.py:16049`
+2. `_prepare_gateway_status_message()` (line 225) filters noisy messages
+3. Telegram adapter's `_notification_kwargs()` (line 472 in `gateway/platforms/telegram.py`) returns `disable_notification=True` if mode is `important`
+
+### Zero Intermediate Messages Config
+```yaml
+display:
+  interim_assistant_messages: false
+  tool_progress: off
+  platforms:
+    telegram:
+      notifications: important
+```
+
+
+### Display/Platform Pitfalls
+- Only Telegram reads `display.platforms.telegram.notifications`. Discord/Slack ignore it — use platform-native settings.
+- `disable_notification=True` is a server-side hint; phone settings (DND, sound muting) can override it.
+
+

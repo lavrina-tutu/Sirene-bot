@@ -1,7 +1,7 @@
 ---
 name: brief-mode
-description: "Правила ведения брифа с PM — поштучные вопросы с рекомендаци"
-version: "1.0.0"
+description: "PM briefing: one decision at a time"
+version: "1.1.0"
 platforms: [linux, macos, windows]
 triggers:
   - "любой бриф"
@@ -14,287 +14,35 @@ metadata:
     tags: [brief, pm, decisions, workflow]
 ---
 
-# Режим брифа
+# PM briefing
 
-## Правила (жёсткие, от PM)
+Use this mode for a sequence of PM decisions, including classification of unclear meetings. Preserve the user's requested scope and mode. Historical examples are evidence for their particular meetings, not a routing dictionary or a substitute for reading the source.
 
-1. **Один вопрос за раз** — задать, дождаться ответа, только потом следующий.
-2. **Всегда давать рекомендацию с обоснованием** — не просто «что выбрать?», а «рекомендую вариант X, потому что Y. Альтернатива Z хуже потому что W.»
-3. **Не использовать clarify()** без рекомендации — clarify без рекомендаций это плохой бриф.
-4. **Записывать ответы по ходу** — фиксировать решения в файл или отчёт, не терять.
-5. **Стоп при неясности** — если непонятно что делать дальше, прийти с конкретным вопросом, не угадывать.
+## Question and decision protocol
 
-## Формат вопроса
+1. State the total number of questions when known. Ask exactly one question; wait for the answer and record it before asking the next.
+2. Give a short context, numbered options, a specific recommendation and the reason for it. Explain a relevant trade-off. Do not use `clarify()` without a recommendation.
+3. Record each answer as it arrives in the appropriate decision source, file or report. Do not wait until the end of the briefing. Distinguish decisions from proposals.
+4. If the next decision is unclear, ask one concrete open question rather than inventing the PM's answer. Respect an explicit switch of mode by the PM.
 
-```
-**Q[N]: [Тема]**
+## Meeting classification and modes
 
-[Контекст — одна строка что за ситуация]
+Read the meeting's summary or available content before recommending a classification; a title, participant name, previous similar case or LLM hint is only a clue. Show title, date, reason for unclear, participants, a short account of the content, a proposed route and its rationale. Use the applicable contacts source to resolve identities; do not promote historical examples of names to mandatory aliases.
 
-**Рекомендую: [вариант].**
-Обоснование: [почему].
-[Альтернатива: ... — хуже потому что ...]
+If the PM requests «поштучно» or «идём по саммари», present exactly one meeting at a time and wait for its answer. If the summary is missing, disclose that and ask about the missing evidence; do not guess a default route. Where applicable, options include `project=<slug>`, `1on1=<login>`, trash and adm.
 
-Делаем?
-```
+For a large list, read the available summaries and group candidates for preparation. Grouping alone does not authorize multiple questions or batch decisions. Use a grouped or hybrid confirmation only when the PM explicitly chooses it. If the PM supplies several explicit answers at once, accept and record every answer, then show the remaining unresolved items; do not silently discard any. Return to one-at-a-time questions for unresolved cases unless batch mode was selected.
 
-## Разметка unclear-очереди (паттерн из AggregateFromMeetings)
+After a round, report remaining entries and meaningful reasons such as a missing alias or uncertain project. Keep an actual decision distinct from the proposed classification. The examples and former mode-specific patterns are in [brief modes](references/brief-modes.md).
 
-При разборе списка неопределённых встреч:
-- Показывать заголовок + дату + причину unclear
-- Давать конкретную рекомендацию: project=slug / 1on1=login / trash / adm
-- Брать данные из tutu-contacts.md для резолва имён
+## Aggregate reconciliation
 
-### Паттерны имён → алиас
-- «Кирилл» → kkrivorotov
-- «Илья» → isereda
-- «Саша А» / «Aralov» / «Alexander Aralov» → aralov
-- «Саша Т» → tkachenkoav
-- «Олег» → opopkov
+Bootstrap historically classifies from `classification_memory.json`, not `unclear_registry.md`; verify the implementation in use. Record approved decisions in the classifier's actual source as well as the PM decision registry when each is required. An update to a report alone does not apply a decision. For Bootstrap, preserve exact filenames for applicable manual overrides and verify that the route is supported.
 
-### Паттерны маршрутизации
-- Диктофоны (.m4a/.mp4) — смотреть тему, не участников
-- «Zoom Meeting Имя», безымянные «Untitled», email-шаблоны (`@tutu.ru - ... - Untitled`), «Fireflies Demo Meeting», безымянные даты («Apr 17, 02:06 PM») → trash
-- Административное (SR, OKR, планирование, Q1/Q2, квартальный обзор, выравнивание целей) → adm
-- «ЦУ.*», «ЦУ-ТУТУ.*», «160226 ЦУ-ТУТУ.*», «ЦУ-отток.*», «Подключение студентов» → project cu
-- «AI-РП», «дорожная карта персонализации», «AI ready», «AI-ready.*», «статус по движению к AI-ready», «AI ready status», «Статус: AI Ready», «AI.*трансформация», «D-D будущего», «Delivery Discovery» (в контексте AI-ready) → project ai-transformaciya
-- «VPN Access», «SSH Key Setup» → trash (служебное)
-- «gantt plan*», «тестирую бота», «Лекция по ИИ» (внешние лекции), «Тестовый прогон.*обучение» → trash
-- «мониториг конкурентов», «доработки системы мониторинга цен», «парсинг внутренний статус» → project parsing
-- «Обсуждение feast», «обсудим устав про ml», «внедрение платформы MLOps» → project ml-platforma
-- «дорожная карта персонализации», «AI-РП. Анализ miro» → project ai-transformaciya
-- «бриф.*инициация чата», «чат-бот.*ПТТ» → project chatbot
-- «DS-as-a-Service» → **adm** (по саммари: стратегический синк по DS-направлению с Хруповым/Араловым, не проектная встреча)
-- «про DS-as-a-Service», «центр компетенций DS», «DS-процесс», «DS-заявки» → adm
-- «BI-направление» → по саммари оказалось **project ai-mas** (обсуждение AI-помощника для аналитиков, self-service BI через LLM) — всегда читать саммари
-- «Daily Кирилл», «Daily Саша - Кирилл» → **1on1 kkrivorotov** (не skip — по саммари реальные 1-1 с содержательными темами: метрики, метротека, планирование)
-- «конструктор отчетов.mp4» (любой год/дата) → **multisync data-talks** (записи DataTalks с демо инструментов, даже если загружены в Fireflies позже)
-- «АиД_2026, планирование», «планирование ч.2», «планы Q1», «планирование Q1», «заполняем jira на Q1», «заполняем джиру на q1» (с несколькими участниками из АиД) → **multisync sync-aid**
-- «про DS-as-a-Service», «DS-as-a-Service», «центр компетенций DS» → **adm** (по саммари: стратегический синк с Хруповым/Араловым, не проект)
-- «Daily [имя]» без фамилии — по саммари другой команды (геокодинг, интеграции) → **trash** (не команда Саши)
-- «FW: Выравнивание по целям и планам», «выравнивание по целям», «роадмапы» (общекорпоративные) → **adm**
-- **Zoom Meeting + имя** — НЕ всегда trash: проверять саммари. «Zoom Meeting 08:00» (техпрозвон, проблемы связи) → trash. «Zoom Meeting 12:00» (содержательная встреча по метрикам/процессам) → смотреть тему и маршрутизировать по содержанию
-- «Custom Agent.*Aralov», «саша саша 1-1» → 1on1 aralov
-- Системные файлы Bootstrap (`_log_meet.md`, `_registry_meet.md`) → skip (не встречи)
+Reconcile `unclear_queue.md` against recorded decisions programmatically after a run; recognize both summary and Action items entries and exclude system files such as `_log_meet.md` and `_registry_meet.md`. Check the real unresolved entries rather than treating the queue heading as a count of new decisions. Rerun and reconcile where authorized. Details and historical causes: [unclear reconciliation](references/aggregate-unclear-reconciliation.md).
 
-### Режим батча — когда PM разом подтверждает блок
-Если PM присылает список с маркерами «верно» / явными ответами на несколько записей сразу:
-1. Принять все ответы, зафиксировать внутри текущего блока
-2. После фиксации **сразу вывести остаток** — таблицей «что осталось»
-3. Группировать остаток по степени уверенности: «нужно уточнение» / «скорее X» / «прочее»
-4. НЕ спрашивать каждую запись поштучно — если в батче несколько очевидных кандидатов, показать их блоком с рекомендациями и ждать одного общего ответа
+For exact meeting decisions, aliases and the sequence of the 2026-06-22 rounds, consult [decision history](references/aggregate-brief-decisions-20260622.md). Similar titles, Zoom/Daily/Untitled, training and recordings can have different outcomes; do not generalize a particular route to all dates or meetings.
 
-### Прогресс-трекинг
-- После каждого раунда выводить таблицу с оставшимися записями
-- Группировать по типу нерешённости: «не хватает алиаса», «не ясен проект», «явный trash»
-- Финал группы = переход к следующей группе (группа 1 → группа 2 и т.д.)
+## Mobile review
 
-## Расхождение числа unclear между реестром и Bootstrap
-
-Bootstrap всегда пересчитывает unclear из `classification_memory.json` — он не видит `unclear_registry.md`. Поэтому:
-- **Бриф снижает unclear** только если алиасы вносятся в `classification_memory.json`
-- `unclear_registry.md` применяется только в продовом пайплайне (Фаза 1+)
-- Если Bootstrap показывает 77 а ожидали 9 — нужно внести алиасы из брифа в classification_memory и перезапустить Bootstrap
-- **Правило:** после брифа Opus вносит решения в **оба** места: unclear_registry.md + classification_memory.json (алиасы для проектов)
-
-## Ловушки Bootstrap unclear (AggregateFromMeetings)
-
-После перезапуска Bootstrap `unclear_queue.md` может показывать больше записей, чем реально нераскрытых. Причины ложных позитивов:
-
-1. **«Action items» вместо «Саммари»** — Bootstrap создаёт записи типа `Action items:` для некоторых встреч. Парсер unclear_queue ищет `— Саммари:`, поэтому action-items-записи парсятся как `? | ?`. Это не новые unclear — это те же встречи (Кирилл 1-1, Илья 1-1 и т.д.), уже решённые.
-2. **Системные файлы** — `_log_meet.md` и `_registry_meet.md` попадают в unclear со статусом «нет реальных участников». Добавить в skip-список в `unclear_registry.md`.
-3. **Решения брифа не применяются при Bootstrap** — `unclear_registry.md` хранит ручные решения, но Bootstrap их не читает — он классифицирует заново по `classification_memory.json`. Реальный % unclear = записи в секции unclear в реестре / total_files.
-
-**Правило проверки:** после Bootstrap сравнить новый `unclear_queue.md` с решениями брифа программно (Python-скрипт). Если все «новые» — это уже решённые или системные файлы → gate пройден, идти к следующему этапу.
-
-## Протокол поштучного разбора unclear (ОБЯЗАТЕЛЬНО)
-
-Когда PM говорит «разбираем поштучно» или «идём по саммари» — **НИКОГДА не предлагать блоки и не угадывать по заголовку**:
-
-1. Показать заголовок + дату встречи
-2. **Прочитать файл саммари** (`cat "path/to/YYYY-MM-DD ... - summary.md"`)
-3. Дать 2–3 строки содержания + участников
-4. Предложить маршрут с обоснованием
-5. Ждать ответа → следующий
-
-**Критически важно:** заголовок встречи часто вводит в заблуждение. Примеры:
-- «Про BI-направление» → по саммари оказалось **project ai-mas** (обсуждение AI-помощника для аналитиков, self-service BI через LLM) — всегда читать саммари
-- «1-1 Даяна\\Саша» → по саммари PM решил **trash** (не 1on1 dnabiev) — 1-1 с внешним контекстом могут быть trash
-- «Вопросы по тг для ИБ» → по саммари оказалось **project chatbot** (не trash) — ИБ в названии ≠ trash
-- «Цифровой управленец» → **trash** (демо внешнего вендора, не рабочая встреча команды)
-- «GMT20251117-Тренинг ИИ.mp4», любые «Тренинг ИИ» → **trash** (внешний корпоративный тренинг)
-
-**Правило:** без саммари рекомендация — это гадание. Всегда читать файл перед ответом.
-
-## Групповой разбор unclear по сущностям (эффективный режим)
-
-Когда unclear > 30 записей — перед поштучным разбором прочитать ВСЕ саммари и сгруппировать по сущностям. Показывать PM **одну группу за раз**:
-
-```python
-# Группировки по сущностям (пример из AggregateFromMeetings):
-groups = {
-    'adm_Q':       # Q1/Q2/SR/OKR/планирование/выравнивание целей
-    '1on1_kirya':  # Кирилл 1-1, Daily Кирилл, Кирилл передача дел
-    '1on1_other':  # другие 1-1 (Илья, Саша А, 1-1 Ткаченко)
-    'trash_sys':   # безымянные, Untitled, Fireflies Demo, временные метки
-    'project_ids': # тематические — нужно читать саммари
-}
-```
-
-**Порядок показа:** сначала очевидные (trash_sys, 1on1_kirya) → потом требующие контекста (project_ids).
-
-**Формат группы:**
-```
-Группа N — [название] (K встреч):
-| Дата | Заголовок | Haiku думает |
-|------|-----------|-------------|
-| ...  | ...       | ...         |
-Рекомендую: все → [маршрут]?
-```
-
-**Гибридный режим (паттерн 22.06, когда есть llm_hint из R10):**
-1. Показать все группы сразу — таблицей с Haiku-рекомендацией по каждой
-2. PM подтверждает очевидные группы разом («Группа 1 — да», «Группа 2 — да»)
-3. По неочевидным группам — поштучно, с рекомендацией и обоснованием
-4. Группа 5 («нет версии Haiku») — **обязательно поштучно** — показывать контекст, спрашивать одну встречу за раз
-
-**Ключевые наблюдения из сессии 22.06:**
-- Когда PM говорит «поштучно брифуем» применительно к группе — это означает поштучно по встречам ВНУТРИ группы, не по всем 32 сразу
-- Для группы без llm_hint: давать рекомендацию по названию + предлагать adm/trash как дефолт
-- PM может перейти к следующей группе сам («Далее про группу 2») — это сигнал что текущая группа закрыта
-
-Если PM говорит «поштучно по саммари» — переключиться в протокол поштучного разбора (читать саммари каждой встречи).
-
-## Новые паттерны маршрутизации из сессии 2026-06-22
-
-- «Zoom Meeting 12:00» (содержательная, метрики/процессы) → **project metroteka** (не trash!)
-- «АиД_2026, планирование ч.2» (несколько участников АиД) → **multisync sync-aid**
-- «планы Q1 2026», «Планирование Q1» (синк АиД, Аралов+Жиров+Набиева+Ткаченко) → **multisync sync-aid**
-- «конструктор отчетов.mp4 [любая дата]» → **multisync data-talks** (записи DataTalks)
-- «Daily Кирилл» → **1on1 kkrivorotov** (по саммари: реальная 1-1 про метрики, метротека, планирование)
-- «Daily [чужая команда]» (геокодинг, интеграции, участники не из команды Саши) → **trash**
-- «1-1 Даяна\Саша» → по саммари может быть **trash** (если внешний контекст без проектного смысла)
-- «Вопросы по тг для ИБ» → **project chatbot** (по саммари: архитектура бота, ИБ-ограничения)
-
-## Новые паттерны из сессии 2026-06-22 (бриф unclear-очереди R10)
-
-- «Delivery Discovery» (2026-01-28, AI-агенты, TTM, Аренда авто) → **project ai-transformaciya** (по решению PM)
-- «taranov@tutu.ru - Untitled», «email@tutu.ru - ... - Untitled» (нет саммари, нет участников) → **trash**
-- «VPN Access and SSH Key Setup Meeting» → **trash** (служебное)
-- «gantt planer» (Jira, управление задачами, нет проектной привязки) → **trash**
-- «Тестирую бота для митингов» → **trash** (PM решение 22.06: общеорганизационный контент без проектной привязки)
-- «Fireflies Demo Meeting» → **trash** (PM решение 22.06: демо внешнего инструмента, не рабочая встреча команды)
-- «AI-агент по агрегации инфы в проекте» (2026-05-20) → **trash** (это сам инструмент AggregateFromMeetings, не рабочая встреча)
-- «Jun 12, 07:30 PM» / «Jun 12, 08:35 PM» (по саммари: туристический поход, этнография) → **trash** (нерабочая встреча)
-- «FW: Выравнивание по целям и планам 2026» → **adm**
-- «Квартальный обзор задач и приоритетов» (общекорпоративный, множество инициатив) → **adm**
-- «Каскад коммуникаций и информированность» (нет саммари, по названию — ВК/ДМС) → **adm**
-- «Daily Саша - Кирилл» (дашборды, SLA, AI-решения) → **1on1 kkrivorotov** (не ai-mas — по содержанию это 1-1)
-- «Daily Кирилл» (несколько тем: метрики, антибот, личное) → **1on1 kkrivorotov**
-- «Кирилл 1-1» (только action items, нет саммари) → **1on1 kkrivorotov**
-- «Илья 1-1» (только action items) → **1on1 isereda**
-- Ретроспектива «Untitled» (6 участников, Miro, голосование, заказчик) → **unclear** (нужен саммари для определения проекта)
-
-## Новые паттерны из сессии 2026-06-22 (дополнение)
-
-- «Delivery Discovery» (2026-01-28, AI-агенты, TTM, Аренда авто, оптимизация D-D цикла) → **project ai-transformaciya** (финальное решение PM 22.06 — ранее была пометка «unclear», теперь закрыто)
-- «DataTalk» (без уточнений) → **multisync data-talks** (по саммари: правила коммуникации, стандарты ответов)
-- «Встреча с ИБ» → **unclear** (по саммари: ПДН, Zero Trust — не очевидно к chatbot или отдельная тема)
-- «Дашборд с ПроцМетриками: Демо» → **unclear** (TTM дашборд — может быть metroteka или отдельный проект)
-- «Каскад коммуникаций и информированность» → **adm** (внутренние коммуникации, ИК, ДМС)
-- «SR - Ткаченко Александр Владимирович» → **1on1 aralov** (SR = self-review, встреча с руководителем)
-- «AI-агент по агрегации инфы в проекте» → **trash** (это сам инструмент AggregateFromMeetings, не рабочая встреча)
-- «ВМ для AI-аналитик» → **project ai-mas** (по саммари: VM с ботом, Metabase, 500 сотрудников)
-- «Управление проектами и рисками» → **adm** (договоры с подрядчиками, РП, Jira — общеорганизационное)
-- «Выбор вендора и сроки внедрения» → **unclear** (нужно знать проект — Колмогоров, лицензии 14 млн — какой?)
-- «GMT20260303-Парсинг внутренний статус» → **project parsing** (roadmap парсеров, авиация, баги — по саммари однозначно)
-- «Тестовый прогон первого занятия — обучение AI-мультиагентная» → **project ai-mas** (курс по агентам, Python+LLM)
-
-## Паттерны из сессии 2026-06-22 (финальные, подтверждённые PM)
-
-- «Собираем Q2», «фин смотрим Q2», «Проверяем Q1-Q2» → **adm** (квартальное планирование)
-- «новые правила заполнения SR в Q2.mp4» → **adm**
-- «Квартальный обзор задач и приоритетов» (корпоративный саммари всех инициатив) → **adm**
-- «FW: Выравнивание по целям и планам 2026» → **adm**
-- «Каскад коммуникаций и информированность» (внутренние ВК/ДМС) → **adm**
-- «gantt planer» (Jira, управление задачами, нет проектной привязки) → **trash**
-- «Тестирую бота для митингов» → **trash** (общеорганизационный, нет привязки)
-- «Fireflies Demo Meeting» → **trash** (демо внешнего инструмента)
-- «AI-агент по агрегации инфы в проекте» → **trash** (это сам AggregateFromMeetings)
-- «VPN Access and SSH Key Setup Meeting» → **trash** (служебное)
-- «Jun 12, ... PM» (туристический поход, этнография) → **trash** (нерабочие встречи)
-- «taranov@tutu.ru - ... - Untitled» → **trash** (нет саммари, нет участников)
-- «Daily Кирилл» (несколько тем) → **1on1 kkrivorotov**
-- «Кирилл 1-1» (только action items, май 2026) → **1on1 kkrivorotov**
-- «Илья 1-1» (только action items) → **1on1 isereda**
-- «Daily Саша - Кирилл» (16.12.25, дашборды, SLA, Реестр ИИ) → **1on1 kkrivorotov** (не ai-mas)
-- Ретроспектива «Untitled» (6 участников, Miro, заказчик) → **unclear** (нужен саммари)
-- «Zoom Meeting Ткаченко» (08:00, техпрозвон) → **unclear** (не trash автоматически)
-- «Daily» без имён (18.12.25, геокодинг/НДС — чужая команда) → **unclear**
-- «tkachenkoav@tutu.ru Untitled» (10.02.26, ретроспектива 6 участников) → **unclear**
-
-## Паттерны маршрутизации из сессии 2026-06-22 (бриф R10, финальный раунд — 6 unclear)
-
-- «Zoom Meeting Ткаченко» (08:00, организационные вопросы, связь, расписание) → **trash** (технический прозвон без содержания)
-- «2025-05-23 конструктор отчетов.mp4» (баги, экономия, отзывы, автоматизация) → **project vestnik-aid** (PM решение 22.06: инструмент отчётности — Вестник)
-- «Daily» (18.12.25, геокодинг/БД/НДС — явно чужая команда) → **trash** (не команда Саши)
-- «планы Q1 2026» (19.01.26, несколько инициатив АИД, Аралов+участники) → **multisync sync-aid** (синк команды АИД, не конкретный проект)
-- Ретроспектива «Untitled» (10.02.26, 6 участников, Miro, заказчик) → **project parsing** (PM знает по контексту — жд ретроспектива)
-- «Встреча с ИБ» (20.03.26, ПДН, Zero Trust, CDP) → **project cu** (ИБ в контексте студентов ЦУ и доступов)
-
-**Итог 3-го раунда:** 6 → 2 unclear (после обновления overrides + перезапуска R10: 41 unclear → 2 = 0.4%)
-
-## Новые маршруты из сессии 2026-06-22 (бриф R10, 3-й раунд)
-
-Финальные решения PM для 32 unclear-встреч — применены в `manual_overrides`:
-
-**adm (9 встреч):** заполняем jira/джиру на Q1, SR Q2, Собираем Q2, Проверяем Q1-Q2, фин смотрим Q2, Квартальный обзор задач, FW: Выравнивание по целям 2026 (часть 2), Каскад коммуникаций
-
-**trash (8 встреч):** gantt planer, taranov@tutu.ru Untitled, Fireflies Demo Meeting, VPN Access and SSH Key Setup, Jun 12 PM×2 (поход/этнография), AI-агент по агрегации инфы в проекте, Тестирую бота для митингов
-
-**1on1/kkrivorotov (7 встреч):** Daily Кирилл (25.09.25), Daily Саша-Кирилл (16.12.25), Кирилл 1-1 actions.md (18/19/20/21/22 мая 2026)
-
-**1on1/isereda (1 встреча):** Илья 1-1 actions.md (19 мая 2026)
-
-**project/ai-transformaciya (1 встреча):** Delivery Discovery (28.01.26, AI-агенты, TTM, Аренда авто)
-
-**unclear (осталось 6):** Zoom Meeting Ткаченко (13.11.25), Daily без привязки (18.12.25), Ретроспектива Untitled 6 участников (10.02.26) + 3 старые из предыдущего брифа
-
-**system/skip (2 записи):** _log_meet.md, _registry_meet.md
-
-## Подача ссылок на файлы Obsidian (мобильный Telegram)
-
-`obsidian://open?vault=...` ссылки **не открываются** в Telegram на мобильном (iOS/Android блокируют кастомные протоколы в inline-ссылках).
-
-**Решение:** создать review-заметку в WorkVault с wiki-ссылками. PM открывает её в Obsidian на телефоне — там всё кликабельно.
-
-```python
-# Шаблон файла: WorkVault/Inbox/unclear_review.md
-content = """---
-created: YYYY-MM-DD
-type: review
----
-
-# 🔍 [Заголовок] — разбор N встреч
-
-1. ДД.ММ.ГГГГ — [[имя-файла-без-расширения|Краткое название]]
-2. ДД.ММ.ГГГГ — [[имя-файла-без-расширения|Краткое название]]
-...
-"""
-```
-
-**Имя файла wiki-ссылки** = имя файла без `.md` и без полного пути. Obsidian находит файл по имени независимо от папки.
-
-После создания файла — `rclone sync WorkVault owncloud:WorkVault` и дождаться синка FolderSync на телефоне.
-
-**Антипаттерн:** давать нумерованный список с `[открыть в Obsidian](obsidian://...)` — выглядит кликабельно в десктопном Telegram, но не работает на мобильном.
-
-## Антипаттерны
-
-- ❌ Задавать несколько вопросов сразу
-- ❌ clarify() с вариантами без рекомендации
-- ❌ «что делаем?» без объяснения зачем
-- ❌ Пропускать обоснование когда оно неочевидно
-- ❌ Верить числу unclear из Bootstrap напрямую — всегда сверять с реестром
-- ❌ Предлагать разобрать «блок trash» скопом — PM хочет видеть каждую запись отдельно с контекстом
-- ❌ Угадывать маршрут по заголовку без чтения саммари — заголовки часто обманывают
+When reviewing files on mobile, prepare a review note with Obsidian wiki-links and deliver it through the requested channel. Do not assume a Telegram `obsidian://` link will open reliably. See [mobile review](references/mobile-obsidian-review.md).

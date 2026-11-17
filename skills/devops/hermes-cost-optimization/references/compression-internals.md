@@ -58,3 +58,31 @@ Per-model compression thresholds через config.yaml **невозможны**
 1. Глобальный threshold под наименьший aux model context
 2. Использовать aux compression model с достаточным контекстом
 3. Правка исходника `_compression_threshold_for_model()`
+
+
+
+## Historical entrypoint material (2026)
+
+> Historical source, 2026; preserved as recorded, not current instructions. Verify against the current entrypoint and implementation.
+
+## 3. Context Compression Tuning
+
+```bash
+hermes config set compression.enabled true
+hermes config set compression.threshold 0.50   # compress at 50% context fill
+hermes config set compression.target_ratio 0.20 # compress down to 20%
+```
+
+**Как threshold взаимодействует с compression model:**
+
+| Compression model | Контекст модели | Рекомендуемый threshold | Результат |
+|---|---|---|---|
+| claude-haiku-4-5 | 200K | `0.17` (170K < 200K) | Haiku справится, порог корректен |
+| claude-sonnet-4-6 | 1M | `0.50` (500K ≪ 1M) | Оптимально, без предупреждений |
+| claude-opus-4-7 | 1M | `0.50` | Оптимально, очень дорого |
+
+**Почему нельзя задать разные пороги для разных моделей:** `compression.threshold` — глобальный параметр, per-model override отсутствует в config.yaml. Единственный встроенный override — функция `_compression_threshold_for_model()` в `agent/auxiliary_client.py` (захардкожена в исходнике). При смене модели (`update_model()`) Hermes переносит `threshold_percent` как есть на новую модель.
+
+**Почему Sonnet лучше Haiku для compression при использовании Opus:** Opus пишет длинные ТЗ/исследования. При пороге 170K компрессия может сработать в середине задачи и Opus потеряет ранний контекст. Sonnet как compressor + threshold 500K даёт Opus запас на полную сессию разработки.
+
+---

@@ -56,3 +56,8 @@ for item in items:
 
 ## Косвенная заметка
 ErrorBus не запускает USERTOOLS — он лишь репортит их ошибки через `report_error.sh`. «Стали падать ошибки MFL после добавления errorbus» = добавленный `_report_error()` просто сделал ранее существовавшие сбои заметными. Ищи причину в самом крон-запуске, а не в errorbus.
+
+
+## Historical source (superseded where it conflicts with SKILL.md; not current instruction)
+
+Historical source: see existing wrapper and ABI analysis above.

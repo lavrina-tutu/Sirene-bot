@@ -1,0 +1,611 @@
+--- a/read_mpp.py
++++ b/read_mpp.py
+@@ -24,17 +24,22 @@
+     import jpype
+     import jpype.imports  # noqa: F401
+     if not jpype.isJVMStarted():
+-        jpype.startJVM()
+-
+-
+-
+-READER_VERSION = "read-mpp-v2"
++        # Observation overlay precedes the pinned upstream JAR. No stock JAR mutation.
++        overlay = Path(__file__).parent / "references/mpxj-16.4.0-observation/mpxj-observation.jar"
++        libs = Path(mpxj.__file__).parent / "lib"
++        jpype.startJVM(classpath=[str(overlay), *map(str, sorted(libs.glob("*.jar")))])
++
++
++
++READER_VERSION = "read-mpp-v3"
+ 
+ 
+ def reader_versions() -> dict[str, str]:
+     """Identity of the installed reader, without starting a second read."""
+     from importlib.metadata import version
+-    return {"reader": READER_VERSION, "mpxj": version("mpxj"), "jpype": version("JPype1")}
++    import hashlib
++    overlay = Path(__file__).parent / "references/mpxj-16.4.0-observation/mpxj-observation.jar"
++    return {"relation_observer_sha256": hashlib.sha256(overlay.read_bytes()).hexdigest(), "reader": READER_VERSION, "mpxj": version("mpxj"), "jpype": version("JPype1")}
+ 
+ 
+ def read_project_file(path: str, *, read_observer=None):
+--- a/plan_export.py
++++ b/plan_export.py
+@@ -165,12 +165,76 @@
+ 
+ 
+ def _ranges(ranges):
++    """MPXJ work ranges (not gaps); preserve every period without interpretation."""
++    if ranges is None:
++        return []
++    return [{"start": _read(rng, "getStart"), "end": _read(rng, "getEnd")} for rng in ranges]
++
++
++def _timephased(assignment):
++    """16.4.0: raw source series and parameterized actual+remaining projection.
++
++    Raw planned is a distinct source, never substituted by actual+remaining.
++    The projection uses explicit source period boundaries, HOURS, and labels
++    its basis. No generated planned series is presented as extracted raw data.
++    """
++    from java.util import ArrayList
++    from org.mpxj import LocalDateTimeRange, TimeUnit
++    raw = {}
++    boundaries = set()
++    for kind, getter in [("planned", "getRawTimephasedPlannedWork"),
++                         ("actual_regular", "getRawTimephasedActualRegularWork"),
++                         ("remaining_regular", "getRawTimephasedRemainingRegularWork"),
++                         ("actual_overtime", "getRawTimephasedActualOvertimeWork"),
++                         ("remaining_overtime", "getRawTimephasedRemainingOvertimeWork")]:
++        result = _read(assignment, getter, list)
++        rows = []
++        for period in result["value"] or []:
++            start, finish = period.getStart(), period.getFinish()
++            if start is not None: boundaries.add(start)
++            if finish is not None: boundaries.add(finish)
++            rows.append({"period_start": _read(period, "getStart"),
++                         "period_end": _read(period, "getFinish"),
++                         "work": _dur_field(period, "getTotalAmount"),
++                         "work_per_hour": _dur_field(period, "getAmountPerHour")})
++        raw[kind] = {**result, "value": rows if result["value"] is not None else None}
++    ranges = ArrayList()
++    dates = sorted(boundaries)
++    for start, finish in zip(dates, dates[1:]):
++        if start < finish: ranges.add(LocalDateTimeRange(start, finish))
++    projected = _read(assignment, "getTimephasedWork", list, ranges, TimeUnit.HOURS)
+     rows = []
+-    if ranges is None:
+-        return rows
+-    for rng in ranges:
+-        rows.append({"start": _read(rng, "getStart"), "end": _read(rng, "getEnd")})
+-    return rows
++    for period, work in zip(ranges, projected["value"] or []):
++        rows.append({"period_start": _read(period, "getStart"), "period_end": _read(period, "getEnd"),
++                     "work": {"value": None if work is None else str(work),
++                              "quantity": None if work is None else _duration(work),
++                              "quality": "missing" if work is None else "ok",
++                              "reason": "not_set" if work is None else None}})
++    quality = {"status": "complete" if projected["quality"] == "ok" else projected["quality"],
++               "count": len(rows), "reason": projected["reason"],
++               "basis": "actual_plus_remaining", "units": "HOURS"}
++    return rows, quality, raw
++
++
++def _relation_audit(project):
++    """Observation emitted by the patched reader in its existing binary pass."""
++    try:
++        from org.mpxj.mpp import RelationReadAudit
++        audit = RelationReadAudit.get(project)
++        if audit is None:
++            raise ValueError("no_audit_for_reader_format")
++        records = []
++        for row in audit.get("records"):
++            records.append({str(k): (int(v) if str(k) in ("uid", "predecessor_uid", "successor_uid", "type_code", "position") else str(v))
++                            for k,v in row.entrySet()})
++        expected = int(audit.get("expected_count"))
++        complete = bool(audit.get("complete")) and len(records) == expected
++        return {"value": {"records": records, "expected_count": expected,
++                          "observed_count": len(records), "enumeration_complete": complete},
++                "quality": "ok" if complete else "partial",
++                "reason": None if complete else "raw_relation_enumeration_incomplete"}
++    except Exception as exc:
++        return {"value": None, "quality": "unsupported", "reason": "raw_relation_audit_unavailable:" + type(exc).__name__}
+ 
+ 
+ def _collect_tasks(project, *, objects=None, keys=None, calendars=None):
+@@ -256,7 +320,7 @@
+                    "type_quality": {"value": normalized, "quality": "ok" if normalized else typ["quality"] if typ["quality"] != "ok" else "unsupported",
+                                     "reason": None if normalized else typ["reason"] or "unknown_relation_type"},
+                    "lag": None if lag["value"] is None else f"{lag['value']['amount']} {lag['value']['source_units']}",
+-                   "lag_value": lag, "lag_calendar": _read(r, "getCalendar"),
++                   "lag_value": lag, "lag_calendar": _read(project.getProjectProperties(), "getRelationshipLagCalendar"),
+                    "project_lag_calendar": _read(project.getProjectProperties(), "getRelationshipLagCalendar"),
+                    "driving": _read(r, "getDriving", bool),
+                    "endpoint_quality": {"predecessor": {k:v for k,v in pred.items() if k != "value"},
+@@ -321,10 +385,7 @@
+         row["units"] = _read(a, "getUnits", _decimal)
+         row["effective_calendar_key"] = _read(a, "getEffectiveCalendar", calendars.get)
+         row["segments"] = _read(a, "getWorkSplits", _ranges)
+-        segments, quality = _sequence(a, "getTimephasedWork")
+-        row["timephased"] = [{"period_start": _read(s, "getStart"), "period_end": _read(s, "getFinish"),
+-                              "work": _dur_field(s, "getTotalAmount")} for s in segments]
+-        row["timephased_quality"] = quality
++        row["timephased"], row["timephased_quality"], row["raw_timephased"] = _timephased(a)
+         out.append(_finish(row))
+     return out
+ 
+@@ -461,14 +522,22 @@
+     collections["external_dependencies"] = _collection_status(external)
+     collections["baseline_values"] = _collection_status([b for t in tasks for b in t.get("baseline_values", [])])
+     graph = diagnose_graph(tasks, deps, external)
+-    # ConstraintFactory in the installed MPXJ discards self/dangling MPP rows
+-    # before ProjectFile is exposed. Do not mistake the visible graph for proof
+-    # that the binary source contains no such records (binary regression below).
+-    graph["raw_relation_enumeration"] = {
+-        "value": None, "quality": "unsupported",
+-        "reason": "MPXJ_ConstraintFactory_filters_self_and_dangling_MPP_records_before_ProjectFile"}
+-    if collections["dependencies"]["status"] == "complete":
+-        collections["dependencies"].update(status="partial", reason=graph["raw_relation_enumeration"]["reason"])
++    audit = _relation_audit(project)
++    graph["raw_relation_enumeration"] = audit
++    records = (audit["value"] or {}).get("records", [])
++    discarded = [row for row in records if row["disposition"] not in ("represented", "deleted")]
++    graph["discarded_relation_records"] = discarded
++    enumeration_complete = audit["quality"] == "ok"
++    collections["dependencies"]["enumeration_complete"] = enumeration_complete
++    collections["dependencies"]["source_record_count"] = len(records)
++    from collections import Counter
++    represented = [row for row in records if row['disposition'] == 'represented']
++    visible_matches = (Counter(row.get('uid') for row in represented) ==
++                       Counter(row.get('uid',{}).get('value') for row in deps))
++    graph['raw_relation_enumeration']['visible_records_match'] = visible_matches
++    if not enumeration_complete or discarded or not visible_matches:
++        collections["dependencies"].update(status="partial",
++            reason="raw_relations_discarded" if discarded else "raw_visible_relation_mismatch" if not visible_matches else audit["reason"])
+     if src.read_bytes() != raw:
+         raise RuntimeError("input_changed_during_MPXJ_read")
+     return {"export_version": EXPORT_VERSION, "source": str(src),
+--- a/tests/test_plan_export.py
++++ b/tests/test_plan_export.py
+@@ -141,8 +141,8 @@
+     assert by_type["FS"]["lag_value"]["value"]["amount"] == "1"
+     assert by_type["FF"]["lag_value"]["value"]["amount"] == "0"
+     for row in data["dependencies"]:
+-        assert row["lag_calendar"]["quality"] == "unsupported"
+-        assert row["lag_calendar"]["reason"] == "getter_unavailable:getCalendar"
++        assert row["lag_calendar"] == row["project_lag_calendar"]
++        assert not (row["lag_calendar"].get("reason") or "").startswith("getter_unavailable")
+         assert row["predecessor_uid"]["quality"] == "ok"
+     assert data["export_version"] == "full-export-v2"
+     assert data["provenance"]["mpxj"] == "16.4.0"
+@@ -273,6 +273,49 @@
+     assert len(data["dependencies"]) == 2  # two of four raw records were filtered inside MPXJ
+     assert data["diagnose_graph"]["has_cycle"]
+     quality = data["diagnose_graph"]["raw_relation_enumeration"]
+-    assert quality["quality"] == "unsupported"
+-    assert "filters_self_and_dangling" in quality["reason"]
++    assert quality["quality"] == "ok"
++    assert quality["value"]["enumeration_complete"] is True
++    assert quality["value"]["expected_count"] == quality["value"]["observed_count"] == 4
++    lost = data["diagnose_graph"]["discarded_relation_records"]
++    assert [(r["predecessor_uid"], r["successor_uid"], r["disposition"]) for r in lost] == [
++        (1, 1, "self_reference"), (99999, 5, "dangling_endpoint")]
++    assert all(len(r["raw_hex"]) == 40 for r in lost)
+     assert data["collections"]["dependencies"]["status"] == "partial"
++
++
++def test_real_parameterized_timephased_api_and_raw_series(synthetic_dir):
++    from read_mpp import read_project_file
++    from plan_export import _timephased
++    from org.mpxj import TimeUnit, LocalDateTimeRange
++    from java.util import ArrayList
++    project = read_project_file(str(synthetic_dir / "mpp14splittask.mpp"))
++    assignment = next(iter(project.getResourceAssignments()))
++    ranges = ArrayList()
++    ranges.add(LocalDateTimeRange(assignment.getStart(), assignment.getFinish()))
++    # This is the real 16.4.0 signature, not a Python fake accepting any args.
++    result = list(assignment.getTimephasedWork(ranges, TimeUnit.HOURS))
++    assert len(result) == 1
++    projected, quality, raw = _timephased(assignment)
++    assert quality['status'] == 'complete' and quality['basis'] == 'actual_plus_remaining'
++    assert quality['units'] == 'HOURS' and projected
++    getters = {'planned':'getRawTimephasedPlannedWork', 'actual_regular':'getRawTimephasedActualRegularWork',
++               'remaining_regular':'getRawTimephasedRemainingRegularWork',
++               'actual_overtime':'getRawTimephasedActualOvertimeWork',
++               'remaining_overtime':'getRawTimephasedRemainingOvertimeWork'}
++    for name, getter in getters.items():
++        source = list(getattr(assignment,getter)())
++        assert raw[name]['quality'] == 'ok'
++        assert len(raw[name]['value']) == len(source)
++        assert [p['work']['quantity']['amount'] for p in raw[name]['value']] == [str(p.getTotalAmount().getDuration()).rstrip('0').rstrip('.') if '.' in str(p.getTotalAmount().getDuration()) else str(p.getTotalAmount().getDuration()) for p in source]
++    assert not raw['planned']['value'] and raw['remaining_regular']['value']
++
++
++def test_raw_audit_isolation_and_unpatched_format_fail_closed(synthetic_dir):
++    from read_mpp import read_project_file
++    from plan_export import _relation_audit
++    from org.mpxj import ProjectFile
++    one = read_project_file(str(synthetic_dir / 'graph-invalid.mpp'))
++    two = read_project_file(str(synthetic_dir / 'mpp14relations.mpp'))
++    assert len(_relation_audit(one)['value']['records']) == 4
++    assert all(r['disposition'] == 'represented' for r in _relation_audit(two)['value']['records'])
++    assert _relation_audit(ProjectFile())['quality'] == 'unsupported'
+--- /dev/null
++++ b/references/mpxj-16.4.0-observation/ConstraintFactory.upstream.java
+@@ -0,0 +1,125 @@
++package org.mpxj.mpp;
++
++import java.io.FileNotFoundException;
++import java.io.IOException;
++
++import org.apache.poi.poifs.filesystem.DirectoryEntry;
++import org.apache.poi.poifs.filesystem.DocumentEntry;
++import org.apache.poi.poifs.filesystem.DocumentInputStream;
++import org.mpxj.EventManager;
++import org.mpxj.ProjectFile;
++import org.mpxj.ProjectProperties;
++import org.mpxj.Relation;
++import org.mpxj.RelationType;
++import org.mpxj.Task;
++import org.mpxj.common.ByteArrayHelper;
++import org.mpxj.common.NumberHelper;
++
++/**
++ * Common implementation detail to extract task constraint data from
++ * MPP9, MPP12, and MPP14 files.
++ */
++class ConstraintFactory
++{
++   /**
++    * Main entry point when called to process constraint data.
++    *
++    * @param projectDir project directory
++    * @param file parent project file
++    * @param inputStreamFactory factory to create input stream
++    */
++   public void process(DirectoryEntry projectDir, ProjectFile file, DocumentInputStreamFactory inputStreamFactory) throws IOException
++   {
++      DirectoryEntry consDir;
++      try
++      {
++         consDir = (DirectoryEntry) projectDir.getEntry("TBkndCons");
++      }
++
++      catch (FileNotFoundException ex)
++      {
++         file.addIgnoredError(ex);
++         consDir = null;
++      }
++
++      if (consDir != null)
++      {
++         FixedMeta consFixedMeta = new FixedMeta(new DocumentInputStream(((DocumentEntry) consDir.getEntry("FixedMeta"))), 10);
++         FixedData consFixedData = new FixedData(consFixedMeta, 20, inputStreamFactory.getInstance(consDir, "FixedData"));
++         //         FixedMeta consFixed2Meta = new FixedMeta(new DocumentInputStream(((DocumentEntry) consDir.getEntry("Fixed2Meta"))), 9);
++         //         FixedData consFixed2Data = new FixedData(consFixed2Meta, 48, getEncryptableInputStream(consDir, "Fixed2Data"));
++
++         int count = consFixedMeta.getItemCount();
++         ProjectProperties properties = file.getProjectProperties();
++         EventManager eventManager = file.getEventManager();
++
++         boolean project15 = NumberHelper.getInt(properties.getMppFileType()) == 14 && NumberHelper.getInt(properties.getApplicationVersion()) > ApplicationVersion.PROJECT_2010;
++         int durationUnitsOffset = project15 ? 18 : 14;
++         int durationOffset = project15 ? 14 : 16;
++
++         for (int loop = 0; loop < count; loop++)
++         {
++            byte[] metaData = consFixedMeta.getByteArrayValue(loop);
++
++            //
++            // SourceForge bug 2209477: we were reading an int here, but
++            // it looks like the deleted flag is just a short.
++            //
++            if (ByteArrayHelper.getShort(metaData, 0) != 0)
++            {
++               continue;
++            }
++
++            int index = consFixedData.getIndexFromOffset(ByteArrayHelper.getInt(metaData, 4));
++            if (index == -1)
++            {
++               continue;
++            }
++
++            //
++            // Do we have enough data?
++            //
++            byte[] data = consFixedData.getByteArrayValue(index);
++            if (data.length < 14)
++            {
++               continue;
++            }
++
++            int taskID1 = ByteArrayHelper.getInt(data, 4);
++            int taskID2 = ByteArrayHelper.getInt(data, 8);
++
++            //
++            // Relationships to/from the project summary task are not valid
++            //
++            if (taskID1 == 0 || taskID2 == 0)
++            {
++               continue;
++            }
++
++            //
++            // Circular relationships are not valid.
++            //
++            if (taskID1 == taskID2)
++            {
++               continue;
++            }
++
++            // byte[] metaData2 = consFixed2Meta.getByteArrayValue(loop);
++            // int index2 = consFixed2Data.getIndexFromOffset(MPPUtility.getInt(metaData2, 4));
++            // byte[] data2 = consFixed2Data.getByteArrayValue(index2);
++
++            Task task1 = file.getTaskByUniqueID(Integer.valueOf(taskID1));
++            Task task2 = file.getTaskByUniqueID(Integer.valueOf(taskID2));
++            if (task1 != null && task2 != null)
++            {
++               Relation relation = task2.addPredecessor(new Relation.Builder()
++                  .predecessorTask(task1)
++                  .type(RelationType.getInstance(ByteArrayHelper.getShort(data, 12)))
++                  .lag(MPPUtility.getAdjustedDuration(properties, ByteArrayHelper.getInt(data, durationOffset), MPPUtility.getDurationTimeUnits(ByteArrayHelper.getShort(data, durationUnitsOffset))))
++                  .uniqueID(Integer.valueOf(ByteArrayHelper.getInt(data, 0))));
++               eventManager.fireRelationReadEvent(relation);
++            }
++         }
++      }
++   }
++}
+--- /dev/null
++++ b/references/mpxj-16.4.0-observation/README.md
+@@ -0,0 +1,22 @@
++# MPXJ 16.4.0: relation read observation overlay
++
++The pinned stock JAR is unchanged. read_mpp starts JVM with this overlay first.
++ConstraintFactory remains the single binary parser; each metadata row emits one
++observation with position, disposition and original bytes. Deleted rows are
++observed separately. Self, project-summary, dangling and malformed records are
++never silently called represented. Completion is emitted only after the loop.
++Unsupported formats or an already-started unpatched JVM have no audit: fail closed.
++
++Rebuild: PYTHONPATH=/home/tkachenkoav/.local/lib/python3.9/site-packages
++/usr/bin/python3.9 references/mpxj-16.4.0-observation/build.py
++(run from MppReader, combine the two lines as environment and command).
++ECJ is pinned for the JRE-only host. Sources/compiler are vendored, hashes checked;
++ZIP entries use fixed timestamps. All input/output hashes are in manifest.json.
++MPXJ licensing: LGPL-2.1, see the upstream source archive META-INF and project LICENSE.
++No second parser, service or product CLI is introduced by this build recipe.
++
++getWorkSplits returns working ranges, not interruptions. A single continuous
++range is not a split defect. Raw periods are kept unchanged for normalization.
++Timephased source planned, actual regular/overtime and remaining regular/overtime
++are separate. getTimephasedWork(List<LocalDateTimeRange>,TimeUnit.HOURS) projects
++actual+remaining over explicit source boundaries; it never replaces raw planned.
+--- /dev/null
++++ b/references/mpxj-16.4.0-observation/build.py
+@@ -0,0 +1,19 @@
++"""Reproducible MPXJ 16.4.0 observation overlay; run with Python, Java required."""
++from pathlib import Path
++import hashlib, subprocess, zipfile, tempfile, os
++ROOT = Path(__file__).resolve().parent
++PINS = {"mpxj-sources.jar":"df43a054f70b3c96083404b5bc2a663af8cc917762c7ac44cf571de82e81312d", "ecj.jar":"f7686c4960cf70c2ebc5c500a73a8cfc04541b730c18f1c5c21329889b137f45"}
++for name, sha in PINS.items():
++    assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest() == sha, name
++import mpxj
++libs = Path(mpxj.__file__).parent / "lib"
++assert hashlib.sha256((libs/"mpxj.jar").read_bytes()).hexdigest() == "4c44b12beed38d7a2b744f56c9df02b29611f1b9606a38d9a8e37be880880410"
++with tempfile.TemporaryDirectory() as tmp:
++    subprocess.run(["java", "-jar", str(ROOT/"ecj.jar"), "-8", "-cp", os.pathsep.join(map(str,sorted(libs.glob("*.jar")))), "-d", tmp,
++                    *map(str, sorted((ROOT/"source").rglob("*.java")))], check=True)
++    with zipfile.ZipFile(ROOT/"mpxj-observation.jar", "w", zipfile.ZIP_STORED) as output:
++        for p in sorted(Path(tmp).rglob("*.class")):
++            info = zipfile.ZipInfo(str(p.relative_to(tmp)), (2026,1,1,0,0,0))
++            info.external_attr = 0o644 << 16
++            output.writestr(info,p.read_bytes())
++print(hashlib.sha256((ROOT/"mpxj-observation.jar").read_bytes()).hexdigest())
+--- /dev/null
++++ b/references/mpxj-16.4.0-observation/manifest.json
+@@ -0,0 +1,16 @@
++{
++  "mpxj": "16.4.0",
++  "source_url": "https://repo.maven.apache.org/maven2/net/sf/mpxj/mpxj/16.4.0/mpxj-16.4.0-sources.jar",
++  "compiler_url": "https://repo.maven.apache.org/maven2/org/eclipse/jdt/ecj/3.33.0/ecj-3.33.0.jar",
++  "files": {
++    "ConstraintFactory.upstream.java": "70a8a4489c944bacd2328b63480e83330859e817cc845397b2452080b29123c6",
++    "README.md": "cdcb81ee272078efb320b3d3a1864a23e28aec1aa12792aecfc4b219d4266d4e",
++    "build.py": "d9fbed7ce5e05429a0a9912355b4246d5f2f4f20081d1ea55a7e14b386bb569c",
++    "ecj.jar": "f7686c4960cf70c2ebc5c500a73a8cfc04541b730c18f1c5c21329889b137f45",
++    "mpxj-observation.jar": "6d77ac02ba9de195e26e54045369c983cb94940abafcb3afb5541f100cbd0e38",
++    "mpxj-sources.jar": "df43a054f70b3c96083404b5bc2a663af8cc917762c7ac44cf571de82e81312d",
++    "source/org/mpxj/mpp/ConstraintFactory.java": "d49f900b583217bfcb791d80e58f049b40a8fed6e02c0978ce4d89ea435b9029",
++    "source/org/mpxj/mpp/RelationReadAudit.java": "23424012e0bd487d7abcd0c107d12a8915e485a022b15dab1572d4268f46ba89"
++  },
++  "runtime_java": "openjdk version \"17.0.17\" 2025-10-21 LTS\nOpenJDK Runtime Environment (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS)\nOpenJDK 64-Bit Server VM (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS, mixed mode, sharing)\n"
++}
+--- /dev/null
++++ b/references/mpxj-16.4.0-observation/source/org/mpxj/mpp/ConstraintFactory.java
+@@ -0,0 +1,142 @@
++package org.mpxj.mpp;
++
++import java.io.FileNotFoundException;
++import java.io.IOException;
++
++import org.apache.poi.poifs.filesystem.DirectoryEntry;
++import org.apache.poi.poifs.filesystem.DocumentEntry;
++import org.apache.poi.poifs.filesystem.DocumentInputStream;
++import org.mpxj.EventManager;
++import org.mpxj.ProjectFile;
++import org.mpxj.ProjectProperties;
++import org.mpxj.Relation;
++import org.mpxj.RelationType;
++import org.mpxj.Task;
++import org.mpxj.common.ByteArrayHelper;
++import org.mpxj.common.NumberHelper;
++
++/**
++ * Common implementation detail to extract task constraint data from
++ * MPP9, MPP12, and MPP14 files.
++ */
++class ConstraintFactory
++{
++   /**
++    * Main entry point when called to process constraint data.
++    *
++    * @param projectDir project directory
++    * @param file parent project file
++    * @param inputStreamFactory factory to create input stream
++    */
++   public void process(DirectoryEntry projectDir, ProjectFile file, DocumentInputStreamFactory inputStreamFactory) throws IOException
++   {
++      DirectoryEntry consDir;
++      try
++      {
++         consDir = (DirectoryEntry) projectDir.getEntry("TBkndCons");
++      }
++
++      catch (FileNotFoundException ex)
++      {
++         file.addIgnoredError(ex);
++         consDir = null;
++      }
++
++      if (consDir != null)
++      {
++         FixedMeta consFixedMeta = new FixedMeta(new DocumentInputStream(((DocumentEntry) consDir.getEntry("FixedMeta"))), 10);
++         FixedData consFixedData = new FixedData(consFixedMeta, 20, inputStreamFactory.getInstance(consDir, "FixedData"));
++         //         FixedMeta consFixed2Meta = new FixedMeta(new DocumentInputStream(((DocumentEntry) consDir.getEntry("Fixed2Meta"))), 9);
++         //         FixedData consFixed2Data = new FixedData(consFixed2Meta, 48, getEncryptableInputStream(consDir, "Fixed2Data"));
++
++         int count = consFixedMeta.getItemCount();
++         RelationReadAudit.begin(file, count);
++         ProjectProperties properties = file.getProjectProperties();
++         EventManager eventManager = file.getEventManager();
++
++         boolean project15 = NumberHelper.getInt(properties.getMppFileType()) == 14 && NumberHelper.getInt(properties.getApplicationVersion()) > ApplicationVersion.PROJECT_2010;
++         int durationUnitsOffset = project15 ? 18 : 14;
++         int durationOffset = project15 ? 14 : 16;
++
++         for (int loop = 0; loop < count; loop++)
++         {
++            byte[] metaData = consFixedMeta.getByteArrayValue(loop);
++
++            //
++            // SourceForge bug 2209477: we were reading an int here, but
++            // it looks like the deleted flag is just a short.
++            //
++            if (ByteArrayHelper.getShort(metaData, 0) != 0)
++            {
++               RelationReadAudit.record(file, loop, "deleted", null);
++               continue;
++            }
++
++            int index = consFixedData.getIndexFromOffset(ByteArrayHelper.getInt(metaData, 4));
++            if (index == -1)
++            {
++               RelationReadAudit.record(file, loop, "missing_fixed_data", null);
++               continue;
++            }
++
++            //
++            // Do we have enough data?
++            //
++            byte[] data = consFixedData.getByteArrayValue(index);
++            if (data.length < 20)
++            {
++               RelationReadAudit.record(file, loop, "short_fixed_data", data);
++               continue;
++            }
++
++            int taskID1 = ByteArrayHelper.getInt(data, 4);
++            int taskID2 = ByteArrayHelper.getInt(data, 8);
++
++            //
++            // Relationships to/from the project summary task are not valid
++            //
++            if (taskID1 == 0 || taskID2 == 0)
++            {
++               RelationReadAudit.record(file, loop, "project_summary_endpoint", data);
++               continue;
++            }
++
++            //
++            // Circular relationships are not valid.
++            //
++            if (taskID1 == taskID2)
++            {
++               RelationReadAudit.record(file, loop, "self_reference", data);
++               continue;
++            }
++
++            // byte[] metaData2 = consFixed2Meta.getByteArrayValue(loop);
++            // int index2 = consFixed2Data.getIndexFromOffset(MPPUtility.getInt(metaData2, 4));
++            // byte[] data2 = consFixed2Data.getByteArrayValue(index2);
++
++            Task task1 = file.getTaskByUniqueID(Integer.valueOf(taskID1));
++            Task task2 = file.getTaskByUniqueID(Integer.valueOf(taskID2));
++            if (task1 != null && task2 != null)
++            {
++               Relation relation = task2.addPredecessor(new Relation.Builder()
++                  .predecessorTask(task1)
++                  .type(RelationType.getInstance(ByteArrayHelper.getShort(data, 12)))
++                  .lag(MPPUtility.getAdjustedDuration(properties, ByteArrayHelper.getInt(data, durationOffset), MPPUtility.getDurationTimeUnits(ByteArrayHelper.getShort(data, durationUnitsOffset))))
++                  .uniqueID(Integer.valueOf(ByteArrayHelper.getInt(data, 0))));
++               eventManager.fireRelationReadEvent(relation);
++               RelationReadAudit.record(file, loop, "represented", data);
++            }
++            else
++            {
++               RelationReadAudit.record(file, loop, "dangling_endpoint", data);
++            }
++         }
++         RelationReadAudit.finish(file);
++      }
++      else
++      {
++         RelationReadAudit.begin(file, 0);
++         RelationReadAudit.finish(file);
++      }
++   }
++}
+--- /dev/null
++++ b/references/mpxj-16.4.0-observation/source/org/mpxj/mpp/RelationReadAudit.java
+@@ -0,0 +1,37 @@
++package org.mpxj.mpp;
++
++import java.util.*;
++import org.mpxj.ProjectFile;
++import org.mpxj.common.ByteArrayHelper;
++
++/** Observation only; no relation mutation and no second read/parser. */
++public final class RelationReadAudit {
++    private static final Map<ProjectFile, Map<String,Object>> AUDITS = Collections.synchronizedMap(new WeakHashMap<>());
++    public static void begin(ProjectFile file, int count) {
++        Map<String,Object> audit = new LinkedHashMap<>();
++        audit.put("expected_count", count); audit.put("complete", false);
++        audit.put("records", new ArrayList<Map<String,Object>>()); AUDITS.put(file, audit);
++    }
++    @SuppressWarnings("unchecked")
++    static void record(ProjectFile file, int position, String disposition, byte[] data) {
++        Map<String,Object> row = new LinkedHashMap<>();
++        row.put("position", position); row.put("disposition", disposition);
++        if (data != null) {
++            row.put("raw_hex", hex(data));
++            if (data.length >= 14) {
++                row.put("uid", ByteArrayHelper.getInt(data, 0));
++                row.put("predecessor_uid", ByteArrayHelper.getInt(data, 4));
++                row.put("successor_uid", ByteArrayHelper.getInt(data, 8));
++                row.put("type_code", (int)ByteArrayHelper.getShort(data, 12));
++            }
++        }
++        ((List<Map<String,Object>>)AUDITS.get(file).get("records")).add(row);
++    }
++    public static void finish(ProjectFile file) { AUDITS.get(file).put("complete", true); }
++    public static Map<String,Object> get(ProjectFile file) { return AUDITS.get(file); }
++    private static String hex(byte[] bytes) {
++        StringBuilder result = new StringBuilder();
++        for (byte b: bytes) result.append(String.format("%02x", b & 255));
++        return result.toString();
++    }
++}

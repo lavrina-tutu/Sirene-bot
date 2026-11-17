@@ -1,0 +1,66 @@
+{
+  "component_root": "/home/tkachenkoav/USERTOOLS/MppReader",
+  "files": [
+    {
+      "path": "read_mpp.py",
+      "before_sha256": "e269c1e46f0d203261684823a71b3111da7946963873d1b6d09b26563b357095",
+      "after_sha256": "2b6ff899cb57414c852c38f89d5ad1f6920bfc18766948359c95d9ee4fbfd5b8"
+    },
+    {
+      "path": "plan_export.py",
+      "before_sha256": "c59402f8e059c4b282f751439e1c43a2b745d2bc64facaa6574f3e6c17925128",
+      "after_sha256": "5ebb2836da2bdedd3b47c356f120078440a36c7e853ca707686736d628fccb15"
+    },
+    {
+      "path": "tests/test_plan_export.py",
+      "before_sha256": "008958087b9405933e8df640da7749b1ff1037bffbf932b8c9d32d5a5168d12a",
+      "after_sha256": "1dc089f4163d241d7a17de4a11274e1b4da988193ef9e2bc2ee9a26a93066bdb"
+    },
+    {
+      "path": "references/mpxj-16.4.0-observation/ConstraintFactory.upstream.java",
+      "before_sha256": null,
+      "after_sha256": "70a8a4489c944bacd2328b63480e83330859e817cc845397b2452080b29123c6"
+    },
+    {
+      "path": "references/mpxj-16.4.0-observation/README.md",
+      "before_sha256": null,
+      "after_sha256": "cdcb81ee272078efb320b3d3a1864a23e28aec1aa12792aecfc4b219d4266d4e"
+    },
+    {
+      "path": "references/mpxj-16.4.0-observation/build.py",
+      "before_sha256": null,
+      "after_sha256": "d9fbed7ce5e05429a0a9912355b4246d5f2f4f20081d1ea55a7e14b386bb569c"
+    },
+    {
+      "path": "references/mpxj-16.4.0-observation/ecj.jar",
+      "before_sha256": null,
+      "after_sha256": "f7686c4960cf70c2ebc5c500a73a8cfc04541b730c18f1c5c21329889b137f45"
+    },
+    {
+      "path": "references/mpxj-16.4.0-observation/manifest.json",
+      "before_sha256": null,
+      "after_sha256": "e31a08d764ead6b9fa74e91855b1beb56e40173e8106b8f88e0a2c6888a80a7a"
+    },
+    {
+      "path": "references/mpxj-16.4.0-observation/mpxj-observation.jar",
+      "before_sha256": null,
+      "after_sha256": "6d77ac02ba9de195e26e54045369c983cb94940abafcb3afb5541f100cbd0e38"
+    },
+    {
+      "path": "references/mpxj-16.4.0-observation/mpxj-sources.jar",
+      "before_sha256": null,
+      "after_sha256": "df43a054f70b3c96083404b5bc2a663af8cc917762c7ac44cf571de82e81312d"
+    },
+    {
+      "path": "references/mpxj-16.4.0-observation/source/org/mpxj/mpp/ConstraintFactory.java",
+      "before_sha256": null,
+      "after_sha256": "d49f900b583217bfcb791d80e58f049b40a8fed6e02c0978ce4d89ea435b9029"
+    },
+    {
+      "path": "references/mpxj-16.4.0-observation/source/org/mpxj/mpp/RelationReadAudit.java",
+      "before_sha256": null,
+      "after_sha256": "23424012e0bd487d7abcd0c107d12a8915e485a022b15dab1572d4268f46ba89"
+    }
+  ],
+  "restore_patch_and_binary_copy_verified": true
+}

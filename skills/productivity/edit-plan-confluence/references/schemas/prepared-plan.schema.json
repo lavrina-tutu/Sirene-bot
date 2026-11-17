@@ -297,6 +297,23 @@
         "record_count": {
           "type": "integer",
           "minimum": 0
+        },
+        "enumeration_complete": {
+          "type": "boolean"
+        },
+        "source_record_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "basis": {
+          "enum": [
+            "actual_plus_remaining"
+          ]
+        },
+        "units": {
+          "enum": [
+            "HOURS"
+          ]
         }
       },
       "required": [

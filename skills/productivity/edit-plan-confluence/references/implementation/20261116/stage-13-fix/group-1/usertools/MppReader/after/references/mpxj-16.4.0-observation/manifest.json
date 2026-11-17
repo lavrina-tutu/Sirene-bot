@@ -1,0 +1,16 @@
+{
+  "mpxj": "16.4.0",
+  "source_url": "https://repo.maven.apache.org/maven2/net/sf/mpxj/mpxj/16.4.0/mpxj-16.4.0-sources.jar",
+  "compiler_url": "https://repo.maven.apache.org/maven2/org/eclipse/jdt/ecj/3.33.0/ecj-3.33.0.jar",
+  "files": {
+    "ConstraintFactory.upstream.java": "70a8a4489c944bacd2328b63480e83330859e817cc845397b2452080b29123c6",
+    "README.md": "cdcb81ee272078efb320b3d3a1864a23e28aec1aa12792aecfc4b219d4266d4e",
+    "build.py": "d9fbed7ce5e05429a0a9912355b4246d5f2f4f20081d1ea55a7e14b386bb569c",
+    "ecj.jar": "f7686c4960cf70c2ebc5c500a73a8cfc04541b730c18f1c5c21329889b137f45",
+    "mpxj-observation.jar": "6d77ac02ba9de195e26e54045369c983cb94940abafcb3afb5541f100cbd0e38",
+    "mpxj-sources.jar": "df43a054f70b3c96083404b5bc2a663af8cc917762c7ac44cf571de82e81312d",
+    "source/org/mpxj/mpp/ConstraintFactory.java": "d49f900b583217bfcb791d80e58f049b40a8fed6e02c0978ce4d89ea435b9029",
+    "source/org/mpxj/mpp/RelationReadAudit.java": "23424012e0bd487d7abcd0c107d12a8915e485a022b15dab1572d4268f46ba89"
+  },
+  "runtime_java": "openjdk version \"17.0.17\" 2025-10-21 LTS\nOpenJDK Runtime Environment (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS)\nOpenJDK 64-Bit Server VM (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS, mixed mode, sharing)\n"
+}

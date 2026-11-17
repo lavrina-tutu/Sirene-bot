@@ -1,0 +1,26 @@
+{
+  "group": 0,
+  "status": "passed",
+  "master_version": "0.5.1",
+  "before": {
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md": "66aa1258ad5c2fc50645a2cd50812318a7439361b41a653c32d959085f6862d4",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md": "6d52cf7f23ecd181e26bcd6c0a97d64163edbe4556dfeeedb99ddb66ca8fd652",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/appendix_unified-pipeline-source_20261116.md": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697",
+    "/home/tkachenkoav/hermes-workspace/skills/devops/dev-workflow/references/canon.md": "a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892"
+  },
+  "after": {
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md": "b3502dd80bc689a03d0fef2a4e38237f9cfe211ccb7036d6b81b2057a3a22b3d",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md": "d4a82972fba5a5451aaf4320f4af144d8fcc936275ba8914b7cc42a5432e16bb",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/appendix_unified-pipeline-source_20261116.md": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697",
+    "/home/tkachenkoav/hermes-workspace/skills/devops/dev-workflow/references/canon.md": "a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892"
+  },
+  "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211",
+  "verification": {
+    "normative_sections_15_3_15_5_15_7_unchanged": true,
+    "appendix_provenance_unchanged": true,
+    "canon_unchanged": true
+  },
+  "limitations": [
+    "§20: финальная приёмка failed; исправления обязательны"
+  ]
+}

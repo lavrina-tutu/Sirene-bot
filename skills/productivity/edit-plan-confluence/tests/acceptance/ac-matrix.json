@@ -718,7 +718,8 @@
     "test_plugin_capabilities_live.py::test_installed_capability_control[assignment-dates]",
     "test_plugin_capabilities_live.py::test_installed_capability_control[resource-availability]",
     "test_plugin_capabilities_live.py::test_installed_capability_control[default-availability]",
-    "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]"
+    "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]",
+    "test_corrective_representation.py::test_zero_work_unassigned_milestone_never_hides_a_declared_missing_resource"
   ],
   "acceptance_test_ids": [
     "test_cases_trisigma.py::test_real_cold_warm_archive[A]",
@@ -815,7 +816,8 @@
         "test_plugin_capabilities_live.py::test_installed_capability_control[resource-calendar]",
         "test_plugin_capabilities_live.py::test_installed_capability_control[segments]",
         "test_plugin_capabilities_live.py::test_installed_capability_control[summary-dependency]",
-        "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]"
+        "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]",
+        "test_corrective_representation.py::test_zero_work_unassigned_milestone_never_hides_a_declared_missing_resource"
       ],
       "fixtures": [
         "real/A-D",
@@ -1160,7 +1162,8 @@
         "test_corrective_completeness.py::test_policy_does_not_globally_allow_collections_assignments_or_mirrors",
         "test_corrective_completeness.py::test_raw_discarded_records_never_become_nonimpact",
         "test_plugin_controls_live.py::test_installed_plugin_controls_live",
-        "test_publish_prepare.py::test_unknown_timezone_archived_before_needs_decision"
+        "test_publish_prepare.py::test_unknown_timezone_archived_before_needs_decision",
+        "test_corrective_representation.py::test_zero_work_unassigned_milestone_never_hides_a_declared_missing_resource"
       ],
       "fixtures": [
         "synthetic/same-root-shifted-task",

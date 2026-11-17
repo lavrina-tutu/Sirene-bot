@@ -268,13 +268,15 @@ def test_real_batch_cli_native_copies(tmp_path, request, input_mode):
     inbox = tmp_path/"Inbox"; inbox.mkdir()
     for case in ids:
         fixture = next(f for f in sources if f["id"] == case)
-        origin = Path(fixture["origin"])
-        assert hashlib.sha256(origin.read_bytes()).hexdigest() == fixture["sha256"]
-        assert origin.stat().st_size == fixture["size_bytes"]
-        target = inbox/(case+".mpp"); shutil.copy2(origin, target)
+        # Transport-cache origin is provenance; the versioned copy owns the
+        # acceptance bytes even after the native upload cache has expired.
+        repository_copy = FIXTURES/"real"/fixture["path"]
+        assert hashlib.sha256(repository_copy.read_bytes()).hexdigest() == fixture["sha256"]
+        assert repository_copy.stat().st_size == fixture["size_bytes"]
+        target = inbox/(case+".mpp"); shutil.copy2(repository_copy, target)
         assert hashlib.sha256(target.read_bytes()).hexdigest() == fixture["sha256"]
         copies.append(target)
-        provenance.append({**fixture, "copy": str(target)})
+        provenance.append({**fixture, "repository_copy": str(repository_copy), "copy": str(target)})
     guard = tmp_path/"guard"; guard.mkdir()
     (guard/"sitecustomize.py").write_text('''import sys,socket,sqlite3,os,importlib.abc
 from pathlib import Path

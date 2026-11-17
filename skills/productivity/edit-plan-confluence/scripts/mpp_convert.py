@@ -369,7 +369,7 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v2'
+CONVERTER_VERSION = 'prepared-gantt-v3'
 
 
 def _number(value):

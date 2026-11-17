@@ -1,7 +1,7 @@
 ---
 name: brief-mode
 description: "PM briefing: one decision at a time"
-version: "1.1.0"
+version: "1.2.0"
 platforms: [linux, macos, windows]
 triggers:
   - "любой бриф"
@@ -14,35 +14,37 @@ metadata:
     tags: [brief, pm, decisions, workflow]
 ---
 
-# PM briefing
+# PM бриф
 
-Use this mode for a sequence of PM decisions, including classification of unclear meetings. Preserve the user's requested scope and mode. Historical examples are evidence for their particular meetings, not a routing dictionary or a substitute for reading the source.
+Режим для серии решений PM, включая классификацию unclear-встреч. Сохраняй запрошенный объём и режим. Исторические примеры — это доказательства именно для их встреч, а не справочник маршрутов и не замена чтению источника.
 
-## Question and decision protocol
+## Протокол вопросов и решений
 
-1. State the total number of questions when known. Ask exactly one question; wait for the answer and record it before asking the next.
-2. Give a short context, numbered options, a specific recommendation and the reason for it. Explain a relevant trade-off. Do not use `clarify()` without a recommendation.
-3. Record each answer as it arrives in the appropriate decision source, file or report. Do not wait until the end of the briefing. Distinguish decisions from proposals.
-4. If the next decision is unclear, ask one concrete open question rather than inventing the PM's answer. Respect an explicit switch of mode by the PM.
+Сначала изучи доступные источники и уже принятые решения; спрашивай лишь о существенном, что не удалось надёжно установить. Укажи, какое решение зависит от ответа. Рекомендацию сопровождай основанием и условиями применимости, отделяя её от установленного факта.
 
-## Meeting classification and modes
+1. Сообщи общее число вопросов, когда оно известно. Задавай ровно один вопрос; дождись ответа и зафиксируй его, прежде чем задавать следующий.
+2. Дай короткий контекст, нумерованные варианты, конкретную рекомендацию и её обоснование. Объясни релевантный компромисс. Не используй `clarify()` без рекомендации.
+3. Записывай каждый ответ по мере поступления в соответствующий источник решений, файл или отчёт. Не откладывай до конца брифа. Отличай решения от предложений.
+4. Если следующее решение неясно, задай один конкретный открытый вопрос, а не выдумывай ответ PM. Уважай явное переключение режима PM.
 
-Read the meeting's summary or available content before recommending a classification; a title, participant name, previous similar case or LLM hint is only a clue. Show title, date, reason for unclear, participants, a short account of the content, a proposed route and its rationale. Use the applicable contacts source to resolve identities; do not promote historical examples of names to mandatory aliases.
+## Классификация встреч и режимы
 
-If the PM requests «поштучно» or «идём по саммари», present exactly one meeting at a time and wait for its answer. If the summary is missing, disclose that and ask about the missing evidence; do not guess a default route. Where applicable, options include `project=<slug>`, `1on1=<login>`, trash and adm.
+Прочитай саммари встречи или доступное содержание, прежде чем рекомендовать классификацию; заголовок, имя участника, похожий прошлый случай или подсказка LLM — лишь зацепка. Покажи заголовок, дату, причину unclear, участников, краткое содержание, предложенный маршрут и его обоснование. Для разрешения личностей используй применимый источник контактов; не превращай исторические примеры имён в обязательные алиасы.
 
-For a large list, read the available summaries and group candidates for preparation. Grouping alone does not authorize multiple questions or batch decisions. Use a grouped or hybrid confirmation only when the PM explicitly chooses it. If the PM supplies several explicit answers at once, accept and record every answer, then show the remaining unresolved items; do not silently discard any. Return to one-at-a-time questions for unresolved cases unless batch mode was selected.
+Если PM просит «поштучно» или «идём по саммари» — показывай ровно одну встречу за раз и жди её ответа. Если саммари нет — сообщи об этом и спроси о недостающем доказательстве; не угадывай маршрут. Там, где применимо, варианты включают `project=<slug>`, `1on1=<login>`, trash и adm.
 
-After a round, report remaining entries and meaningful reasons such as a missing alias or uncertain project. Keep an actual decision distinct from the proposed classification. The examples and former mode-specific patterns are in [brief modes](references/brief-modes.md).
+Для большого списка прочитай доступные саммари и сгруппируй кандидатов для подготовки. Группировка сама по себе не разрешает несколько вопросов или пакетные решения. Используй групповое или гибридное подтверждение только при явном выборе PM. Если PM присылает несколько явных ответов сразу — прими и зафиксируй каждый, затем покажи оставшиеся нерешённые пункты; ничего не отбрасывай молча. Для нерешённых вернись к вопросам по одному, если не выбран пакетный режим.
 
-## Aggregate reconciliation
+После раунда отчитайся об оставшихся записях и существенных причинах: не хватает алиаса, неясен проект. Отличай принятое решение от предложенной классификации. Примеры и прежние паттерны режимов — в [режимах брифа](references/brief-modes.md).
 
-Bootstrap historically classifies from `classification_memory.json`, not `unclear_registry.md`; verify the implementation in use. Record approved decisions in the classifier's actual source as well as the PM decision registry when each is required. An update to a report alone does not apply a decision. For Bootstrap, preserve exact filenames for applicable manual overrides and verify that the route is supported.
+## Сверка агрегатов
 
-Reconcile `unclear_queue.md` against recorded decisions programmatically after a run; recognize both summary and Action items entries and exclude system files such as `_log_meet.md` and `_registry_meet.md`. Check the real unresolved entries rather than treating the queue heading as a count of new decisions. Rerun and reconcile where authorized. Details and historical causes: [unclear reconciliation](references/aggregate-unclear-reconciliation.md).
+Bootstrap исторически классифицирует из `classification_memory.json`, а не `unclear_registry.md`; проверь используемую реализацию. Записывай утверждённые решения в фактический источник классификатора, а также в реестр решений PM, где это требуется. Обновление одного отчёта само по себе не применяет решение. Для Bootstrap сохраняй точные имена файлов для применимых ручных переопределений и проверяй, что маршрут поддерживается.
 
-For exact meeting decisions, aliases and the sequence of the 2026-06-22 rounds, consult [decision history](references/aggregate-brief-decisions-20260622.md). Similar titles, Zoom/Daily/Untitled, training and recordings can have different outcomes; do not generalize a particular route to all dates or meetings.
+После запуска программно сверь `unclear_queue.md` с записанными решениями; распознавай и записи саммари, и элементы Action items, исключая системные файлы вроде `_log_meet.md` и `_registry_meet.md`. Проверяй реальные нерешённые записи, а не трактуй заголовок очереди как счётчик новых решений. Запускай повторно и сверяй там, где разрешено. Детали и исторические причины — в [сверке unclear](references/aggregate-unclear-reconciliation.md).
 
-## Mobile review
+Для точных решений, алиасов и последовательности раундов 2026-06-22 смотри [историю решений](references/aggregate-brief-decisions-20260622.md). Похожие заголовки, Zoom/Daily/Untitled, тренинги и записи могут иметь разные исходы; не обобщай конкретный маршрут на все даты и встречи.
 
-When reviewing files on mobile, prepare a review note with Obsidian wiki-links and deliver it through the requested channel. Do not assume a Telegram `obsidian://` link will open reliably. See [mobile review](references/mobile-obsidian-review.md).
+## Мобильный просмотр
+
+При просмотре файлов на телефоне подготовь заметку-ревью с Obsidian wiki-ссылками и доставь через запрошенный канал. Не предполагай, что ссылка `obsidian://` в Telegram откроется надёжно. См. [мобильное ревью](references/mobile-obsidian-review.md).

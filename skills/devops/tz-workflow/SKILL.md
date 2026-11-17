@@ -1,6 +1,6 @@
 ---
 name: tz-workflow
-version: 2.13.0
+version: 2.14.0
 description: "Содержание, хранение и inventory ТЗ Hermes/USERTOOLS"
 ---
 
@@ -19,3 +19,5 @@ description: "Содержание, хранение и inventory ТЗ Hermes/US
 Перед фазой читать GLOSSARY и `dev-workflow/references/context.md`. Точные фазы `TZ:stabilize`, `TZ:compress`, `TZ:patch`, `REV:tz`, `TZ:finalize` остаются каноническими именами, но их рецепт/владелец/запуск определяет dev-workflow.
 
 Полезные проверки качества, contracts и inventory перечислены в references; они не заменяют процесс.
+
+До согласования ТЗ проверь достаточность: понятны цель, границы, существенные решения и зависимости, ожидаемое поведение и способ проверки. Непринятое существенное решение обозначь явно. Для контрактов и повторного использования применяй существующие [правила контрактов](references/contracts-standard.md) и [правило повторного использования](references/reuse-first-rule.md), а также [проверку качества](references/quality-and-checklist.md).

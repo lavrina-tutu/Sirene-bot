@@ -1,10 +1,12 @@
 # RTF → plain text extraction (resume / any .rtf)
 
+Происхождение: адаптировано из resume-optimization (license: proprietary); перенос не означает перелицензирование в MIT.
+
 Резюме от hh.ru приходит как `.rtf` (ANSI, codepage 1251). read_file видит его как binary; текст не инлайн.
 
 ## Проверенный способ (striprtf через uv venv)
 
-pandoc до v3 НЕ имеет rtf-reader (`Unknown input format rtf`) — не пытаться. Ставить striprtf:
+В проверенной ранее среде `pandoc -f rtf` вернул `Unknown input format rtf`; один из рабочих обходов — striprtf:
 
 ```bash
 cd ~/.hermes/cache/scratch
@@ -23,3 +25,7 @@ EOF
 - Копировать исходный файл в scratch, а не парсить из cache/documents напрямую.
 - striprtf теряет структуру таблиц (возвращает текст почти линейно), но для чтения содержимого резюме достаточно — читать результат через read_file по строкам.
 - После чтения текст идёт в анализ; сам RTF-шаблон (hh.ru) не трогать при извлечении.
+
+## Очистка извлечённого текста
+
+При извлечении удалять из текстового результата служебные destination-группы (`pict`, `object`, `fonttbl`, `colortbl`, `stylesheet`, `datastore`, `themedata`), длинный hex-мусор и хвост стилей; проверять, что конец содержит реальный текст. Сам RTF-эталон при этом не изменять.

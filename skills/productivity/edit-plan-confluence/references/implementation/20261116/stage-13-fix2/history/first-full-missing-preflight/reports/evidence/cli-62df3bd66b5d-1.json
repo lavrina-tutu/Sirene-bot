@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]",
+  "observed_at": "2026-11-17T12:43:35.998343+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_publish_repeat_and_o1/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_publish_repeat_and_o1/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_publish_repeat_and_o1/cache",
+    "publish",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_publish_repeat_and_o1/B.mpp",
+    "--page-id",
+    "537575454",
+    "--project-slug",
+    "trisigma",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 5,
+  "duration_seconds": 10.373829454008956,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_3a65f01a20ba40299166b0ed93280f40\", \"item_id\": \"item_af177098d8b242228b4f765b04b86946\", \"status\": \"failed\", \"mode\": \"publish\", \"exit_code\": 5, \"project_slug\": \"trisigma\", \"source\": {\"name\": \"B.mpp\", \"sha256\": \"216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317\", \"size_bytes\": 586240}, \"snapshot_id\": \"snapshot_6e115a48fefd484bb7585ece272888fa\", \"page_id\": null, \"page_url\": null, \"task_count\": 62, \"display_task_count\": 61, \"dependency_count\": 60, \"exceptions\": [{\"rule_id\": \"B\", \"revision\": \"historical-unresolved-v1\", \"result\": \"inactive\", \"evidence_id\": null}], \"attachment_version\": null, \"verification\": {\"archive\": \"verified\", \"attachment\": \"not_applicable\", \"storage\": \"not_applicable\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_actuals_unrepresented:actual_duration\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_actuals_unrepresented:actual_finish\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 2, \"example_entities\": [\"uid:323\", \"uid:324\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_actuals_unrepresented:actual_start\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_actuals_unrepresented:actual_work\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_actuals_unrepresented:resume\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 8, \"category\": \"unsupported_semantics\", \"code\": \"task_actuals_unrepresented:stop\", \"exit_code\": 5, \"accepted_deviation\": false, \"count\": 5, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 14, \"category\": \"identity\", \"code\": \"rule_reference_or_evidence_missing\", \"exit_code\": 3, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"B\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_87b8b10c3a7a4dceb49ca20faf8777c0\"]}}, \"published\": false, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_87b8b10c3a7a4dceb49ca20faf8777c0\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_87b8b10c3a7a4dceb49ca20faf8777c0\"}], \"completed_stages\": [\"input_frozen\", \"prepared\", \"archived\"], \"external_effect\": \"none\", \"error\": {\"code\": \"rule_reference_or_evidence_missing\", \"message\": \"rule_reference_or_evidence_missing\", \"retryable\": false, \"next_action\": \"operation show --operation-id operation_3a65f01a20ba40299166b0ed93280f40\"}}\n",
+  "stderr": "2026-11-17T12:43:28.346710893Z main ERROR Log4j API could not find a logging provider.\n",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 1,
+    "cache_hit": 0,
+    "cache_miss": 1,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575454"
+      }
+    ]
+  }
+}

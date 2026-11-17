@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+  "observed_at": "2026-11-17T12:42:08.720373+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_binary_identity_does_not_0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_binary_identity_does_not_0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_binary_identity_does_not_0/cache",
+    "identity",
+    "confirm",
+    "--project-slug",
+    "stage13-binary-negative",
+    "--from",
+    "snapshot:snapshot_8b2522f90ffe4e1da8db25325a3d2fb2",
+    "--to",
+    "snapshot:snapshot_c763dedd485746b39b20cc4909ed3855",
+    "--mode",
+    "continuity",
+    "--evidence",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_binary_identity_does_not_0/test-only-user-evidence.txt",
+    "--reason",
+    "Explicit test fixture identity: same documented binary recipe and stable task UIDs"
+  ],
+  "rc": 0,
+  "duration_seconds": 0.7775625470094383,
+  "stdout": "{\"schema_version\": 1, \"action\": \"identity_confirm\", \"status\": \"confirmed\", \"exit_code\": 0, \"project_slug\": \"stage13-binary-negative\", \"from_snapshot_id\": \"snapshot_8b2522f90ffe4e1da8db25325a3d2fb2\", \"to_snapshot_id\": \"snapshot_c763dedd485746b39b20cc4909ed3855\", \"from_source_sha256\": \"8f33cdb774aa090b664d90145879acc8a289057ca45a6575884eb0da9fd91f30\", \"to_source_sha256\": \"759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937\", \"mapping_revision_id\": \"mapping_233726ce4fbf49e48b60e49234fea19b\", \"revision_status\": \"active\", \"evidence_id\": \"artifact_0125ba7024154e7eab9f170d6c98f184\", \"evidence_sha256\": \"99cd720acf36d9e4e0ff602a8ded67afabf1b34dc270ad69bfcedd08ebd4f9de\", \"published\": false, \"error\": null}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0,
+    "calls": []
+  }
+}

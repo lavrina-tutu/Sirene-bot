@@ -1,0 +1,21 @@
+{
+  "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[F]",
+  "observed_at": "2026-11-17T12:57:49.884602+00:00",
+  "baseline_before": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c4319d470e074e55aac350f77ea8390b','plan_82dbd34198aa40609d33027a68a89a34','snapshot_22a1fc28d42c4300937fd2909958f886',0,1,'test owner before acceptance',NULL,'2026-11-17T12:57:33+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5ebdb8c13ba54813933d63d2a2340df0','lineage_c5b82c444be84c8a9fa0b832fd9d54f9','snapshot_22a1fc28d42c4300937fd2909958f886',1,'test owner before acceptance',NULL,'2026-11-17T12:57:33+00:00');"
+    ]
+  },
+  "baseline_after": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c4319d470e074e55aac350f77ea8390b','plan_82dbd34198aa40609d33027a68a89a34','snapshot_22a1fc28d42c4300937fd2909958f886',0,1,'test owner before acceptance',NULL,'2026-11-17T12:57:33+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5ebdb8c13ba54813933d63d2a2340df0','lineage_c5b82c444be84c8a9fa0b832fd9d54f9','snapshot_22a1fc28d42c4300937fd2909958f886',1,'test owner before acceptance',NULL,'2026-11-17T12:57:33+00:00');"
+    ]
+  },
+  "unchanged": true
+}

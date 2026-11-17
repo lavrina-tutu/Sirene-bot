@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "group": "G6",
+  "gate": "failed",
+  "summary": {
+    "passed": 799,
+    "failed": 4,
+    "skipped": 0
+  },
+  "exit_code": 1,
+  "gate_checks": {
+    "nonempty_results": true,
+    "all_required_selected": true,
+    "all_required_passed": false,
+    "all_AC_passed": false,
+    "all_cases_passed": false,
+    "all_journeys_passed": false,
+    "fixtures_verified": true,
+    "populated_baseline_preserved": true,
+    "protected_files_unchanged": false,
+    "sources_stable": true,
+    "external_regression_passed": true,
+    "external_sources_restorable": true,
+    "prior_twelve_commits": true,
+    "original_stage13_failed_preserved": true,
+    "no_production_live_targets": true,
+    "pytest_exit_zero": false,
+    "ordered_phases_2_through_11": true,
+    "ordered_unit_archive_mpp_live": true
+  },
+  "command": {
+    "cwd": "/home/tkachenkoav/hermes-workspace",
+    "argv": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "-c",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+      "--acceptance-stage",
+      "13",
+      "--test-root",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final",
+      "-m",
+      "unit or archive_integration or mpp_fixtures or confluence_live",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/reports/junit.xml",
+      "-q"
+    ],
+    "environment": {
+      "EDITPLAN_LIVE": "1",
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+    }
+  },
+  "reports": "../stage-report.json",
+  "junit": "../final/reports/junit.xml",
+  "source_tree_sha256": "22f7be6e79a92ba0bccef8ab6714cc65e8d673e17bfc88c152110b49fb1776f7"
+}

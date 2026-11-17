@@ -1,0 +1,255 @@
+F......FFFFF...F.....                                                    [100%]
+=================================== FAILURES ===================================
+_______ test_D_unassigned_resources_and_independent_interval_still_block _______
+
+    def test_D_unassigned_resources_and_independent_interval_still_block():
+        data, prepared, profile, conversion = converted('D')
+        rows = {a['assignment_key']:a for a in data['assignments']}
+>       assert {k for k,a in rows.items() if a['resource_key'] is None} == {'uid:441','uid:699','uid:700','uid:701'}
+E       AssertionError: assert {'uid:441', '...uid:690', ...} == {'uid:441', '...0', 'uid:701'}
+E         
+E         Extra items in the left set:
+E         'uid:443'
+E         'uid:690'
+E         'uid:584'
+E         'uid:688'
+E         'uid:445'
+E         Use -v to get more diff
+
+skills/productivity/edit-plan-confluence/tests/test_fix2_schedule_boundaries.py:30: AssertionError
+__________________ test_bc_exact_mapping_and_context[reorder] __________________
+
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-5-unit..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+case = 'reorder'
+
+    @pytest.mark.parametrize('case',['reorder','new_uid','context','relation','not_needed','missing_reference'])
+    def test_bc_exact_mapping_and_context(publish_case,case):
+        c=publish_case;data=cyclic(c['export']) if case!='not_needed' else deepcopy(c['export'])
+        anchor=prepare(c,export=data).receipt['snapshot_id']
+        register_rule(c,anchor,data,cause='dependency_type_unsupported' if case=='not_needed' else 'cycle',no_reference=case=='missing_reference')
+        new=change_source(c,data);mapping=None
+        if case=='reorder':new['tasks'].reverse()
+        elif case=='new_uid':
+            for t in new['tasks']:
+                if t['task_key']=='uid:2':t.update(task_key='uid:900',uid=900,id=77)
+            for t in new['tasks']:
+                if t['child_task_keys'].get('value'):t['child_task_keys']['value']=['uid:900' if k=='uid:2' else k for k in t['child_task_keys']['value']]
+            for d in new['dependencies']:
+                for key in ('predecessor_task_key','successor_task_key'):
+                    if d[key]=='uid:2':d[key]='uid:900'
+            mapping=c['tmp']/'mapping.json'
+            mapping.write_text(json.dumps({'schema_version':1,'pairs':[{'entity_kind':'task','from_key':k,'to_key':'uid:900' if k=='uid:2' else k,'identity_key':'test:'+k} for k in ('uid:1','uid:2','uid:3')]}))
+        elif case=='context':new['tasks'][1]['wbs']='9.9'
+        elif case=='relation':new['dependencies'][0]['lag_value']['value']['amount']='-1'
+        first=prepare(c,export=new)
+        assert first.exit_code in (3,5),first.receipt
+        assert first.receipt['snapshot_id'] and first.receipt['verification']['archive']=='verified'
+        if case=='missing_reference':
+            assert first.receipt['exceptions'][0]['result']=='inactive'
+            assert not q.get_identity_requirements(c['conn'],first.receipt['operation_id']);return
+        selected=confirm(c,anchor,first.receipt['snapshot_id'],mapping=mapping)
+        assert selected['exit_code']==0,selected
+        after=resume(c,first.receipt['operation_id'],mapping_revision=selected['mapping_revision_id'])
+        if case in ('context','relation'):
+            assert after.exit_code==5,after.receipt # graph blocker has no applicable transformation
+            assert after.receipt['exceptions'][0]['result']=='inactive'
+        else:
+>           assert after.exit_code==0,after.receipt
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 2, 'display_task_count': 3, ...}
+E           assert 4 == 0
+E            +  where 4 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_e9120f11181a445c9bce659b251e2998', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+skills/productivity/edit-plan-confluence/tests/test_plan_rules.py:94: AssertionError
+__________________ test_bc_exact_mapping_and_context[new_uid] __________________
+
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-5-unit..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+case = 'new_uid'
+
+    @pytest.mark.parametrize('case',['reorder','new_uid','context','relation','not_needed','missing_reference'])
+    def test_bc_exact_mapping_and_context(publish_case,case):
+        c=publish_case;data=cyclic(c['export']) if case!='not_needed' else deepcopy(c['export'])
+        anchor=prepare(c,export=data).receipt['snapshot_id']
+        register_rule(c,anchor,data,cause='dependency_type_unsupported' if case=='not_needed' else 'cycle',no_reference=case=='missing_reference')
+        new=change_source(c,data);mapping=None
+        if case=='reorder':new['tasks'].reverse()
+        elif case=='new_uid':
+            for t in new['tasks']:
+                if t['task_key']=='uid:2':t.update(task_key='uid:900',uid=900,id=77)
+            for t in new['tasks']:
+                if t['child_task_keys'].get('value'):t['child_task_keys']['value']=['uid:900' if k=='uid:2' else k for k in t['child_task_keys']['value']]
+            for d in new['dependencies']:
+                for key in ('predecessor_task_key','successor_task_key'):
+                    if d[key]=='uid:2':d[key]='uid:900'
+            mapping=c['tmp']/'mapping.json'
+            mapping.write_text(json.dumps({'schema_version':1,'pairs':[{'entity_kind':'task','from_key':k,'to_key':'uid:900' if k=='uid:2' else k,'identity_key':'test:'+k} for k in ('uid:1','uid:2','uid:3')]}))
+        elif case=='context':new['tasks'][1]['wbs']='9.9'
+        elif case=='relation':new['dependencies'][0]['lag_value']['value']['amount']='-1'
+        first=prepare(c,export=new)
+        assert first.exit_code in (3,5),first.receipt
+        assert first.receipt['snapshot_id'] and first.receipt['verification']['archive']=='verified'
+        if case=='missing_reference':
+            assert first.receipt['exceptions'][0]['result']=='inactive'
+            assert not q.get_identity_requirements(c['conn'],first.receipt['operation_id']);return
+        selected=confirm(c,anchor,first.receipt['snapshot_id'],mapping=mapping)
+        assert selected['exit_code']==0,selected
+        after=resume(c,first.receipt['operation_id'],mapping_revision=selected['mapping_revision_id'])
+        if case in ('context','relation'):
+            assert after.exit_code==5,after.receipt # graph blocker has no applicable transformation
+            assert after.receipt['exceptions'][0]['result']=='inactive'
+        else:
+>           assert after.exit_code==0,after.receipt
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 2, 'display_task_count': 3, ...}
+E           assert 4 == 0
+E            +  where 4 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_29f694574bc04d4f9e1d830e2343d898', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+skills/productivity/edit-plan-confluence/tests/test_plan_rules.py:94: AssertionError
+__________________ test_bc_exact_mapping_and_context[context] __________________
+
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-5-unit..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+case = 'context'
+
+    @pytest.mark.parametrize('case',['reorder','new_uid','context','relation','not_needed','missing_reference'])
+    def test_bc_exact_mapping_and_context(publish_case,case):
+        c=publish_case;data=cyclic(c['export']) if case!='not_needed' else deepcopy(c['export'])
+        anchor=prepare(c,export=data).receipt['snapshot_id']
+        register_rule(c,anchor,data,cause='dependency_type_unsupported' if case=='not_needed' else 'cycle',no_reference=case=='missing_reference')
+        new=change_source(c,data);mapping=None
+        if case=='reorder':new['tasks'].reverse()
+        elif case=='new_uid':
+            for t in new['tasks']:
+                if t['task_key']=='uid:2':t.update(task_key='uid:900',uid=900,id=77)
+            for t in new['tasks']:
+                if t['child_task_keys'].get('value'):t['child_task_keys']['value']=['uid:900' if k=='uid:2' else k for k in t['child_task_keys']['value']]
+            for d in new['dependencies']:
+                for key in ('predecessor_task_key','successor_task_key'):
+                    if d[key]=='uid:2':d[key]='uid:900'
+            mapping=c['tmp']/'mapping.json'
+            mapping.write_text(json.dumps({'schema_version':1,'pairs':[{'entity_kind':'task','from_key':k,'to_key':'uid:900' if k=='uid:2' else k,'identity_key':'test:'+k} for k in ('uid:1','uid:2','uid:3')]}))
+        elif case=='context':new['tasks'][1]['wbs']='9.9'
+        elif case=='relation':new['dependencies'][0]['lag_value']['value']['amount']='-1'
+        first=prepare(c,export=new)
+        assert first.exit_code in (3,5),first.receipt
+        assert first.receipt['snapshot_id'] and first.receipt['verification']['archive']=='verified'
+        if case=='missing_reference':
+            assert first.receipt['exceptions'][0]['result']=='inactive'
+            assert not q.get_identity_requirements(c['conn'],first.receipt['operation_id']);return
+        selected=confirm(c,anchor,first.receipt['snapshot_id'],mapping=mapping)
+        assert selected['exit_code']==0,selected
+        after=resume(c,first.receipt['operation_id'],mapping_revision=selected['mapping_revision_id'])
+        if case in ('context','relation'):
+>           assert after.exit_code==5,after.receipt # graph blocker has no applicable transformation
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 2, 'display_task_count': 3, ...}
+E           assert 4 == 5
+E            +  where 4 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_c6646a9157714acbb2ec8fb39519a79f', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+skills/productivity/edit-plan-confluence/tests/test_plan_rules.py:91: AssertionError
+_________________ test_bc_exact_mapping_and_context[relation] __________________
+
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-5-unit..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+case = 'relation'
+
+    @pytest.mark.parametrize('case',['reorder','new_uid','context','relation','not_needed','missing_reference'])
+    def test_bc_exact_mapping_and_context(publish_case,case):
+        c=publish_case;data=cyclic(c['export']) if case!='not_needed' else deepcopy(c['export'])
+        anchor=prepare(c,export=data).receipt['snapshot_id']
+        register_rule(c,anchor,data,cause='dependency_type_unsupported' if case=='not_needed' else 'cycle',no_reference=case=='missing_reference')
+        new=change_source(c,data);mapping=None
+        if case=='reorder':new['tasks'].reverse()
+        elif case=='new_uid':
+            for t in new['tasks']:
+                if t['task_key']=='uid:2':t.update(task_key='uid:900',uid=900,id=77)
+            for t in new['tasks']:
+                if t['child_task_keys'].get('value'):t['child_task_keys']['value']=['uid:900' if k=='uid:2' else k for k in t['child_task_keys']['value']]
+            for d in new['dependencies']:
+                for key in ('predecessor_task_key','successor_task_key'):
+                    if d[key]=='uid:2':d[key]='uid:900'
+            mapping=c['tmp']/'mapping.json'
+            mapping.write_text(json.dumps({'schema_version':1,'pairs':[{'entity_kind':'task','from_key':k,'to_key':'uid:900' if k=='uid:2' else k,'identity_key':'test:'+k} for k in ('uid:1','uid:2','uid:3')]}))
+        elif case=='context':new['tasks'][1]['wbs']='9.9'
+        elif case=='relation':new['dependencies'][0]['lag_value']['value']['amount']='-1'
+        first=prepare(c,export=new)
+        assert first.exit_code in (3,5),first.receipt
+        assert first.receipt['snapshot_id'] and first.receipt['verification']['archive']=='verified'
+        if case=='missing_reference':
+            assert first.receipt['exceptions'][0]['result']=='inactive'
+            assert not q.get_identity_requirements(c['conn'],first.receipt['operation_id']);return
+        selected=confirm(c,anchor,first.receipt['snapshot_id'],mapping=mapping)
+        assert selected['exit_code']==0,selected
+        after=resume(c,first.receipt['operation_id'],mapping_revision=selected['mapping_revision_id'])
+        if case in ('context','relation'):
+>           assert after.exit_code==5,after.receipt # graph blocker has no applicable transformation
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 2, 'display_task_count': 3, ...}
+E           assert 4 == 5
+E            +  where 4 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_546b17b3f8fe4f2793303541659936e5', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+skills/productivity/edit-plan-confluence/tests/test_plan_rules.py:91: AssertionError
+________________ test_bc_exact_mapping_and_context[not_needed] _________________
+
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-5-unit..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+case = 'not_needed'
+
+    @pytest.mark.parametrize('case',['reorder','new_uid','context','relation','not_needed','missing_reference'])
+    def test_bc_exact_mapping_and_context(publish_case,case):
+        c=publish_case;data=cyclic(c['export']) if case!='not_needed' else deepcopy(c['export'])
+        anchor=prepare(c,export=data).receipt['snapshot_id']
+        register_rule(c,anchor,data,cause='dependency_type_unsupported' if case=='not_needed' else 'cycle',no_reference=case=='missing_reference')
+        new=change_source(c,data);mapping=None
+        if case=='reorder':new['tasks'].reverse()
+        elif case=='new_uid':
+            for t in new['tasks']:
+                if t['task_key']=='uid:2':t.update(task_key='uid:900',uid=900,id=77)
+            for t in new['tasks']:
+                if t['child_task_keys'].get('value'):t['child_task_keys']['value']=['uid:900' if k=='uid:2' else k for k in t['child_task_keys']['value']]
+            for d in new['dependencies']:
+                for key in ('predecessor_task_key','successor_task_key'):
+                    if d[key]=='uid:2':d[key]='uid:900'
+            mapping=c['tmp']/'mapping.json'
+            mapping.write_text(json.dumps({'schema_version':1,'pairs':[{'entity_kind':'task','from_key':k,'to_key':'uid:900' if k=='uid:2' else k,'identity_key':'test:'+k} for k in ('uid:1','uid:2','uid:3')]}))
+        elif case=='context':new['tasks'][1]['wbs']='9.9'
+        elif case=='relation':new['dependencies'][0]['lag_value']['value']['amount']='-1'
+        first=prepare(c,export=new)
+        assert first.exit_code in (3,5),first.receipt
+        assert first.receipt['snapshot_id'] and first.receipt['verification']['archive']=='verified'
+        if case=='missing_reference':
+            assert first.receipt['exceptions'][0]['result']=='inactive'
+            assert not q.get_identity_requirements(c['conn'],first.receipt['operation_id']);return
+        selected=confirm(c,anchor,first.receipt['snapshot_id'],mapping=mapping)
+        assert selected['exit_code']==0,selected
+        after=resume(c,first.receipt['operation_id'],mapping_revision=selected['mapping_revision_id'])
+        if case in ('context','relation'):
+            assert after.exit_code==5,after.receipt # graph blocker has no applicable transformation
+            assert after.receipt['exceptions'][0]['result']=='inactive'
+        else:
+>           assert after.exit_code==0,after.receipt
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}
+E           assert 4 == 0
+E            +  where 4 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_2548f41d7b624d37824ed39090085259', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+skills/productivity/edit-plan-confluence/tests/test_plan_rules.py:94: AssertionError
+__________ test_changed_hierarchy_blocks_even_when_wbs_and_uid_match ___________
+
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-5-unit..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+
+    def test_changed_hierarchy_blocks_even_when_wbs_and_uid_match(publish_case):
+        c=publish_case;d=cyclic(c['export'])
+        anchor=prepare(c,export=d).receipt['snapshot_id'];register_rule(c,anchor,d)
+        new=change_source(c,d)
+        new['tasks'][1]['parent_task_key']={'value':None,'quality':'missing','reason':'not_set'}
+        start=prepare(c,export=new)
+        proof=confirm(c,anchor,start.receipt['snapshot_id'])
+        after=resume(c,start.receipt['operation_id'],mapping_revision=proof['mapping_revision_id'])
+>       assert after.exit_code==5
+E       AssertionError: assert 4 == 5
+E        +  where 4 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_f9498d7e5cf54c6b9e69f17c8fc255d7', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+skills/productivity/edit-plan-confluence/tests/test_plan_rules.py:138: AssertionError
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-5-unit/reports/junit.xml -
+=========================== short test summary info ============================
+FAILED skills/productivity/edit-plan-confluence/tests/test_fix2_schedule_boundaries.py::test_D_unassigned_resources_and_independent_interval_still_block
+FAILED skills/productivity/edit-plan-confluence/tests/test_plan_rules.py::test_bc_exact_mapping_and_context[reorder]
+FAILED skills/productivity/edit-plan-confluence/tests/test_plan_rules.py::test_bc_exact_mapping_and_context[new_uid]
+FAILED skills/productivity/edit-plan-confluence/tests/test_plan_rules.py::test_bc_exact_mapping_and_context[context]
+FAILED skills/productivity/edit-plan-confluence/tests/test_plan_rules.py::test_bc_exact_mapping_and_context[relation]
+FAILED skills/productivity/edit-plan-confluence/tests/test_plan_rules.py::test_bc_exact_mapping_and_context[not_needed]
+FAILED skills/productivity/edit-plan-confluence/tests/test_plan_rules.py::test_changed_hierarchy_blocks_even_when_wbs_and_uid_match
+7 failed, 14 passed in 49.88s

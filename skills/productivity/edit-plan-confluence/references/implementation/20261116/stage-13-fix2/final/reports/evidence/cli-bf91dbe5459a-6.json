@@ -1,0 +1,51 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+  "observed_at": "2026-11-17T13:12:23.053731+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/pytest-tmp/test_new_binary_identity_to_pu0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/pytest-tmp/test_new_binary_identity_to_pu0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/pytest-tmp/test_new_binary_identity_to_pu0/cache",
+    "resume",
+    "--operation-id",
+    "operation_4c9d3ebf7c364c6ab8eceab29c0cfb0a"
+  ],
+  "rc": 0,
+  "duration_seconds": 2.6513743289979175,
+  "stdout": "{\"attachment_version\": 1, \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"dependency_count\": 4, \"display_task_count\": 6, \"error\": null, \"exceptions\": [{\"evidence_id\": \"artifact_2df66cc86755465fb2d33178d7f00af9\", \"result\": \"applied\", \"revision\": \"binary-fixture-v1\", \"rule_id\": \"new-source-diff\"}], \"exit_code\": 0, \"external_effect\": \"none\", \"item_id\": \"item_cf8641e30896460bb60b66d2c3600672\", \"mode\": \"publish\", \"operation_id\": \"operation_4c9d3ebf7c364c6ab8eceab29c0cfb0a\", \"page_id\": \"537575636\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537575636\", \"project_slug\": \"stage13-binary-positive\", \"published\": true, \"schema_version\": 1, \"snapshot_id\": \"snapshot_59168365d44b4331acb3cadb5145c8af\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"status\": \"unchanged\", \"task_count\": 6, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"schedule\": {\"checks\": [{\"accepted_deviation\": false, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"count\": 1, \"example_entities\": [\"model\"], \"exit_code\": 0, \"row\": 5}, {\"accepted_deviation\": false, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"count\": 1, \"example_entities\": [\"plugin\"], \"exit_code\": 0, \"row\": 6}], \"evidence_ids\": [\"artifact_3faeb3ba78a74f3294c5e1bacf58633b\"], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"status\": \"not_verified\"}, \"source_values\": {\"checks\": [], \"evidence_ids\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"status\": \"not_verified\"}, \"storage\": \"verified\"}, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"details_ref\": \"artifact:artifact_3faeb3ba78a74f3294c5e1bacf58633b\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"details_ref\": \"artifact:artifact_3faeb3ba78a74f3294c5e1bacf58633b\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\"}]}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575636"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575636/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575639"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537575636/gantt-chart-07b5b6a722134e7897f8a5dc4a151987.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575636/child/attachment"
+      }
+    ]
+  }
+}

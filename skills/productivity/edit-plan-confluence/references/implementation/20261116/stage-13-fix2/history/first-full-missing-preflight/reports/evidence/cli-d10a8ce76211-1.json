@@ -1,0 +1,31 @@
+{
+  "test_id": "acceptance/test_user_journeys.py::test_today_cli_local_boundaries",
+  "observed_at": "2026-11-17T12:34:54.720589+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_today_cli_local_boundarie0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_today_cli_local_boundarie0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_today_cli_local_boundarie0/cache",
+    "history",
+    "--project-slug",
+    "stage13-trisigma",
+    "--view",
+    "files",
+    "--time-field",
+    "received",
+    "--since",
+    "2026-11-17T00:00:00+03:00",
+    "--until",
+    "2026-11-18T00:00:00+03:00"
+  ],
+  "rc": 0,
+  "duration_seconds": 0.9374864010023884,
+  "stdout": "{\"schema_version\": 1, \"action\": \"history\", \"exit_code\": 0, \"parameters\": {\"project_slug\": \"stage13-trisigma\", \"view\": \"files\", \"order\": \"ingested\", \"lineage_id\": null, \"since\": \"2026-11-16T21:00:00.000000+00:00\", \"until\": \"2026-11-17T21:00:00.000000+00:00\", \"time_field\": \"received\", \"limit\": 100}, \"result\": {\"records\": [{\"sequence\": 2, \"item_id\": \"item_0e16cc17830145ea8b803a9cb19eebed\", \"operation_id\": \"operation_e487c2f631924eeeaeef4f7eb5b09bee\", \"batch_id\": null, \"ordinal\": 0, \"plan_id\": \"plan_a0f9c03ca710455c9302073260f63513\", \"lineage_id\": \"lineage_8e3fcbca27e94dca898010e3934053d9\", \"original_name\": \"E.mpp\", \"original_locator\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_today_cli_local_boundarie0/E.mpp\", \"transport_json\": null, \"source_mpp_sha256\": \"04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a\", \"size_bytes\": 552960, \"container_sha256\": null, \"container_locator\": null, \"zip_member\": null, \"received_at\": \"2026-11-17T00:00:00+03:00\", \"frozen_at\": \"2026-11-17T12:34:42.662538+00:00\", \"frozen_locator\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_today_cli_local_boundarie0/WorkVault/_plan-receipts/operation_e487c2f631924eeeaeef4f7eb5b09bee/input/04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a/source.mpp\", \"source_version_date\": null, \"source_version_basis\": null, \"artifact_id\": \"artifact_ed8aa94ace894a74a9b4288a01eca33e\", \"snapshot_id\": \"snapshot_11dd891124824255be5a7c1f13094bb4\", \"normalization_profile_fingerprint\": \"a22b622f83306016a9f82dd98f34995b6956eadf17de10d0101af877342c28ce\", \"resolved_timezone\": \"unknown\", \"dedup_key\": \"e42bbf233ac0dec4ab332bbf24f7601483e7c1e99dc1504a829a98da59deeeb4\", \"status\": \"unchanged\", \"error_code\": null, \"retryable\": 0, \"project_slug\": \"stage13-trisigma\", \"recorded_at\": \"2026-11-17T00:00:00+03:00\", \"snapshot_recorded_at\": \"2026-11-16T23:59:59+03:00\", \"status_date\": null, \"publications\": [], \"published_at\": null}, {\"sequence\": 3, \"item_id\": \"item_265ac4f0f7d74192b6a28f6ff05ad413\", \"operation_id\": \"operation_fb5c368039bf4a2684c2a3211b9aa044\", \"batch_id\": null, \"ordinal\": 0, \"plan_id\": \"plan_a0f9c03ca710455c9302073260f63513\", \"lineage_id\": \"lineage_8e3fcbca27e94dca898010e3934053d9\", \"original_name\": \"E.mpp\", \"original_locator\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_today_cli_local_boundarie0/E.mpp\", \"transport_json\": null, \"source_mpp_sha256\": \"04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a\", \"size_bytes\": 552960, \"container_sha256\": null, \"container_locator\": null, \"zip_member\": null, \"received_at\": \"2026-11-17T23:59:59+03:00\", \"frozen_at\": \"2026-11-17T12:34:46.531762+00:00\", \"frozen_locator\": \"/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_today_cli_local_boundarie0/WorkVault/_plan-receipts/operation_fb5c368039bf4a2684c2a3211b9aa044/input/04aa6f521400af2c0e14e007a4fdff625d6bce956c6130052cb4a05a0c4d5e2a/source.mpp\", \"source_version_date\": null, \"source_version_basis\": null, \"artifact_id\": \"artifact_ed8aa94ace894a74a9b4288a01eca33e\", \"snapshot_id\": \"snapshot_11dd891124824255be5a7c1f13094bb4\", \"normalization_profile_fingerprint\": \"a22b622f83306016a9f82dd98f34995b6956eadf17de10d0101af877342c28ce\", \"resolved_timezone\": \"unknown\", \"dedup_key\": \"e42bbf233ac0dec4ab332bbf24f7601483e7c1e99dc1504a829a98da59deeeb4\", \"status\": \"unchanged\", \"error_code\": null, \"retryable\": 0, \"project_slug\": \"stage13-trisigma\", \"recorded_at\": \"2026-11-17T23:59:59+03:00\", \"snapshot_recorded_at\": \"2026-11-16T23:59:59+03:00\", \"status_date\": null, \"publications\": [], \"published_at\": null}], \"unknown_source_dates\": [], \"unknown_source_date_count\": 2, \"unknown_time_count\": 0, \"total\": 2, \"next_cursor\": null}, \"quality\": {\"time_interval\": \"[since,until)\", \"source_date_scale\": \"UTC calendar date; no task timezone inference\", \"identity\": \"not_evaluated\", \"publication_trust\": \"preserved\"}, \"error\": null}\n",
+  "stderr": "",
+  "live": false,
+  "counters": null
+}

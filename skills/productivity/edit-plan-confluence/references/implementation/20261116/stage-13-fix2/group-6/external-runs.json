@@ -1,0 +1,60 @@
+[
+  {
+    "component": "MppReader",
+    "rc": 0,
+    "results": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "1",
+      "tests": "82",
+      "time": "8.197",
+      "timestamp": "2026-11-17T15:47:47.166344+03:00",
+      "hostname": "hermes-agents.devel.tutu.ru"
+    },
+    "junit": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/reports/junit.xml",
+    "log": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/reports/pytest.log",
+    "cwd": "/home/tkachenkoav/USERTOOLS/MppReader",
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-o",
+      "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/cache",
+      "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/tmp",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/reports/junit.xml"
+    ]
+  },
+  {
+    "component": "MofsIndex",
+    "rc": 0,
+    "results": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "206",
+      "time": "39.197",
+      "timestamp": "2026-11-17T15:47:55.886312+03:00",
+      "hostname": "hermes-agents.devel.tutu.ru"
+    },
+    "junit": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/reports/junit.xml",
+    "log": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/reports/pytest.log",
+    "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "tests/plan",
+      "-q",
+      "-o",
+      "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/cache",
+      "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/tmp",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/reports/junit.xml"
+    ]
+  }
+]

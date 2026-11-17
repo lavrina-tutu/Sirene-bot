@@ -1,0 +1,194 @@
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 26%]
+........................................................................ [ 35%]
+........................................................................ [ 44%]
+........................................................................ [ 53%]
+........................................................................ [ 62%]
+........................................................................ [ 71%]
+........................................................................ [ 80%]
+........................................................................ [ 89%]
+........................................................................ [ 98%]
+.....FFFF..                                                              [100%]
+=================================== FAILURES ===================================
+________________ test_real_publish_repeat_and_observed_dates[A] ________________
+
+case = 'A'
+live_page = (<conf_client.ConfluenceClient object at 0x7f60a44e92e0>, '537575647', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537575647'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_input = <function stage13_input.<locals>.select at 0x7f60a4333d30>
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7f60a3f77400>, <function stage13_cli.<locals>.run at 0x7f60a37cb550>)
+stage13_record = <function stage13_record.<locals>.record at 0x7f60a4333550>
+request = <FixtureRequest for <Function test_real_publish_repeat_and_observed_dates[A]>>
+
+    @pytest.mark.parametrize('case', ['A','B','C','D'])
+    def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):
+        from macro import find_macro
+        from itogo import compute_itogo_from_prepared
+        from prepared_plan import PreparedPlan, fingerprint
+        client, page_id, before = live_page
+        context, run = stage13_cli
+        source, fixture = stage13_input(case)
+        # Real Trisigma scope also exercises historical B/C rule diagnostics.
+        result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        counters = deepcopy(run.last_probe)
+        after = client.get_page(page_id)
+        conn = connect_durable(context.db)
+        try:
+            operation = result['operation_id']
+            snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None
+            prep = q.get_preparation_result(conn, operation) if operation else None
+            versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None
+            status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,
+                'page_id': page_id, 'page_version_before': before['version']['number'],
+                'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],
+                'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,
+                'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',
+                'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}
+            stage13_record('live-'+case, status)
+            assert result['verification']['archive'] == 'verified', result
+            assert counters['MPXJ_read'] == 1
+>           assert result['exit_code'] == 0 and result['published'] is True, result
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 53, 'display_task_count': 57, ...}
+E           assert (5 == 0)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:167: AssertionError
+________________ test_real_publish_repeat_and_observed_dates[B] ________________
+
+case = 'B'
+live_page = (<conf_client.ConfluenceClient object at 0x7f60a4a017f0>, '537575648', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537575648'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_input = <function stage13_input.<locals>.select at 0x7f60a4333ee0>
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7f60a4a0ad00>, <function stage13_cli.<locals>.run at 0x7f60729c9c10>)
+stage13_record = <function stage13_record.<locals>.record at 0x7f60a37b5dc0>
+request = <FixtureRequest for <Function test_real_publish_repeat_and_observed_dates[B]>>
+
+    @pytest.mark.parametrize('case', ['A','B','C','D'])
+    def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):
+        from macro import find_macro
+        from itogo import compute_itogo_from_prepared
+        from prepared_plan import PreparedPlan, fingerprint
+        client, page_id, before = live_page
+        context, run = stage13_cli
+        source, fixture = stage13_input(case)
+        # Real Trisigma scope also exercises historical B/C rule diagnostics.
+        result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        counters = deepcopy(run.last_probe)
+        after = client.get_page(page_id)
+        conn = connect_durable(context.db)
+        try:
+            operation = result['operation_id']
+            snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None
+            prep = q.get_preparation_result(conn, operation) if operation else None
+            versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None
+            status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,
+                'page_id': page_id, 'page_version_before': before['version']['number'],
+                'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],
+                'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,
+                'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',
+                'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}
+            stage13_record('live-'+case, status)
+            assert result['verification']['archive'] == 'verified', result
+            assert counters['MPXJ_read'] == 1
+>           assert result['exit_code'] == 0 and result['published'] is True, result
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 60, 'display_task_count': 61, ...}
+E           assert (5 == 0)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:167: AssertionError
+________________ test_real_publish_repeat_and_observed_dates[C] ________________
+
+case = 'C'
+live_page = (<conf_client.ConfluenceClient object at 0x7f60a3b52b20>, '537575650', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537575650'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_input = <function stage13_input.<locals>.select at 0x7f60a37cb310>
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7f60a42c5a90>, <function stage13_cli.<locals>.run at 0x7f60a4333550>)
+stage13_record = <function stage13_record.<locals>.record at 0x7f60a3d62550>
+request = <FixtureRequest for <Function test_real_publish_repeat_and_observed_dates[C]>>
+
+    @pytest.mark.parametrize('case', ['A','B','C','D'])
+    def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):
+        from macro import find_macro
+        from itogo import compute_itogo_from_prepared
+        from prepared_plan import PreparedPlan, fingerprint
+        client, page_id, before = live_page
+        context, run = stage13_cli
+        source, fixture = stage13_input(case)
+        # Real Trisigma scope also exercises historical B/C rule diagnostics.
+        result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        counters = deepcopy(run.last_probe)
+        after = client.get_page(page_id)
+        conn = connect_durable(context.db)
+        try:
+            operation = result['operation_id']
+            snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None
+            prep = q.get_preparation_result(conn, operation) if operation else None
+            versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None
+            status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,
+                'page_id': page_id, 'page_version_before': before['version']['number'],
+                'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],
+                'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,
+                'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',
+                'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}
+            stage13_record('live-'+case, status)
+            assert result['verification']['archive'] == 'verified', result
+            assert counters['MPXJ_read'] == 1
+>           assert result['exit_code'] == 0 and result['published'] is True, result
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 61, 'display_task_count': 61, ...}
+E           assert (5 == 0)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:167: AssertionError
+________________ test_real_publish_repeat_and_observed_dates[D] ________________
+
+case = 'D'
+live_page = (<conf_client.ConfluenceClient object at 0x7f60a17f0400>, '537575651', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537575651'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})
+stage13_input = <function stage13_input.<locals>.select at 0x7f60a42ce550>
+stage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7f60a4a0af70>, <function stage13_cli.<locals>.run at 0x7f60a3d62820>)
+stage13_record = <function stage13_record.<locals>.record at 0x7f60a37cb820>
+request = <FixtureRequest for <Function test_real_publish_repeat_and_observed_dates[D]>>
+
+    @pytest.mark.parametrize('case', ['A','B','C','D'])
+    def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):
+        from macro import find_macro
+        from itogo import compute_itogo_from_prepared
+        from prepared_plan import PreparedPlan, fingerprint
+        client, page_id, before = live_page
+        context, run = stage13_cli
+        source, fixture = stage13_input(case)
+        # Real Trisigma scope also exercises historical B/C rule diagnostics.
+        result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
+                     '--timezone-hint', 'Europe/Moscow', live=True)
+        counters = deepcopy(run.last_probe)
+        after = client.get_page(page_id)
+        conn = connect_durable(context.db)
+        try:
+            operation = result['operation_id']
+            snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None
+            prep = q.get_preparation_result(conn, operation) if operation else None
+            versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None
+            status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,
+                'page_id': page_id, 'page_version_before': before['version']['number'],
+                'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],
+                'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,
+                'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',
+                'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}
+            stage13_record('live-'+case, status)
+            assert result['verification']['archive'] == 'verified', result
+            assert counters['MPXJ_read'] == 1
+>           assert result['exit_code'] == 0 and result['published'] is True, result
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 76, 'display_task_count': 71, ...}
+E           assert (5 == 0)
+
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:167: AssertionError
+=============================== warnings summary ===============================
+test_mpp_input.py::test_zip_collisions[names0]
+  /usr/lib64/python3.9/zipfile.py:1535: UserWarning: Duplicate name: 'x.mpp'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/reports/junit.xml -
+=========================== short test summary info ============================
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[C]
+FAILED skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]
+4 failed, 799 passed, 1 warning in 1423.33s (0:23:43)

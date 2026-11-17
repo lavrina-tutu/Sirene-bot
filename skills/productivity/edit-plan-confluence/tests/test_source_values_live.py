@@ -112,3 +112,19 @@ def test_visible_source_values_and_reopen(capability_page, request):
         observation['status']='passed'
     finally:
         (folder/'observation.json').write_text(json.dumps(observation,ensure_ascii=False,indent=2,default=str)+'\n')
+
+
+def test_real_plan_observer_reads_visible_values(capability_page, request):
+    """Exercise the A-D observer on an independent admitted display control."""
+    from gantt_attachment import _create_attachment, _post_attachment_data
+    from prepared_plan import canonical_bytes
+    from acceptance.test_live_publication import observe_plugin
+    client, page_id, filename, ctx, root = capability_page
+    control=json.loads(FIXTURE.read_text());payload=canonical_bytes(control['input'])
+    prior=[a for a in client.list_attachments(page_id) if a['title']==filename]
+    att=(_post_attachment_data(client,page_id,prior[0]['id'],filename,payload) if prior
+         else _create_attachment(client,page_id,filename,payload))
+    request.config._acceptance_counters['live_POST']+=1
+    observation=observe_plugin(client,page_id,payload,request,root/'real-plan-observer',attachment_version=att.version,browser_context=ctx)
+    assert observation['source_values_verification']['status']=='verified'
+    assert len(observation['openings'])==2 and len(observation['tasks'])==7

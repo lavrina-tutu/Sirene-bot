@@ -1,0 +1,12 @@
+{
+  "cycle_start_protected_count": 1270,
+  "changed": [
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/state/index.sqlite"
+  ],
+  "final_acceptance_protected_count": 3512,
+  "changed_at_final_test_finish": [
+    "/home/tkachenkoav/USERTOOLS/MofsIndex/state/index.sqlite"
+  ],
+  "canon_sha256": "a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892",
+  "source_drift_during_test": []
+}

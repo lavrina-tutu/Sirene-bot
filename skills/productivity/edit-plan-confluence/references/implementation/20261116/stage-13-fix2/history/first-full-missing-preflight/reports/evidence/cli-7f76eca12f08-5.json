@@ -1,0 +1,113 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+  "observed_at": "2026-11-17T12:43:09.014688+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_new_binary_identity_to_pu1/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
+    "resume",
+    "--operation-id",
+    "operation_3888d1e540d24562a242e54b3387480a",
+    "--mapping-revision",
+    "mapping_dd6fe865d66b4d0b9e4875994c93df66"
+  ],
+  "rc": 0,
+  "duration_seconds": 5.564943377976306,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_3888d1e540d24562a242e54b3387480a\", \"item_id\": \"item_e5704d4be75f4de7aa63bcebcdf7cde7\", \"status\": \"published_with_warnings\", \"mode\": \"publish\", \"exit_code\": 0, \"project_slug\": \"stage13-binary-positive\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_1ef6b4680196427289780b9ec4a3a97a\", \"page_id\": \"537575448\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537575448\", \"task_count\": 6, \"display_task_count\": 6, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"new-source-publish\", \"revision\": \"binary-fixture-v1\", \"result\": \"applied\", \"evidence_id\": \"artifact_34bf7befb3ca452288383c822814f3f4\"}], \"attachment_version\": 1, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"storage\": \"verified\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_d5af9148c1bc4ba4b6b11fdf989e2d9d\"]}}, \"published\": true, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_d5af9148c1bc4ba4b6b11fdf989e2d9d\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_d5af9148c1bc4ba4b6b11fdf989e2d9d\"}], \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"external_effect\": \"storage_written\", \"error\": null}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 1,
+    "PUT": 1,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448/child/attachment"
+      },
+      {
+        "method": "POST",
+        "path": "/rest/api/content/537575448/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575450"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537575448/gantt-chart-ec095ce4cba945a883828603745efd75.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575450"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537575448/gantt-chart-ec095ce4cba945a883828603745efd75.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448/child/attachment"
+      },
+      {
+        "method": "PUT",
+        "path": "/rest/api/content/537575448"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575450"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537575448/gantt-chart-ec095ce4cba945a883828603745efd75.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537575448/child/attachment"
+      }
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+_________________ test_real_plan_observer_reads_visible_values _________________
+
+capability_page = (<conf_client.ConfluenceClient object at 0x7f430d70db80>, '537575183', 'gantt-chart-f2a84d14b6d24742a52ee5cbeb38a5ba.j.../tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-6-observer/capability-controls'))
+request = <FixtureRequest for <Function test_real_plan_observer_reads_visible_values>>
+
+    def test_real_plan_observer_reads_visible_values(capability_page, request):
+        """Exercise the A-D observer on an independent admitted display control."""
+        from gantt_attachment import _create_attachment, _post_attachment_data
+        from prepared_plan import canonical_bytes
+        from acceptance.test_live_publication import observe_plugin
+        client, page_id, filename, ctx, root = capability_page
+        control=json.loads(FIXTURE.read_text());payload=canonical_bytes(control['input'])
+        prior=[a for a in client.list_attachments(page_id) if a['title']==filename]
+        att=(_post_attachment_data(client,page_id,prior[0]['id'],filename,payload) if prior
+             else _create_attachment(client,page_id,filename,payload))
+        request.config._acceptance_counters['live_POST']+=1
+>       observation=observe_plugin(client,page_id,payload,request,root/'real-plan-observer',attachment_version=att.version)
+
+skills/productivity/edit-plan-confluence/tests/test_source_values_live.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+skills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:66: in observe_plugin
+    with sync_playwright() as playwright:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright.sync_api._context_manager.PlaywrightContextManager object at 0x7f430a7d66a0>
+
+        def __enter__(self) -> SyncPlaywright:
+            try:
+                self._loop = asyncio.get_running_loop()
+            except RuntimeError:
+                self._loop = asyncio.new_event_loop()
+                self._own_loop = True
+            if self._loop.is_running():
+>               raise Error(
+                    """It looks like you are using Playwright Sync API inside the asyncio loop.
+    Please use the Async API instead."""
+                )
+E               playwright._impl._errors.Error: It looks like you are using Playwright Sync API inside the asyncio loop.
+E               Please use the Async API instead.
+
+../.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-6-observer/browser-deps/playwright/sync_api/_context_manager.py:47: Error
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-6-observer/reports/junit.xml -
+=========================== short test summary info ============================
+FAILED skills/productivity/edit-plan-confluence/tests/test_source_values_live.py::test_real_plan_observer_reads_visible_values
+1 failed, 1 passed in 21.82s

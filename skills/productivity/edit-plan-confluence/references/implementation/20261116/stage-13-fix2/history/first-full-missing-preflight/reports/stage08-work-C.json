@@ -1,0 +1,393 @@
+{
+  "case": "C",
+  "source_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+  "expected_hours": "2088",
+  "actual_hours": "2088",
+  "absolute_delta_hours": "0",
+  "tolerance_hours": "0.001",
+  "summary": {
+    "profile": "summary-v1",
+    "profile_fingerprint": "716c94354368c0642f1284f48213e6de246ec92f0024b5b533c45f4c3f1abc70",
+    "root_candidates": [
+      "uid:164"
+    ],
+    "root_task_key": "uid:164",
+    "explicit_root_choice": false,
+    "start": "2026-04-23T09:00",
+    "finish": "2026-08-12T18:00",
+    "d1": "23.04.26",
+    "d2": "12.08.26",
+    "n_days": 77,
+    "duration_working_days": "76.875",
+    "source_duration": {
+      "value": "76.875 d",
+      "quality": "ok",
+      "reason": null,
+      "quantity": {
+        "amount": "76.875",
+        "units": "DAYS",
+        "source_units": "d",
+        "elapsed": false
+      }
+    },
+    "coefficients": {
+      "minutes_per_day": "480"
+    },
+    "work": {
+      "hours": "2088",
+      "display_hours": "2088",
+      "quality": "complete",
+      "known_assignments": 49,
+      "missing_assignments": 0,
+      "excluded_assignments": 0,
+      "reasons": [],
+      "per_task": {
+        "uid:373": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:375": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:377": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:508": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:346": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:342": {
+          "known_hours": "24",
+          "missing": 0,
+          "known": 1,
+          "hours": "24",
+          "quality": "complete"
+        },
+        "uid:496": {
+          "known_hours": "176",
+          "missing": 0,
+          "known": 1,
+          "hours": "176",
+          "quality": "complete"
+        },
+        "uid:497": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:507": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:498": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:337": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 2,
+          "hours": "32",
+          "quality": "complete"
+        },
+        "uid:343": {
+          "known_hours": "24",
+          "missing": 0,
+          "known": 1,
+          "hours": "24",
+          "quality": "complete"
+        },
+        "uid:292": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "complete"
+        },
+        "uid:378": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "complete"
+        },
+        "uid:511": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:510": {
+          "known_hours": "152",
+          "missing": 0,
+          "known": 1,
+          "hours": "152",
+          "quality": "complete"
+        },
+        "uid:323": {
+          "known_hours": "24",
+          "missing": 0,
+          "known": 1,
+          "hours": "24",
+          "quality": "complete"
+        },
+        "uid:324": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:512": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "complete"
+        },
+        "uid:513": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 1,
+          "hours": "80",
+          "quality": "complete"
+        },
+        "uid:326": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:327": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:329": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:330": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:331": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:332": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:334": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:335": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:514": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "complete"
+        },
+        "uid:339": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:341": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:515": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 1,
+          "hours": "80",
+          "quality": "complete"
+        },
+        "uid:344": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 2,
+          "hours": "80",
+          "quality": "complete"
+        },
+        "uid:347": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:348": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:321": {
+          "known_hours": "8",
+          "missing": 0,
+          "known": 1,
+          "hours": "8",
+          "quality": "complete"
+        },
+        "uid:517": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "complete"
+        },
+        "uid:518": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "complete"
+        },
+        "uid:519": {
+          "known_hours": "160",
+          "missing": 0,
+          "known": 1,
+          "hours": "160",
+          "quality": "complete"
+        },
+        "uid:520": {
+          "known_hours": "80",
+          "missing": 0,
+          "known": 1,
+          "hours": "80",
+          "quality": "complete"
+        },
+        "uid:521": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "complete"
+        },
+        "uid:532": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:533": {
+          "known_hours": "0",
+          "missing": 0,
+          "known": 1,
+          "hours": "0",
+          "quality": "complete"
+        },
+        "uid:314": {
+          "known_hours": "232",
+          "missing": 0,
+          "known": 1,
+          "hours": "232",
+          "quality": "complete"
+        },
+        "uid:534": {
+          "known_hours": "16",
+          "missing": 0,
+          "known": 1,
+          "hours": "16",
+          "quality": "complete"
+        },
+        "uid:535": {
+          "known_hours": "40",
+          "missing": 0,
+          "known": 1,
+          "hours": "40",
+          "quality": "complete"
+        },
+        "uid:536": {
+          "known_hours": "32",
+          "missing": 0,
+          "known": 1,
+          "hours": "32",
+          "quality": "complete"
+        }
+      }
+    },
+    "counts": {
+      "task_count": 62,
+      "archive_task_count": 62,
+      "service_task_count": 1,
+      "display_task_count": 61,
+      "dependency_count": 61,
+      "external_dependency_count": 0,
+      "task_extraction_errors": 0
+    },
+    "reasons": [],
+    "publishable": true,
+    "storage_html": "<p><strong>Итого: с 23.04.26 по 12.08.26 - 77 рабочих дней</strong></p>"
+  },
+  "archive_task_count": 62,
+  "service_task_count": 1,
+  "display_task_count": 61,
+  "MPXJ_read": 1
+}

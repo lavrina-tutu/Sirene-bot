@@ -1,0 +1,86 @@
+{
+  "A": {
+    "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/pytest-tmp/test_real_publish_repeat_and_o0/state/index.sqlite",
+    "snapshot_id": "snapshot_772c8b6e19054213b11072489734c704",
+    "source_mpp_sha256": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89",
+    "normalized_data_sha256": "96ee6ea2618a19689b52ebda88833fed21b4534f7e1c8c1bd4a1151ae4b26b37",
+    "normalized_archive_bytes_exact": true,
+    "all_six_fields_present_and_exact_in_task_versions": true,
+    "task_versions": 58,
+    "same_normalized_source_as_cycle1": true,
+    "source_collection_status": {
+      "assignments": "complete",
+      "baseline_values": "complete",
+      "calendars": "complete",
+      "dependencies": "complete",
+      "external_dependencies": "complete",
+      "resources": "complete",
+      "tasks": "complete"
+    },
+    "specific_plan_visible_values_observed": false,
+    "scope": "Fresh final public-CLI archive, read-only audit; prepared text is not a calendar proof."
+  },
+  "B": {
+    "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/pytest-tmp/test_real_publish_repeat_and_o1/state/index.sqlite",
+    "snapshot_id": "snapshot_6ed3162640ec4777995b1f54f7302215",
+    "source_mpp_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+    "normalized_data_sha256": "8c96801c0edcec20d63fa19192bd95ab86f234aef3ac3af837cb71aaed1e575c",
+    "normalized_archive_bytes_exact": true,
+    "all_six_fields_present_and_exact_in_task_versions": true,
+    "task_versions": 62,
+    "same_normalized_source_as_cycle1": true,
+    "source_collection_status": {
+      "assignments": "complete",
+      "baseline_values": "complete",
+      "calendars": "complete",
+      "dependencies": "complete",
+      "external_dependencies": "complete",
+      "resources": "complete",
+      "tasks": "complete"
+    },
+    "specific_plan_visible_values_observed": false,
+    "scope": "Fresh final public-CLI archive, read-only audit; prepared text is not a calendar proof."
+  },
+  "C": {
+    "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/pytest-tmp/test_real_publish_repeat_and_o2/state/index.sqlite",
+    "snapshot_id": "snapshot_4f8cef64e29742afb2e1c96dbff2660a",
+    "source_mpp_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+    "normalized_data_sha256": "f445f09bf6519df9bbde79642adec1c6637999cc2eb6dd80dac51b1fa7f4698d",
+    "normalized_archive_bytes_exact": true,
+    "all_six_fields_present_and_exact_in_task_versions": true,
+    "task_versions": 62,
+    "same_normalized_source_as_cycle1": true,
+    "source_collection_status": {
+      "assignments": "complete",
+      "baseline_values": "complete",
+      "calendars": "complete",
+      "dependencies": "complete",
+      "external_dependencies": "complete",
+      "resources": "complete",
+      "tasks": "complete"
+    },
+    "specific_plan_visible_values_observed": false,
+    "scope": "Fresh final public-CLI archive, read-only audit; prepared text is not a calendar proof."
+  },
+  "D": {
+    "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/pytest-tmp/test_real_publish_repeat_and_o3/state/index.sqlite",
+    "snapshot_id": "snapshot_540211f7ca7d422ea63506422bb6f4ce",
+    "source_mpp_sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+    "normalized_data_sha256": "af570ca612ca6ac47541223e94f3bfd5f235518d78ac4cc703bcc052bdf9a926",
+    "normalized_archive_bytes_exact": true,
+    "all_six_fields_present_and_exact_in_task_versions": true,
+    "task_versions": 72,
+    "same_normalized_source_as_cycle1": true,
+    "source_collection_status": {
+      "assignments": "complete",
+      "baseline_values": "complete",
+      "calendars": "complete",
+      "dependencies": "complete",
+      "external_dependencies": "complete",
+      "resources": "complete",
+      "tasks": "complete"
+    },
+    "specific_plan_visible_values_observed": false,
+    "scope": "Fresh final public-CLI archive, read-only audit; prepared text is not a calendar proof."
+  }
+}

@@ -1,0 +1,310 @@
+{
+  "scope": "Changes outside EditPlanConfluence appeared during execution; preserved and excluded from this task commits.",
+  "paths": [
+    {
+      "status": " M",
+      "path": "skills/autonomous-ai-agents/claude-code/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/autonomous-ai-agents/codex/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/autonomous-ai-agents/hermes-agent/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "D ",
+      "path": "skills/devops/aggregate-tz-opus-workflow/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "D ",
+      "path": "skills/devops/aggregate-tz-opus-workflow/references/verification-history.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/cron-troubleshooting/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-cost-optimization/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-cost-optimization/references/compression-internals.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-cost-optimization/references/gateway-response-injection.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-cost-optimization/references/model-role-matrix.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-gateway-setup/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-gateway-setup/references/cronjob-vs-delegate-task.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-gateway-setup/references/gateway-telegram-notifications.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-gateway-setup/references/telegram-group-chat-setup.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-upstream-check/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/hermes-upstream-check/references/upstream-merge-steps.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/mofs-operations/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/mofs-operations/references/mofsindex-v01-architecture.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/mofs-operations/references/projects-brief-22072026.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/mofs-operations/references/tools-registry-brief.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/pii-data-scanning/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/pii-data-scanning/references/pii-errorbus-triage.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/pii-data-scanning/references/pii-rule-20260909.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/usertools-llm-integration/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/usertools-llm-integration/references/env-leak-registry-merge-20260817.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/usertools-llm-integration/references/usertools-cron-venv-syspath.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/devops/usertools-llm-integration/references/usertools-env-loader-rollout-20260827.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": " M",
+      "path": "skills/software-development/brief-mode/SKILL.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/autonomous-ai-agents/claude-code/references/",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/autonomous-ai-agents/codex/references/",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/autonomous-ai-agents/hermes-agent/references/",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/cron-troubleshooting/references/",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-cost-optimization/references/configuration-recipes.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-cost-optimization/references/delegation-history.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-cost-optimization/references/local-endpoints-and-fallback.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-cost-optimization/references/model-cost-history.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-cost-optimization/references/secret-cleanup-history.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-gateway-setup/references/cron-environment.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-gateway-setup/references/file-delivery.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-gateway-setup/references/gateway-crash-history.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-gateway-setup/references/gateway-diagnostics.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-gateway-setup/references/profile-routing.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-gateway-setup/references/startup-notification-race.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-gateway-setup/references/windows-service-setup.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-upstream-check/references/post-ff-verification.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-upstream-check/references/update-cycle.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-upstream-check/references/upstream-analysis.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/hermes-upstream-check/references/upstream-incident-history.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/mofs-operations/references/bulk-run-and-recovery.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/mofs-operations/references/contacts-and-backfill.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/mofs-operations/references/mofs-incident-history.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/mofs-operations/references/mofs-release-history.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/pii-data-scanning/references/baseline-and-reporting.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/pii-data-scanning/references/detection-and-masking.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/pii-data-scanning/references/pii-incident-20260921.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/pii-data-scanning/references/retention-and-log-hygiene.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/usertools-llm-integration/references/authentication-diagnostics.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/usertools-llm-integration/references/config-loader-verification.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/usertools-llm-integration/references/default-llm-contract.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/devops/usertools-llm-integration/references/integration-history.md",
+      "protected_by_this_acceptance": false
+    },
+    {
+      "status": "??",
+      "path": "skills/software-development/brief-mode/references/",
+      "protected_by_this_acceptance": false
+    }
+  ]
+}

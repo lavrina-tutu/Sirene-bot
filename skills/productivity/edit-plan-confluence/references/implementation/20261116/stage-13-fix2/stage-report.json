@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "cycle": "fix2",
+  "gate": "failed",
+  "section20_verdict": "failed",
+  "summary": {
+    "passed": 799,
+    "failed": 4,
+    "skipped": 0
+  },
+  "exit_code": 1,
+  "mandatory_tests": 803,
+  "missing_required": [],
+  "AC": {
+    "passed": 23,
+    "failed": 4
+  },
+  "cases": [
+    {
+      "case": "A",
+      "status": "failed",
+      "exit_code": 5,
+      "archive_task_count": 58,
+      "display_task_count": 57,
+      "dependency_count": 53,
+      "work_hours": "1576",
+      "work_quality": "complete",
+      "source_sha256": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89",
+      "snapshot_id": "snapshot_772c8b6e19054213b11072489734c704",
+      "operation_id": "operation_6101441b8bad4d1690295edd1dcfabcb",
+      "page_id": "537575647",
+      "page_version_before": 1,
+      "page_version_after": 1,
+      "POST": 0,
+      "PUT": 0,
+      "MPXJ_read": 1,
+      "blocking_findings": 27,
+      "observed_dates": null,
+      "successful_repeat": null,
+      "source_collection_status": {
+        "assignments": "complete",
+        "baseline_values": "complete",
+        "calendars": "complete",
+        "dependencies": "complete",
+        "external_dependencies": "complete",
+        "resources": "complete",
+        "tasks": "complete"
+      },
+      "evidence": "final/reports/evidence/live-A.json"
+    },
+    {
+      "case": "B",
+      "status": "failed",
+      "exit_code": 5,
+      "archive_task_count": 62,
+      "display_task_count": 61,
+      "dependency_count": 60,
+      "work_hours": "2096",
+      "work_quality": "complete",
+      "source_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+      "snapshot_id": "snapshot_6ed3162640ec4777995b1f54f7302215",
+      "operation_id": "operation_2f39b8675d3f4ad4a170f0d52a9e1e7f",
+      "page_id": "537575648",
+      "page_version_before": 1,
+      "page_version_after": 1,
+      "POST": 0,
+      "PUT": 0,
+      "MPXJ_read": 1,
+      "blocking_findings": 28,
+      "observed_dates": null,
+      "successful_repeat": null,
+      "source_collection_status": {
+        "assignments": "complete",
+        "baseline_values": "complete",
+        "calendars": "complete",
+        "dependencies": "complete",
+        "external_dependencies": "complete",
+        "resources": "complete",
+        "tasks": "complete"
+      },
+      "evidence": "final/reports/evidence/live-B.json"
+    },
+    {
+      "case": "C",
+      "status": "failed",
+      "exit_code": 5,
+      "archive_task_count": 62,
+      "display_task_count": 61,
+      "dependency_count": 61,
+      "work_hours": "2088",
+      "work_quality": "complete",
+      "source_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+      "snapshot_id": "snapshot_4f8cef64e29742afb2e1c96dbff2660a",
+      "operation_id": "operation_bbed23fed907442aa2377f0937df0314",
+      "page_id": "537575650",
+      "page_version_before": 1,
+      "page_version_after": 1,
+      "POST": 0,
+      "PUT": 0,
+      "MPXJ_read": 1,
+      "blocking_findings": 103,
+      "observed_dates": null,
+      "successful_repeat": null,
+      "source_collection_status": {
+        "assignments": "complete",
+        "baseline_values": "complete",
+        "calendars": "complete",
+        "dependencies": "complete",
+        "external_dependencies": "complete",
+        "resources": "complete",
+        "tasks": "complete"
+      },
+      "evidence": "final/reports/evidence/live-C.json"
+    },
+    {
+      "case": "D",
+      "status": "failed",
+      "exit_code": 5,
+      "archive_task_count": 72,
+      "display_task_count": 71,
+      "dependency_count": 76,
+      "work_hours": "3136",
+      "work_quality": "complete",
+      "source_sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+      "snapshot_id": "snapshot_540211f7ca7d422ea63506422bb6f4ce",
+      "operation_id": "operation_944d751b633e4c8789373ec386991d6b",
+      "page_id": "537575651",
+      "page_version_before": 1,
+      "page_version_after": 1,
+      "POST": 0,
+      "PUT": 0,
+      "MPXJ_read": 1,
+      "blocking_findings": 217,
+      "observed_dates": null,
+      "successful_repeat": null,
+      "source_collection_status": {
+        "assignments": "complete",
+        "baseline_values": "complete",
+        "calendars": "complete",
+        "dependencies": "complete",
+        "external_dependencies": "complete",
+        "resources": "complete",
+        "tasks": "complete"
+      },
+      "evidence": "final/reports/evidence/live-D.json"
+    }
+  ],
+  "case_results": {
+    "failed": 4,
+    "passed": 4
+  },
+  "journeys": {
+    "failed": 1,
+    "passed": 10
+  },
+  "gate_checks": {
+    "nonempty_results": true,
+    "all_required_selected": true,
+    "all_required_passed": false,
+    "all_AC_passed": false,
+    "all_cases_passed": false,
+    "all_journeys_passed": false,
+    "fixtures_verified": true,
+    "populated_baseline_preserved": true,
+    "protected_files_unchanged": false,
+    "sources_stable": true,
+    "external_regression_passed": true,
+    "external_sources_restorable": true,
+    "prior_twelve_commits": true,
+    "original_stage13_failed_preserved": true,
+    "no_production_live_targets": true,
+    "pytest_exit_zero": false,
+    "ordered_phases_2_through_11": true,
+    "ordered_unit_archive_mpp_live": true
+  },
+  "source_tree_sha256": "22f7be6e79a92ba0bccef8ab6714cc65e8d673e17bfc88c152110b49fb1776f7",
+  "source_files_verified": 208,
+  "cycle_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510",
+  "final_run_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat",
+  "command": {
+    "cwd": "/home/tkachenkoav/hermes-workspace",
+    "argv": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "-c",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+      "--acceptance-stage",
+      "13",
+      "--test-root",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final",
+      "-m",
+      "unit or archive_integration or mpp_fixtures or confluence_live",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/reports/junit.xml",
+      "-q"
+    ],
+    "environment": {
+      "EDITPLAN_LIVE": "1",
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+    }
+  },
+  "group_commits": {
+    "G0": "976aadcfa2815ec908825bf645bb26e94fee4f40",
+    "G1": "7c27b3b46df8c042c776f609847bf8394ff74ec7",
+    "G2": "ba165f97e2605cbc24ea8a7a47e889a9baa875ad",
+    "G3": "65d77d49a87747ab1623da174fd3d371edb40d32",
+    "G4": "82c9bac0c180e666e2d7647dca284ae225608d3f",
+    "G5": "b574a01a86ff7cd87518f33719b05179249d7979"
+  },
+  "G6_commit": "recorded in plan journal after commit",
+  "external_regression": [
+    {
+      "component": "MppReader",
+      "rc": 0,
+      "results": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "1",
+        "tests": "82",
+        "time": "8.197",
+        "timestamp": "2026-11-17T15:47:47.166344+03:00",
+        "hostname": "hermes-agents.devel.tutu.ru"
+      },
+      "junit": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/reports/junit.xml",
+      "log": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/reports/pytest.log",
+      "cwd": "/home/tkachenkoav/USERTOOLS/MppReader",
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "tests",
+        "-q",
+        "-o",
+        "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/cache",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/tmp",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/reader/reports/junit.xml"
+      ]
+    },
+    {
+      "component": "MofsIndex",
+      "rc": 0,
+      "results": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "206",
+        "time": "39.197",
+        "timestamp": "2026-11-17T15:47:55.886312+03:00",
+        "hostname": "hermes-agents.devel.tutu.ru"
+      },
+      "junit": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/reports/junit.xml",
+      "log": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/reports/pytest.log",
+      "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+      "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "tests/plan",
+        "-q",
+        "-o",
+        "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/cache",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/tmp",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/external/mofs/reports/junit.xml"
+      ]
+    }
+  ],
+  "source_blocker_count": 375,
+  "environment_blockers": [
+    "production_db_changed_during_acceptance"
+  ],
+  "reports": {
+    "acceptance": "final/reports/acceptance-report.json.gz",
+    "junit": "final/reports/junit.xml",
+    "blockers": "blocker-ledger.json",
+    "delivery": "delivery-manifest.json"
+  },
+  "preservation": {
+    "source_drift": [],
+    "changed_protected_files": [
+      "/home/tkachenkoav/USERTOOLS/MofsIndex/state/index.sqlite"
+    ],
+    "canon_sha256": "a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892",
+    "canon_git_status_at_entry": "clean; requested M absent; no fabricated modification",
+    "concurrent_foreign_edits": "group-6/concurrent-worktree.json"
+  }
+}

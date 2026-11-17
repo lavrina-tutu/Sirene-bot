@@ -1,0 +1,12 @@
+{
+  "runtime_directories_excluded": [
+    "group-6/external/reader/tmp",
+    "group-6/external/reader/cache",
+    "group-6/external/mofs/tmp",
+    "group-6/external/mofs/cache"
+  ],
+  "delivery_entries_before_filter": 1026,
+  "delivery_entries_after_filter": 422,
+  "runtime_originals_retained_in_T": true,
+  "final_delivery_scope": "reports, observations, source audit and hashes; no external test tmp/cache/DB artifacts"
+}

@@ -1,0 +1,23 @@
+{
+  "cwd": "/home/tkachenkoav/hermes-workspace",
+  "argv": [
+    "/usr/bin/python3.9",
+    "-m",
+    "pytest",
+    "-c",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests",
+    "--acceptance-stage",
+    "13",
+    "--test-root",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final",
+    "-m",
+    "unit or archive_integration or mpp_fixtures or confluence_live",
+    "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/verified-repeat/final/reports/junit.xml",
+    "-q"
+  ],
+  "environment": {
+    "EDITPLAN_LIVE": "1",
+    "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages"
+  }
+}

@@ -58,3 +58,40 @@ JUnit/stdout/stderr и очищенные evidence из T/reports копирую
 Изолированные проверки не заменяют пилот ZD/W5/Q1–Q7/AC-101…144 §19.
 Gateway не меняется/не рестартует, cron/наблюдатели/расписания не создаются;
 изолированный subprocess skill_view не означает прогон сообщения через Gateway.
+
+## Корректирующий цикл 2 — полный этап 13
+
+Новые обязательные test IDs добавлены к прежней AC-матрице: независимый от Confluence
+первичный архив, точный round-trip actuals, view/edit-колонки, 21/47/76/100 и дробный
+процент, source summary, отдельный actual finish, field/method/wrapper binding,
+видимый текст и повторное открытие. Полная замена проверяет исчезновение старых задач
+и связей, сохранение macro-id/id/hash и отсутствие новых версий при повторе.
+Прежние conflict/resume/recovery и все реальные A–D остаются обязательными.
+
+`test_source_values_live` проверяет отдельный контроль и браузерный наблюдатель,
+используемый A–D. Контроль на синтетическом примере не заменяет успешные публикации,
+даты, видимые значения и unchanged-повтор самих A–D. Отрицательные native controls
+могут пройти как защитные тесты, сохраняя capability:not_verified и failed-приёмку.
+
+Полный запуск на окончательном дереве, с новым изолированным T:
+
+```bash
+EDITPLAN_LIVE=1 PYTHONPATH=/home/tkachenkoav/.local/lib/python3.9/site-packages \
+/usr/bin/python3.9 -m pytest -c "$S/tests/pytest.ini" "$S/tests" \
+  --acceptance-stage 13 --test-root "$T/final" \
+  -m 'unit or archive_integration or mpp_fixtures or confluence_live' \
+  --junitxml="$T/final/reports/junit.xml" -q
+```
+
+Отчёт и blocker-ledger цикла — references/implementation/20261116/stage-13-fix2/;
+история предыдущих failed-прогонов сохраняется. Условия §20/AC и числа A–D неизменны;
+passed с ограничениями не используется. Production-БД, страницы A–D/AB и расписания
+не являются целями записи.
+
+Перед полной командой внешний этап подготовки сохраняет `reports/initial-state.json`
+(реальные hashes защищённых файлов, canon, production DB, base commit) и
+`reports/external-checks.json` (отдельные последовательные pytest R/M, JUnit/rc,
+проверку прежних коммитов и восстановления after-копий USERTOOLS). Это входы
+существующего pytest report hook; отсутствующие файлы оставляют соответствующие
+gate checks непроверенными. Команды и точные manifests сохраняются в external-checks,
+никаких старых флагов passed без проверки текущих hashes не переносится.

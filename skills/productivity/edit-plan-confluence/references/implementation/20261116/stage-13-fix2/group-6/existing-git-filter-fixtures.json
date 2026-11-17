@@ -1,0 +1,26 @@
+{
+  "scope": "Three pre-existing CSV fixtures retain tested CRLF working bytes; existing Git clean filter stores LF; their Git blobs are unchanged in G6. No fixture normalization was performed.",
+  "files": [
+    {
+      "path": "skills/productivity/edit-plan-confluence/tests/fixtures/ab_080926_\u043f\u0443\u043d\u043a\u044212__assignments.csv",
+      "tested_working_sha256": "b91c78df68154c30b5805b873c7d5490ec6543a3d75f3ecbc917c18150acc230",
+      "existing_git_blob_sha256": "2dcdcdbba34c33a6c45d46922999e18dbd40d98d247255ba25225bc6208b7837",
+      "git_blob_unchanged_in_G6": true,
+      "existing_clean_filter_matches_git": true
+    },
+    {
+      "path": "skills/productivity/edit-plan-confluence/tests/fixtures/ab_080926_\u043f\u0443\u043d\u043a\u044212__resources.csv",
+      "tested_working_sha256": "974bd73c1a30cd5505866cdf57c4e934502f9223868ab0d9ea5b8c93c19d03db",
+      "existing_git_blob_sha256": "8e7e0a880db67b21decd6cd4acc129c7088a51121cea476c22319d228a0174d6",
+      "git_blob_unchanged_in_G6": true,
+      "existing_clean_filter_matches_git": true
+    },
+    {
+      "path": "skills/productivity/edit-plan-confluence/tests/fixtures/ab_080926_\u043f\u0443\u043d\u043a\u044212__tasks.csv",
+      "tested_working_sha256": "4e55269c89cfd4da1d863f5f05ebac783b8b0664c84d9ecf9114ed2a32f2498e",
+      "existing_git_blob_sha256": "0fd9720886913ac9ac083ec42e6e6a8f426820a8628f372b85f742a6fc6c668b",
+      "git_blob_unchanged_in_G6": true,
+      "existing_clean_filter_matches_git": true
+    }
+  ]
+}

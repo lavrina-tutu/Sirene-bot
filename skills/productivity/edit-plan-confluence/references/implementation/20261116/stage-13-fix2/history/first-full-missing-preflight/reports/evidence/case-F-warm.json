@@ -1,0 +1,91 @@
+{
+  "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[F]",
+  "observed_at": "2026-11-17T12:28:21.527880+00:00",
+  "case": "F",
+  "receipt": {
+    "schema_version": 1,
+    "operation_id": "operation_73fe1ad543194043ac6c875d2a139d0d",
+    "item_id": "item_786369b307774f5d8b29805be394bef0",
+    "status": "unchanged",
+    "mode": "save",
+    "exit_code": 0,
+    "project_slug": "stage13-trisigma",
+    "source": {
+      "name": "same-bytes-renamed.mpp",
+      "sha256": "58bd3830f4c126cb37ecc998702a980a67a84550cf9708950493cb358613395c",
+      "size_bytes": 567808
+    },
+    "snapshot_id": "snapshot_ec2eae13480e450ebab981b1d978d9df",
+    "page_id": null,
+    "page_url": null,
+    "task_count": 86,
+    "display_task_count": 85,
+    "dependency_count": 93,
+    "exceptions": [],
+    "attachment_version": null,
+    "verification": {
+      "archive": "verified",
+      "attachment": "not_applicable",
+      "storage": "not_applicable",
+      "source_values": {
+        "status": "not_applicable",
+        "checks": [],
+        "limitations": [],
+        "evidence_ids": []
+      },
+      "schedule": {
+        "status": "not_verified",
+        "checks": [],
+        "limitations": [
+          "fields_missing",
+          "fields_unsupported",
+          "schedule_not_verified"
+        ],
+        "evidence_ids": []
+      }
+    },
+    "published": false,
+    "warnings": [
+      {
+        "code": "fields_missing",
+        "message": "Часть исходных полей имеет качество missing",
+        "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/33aa49d19dc9f8dc1e4f176e6d1e5b1bd031bec72406350250b2206113e1415d.json"
+      },
+      {
+        "code": "fields_unsupported",
+        "message": "Часть исходных полей имеет качество unsupported",
+        "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_cold_warm_archive_F_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/33aa49d19dc9f8dc1e4f176e6d1e5b1bd031bec72406350250b2206113e1415d.json"
+      }
+    ],
+    "completed_stages": [
+      "input_frozen",
+      "prepared",
+      "archived"
+    ],
+    "external_effect": "none",
+    "error": null
+  },
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 1,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0
+  },
+  "baseline_before": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_ac91c65188914d5fb30d6cbfbfbda9d6','plan_87da6de5a4e440fa8f5dffe391a85c36','snapshot_93b5abecc45048ccbac22eb2b4d7f810',0,1,'test owner before acceptance',NULL,'2026-11-17T12:28:06+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_df33f1b3a29e4eb19cdc92ca3ab053a3','lineage_abd6b035563d4502a9b0ac6ee3f89861','snapshot_93b5abecc45048ccbac22eb2b4d7f810',1,'test owner before acceptance',NULL,'2026-11-17T12:28:06+00:00');"
+    ]
+  },
+  "baseline_after": {
+    "plan_baseline_selection": [
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_ac91c65188914d5fb30d6cbfbfbda9d6','plan_87da6de5a4e440fa8f5dffe391a85c36','snapshot_93b5abecc45048ccbac22eb2b4d7f810',0,1,'test owner before acceptance',NULL,'2026-11-17T12:28:06+00:00');"
+    ],
+    "plan_snapshot_selection": [
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_df33f1b3a29e4eb19cdc92ca3ab053a3','lineage_abd6b035563d4502a9b0ac6ee3f89861','snapshot_93b5abecc45048ccbac22eb2b4d7f810',1,'test owner before acceptance',NULL,'2026-11-17T12:28:06+00:00');"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "master": {
+    "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md",
+    "version": "0.5.2",
+    "at_acceptance_sha256": "3a12400e67232a22c8c93bb134690c02321e8ad517b1b82118d49f8a57b73777",
+    "current_sha256": "3a12400e67232a22c8c93bb134690c02321e8ad517b1b82118d49f8a57b73777"
+  },
+  "plan": {
+    "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md",
+    "normative_sha256": "6a6c82c418431f2895e0b0286c791b927dfc2e14e6614306d027d70f563b2298",
+    "full_sha256_before_G6_commit_log": "fbae4bd83bbc6f637efa4e0ecff41fcb023a59bdb4b69fe4893c2174455166e3",
+    "post_commit_journal_append_expected": true
+  },
+  "inventory": {
+    "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md",
+    "sha256": "52e7d5ca63ec9db969cb7014df7a8e9265f59fb20b9e758e5e1f24e647048dd6",
+    "updated_under_LOCK_EX": true
+  },
+  "normative_preservation": "group-6/normative-preservation.json",
+  "production_docs_index_not_updated": "production DB writes forbidden",
+  "owncloud_sync": "not_confirmed"
+}

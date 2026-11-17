@@ -1,0 +1,33 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_full_replacement_retains_macro_and_repeat_versions ____________
+
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-6-repl..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4d59fdd550>
+
+    def test_full_replacement_retains_macro_and_repeat_versions(publish_case, monkeypatch):
+        c=publish_case;_fake_raw_upload(c,monkeypatch)
+        c['client'].page['body']['storage']['value'] += '<p>Unmanaged replacement neighbour</p>'
+        first=pipeline.publish_prepared(c['client'],prepare(c))
+        assert first.exit_code==0 and first.receipt['published'] is True,first.receipt
+        initial_macro=find_macro(c['client'].page['body']['storage']['value'])
+        changed=deepcopy(c['export'])
+        changed['tasks']=[t for t in changed['tasks'] if t['task_key']!='uid:3']
+        changed['tasks'][0]['child_task_keys']['value']=['uid:2']
+        changed['tasks'][1]['name']='Replacement task'
+        changed['tasks'][1]['percent_complete']={'value':'47.375','quality':'ok','reason':None}
+        changed['dependencies']=[];changed['collections']['dependencies']['count']=0
+        changed['collections']['tasks']['count']=len(changed['tasks'])
+        c['source'].write_bytes(c['source'].read_bytes()+b' changed source removes task and relation')
+        changed['provenance'].update(sha256=hashlib.sha256(c['source'].read_bytes()).hexdigest(),size_bytes=c['source'].stat().st_size)
+        c['export']=changed
+        second=pipeline.publish_prepared(c['client'],prepare(c))
+        assert second.exit_code==0 and second.receipt['published'] is True,second.receipt
+>       assert second.counters['POST']==second.counters['PUT']==1
+E       assert 1 == 0
+
+skills/productivity/edit-plan-confluence/tests/test_publish_replacement.py:34: AssertionError
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-6-replacement/reports/junit.xml -
+=========================== short test summary info ============================
+FAILED skills/productivity/edit-plan-confluence/tests/test_publish_replacement.py::test_full_replacement_retains_macro_and_repeat_versions
+1 failed in 3.59s

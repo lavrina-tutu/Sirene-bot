@@ -1,0 +1,6 @@
+{
+  "source_tree_sha256": "22f7be6e79a92ba0bccef8ab6714cc65e8d673e17bfc88c152110b49fb1776f7",
+  "checked_sources": 208,
+  "changed_sources": [],
+  "scope": "Working bytes equal final pytest source hashes before post-run inventory/journal metadata; commit blobs are checked after commit."
+}

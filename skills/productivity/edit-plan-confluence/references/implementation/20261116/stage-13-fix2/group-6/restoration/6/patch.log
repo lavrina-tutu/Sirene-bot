@@ -1,0 +1,8 @@
+patching file mofs_index/plan/identity.py
+patching file mofs_index/plan/query.py
+patching file mofs_index/plan/schema.py
+patching file mofs_index/plan/writer.py
+patching file tests/plan/test_batch_decisions.py
+patching file tests/plan/test_identity.py
+patching file tests/plan/test_migrate.py
+patching file tests/plan/test_query.py

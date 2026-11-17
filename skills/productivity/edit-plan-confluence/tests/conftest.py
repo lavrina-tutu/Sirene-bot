@@ -1946,7 +1946,7 @@ STAGE13_REQUIRED = _stage13_required()
 
 def _stage13_sources():
     hashes = _stage12_sources()
-    files = [*SKILL_ROOT.joinpath('tests/acceptance').glob('*.py'), STAGE13_MATRIX,
+    files = [*SKILL_ROOT.joinpath('tests').glob('*.py'), *SKILL_ROOT.joinpath('tests/acceptance').glob('*.py'), STAGE13_MATRIX,
              SKILL_ROOT/'tests/conftest.py', SKILL_ROOT/'tests/pytest.ini',
              *FIXTURES.rglob('*.mpp'), *FIXTURES.rglob('*manifest.json')]
     hashes.update({str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in files if p.is_file()})
@@ -2372,7 +2372,7 @@ def _stage13_report(session, exitstatus, root):
         'live_pages':live_pages, 'production_pages_excluded':sorted(STAGE13_PRODUCTION_PAGES),
         'execution_order':'execution-order.json',
         'limitations':['Acceptance of §20 only; §19 W5/ZD/AC-101…144 remains independent.',
-            'Master v0.5.1 with separate §21; acceptance norms clarified before this corrective run. Original archived stages 01–13 and failed commit 92bea3f are preserved.',
+            'Master v0.5.2 with separate §21; fix2 separates source facts, display and schedule. Original archived stages 01–13 and failed cycles remain preserved.',
             'Product defects belong to earlier stages and are reported, not repaired in stage 13.',
             'No token economy claim: tokens were not measured.',
             'Process-death tests do not model power loss. Gateway, cron and watchers are unchanged.',

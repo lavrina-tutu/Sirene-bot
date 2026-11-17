@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+  "observed_at": "2026-11-17T12:43:03.447842+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_new_binary_identity_to_pu1/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
+    "identity",
+    "confirm",
+    "--project-slug",
+    "stage13-binary-positive",
+    "--from",
+    "snapshot:snapshot_8bb02a4cce4c47a5adc349bb80db1e52",
+    "--to",
+    "snapshot:snapshot_1ef6b4680196427289780b9ec4a3a97a",
+    "--mode",
+    "continuity",
+    "--evidence",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_new_binary_identity_to_pu1/test-only-user-evidence.txt",
+    "--reason",
+    "Explicit test fixture identity: same documented binary recipe and stable task UIDs"
+  ],
+  "rc": 0,
+  "duration_seconds": 0.6205430470290594,
+  "stdout": "{\"schema_version\": 1, \"action\": \"identity_confirm\", \"status\": \"confirmed\", \"exit_code\": 0, \"project_slug\": \"stage13-binary-positive\", \"from_snapshot_id\": \"snapshot_8bb02a4cce4c47a5adc349bb80db1e52\", \"to_snapshot_id\": \"snapshot_1ef6b4680196427289780b9ec4a3a97a\", \"from_source_sha256\": \"7aea0277b7a3d08fc19d17a67529022f35cea0a35e5938110c1ab433c9a02b4b\", \"to_source_sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"mapping_revision_id\": \"mapping_dd6fe865d66b4d0b9e4875994c93df66\", \"revision_status\": \"active\", \"evidence_id\": \"artifact_34bf7befb3ca452288383c822814f3f4\", \"evidence_sha256\": \"99cd720acf36d9e4e0ff602a8ded67afabf1b34dc270ad69bfcedd08ebd4f9de\", \"published\": false, \"error\": null}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 0,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0,
+    "calls": []
+  }
+}

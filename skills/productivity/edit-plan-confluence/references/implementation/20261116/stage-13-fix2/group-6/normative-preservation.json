@@ -1,0 +1,30 @@
+{
+  "backup": "/home/tkachenkoav/WorkVault_backup/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ_snapshots-20261117-145510.tgz",
+  "checks": {
+    "master_A-F_hashes_counts_work": {
+      "unchanged": true,
+      "before_sha256": "4bb15826c50c44c4056c628c08b84ec65e67f5b458782b2a361688ba622e0072",
+      "after_sha256": "4bb15826c50c44c4056c628c08b84ec65e67f5b458782b2a361688ba622e0072"
+    },
+    "plan_15_3_hashes_counts_work": {
+      "unchanged": true,
+      "before_sha256": "6b0a865de75fd2922f9fefe2daa929d84a7a6fa68205042a142d340dcae32145",
+      "after_sha256": "6b0a865de75fd2922f9fefe2daa929d84a7a6fa68205042a142d340dcae32145"
+    },
+    "plan_15_5_cases": {
+      "unchanged": true,
+      "before_sha256": "4f571632a030c23e2103f7a8223cfc09536dae31d1995f9c536a2173a2593ffd",
+      "after_sha256": "4f571632a030c23e2103f7a8223cfc09536dae31d1995f9c536a2173a2593ffd"
+    },
+    "plan_15_7_full_command": {
+      "unchanged": true,
+      "before_sha256": "a1bc29edf1a9699217a4eab84e87797817ea5ecb70c1dee545b48b13dc4d826d",
+      "after_sha256": "a1bc29edf1a9699217a4eab84e87797817ea5ecb70c1dee545b48b13dc4d826d"
+    },
+    "plan_full_gate": {
+      "unchanged": true,
+      "before_sha256": "3bf82021b0669c200880c07a16a0a06bfcd08315b08019c35376bfb918a63319",
+      "after_sha256": "3bf82021b0669c200880c07a16a0a06bfcd08315b08019c35376bfb918a63319"
+    }
+  }
+}

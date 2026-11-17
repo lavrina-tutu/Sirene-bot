@@ -1,0 +1,78 @@
+{
+  "A": {
+    "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_publish_repeat_and_o0/state/index.sqlite",
+    "snapshot_id": "snapshot_c1a9fa71c72242ac819daed84872fad9",
+    "source_fields_exact_in_each_task_version": true,
+    "task_count": 58,
+    "same_normalized_source_as_cycle1": true,
+    "collection_status": {
+      "assignments": "complete",
+      "baseline_values": "complete",
+      "calendars": "complete",
+      "dependencies": "complete",
+      "external_dependencies": "complete",
+      "resources": "complete",
+      "tasks": "complete"
+    },
+    "source_mpp_sha256": "7705e0c07dc06f5b0b8d66e245f4e84b9b0aa32536ec8e758125ed2a59b15b89",
+    "normalized_archive_bytes_exact": true,
+    "all_six_fields_present": true
+  },
+  "B": {
+    "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_publish_repeat_and_o1/state/index.sqlite",
+    "snapshot_id": "snapshot_6e115a48fefd484bb7585ece272888fa",
+    "source_fields_exact_in_each_task_version": true,
+    "task_count": 62,
+    "same_normalized_source_as_cycle1": true,
+    "collection_status": {
+      "assignments": "complete",
+      "baseline_values": "complete",
+      "calendars": "complete",
+      "dependencies": "complete",
+      "external_dependencies": "complete",
+      "resources": "complete",
+      "tasks": "complete"
+    },
+    "source_mpp_sha256": "216a40df95e70c635548147160c137fc28824589723b05abc7c397920c2e6317",
+    "normalized_archive_bytes_exact": true,
+    "all_six_fields_present": true
+  },
+  "C": {
+    "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_publish_repeat_and_o2/state/index.sqlite",
+    "snapshot_id": "snapshot_6723236eda5249a989befc957603590d",
+    "source_fields_exact_in_each_task_version": true,
+    "task_count": 62,
+    "same_normalized_source_as_cycle1": true,
+    "collection_status": {
+      "assignments": "complete",
+      "baseline_values": "complete",
+      "calendars": "complete",
+      "dependencies": "complete",
+      "external_dependencies": "complete",
+      "resources": "complete",
+      "tasks": "complete"
+    },
+    "source_mpp_sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
+    "normalized_archive_bytes_exact": true,
+    "all_six_fields_present": true
+  },
+  "D": {
+    "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/final/pytest-tmp/test_real_publish_repeat_and_o3/state/index.sqlite",
+    "snapshot_id": "snapshot_79641b6fd2d5453e83e54544d2ab7806",
+    "source_fields_exact_in_each_task_version": true,
+    "task_count": 72,
+    "same_normalized_source_as_cycle1": true,
+    "collection_status": {
+      "assignments": "complete",
+      "baseline_values": "complete",
+      "calendars": "complete",
+      "dependencies": "complete",
+      "external_dependencies": "complete",
+      "resources": "complete",
+      "tasks": "complete"
+    },
+    "source_mpp_sha256": "82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9",
+    "normalized_archive_bytes_exact": true,
+    "all_six_fields_present": true
+  }
+}

@@ -1,0 +1,1887 @@
+{
+  "calls": [
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[actuals-stop-resume]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[actuals-stop-resume]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[actuals-stop-resume]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[actuals-stop-resume]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[actuals]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[actuals]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[actuals]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[actuals]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[assignment-dates]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[assignment-dates]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[assignment-dates]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[assignment-dates]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[calendar-inheritance]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[calendar-inheritance]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[calendar-inheritance]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[calendar-inheritance]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-FINISH_NO_EARLIER_THAN]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-FINISH_NO_EARLIER_THAN]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-FINISH_NO_EARLIER_THAN]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-FINISH_NO_EARLIER_THAN]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-START_NO_EARLIER_THAN]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-START_NO_EARLIER_THAN]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-START_NO_EARLIER_THAN]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-START_NO_EARLIER_THAN]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[default-availability]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[default-availability]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[default-availability]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[default-availability]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[fixed-units]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[fixed-units]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[fixed-units]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[fixed-units]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[inactive]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[inactive]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[inactive]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[inactive]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-availability]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-availability]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-availability]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-availability]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-calendar]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-calendar]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-calendar]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[resource-calendar]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[segments]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[segments]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[segments]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[segments]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[summary-dependency]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[summary-dependency]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[summary-dependency]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[summary-dependency]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367/child/attachment/537575368/data"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575367/gantt-chart-4c80d3bc369f47da9dca8ef78d3a8085.json"
+    },
+    {
+      "test_id": "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575367"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398/child/attachment/537575399/data"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575399"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575398/gantt-chart-c1006f0152674177a3af014df2296406.json"
+    },
+    {
+      "test_id": "test_plugin_controls_live.py::test_installed_plugin_controls_live",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575398"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575418"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575417/gantt-chart-19d34ffc28294438bed616ba5021c96a.json"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575418"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575417/gantt-chart-19d34ffc28294438bed616ba5021c96a.json"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "PUT",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575418"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575417/gantt-chart-19d34ffc28294438bed616ba5021c96a.json"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575418"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575417/gantt-chart-19d34ffc28294438bed616ba5021c96a.json"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417"
+    },
+    {
+      "test_id": "test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575417/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_live_get_test_page",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "PUT",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "PUT",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment/537575423/data"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575423"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575422/gantt-chart-82fa78afeb204797b68a87663767f6d7.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575422/child/page"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575431"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575428/gantt-chart-a99d3334695e41beafa164310f8cdee1.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575431"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575428/gantt-chart-a99d3334695e41beafa164310f8cdee1.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428/child/attachment"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575431"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575428/gantt-chart-a99d3334695e41beafa164310f8cdee1.json"
+    },
+    {
+      "test_id": "test_rest_live.py::test_stage10_live_recovery_idempotency_and_child",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575428/child/attachment"
+    },
+    {
+      "test_id": "test_source_values_live.py::test_real_plan_observer_reads_visible_values",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575432/child/attachment"
+    },
+    {
+      "test_id": "test_source_values_live.py::test_real_plan_observer_reads_visible_values",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575432/child/attachment"
+    },
+    {
+      "test_id": "test_source_values_live.py::test_visible_source_values_and_reopen",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575432/child/attachment"
+    },
+    {
+      "test_id": "test_source_values_live.py::test_visible_source_values_and_reopen",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575432/child/attachment/537575433/data"
+    },
+    {
+      "test_id": "test_source_values_live.py::test_visible_source_values_and_reopen",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537575432/gantt-chart-f496647264094314942d25668ba6b753.json"
+    },
+    {
+      "test_id": "test_source_values_live.py::test_visible_source_values_and_reopen",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575432"
+    },
+    {
+      "test_id": "test_source_values_live.py::test_visible_source_values_and_reopen",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575432"
+    },
+    {
+      "test_id": "test_source_values_live.py::test_visible_source_values_and_reopen",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575432/child/attachment"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575442"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575442"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575448"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575448"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575452"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575454"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[C]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[C]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[C]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575455"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]",
+      "method": "POST",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content"
+    },
+    {
+      "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537575456"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572836"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572836"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537572835/gantt-chart-9703cf3f5bb14f92ad39f3db5b07e5ee.json"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572835"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572836"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537572835/gantt-chart-9703cf3f5bb14f92ad39f3db5b07e5ee.json"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572835"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572835/child/attachment"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572835"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572836"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/download/attachments/537572835/gantt-chart-9703cf3f5bb14f92ad39f3db5b07e5ee.json"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572835"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572835/child/attachment"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572835"
+    },
+    {
+      "test_id": "test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope",
+      "method": "GET",
+      "origin": "dom.tutu.ru",
+      "path": "/rest/api/content/537572836"
+    }
+  ],
+  "pages": [
+    "519501810",
+    "537572835",
+    "537575367",
+    "537575398",
+    "537575417",
+    "537575422",
+    "537575428",
+    "537575432",
+    "537575440",
+    "537575441",
+    "537575442",
+    "537575448",
+    "537575452",
+    "537575454",
+    "537575455",
+    "537575456"
+  ],
+  "counts": {
+    "GET": 263,
+    "POST": 44,
+    "PUT": 3
+  }
+}

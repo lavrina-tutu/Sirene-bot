@@ -50,48 +50,89 @@ def live_page(tmp_path, request, monkeypatch, stage13_record):
         'POST': sum(c['method']=='POST' for c in calls), 'PUT': sum(c['method']=='PUT' for c in calls)})
 
 
-def observe_plugin(client, page_id, expected, request, folder):
-    """Read-only browser: observe the actual attachment and runtime project."""
+def observe_plugin(client, page_id, expected, request, folder, *, attachment_version, browser_context=None):
+    """Read-only normal view: dates, raw facts, rendered cells and reopening."""
     root = getattr(request.config, '_acceptance_root', folder)
     if (root/'browser-deps').is_dir(): sys.path.insert(0, str(root/'browser-deps'))
     if (root/'browsers').is_dir(): os.environ['PLAYWRIGHT_BROWSERS_PATH'] = str(root/'browsers')
     from playwright.sync_api import sync_playwright
     from urllib.parse import urlsplit
-    received = []
-    with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(headless=True, args=['--no-sandbox'])
-        ctx = browser.new_context(timezone_id='Europe/Moscow', extra_http_headers={'Cache-Control':'no-cache'})
+    from mpp_convert import SOURCE_COLUMNS
+    from plugin_profile import PluginProfile
+    from plan_publication_verify import verify_source_value_observation
+    folder.mkdir(parents=True, exist_ok=True)
+    observation = {'page_id':page_id, 'attachment_version':attachment_version,
+        'input_sha256':hashlib.sha256(expected).hexdigest(), 'openings':[]}
+    from contextlib import ExitStack
+    with ExitStack() as stack:
+        if browser_context is None:
+            playwright=stack.enter_context(sync_playwright())
+            browser=playwright.chromium.launch(headless=True,args=['--no-sandbox'])
+            ctx=browser.new_context(timezone_id='Europe/Moscow',extra_http_headers={'Cache-Control':'no-cache'})
+        else:
+            browser=None;ctx=browser_context
         def route(r):
-            if urlsplit(r.request.url).netloc != urlsplit(client.base_url).netloc:
-                r.abort(); return
-            if r.request.method not in ('GET','HEAD'):
+            if (urlsplit(r.request.url).netloc != urlsplit(client.base_url).netloc
+                    or r.request.method not in ('GET','HEAD')):
                 r.abort(); return
             r.continue_(headers={**r.request.headers, 'Authorization':'Bearer '+client.token})
-        ctx.route('**/*', route)
-        page = ctx.new_page()
-        def capture(response):
-            if response.status == 200 and '/download/attachments/'+page_id+'/' in response.url:
-                received.append({'url':response.url, 'bytes':response.body()})
-        page.on('response', capture)
-        page.goto(client.base_url+'/pages/viewpage.action?pageId='+page_id, wait_until='domcontentloaded', timeout=60000)
-        frame = page.wait_for_selector('iframe[src*="gantt-chart.html"]', timeout=45000).content_frame()
-        assert frame is not None
-        frame.wait_for_function('() => window.gantt?.project?.eventStore?.allRecords?.length > 1', timeout=45000)
-        observation = frame.evaluate('''async () => {
-            await gantt.project.commitAsync();
-            const local = d => d && [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')+'T'+[d.getHours(),d.getMinutes(),d.getSeconds()].map(x=>String(x).padStart(2,'0')).join(':');
-            return {build:__NEXT_DATA__.buildId, engine_version:bryntum.getVersion('gantt'),
-                tasks:gantt.project.eventStore.allRecords.map(t=>({id:t.id,name:t.name,start:local(t.startDate),finish:local(t.endDate),milestone:t.isMilestone})),
-                dependency_count:gantt.project.dependencyStore.count};
-        }''')
-        observation['confluence_version'] = page.locator('meta[name="ajs-version-number"]').get_attribute('content')
-        assert received and received[-1]['bytes'] == expected
-        observation['browser_received_sha256'] = hashlib.sha256(received[-1]['bytes']).hexdigest()
-        folder.mkdir(parents=True, exist_ok=True)
-        (folder/'browser-received.json').write_bytes(received[-1]['bytes'])
-        frame.locator('body').screenshot(path=str(folder/'render.png'))
-        ctx.unroute_all(behavior='wait')
-        browser.close()
+        if browser_context is None:ctx.route('**/*', route)
+        try:
+            for opening in range(2):
+                page = ctx.new_page(); received=[]
+                def capture(response):
+                    if response.status == 200 and '/download/attachments/'+page_id+'/' in response.url:
+                        received.append(response.body())
+                    for key, suffix in [('asset_sha256','7b1ccf34.b54da94330ce3dd5.js'),
+                                        ('wrapper_asset_sha256','103.dc91403c7e11c30e.js')]:
+                        if response.status==200 and response.url.endswith(suffix):
+                            observation[key]=hashlib.sha256(response.body()).hexdigest()
+                page.on('response', capture)
+                try:
+                    page.goto(client.base_url+'/pages/viewpage.action?pageId='+page_id, wait_until='domcontentloaded', timeout=60000)
+                    frame = page.wait_for_selector('iframe[src*="gantt-chart.html"]', timeout=45000).content_frame()
+                    frame.wait_for_function('() => window.gantt?.project?.eventStore?.allRecords?.length > 1', timeout=45000)
+                    data = frame.evaluate("""async () => {
+                        await gantt.project.commitAsync();
+                        const local = d => d && [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')+'T'+[d.getHours(),d.getMinutes(),d.getSeconds()].map(x=>String(x).padStart(2,'0')).join(':');
+                        return {build:__NEXT_DATA__.buildId,engine_version:bryntum.getVersion('gantt'),readOnly:gantt.readOnly,
+                            tasks:gantt.project.eventStore.allRecords.map(t=>({id:t.id,name:t.name,start:local(t.startDate),finish:local(t.endDate),milestone:t.isMilestone,percentDone:t.percentDone,status:t.status,model:t.toJSON(),persistable:t.persistableData})),
+                            columns:gantt.columns.records.map(c=>({id:c.id,field:c.field,hidden:c.hidden})),
+                            dependency_count:gantt.project.dependencyStore.count};
+                    }""")
+                    assert received and received[-1] == expected
+                    observation.update(build=data['build'],engine_version=data['engine_version'],
+                        confluence_version=page.locator('meta[name="ajs-version-number"]').get_attribute('content'),
+                        browser_received_sha256=hashlib.sha256(received[-1]).hexdigest())
+                    (folder/('browser-received-'+str(opening)+'.json')).write_bytes(received[-1])
+                    columns={c['id']:c for c in data['columns']};data['visible_values']={}
+                    assert all(columns[c]['hidden'] is False for c in ('status','percentdone','startdate','enddate','duration'))
+                    # Expanding/scrolling is ordinary viewing, without changing schedule fields.
+                    frame.evaluate('async()=>{await gantt.expandAll();return null;}')
+                    for column,_ in SOURCE_COLUMNS.values():
+                        assert columns[column]['hidden'] is False
+                        frame.evaluate('async(id)=>{await gantt.scrollColumnIntoView(gantt.columns.getById(id));return null;}',column)
+                        values=[]
+                        for task in data['tasks']:
+                            frame.evaluate('async(id)=>{await gantt.scrollRowIntoView(id);return null;}',task['id'])
+                            cell=frame.locator('.b-grid-row[data-id="'+str(task['id'])+'"] .b-grid-cell[data-column="'+column+'"]')
+                            assert cell.count()==1
+                            text=cell.inner_text().strip();values.append(text)
+                            assert text==task['model'][column]
+                        data['visible_values'][column]=values
+                        if opening==0:page.screenshot(path=str(folder/('visible-'+column+'.png')),full_page=True)
+                    observation['openings'].append(data)
+                    page.screenshot(path=str(folder/('render-'+str(opening)+'.png')),full_page=True)
+                finally:page.close()
+        finally:
+            if browser is not None:
+                ctx.unroute_all(behavior='wait');browser.close()
+    observation['tasks']=observation['openings'][0]['tasks']
+    observation['dependency_count']=observation['openings'][0]['dependency_count']
+    observation['source_values_verification']=verify_source_value_observation(json.loads(expected),observation,
+        plugin_profile=PluginProfile.load(),page_id=page_id,attachment_version=attachment_version)
+    assert observation['source_values_verification']['status']=='verified'
+    (folder/'observation.json').write_text(json.dumps(observation,ensure_ascii=False,indent=2)+'\n')
     return observation
 
 
@@ -138,7 +179,7 @@ def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, 
             attachment_version_after=result['attachment_version'], expected_sha256=hashlib.sha256(expected).hexdigest(),
             received_sha256=hashlib.sha256(received).hexdigest())
         root = request.config._acceptance_root
-        observation = observe_plugin(client, page_id, expected, request, root/'live-stage13'/case)
+        observation = observe_plugin(client, page_id, expected, request, root/'live-stage13'/case, attachment_version=result['attachment_version'])
         status['plugin_observation'] = observation
         normalized = json.loads(snapshot['source_json'])
         source_dates = {str(t['id']):t for t in normalized['tasks'] if t.get('id') != 0}

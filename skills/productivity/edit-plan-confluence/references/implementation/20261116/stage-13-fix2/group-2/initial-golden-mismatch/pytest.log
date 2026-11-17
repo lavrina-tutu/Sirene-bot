@@ -1,0 +1,24 @@
+.............................F......                                     [100%]
+=================================== FAILURES ===================================
+____________________ test_prepared_golden_bytes_and_storage ____________________
+
+stage08_export = {'assignments': [{'actual_finish': {'quality': 'missing', 'reason': 'not_set', 'value': None}, 'actual_start': {'quali...or': {'quality': 'ok', 'reason': None}, 'successor': {'quality': 'ok', 'reason': None}}, 'external': False, ...}], ...}
+stage08_profile = stage08_profile.<locals>.UnitProfile(document={'schema_version': 1, 'id': 'installed-gantt-profile', 'version': 'unit-...e.json', 'sha256': '9f76bf74a207433507241f97ac97caaef4898571aaeba12401ce4117c2c377a4'}}, 'limitations': ['unit-only']})
+
+    def test_prepared_golden_bytes_and_storage(stage08_export,stage08_profile):
+        import hashlib,json
+        golden=Path(__file__).parent/'fixtures/golden'
+        for item in json.loads((golden/'manifest.json').read_text())['fixtures']:
+            assert hashlib.sha256((golden/item['path']).read_bytes()).hexdigest()==item['sha256']
+        result=convert_prepared_plan(PreparedPlan.from_export(stage08_export,timezone_hint='Europe/Moscow'),plugin_profile=stage08_profile)
+>       assert representation_bytes(result)==(golden/'prepared-unit-gantt.json').read_bytes()
+E       assert b'{"assignmen...05T09:00:00"}' == b'{"assignmen...05T09:00:00"}'
+E         
+E         At index 3908 diff: b'f' != b't'
+E         Use -v to get more diff
+
+skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py:313: AssertionError
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-2/reports/junit.xml -
+=========================== short test summary info ============================
+FAILED skills/productivity/edit-plan-confluence/tests/test_mpp_convert.py::test_prepared_golden_bytes_and_storage
+1 failed, 35 passed in 8.39s

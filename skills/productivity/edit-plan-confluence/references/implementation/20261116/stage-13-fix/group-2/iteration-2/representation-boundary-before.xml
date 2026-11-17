@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.884" timestamp="2026-11-17T13:26:33.948495+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_corrective_representation" name="test_zero_work_unassigned_milestone_never_hides_a_declared_missing_resource" time="0.773"><failure message="AssertionError: assert ([] == []&#10;  &#10;  Use -v to get more diff and not [{'basis': 'no_resource_and_all_work_known_zero_milestone_duration_zero_coincident_dates', 'entity': 'a1', 'field': 'resource_key', 'kind': 'zero_work_unassigned_milestone', ...}])">def test_zero_work_unassigned_milestone_never_hides_a_declared_missing_resource():
+        from mpp_convert import build_assignments
+        def field(value):return {'value':value,'quality':'ok','reason':None}
+        task={'task_key':'uid:1','milestone':True,'duration':{'quantity':{'amount':'0'}},
+              'start':field('2026-01-05T09:00:00'),'finish':field('2026-01-05T09:00:00')}
+        assignment={'assignment_key':'a1','task_key':'uid:1','resource_key':None,
+            'resource_uid':{'value':None,'quality':'missing','reason':'not_set'},
+            'start':deepcopy(task['start']),'finish':deepcopy(task['finish']),
+            'segments':field([]),'units':field('100')}
+        for name in ('work','actual_work','remaining_work','overtime_work'):
+            assignment[name]={'quality':'ok','quantity':{'amount':'0'}}
+        diagnostics=[];transforms=[]
+        result=build_assignments([assignment],{'uid:1':1},{},2,diagnostics=diagnostics,
+            source_tasks={'uid:1':task},transformations=transforms)
+        assert result==[] and not diagnostics and transforms[0]['kind']=='zero_work_unassigned_milestone'
+        # Same zero work/date values, but source explicitly names an absent resource.
+        assignment.update(resource_key='external:resource:uid:99999',resource_uid=field(99999))
+        diagnostics=[];transforms=[]
+        result=build_assignments([assignment],{'uid:1':1},{},2,diagnostics=diagnostics,
+            source_tasks={'uid:1':task},transformations=transforms)
+&gt;       assert result==[] and not transforms
+E       AssertionError: assert ([] == []
+E         
+E         Use -v to get more diff and not [{'basis': 'no_resource_and_all_work_known_zero_milestone_duration_zero_coincident_dates', 'entity': 'a1', 'field': 'resource_key', 'kind': 'zero_work_unassigned_milestone', ...}])
+
+tests/test_corrective_representation.py:101: AssertionError</failure></testcase></testsuite></testsuites>

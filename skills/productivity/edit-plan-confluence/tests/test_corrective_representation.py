@@ -76,3 +76,28 @@ def test_supported_fields_and_segment_working_duration(stage08_export,stage08_pr
     task['duration']['quantity']['amount']='3'
     c=convert_prepared_plan(PreparedPlan.from_export(d,timezone_hint='Europe/Moscow'),plugin_profile=stage08_profile)
     assert any(x['code']=='segment_duration_source_mismatch' for x in c['diagnostics'])
+
+
+def test_zero_work_unassigned_milestone_never_hides_a_declared_missing_resource():
+    from mpp_convert import build_assignments
+    def field(value):return {'value':value,'quality':'ok','reason':None}
+    task={'task_key':'uid:1','milestone':True,'duration':{'quantity':{'amount':'0'}},
+          'start':field('2026-01-05T09:00:00'),'finish':field('2026-01-05T09:00:00')}
+    assignment={'assignment_key':'a1','task_key':'uid:1','resource_key':None,
+        'resource_uid':{'value':None,'quality':'missing','reason':'not_set'},
+        'start':deepcopy(task['start']),'finish':deepcopy(task['finish']),
+        'segments':field([]),'units':field('100')}
+    for name in ('work','actual_work','remaining_work','overtime_work'):
+        assignment[name]={'quality':'ok','quantity':{'amount':'0'}}
+    diagnostics=[];transforms=[]
+    result=build_assignments([assignment],{'uid:1':1},{},2,diagnostics=diagnostics,
+        source_tasks={'uid:1':task},transformations=transforms)
+    assert result==[] and not diagnostics and transforms[0]['kind']=='zero_work_unassigned_milestone'
+    # Same zero work/date values, but source explicitly names an absent resource.
+    for resource_key in (None,'external:resource:uid:99999'):
+        assignment.update(resource_key=resource_key,resource_uid=field(99999))
+        diagnostics=[];transforms=[]
+        result=build_assignments([assignment],{'uid:1':1},{},2,diagnostics=diagnostics,
+            source_tasks={'uid:1':task},transformations=transforms)
+        assert result==[] and not transforms
+        assert any(d['code']=='assignment_partial' for d in diagnostics)

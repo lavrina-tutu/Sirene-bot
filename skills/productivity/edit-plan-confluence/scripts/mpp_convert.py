@@ -442,7 +442,11 @@ def build_assignments(assignments, task_mapping, resource_mapping, start_id, *, 
         source_task=(source_tasks or {}).get(a.get('task_key'))
         from mpp_calendar import coincident_assignment_interval
         coincident=coincident_assignment_interval(a,source_task)
-        if (resource is None and source_task and source_task.get('milestone') is True
+        if (resource is None and a.get('resource_key') is None
+                and a.get('resource_uid',{}).get('quality') == 'missing'
+                and a.get('resource_uid',{}).get('reason') == 'not_set'
+                and a.get('resource_uid',{}).get('value') is None
+                and source_task and source_task.get('milestone') is True
                 and source_task.get('duration',{}).get('quantity',{}).get('amount')=='0'
                 and coincident and all(a.get(field,{}).get('quality')=='ok'
                     and a.get(field,{}).get('quantity',{}).get('amount')=='0'

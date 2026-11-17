@@ -1,0 +1,21 @@
+{
+  "version": "0.5.3",
+  "authorization": "User executor prompt D3; canonical plan §1.1.1 manual execution",
+  "files": [
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md",
+      "before_sha256": "3a12400e67232a22c8c93bb134690c02321e8ad517b1b82118d49f8a57b73777",
+      "after_sha256": "3872ee1a0cfd7c972cc5efa328c1e21fd5259d845174a2432eb4dfffc3ae660b"
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md",
+      "before_sha256": "2bf05bfb08a832f8a58f4fa850d8aaddafc674710fefa8ce9a8c06ccd3ed6fb9",
+      "after_sha256": "69247801bb5f0b76cdc902273d27b39dae5807a9755d1deda1e99192aaed1b51"
+    },
+    {
+      "path": "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md",
+      "before_sha256": "52e7d5ca63ec9db969cb7014df7a8e9265f59fb20b9e758e5e1f24e647048dd6",
+      "after_sha256": "bbb6092d1fc285fda106e6eb9b6f7d760ef1aa080dd780dcc1f55a1deba8fba5"
+    }
+  ]
+}

@@ -73,6 +73,15 @@ def apply_rules(conn, operation_id, prepared, conversion, *, mapping_revision=No
                 and not any(r['rule_id']==entry['rule_id'] for r in rules)):
             results.append({'rule_id':entry['rule_id'],'rule_revision':entry['revision'],'mapping_revision_id':None,
                 'status':'inactive','reason':'rule_reference_or_evidence_missing','evidence_id':None})
+            recovery=entry.get('recovery')
+            if recovery:
+                import hashlib
+                path=(ROOT/recovery['evidence_path']).resolve()
+                if ROOT.resolve() not in path.parents or hashlib.sha256(path.read_bytes()).hexdigest()!=recovery['evidence_sha256']:
+                    raise ValueError('historical_rule_recovery_evidence_integrity')
+                # A legacy snapshot/source is provenance, not an active local
+                # rule binding or a new identity confirmation.
+                results[-1]['recovery']=deepcopy(recovery)
             findings.append(finding('identity','rule_reference_or_evidence_missing',entry['rule_id'],entry))
     counts=Counter(r['rule_id'] for r in rules)
     for rule in rules:

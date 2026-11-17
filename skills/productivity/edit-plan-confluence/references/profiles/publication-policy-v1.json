@@ -1,16 +1,12 @@
 {
   "id": "publication-admission-v1",
-  "version": 1,
+  "version": 2,
   "date_precision": "minute",
   "date_tolerance_seconds": 60,
   "nonimpact_fields": [
     "collections.baseline_values",
     "tasks.*.baseline_values*",
     "tasks.*.baselines*",
-    "assignments.*.timephased*",
-    "assignments.*.work",
-    "assignments.*.actual_work",
-    "assignments.*.remaining_work",
     "resources.*.cost*",
     "resources.*.standard_rate*",
     "resources.*.overtime_rate*",
@@ -27,11 +23,9 @@
     "tasks.*.total_slack",
     "tasks.*.free_slack",
     "tasks.*.field_quality.notes",
-    "tasks.*.quality_issues",
-    "dependencies.*.driving",
-    "dependencies.*.quality_issues"
+    "dependencies.*.driving"
   ],
-  "nonimpact_basis": "These fields are not serialized as scheduling inputs, dependency/calendar bindings, dates or summary N. Assignment work quality stays in the work diagnostic and never implies complete work extraction.",
+  "nonimpact_basis": "Only explicitly named non-scheduling/non-summary fields with recognized extraction failures; partial collections require complete row and cause enumeration. quality_issues are exact provenance mirrors, never permissions. Work and timephased failures can affect represented effort or progress.",
   "known_absence_reasons": [
     "not_set",
     "not_applicable",
@@ -172,7 +166,8 @@
       "uid",
       "units",
       "work",
-      "work_contour"
+      "work_contour",
+      "raw_timephased"
     ],
     "calendars": [
       "calendar_key",
@@ -218,5 +213,13 @@
       "start_date",
       "status_date"
     ]
-  }
+  },
+  "known_failure_reasons": [
+    "getter_unavailable",
+    "getter_missing"
+  ],
+  "known_failure_reason_patterns": [
+    "getter_unavailable:[A-Za-z][A-Za-z0-9_]*",
+    "getter_failed:[A-Za-z][A-Za-z0-9_]*:[A-Za-z][A-Za-z0-9_.]*"
+  ]
 }

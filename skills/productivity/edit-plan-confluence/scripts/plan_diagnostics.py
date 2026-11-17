@@ -23,40 +23,113 @@ def finding(category, code, entity, source=None, represented=None, *, model=None
 
 
 def completeness(data, profile):
-    findings=[]
+    """Classify original causes once; aggregate partial never grants permission.
+
+    Quality mirrors contribute provenance only after exact source validation.
+    A fully enumerated collection with only nonimpact field failures can warn;
+    unknown reasons, missing rows or affecting causes remain blockers.
+    """
+    import re
+    from copy import deepcopy
+    issues, mirrors, findings, absences = {}, [], [], set()
+    def canonical(path):
+        return re.sub(r'\[(\d+)\]', r'.\1', path).replace('.field_quality.', '.')
     def nonimpact(path):
         return any(fnmatchcase(path,p) for p in profile['nonimpact_fields'])
+    def known(reason):
+        return isinstance(reason,str) and (reason in profile.get('known_failure_reasons', []) or
+            any(re.fullmatch(pattern,reason) for pattern in profile.get('known_failure_reason_patterns', [])))
+    def add(path, quality, reason, source, origin):
+        if quality=='missing' and reason in profile['known_absence_reasons']:
+            absences.add((canonical(path),quality,reason))
+            return
+        key=canonical(path)
+        identity=(key,quality,reason)
+        if identity not in issues:
+            issues[identity]={'path':key,'quality':quality,'reason':reason,'source':source,'origins':[]}
+        issues[identity]['origins'].append(origin)
     def walk(value,path):
         if isinstance(value,dict):
-            quality=value.get('quality')
-            absent=(quality=='missing' and value.get('reason') in profile['known_absence_reasons'])
-            if quality in ('partial','missing','unsupported') and not absent:
-                findings.append(finding('nonimpact_incomplete' if nonimpact(path) else 'incomplete',
-                    'field_'+quality,path,value))
+            if value.get('quality') in ('partial','missing','unsupported'):
+                add(path,value['quality'],value.get('reason'),value,path)
             if value.get('status') in ('partial','missing','unsupported'):
-                findings.append(finding('nonimpact_incomplete' if nonimpact(path) else 'incomplete',
-                    'nested_collection_'+value['status'],path,value))
+                add(path,value['status'],value.get('reason'),value,path)
             for k,v in value.items():
+                if k=='quality_issues':
+                    mirrors.append((path,v));continue
                 walk(v,path+'.'+k if path else k)
         elif isinstance(value,list):
-            for index,v in enumerate(value): walk(v,path+'.'+str(index))
+            for index,v in enumerate(value):walk(v,path+'.'+str(index))
+    groups=('project','tasks','dependencies','resources','assignments','calendars','external_dependencies')
+    for name in groups:walk(data[name],name)
+    for prefix,rows in mirrors:
+        if not isinstance(rows,list):
+            findings.append(finding('incomplete','invalid_quality_issues',prefix+'.quality_issues',rows));continue
+        for index,row in enumerate(rows):
+            if not isinstance(row,dict):
+                findings.append(finding('incomplete','invalid_quality_issue',prefix+'.quality_issues.'+str(index),row));continue
+            key=canonical(prefix+'.'+str(row.get('field','')))
+            identity=(key,row.get('quality'),row.get('reason'))
+            if identity in absences:
+                continue
+            if identity in issues:
+                issues[identity]['origins'].append(prefix+'.quality_issues.'+str(index))
+            else:
+                # A mirror alone cannot prove its origin or lower its category.
+                findings.append(finding('incomplete','quality_issue_origin_unresolved',key,deepcopy(row)))
+    by_group={}
+    for item in issues.values():
+        path=item['path'];category='nonimpact_incomplete' if nonimpact(path) and known(item['reason']) else 'incomplete'
+        code='field_'+item['quality'] if known(item['reason']) else 'unknown_incompleteness_reason'
+        row=finding(category,code,path,deepcopy(item['source']))
+        row['provenance_paths']=item['origins'][:]
+        findings.append(row);by_group.setdefault(path.split('.')[0],[]).append(row)
     for name,status in data['collections'].items():
-        if status['status']!='complete':
-            findings.append(finding('nonimpact_incomplete' if nonimpact('collections.'+name) else 'incomplete',
-                                    'collection_'+status['status'],name,status))
-    for name in ('project','tasks','dependencies','resources','assignments','calendars','external_dependencies'):
-        walk(data[name],name)
+        if status['status']=='complete':continue
+        rows=(data.get(name) if name!='baseline_values' else [b for t in data['tasks'] for b in t.get('baseline_values',[])])
+        causes=by_group.get(name,[])
+        record_count=status.get('record_count')
+        enumerated=(isinstance(rows,list) and record_count==len(rows)==status.get('count')
+                    and status.get('error_count')==0 and not any('error' in row for row in rows))
+        affected_rows={int(f['entity'].split('.')[1]) for f in causes
+                       if len(f['entity'].split('.'))>1 and f['entity'].split('.')[1].isdigit()}
+        aggregate_reason='read_errors:0;items_with_field_issues:'+str(len(affected_rows))
+        if (status['status']=='partial' and enumerated and causes
+                and status.get('reason')==aggregate_reason):
+            for cause in causes:
+                cause.setdefault('collection_provenance',[]).append({'field':'collections.'+name,'source':deepcopy(status)})
+            continue
+        if name=='dependencies' and status.get('reason')=='raw_relations_discarded':
+            audit=data.get('diagnose_graph',{}).get('raw_relation_enumeration',{})
+            raw=audit.get('value') or {};discarded=data['diagnose_graph'].get('discarded_relation_records')
+            if (audit.get('quality')=='ok' and raw.get('enumeration_complete') is True
+                    and raw.get('expected_count')==raw.get('observed_count')==len(raw.get('records',[]))
+                    and discarded and all(r.get('disposition') in ('self_reference','dangling_endpoint','project_summary_endpoint','short_fixed_data','missing_fixed_data') for r in discarded)):
+                # graph_findings classifies these exact raw records; never warn.
+                continue
+        findings.append(finding('incomplete','collection_'+status['status'],'collections.'+name,deepcopy(status)))
+    audit=data.get('diagnose_graph',{}).get('raw_relation_enumeration')
+    if audit is not None:
+        raw=audit.get('value') or {}
+        if (audit.get('quality')!='ok' or raw.get('enumeration_complete') is not True
+                or raw.get('expected_count')!=raw.get('observed_count')
+                or raw.get('observed_count')!=len(raw.get('records',[]))
+                or audit.get('visible_records_match') is False):
+            findings.append(finding('incomplete','raw_relation_completeness_unproven','diagnose_graph.raw_relation_enumeration',deepcopy(audit)))
     for group,properties in profile['known_record_fields'].items():
         rows=[data[group]] if group=='project' else data[group]
         for index,row in enumerate(rows):
             for key in row.keys()-set(properties):
                 path=group+'.'+str(index)+'.'+key
-                if not nonimpact(path):findings.append(finding('incomplete','unknown_source_field',path,row[key]))
+                # An unknown field has no nonimpact proof, including mirrors.
+                findings.append(finding('incomplete','unknown_source_field',path,deepcopy(row[key])))
     return findings
 
 
 def capability_findings(data, plugin_profile):
     issues=[]
+    from mpp_calendar import default_availability_equivalent, coincident_assignment_interval
+    tasks={t['task_key']:t for t in data['tasks'] if 'error' not in t}
     for task in data['tasks']:
         if task.get('id')==0:continue
         for field in ('actual_start','actual_finish','actual_duration','actual_work','stop','resume'):
@@ -66,12 +139,15 @@ def capability_findings(data, plugin_profile):
             if not empty and not plugin_profile.supports('task:'+field):
                 issues.append(finding('unsupported_semantics','task_actuals_unrepresented:'+field,task['task_key'],raw))
     for resource in data['resources']:
-        if resource.get('availability') and not plugin_profile.supports('resource:availability'):
+        if (resource.get('availability') and not plugin_profile.supports('resource:availability')
+                and not (plugin_profile.supports('resource:default_availability') and default_availability_equivalent(resource,data))):
             issues.append(finding('unsupported_semantics','resource_availability_unrepresented',resource['resource_key'],resource['availability']))
     for assignment in data['assignments']:
         for field in ('start','finish','segments'):
             value=field_value(assignment.get(field))
-            if value not in (None,[]) and not plugin_profile.supports('assignment:'+field):
+            equivalent=(plugin_profile.supports('assignment:coincident_task_interval')
+                        and coincident_assignment_interval(assignment,tasks.get(assignment.get('task_key'))))
+            if value not in (None,[]) and not plugin_profile.supports('assignment:'+field) and not equivalent:
                 issues.append(finding('unsupported_semantics','assignment_semantics_unrepresented:'+field,assignment['assignment_key'],value))
     return issues
 
@@ -100,6 +176,9 @@ def graph_findings(data, *, excluded=()):
         visiting.remove(key);done.add(key)
     for key in sorted(tasks):visit(key,[])
     # Getter-level defects not reconstructible from relation rows cannot vanish.
+    for index,record in enumerate(data['diagnose_graph'].get('discarded_relation_records',[])):
+        findings.append(finding('graph','raw_relation_'+str(record.get('disposition','unknown')),
+            'diagnose_graph.discarded_relation_records.'+str(index),record))
     for key in ('dangling_endpoints','external_records'):
         if data['diagnose_graph'].get(key):findings.append(finding('graph',key,'source_graph',data['diagnose_graph'][key]))
     return findings

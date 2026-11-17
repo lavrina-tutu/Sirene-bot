@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="73" time="56.712" timestamp="2026-11-17T12:33:53.784383+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_corrective_completeness" name="test_nonimpact_partial_proof_keeps_original_and_one_cause" time="0.707"><failure message="AssertionError: assert not [{'category': 'incomplete', 'code': 'quality_issue_origin_unresolved', 'entity': 'dependencies.0.lag_calendar', 'model': None, ...}]">publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+
+    def test_nonimpact_partial_proof_keeps_original_and_one_cause(publish_case):
+        d=data(publish_case);inject(d);before=deepcopy(d)
+        fs=completeness(d,policy_profile())
+        own=[f for f in fs if f['entity']=='tasks.1.late_start']
+        assert len(own)==1 and own[0]['category']=='nonimpact_incomplete'
+        assert own[0]['provenance_paths']==['tasks.1.late_start','tasks.1.quality_issues.0']
+        assert own[0]['collection_provenance'][0]['source']==d['collections']['tasks']
+&gt;       assert not [f for f in fs if f['category']=='incomplete']
+E       AssertionError: assert not [{'category': 'incomplete', 'code': 'quality_issue_origin_unresolved', 'entity': 'dependencies.0.lag_calendar', 'model': None, ...}]
+
+tests/test_corrective_completeness.py:30: AssertionError</failure></testcase><testcase classname="test_corrective_completeness" name="test_partial_proof_fails_closed[influencing]" time="0.549" /><testcase classname="test_corrective_completeness" name="test_partial_proof_fails_closed[unknown_reason]" time="0.608" /><testcase classname="test_corrective_completeness" name="test_partial_proof_fails_closed[row_missing]" time="0.547" /><testcase classname="test_corrective_completeness" name="test_partial_proof_fails_closed[count_missing]" time="0.606" /><testcase classname="test_corrective_completeness" name="test_partial_proof_fails_closed[unknown_mirror]" time="0.624" /><testcase classname="test_corrective_completeness" name="test_partial_proof_fails_closed[mirror_reason_changed]" time="0.624" /><testcase classname="test_corrective_completeness" name="test_partial_proof_fails_closed[extra_cause]" time="0.588" /><testcase classname="test_corrective_completeness" name="test_adding_exact_mirror_does_not_change_classification" time="0.579" /><testcase classname="test_corrective_completeness" name="test_raw_discarded_records_never_become_nonimpact" time="0.658" /><testcase classname="test_corrective_completeness" name="test_policy_does_not_globally_allow_collections_assignments_or_mirrors" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-1]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-2]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-3]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-4]" time="0.001" /><testcase classname="test_admission" name="test_matrix_row[row-5]" time="0.001" /><testcase classname="test_admission" name="test_matrix_row[row-6]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-7]" time="0.001" /><testcase classname="test_admission" name="test_matrix_row[row-8]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-9]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-10]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-11]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-12]" time="0.001" /><testcase classname="test_admission" name="test_matrix_row[row-13]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-14]" time="0.001" /><testcase classname="test_admission" name="test_matrix_row[row-15]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-16]" time="0.003" /><testcase classname="test_admission" name="test_matrix_row[row-17]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-18]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-19]" time="0.002" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-3]" time="0.920" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-4]" time="1.174"><failure message="AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}&#10;assert 5 == 3&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_b06dc6656ce1421cb04c7733cc25b909', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">rule = AdmissionRule(row=4, category='timezone', code=3, consent=False, warning=False)
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7fc890dc7ee0&gt;
+
+    @pytest.mark.parametrize('rule',[r for r in MATRIX if r.code],ids=lambda r:'row-'+str(r.row))
+    def test_matrix_blocker_archives_and_performs_zero_writes(rule,publish_case,monkeypatch):
+        import plan_diagnostics,pipeline
+        c=publish_case;original=plan_diagnostics.diagnose
+        def inject(*a,**kw):
+            d=original(*a,**kw);d['findings'].append(finding(rule.category,rule.category,'controlled-test'));return d
+        monkeypatch.setattr(plan_diagnostics,'diagnose',inject)
+        r=pipeline.publish_plan(c['client'],page_id='test-page',mpp_path=c['source'],project_slug='test',timezone_hint='Europe/Moscow',
+            context=c['context'],export=c['export'],plugin_profile=c['profile'])
+&gt;       assert r.exit_code==(3 if rule.category=='date_mismatch' else rule.code),r.receipt
+E       AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}
+E       assert 5 == 3
+E        +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_b06dc6656ce1421cb04c7733cc25b909', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_admission.py:36: AssertionError</failure></testcase><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-7]" time="1.108" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-8]" time="1.023" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-9]" time="0.989" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-11]" time="1.043"><failure message="AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}&#10;assert 5 == 3&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_9c12582d9d0545a2b9d7d537bfe7976b', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">rule = AdmissionRule(row=11, category='date_mismatch', code=5, consent=True, warning=False)
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7fc89082a4c0&gt;
+
+    @pytest.mark.parametrize('rule',[r for r in MATRIX if r.code],ids=lambda r:'row-'+str(r.row))
+    def test_matrix_blocker_archives_and_performs_zero_writes(rule,publish_case,monkeypatch):
+        import plan_diagnostics,pipeline
+        c=publish_case;original=plan_diagnostics.diagnose
+        def inject(*a,**kw):
+            d=original(*a,**kw);d['findings'].append(finding(rule.category,rule.category,'controlled-test'));return d
+        monkeypatch.setattr(plan_diagnostics,'diagnose',inject)
+        r=pipeline.publish_plan(c['client'],page_id='test-page',mpp_path=c['source'],project_slug='test',timezone_hint='Europe/Moscow',
+            context=c['context'],export=c['export'],plugin_profile=c['profile'])
+&gt;       assert r.exit_code==(3 if rule.category=='date_mismatch' else rule.code),r.receipt
+E       AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}
+E       assert 5 == 3
+E        +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_9c12582d9d0545a2b9d7d537bfe7976b', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_admission.py:36: AssertionError</failure></testcase><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-12]" time="0.947" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-13]" time="0.936"><failure message="AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}&#10;assert 5 == 3&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_37b21456f67a4867b529cafa17735ef0', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">rule = AdmissionRule(row=13, category='binding', code=3, consent=False, warning=False)
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7fc89082ac40&gt;
+
+    @pytest.mark.parametrize('rule',[r for r in MATRIX if r.code],ids=lambda r:'row-'+str(r.row))
+    def test_matrix_blocker_archives_and_performs_zero_writes(rule,publish_case,monkeypatch):
+        import plan_diagnostics,pipeline
+        c=publish_case;original=plan_diagnostics.diagnose
+        def inject(*a,**kw):
+            d=original(*a,**kw);d['findings'].append(finding(rule.category,rule.category,'controlled-test'));return d
+        monkeypatch.setattr(plan_diagnostics,'diagnose',inject)
+        r=pipeline.publish_plan(c['client'],page_id='test-page',mpp_path=c['source'],project_slug='test',timezone_hint='Europe/Moscow',
+            context=c['context'],export=c['export'],plugin_profile=c['profile'])
+&gt;       assert r.exit_code==(3 if rule.category=='date_mismatch' else rule.code),r.receipt
+E       AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}
+E       assert 5 == 3
+E        +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_37b21456f67a4867b529cafa17735ef0', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_admission.py:36: AssertionError</failure></testcase><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-14]" time="0.971"><failure message="AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}&#10;assert 5 == 3&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_17ee412648ed4404aff59fe690543e5c', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">rule = AdmissionRule(row=14, category='identity', code=3, consent=False, warning=False)
+publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7fc890601a60&gt;
+
+    @pytest.mark.parametrize('rule',[r for r in MATRIX if r.code],ids=lambda r:'row-'+str(r.row))
+    def test_matrix_blocker_archives_and_performs_zero_writes(rule,publish_case,monkeypatch):
+        import plan_diagnostics,pipeline
+        c=publish_case;original=plan_diagnostics.diagnose
+        def inject(*a,**kw):
+            d=original(*a,**kw);d['findings'].append(finding(rule.category,rule.category,'controlled-test'));return d
+        monkeypatch.setattr(plan_diagnostics,'diagnose',inject)
+        r=pipeline.publish_plan(c['client'],page_id='test-page',mpp_path=c['source'],project_slug='test',timezone_hint='Europe/Moscow',
+            context=c['context'],export=c['export'],plugin_profile=c['profile'])
+&gt;       assert r.exit_code==(3 if rule.category=='date_mismatch' else rule.code),r.receipt
+E       AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}
+E       assert 5 == 3
+E        +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_17ee412648ed4404aff59fe690543e5c', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_admission.py:36: AssertionError</failure></testcase><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-15]" time="0.934" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-16]" time="0.969" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-17]" time="0.979" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-18]" time="1.136" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-19]" time="1.092" /><testcase classname="test_admission" name="test_specific_proposal_cannot_override_archive_or_profile" time="0.004" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[60-0-task]" time="0.950" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[60-0-milestone]" time="0.891" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[61-5-task]" time="0.845" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[61-5-milestone]" time="0.844" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[-61-5-task]" time="0.896" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[-61-5-milestone]" time="0.973" /><testcase classname="test_admission" name="test_unknown_timezone_never_claims_absolute_date_delta" time="0.854" /><testcase classname="test_admission" name="test_unknown_field_blocks_but_proven_nonimpact_warns" time="1.549"><failure message="AssertionError: assert (5 == 0)&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_682d6870648b47f3bc0c751f00e49d82', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+
+    def test_unknown_field_blocks_but_proven_nonimpact_warns(publish_case):
+        c=publish_case;d=deepcopy(c['export'])
+        d['tasks'][1]['mystery']={'quality':'unsupported','value':None,'reason':'getter_unavailable'}
+        assert prepare(c,export=d).exit_code==5
+        from test_plan_rules import change_source
+        d=change_source(c,c['export']);d['project']['status_date']={'quality':'unsupported','value':None,'reason':'getter_unavailable'}
+        r=prepare(c,export=d)
+&gt;       assert r.exit_code==0 and any(w['code']=='field_unsupported' for w in r.receipt['warnings'])
+E       AssertionError: assert (5 == 0)
+E        +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_682d6870648b47f3bc0c751f00e49d82', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_admission.py:84: AssertionError</failure></testcase><testcase classname="test_admission" name="test_local_scheduler_unsupported_and_plan_unobserved_are_warnings" time="1.102"><failure message="AssertionError: assert (5 == 0)&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_b5868897bd214a89935944195fe7e0a5', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+
+    def test_local_scheduler_unsupported_and_plan_unobserved_are_warnings(publish_case):
+        r=prepare(publish_case)
+&gt;       assert r.exit_code==0 and r.receipt['verification']['schedule']['status']=='not_verified'
+E       AssertionError: assert (5 == 0)
+E        +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_b5868897bd214a89935944195fe7e0a5', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_admission.py:89: AssertionError</failure></testcase><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[type]" time="1.079" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[signed_lag]" time="1.062" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[calendar]" time="0.928" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[assignment]" time="1.038" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[graph_cycle]" time="1.139" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[self_reference]" time="1.077" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[dangling]" time="1.053" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[external]" time="0.954" /><testcase classname="test_admission" name="test_accepted_date_deviation_never_becomes_verified" time="0.003" /><testcase classname="test_admission" name="test_legacy_longest_path_excludes_root_and_never_proposes_auto_removal" time="0.003" /><testcase classname="test_plan_rules" name="test_bc_exact_mapping_and_context[reorder]" time="2.194"><failure message="AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 2, 'display_task_count': 3, ...}&#10;assert 5 == 0&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_d71fe486d9e24e6c931f126de69616da', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+case = 'reorder'
+
+    @pytest.mark.parametrize('case',['reorder','new_uid','context','relation','not_needed','missing_reference'])
+    def test_bc_exact_mapping_and_context(publish_case,case):
+        c=publish_case;data=cyclic(c['export']) if case!='not_needed' else deepcopy(c['export'])
+        anchor=prepare(c,export=data).receipt['snapshot_id']
+        register_rule(c,anchor,data,cause='dependency_type_unsupported' if case=='not_needed' else 'cycle',no_reference=case=='missing_reference')
+        new=change_source(c,data);mapping=None
+        if case=='reorder':new['tasks'].reverse()
+        elif case=='new_uid':
+            for t in new['tasks']:
+                if t['task_key']=='uid:2':t.update(task_key='uid:900',uid=900,id=77)
+            for t in new['tasks']:
+                if t['child_task_keys'].get('value'):t['child_task_keys']['value']=['uid:900' if k=='uid:2' else k for k in t['child_task_keys']['value']]
+            for d in new['dependencies']:
+                for key in ('predecessor_task_key','successor_task_key'):
+                    if d[key]=='uid:2':d[key]='uid:900'
+            mapping=c['tmp']/'mapping.json'
+            mapping.write_text(json.dumps({'schema_version':1,'pairs':[{'entity_kind':'task','from_key':k,'to_key':'uid:900' if k=='uid:2' else k,'identity_key':'test:'+k} for k in ('uid:1','uid:2','uid:3')]}))
+        elif case=='context':new['tasks'][1]['wbs']='9.9'
+        elif case=='relation':new['dependencies'][0]['lag_value']['value']['amount']='-1'
+        first=prepare(c,export=new)
+        assert first.exit_code in (3,5),first.receipt
+        assert first.receipt['snapshot_id'] and first.receipt['verification']['archive']=='verified'
+        if case=='missing_reference':
+            assert first.receipt['exceptions'][0]['result']=='inactive'
+            assert not q.get_identity_requirements(c['conn'],first.receipt['operation_id']);return
+        selected=confirm(c,anchor,first.receipt['snapshot_id'],mapping=mapping)
+        assert selected['exit_code']==0,selected
+        after=resume(c,first.receipt['operation_id'],mapping_revision=selected['mapping_revision_id'])
+        if case in ('context','relation'):
+            assert after.exit_code==5,after.receipt # graph blocker has no applicable transformation
+            assert after.receipt['exceptions'][0]['result']=='inactive'
+        else:
+&gt;           assert after.exit_code==0,after.receipt
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 2, 'display_task_count': 3, ...}
+E           assert 5 == 0
+E            +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_d71fe486d9e24e6c931f126de69616da', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_plan_rules.py:94: AssertionError</failure></testcase><testcase classname="test_plan_rules" name="test_bc_exact_mapping_and_context[new_uid]" time="2.224"><failure message="AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 2, 'display_task_count': 3, ...}&#10;assert 5 == 0&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_0bdb53663a004740b811fc8508f16810', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+case = 'new_uid'
+
+    @pytest.mark.parametrize('case',['reorder','new_uid','context','relation','not_needed','missing_reference'])
+    def test_bc_exact_mapping_and_context(publish_case,case):
+        c=publish_case;data=cyclic(c['export']) if case!='not_needed' else deepcopy(c['export'])
+        anchor=prepare(c,export=data).receipt['snapshot_id']
+        register_rule(c,anchor,data,cause='dependency_type_unsupported' if case=='not_needed' else 'cycle',no_reference=case=='missing_reference')
+        new=change_source(c,data);mapping=None
+        if case=='reorder':new['tasks'].reverse()
+        elif case=='new_uid':
+            for t in new['tasks']:
+                if t['task_key']=='uid:2':t.update(task_key='uid:900',uid=900,id=77)
+            for t in new['tasks']:
+                if t['child_task_keys'].get('value'):t['child_task_keys']['value']=['uid:900' if k=='uid:2' else k for k in t['child_task_keys']['value']]
+            for d in new['dependencies']:
+                for key in ('predecessor_task_key','successor_task_key'):
+                    if d[key]=='uid:2':d[key]='uid:900'
+            mapping=c['tmp']/'mapping.json'
+            mapping.write_text(json.dumps({'schema_version':1,'pairs':[{'entity_kind':'task','from_key':k,'to_key':'uid:900' if k=='uid:2' else k,'identity_key':'test:'+k} for k in ('uid:1','uid:2','uid:3')]}))
+        elif case=='context':new['tasks'][1]['wbs']='9.9'
+        elif case=='relation':new['dependencies'][0]['lag_value']['value']['amount']='-1'
+        first=prepare(c,export=new)
+        assert first.exit_code in (3,5),first.receipt
+        assert first.receipt['snapshot_id'] and first.receipt['verification']['archive']=='verified'
+        if case=='missing_reference':
+            assert first.receipt['exceptions'][0]['result']=='inactive'
+            assert not q.get_identity_requirements(c['conn'],first.receipt['operation_id']);return
+        selected=confirm(c,anchor,first.receipt['snapshot_id'],mapping=mapping)
+        assert selected['exit_code']==0,selected
+        after=resume(c,first.receipt['operation_id'],mapping_revision=selected['mapping_revision_id'])
+        if case in ('context','relation'):
+            assert after.exit_code==5,after.receipt # graph blocker has no applicable transformation
+            assert after.receipt['exceptions'][0]['result']=='inactive'
+        else:
+&gt;           assert after.exit_code==0,after.receipt
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 2, 'display_task_count': 3, ...}
+E           assert 5 == 0
+E            +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_0bdb53663a004740b811fc8508f16810', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_plan_rules.py:94: AssertionError</failure></testcase><testcase classname="test_plan_rules" name="test_bc_exact_mapping_and_context[context]" time="2.274" /><testcase classname="test_plan_rules" name="test_bc_exact_mapping_and_context[relation]" time="2.466" /><testcase classname="test_plan_rules" name="test_bc_exact_mapping_and_context[not_needed]" time="2.290"><failure message="AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}&#10;assert 5 == 0&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_6ac4719546ed498d889b0f9338f53da3', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+case = 'not_needed'
+
+    @pytest.mark.parametrize('case',['reorder','new_uid','context','relation','not_needed','missing_reference'])
+    def test_bc_exact_mapping_and_context(publish_case,case):
+        c=publish_case;data=cyclic(c['export']) if case!='not_needed' else deepcopy(c['export'])
+        anchor=prepare(c,export=data).receipt['snapshot_id']
+        register_rule(c,anchor,data,cause='dependency_type_unsupported' if case=='not_needed' else 'cycle',no_reference=case=='missing_reference')
+        new=change_source(c,data);mapping=None
+        if case=='reorder':new['tasks'].reverse()
+        elif case=='new_uid':
+            for t in new['tasks']:
+                if t['task_key']=='uid:2':t.update(task_key='uid:900',uid=900,id=77)
+            for t in new['tasks']:
+                if t['child_task_keys'].get('value'):t['child_task_keys']['value']=['uid:900' if k=='uid:2' else k for k in t['child_task_keys']['value']]
+            for d in new['dependencies']:
+                for key in ('predecessor_task_key','successor_task_key'):
+                    if d[key]=='uid:2':d[key]='uid:900'
+            mapping=c['tmp']/'mapping.json'
+            mapping.write_text(json.dumps({'schema_version':1,'pairs':[{'entity_kind':'task','from_key':k,'to_key':'uid:900' if k=='uid:2' else k,'identity_key':'test:'+k} for k in ('uid:1','uid:2','uid:3')]}))
+        elif case=='context':new['tasks'][1]['wbs']='9.9'
+        elif case=='relation':new['dependencies'][0]['lag_value']['value']['amount']='-1'
+        first=prepare(c,export=new)
+        assert first.exit_code in (3,5),first.receipt
+        assert first.receipt['snapshot_id'] and first.receipt['verification']['archive']=='verified'
+        if case=='missing_reference':
+            assert first.receipt['exceptions'][0]['result']=='inactive'
+            assert not q.get_identity_requirements(c['conn'],first.receipt['operation_id']);return
+        selected=confirm(c,anchor,first.receipt['snapshot_id'],mapping=mapping)
+        assert selected['exit_code']==0,selected
+        after=resume(c,first.receipt['operation_id'],mapping_revision=selected['mapping_revision_id'])
+        if case in ('context','relation'):
+            assert after.exit_code==5,after.receipt # graph blocker has no applicable transformation
+            assert after.receipt['exceptions'][0]['result']=='inactive'
+        else:
+&gt;           assert after.exit_code==0,after.receipt
+E           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}
+E           assert 5 == 0
+E            +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_6ac4719546ed498d889b0f9338f53da3', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_plan_rules.py:94: AssertionError</failure></testcase><testcase classname="test_plan_rules" name="test_bc_exact_mapping_and_context[missing_reference]" time="1.697" /><testcase classname="test_plan_rules" name="test_drop_dep_resolves_exact_source_and_does_not_apply_without_consent" time="1.132"><failure message="AssertionError: assert (5 == 3)&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_4c66e546b264485a8d5c4e25afc04fea', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+
+    def test_drop_dep_resolves_exact_source_and_does_not_apply_without_consent(publish_case):
+        c=publish_case
+        from prepared_plan import PreparedPlan
+        resolved=resolve_drop_links(PreparedPlan.from_export(c['export']).normalized_data,[(2,3)])
+        assert resolved[0]['source_sha256']==c['export']['provenance']['sha256']
+        r=prepare(c,drop_links=[(2,3)])
+&gt;       assert r.exit_code==3 and len(r.conversion['gantt']['dependenciesData'])==1
+E       AssertionError: assert (5 == 3)
+E        +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_4c66e546b264485a8d5c4e25afc04fea', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_plan_rules.py:110: AssertionError</failure></testcase><testcase classname="test_plan_rules" name="test_explicit_project_scope_persists_versioned_rule" time="1.729"><failure message="AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}&#10;assert 5 == 0&#10; +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_0c447951e8f24f9eba0722432bcfbaf9', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code">publish_case = {'cache': PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-3-unit/..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+
+    def test_explicit_project_scope_persists_versioned_rule(publish_case):
+        c=publish_case;r=prepare(c,drop_links=[(2,3)])
+        proposal=q.get_publish_proposals(c['conn'],r.receipt['operation_id'])[0]
+        after=resume(c,r.receipt['operation_id'],accept_proposal=proposal['proposal_id'],reason='Test project-scoped explicit consent',rule_scope='project')
+&gt;       assert after.exit_code==0,after.receipt
+E       AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 1, 'display_task_count': 3, ...}
+E       assert 5 == 0
+E        +  where 5 = PublishPreparation(receipt={'schema_version': 1, 'operation_id': 'operation_0c447951e8f24f9eba0722432bcfbaf9', 'item_i...54'}, 'macro': None, 'attachment': None, 'sha256': '44619512e01305bfda317ae911b8efd4020bdc011bd3849a3583aa0bd5bffe05'}).exit_code
+
+tests/test_plan_rules.py:123: AssertionError</failure></testcase><testcase classname="test_plan_rules" name="test_changed_hierarchy_blocks_even_when_wbs_and_uid_match" time="2.141" /></testsuite></testsuites>

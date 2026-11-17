@@ -16,11 +16,16 @@
     },
     {
       "path": "prepared-unit-gantt.json",
-      "sha256": "1359a5fb7bdc5221445d39c1292c909903fe717b027308383e9972dde4ee69d4"
+      "sha256": "d7f891686b59a96c95b696faae35b14d1679b09168de752f322e5b4202d0d9b1"
     },
     {
       "path": "prepared-unit-storage.xml",
       "sha256": "364a56885eb8a38193ad0dcee071daedb4dffe0503e072741fa46e9c3ed6e6b8"
+    },
+    {
+      "path": "source-values-control.json",
+      "kind": "installed-wrapper-source-facts-control",
+      "sha256": "b25b7a2996a788d940cd02d87c0ee3c213dc63c644837aba6a61a87db11cd953"
     }
   ]
 }

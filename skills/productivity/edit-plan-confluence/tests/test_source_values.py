@@ -29,3 +29,40 @@ def test_columns_visible_in_both_modes():
         columns = {c['id']: c for c in template['initialState'][mode]['columns']}
         assert all(columns[name].get('hidden') is False
                    for name in ('status', 'percentdone', 'startdate', 'enddate', 'duration'))
+
+
+@pytest.mark.parametrize('percent,start,finish,active,review', [
+    ('0', '2026-01-05T09:00', None, True, True),
+    (None, None, None, True, True),
+    ('47', None, '2026-01-06T18:00', True, True),
+    ('21.125', None, None, False, False),
+    ('100', None, '2026-01-06T18:00', True, False),
+])
+def test_source_facts_do_not_infer_actual_finish(percent, start, finish, active, review):
+    from mpp_convert import source_fact_values
+    field = lambda v: {'value': v, 'quality': 'ok' if v is not None else 'missing', 'reason': None if v is not None else 'not_set'}
+    task = {'percent_complete': field(percent), 'actual_start': field(start), 'actual_finish': field(finish),
+            'finish': field('2099-12-31T18:00'), 'active': field(active)}
+    values = source_fact_values(task)
+    assert values['custom_mpp_actual_finish'] == (finish or 'не задано')
+    assert values['custom_mpp_percent_complete'] == (percent or 'не задано')
+    assert ('требует проверки' in values['custom_mpp_source_state']) is review
+    if active is False:
+        assert 'indeterminate' in values['custom_mpp_source_state'] and 'неактивна' in values['custom_mpp_source_state']
+
+
+def test_custom_summary_values_are_text_and_not_aggregates(stage08_export, stage08_profile):
+    from mpp_convert import SOURCE_COLUMNS
+    export = deepcopy(stage08_export)
+    summary = next(t for t in export['tasks'] if t.get('summary') and t.get('id') != 0)
+    summary['percent_complete'] = {'value': '47.375', 'quality': 'ok', 'reason': None}
+    summary['actual_work'] = {'value': '2.125 h', 'quality': 'ok', 'reason': None,
+                             'quantity': {'amount': '2.125', 'units': 'HOURS', 'source_units': 'h', 'elapsed': False}}
+    out = convert_prepared_plan(PreparedPlan.from_export(export, timezone_hint='Europe/Moscow'), plugin_profile=stage08_profile)
+    node = flatten(out['gantt']['eventsData'])[out['mappings']['tasks'][summary['task_key']]]
+    assert node['custom_mpp_percent_complete'] == '47.375'
+    assert node['custom_mpp_actual_work'] == '2.125 h'
+    assert all(out['gantt']['customColumns'][column]['type'] == 'customtext' for column, _ in SOURCE_COLUMNS.values())
+    for mode in ('view', 'edit'):
+        columns = {c['id']: c for c in out['gantt']['initialState'][mode]['columns']}
+        assert all(columns[column]['hidden'] is False for column, _ in SOURCE_COLUMNS.values())

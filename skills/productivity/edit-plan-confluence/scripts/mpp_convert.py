@@ -366,7 +366,84 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v4'
+CONVERTER_VERSION = 'prepared-gantt-v5'
+
+# The wrapper registers these fields before loading tasks. Text columns preserve
+# source decimals and summary values; they do not participate in scheduling.
+SOURCE_COLUMNS = {
+    'percent_complete': ('custom_mpp_percent_complete', 'Процент MPP (исходный)'),
+    'actual_finish': ('custom_mpp_actual_finish', 'Фактическое окончание MPP'),
+    'actual_start': ('custom_mpp_actual_start', 'Фактическое начало MPP'),
+    'actual_duration': ('custom_mpp_actual_duration', 'Фактическая длительность MPP'),
+    'actual_work': ('custom_mpp_actual_work', 'Фактическая работа MPP'),
+    'stop': ('custom_mpp_stop', 'Остановка MPP'),
+    'resume': ('custom_mpp_resume', 'Возобновление MPP'),
+    'source_state': ('custom_mpp_source_state', 'Проверка исходных фактов MPP'),
+}
+
+
+def source_value_text(raw):
+    """Lossless decimal text and explicit absence, without deriving actuals."""
+    from decimal import Decimal, InvalidOperation
+    from itogo import field_value
+    if not isinstance(raw, dict):
+        return 'неизвестно'
+    value = field_value(raw)
+    if raw.get('quality') not in (None, 'ok'):
+        if raw.get('quality') == 'missing' and raw.get('reason') == 'not_set':
+            return 'не задано'
+        return 'неизвестно (' + str(raw.get('reason') or raw.get('quality')) + ')'
+    quantity = raw.get('quantity')
+    if quantity and quantity.get('amount') is not None:
+        amount = format(Decimal(str(quantity['amount'])), 'f')
+        unit = quantity.get('source_units') or quantity.get('units')
+        return amount + (' ' + str(unit) if unit else '')
+    if value is None:
+        return 'не задано'
+    # Numeric strings use plain decimal notation, never binary-float arithmetic.
+    try:
+        number = Decimal(str(value))
+        if number.is_finite():
+            return format(number, 'f')
+    except InvalidOperation:
+        pass
+    return str(value)
+
+
+def source_fact_values(task):
+    from itogo import field_value, decimal_value
+    values = {column: source_value_text(task.get(field))
+              for field, (column, _) in SOURCE_COLUMNS.items() if field != 'source_state'}
+    percent = decimal_value(field_value(task.get('percent_complete')))
+    reasons = []
+    if percent is None or not percent.is_finite() or not 0 <= percent <= 100:
+        reasons.append('процент неизвестен или недопустим')
+    else:
+        if percent == 0 and field_value(task.get('actual_start')) is not None:
+            reasons.append('0% при заданном фактическом начале')
+        if percent < 100 and field_value(task.get('actual_finish')) is not None:
+            reasons.append('менее 100% при заданном фактическом окончании')
+    values['custom_mpp_source_state'] = ('требует проверки: ' + '; '.join(reasons) if reasons
+        else 'по исходному проценту: ' + ('new' if percent == 0 else 'done' if percent == 100 else 'indeterminate'))
+    if field_value(task.get('active')) is False:
+        values['custom_mpp_source_state'] += '; неактивна'
+    return values
+
+
+def add_source_columns(gantt):
+    """Use the installed wrapper's customColumns object and customtext fields."""
+    columns = gantt.setdefault('customColumns', {})
+    for column, title in SOURCE_COLUMNS.values():
+        columns[column] = {'id': column, 'text': title, 'type': 'customtext'}
+    for mode in ('view', 'edit'):
+        state = gantt.setdefault('initialState', {}).setdefault(mode, {})
+        rows = state.setdefault('columns', [])
+        existing = {row['id']: row for row in rows}
+        for column, _ in SOURCE_COLUMNS.values():
+            if column not in existing:
+                rows.append({'id': column, 'width': 210, 'hidden': False, 'order': len(rows)})
+            else:
+                existing[column]['hidden'] = False
 
 
 def _number(value):
@@ -564,6 +641,7 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
             if node['startDate'] is None or node['endDate'] is None:
                 diagnostics.append({'code':'task_dates_missing','entity':key,'source':deepcopy(t),'represented':None})
             node['percentDone']=_number(field_value(t.get('percent_complete')))
+            node.update(source_fact_values(t))
             mode=field_value(t.get('task_mode'))
             if mode in ('AUTO_SCHEDULED','Auto Scheduled','AUTO'):
                 node['manuallyScheduled']=False
@@ -692,6 +770,7 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
             diagnostics.append({'code':'graph_problem:'+name,'entity':'graph','source':graph[name],'represented':None})
     out=deepcopy(tmpl)
     out.update(eventsData=roots,resourcesData=resources,dependenciesData=deps,assignmentsData=assignments,calendarsData=cal['calendarsData'])
+    add_source_columns(out)
     default_cal=cal['bindings']['project']
     if profile.supports('calendar:bindings:project') and default_cal in cal['mapping']:
         out['calendar']=cal['mapping'][default_cal]

@@ -1,0 +1,651 @@
+{
+  "case": "source-values",
+  "status": "not_verified",
+  "assertion_kind": "supported",
+  "capabilities": [
+    "display:percent:leaf",
+    "display:percent:source_exact",
+    "display:percent:summary_source",
+    "display:status:derived",
+    "display:actual_start:customtext",
+    "display:actual_finish:customtext",
+    "display:actual_duration:customtext",
+    "display:actual_work:customtext",
+    "display:stop:customtext",
+    "display:resume:customtext"
+  ],
+  "page_id": "537575100",
+  "parent": "519501810",
+  "attachment_id": "537575101",
+  "attachment_version": 1,
+  "page_version": 1,
+  "input_sha256": "59d20b7b5d6938ba3a6e0c09930fc5cd343ca704c1c7c62fd99f8befb7cc4462",
+  "checks": {
+    "0.1.model.custom_mpp_percent_complete": {
+      "expected": "47.375",
+      "actual": "47.375",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_percent_complete": {
+      "expected": "47.375",
+      "actual": "47.375",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_source_state": {
+      "expected": "требует проверки: менее 100% при заданном фактическом окончании",
+      "actual": "требует проверки: менее 100% при заданном фактическом окончании",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_source_state": {
+      "expected": "требует проверки: менее 100% при заданном фактическом окончании",
+      "actual": "требует проверки: менее 100% при заданном фактическом окончании",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_percent_complete": {
+      "expected": "0",
+      "actual": "0",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_percent_complete": {
+      "expected": "0",
+      "actual": "0",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: new",
+      "actual": "по исходному проценту: new",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: new",
+      "actual": "по исходному проценту: new",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_percent_complete": {
+      "expected": "21",
+      "actual": "21",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_percent_complete": {
+      "expected": "21",
+      "actual": "21",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_percent_complete": {
+      "expected": "47",
+      "actual": "47",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_percent_complete": {
+      "expected": "47",
+      "actual": "47",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_percent_complete": {
+      "expected": "76",
+      "actual": "76",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_percent_complete": {
+      "expected": "76",
+      "actual": "76",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_percent_complete": {
+      "expected": "100",
+      "actual": "100",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_percent_complete": {
+      "expected": "100",
+      "actual": "100",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: done",
+      "actual": "по исходному проценту: done",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: done",
+      "actual": "по исходному проценту: done",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_percent_complete": {
+      "expected": "21.125",
+      "actual": "21.125",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_percent_complete": {
+      "expected": "21.125",
+      "actual": "21.125",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.2.percent": {
+      "expected": 0.0,
+      "actual": 0,
+      "passed": true
+    },
+    "0.2.status": {
+      "expected": "new",
+      "actual": "new",
+      "passed": true
+    },
+    "0.3.percent": {
+      "expected": 21.0,
+      "actual": 21,
+      "passed": true
+    },
+    "0.3.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "0.4.percent": {
+      "expected": 47.0,
+      "actual": 47,
+      "passed": true
+    },
+    "0.4.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "0.5.percent": {
+      "expected": 76.0,
+      "actual": 76,
+      "passed": true
+    },
+    "0.5.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "0.6.percent": {
+      "expected": 100.0,
+      "actual": 100,
+      "passed": true
+    },
+    "0.6.status": {
+      "expected": "done",
+      "actual": "done",
+      "passed": true
+    },
+    "0.7.percent": {
+      "expected": 21.125,
+      "actual": 21.125,
+      "passed": true
+    },
+    "0.7.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    }
+  },
+  "openings": [],
+  "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+  "build": "H6u7SQymvwxeyojc1ur6Z",
+  "engine_version": "5.4.1",
+  "confluence_version": "8.9.4",
+  "browser_received_sha256": "59d20b7b5d6938ba3a6e0c09930fc5cd343ca704c1c7c62fd99f8befb7cc4462"
+}

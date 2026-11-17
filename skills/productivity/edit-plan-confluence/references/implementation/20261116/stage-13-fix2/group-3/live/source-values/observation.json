@@ -1,0 +1,3423 @@
+{
+  "case": "source-values",
+  "status": "passed",
+  "assertion_kind": "supported",
+  "capabilities": [
+    "display:percent:leaf",
+    "display:percent:source_exact",
+    "display:percent:summary_source",
+    "display:status:derived",
+    "display:actual_start:customtext",
+    "display:actual_finish:customtext",
+    "display:actual_duration:customtext",
+    "display:actual_work:customtext",
+    "display:stop:customtext",
+    "display:resume:customtext"
+  ],
+  "page_id": "537575108",
+  "parent": "519501810",
+  "attachment_id": "537575109",
+  "attachment_version": 1,
+  "page_version": 1,
+  "input_sha256": "59d20b7b5d6938ba3a6e0c09930fc5cd343ca704c1c7c62fd99f8befb7cc4462",
+  "checks": {
+    "0.1.model.custom_mpp_percent_complete": {
+      "expected": "47.375",
+      "actual": "47.375",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_percent_complete": {
+      "expected": "47.375",
+      "actual": "47.375",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.1.model.custom_mpp_source_state": {
+      "expected": "требует проверки: менее 100% при заданном фактическом окончании",
+      "actual": "требует проверки: менее 100% при заданном фактическом окончании",
+      "passed": true
+    },
+    "0.1.persistable.custom_mpp_source_state": {
+      "expected": "требует проверки: менее 100% при заданном фактическом окончании",
+      "actual": "требует проверки: менее 100% при заданном фактическом окончании",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_percent_complete": {
+      "expected": "0",
+      "actual": "0",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_percent_complete": {
+      "expected": "0",
+      "actual": "0",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.2.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: new",
+      "actual": "по исходному проценту: new",
+      "passed": true
+    },
+    "0.2.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: new",
+      "actual": "по исходному проценту: new",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_percent_complete": {
+      "expected": "21",
+      "actual": "21",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_percent_complete": {
+      "expected": "21",
+      "actual": "21",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.3.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.3.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_percent_complete": {
+      "expected": "47",
+      "actual": "47",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_percent_complete": {
+      "expected": "47",
+      "actual": "47",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.4.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.4.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_percent_complete": {
+      "expected": "76",
+      "actual": "76",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_percent_complete": {
+      "expected": "76",
+      "actual": "76",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.5.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.5.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_percent_complete": {
+      "expected": "100",
+      "actual": "100",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_percent_complete": {
+      "expected": "100",
+      "actual": "100",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.6.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: done",
+      "actual": "по исходному проценту: done",
+      "passed": true
+    },
+    "0.6.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: done",
+      "actual": "по исходному проценту: done",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_percent_complete": {
+      "expected": "21.125",
+      "actual": "21.125",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_percent_complete": {
+      "expected": "21.125",
+      "actual": "21.125",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "0.7.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.7.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "0.2.percent": {
+      "expected": 0.0,
+      "actual": 0,
+      "passed": true
+    },
+    "0.2.status": {
+      "expected": "new",
+      "actual": "new",
+      "passed": true
+    },
+    "0.3.percent": {
+      "expected": 21.0,
+      "actual": 21,
+      "passed": true
+    },
+    "0.3.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "0.4.percent": {
+      "expected": 47.0,
+      "actual": 47,
+      "passed": true
+    },
+    "0.4.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "0.5.percent": {
+      "expected": 76.0,
+      "actual": 76,
+      "passed": true
+    },
+    "0.5.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "0.6.percent": {
+      "expected": 100.0,
+      "actual": 100,
+      "passed": true
+    },
+    "0.6.status": {
+      "expected": "done",
+      "actual": "done",
+      "passed": true
+    },
+    "0.7.percent": {
+      "expected": 21.125,
+      "actual": 21.125,
+      "passed": true
+    },
+    "0.7.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "0.visible.status": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.percentdone": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.startdate": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.enddate": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.duration": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.custom_mpp_percent_complete": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.custom_mpp_actual_finish": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.custom_mpp_actual_start": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.custom_mpp_actual_duration": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.custom_mpp_actual_work": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.custom_mpp_stop": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.custom_mpp_resume": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "0.visible.custom_mpp_source_state": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.1.model.custom_mpp_percent_complete": {
+      "expected": "47.375",
+      "actual": "47.375",
+      "passed": true
+    },
+    "1.1.persistable.custom_mpp_percent_complete": {
+      "expected": "47.375",
+      "actual": "47.375",
+      "passed": true
+    },
+    "1.1.model.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "1.1.persistable.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "1.1.model.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "1.1.persistable.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "1.1.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.1.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.1.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.1.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.1.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.1.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.1.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.1.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.1.model.custom_mpp_source_state": {
+      "expected": "требует проверки: менее 100% при заданном фактическом окончании",
+      "actual": "требует проверки: менее 100% при заданном фактическом окончании",
+      "passed": true
+    },
+    "1.1.persistable.custom_mpp_source_state": {
+      "expected": "требует проверки: менее 100% при заданном фактическом окончании",
+      "actual": "требует проверки: менее 100% при заданном фактическом окончании",
+      "passed": true
+    },
+    "1.2.model.custom_mpp_percent_complete": {
+      "expected": "0",
+      "actual": "0",
+      "passed": true
+    },
+    "1.2.persistable.custom_mpp_percent_complete": {
+      "expected": "0",
+      "actual": "0",
+      "passed": true
+    },
+    "1.2.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.2.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.2.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.2.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.2.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.2.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.2.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.2.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.2.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.2.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.2.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.2.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.2.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: new",
+      "actual": "по исходному проценту: new",
+      "passed": true
+    },
+    "1.2.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: new",
+      "actual": "по исходному проценту: new",
+      "passed": true
+    },
+    "1.3.model.custom_mpp_percent_complete": {
+      "expected": "21",
+      "actual": "21",
+      "passed": true
+    },
+    "1.3.persistable.custom_mpp_percent_complete": {
+      "expected": "21",
+      "actual": "21",
+      "passed": true
+    },
+    "1.3.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.3.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.3.model.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "1.3.persistable.custom_mpp_actual_start": {
+      "expected": "2026-01-05T09:00",
+      "actual": "2026-01-05T09:00",
+      "passed": true
+    },
+    "1.3.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.3.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.3.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.3.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.3.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.3.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.3.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.3.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.3.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "1.3.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "1.4.model.custom_mpp_percent_complete": {
+      "expected": "47",
+      "actual": "47",
+      "passed": true
+    },
+    "1.4.persistable.custom_mpp_percent_complete": {
+      "expected": "47",
+      "actual": "47",
+      "passed": true
+    },
+    "1.4.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.4.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.4.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.4.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.4.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.4.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.4.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.4.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.4.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.4.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.4.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.4.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.4.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "1.4.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "1.5.model.custom_mpp_percent_complete": {
+      "expected": "76",
+      "actual": "76",
+      "passed": true
+    },
+    "1.5.persistable.custom_mpp_percent_complete": {
+      "expected": "76",
+      "actual": "76",
+      "passed": true
+    },
+    "1.5.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.5.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.5.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.5.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.5.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.5.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.5.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.5.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.5.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.5.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.5.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.5.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.5.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "1.5.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "1.6.model.custom_mpp_percent_complete": {
+      "expected": "100",
+      "actual": "100",
+      "passed": true
+    },
+    "1.6.persistable.custom_mpp_percent_complete": {
+      "expected": "100",
+      "actual": "100",
+      "passed": true
+    },
+    "1.6.model.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "1.6.persistable.custom_mpp_actual_finish": {
+      "expected": "2026-01-06T18:00",
+      "actual": "2026-01-06T18:00",
+      "passed": true
+    },
+    "1.6.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.6.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.6.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.6.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.6.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.6.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.6.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.6.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.6.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.6.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.6.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: done",
+      "actual": "по исходному проценту: done",
+      "passed": true
+    },
+    "1.6.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: done",
+      "actual": "по исходному проценту: done",
+      "passed": true
+    },
+    "1.7.model.custom_mpp_percent_complete": {
+      "expected": "21.125",
+      "actual": "21.125",
+      "passed": true
+    },
+    "1.7.persistable.custom_mpp_percent_complete": {
+      "expected": "21.125",
+      "actual": "21.125",
+      "passed": true
+    },
+    "1.7.model.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.7.persistable.custom_mpp_actual_finish": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.7.model.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.7.persistable.custom_mpp_actual_start": {
+      "expected": "не задано",
+      "actual": "не задано",
+      "passed": true
+    },
+    "1.7.model.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.7.persistable.custom_mpp_actual_duration": {
+      "expected": "1.125 h",
+      "actual": "1.125 h",
+      "passed": true
+    },
+    "1.7.model.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.7.persistable.custom_mpp_actual_work": {
+      "expected": "0.375 h",
+      "actual": "0.375 h",
+      "passed": true
+    },
+    "1.7.model.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.7.persistable.custom_mpp_stop": {
+      "expected": "2026-01-05T10:07:30",
+      "actual": "2026-01-05T10:07:30",
+      "passed": true
+    },
+    "1.7.model.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.7.persistable.custom_mpp_resume": {
+      "expected": "2026-01-06T09:00",
+      "actual": "2026-01-06T09:00",
+      "passed": true
+    },
+    "1.7.model.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "1.7.persistable.custom_mpp_source_state": {
+      "expected": "по исходному проценту: indeterminate",
+      "actual": "по исходному проценту: indeterminate",
+      "passed": true
+    },
+    "1.2.percent": {
+      "expected": 0.0,
+      "actual": 0,
+      "passed": true
+    },
+    "1.2.status": {
+      "expected": "new",
+      "actual": "new",
+      "passed": true
+    },
+    "1.3.percent": {
+      "expected": 21.0,
+      "actual": 21,
+      "passed": true
+    },
+    "1.3.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "1.4.percent": {
+      "expected": 47.0,
+      "actual": 47,
+      "passed": true
+    },
+    "1.4.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "1.5.percent": {
+      "expected": 76.0,
+      "actual": 76,
+      "passed": true
+    },
+    "1.5.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "1.6.percent": {
+      "expected": 100.0,
+      "actual": 100,
+      "passed": true
+    },
+    "1.6.status": {
+      "expected": "done",
+      "actual": "done",
+      "passed": true
+    },
+    "1.7.percent": {
+      "expected": 21.125,
+      "actual": 21.125,
+      "passed": true
+    },
+    "1.7.status": {
+      "expected": "indeterminate",
+      "actual": "indeterminate",
+      "passed": true
+    },
+    "1.visible.status": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.percentdone": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.startdate": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.enddate": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.duration": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.custom_mpp_percent_complete": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.custom_mpp_actual_finish": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.custom_mpp_actual_start": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.custom_mpp_actual_duration": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.custom_mpp_actual_work": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.custom_mpp_stop": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.custom_mpp_resume": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    "1.visible.custom_mpp_source_state": {
+      "expected": true,
+      "actual": true,
+      "passed": true
+    }
+  },
+  "openings": [
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "readOnly": true,
+      "tasks": [
+        {
+          "id": 1,
+          "percentDone": 44.1875,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 1,
+            "parentIndex": 0,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-1",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "constraintDate": null,
+            "percentDone": 44.1875,
+            "effort": 48,
+            "effortUnit": "hour",
+            "inactive": false,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "Normal",
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "2026-01-06T18:00",
+            "custom_mpp_actual_start": "2026-01-05T09:00",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "47.375",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "требует проверки: менее 100% при заданном фактическом окончании",
+            "custom_mpp_stop": "2026-01-05T10:07:30",
+            "children": [
+              {
+                "id": 2,
+                "parentIndex": 0,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-2",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 0,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "0",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: new",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 3,
+                "parentIndex": 1,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-3",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 21,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "2026-01-05T09:00",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "21",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: indeterminate",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 4,
+                "parentIndex": 2,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-4",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 47,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "47",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: indeterminate",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 5,
+                "parentIndex": 3,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-5",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 76,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "76",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: indeterminate",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 6,
+                "parentIndex": 4,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-6",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 100,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "2026-01-06T18:00",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "100",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: done",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 7,
+                "parentIndex": 5,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-7",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 21.125,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "21.125",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: indeterminate",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              }
+            ]
+          },
+          "persistable": {
+            "id": 1,
+            "parentIndex": 0,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-1",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "constraintDate": null,
+            "percentDone": 44.1875,
+            "effort": 48,
+            "effortUnit": "hour",
+            "inactive": false,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "Normal",
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "2026-01-06T18:00",
+            "custom_mpp_actual_start": "2026-01-05T09:00",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "47.375",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "требует проверки: менее 100% при заданном фактическом окончании",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 2,
+          "percentDone": 0,
+          "status": {
+            "category": "new",
+            "text": "To Do"
+          },
+          "model": {
+            "id": 2,
+            "parentIndex": 0,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-2",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 0,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "0",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: new",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 2,
+            "parentIndex": 0,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-2",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 0,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "0",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: new",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 3,
+          "percentDone": 21,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 3,
+            "parentIndex": 1,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-3",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 21,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "2026-01-05T09:00",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "21",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 3,
+            "parentIndex": 1,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-3",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 21,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "2026-01-05T09:00",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "21",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 4,
+          "percentDone": 47,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 4,
+            "parentIndex": 2,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-4",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 47,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "47",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 4,
+            "parentIndex": 2,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-4",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 47,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "47",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 5,
+          "percentDone": 76,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 5,
+            "parentIndex": 3,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-5",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 76,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "76",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 5,
+            "parentIndex": 3,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-5",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 76,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "76",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 6,
+          "percentDone": 100,
+          "status": {
+            "category": "done",
+            "text": "Done"
+          },
+          "model": {
+            "id": 6,
+            "parentIndex": 4,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-6",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 100,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "2026-01-06T18:00",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "100",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: done",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 6,
+            "parentIndex": 4,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-6",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 100,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "2026-01-06T18:00",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "100",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: done",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 7,
+          "percentDone": 21.125,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 7,
+            "parentIndex": 5,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-7",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 21.125,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "21.125",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 7,
+            "parentIndex": 5,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-7",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 21.125,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "21.125",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        }
+      ],
+      "columns": [
+        {
+          "id": "wbs",
+          "field": "wbsValue",
+          "hidden": false,
+          "type": "wbs"
+        },
+        {
+          "id": "name",
+          "field": "name",
+          "hidden": false,
+          "type": "name"
+        },
+        {
+          "id": "startdate",
+          "field": "startDate",
+          "hidden": false,
+          "type": "startdate"
+        },
+        {
+          "id": "enddate",
+          "field": "endDate",
+          "hidden": false,
+          "type": "enddate"
+        },
+        {
+          "id": "duration",
+          "field": "fullDuration",
+          "hidden": false,
+          "type": "duration"
+        },
+        {
+          "id": "resourceassignment",
+          "field": "assignments",
+          "hidden": false,
+          "type": "customresourceassignment"
+        },
+        {
+          "id": "effort",
+          "field": "fullEffort",
+          "hidden": false,
+          "type": "effort"
+        },
+        {
+          "id": "schedulingMode",
+          "field": "customSchedulingMode",
+          "hidden": true,
+          "type": "customschedulingmodecolumn"
+        },
+        {
+          "id": "status",
+          "field": "status",
+          "hidden": false,
+          "type": "statuscolumn"
+        },
+        {
+          "id": "percentdone",
+          "field": "percentDone",
+          "hidden": false,
+          "type": "percentdone"
+        },
+        {
+          "id": "predecessor",
+          "field": "predecessors",
+          "hidden": true,
+          "type": "custompredecessorcolumn"
+        },
+        {
+          "id": "successor",
+          "field": "successors",
+          "hidden": true,
+          "type": "customsuccessorcolumn"
+        },
+        {
+          "id": "constrainttype",
+          "field": "constraintType",
+          "hidden": true,
+          "type": "constrainttype"
+        },
+        {
+          "id": "constraintdate",
+          "field": "constraintDate",
+          "hidden": true,
+          "type": "constraintdate"
+        },
+        {
+          "id": "deadlinedate",
+          "field": "deadlineDate",
+          "hidden": true,
+          "type": "deadlinedate"
+        },
+        {
+          "id": "manuallyscheduled",
+          "field": "manuallyScheduled",
+          "hidden": true,
+          "type": "manuallyscheduled"
+        },
+        {
+          "id": "rollup",
+          "field": "rollup",
+          "hidden": true,
+          "type": "rollup"
+        },
+        {
+          "id": "defaultcollapse",
+          "field": "defaultCollapse",
+          "hidden": true,
+          "type": "defaultcollapse"
+        },
+        {
+          "id": "inactive",
+          "field": "inactive",
+          "hidden": true,
+          "type": "inactive"
+        },
+        {
+          "id": "color",
+          "field": "color",
+          "hidden": true,
+          "type": "color"
+        },
+        {
+          "id": "propagatecolor",
+          "field": "propagateColor",
+          "hidden": true,
+          "type": "propagatecolor"
+        },
+        {
+          "id": "weblink",
+          "field": "webLink",
+          "hidden": true,
+          "type": "weblink"
+        },
+        {
+          "id": "note",
+          "field": "note",
+          "hidden": true,
+          "type": "note"
+        },
+        {
+          "id": "custom_mpp_percent_complete",
+          "field": "custom_mpp_percent_complete",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_actual_finish",
+          "field": "custom_mpp_actual_finish",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_actual_start",
+          "field": "custom_mpp_actual_start",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_actual_duration",
+          "field": "custom_mpp_actual_duration",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_actual_work",
+          "field": "custom_mpp_actual_work",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_stop",
+          "field": "custom_mpp_stop",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_resume",
+          "field": "custom_mpp_resume",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_source_state",
+          "field": "custom_mpp_source_state",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "col1",
+          "field": "_timeAxis2",
+          "hidden": false,
+          "type": "timeAxis"
+        }
+      ],
+      "source_summary_percent": "47.375",
+      "runtime_errors": [
+        "Failed to fetch",
+        "Failed to fetch",
+        "Failed to fetch",
+        "generateDropDownMenu is not defined",
+        "Failed to fetch",
+        "Failed to fetch"
+      ]
+    },
+    {
+      "build": "H6u7SQymvwxeyojc1ur6Z",
+      "engine_version": "5.4.1",
+      "readOnly": true,
+      "tasks": [
+        {
+          "id": 1,
+          "percentDone": 44.1875,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 1,
+            "parentIndex": 0,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-1",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "constraintDate": null,
+            "percentDone": 44.1875,
+            "effort": 48,
+            "effortUnit": "hour",
+            "inactive": false,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "Normal",
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "2026-01-06T18:00",
+            "custom_mpp_actual_start": "2026-01-05T09:00",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "47.375",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "требует проверки: менее 100% при заданном фактическом окончании",
+            "custom_mpp_stop": "2026-01-05T10:07:30",
+            "children": [
+              {
+                "id": 2,
+                "parentIndex": 0,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-2",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 0,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "0",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: new",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 3,
+                "parentIndex": 1,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-3",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 21,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "2026-01-05T09:00",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "21",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: indeterminate",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 4,
+                "parentIndex": 2,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-4",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 47,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "47",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: indeterminate",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 5,
+                "parentIndex": 3,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-5",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 76,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "76",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: indeterminate",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 6,
+                "parentIndex": 4,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-6",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 100,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "2026-01-06T18:00",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "100",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: done",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              },
+              {
+                "id": 7,
+                "parentIndex": 5,
+                "expanded": true,
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "cls": "",
+                "name": "Source-7",
+                "calendar": null,
+                "direction": null,
+                "manuallyScheduled": false,
+                "unscheduled": false,
+                "ignoreResourceCalendar": null,
+                "constraintType": null,
+                "constraintDate": null,
+                "percentDone": 21.125,
+                "effort": 8,
+                "effortUnit": "hour",
+                "inactive": null,
+                "segments": null,
+                "effortDriven": false,
+                "schedulingMode": "FixedDuration",
+                "baselines": [],
+                "parentId": 1,
+                "propagateColor": true,
+                "defaultCollapse": false,
+                "custom_mpp_actual_duration": "1.125 h",
+                "custom_mpp_actual_finish": "не задано",
+                "custom_mpp_actual_start": "не задано",
+                "custom_mpp_actual_work": "0.375 h",
+                "custom_mpp_percent_complete": "21.125",
+                "custom_mpp_resume": "2026-01-06T09:00",
+                "custom_mpp_source_state": "по исходному проценту: indeterminate",
+                "custom_mpp_stop": "2026-01-05T10:07:30"
+              }
+            ]
+          },
+          "persistable": {
+            "id": 1,
+            "parentIndex": 0,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-1",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "constraintDate": null,
+            "percentDone": 44.1875,
+            "effort": 48,
+            "effortUnit": "hour",
+            "inactive": false,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "Normal",
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "2026-01-06T18:00",
+            "custom_mpp_actual_start": "2026-01-05T09:00",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "47.375",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "требует проверки: менее 100% при заданном фактическом окончании",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 2,
+          "percentDone": 0,
+          "status": {
+            "category": "new",
+            "text": "To Do"
+          },
+          "model": {
+            "id": 2,
+            "parentIndex": 0,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-2",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 0,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "0",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: new",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 2,
+            "parentIndex": 0,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-2",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 0,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "0",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: new",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 3,
+          "percentDone": 21,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 3,
+            "parentIndex": 1,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-3",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 21,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "2026-01-05T09:00",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "21",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 3,
+            "parentIndex": 1,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-3",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 21,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "2026-01-05T09:00",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "21",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 4,
+          "percentDone": 47,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 4,
+            "parentIndex": 2,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-4",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 47,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "47",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 4,
+            "parentIndex": 2,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-4",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 47,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "47",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 5,
+          "percentDone": 76,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 5,
+            "parentIndex": 3,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-5",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 76,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "76",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 5,
+            "parentIndex": 3,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-5",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 76,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "76",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 6,
+          "percentDone": 100,
+          "status": {
+            "category": "done",
+            "text": "Done"
+          },
+          "model": {
+            "id": 6,
+            "parentIndex": 4,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-6",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 100,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "2026-01-06T18:00",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "100",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: done",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 6,
+            "parentIndex": 4,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-6",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 100,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "2026-01-06T18:00",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "100",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: done",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        },
+        {
+          "id": 7,
+          "percentDone": 21.125,
+          "status": {
+            "category": "indeterminate",
+            "text": "In Progress"
+          },
+          "model": {
+            "id": 7,
+            "parentIndex": 5,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-7",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 21.125,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "21.125",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          },
+          "persistable": {
+            "id": 7,
+            "parentIndex": 5,
+            "expanded": true,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "cls": "",
+            "name": "Source-7",
+            "calendar": null,
+            "direction": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": null,
+            "constraintDate": null,
+            "percentDone": 21.125,
+            "effort": 8,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration",
+            "baselines": [],
+            "parentId": 1,
+            "propagateColor": true,
+            "defaultCollapse": false,
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_percent_complete": "21.125",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate",
+            "custom_mpp_stop": "2026-01-05T10:07:30"
+          }
+        }
+      ],
+      "columns": [
+        {
+          "id": "wbs",
+          "field": "wbsValue",
+          "hidden": false,
+          "type": "wbs"
+        },
+        {
+          "id": "name",
+          "field": "name",
+          "hidden": false,
+          "type": "name"
+        },
+        {
+          "id": "startdate",
+          "field": "startDate",
+          "hidden": false,
+          "type": "startdate"
+        },
+        {
+          "id": "enddate",
+          "field": "endDate",
+          "hidden": false,
+          "type": "enddate"
+        },
+        {
+          "id": "duration",
+          "field": "fullDuration",
+          "hidden": false,
+          "type": "duration"
+        },
+        {
+          "id": "resourceassignment",
+          "field": "assignments",
+          "hidden": false,
+          "type": "customresourceassignment"
+        },
+        {
+          "id": "effort",
+          "field": "fullEffort",
+          "hidden": false,
+          "type": "effort"
+        },
+        {
+          "id": "schedulingMode",
+          "field": "customSchedulingMode",
+          "hidden": true,
+          "type": "customschedulingmodecolumn"
+        },
+        {
+          "id": "status",
+          "field": "status",
+          "hidden": false,
+          "type": "statuscolumn"
+        },
+        {
+          "id": "percentdone",
+          "field": "percentDone",
+          "hidden": false,
+          "type": "percentdone"
+        },
+        {
+          "id": "predecessor",
+          "field": "predecessors",
+          "hidden": true,
+          "type": "custompredecessorcolumn"
+        },
+        {
+          "id": "successor",
+          "field": "successors",
+          "hidden": true,
+          "type": "customsuccessorcolumn"
+        },
+        {
+          "id": "constrainttype",
+          "field": "constraintType",
+          "hidden": true,
+          "type": "constrainttype"
+        },
+        {
+          "id": "constraintdate",
+          "field": "constraintDate",
+          "hidden": true,
+          "type": "constraintdate"
+        },
+        {
+          "id": "deadlinedate",
+          "field": "deadlineDate",
+          "hidden": true,
+          "type": "deadlinedate"
+        },
+        {
+          "id": "manuallyscheduled",
+          "field": "manuallyScheduled",
+          "hidden": true,
+          "type": "manuallyscheduled"
+        },
+        {
+          "id": "rollup",
+          "field": "rollup",
+          "hidden": true,
+          "type": "rollup"
+        },
+        {
+          "id": "defaultcollapse",
+          "field": "defaultCollapse",
+          "hidden": true,
+          "type": "defaultcollapse"
+        },
+        {
+          "id": "inactive",
+          "field": "inactive",
+          "hidden": true,
+          "type": "inactive"
+        },
+        {
+          "id": "color",
+          "field": "color",
+          "hidden": true,
+          "type": "color"
+        },
+        {
+          "id": "propagatecolor",
+          "field": "propagateColor",
+          "hidden": true,
+          "type": "propagatecolor"
+        },
+        {
+          "id": "weblink",
+          "field": "webLink",
+          "hidden": true,
+          "type": "weblink"
+        },
+        {
+          "id": "note",
+          "field": "note",
+          "hidden": true,
+          "type": "note"
+        },
+        {
+          "id": "custom_mpp_percent_complete",
+          "field": "custom_mpp_percent_complete",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_actual_finish",
+          "field": "custom_mpp_actual_finish",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_actual_start",
+          "field": "custom_mpp_actual_start",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_actual_duration",
+          "field": "custom_mpp_actual_duration",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_actual_work",
+          "field": "custom_mpp_actual_work",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_stop",
+          "field": "custom_mpp_stop",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_resume",
+          "field": "custom_mpp_resume",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "custom_mpp_source_state",
+          "field": "custom_mpp_source_state",
+          "hidden": false,
+          "type": "customtext"
+        },
+        {
+          "id": "col1",
+          "field": "_timeAxis2",
+          "hidden": false,
+          "type": "timeAxis"
+        }
+      ],
+      "source_summary_percent": "47.375",
+      "runtime_errors": [
+        "Failed to fetch",
+        "Failed to fetch",
+        "Failed to fetch",
+        "generateDropDownMenu is not defined",
+        "Failed to fetch",
+        "Failed to fetch"
+      ]
+    }
+  ],
+  "wrapper_asset_sha256": "9a43a94647ce8c2fff5cabdb07a52b8619b824bf8673b0bcafe9a090cd9dccb2",
+  "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+  "build": "H6u7SQymvwxeyojc1ur6Z",
+  "engine_version": "5.4.1",
+  "confluence_version": "8.9.4",
+  "browser_received_sha256": "59d20b7b5d6938ba3a6e0c09930fc5cd343ca704c1c7c62fd99f8befb7cc4462"
+}

@@ -121,7 +121,7 @@
       "origin": "mpp14relations.mpp from MPXJ upstream-manifest.json",
       "generator": "binary_recipe.py:make_elapsed_fixture; POI bundled with MPXJ 16.4.0",
       "recipe_sha256": "fab664afd18fdb808a08c78302bbf1002c1d03308f57095c3aef13f2122b391e",
-      "purpose": "all four types, FS +1 working day, SS -1 elapsed day, FF/SF known zero"
+      "purpose": "Negative identity/resume: confirmation does not override elapsed-lag/other semantic losses; failed/5 and zero writes."
     },
     {
       "id": "same-bytes-diff-names",
@@ -143,6 +143,26 @@
       "origin": "mpp14relations.mpp from upstream-manifest.json",
       "generator": "binary_recipe.py:make_graph_fixture; POI/MPXJ 16.4.0",
       "purpose": "cycle visible; self/dangling filtered by MPXJ and explicitly unsupported"
+    },
+    {
+      "id": "binary-identity-positive-anchor",
+      "path": "binary-identity-positive/anchor.mpp",
+      "kind": "binary_mpp",
+      "purpose": "Positive identity/resume fixture with supported source semantics; see nested manifest.",
+      "origin": "pinned mpp14relations.mpp plus documented binary source recipe",
+      "generator": "binary_recipe.py::make_identity_positive_fixture",
+      "sha256": "7aea0277b7a3d08fc19d17a67529022f35cea0a35e5938110c1ab433c9a02b4b",
+      "size_bytes": 180736
+    },
+    {
+      "id": "binary-identity-positive-revised",
+      "path": "binary-identity-positive/revised.mpp",
+      "kind": "binary_mpp",
+      "purpose": "Positive identity/resume fixture with supported source semantics; see nested manifest.",
+      "origin": "pinned mpp14relations.mpp plus documented binary source recipe",
+      "generator": "binary_recipe.py::make_identity_positive_fixture",
+      "sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
+      "size_bytes": 180736
     }
   ]
 }

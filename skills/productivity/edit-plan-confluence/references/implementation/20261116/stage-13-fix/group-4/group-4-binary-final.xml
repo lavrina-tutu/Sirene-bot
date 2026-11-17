@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="11.411" timestamp="2026-11-17T12:48:46.598201+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_corrective_binary_fixtures" name="test_binary_positive_recipe_and_real_admission[anchor]" time="5.587"><failure message="json.decoder.JSONDecodeError: Extra data: line 1 column 5 (char 4)">tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-4-fixtures/pytest-tmp/test_binary_positive_recipe_an0')
+revision = False
+
+    @pytest.mark.parametrize('revision',[False,True],ids=['anchor','revised'])
+    def test_binary_positive_recipe_and_real_admission(tmp_path,revision):
+        from env import select_mpxj_python
+        from plan_context import PlanContext
+        runtime=select_mpxj_python();context=PlanContext.resolve()
+        dest=tmp_path/'recreated.mpp'
+        code='''import importlib.util,sys
+    sys.path.insert(0,sys.argv[5])
+    spec=importlib.util.spec_from_file_location('binary_recipe',sys.argv[1]);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    m.make_identity_positive_fixture(sys.argv[2],sys.argv[3],revision=sys.argv[4]=='1')'''
+        command=[runtime.python,'-c',code,str(FIXTURES/'binary_recipe.py'),str(FIXTURES/'mpp14relations.mpp'),str(dest),'1' if revision else '0',str(context.mpp_reader)]
+        proc=subprocess.run(command,capture_output=True,text=True,timeout=180)
+        assert proc.returncode==0,proc.stderr
+        assert dest.read_bytes()==(FIXTURES/'binary-identity-positive'/('revised.mpp' if revision else 'anchor.mpp')).read_bytes()
+        proc=subprocess.run([runtime.python,str(context.mpp_reader/'plan_export.py'),str(dest)],capture_output=True,text=True,timeout=180)
+        assert proc.returncode==0,proc.stderr
+&gt;       export=json.loads(proc.stdout)
+
+tests/test_corrective_binary_fixtures.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.9/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;json.decoder.JSONDecoder object at 0x7f04265b44c0&gt;
+s = '2026-11-17T09:48:51.433089942Z main ERROR Log4j API could not find a logging provider.\n{\n  "export_version": "full-...upported",\n      "reason": "summary_profile_not_applied"\n    }\n  },\n  "telemetry": {\n    "MPXJ_read": 1\n  }\n}\n'
+_w = &lt;built-in method match of re.Pattern object at 0x7f042670d930&gt;
+
+    def decode(self, s, _w=WHITESPACE.match):
+        """Return the Python representation of ``s`` (a ``str`` instance
+        containing a JSON document).
+    
+        """
+        obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+        end = _w(s, end).end()
+        if end != len(s):
+&gt;           raise JSONDecodeError("Extra data", s, end)
+E           json.decoder.JSONDecodeError: Extra data: line 1 column 5 (char 4)
+
+/usr/lib64/python3.9/json/decoder.py:340: JSONDecodeError</failure></testcase><testcase classname="test_corrective_binary_fixtures" name="test_binary_positive_recipe_and_real_admission[revised]" time="5.691"><failure message="json.decoder.JSONDecodeError: Extra data: line 1 column 5 (char 4)">tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-4-fixtures/pytest-tmp/test_binary_positive_recipe_an1')
+revision = True
+
+    @pytest.mark.parametrize('revision',[False,True],ids=['anchor','revised'])
+    def test_binary_positive_recipe_and_real_admission(tmp_path,revision):
+        from env import select_mpxj_python
+        from plan_context import PlanContext
+        runtime=select_mpxj_python();context=PlanContext.resolve()
+        dest=tmp_path/'recreated.mpp'
+        code='''import importlib.util,sys
+    sys.path.insert(0,sys.argv[5])
+    spec=importlib.util.spec_from_file_location('binary_recipe',sys.argv[1]);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    m.make_identity_positive_fixture(sys.argv[2],sys.argv[3],revision=sys.argv[4]=='1')'''
+        command=[runtime.python,'-c',code,str(FIXTURES/'binary_recipe.py'),str(FIXTURES/'mpp14relations.mpp'),str(dest),'1' if revision else '0',str(context.mpp_reader)]
+        proc=subprocess.run(command,capture_output=True,text=True,timeout=180)
+        assert proc.returncode==0,proc.stderr
+        assert dest.read_bytes()==(FIXTURES/'binary-identity-positive'/('revised.mpp' if revision else 'anchor.mpp')).read_bytes()
+        proc=subprocess.run([runtime.python,str(context.mpp_reader/'plan_export.py'),str(dest)],capture_output=True,text=True,timeout=180)
+        assert proc.returncode==0,proc.stderr
+&gt;       export=json.loads(proc.stdout)
+
+tests/test_corrective_binary_fixtures.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.9/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;json.decoder.JSONDecoder object at 0x7f04265b44c0&gt;
+s = '2026-11-17T09:48:56.796095138Z main ERROR Log4j API could not find a logging provider.\n{\n  "export_version": "full-...upported",\n      "reason": "summary_profile_not_applied"\n    }\n  },\n  "telemetry": {\n    "MPXJ_read": 1\n  }\n}\n'
+_w = &lt;built-in method match of re.Pattern object at 0x7f042670d930&gt;
+
+    def decode(self, s, _w=WHITESPACE.match):
+        """Return the Python representation of ``s`` (a ``str`` instance
+        containing a JSON document).
+    
+        """
+        obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+        end = _w(s, end).end()
+        if end != len(s):
+&gt;           raise JSONDecodeError("Extra data", s, end)
+E           json.decoder.JSONDecodeError: Extra data: line 1 column 5 (char 4)
+
+/usr/lib64/python3.9/json/decoder.py:340: JSONDecodeError</failure></testcase></testsuite></testsuites>

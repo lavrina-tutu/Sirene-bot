@@ -687,7 +687,38 @@
     "test_skill_contract.py::test_invalid_arguments_do_not_echo_secret",
     "test_skill_contract.py::test_today_example_uses_local_midnights_and_offsets",
     "test_skill_contract.py::test_reference_links_and_json_examples",
-    "test_skill_contract.py::test_forbidden_legacy_routes_removed"
+    "test_skill_contract.py::test_forbidden_legacy_routes_removed",
+    "test_corrective_binary_fixtures.py::test_binary_positive_recipe_and_real_admission[anchor]",
+    "test_corrective_binary_fixtures.py::test_binary_positive_recipe_and_real_admission[revised]",
+    "test_corrective_completeness.py::test_nonimpact_partial_proof_keeps_original_and_one_cause",
+    "test_corrective_completeness.py::test_partial_proof_fails_closed[influencing]",
+    "test_corrective_completeness.py::test_partial_proof_fails_closed[unknown_reason]",
+    "test_corrective_completeness.py::test_partial_proof_fails_closed[row_missing]",
+    "test_corrective_completeness.py::test_partial_proof_fails_closed[count_missing]",
+    "test_corrective_completeness.py::test_partial_proof_fails_closed[unknown_mirror]",
+    "test_corrective_completeness.py::test_partial_proof_fails_closed[mirror_reason_changed]",
+    "test_corrective_completeness.py::test_partial_proof_fails_closed[extra_cause]",
+    "test_corrective_completeness.py::test_adding_exact_mirror_does_not_change_classification",
+    "test_corrective_completeness.py::test_raw_discarded_records_never_become_nonimpact",
+    "test_corrective_completeness.py::test_policy_does_not_globally_allow_collections_assignments_or_mirrors",
+    "test_corrective_representation.py::test_alias_only_for_calendar_without_any_override",
+    "test_corrective_representation.py::test_one_working_envelope_is_not_a_split_loss",
+    "test_corrective_representation.py::test_installed_claim_cannot_reuse_unrelated_control",
+    "test_corrective_representation.py::test_supported_fields_and_segment_working_duration",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[calendar-inheritance]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[resource-calendar]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[fixed-units]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-START_NO_EARLIER_THAN]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-FINISH_NO_EARLIER_THAN]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[segments]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[inactive]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[summary-dependency]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[actuals]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[assignment-dates]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[resource-availability]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[default-availability]",
+    "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]"
   ],
   "acceptance_test_ids": [
     "test_cases_trisigma.py::test_real_cold_warm_archive[A]",
@@ -726,7 +757,9 @@
     "test_failure_matrix.py::test_final_order_has_all_phases",
     "test_user_journeys.py::test_final_baseline_audit",
     "test_failure_matrix.py::test_pytest_cache_is_isolated",
-    "test_failure_matrix.py::test_runtime_cache_is_not_a_protected_source"
+    "test_failure_matrix.py::test_runtime_cache_is_not_a_protected_source",
+    "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+    "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]"
   ],
   "requirements": {
     "AC-01": {
@@ -737,7 +770,9 @@
         "test_cases_trisigma.py::test_real_cold_warm_archive[D-risks]",
         "test_cases_trisigma.py::test_real_cold_warm_archive[D]",
         "test_cases_trisigma.py::test_real_cold_warm_archive[E]",
-        "test_cases_trisigma.py::test_real_cold_warm_archive[F]"
+        "test_cases_trisigma.py::test_real_cold_warm_archive[F]",
+        "test_corrective_binary_fixtures.py::test_binary_positive_recipe_and_real_admission[anchor]",
+        "test_corrective_binary_fixtures.py::test_binary_positive_recipe_and_real_admission[revised]"
       ],
       "fixtures": [
         "real/A-F",
@@ -757,12 +792,30 @@
     },
     "AC-02": {
       "tests": [
+        "test_corrective_representation.py::test_alias_only_for_calendar_without_any_override",
+        "test_corrective_representation.py::test_installed_claim_cannot_reuse_unrelated_control",
+        "test_corrective_representation.py::test_one_working_envelope_is_not_a_split_loss",
+        "test_corrective_representation.py::test_supported_fields_and_segment_working_duration",
         "test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
         "test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]",
         "test_live_publication.py::test_real_publish_repeat_and_observed_dates[C]",
         "test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]",
         "test_mpp_calendar.py::test_prepared_calendar_intervals_exceptions_inheritance_bindings",
-        "test_mpp_convert.py::test_prepared_no_reader_in_converter_calendar_itogo"
+        "test_mpp_convert.py::test_prepared_no_reader_in_converter_calendar_itogo",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[actuals]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[assignment-dates]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[calendar-inheritance]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-FINISH_NO_EARLIER_THAN]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-START_NO_EARLIER_THAN]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[default-availability]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[fixed-units]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[inactive]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[resource-availability]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[resource-calendar]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[segments]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[summary-dependency]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]"
       ],
       "fixtures": [
         "real/A-D",
@@ -808,6 +861,8 @@
         "test_failure_matrix.py::test_identity_choice_complete_preparation_chain[later-revision]",
         "test_failure_matrix.py::test_identity_choice_complete_preparation_chain[missing]",
         "test_failure_matrix.py::test_identity_choice_complete_preparation_chain[replace-selected]",
+        "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+        "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
         "test_live_publication.py::test_new_binary_identity_to_publication[diff]",
         "test_live_publication.py::test_new_binary_identity_to_publication[publish]",
         "test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
@@ -816,15 +871,18 @@
       ],
       "fixtures": [
         "real/A",
-        "synthetic/new-source-identity-resume",
+        "synthetic/binary-identity-positive",
         "synthetic/mpp14relations.mpp",
+        "synthetic/new-source-identity-resume",
         "synthetic/relations-all-types.mpp"
       ],
       "required_evidence": [
         "snapshot before admission",
         "same item/snapshot through identity/resume",
         "one binary read",
-        "no preliminary save"
+        "no preliminary save",
+        "positive binary source: needs_decision/3 → confirm → resume → publication true/0; no independent blockers",
+        "negative binary source: confirmed identity retains failed/5 and POST=PUT=0"
       ],
       "evidence": [],
       "subcases": {
@@ -836,6 +894,7 @@
             "test_live_publication.py::test_new_binary_identity_to_publication[publish]"
           ],
           "fixtures": [
+            "synthetic/binary-identity-positive",
             "synthetic/new-source-identity-resume"
           ],
           "required_evidence": [
@@ -850,6 +909,7 @@
             "test_live_publication.py::test_new_binary_identity_to_publication[publish]"
           ],
           "fixtures": [
+            "synthetic/binary-identity-positive",
             "synthetic/new-source-identity-resume"
           ],
           "required_evidence": [
@@ -864,6 +924,7 @@
             "test_live_publication.py::test_new_binary_identity_to_publication[publish]"
           ],
           "fixtures": [
+            "synthetic/binary-identity-positive",
             "synthetic/new-source-identity-resume"
           ],
           "required_evidence": [
@@ -878,6 +939,7 @@
             "test_live_publication.py::test_new_binary_identity_to_publication[publish]"
           ],
           "fixtures": [
+            "synthetic/binary-identity-positive",
             "synthetic/new-source-identity-resume"
           ],
           "required_evidence": [
@@ -950,6 +1012,20 @@
           ],
           "required_evidence": [
             "new MPP seven-step chain §20.7.1; 07-archive-crash-preserves-baseline"
+          ],
+          "evidence": [],
+          "subcases": {}
+        },
+        "08-identity-retains-independent-semantic-blockers": {
+          "tests": [
+            "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+            "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]"
+          ],
+          "fixtures": [
+            "synthetic/relations-all-types.mpp"
+          ],
+          "required_evidence": [
+            "identity exit0; resume failed5; same snapshot; zero MPXJ read on resume; zero POST/PUT"
           ],
           "evidence": [],
           "subcases": {}
@@ -1072,6 +1148,17 @@
         "test_admission.py::test_specific_proposal_cannot_override_archive_or_profile",
         "test_admission.py::test_unknown_field_blocks_but_proven_nonimpact_warns",
         "test_admission.py::test_unknown_timezone_never_claims_absolute_date_delta",
+        "test_corrective_completeness.py::test_adding_exact_mirror_does_not_change_classification",
+        "test_corrective_completeness.py::test_nonimpact_partial_proof_keeps_original_and_one_cause",
+        "test_corrective_completeness.py::test_partial_proof_fails_closed[count_missing]",
+        "test_corrective_completeness.py::test_partial_proof_fails_closed[extra_cause]",
+        "test_corrective_completeness.py::test_partial_proof_fails_closed[influencing]",
+        "test_corrective_completeness.py::test_partial_proof_fails_closed[mirror_reason_changed]",
+        "test_corrective_completeness.py::test_partial_proof_fails_closed[row_missing]",
+        "test_corrective_completeness.py::test_partial_proof_fails_closed[unknown_mirror]",
+        "test_corrective_completeness.py::test_partial_proof_fails_closed[unknown_reason]",
+        "test_corrective_completeness.py::test_policy_does_not_globally_allow_collections_assignments_or_mirrors",
+        "test_corrective_completeness.py::test_raw_discarded_records_never_become_nonimpact",
         "test_plugin_controls_live.py::test_installed_plugin_controls_live",
         "test_publish_prepare.py::test_unknown_timezone_archived_before_needs_decision"
       ],
@@ -1101,6 +1188,8 @@
         "test_identity_resume_e2e.py::test_identity_revision_blockers[partial]",
         "test_identity_resume_e2e.py::test_identity_revision_blockers[replaced]",
         "test_identity_resume_e2e.py::test_identity_revision_blockers[revoked]",
+        "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+        "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
         "test_live_publication.py::test_new_binary_identity_to_publication[diff]",
         "test_live_publication.py::test_new_binary_identity_to_publication[publish]",
         "test_live_publication.py::test_real_publish_repeat_and_observed_dates[B]",
@@ -1118,14 +1207,18 @@
       "fixtures": [
         "real/B",
         "real/C",
-        "synthetic/new-source-identity-resume"
+        "synthetic/binary-identity-positive",
+        "synthetic/new-source-identity-resume",
+        "synthetic/relations-all-types.mpp"
       ],
       "required_evidence": [
         "exact revision before rule",
         "reordered rows",
         "changed context",
         "partial/foreign/revoked/replaced",
-        "not_needed with removed cause"
+        "not_needed with removed cause",
+        "positive binary source: needs_decision/3 → confirm → resume → publication true/0; no independent blockers",
+        "negative binary source: confirmed identity retains failed/5 and POST=PUT=0"
       ],
       "evidence": [],
       "subcases": {
@@ -1137,6 +1230,7 @@
             "test_live_publication.py::test_new_binary_identity_to_publication[publish]"
           ],
           "fixtures": [
+            "synthetic/binary-identity-positive",
             "synthetic/new-source-identity-resume"
           ],
           "required_evidence": [
@@ -1151,6 +1245,7 @@
             "test_live_publication.py::test_new_binary_identity_to_publication[publish]"
           ],
           "fixtures": [
+            "synthetic/binary-identity-positive",
             "synthetic/new-source-identity-resume"
           ],
           "required_evidence": [
@@ -1165,6 +1260,7 @@
             "test_live_publication.py::test_new_binary_identity_to_publication[publish]"
           ],
           "fixtures": [
+            "synthetic/binary-identity-positive",
             "synthetic/new-source-identity-resume"
           ],
           "required_evidence": [
@@ -1179,6 +1275,7 @@
             "test_live_publication.py::test_new_binary_identity_to_publication[publish]"
           ],
           "fixtures": [
+            "synthetic/binary-identity-positive",
             "synthetic/new-source-identity-resume"
           ],
           "required_evidence": [
@@ -1251,6 +1348,20 @@
           ],
           "required_evidence": [
             "new MPP seven-step chain §20.7.1; 07-archive-crash-preserves-baseline"
+          ],
+          "evidence": [],
+          "subcases": {}
+        },
+        "08-identity-retains-independent-semantic-blockers": {
+          "tests": [
+            "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+            "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]"
+          ],
+          "fixtures": [
+            "synthetic/relations-all-types.mpp"
+          ],
+          "required_evidence": [
+            "identity exit0; resume failed5; same snapshot; zero MPXJ read on resume; zero POST/PUT"
           ],
           "evidence": [],
           "subcases": {}
@@ -3503,8 +3614,8 @@
         "test_failure_matrix.py::test_identity_choice_complete_preparation_chain[later-revision]",
         "test_failure_matrix.py::test_identity_choice_complete_preparation_chain[missing]",
         "test_failure_matrix.py::test_identity_choice_complete_preparation_chain[replace-selected]",
-        "test_live_publication.py::test_new_binary_identity_to_publication[diff]",
-        "test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+        "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+        "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
         "test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
         "test_publish_prepare.py::test_first_diff_snapshot_before_admission",
         "test_publish_prepare.py::test_new_binding_without_slug_retains_input_no_resumable_id"
@@ -3530,8 +3641,8 @@
         "test_failure_matrix.py::test_identity_choice_complete_preparation_chain[later-revision]",
         "test_failure_matrix.py::test_identity_choice_complete_preparation_chain[missing]",
         "test_failure_matrix.py::test_identity_choice_complete_preparation_chain[replace-selected]",
-        "test_live_publication.py::test_new_binary_identity_to_publication[diff]",
-        "test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+        "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[diff]",
+        "test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
         "test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
         "test_publish_prepare.py::test_first_diff_snapshot_before_admission",
         "test_publish_prepare.py::test_new_binding_without_slug_retains_input_no_resumable_id"
@@ -4652,6 +4763,73 @@
         "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_history_queries.py",
         "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publication_verify.py",
         "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_publish_resume.py"
+      ]
+    },
+    "synthetic/binary-identity-positive": {
+      "kind": "versioned_file",
+      "provider_test_ids": [
+        "test_live_publication.py::test_new_binary_identity_to_publication[diff]",
+        "test_live_publication.py::test_new_binary_identity_to_publication[publish]",
+        "test_corrective_binary_fixtures.py::test_binary_positive_recipe_and_real_admission[anchor]",
+        "test_corrective_binary_fixtures.py::test_binary_positive_recipe_and_real_admission[revised]"
+      ],
+      "path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary-identity-positive",
+      "note": "Documented supported binary source pair; generated and exported by real MPXJ. No clean-JSON replacement.",
+      "files": [
+        {
+          "path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary-identity-positive/anchor.mpp",
+          "sha256": "7aea0277b7a3d08fc19d17a67529022f35cea0a35e5938110c1ab433c9a02b4b",
+          "size_bytes": 180736
+        },
+        {
+          "path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary-identity-positive/manifest.json",
+          "sha256": "194abb27d7d88bbbefec77bcabe777548a35f3b1b5f53924803a2b49a16c8c36",
+          "size_bytes": 1735
+        },
+        {
+          "path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary-identity-positive/revised.mpp",
+          "sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
+          "size_bytes": 180736
+        },
+        {
+          "path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary-identity-positive/test-only-user-evidence.txt",
+          "sha256": "99cd720acf36d9e4e0ff602a8ded67afabf1b34dc270ad69bfcedd08ebd4f9de",
+          "size_bytes": 422
+        }
+      ],
+      "definition_files": [
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary_recipe.py"
+      ]
+    },
+    "golden/capability-controls": {
+      "kind": "versioned_file",
+      "provider_test_ids": [
+        "test_plugin_capabilities_live.py::test_installed_capability_control[task-calendar]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[calendar-inheritance]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[resource-calendar]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[fixed-units]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-START_NO_EARLIER_THAN]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[constraint-FINISH_NO_EARLIER_THAN]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[segments]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[inactive]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[summary-dependency]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[actuals]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[assignment-dates]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[resource-availability]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[default-availability]",
+        "test_plugin_capabilities_live.py::test_installed_capability_control[coincident-assignment]"
+      ],
+      "path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/capability-controls.json",
+      "note": "Independent installed-wrapper behavior and explicit unsupported probes; not all capabilities supported.",
+      "files": [
+        {
+          "path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/golden/capability-controls.json",
+          "sha256": "0348f115c3e223fc4c40ebad3df70c9f256850674c74c973a78c2eaf4b8ae42d",
+          "size_bytes": 171677
+        }
+      ],
+      "definition_files": [
+        "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_plugin_capabilities_live.py"
       ]
     }
   }

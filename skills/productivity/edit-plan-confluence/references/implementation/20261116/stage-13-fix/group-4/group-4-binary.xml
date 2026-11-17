@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="4.599" timestamp="2026-11-17T12:47:55.337561+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_corrective_binary_fixtures" name="test_binary_positive_recipe_and_real_admission[anchor]" time="2.594"><failure message="AssertionError: Traceback (most recent call last):&#10;    File &quot;&lt;string&gt;&quot;, line 3, in &lt;module&gt;&#10;    File &quot;/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary_recipe.py&quot;, line 79, in make_identity_positive_fixture&#10;      from read_mpp import _start_jvm&#10;  ModuleNotFoundError: No module named 'read_mpp'&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/usr/bin/python3.9', '-c', &quot;import importlib.util,sys\nspec=importlib.util.spec_from_file_loca...e_identity_positive_fixture\n    from read_mpp import _start_jvm\nModuleNotFoundError: No module named \'read_mpp\'\n').returncode">tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-4-fixtures/pytest-tmp/test_binary_positive_recipe_an0')
+revision = False
+
+    @pytest.mark.parametrize('revision',[False,True],ids=['anchor','revised'])
+    def test_binary_positive_recipe_and_real_admission(tmp_path,revision):
+        from env import select_mpxj_python
+        from plan_context import PlanContext
+        runtime=select_mpxj_python();context=PlanContext.resolve()
+        dest=tmp_path/'recreated.mpp'
+        code='''import importlib.util,sys
+    spec=importlib.util.spec_from_file_location('binary_recipe',sys.argv[1]);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    m.make_identity_positive_fixture(sys.argv[2],sys.argv[3],revision=sys.argv[4]=='1')'''
+        command=[runtime.python,'-c',code,str(FIXTURES/'binary_recipe.py'),str(FIXTURES/'mpp14relations.mpp'),str(dest),'1' if revision else '0']
+        proc=subprocess.run(command,capture_output=True,text=True,timeout=180)
+&gt;       assert proc.returncode==0,proc.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "&lt;string&gt;", line 3, in &lt;module&gt;
+E           File "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary_recipe.py", line 79, in make_identity_positive_fixture
+E             from read_mpp import _start_jvm
+E         ModuleNotFoundError: No module named 'read_mpp'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/usr/bin/python3.9', '-c', "import importlib.util,sys\nspec=importlib.util.spec_from_file_loca...e_identity_positive_fixture\n    from read_mpp import _start_jvm\nModuleNotFoundError: No module named \'read_mpp\'\n').returncode
+
+tests/test_corrective_binary_fixtures.py:30: AssertionError</failure></testcase><testcase classname="test_corrective_binary_fixtures" name="test_binary_positive_recipe_and_real_admission[revised]" time="1.909"><failure message="AssertionError: Traceback (most recent call last):&#10;    File &quot;&lt;string&gt;&quot;, line 3, in &lt;module&gt;&#10;    File &quot;/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary_recipe.py&quot;, line 79, in make_identity_positive_fixture&#10;      from read_mpp import _start_jvm&#10;  ModuleNotFoundError: No module named 'read_mpp'&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/usr/bin/python3.9', '-c', &quot;import importlib.util,sys\nspec=importlib.util.spec_from_file_loca...e_identity_positive_fixture\n    from read_mpp import _start_jvm\nModuleNotFoundError: No module named \'read_mpp\'\n').returncode">tmp_path = PosixPath('/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-4-fixtures/pytest-tmp/test_binary_positive_recipe_an1')
+revision = True
+
+    @pytest.mark.parametrize('revision',[False,True],ids=['anchor','revised'])
+    def test_binary_positive_recipe_and_real_admission(tmp_path,revision):
+        from env import select_mpxj_python
+        from plan_context import PlanContext
+        runtime=select_mpxj_python();context=PlanContext.resolve()
+        dest=tmp_path/'recreated.mpp'
+        code='''import importlib.util,sys
+    spec=importlib.util.spec_from_file_location('binary_recipe',sys.argv[1]);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    m.make_identity_positive_fixture(sys.argv[2],sys.argv[3],revision=sys.argv[4]=='1')'''
+        command=[runtime.python,'-c',code,str(FIXTURES/'binary_recipe.py'),str(FIXTURES/'mpp14relations.mpp'),str(dest),'1' if revision else '0']
+        proc=subprocess.run(command,capture_output=True,text=True,timeout=180)
+&gt;       assert proc.returncode==0,proc.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "&lt;string&gt;", line 3, in &lt;module&gt;
+E           File "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/synthetic/binary_recipe.py", line 79, in make_identity_positive_fixture
+E             from read_mpp import _start_jvm
+E         ModuleNotFoundError: No module named 'read_mpp'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/usr/bin/python3.9', '-c', "import importlib.util,sys\nspec=importlib.util.spec_from_file_loca...e_identity_positive_fixture\n    from read_mpp import _start_jvm\nModuleNotFoundError: No module named \'read_mpp\'\n').returncode
+
+tests/test_corrective_binary_fixtures.py:30: AssertionError</failure></testcase></testsuite></testsuites>

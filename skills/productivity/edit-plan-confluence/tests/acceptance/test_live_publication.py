@@ -167,61 +167,93 @@ def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, 
 
 @pytest.mark.parametrize('action', ['diff','publish'])
 def test_new_binary_identity_to_publication(action, live_page, stage13_cli, stage13_record, tmp_path):
-    from plan_rules import relation_signature, task_context
+    _binary_identity_chain(action,live_page,stage13_cli,stage13_record,tmp_path,positive=True)
+
+
+@pytest.mark.parametrize('action', ['diff','publish'])
+def test_binary_identity_does_not_override_semantic_losses(action,live_page,stage13_cli,stage13_record,tmp_path):
+    _binary_identity_chain(action,live_page,stage13_cli,stage13_record,tmp_path,positive=False)
+
+
+def _binary_identity_chain(action,live_page,stage13_cli,stage13_record,tmp_path,*,positive):
+    from plan_rules import relation_signature,task_context
     from prepared_plan import fingerprint
-    client, page_id, _ = live_page
-    context, run = stage13_cli
-    fixtures = Path(__file__).resolve().parents[1]/'fixtures/synthetic'
-    anchor_source = fixtures/'mpp14relations.mpp'
-    anchor = run('diff', '--mpp', str(anchor_source), '--page-id', page_id, '--project-slug', 'stage13-trisigma',
-                 '--timezone-hint', 'Europe/Moscow', live=True)
-    assert anchor['snapshot_id']
-    conn = connect_durable(context.db)
+    client,page_id,_=live_page
+    context,run=stage13_cli
+    fixtures=Path(__file__).resolve().parents[1]/'fixtures/synthetic'
+    binary=fixtures/'binary-identity-positive'
+    anchor_source=tmp_path/'anchor.mpp'
+    anchor_source.write_bytes((binary/'anchor.mpp' if positive else fixtures/'mpp14relations.mpp').read_bytes())
+    new_source=tmp_path/'new-binary.mpp'
+    new_source.write_bytes((binary/'revised.mpp' if positive else fixtures/'relations-all-types.mpp').read_bytes())
+    source_hash=hashlib.sha256(new_source.read_bytes()).hexdigest()
+    slug='stage13-binary-positive' if positive else 'stage13-binary-negative'
+    label=('new-source-' if positive else 'semantic-negative-')+action
+    anchor=run('diff','--mpp',str(anchor_source),'--page-id',page_id,'--project-slug',slug,
+               '--timezone-hint','Europe/Moscow',live=True)
+    assert anchor['snapshot_id'] and anchor['verification']['archive']=='verified'
+    if positive:assert anchor['exit_code']==0,anchor
+    conn=connect_durable(context.db)
     try:
-        normalized = json.loads(q.get_snapshot(conn, anchor['snapshot_id'])['source_json'])
-        dep = next(d for d in normalized['dependencies'] if d['link_type']=='FF')
-        signature = relation_signature(dep, normalized['project'])
-        tasks = {t['task_key']:t for t in normalized['tasks']}
-        keys = (dep['predecessor_task_key'],dep['successor_task_key'])
-        evidence = tmp_path/'test-only-user-evidence.txt'
-        evidence.write_bytes((fixtures/'new-source-identity-resume/test-only-user-evidence.txt').read_bytes())
-        digest = hashlib.sha256(evidence.read_bytes()).hexdigest()
-        eid = w.record_artifact(conn, digest, 'other', str(evidence))
-        content = {'predecessor_key':keys[0], 'successor_key':keys[1], 'expected_relation':signature,
-            'task_contexts':{k:task_context(tasks[k]) for k in keys}, 'action':'exclude_dependency',
-            'reason':'Explicit test-only rule, no claim of real Trisigma identity', 'approved_at':'2026-11-16T00:00:00Z',
-            'policy_revision':'publication-admission-v1', 'termination':'Exact pair/context changes',
-            'cause':{'code':'dependency_type_unsupported','entity':dep['dependency_key'],'source_sha256':fingerprint(signature)}}
-        w.record_project_rule(conn, w.ProjectRuleSpec('stage13-'+action,'1','stage13-trisigma',anchor['snapshot_id'],eid,digest,content))
-        new_source = tmp_path/'new-binary.mpp'; new_source.write_bytes((fixtures/'relations-all-types.mpp').read_bytes())
-        source_hash = hashlib.sha256(new_source.read_bytes()).hexdigest()
-        normalized_plan = q.get_snapshot(conn, anchor['snapshot_id'])['plan_id']
-        assert all(v.get('source_mpp_sha256') != source_hash for v in q.list_versions(conn, normalized_plan)['versions'])
-        first = run(action, '--mpp', str(new_source), '--page-id', page_id, '--project-slug', 'stage13-trisigma',
-                    '--timezone-hint', 'Europe/Moscow', live=True)
-        first_counters = deepcopy(run.last_probe)
-        shown = run('operation','show','--operation-id',first['operation_id'], live=True)
-        stage13_record('new-source-'+action, {'action':action,'anchor':anchor,'first':first,
-            'operation_show':shown,'counters':first_counters,'source_sha256':source_hash})
+        normalized=json.loads(q.get_snapshot(conn,anchor['snapshot_id'])['source_json'])
+        # The revised fixture changes UID 1's FS lag; the addressed rule excludes
+        # the unchanged UID 2 relation, only for the exact revised source bytes.
+        dep=(next(d for d in normalized['dependencies'] if d['uid']['value']==2) if positive
+             else next(d for d in normalized['dependencies'] if d['link_type']=='FF'))
+        signature=relation_signature(dep,normalized['project'])
+        tasks={t['task_key']:t for t in normalized['tasks']}
+        keys=(dep['predecessor_task_key'],dep['successor_task_key'])
+        evidence=tmp_path/'test-only-user-evidence.txt';evidence.write_bytes((binary/'test-only-user-evidence.txt').read_bytes())
+        digest=hashlib.sha256(evidence.read_bytes()).hexdigest()
+        eid=w.record_artifact(conn,digest,'other',str(evidence))
+        content={'predecessor_key':keys[0],'successor_key':keys[1],'expected_relation':signature,
+            'task_contexts':{k:task_context(tasks[k]) for k in keys},'action':'exclude_dependency',
+            'reason':'Explicit test-only exclusion of this relation for these exact revised binary bytes; no production consent',
+            'approved_at':'2026-11-17T00:00:00Z','policy_revision':'publication-admission-v1',
+            'termination':'Exact source, pair, context, relation or policy changes',
+            'cause':{'code':'explicit_dependency_exclusion','entity':dep['dependency_key'],
+                     'source_sha256':fingerprint(signature),'exact_source_required':source_hash}}
+        w.record_project_rule(conn,w.ProjectRuleSpec(label,'binary-fixture-v1',slug,anchor['snapshot_id'],eid,digest,content))
+        plan=q.get_snapshot(conn,anchor['snapshot_id'])['plan_id']
+        assert all(v.get('source_mpp_sha256')!=source_hash for v in q.list_versions(conn,plan)['versions'])
+        first=run(action,'--mpp',str(new_source),'--page-id',page_id,'--project-slug',slug,
+                  '--timezone-hint','Europe/Moscow',live=True)
+        first_counters=deepcopy(run.last_probe)
+        shown=run('operation','show','--operation-id',first['operation_id'],live=True)
+        result={'kind':'positive' if positive else 'semantic-negative','action':action,'anchor':anchor,'first':first,
+            'operation_show':shown,'first_counters':first_counters,'source_sha256':source_hash}
+        stage13_record(label,result)
         assert first['snapshot_id'] and first['verification']['archive']=='verified' and first['published'] is False
         assert first_counters['MPXJ_read']==1 and first_counters['POST']==first_counters['PUT']==0
-        identity = run('identity','confirm','--project-slug','stage13-trisigma',
-            '--from','snapshot:'+anchor['snapshot_id'],'--to','snapshot:'+first['snapshot_id'],
-            '--mode','continuity','--evidence',str(evidence),'--reason','Explicit synthetic fixture identity assertion',live=True)
+        assert first['exit_code']==(3 if positive else 5),first
+        assert first['status']==('needs_decision' if positive else 'failed'),first
+        requirement=shown['identity_requirements'][0]
+        assert requirement['from_snapshot_id']==anchor['snapshot_id'] and requirement['to_snapshot_id']==first['snapshot_id']
+        identity=run('identity','confirm','--project-slug',slug,'--from','snapshot:'+anchor['snapshot_id'],
+            '--to','snapshot:'+first['snapshot_id'],'--mode','continuity','--evidence',str(evidence),
+            '--reason','Explicit test fixture identity: same documented binary recipe and stable task UIDs',live=True)
         assert identity['exit_code']==0,identity
         new_source.unlink()
-        resumed = run('resume','--operation-id',first['operation_id'],'--mapping-revision',identity['mapping_revision_id'],live=True)
-        stage13_record('new-source-'+action, {'action':action,'anchor':anchor,'first':first,'operation_show':shown,
-            'identity':identity,'resume':resumed,'first_counters':first_counters,'resume_counters':run.last_probe,
-            'source_sha256':source_hash,'functional_status':'passed' if resumed['published'] is True else 'failed'})
-        assert resumed['snapshot_id']==first['snapshot_id'] and run.last_probe['MPXJ_read']==0
-        assert first['exit_code']==3 and first['status']=='needs_decision',first
-        requirement = shown['identity_requirements'][0]
-        assert requirement['from_snapshot_id']==anchor['snapshot_id'] and requirement['to_snapshot_id']==first['snapshot_id']
-        assert len([v for v in q.list_versions(conn,normalized_plan)['versions'] if v.get('source_mpp_sha256')==source_hash])==1
-        assert resumed['exit_code']==0 and resumed['published'] is True,resumed
-    finally:
-        conn.close()
+        resumed=run('resume','--operation-id',first['operation_id'],'--mapping-revision',identity['mapping_revision_id'],live=True)
+        resumed_counters=deepcopy(run.last_probe)
+        result.update(identity=identity,resume=resumed,resume_counters=resumed_counters,
+            functional_status='passed' if resumed['published'] is positive else 'failed')
+        stage13_record(label,result)
+        assert resumed['snapshot_id']==first['snapshot_id'] and resumed_counters['MPXJ_read']==0
+        assert len([v for v in q.list_versions(conn,plan)['versions'] if v.get('source_mpp_sha256')==source_hash])==1
+        if positive:
+            assert resumed['exit_code']==0 and resumed['published'] is True,resumed
+            assert resumed_counters['POST']==resumed_counters['PUT']==1
+            versions=client.get_page(page_id)['version']['number']
+            repeat=run('resume','--operation-id',first['operation_id'],live=True)
+            result.update(repeat=repeat,repeat_counters=deepcopy(run.last_probe));stage13_record(label,result)
+            assert repeat['status']=='unchanged' and repeat['exit_code']==0 and repeat['published'] is True
+            assert run.last_probe['MPXJ_read']==run.last_probe['POST']==run.last_probe['PUT']==0
+            assert client.get_page(page_id)['version']['number']==versions
+        else:
+            assert resumed['exit_code']==5 and resumed['status']=='failed' and resumed['published'] is False,resumed
+            assert resumed['external_effect']=='none' and resumed_counters['POST']==resumed_counters['PUT']==0
+    finally:conn.close()
 
 
 def test_installed_names_after_live(request, stage13_record):

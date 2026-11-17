@@ -1,0 +1,22 @@
+{
+  "run_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510",
+  "authorization": "explicit executor correction cycle 2; master §20 manual Codex exception",
+  "before": {
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md": "b3502dd80bc689a03d0fef2a4e38237f9cfe211ccb7036d6b81b2057a3a22b3d",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md": "d4a82972fba5a5451aaf4320f4af144d8fcc936275ba8914b7cc42a5432e16bb",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md": "f7c04b7fde0831a42e179fb4821ee2ce8e0553baf40b5eaae93bc31ded0d8637",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/appendix_unified-pipeline-source_20261116.md": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697"
+  },
+  "after": {
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md": "9c12e51efff158d884612344cbcfb37bd76b710daa4a0e2396bfc88f0517b812",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md": "e05bb47d428e0f8c4c267809ec66bb7d1792c42c48a66f769a927bee4988afec",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md": "b57ff67ff1ff84ef412b2ec4454c188b64d7a3215b0547be19ec28f15a42e391",
+    "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/appendix_unified-pipeline-source_20261116.md": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697"
+  },
+  "version": "0.5.2",
+  "canon": {
+    "sha256": "a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892",
+    "git_status": "clean at entry; requested M absent; no fabricated modification"
+  },
+  "gate": "documentation_updated; acceptance_pending"
+}

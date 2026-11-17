@@ -1,0 +1,20 @@
+{
+  "targeted": {
+    "passed": 28,
+    "failed": 0,
+    "rc": 0
+  },
+  "first_targeted": {
+    "passed": 25,
+    "failed": 3,
+    "rc": 1,
+    "reason": "Receipt schema did not allow new owner decision fields; corrected and repeated.",
+    "failed_tests": [
+      "test_bc_exact_mapping_and_context[reorder]",
+      "test_bc_exact_mapping_and_context[new_uid]",
+      "test_bc_exact_mapping_and_context[not_needed]"
+    ]
+  },
+  "canon_sha256": "a6e841a660f60f2aee932edbd558992c68fc560de4464a580ffbb1a8e0b17892",
+  "new_migrations": []
+}

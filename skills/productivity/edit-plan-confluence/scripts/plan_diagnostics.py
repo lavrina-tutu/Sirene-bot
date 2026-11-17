@@ -183,6 +183,31 @@ def capability_findings(data, plugin_profile, conversion=None):
                 and not (plugin_profile.supports('resource:default_availability') and default_availability_equivalent(resource,data))):
             issues.append(finding('unsupported_semantics','resource_availability_unrepresented',resource['resource_key'],resource['availability']))
     for assignment in data['assignments']:
+        from mpp_convert import unassigned_source, unassigned_text, UNASSIGNED_COLUMN
+        if unassigned_source(assignment, tasks):
+            from plan_policy import owner_decision
+            decision = owner_decision()
+            ident = (conversion or {}).get('mappings', {}).get('tasks', {}).get(assignment['task_key'])
+            node = nodes.get(ident, {})
+            gantt = (conversion or {}).get('gantt', {})
+            text = unassigned_text(assignment)
+            matching = [a for a in data['assignments'] if a.get('task_key') == assignment['task_key'] and unassigned_source(a, tasks)]
+            expected = '\n'.join(unassigned_text(a) for a in matching)
+            visible = all(any(c.get('id') == UNASSIGNED_COLUMN and c.get('hidden') is False
+                for c in gantt.get('initialState', {}).get(mode, {}).get('columns', [])) for mode in ('view','edit'))
+            native = [a for a in gantt.get('assignmentsData', [])
+                if a.get('id') == (conversion or {}).get('mappings', {}).get('assignments', {}).get(assignment['assignment_key'])]
+            planned = node.get('startDate') == field_value(tasks[assignment['task_key']].get('start')) and node.get('endDate') == field_value(tasks[assignment['task_key']].get('finish'))
+            admissible = (decision['unassigned_resources'] == 'preserve_source_display' and planned
+                and node.get(UNASSIGNED_COLUMN) == expected and visible and not native
+                and gantt.get('customColumns', {}).get(UNASSIGNED_COLUMN, {}).get('type') == 'customtext')
+            issues.append(finding('display_only' if admissible else 'unsupported_semantics',
+                'unassigned_resource_source_display' if admissible else 'unassigned_resource_display_unverified',
+                assignment['assignment_key'], assignment,
+                {'message':'назначение без ресурса публикуется как есть (resource_uid: missing)',
+                 'resource':None,'text':text,'verified':admissible,'owner_decision':decision}))
+            if admissible:
+                continue
         for field in ('start','finish','segments'):
             value=field_value(assignment.get(field))
             equivalent=(plugin_profile.supports('assignment:coincident_task_interval')

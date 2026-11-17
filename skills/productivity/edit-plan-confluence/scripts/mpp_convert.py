@@ -366,7 +366,7 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v6'
+CONVERTER_VERSION = 'prepared-gantt-v7-owner-source'
 
 PUBLICATION_MODE = 'planned_schedule_with_actuals_columns'
 PUBLICATION_LABEL = 'по плану; факт — в колонках'
@@ -433,16 +433,36 @@ def source_fact_values(task):
     return values
 
 
+UNASSIGNED_COLUMN = 'custom_mpp_unassigned'
+
+
+def unassigned_source(assignment, source_tasks):
+    """Only an explicitly absent resource; invalid/unknown references still block."""
+    from itogo import field_value
+    raw = assignment.get('resource_uid', {})
+    return (assignment.get('resource_key') is None and raw.get('quality') == 'missing'
+        and raw.get('reason') == 'not_set' and raw.get('value') is None
+        and assignment.get('task_key') in source_tasks and 'error' not in assignment
+        and _number(field_value(assignment.get('units'))) is not None)
+
+
+def unassigned_text(assignment):
+    fields = ('start','finish','work','actual_work','remaining_work','overtime_work','units')
+    return (assignment['assignment_key'] + '; resource_uid: missing; ресурс: ; '
+        + '; '.join(field + ': ' + source_value_text(assignment.get(field)) for field in fields))
+
+
 def add_source_columns(gantt):
     """Use the installed wrapper's customColumns object and customtext fields."""
     columns = gantt.setdefault('customColumns', {})
-    for column, title in SOURCE_COLUMNS.values():
+    values = [*SOURCE_COLUMNS.values(), (UNASSIGNED_COLUMN, 'Назначения без ресурса (исходник)')]
+    for column, title in values:
         columns[column] = {'id': column, 'text': title, 'type': 'customtext'}
     for mode in ('view', 'edit'):
         state = gantt.setdefault('initialState', {}).setdefault(mode, {})
         rows = state.setdefault('columns', [])
         existing = {row['id']: row for row in rows}
-        for column, _ in SOURCE_COLUMNS.values():
+        for column, _ in values:
             if column not in existing:
                 rows.append({'id': column, 'width': 210, 'hidden': False, 'order': len(rows)})
             else:
@@ -533,6 +553,17 @@ def build_assignments(assignments, task_mapping, resource_mapping, start_id, *, 
                     'source':deepcopy(a),'normalized':None,'represented':None,
                     'basis':'no_resource_and_all_work_known_zero_milestone_duration_zero_coincident_dates'})
             continue
+        if unassigned_source(a, source_tasks or {}):
+            from plan_policy import owner_decision
+            decision = owner_decision()
+            if decision['unassigned_resources'] == 'preserve_source_display':
+                if transformations is not None:
+                    transformations.append({'entity':a['assignment_key'], 'field':'resource_key',
+                        'kind':'unassigned_source_display', 'source':deepcopy(a), 'normalized':None,
+                        'represented':{'task':task, 'resource':None, 'text':unassigned_text(a)},
+                        'basis':'назначение без ресурса публикуется как есть (resource_uid: missing)',
+                        'owner_decision':decision})
+                continue
         if task is None or resource is None or units is None or 'error' in a:
             diagnostics.append({'code':'assignment_partial','entity':a.get('assignment_key'),
                                 'source':deepcopy(a),'represented':None})
@@ -774,6 +805,9 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
     out=deepcopy(tmpl)
     out.update(eventsData=roots,resourcesData=resources,dependenciesData=deps,assignmentsData=assignments,calendarsData=cal['calendarsData'])
     add_source_columns(out)
+    for key, node in nodes.items():
+        node[UNASSIGNED_COLUMN] = '\n'.join(unassigned_text(a) for a in data['assignments']
+            if a.get('task_key') == key and unassigned_source(a, source_tasks))
     default_cal=cal['bindings']['project']
     if profile.supports('calendar:bindings:project') and default_cal in cal['mapping']:
         out['calendar']=cal['mapping'][default_cal]

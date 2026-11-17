@@ -61,6 +61,10 @@ def freeze_operation_input(conn, operation: ImportOperation) -> FrozenInput:
             size_bytes=frozen.size_bytes,frozen_at=frozen.frozen_at,container_sha256=frozen.container_sha256,
             container_locator=frozen.container_locator,zip_member=frozen.zip_member)
         w.record_operation_event(conn,operation.attempt_id,"input_frozen",detail=operation.item_id)
+        w.record_operation_event(conn,operation.attempt_id,"source_file_metadata",detail=json.dumps({
+            'item_id':operation.item_id,'source_mpp_sha256':frozen.sha256,
+            'source_mtime_ns':frozen.source_mtime_ns,
+            'basis':'delivered_container_mtime' if frozen.container_sha256 else 'source_file_mtime'}))
         return frozen
     except InputError as exc:
         w.fail_import_item(conn,operation.item_id,operation.attempt_id,exc.code,

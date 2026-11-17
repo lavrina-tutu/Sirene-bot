@@ -13,7 +13,7 @@ from prepared_plan import fingerprint, ROOT
 from plan_diagnostics import graph_findings, finding
 from mofs_index.plan import writer as w, query as q, identity as identity
 
-RULES_VERSION='project-exceptions-v1'
+RULES_VERSION='project-exceptions-v2-owner-source'
 
 
 def relation_signature(relation, project):
@@ -82,7 +82,15 @@ def apply_rules(conn, operation_id, prepared, conversion, *, mapping_revision=No
                 # A legacy snapshot/source is provenance, not an active local
                 # rule binding or a new identity confirmation.
                 results[-1]['recovery']=deepcopy(recovery)
-            findings.append(finding('identity','rule_reference_or_evidence_missing',entry['rule_id'],entry))
+            from plan_policy import owner_decision
+            decision = owner_decision()
+            if decision['historical_rules'] == 'not_applicable':
+                results[-1].update(status='not_needed', reason='историческое правило не применяется (решение владельца)',
+                    owner_decision=decision)
+                findings.append(finding('display_only','historical_rule_not_applicable_owner_decision',
+                    entry['rule_id'], entry, {'decision':decision, 'message':results[-1]['reason']}))
+            else:
+                findings.append(finding('identity','rule_reference_or_evidence_missing',entry['rule_id'],entry))
     counts=Counter(r['rule_id'] for r in rules)
     for rule in rules:
         rid=rule['rule_id']; content=rule['content']

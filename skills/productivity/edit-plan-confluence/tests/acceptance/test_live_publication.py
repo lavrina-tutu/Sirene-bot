@@ -124,6 +124,28 @@ def observe_plugin(client, page_id, expected, request, folder, *, attachment_ver
                             assert text==task['model'][column]
                         data['visible_values'][column]=values
                         if opening==0:page.screenshot(path=str(folder/('visible-'+column+'.png')),full_page=True)
+                    from mpp_convert import UNASSIGNED_COLUMN
+                    expected_tasks = {}
+                    def collect(rows):
+                        for task in rows:
+                            expected_tasks[str(task['id'])] = task
+                            collect(task.get('children', []))
+                    collect(json.loads(expected)['eventsData'])
+                    if any(t.get(UNASSIGNED_COLUMN) for t in expected_tasks.values()):
+                        assert columns[UNASSIGNED_COLUMN]['hidden'] is False
+                        frame.evaluate('async(id)=>{await gantt.scrollColumnIntoView(gantt.columns.getById(id));return null;}', UNASSIGNED_COLUMN)
+                        data['visible_unassigned'] = {}
+                        for task in data['tasks']:
+                            text = expected_tasks[str(task['id'])].get(UNASSIGNED_COLUMN, '')
+                            if not text:
+                                continue
+                            frame.evaluate('async(id)=>{await gantt.scrollRowIntoView(id);return null;}', task['id'])
+                            cell = frame.locator('.b-grid-row[data-id="'+str(task['id'])+'"] .b-grid-cell[data-column="'+UNASSIGNED_COLUMN+'"]')
+                            assert cell.count() == 1 and cell.inner_text().strip() == text
+                            assert task['model'][UNASSIGNED_COLUMN] == text
+                            data['visible_unassigned'][str(task['id'])] = text
+                        if opening == 0:
+                            page.screenshot(path=str(folder/'visible-unassigned.png'), full_page=True)
                     observation['openings'].append(data)
                     page.screenshot(path=str(folder/('render-'+str(opening)+'.png')),full_page=True)
                 finally:page.close()

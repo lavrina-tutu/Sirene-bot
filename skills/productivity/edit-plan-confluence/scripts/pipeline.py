@@ -987,7 +987,8 @@ def prepare_publish(client=None, page_id=None, mpp_path=None, *, project_slug=No
         admission=evaluate(findings,proposals=proposals,accepted_deviations=accepted_deviations)
         receipt.update(status=admission['status'],exit_code=admission['exit_code'],
             exceptions=[{'rule_id':r['rule_id'],'revision':r['rule_revision'],
-                         'result':r['status'],'evidence_id':r['evidence_id']} for r in rules])
+                         'result':r['status'],'evidence_id':r['evidence_id'],
+                         'reason':r.get('reason'),'owner_decision':r.get('owner_decision')} for r in rules])
         receipt['verification']['schedule'],receipt['warnings']=compact_receipt_diagnostics(admission)
         counts=conversion['summary'].get('counts',{})
         for key in ('task_count','display_task_count','dependency_count'):receipt[key]=counts.get(key)

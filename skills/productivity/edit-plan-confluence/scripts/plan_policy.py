@@ -7,6 +7,18 @@ from prepared_plan import fingerprint
 POLICY_VERSION = 'publication-admission-v1'
 
 
+def owner_decision():
+    """Versioned owner evidence; unavailable/tampered evidence fails closed."""
+    import hashlib, json
+    from prepared_plan import ROOT
+    policy = json.loads((ROOT/'references/profiles/owner-decision-v1.json').read_text())
+    evidence = (ROOT/policy['evidence_path']).resolve()
+    if ROOT.resolve() not in evidence.parents or hashlib.sha256(evidence.read_bytes()).hexdigest() != policy['evidence_sha256']:
+        raise ValueError('owner_decision_evidence_integrity')
+    return policy
+
+
+
 @dataclass(frozen=True)
 class AdmissionRule:
     row: int

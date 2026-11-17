@@ -24,15 +24,15 @@ def converted(case):
     return data, prepared, profile, convert_prepared_plan(prepared, plugin_profile=profile)
 
 
-def test_D_unassigned_resources_and_independent_interval_still_block():
+def test_D_unassigned_resources_and_independent_interval_preserved_by_owner():
     data, prepared, profile, conversion = converted('D')
     rows = {a['assignment_key']:a for a in data['assignments']}
     assert {'uid:441','uid:699','uid:700','uid:701'} <= {k for k,a in rows.items() if a['resource_key'] is None}
     errors = {(x['entity'],x['code']) for x in conversion['diagnostics']}
-    assert {entity for entity,code in errors if code=='assignment_partial'} == {'uid:441','uid:699','uid:700','uid:701'}
+    assert not {entity for entity,code in errors if code=='assignment_partial'}
     findings = capability_findings(prepared.normalized_data, profile, conversion)
-    assert all(any(f['entity']=='uid:441' and f['code']=='assignment_semantics_unrepresented:'+field for f in findings)
-               for field in ('start','finish'))
+    assert {f['entity'] for f in findings if f['code']=='unassigned_resource_source_display'} >= {'uid:441','uid:699','uid:700','uid:701'}
+    assert not any(f['entity']=='uid:441' and f['code'].startswith('assignment_semantics_unrepresented:') for f in findings)
     assignment = rows['uid:441']; task = next(t for t in data['tasks'] if t['task_key']==assignment['task_key'])
     assert assignment['finish']['value']=='2026-03-30T09:00'
     assert task['finish']['value']=='2026-04-22T18:00'

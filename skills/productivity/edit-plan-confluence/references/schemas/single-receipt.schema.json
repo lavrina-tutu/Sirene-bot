@@ -162,6 +162,18 @@
               "string",
               "null"
             ]
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "owner_decision": {
+            "type": [
+              "object",
+              "null"
+            ]
           }
         },
         "required": [

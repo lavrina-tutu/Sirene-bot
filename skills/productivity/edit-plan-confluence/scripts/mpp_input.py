@@ -101,6 +101,7 @@ class FrozenInput:
     container_sha256: str | None = None
     container_locator: str | None = None
     zip_member: str | None = None
+    source_mtime_ns: int | None = None
 
 
 def _sync_dir(path):
@@ -159,7 +160,7 @@ def _copy_consistent(source: Path, target: Path, limit: int):
     # Independently read back the copy, not just the digest fed to write().
     if hashlib.sha256(target.read_bytes()).digest() != digest.digest():
         raise InputError("frozen_input_hash_mismatch")
-    return digest.hexdigest(),size
+    return digest.hexdigest(),size,before.st_mtime_ns
 
 
 def _unpack_zip(container, directory, limits):
@@ -265,7 +266,7 @@ def freeze_input(path: str | Path, *, operation_id: str, workvault: Path | None 
     digest=None
     try:
         raw=staging/"input.bin"
-        digest,size=_copy_consistent(source,raw,max(limits["MPP_MAX_BYTES"],limits["ZIP_MAX_BYTES"]))
+        digest,size,source_mtime_ns=_copy_consistent(source,raw,max(limits["MPP_MAX_BYTES"],limits["ZIP_MAX_BYTES"]))
         # Preserve accepted transport bytes even if candidate selection fails.
         durable_source=root/(digest+".source")
         try:
@@ -303,7 +304,7 @@ def freeze_input(path: str | Path, *, operation_id: str, workvault: Path | None 
         if container_sha:
             container_locator=str(dest/"container.zip")
         return FrozenInput(dest/"source.mpp",sha,size,source.name,str(source),datetime.now(timezone.utc).isoformat(),
-                           container_sha,container_locator,member)
+                           container_sha,container_locator,member,source_mtime_ns)
     except InputError as exc:
         exc.container_sha256=digest if durable_source else None
         exc.container_locator=str(durable_source) if durable_source else None

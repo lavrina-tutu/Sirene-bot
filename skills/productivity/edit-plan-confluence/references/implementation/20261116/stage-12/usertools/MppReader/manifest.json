@@ -1,0 +1,15 @@
+{
+  "tool": "MppReader",
+  "reason": "stage-12 exporter/typed API operational documentation only",
+  "files": [
+    {
+      "relative_path": "README.md",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MppReader/README.md",
+      "action": "modify",
+      "before_sha256": "9faa5ec81fe6cfd27c08ce37e42c5d1e2e609c5661d050a9ee1d938a66c3f194",
+      "after_sha256": "f6c9dbb49f201818c168777079d7a29150cf9b925667ac21db26f685573c0050",
+      "before_mode": "0o600",
+      "after_mode": "0o600"
+    }
+  ]
+}

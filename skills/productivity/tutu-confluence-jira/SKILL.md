@@ -1,7 +1,7 @@
 ---
 name: tutu-confluence-jira
 description: "Confluence/JIRA ТУТУ: страницы, макросы, формат, резолв; постановка/правка задач в минутках — через taskrefresh"
-version: 1.9.0
+version: 1.9.1
 author: agent
 license: MIT
 platforms: [linux]
@@ -21,30 +21,46 @@ metadata:
 
 | Система | Файл | Переменная |
 |---|---|---|
-| Confluence (`dom.tutu.ru`) | `~/USERTOOLS/ConfluenceSync/.env` | `CONFLUENCE_TOKEN` |
+| Confluence (`dom.tutu.ru`) | процессное окружение → центральный `~/.config/hermes/.env` через usertools_env; локальный legacy только по режиму loader | `CONFLUENCE_TOKEN` |
 | JIRA (`hq.tutu.ru`) | `~/.hermes/profiles/default/.env` (fallback: `anthropic/.env`) | `JIRA_TOKEN` + `JIRA_BASE_URL=https://hq.tutu.ru` |
 
-⚠️ **`~/.config/hermes/.env` сломан** — содержит спецсимволы в `TUTU_DOMAIN_PASSWORD`, bash падает с syntax error при `source`. Для JIRA: канон `~/.hermes/profiles/default/.env`, fallback `~/.hermes/profiles/anthropic/.env`.
+Для JIRA сохраняется отдельный действующий контур ниже. `.env` с
+shell-спецсимволами нельзя source-ить ради Confluence: штатный loader парсит файл.
 
-⚠️ **Массовый 404 на Confluence = сперва проверь токен, а не «страницы удалены».** Если ВСЕ страницы разом дают 404 (и даже заведомо живая контрольная), а тело ответа содержит `"authorized":false,"valid":true` — это **отказ авторизации, замаскированный под `No content found` (404)**, а не отсутствие страниц. Единичный 404 одного pageId (обычно SSO/private/space-rights) — другая история; правило ниже «404 = единственный выход вручную» про неё. Массовый 404 с `authorized:false` — проверь `load_confluence_env` и целостность скопированного токена: **повреждённый CONFLUENCE_TOKEN (валидные байты + мусорные хвостовые) в более-приоритетном env перекрывает рабочий** из `~/USERTOOLS/ConfluenceSync/.env`. Загрузка env идёт по порядку (`load_usertools_env()` центральный первый, фоллбек на tool-local только `if key not in os.environ`) — попавший в центральный `~/.config/hermes/.env` мусорный токен глушит валидный, ничего не бросая. Проверка: `curl -s -o /dev/null -w "%{http_code}"` на известный pageId валидным токеном (ожидай 200) — расхождение = сломан загруженный токен.
+Массовый 404 Confluence с authorized:false может означать отказ авторизации;
+проверить доступ к известной странице и источник credentials без печати token.
+Process env перекрывает центральный источник. При unified_only локальный .env
+не служит обходом приоритета; исправление credentials выполняется в их владельце.
 
-Загрузить Confluence (только нужные переменные, БЕЗ распыления generic-переменных):
+Загружать Confluence штатным `scripts/env.py` канона
+[edit-plan-confluence](../edit-plan-confluence/SKILL.md): `load_confluence_env()`
+использует установленные usertools_config/usertools_env. В unified_only локальный
+ConfluenceSync `.env` не читается; в not_started/dual_read или явном legacy mode
+допустим штатный fallback. Process env имеет приоритет; `.env` не source-ить.
+Для существующих shell-примеров ниже функция сохраняет имя и экспортирует
+только разрешённые ключи, не печатая token:
+
 ```bash
-# Загружает из ConfluenceSync/.env ТОЛЬКО токен и при необходимости WORKVAULT_PATH,
-# НЕ мутируя окружение чужими generic-переменными (TOOL_DIR/LOGS_PATH и т.п.),
-# которые распыляются из этого .env при использовании `source` и ломают другие тулы
-# (см. баг MOFS CONF-001, решён 20.08.2026).
 load_confluence_env() {
-  while IFS='=' read -r _k _v; do
-    case "$_k" in
-      CONFLUENCE_TOKEN|WORKVAULT_PATH)
-        [ -n "$_v" ] && export "$_k=$_v"
-        ;;
-    esac
-  done < "$HOME/USERTOOLS/ConfluenceSync/.env"
+  local _conf_key _conf_value
+  while IFS='=' read -r _conf_key _conf_value; do
+    case "$_conf_key" in CONFLUENCE_TOKEN|WORKVAULT_PATH) export "$_conf_key=$_conf_value" ;; esac
+  done < <(/usr/bin/python3 - <<'PYCONF'
+import sys
+sys.path.insert(0, '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts')
+from env import load_confluence_env
+for key, value in load_confluence_env().items():
+    print(key + '=' + value)
+PYCONF
+  )
+  test -n "${CONFLUENCE_TOKEN:-}"
 }
 load_confluence_env
 ```
+
+MPP/Gantt направлять в `skill_view(name="edit-plan-confluence")`: publish/save,
+Inbox и адресные решения определены там. Обычное publish не требует повторного
+общего «да». Остальные Confluence/JIRA сценарии сохраняют свои правила.
 
 Для Confluence curl:
 ```bash
@@ -568,8 +584,8 @@ Restate the task spec, wait for Sasha's answers, then act ("делай"). Task U
 - **Ячейка таблицы с простым текстом**: Confluence-санитайзер storage-формата снимает `<td>` у ячеек вида `<td><p>текст</p></td>` — оставляет голый `<p>` прямо в `<tr>`, и таблица рендерится криво (текст «съезжает», колонки теряются). Каноничные форматы ячейки: простой текст — `<td>текст</td>` (без обёртки `<p>`); ячейка с макросом (`ac:link`, `time`, `status`, `expand`, `code`) — `<td><div class="content-wrapper"><p>...</p></div></td>`; пустая ячейка — `<td><p><br /></p></td>`. После PUT обязательно проверять живым GET, что в каждой вставленной строке ровно N `<td>` и нет голых `<p>` внутри `<tr>`.
 - **table-filter «Запросы к данным»: строки класть в ГЛАВНЫЙ `<tbody>`, не во вложенную легенду.** В этом шаблоне заголовочный ряд `<tr class="">` содержит колонку «Статус (заполняет владелец данных)» с вложенным макросом `tooltip2`, а внутри него — вложенную `<table>`-легенду (4 строки «будут реализованы» → «В РАБОТЕ» и т.д.). Наивный анкер вида `</tbody></table><p …>` совпадает с концом этой ВЛОЖЕННОЙ таблицы, поэтому строки уходят ВНУТРЬ легенды и страница выглядит пустой (строки «запрятаны» в тултип) — Саша видит пустую таблицу и переспрашивает. Правильно: data-строки вставлять после закрытия заголовочного `</tr>` и перед первым вхождением `</tbody></table></ac:rich-text-body>` (это конец главной таблицы table-filter #0, а вложенная легенда закрывается как `</tbody></table>` + текст, без `</ac:rich-text-body>` сразу). Тег data-строки — `<tr>` без `class`; заголовочной — `<tr class="">`. Верифицировать: в главной таблице `<tr>`(без class) == числу строк, легенда остаётся ровно 4 шт `<tr class="">`.
 - **НЕ пропускать HTML-теги через эскейпер.** Если хелпер вида `p(t)`/`esc(t)` делает `html.escape(t)`, в него можно передавать только чистый текст. Строки с готовой разметкой (`<strong>`, `<br/>`, `<a href>`, `<h3>`) собирать вручную (литеральные теги + `esc()` только на текстовых кусках). Иначе на странице виден буквальный текст `<strong>…</strong>`, `<br/>` — «маркеры», которые Саша просит убрать. После сборки обязательно проверять живым GET: `body.count('&lt;') == 0` в своих вставках. Confluence нормализует `<br/>` → `<br />` — это норм, не дефект.
-- **ConfluenceSync .env содержит PAT** — `load_confluence_env` перед curl.
-- **`--dest` флага нет** у confluencesync pull — путь сохранения определяется автоматически по иерархии Confluence; управление через `.env` WORKVAULT_PATH.
+- **Confluence credentials** — штатный `load_confluence_env` перед curl; источник определяется unified loader, в unified_only локальный `.env` не требуется.
+- **`--dest` флага нет** у confluencesync pull — путь сохранения определяется автоматически по иерархии Confluence; управление через штатную настройку WORKVAULT_PATH.
 - После изменений в WorkVault — `rclone sync ~/WorkVault owncloud:WorkVault`.
 - **REST API возвращает 404 на некоторые pageId** — не ошибка конфигурации. Причины: страница в пространстве без прав для PAT, или пространство использует SSO/keycloak-only авторизацию. Это нормально — зафиксируй ссылку для ручного открытия, не трать время на обходы. **Единственный выход при 404 — дать пользователю готовый текст/инструкцию и попросить вставить вручную.** Пример: pageId=511559466 («Настройка ссылки Zoom») — 404 через PAT даже при валидном токене (23.07.2026).
 - **Zoom Marketplace Server-to-Server OAuth scope `meeting:write:meeting:admin`** — в корпоративном аккаунте ТУТУ этот scope недоступен для выбора (не отображается в UI, скрыт политикой аккаунта). Нужно обращаться к Zoom-админу ТУТУ. Токен и само приложение создаются нормально, ошибка проявляется только при вызове `POST /v2/users/{id}/meetings` → код 4711. Credentials хранятся в `~/.hermes/profiles/anthropic/.env` (`ZOOM_ACCOUNT_ID`, `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET`). Скрипт тестирования: `/home/tkachenkoav/USERTOOLS/ZoomAPI/test_zoom.py`. Детали — `references/zoom-api-setup.md`.

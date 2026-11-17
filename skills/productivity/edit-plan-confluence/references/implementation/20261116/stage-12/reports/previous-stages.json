@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "maps": {
+    "STAGE01_REQUIRED": true,
+    "STAGE02_REQUIRED": true,
+    "STAGE03_REQUIRED": true,
+    "STAGE04_REQUIRED": true,
+    "STAGE05_REQUIRED": true,
+    "STAGE06_REQUIRED": true,
+    "STAGE07_REQUIRED": true,
+    "STAGE08_REQUIRED": true,
+    "STAGE09_REQUIRED": true,
+    "STAGE10_REQUIRED": true,
+    "STAGE11_REQUIRED": true
+  },
+  "unchanged_report_source_functions": [
+    "_stage02_report",
+    "_stage03_report",
+    "_stage04_report",
+    "_stage05_report",
+    "_stage06_report",
+    "_stage07_report",
+    "_stage08_report",
+    "_stage09_report",
+    "_stage09_sources",
+    "_stage10_report",
+    "_stage10_sources",
+    "_stage11_report",
+    "_stage11_sources"
+  ]
+}

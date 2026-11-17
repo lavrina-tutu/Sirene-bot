@@ -1,0 +1,25 @@
+{
+  "procedure": "hermes-multi-profile-skills: backup real custom directory, repair live layer, restore-all-skills.sh",
+  "hub_owned": false,
+  "skills": [
+    {
+      "name": "edit-plan-confluence",
+      "active_path": "/home/tkachenkoav/.hermes/skills/productivity/edit-plan-confluence",
+      "existed": false,
+      "was_symlink": false,
+      "profile_target": "/home/tkachenkoav/.hermes/profiles/default/skills/productivity/edit-plan-confluence",
+      "link_target": "../../profiles/default/skills/productivity/edit-plan-confluence"
+    },
+    {
+      "name": "confluence-gantt-plan",
+      "active_path": "/home/tkachenkoav/.hermes/skills/productivity/confluence-gantt-plan",
+      "existed": true,
+      "was_symlink": false,
+      "profile_target": "/home/tkachenkoav/.hermes/profiles/default/skills/productivity/confluence-gantt-plan",
+      "before_realpath": "/home/tkachenkoav/.hermes/skills/productivity/confluence-gantt-plan",
+      "before_sha256": "6600312371183840011b077a200fc00b388e38c47e7dcd540d26b2c2840e77bc",
+      "backup_path": "/home/tkachenkoav/.hermes/_Archives/skill-sync-stage12-20261117-090657/confluence-gantt-plan",
+      "link_target": "../../profiles/default/skills/productivity/confluence-gantt-plan"
+    }
+  ]
+}

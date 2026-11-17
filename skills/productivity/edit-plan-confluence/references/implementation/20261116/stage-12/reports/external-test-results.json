@@ -1,0 +1,52 @@
+[
+  {
+    "name": "mofs-plan",
+    "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "tests/plan",
+      "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/mofs-tmp",
+      "-o",
+      "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/cache/mofs-pytest",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/reports/mofs-junit.xml",
+      "-q"
+    ],
+    "rc": 0,
+    "stdout": "mofs-plan.stdout",
+    "stderr": "mofs-plan.stderr",
+    "tests": 206,
+    "passed": 206,
+    "skipped": [],
+    "junit": "mofs-junit.xml"
+  },
+  {
+    "name": "mpp-export",
+    "cwd": "/home/tkachenkoav/USERTOOLS/MppReader",
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "tests/test_plan_export.py",
+      "tests/test_read_mpp_regression.py",
+      "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/mpp-tmp",
+      "-o",
+      "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/cache/mpp-pytest",
+      "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/reports/mpp-junit.xml",
+      "-q"
+    ],
+    "rc": 0,
+    "stdout": "mpp-export.stdout",
+    "stderr": "mpp-export.stderr",
+    "tests": 25,
+    "passed": 24,
+    "skipped": [
+      {
+        "name": "test_export_full_zd_hashes_match_r036",
+        "reason": "ZD MPP эталоны отсутствуют в этом окружении: [PosixPath('/home/tkachenkoav/.hermes/cache/documents/doc_8d6bece30ad4_ZD. Закупка данных 121126.mpp'), PosixPath('/home/tkachenkoav/.hermes/cache/documents/doc_94730ef53187_ZD. Закупка данных 131126.mpp')]"
+      }
+    ],
+    "junit": "mpp-junit.xml"
+  }
+]

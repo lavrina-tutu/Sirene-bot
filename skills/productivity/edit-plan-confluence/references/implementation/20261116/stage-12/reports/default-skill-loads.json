@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "skills": [
+    {
+      "name": "edit-plan-confluence",
+      "path": "/home/tkachenkoav/.hermes/skills/productivity/edit-plan-confluence/SKILL.md",
+      "resolved_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/SKILL.md",
+      "sha256": "3a3fa33220c5dac343b9e6fe45022743540449bcaeaebb3a289d058c36e1b58a",
+      "default_preprocessing": true,
+      "success": true
+    },
+    {
+      "name": "confluence-gantt-plan",
+      "path": "/home/tkachenkoav/.hermes/skills/productivity/confluence-gantt-plan/SKILL.md",
+      "resolved_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/confluence-gantt-plan/SKILL.md",
+      "sha256": "6d2edf035cff8b933577773520abe44d8fd852fd80f16a3b9219fa2dee9292cc",
+      "default_preprocessing": true,
+      "success": true
+    },
+    {
+      "name": "workvault-rag",
+      "path": "/home/tkachenkoav/.hermes/skills/research/workvault-rag/SKILL.md",
+      "resolved_path": "/home/tkachenkoav/hermes-workspace/skills/research/workvault-rag/SKILL.md",
+      "sha256": "2e41d048bb07bfeedf6ab006ec9205a98c0db9afd07cd7d42b83e66cb36f7c75",
+      "default_preprocessing": true,
+      "success": true
+    },
+    {
+      "name": "tutu-confluence-jira",
+      "path": "/home/tkachenkoav/.hermes/skills/productivity/tutu-confluence-jira/SKILL.md",
+      "resolved_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/tutu-confluence-jira/SKILL.md",
+      "sha256": "448c2b9c8517b21621a3471a358fa34009ae167a800179b80b8f977f74bbf7b1",
+      "default_preprocessing": true,
+      "success": true
+    }
+  ]
+}

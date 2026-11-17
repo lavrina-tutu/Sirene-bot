@@ -1,106 +1,117 @@
 ---
 name: edit-plan-confluence
-description: "Заливка плана MS Project (.mpp/.zip) на страницу Confluence с макросом gantt-chart-planner: полная замена JSON-вложения, календарь MPP, блок «Итого», создание дочерней страницы. Триггеры: «поправь план», «обнови план на страничке», «помести план на страничку», «скорректируй план», «добавь задачу в план», «создай страницу с планом», «поставь гант на страницу» + файл .mpp/.zip. Гейт: дифф + «лей»/«пиши»/«да». Без pageId — спросить. Живая AB 519492935 — только с --allow-live-ab."
-version: "0.3.0"
+description: "MPP/ZIP → архив или план Confluence: залей/обнови план на странице, сохрани только в архив, сохрани MPP из Inbox, покажи историю или сравни версии плана."
+version: "0.5.0"
 platforms: [linux]
 tools: [terminal, read_file, write_file]
 metadata:
   hermes:
     tags: [confluence, gantt, plan, mpp, ms-project, gantt-chart-planner]
-    related_skills: [tutu-confluence-jira, read-mpp]
+    related_skills: [tutu-confluence-jira, workvault-rag, read-mpp]
 ---
 
-# Edit Plan Confluence — MPP → gantt-chart-planner
+# MPP → архив / Confluence
 
-Скилл `productivity/edit-plan-confluence`: залить план MS Project на страницу Confluence с макросом **gantt-chart-planner**. v1 = только полная заливка MPP (не поштучные правки).
+Единственный канон обоих имён `edit-plan-confluence` и `confluence-gantt-plan`.
+Публичный вход — `/usr/bin/python3` и
+`/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py`.
+Глобальные `--db`, `--workvault`, `--cache-dir`, `--allow-live-ab` стоят **до** подкоманды.
+Флаги, примеры и коды — [cli-contract.md](references/cli-contract.md).
 
-## Триггеры
+## Выбор сценария
 
-- «поправь план», «обнови план на страничке», «помести план на страничку»
-- «скорректируй план», «добавь задачу в план» (без .mpp → отказ: v1 только заливка файла)
-- «создай страницу с планом», «поставь гант на страницу»
-- файл `.mpp` или `.zip` с `.mpp` внутри (как `read-mpp`)
+| Запрос пользователя | Действие CLI |
+|---|---|
+| «Залей этот MPP на страницу», «обнови план» | `publish --mpp FILE --page-id PAGE --project-slug SLUG` |
+| «Сохрани только в архив» | `save --mpp FILE --project-slug SLUG` |
+| «Сохрани все MPP из этой папки Inbox» | `batch save --inbox FOLDER --project-slug SLUG --batch-id ID` |
+| «Что не загрузилось?» | `batch show --batch-id ID --view errors` |
+| «Покажи хронологию планов» | `history --project-slug SLUG --view files` |
+| «Какие файлы загрузили сегодня?» | `history --view files --time-field received` с project и локальным периодом |
+| «Сравни X и Y» | `compare --project-slug SLUG --from snapshot:ID --to snapshot:ID` либо точные `publication:ID` |
+| «Какая версия опубликована?» | `history --view publications`; последняя подтверждённая версия отдельно от текущего наблюдения |
+| «Продолжи после сбоя» | `operation show`, затем `resume --operation-id ID`; для пакета — `batch resume` |
 
-## Авторизация
+Файл использовать по доставленному абсолютному пути. CLI сам фиксирует байты;
+новая привязка создаётся внутри `publish --project-slug`. При существующем
+однозначном binding slug можно опустить. Проект выбирать из `Registries/entities.json`;
+отсутствующий/неоднозначный проект или цель требуют адресного уточнения.
+`pfs.page_id` — минутки, а не страница плана. Не угадывать страницу по этому полю.
 
-Токен Confluence — только `CONFLUENCE_TOKEN` из `~/USERTOOLS/ConfluenceSync/.env`:
+Команда «залей» с однозначными файлом и целью разрешает обычный `publish`.
+Повторное общее «да» не требуется. `diff` архивирует пригодный источник и
+возвращает operation/snapshot ID; GET цели допустим, POST/PUT отсутствуют.
+Подготовленную операцию можно продолжить через `resume`.
+`save` и batch работают локально без Confluence token/клиента, публикаций и сдвига baseline.
+Совместимый `save --page-id` задаёт только локальную привязку.
 
-```bash
-load_confluence_env() {
-  while IFS='=' read -r _k _v; do
-    case "$_k" in CONFLUENCE_TOKEN|WORKVAULT_PATH) [ -n "$_v" ] && export "$_k=$_v" ;; esac
-  done < "$HOME/USERTOOLS/ConfluenceSync/.env"
-}
-```
+## Адресные решения
 
-База: `https://dom.tutu.ru`. Не использовать `web_extract` на dom.tutu.ru.
+После `needs_decision / 3` читать `operation show --operation-id ID` и сообщать
+конкретную причину/последствия. Снимок исходного MPP уже сохранён, если
+`verification.archive:verified`; блокировка публикации его не отменяет.
 
-## CLI (скрипты скилла)
+- Идентичность: `identity confirm` с точной парой snapshot, явным свидетельством
+  пользователя и mode `continuity` либо `mapping`; затем отдельный
+  `resume --operation-id ID --mapping-revision REVISION`.
+- Неизвестная timezone: `resume --operation-id ID --timezone-hint Europe/Moscow`
+  после указания пользователем и до внешнего эффекта. Новая подготовка сохраняет
+  прежнюю; старые решения и mapping автоматически не переносятся.
+- Преобразование смысла: `resume --operation-id ID --accept-proposal PROPOSAL
+  --rule-scope once --reason "Основание пользователя"`. Scope `project` требует
+  явного согласия на правило проекта. B/C меняют только производное представление.
+- Batch-item: `resume --accept-proposal` регистрирует решение размещения и
+  оставляет item в `needs_decision`. Обработку запускает отдельный
+  `batch resume --batch-id ID --retry-decisions`.
 
-```bash
-PY=~/hermes-agent/.venv/bin/python3
-CLI=~/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py
+Точные команды, evidence и пределы — [identity-and-rules.md](references/identity-and-rules.md)
+и [batch-and-inbox.md](references/batch-and-inbox.md). UID/имя/lineage не доказывают
+идентичность между MPP. Не удалять связи автоматически ради совпадения срока.
+`--drop-dep` формирует адресное предложение для проверки и согласования.
 
-# preview (GET only)
-$PY $CLI preview --page-id 519501810
+## История и достоверность
 
-# дифф перед записью
-$PY $CLI diff --page-id 519501810 --mpp /path/plan.mpp
+Для «сегодня» вычислять две локальные полуночи в зоне пользователя (для Саши
+Europe/Moscow), передавать ISO timestamps с UTC offset и полуинтервалом
+`[since, until)`. День определяется на момент запроса; таймзона задач MPP от
+этого не устанавливается. [history-and-verification.md](references/history-and-verification.md)
+содержит вычисление, cursor и различия времён.
 
-# заливка после «лей»
-$PY $CLI apply --page-id 519501810 --mpp /path/plan.mpp --confirm лей
+«Какая версия опубликована»: назвать page/attachment/version/publication ID,
+trust и время подтверждения последней подтверждённой версии. Текущая цель может
+уже отличаться. Для свежей проверки выбранной записи —
+`publication verify --project-slug SLUG --publication-id ID --scope current_state`
+(только GET, добавляет локальное наблюдение). Без свежего наблюдения говорить
+«последняя известная регистрация на момент …». Historical scope не заменяет
+current scope; нынешнее совпадение не доказывает старую дату. Наличие публикаций
+определять typed API по связям snapshot, а не по nullable дате.
 
-# дочка от родителя
-$PY $CLI diff --page-id 519501810 --child --mpp /path/plan.mpp
-$PY $CLI apply --page-id 519501810 --child --mpp /path/plan.mpp --confirm лей
+История/compare — typed API MofsIndex через CLI либо `workvault-rag`.
+Один «v2» требует выбора страницы/вложения и точного ID; произвольный ID не выбирать.
+Архив, байты/страница и расписание имеют независимые статусы:
+`schedule:not_verified` не становится verified после успешного POST/PUT.
+В ответе кратко дать результат, IDs, архив/публикацию/расписание и следующий шаг;
+полный экспорт и диагностика — по ссылкам квитанции.
 
-# оффлайн конвертер
-$PY $CLI convert --mpp /path/plan.mpp --out /tmp/out.json
+## Несколько входов и эксплуатация
 
-# исключить связь FROM→TO (когда плагин завышает срок из-за лишней зависимости)
-$PY $CLI diff --page-id 519501810 --mpp /path/plan.mpp --drop-dep 28:19
-$PY $CLI apply --page-id 519501810 --mpp /path/plan.mpp --confirm лей --drop-dep 28:19
-```
+Основной сценарий — отдельная папка `WorkVault/Inbox/<имя-пакета>/` и одно
+текстовое сообщение «сохрани все MPP из … в архив проекта …».
+Freeze-all предшествует разбору, обработка последовательная. Исходники остаются
+на месте. Отклонённое Gateway сообщение скилл не получает и исправить не может;
+готовую папку обрабатывать по отдельной текстовой команде.
 
-## Прогон в чате
+Сохранены `preview`, `diff`, `convert`, `archive-history`, `apply --confirm` и
+дочерняя ветка `diff/apply --child`. `convert` — legacy CSV-адаптер; штатные
+save/publish используют [prepared-data](references/mpp-to-gantt.md).
+Для AB нужен явный page ID и `--allow-live-ab` при каждом resume.
 
-1. Резолв `pageId` из сообщения / сессии; нет → спросить (не угадывать 519492935).
-2. Файл `.mpp`/`.zip` → `read_mpp.py` → CSV → конвертер + календарь MPP.
-3. Собрать JSON: MPP / копия с родителя / пустой шаблон (правило C для дочки).
-4. Патч «Итого» (одна строка `Итого: с DD.MM.YY по DD.MM.YY - N рабочих дней` над макросом; «Трудозатраты» не создавать и удалять из storage, если есть; третью про 70% не создавать).
-5. **Гейт:** показать дифф, ждать «лей»/«пиши»/«да».
-6. Запись: POST `/data?conflictPolicy=override` (не PUT!) → PUT storage.
-7. Отчёт: URL, версия вложения, «Итого»; если в диффе есть предупреждение про срок плагина — привести вариант `--drop-dep` и дать Саше решить.
+Авторизация — `scripts/env.py` через штатные `usertools_config`/`usertools_env`.
+ConfluenceSync в режиме `unified_only`: process env и центральный secret store,
+локальный `.env` не требуется. Не source-ить `.env`, не печатать token/Authorization.
+Timeout/size/retry, источники настроек, backup и восстановление —
+[operations-and-recovery.md](references/operations-and-recovery.md).
+Gateway/загрузчик не менять и не перезапускать; cron/наблюдатели не создавать.
 
-> **Важно про срок проекта:** плагин gantt-chart-planner **сам пересчитывает срок проекта как критический путь** (сумма длительностей по самой длинной цепочке зависимостей), игнорируя готовые start/end, записанные в JSON. `Итого: ... N рабочих дней` и `duration` корня = из MPP, а вот что покажет диаграмма — считается плагином. Расхождение (`⚠ плагин покажет X дней, а не N из MPP`) почти всегда не календарь и не баг — это лишняя/доморощенная зависимость, сериализующая параллельные ветки. Исключи её `--drop-dep FROM:TO` (см. кейс «42 вместо 37»).
-
-## Питфоллы
-
-- **MPP ↔ Confluence gantt reconciliation:** source of truth is the MPP file («mpp главнее»). Applies ONLY to Confluence-gantt comparison — Jira reconciliation (`plan-reconciliation-mpp-jira`) has a different SoT; do not copy this rule there.
-- `idCounter` = max(все id)+1, **не** 300000.
-- Активные ресурсы = max id на имя; мёртвые копии не включать.
-- На существующем макросе `macro-id`/`id`/`hash` не менять.
-- PUT страницы плана уходит с `version+1` (re-read версии перед PUT + инкремент, optimistic lock Confluence): не слать текущую версию as-is — иначе HTTP 409 `Version must be incremented`. `conflictPolicy=override` для страницы НЕ использовать (потеряет защиту от перезаписи чужой правки).
-- Календарь MPP: обед 12–13, ночь 18–09, сб/вс; исключения `endDate = toDate+1`.
-- M (чел-ч) в **тексте гейта** = ceil(sum work назначений), не summary-задачи; в storage страницы не пишется — только одна строка «Итого» с датами и N рабочих дней.
-- Живая AB `519492935` — только `--allow-live-ab` + явный pageId.
-- **Срок проекта в плагине ≠ корневому duration MPP:** плагин пересчитывает срок как критический путь по связям. Расхождение (напр. 42 vs 37) — лишняя зависимость, сериализующая ветки. Верифицировать через `critical_path_days()`, исключать `--drop-dep FROM:TO`. Это не календарь — правки календаря здесь не помогут.
-
-## Тестовые страницы
-
-| pageId | Назначение |
-|--------|------------|
-| 519501810 | Тестовая (приёмка v1) |
-| 519492935 | Живая AB — не трогать без явной команды |
-
-## Файлы
-
-- `references/empty-gantt-template.json` — пустой шаблон
-- `references/mpp-to-gantt.md` — рецепт конвертера
-- `scripts/` — env, conf_client, mpp_convert, mpp_calendar, itogo, macro, gantt_attachment, child_page, gate_diff, pipeline, cli
-
-## Связанные скиллы
-
-- `read-mpp` — тот же вход `.zip`; другой выход (GS). Вызывать только `read_mpp.py` для CSV.
-- `tutu-confluence-jira` — паттерн `load_confluence_env`.
-- `confluence-gantt-plan` — **deprecated**, см. `edit-plan-confluence`.
+Приёмка и границы stage-12 — [testing-and-acceptance.md](references/testing-and-acceptance.md).
+Кейсы A–G, hashes и отличие D-risks — [cases-trisigma.md](references/cases-trisigma.md).

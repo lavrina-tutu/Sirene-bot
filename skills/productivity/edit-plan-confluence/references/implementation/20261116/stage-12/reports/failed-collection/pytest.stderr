@@ -1,0 +1,2 @@
+ERROR: mandatory stage-12 tests not selected: test_publish_resume.py::test_real_process_death_http_reconciliation[after_confirmation], test_publish_resume.py::test_real_process_death_http_reconciliation[after_post], test_publish_resume.py::test_real_process_death_http_reconciliation[after_put], test_publish_resume.py::test_real_process_death_http_reconciliation[before_post], test_publish_resume.py::test_real_process_death_http_reconciliation[before_put], test_publish_resume.py::test_real_process_death_http_reconciliation[hold_post]
+

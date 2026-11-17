@@ -1,0 +1,191 @@
+{
+  "gate": "passed",
+  "tests": [
+    {
+      "name": "mofs-plan",
+      "cwd": "/home/tkachenkoav/USERTOOLS/MofsIndex",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "tests/plan",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/mofs-tmp",
+        "-o",
+        "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/cache/mofs-pytest",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/reports/mofs-junit.xml",
+        "-q"
+      ],
+      "rc": 0,
+      "stdout": "mofs-plan.stdout",
+      "stderr": "mofs-plan.stderr",
+      "tests": 206,
+      "passed": 206,
+      "skipped": [],
+      "junit": "mofs-junit.xml"
+    },
+    {
+      "name": "mpp-export",
+      "cwd": "/home/tkachenkoav/USERTOOLS/MppReader",
+      "command": [
+        "/usr/bin/python3.9",
+        "-m",
+        "pytest",
+        "tests/test_plan_export.py",
+        "tests/test_read_mpp_regression.py",
+        "--basetemp=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/mpp-tmp",
+        "-o",
+        "cache_dir=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/cache/mpp-pytest",
+        "--junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/reports/mpp-junit.xml",
+        "-q"
+      ],
+      "rc": 0,
+      "stdout": "mpp-export.stdout",
+      "stderr": "mpp-export.stderr",
+      "tests": 25,
+      "passed": 24,
+      "skipped": [
+        {
+          "name": "test_export_full_zd_hashes_match_r036",
+          "reason": "ZD MPP эталоны отсутствуют в этом окружении: [PosixPath('/home/tkachenkoav/.hermes/cache/documents/doc_8d6bece30ad4_ZD. Закупка данных 121126.mpp'), PosixPath('/home/tkachenkoav/.hermes/cache/documents/doc_94730ef53187_ZD. Закупка данных 131126.mpp')]"
+        }
+      ],
+      "junit": "mpp-junit.xml"
+    }
+  ],
+  "usertools_restore": {
+    "status": "passed",
+    "components": [
+      {
+        "tool": "MppReader",
+        "checks": [
+          {
+            "method": "patch",
+            "command": [
+              "patch",
+              "-p1",
+              "-i",
+              "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-12/usertools/MppReader/changes.patch"
+            ],
+            "rc": 0,
+            "stdout": "patching file README.md\n",
+            "stderr": ""
+          },
+          {
+            "method": "after-copy",
+            "rc": 0,
+            "operation": "shutil.copy2(after/README.md, restore/README.md)"
+          }
+        ],
+        "sha256": "f6c9dbb49f201818c168777079d7a29150cf9b925667ac21db26f685573c0050",
+        "status": "passed"
+      },
+      {
+        "tool": "MofsIndex",
+        "checks": [
+          {
+            "method": "patch",
+            "command": [
+              "patch",
+              "-p1",
+              "-i",
+              "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-12/usertools/MofsIndex/changes.patch"
+            ],
+            "rc": 0,
+            "stdout": "patching file README.md\n",
+            "stderr": ""
+          },
+          {
+            "method": "after-copy",
+            "rc": 0,
+            "operation": "shutil.copy2(after/README.md, restore/README.md)"
+          }
+        ],
+        "sha256": "06960b1fc9ea93a6a603c3a8a8ec45b62fcac7a29aa3ab483e7af629507c2350",
+        "status": "passed"
+      }
+    ]
+  },
+  "previous_stages": {
+    "status": "passed",
+    "maps": {
+      "STAGE01_REQUIRED": true,
+      "STAGE02_REQUIRED": true,
+      "STAGE03_REQUIRED": true,
+      "STAGE04_REQUIRED": true,
+      "STAGE05_REQUIRED": true,
+      "STAGE06_REQUIRED": true,
+      "STAGE07_REQUIRED": true,
+      "STAGE08_REQUIRED": true,
+      "STAGE09_REQUIRED": true,
+      "STAGE10_REQUIRED": true,
+      "STAGE11_REQUIRED": true
+    },
+    "unchanged_report_source_functions": [
+      "_stage02_report",
+      "_stage03_report",
+      "_stage04_report",
+      "_stage05_report",
+      "_stage06_report",
+      "_stage07_report",
+      "_stage08_report",
+      "_stage09_report",
+      "_stage09_sources",
+      "_stage10_report",
+      "_stage10_sources",
+      "_stage11_report",
+      "_stage11_sources"
+    ]
+  },
+  "config_sources": "config-sources.json",
+  "config_keys_checked": 15,
+  "documentation": {
+    "status": "passed",
+    "master_version": "0.5.1",
+    "inventory_matches_master": true,
+    "files": {
+      "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md": "66aa1258ad5c2fc50645a2cd50812318a7439361b41a653c32d959085f6862d4",
+      "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/plans/HF-plan_EditPlanConfluence_20261116.md": "969994f31cdb87a88f4e0ba08701c7070426f1cbbd67952f5695dd7838a19a19",
+      "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/appendix_unified-pipeline-source_20261116.md": "542391a2544c2a95143832f3a1e66fee59d7f9660e656a99deb3f69eedb7c697",
+      "/home/tkachenkoav/WorkVault/Hermes-Backlog/TZ/MAIN_TZ_INVENTORY.md": "f7c04b7fde0831a42e179fb4821ee2ce8e0553baf40b5eaae93bc31ded0d8637",
+      "/home/tkachenkoav/WorkVault/Registries/EcosystemManifest.json": "a51427d3a047c40fea8f6cb4596bdec622e348a603b5a3fb03f7c049ebda8784",
+      "/home/tkachenkoav/WorkVault/Registries/EcosystemManifest.digest.md": "73c4095a6235b8662560b671b9bef874a9c25bab36db6a9a1b650de0889c56d0",
+      "/home/tkachenkoav/WorkVault/Registries/EcosystemManifest.render.md": "b0684ae57a772fb3eeab2fba58b30cb147298f6715ecaaf35991936878a0cf07",
+      "/home/tkachenkoav/WorkVault/Registries/EcosystemConfig.schema.json": "676c5a6f265ad7773bddc57d189cb19b95ad4587b955237fc67335ba727a4b8c"
+    },
+    "owncloud_sync_confirmed": false
+  },
+  "registry": "registry/manifest-ids.json",
+  "secret_scan": {
+    "status": "passed",
+    "files_scanned": 38,
+    "credential_values_examined": 6,
+    "leaked_paths": [],
+    "values_or_hashes_saved": false
+  },
+  "skill_creator_validation": "skill-creator-validation.json",
+  "skill_creator_validator_applicability": "Codex generic schema rejects existing Hermes fields; actual Hermes loading passed",
+  "restore_all_skills": {
+    "command": [
+      "bash",
+      "/home/tkachenkoav/hermes-workspace/restore-all-skills.sh"
+    ],
+    "rc": 0,
+    "stdout": "restore-skills.stdout",
+    "stderr": "restore-skills.stderr"
+  },
+  "preliminary_smoke": {
+    "command": [
+      "/usr/bin/python3.9",
+      "-m",
+      "pytest",
+      "-c",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini",
+      "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_skill_contract.py",
+      "-q"
+    ],
+    "rc": 0,
+    "passed": 74,
+    "isolation": "standard isolated pytest tmp, not used for acceptance gate"
+  },
+  "registry_validation_note": "Two pre-write validation attempts returned rc=1: existing general schema errors, then existing skills.edit_plan_confluence tz_ref schema error. No writes occurred; final delta has exactly baseline errors and no new IDs."
+}

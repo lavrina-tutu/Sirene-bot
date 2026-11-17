@@ -1,0 +1,10 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0
+rootdir: /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests
+configfile: pytest.ini
+plugins: xdist-3.8.0, asyncio-1.2.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 685 items / 25 deselected / 660 selected
+
+- generated xml file: /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/stage12-20261117/stage-12/reports/junit.xml -
+============================ 25 deselected in 2.49s ============================

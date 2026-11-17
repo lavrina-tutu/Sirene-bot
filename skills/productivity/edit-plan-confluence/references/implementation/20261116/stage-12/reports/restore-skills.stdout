@@ -1,0 +1,14 @@
+=== Skill symlink restoration Tue Nov 17 09:07:02 MSK 2026 ===
+
+--- Syncing custom skills to default ---
+=== Syncing custom skills from hermes-workspace → default ===
+
+
+=== Result ===
+  Created (new links):    0
+  Fixed (wrong targets):  0
+  Already OK:             209
+  Skipped (bundled):      2
+  Target: /home/tkachenkoav/.hermes/profiles/default/skills
+
+=== Skill symlink restoration complete ===

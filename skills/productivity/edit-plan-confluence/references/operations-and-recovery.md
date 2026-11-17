@@ -15,12 +15,12 @@
 | ZIP_MAX_UNPACKED_BYTES | 268435456 | байты; 1–1099511627776 |
 | ZIP_MAX_RATIO | 100 | безразмерное отношение; 1–1000000 |
 | NORMALIZATION_PROFILE | normalization-v1 | установленный versioned профиль и fingerprint |
-| SUMMARY_PROFILE | summary-v1 | выбранное имя; файл и применение — этап 08 |
-| PLUGIN_PROFILE | installed-gantt-profile | выбранное имя; файл и проверка — этап 08 |
+| SUMMARY_PROFILE | summary-v1 | установленный версионированный профиль |
+| PLUGIN_PROFILE | installed-gantt-profile | проверенный профиль и ссылки на evidence |
 
-Размеры и верхние границы — выбранная ограничительная политика, проверяемая тестами, без заявления о benchmark или максимальной ёмкости MPXJ. Проверены schema/ranges и точная граница MPP/ZIP size checker (limit принимается, limit+1 отклоняется). Реальная защита распаковки ZIP относится к этапу 03; HTTP-настройки подключаются к сетевым стадиям в этапе 10. Выбор имён будущих профилей не означает их доступность/проверенность: snapshot показывает not_installed и null fingerprint.
+Размеры и верхние границы — выбранная ограничительная политика, проверяемая тестами, без заявления о benchmark или максимальной ёмкости MPXJ. Проверены schema/ranges и точная граница MPP/ZIP size checker (limit принимается, limit+1 отклоняется). Защита ZIP и HTTP-настройки подключены в выполненных этапах 03/10. Статус и fingerprint каждого профиля фиксируются фактическим контекстом операции.
 
-`PlanContext.resolve(db=..., workvault=..., cache_dir=...)` принимает явные зависимости будущих глобальных CLI overrides без перезаписи YAML. Публичные флаги подключаются на этапе 04. Snapshot содержит несекретные значения, sources, пути, версии/fingerprints профилей и fingerprint контекста; operation resume позднее использует зафиксированный snapshot. Конфигурационные snapshots не являются semantic hash плана.
+`PlanContext.resolve(db=..., workvault=..., cache_dir=...)` принимает явные глобальные CLI overrides без перезаписи YAML. Публичные флаги доступны через cli.py. Snapshot содержит несекретные значения, sources, пути, версии/fingerprints профилей и fingerprint контекста; operation resume использует зафиксированный snapshot. Конфигурационные snapshots не являются semantic hash плана.
 
 Python MPXJ использует штатное окружение процесса; в проверенном окружении `PYTHONPATH=/home/tkachenkoav/.local/lib/python3.9/site-packages`. Фактически проверены MPXJ 16.4.0, JPype 1.7.1 и чтение бинарных fixtures. Runtime-зависимости CLI зафиксированы в `requirements.txt` (PyYAML, jsonschema); MPXJ не устанавливается во второй interpreter автоматически.
 
@@ -40,7 +40,7 @@ ZIP определяется содержимым. Контейнер сохра
 
 `plan_reconcile.reconcile_import()` сначала читает committed item/event, затем выполняет archive read-back и только затем вызывает необязательный writer файлового зеркала. Сбой после SQL commit, перед read-back или квитанцией оставляет те же ID; повторный reader/ingest не вызывается. Повреждение архива требует восстановления тех же байтов и нового read-back. Успешное локальное восстановление сообщает `published:false`, `external_effect:none`, `verification.archive:verified`. Работа с Confluence в этом контракте отсутствует.
 
-Публичная сборка нового однопроходного save и глобальные CLI overrides относятся к этапу 04; batch freeze-all/обработка — к этапам 05–06. Этап 03 предоставляет внутренние API и доказательства их границ. Единственная адресная правка старого save — стабильная архивная lineage проекта вместо имени файла; старые линии сохранены отдельно.
+Публичный однопроходный save, глобальные пути и batch freeze-all/обработка подключены этапами 04–06. Архивная lineage проекта стабильна и не зависит от имени файла; старые линии сохранены отдельно.
 
 ## Сетевые стадии и восстановление (этап 10)
 
@@ -130,3 +130,84 @@ override. PID диагностический; живость определяе�
 Перед будущей миграцией рабочей БД необходим штатный backup MofsIndex и
 `verify_backup`; приёмка использует только изолированные БД/WorkVault/cache.
 Никакой автоматической миграции production-БД этим этапом не выполняется.
+
+## Эксплуатация и источники — этап 12
+
+Актуальные значения и sources фиксируются фактическим `PlanContext.snapshot()`
+в evidence stage-12/config-sources.json; таблица выше — текущая политика,
+а не обещание производительности. Проверять источники через `env.load_settings`
+и `usertools_config.resolve_key`, не печатать всё окружение.
+
+| Параметры | Владелец/источник при отсутствии override |
+|---|---|
+| WORKVAULT_PATH, CONFLUENCE_URL | shared в Registries/EcosystemConfig.yaml |
+| CACHE_DIR, MPXJ_PYTHON | tools.edit_plan_confluence в том же YAML |
+| MPP_READ_TIMEOUT_SECONDS, HTTP_TIMEOUT_SECONDS, HTTP_RETRY_LIMIT | tools.edit_plan_confluence |
+| MPP_MAX_BYTES, ZIP_MAX_BYTES, ZIP_MAX_ENTRIES, ZIP_MAX_UNPACKED_BYTES, ZIP_MAX_RATIO | tools.edit_plan_confluence |
+| NORMALIZATION_PROFILE, SUMMARY_PROFILE, PLUGIN_PROFILE | tools.edit_plan_confluence, содержание profiles/*.json из git |
+| db | mofs_index.db.DEFAULT_DB_PATH, кроме явного --db |
+| корни MppReader/MofsIndex | существующие tools.mpp_reader/mofs_index в EcosystemManifest.json |
+| credentials | process env → usertools_env._HERMES_ENV (фактически ~/.config/hermes/.env) |
+
+Приоритет loader: process env → установленный overlay → tool YAML → shared YAML →
+central env → разрешённый по migration mode legacy. Секретные ключи не берутся из
+YAML; `env.py` архивный путь их не загружает. Для credentials локальный ConfluenceSync
+.env допустим только в not_started/dual_read или явном legacy mode;
+фактический confluence_sync — unified_only. Не source-ить .env и не менять
+~/.hermes/config.yaml. `--workvault/--cache-dir/--db` сильнее defaults только
+для запуска; resume использует сохранённый context, не новые defaults.
+Python probe JVM — 60 секунд на кандидата (env.select_mpxj_python), reader —
+180 секунд; проверенный PYTHONPATH см. выше. JSON settings validation fail закрывает
+подготовку до сетевых записей. Скрипт CLI запускается `/usr/bin/python3`.
+
+## Backup перед будущей миграцией рабочей БД
+
+Текущая приёмка мигрирует исключительно T/stage-12/state и fixtures. Рабочая БД
+`/home/tkachenkoav/USERTOOLS/MofsIndex/state/index.sqlite` не открывается для записи.
+Перед отдельной будущей миграцией нужен согласованный online backup с WAL через
+существующий typed `mofs_index.plan.backup`, не сырое cp sqlite-файла.
+Сохранить также content-addressed artifacts/normalized и _plan-receipts в
+существующий backup/ownCloud-контур: БД не содержит единственных исходных bytes.
+Наличие файла не доказывает завершение ownCloud sync.
+
+Пример процедуры на **изолированной** БД; перенос на рабочий путь — отдельная
+операция. Новый файл backup выбирать с timestamp, т.к. backup_to заменяет dest.
+
+```python
+from pathlib import Path
+from mofs_index.plan.backup import backup_to, verify_backup, restore_from
+source = Path('/isolated/state/index.sqlite')
+backup = Path('/isolated/backups/index-before-migration.sqlite')
+assert backup_to(backup, src_path=source).ok
+assert verify_backup(backup).ok
+assert restore_from(backup, Path('/isolated/restore/index.sqlite'), dry_run=True).ok
+# Реальное восстановление только в отдельное дерево после проверки source:
+assert restore_from(backup, Path('/isolated/restore/index.sqlite'),
+                    dry_run=False, confirm=True).ok
+```
+
+После восстановления сверить artifacts/receipt hashes, версии схемы, counts,
+baseline/selection и ссылки через typed API, затем read-back. Не удалять историю
+для «починки». Инфраструктура после сбоя должна быть восстановлена до resume.
+
+## Частичные эффекты, вывод и доставка скиллов
+
+`operation show` → `resume` выполняет reconciliation раньше повторной записи.
+Успешные batch items не повторяются, retryable failed только --retry-failed,
+решения только --retry-decisions. Cache можно удалить; frozen/архивные bytes
+нужны с прежними hashes. При смене контекста создать новый batch/операцию.
+Не удалять lock-файлы и не сбрасывать счётчики retries ручной правкой БД.
+
+В квитанциях/логах запрещены credentials, Authorization и полный export.
+Reader stdout перехватывается, полный admission остаётся по details_ref.
+Оператор не включает set -x, env dump или curl -v с токеном. Примеры содержат
+вымышленные IDs; secret-redaction проверяется canary-тестами и сканированием
+поставляемого evidence, без сохранения реальных значений секретов.
+
+Доставка: workspace → `restore-all-skills.sh` → default profile;
+живое дерево ~/.hermes/skills — отдельный слой. По регламенту
+`devops/hermes-multi-profile-skills` проверить hub ownership, сохранить обычный
+кастомный каталог в ~/.hermes/_Archives, подключить live symlink к профилю и
+повторить restore. Проверить настоящие skill_view обоих имён, физические paths,
+возвращённый текст и SHA-256. Самостоятельную копию канона в A не создавать.
+Загрузчик/Gateway и скрипты restore/sync при этом не изменяются.

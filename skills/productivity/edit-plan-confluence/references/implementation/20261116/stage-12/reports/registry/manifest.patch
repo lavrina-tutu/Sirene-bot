@@ -1,0 +1,49 @@
+--- /home/tkachenkoav/WorkVault/Registries/EcosystemManifest.json
++++ /home/tkachenkoav/WorkVault/Registries/EcosystemManifest.json
+@@ -1,6 +1,6 @@
+ {
+   "schema_version": "0.6.0",
+-  "updated_at": "2026-10-21T23:47:50.124960+03:00",
++  "updated_at": "2026-11-17T09:12:16.358047+03:00",
+   "maintainer": "Hermes + Cursor",
+   "tools": {
+     "aggregate_from_meetings": {
+@@ -461,9 +461,9 @@
+       "status": "released",
+       "path": "~/hermes-workspace/skills/productivity/edit-plan-confluence",
+       "tz_ref": "TZ/EditPlanConfluence/EditPlanConfluence_TZ.md",
+-      "purpose": "Заливка плана MS Project (.mpp/.zip) на страницу Confluence с макросом gantt-chart-planner: полная замена JSON-вложения, календарь MPP, блок «Итого», создание дочерней страницы. Гейт: дифф + «лей».",
+-      "owner": "Hermes",
+-      "called_by": "[скилл: edit-plan-confluence, tutu-confluence-jira]"
++      "purpose": "Единый MPP → архив / Confluence: publish, save, Inbox batch, history/compare, identity и resume; §20, интеграция этапа 12, полная приёмка этапа 13 отдельно.",
++      "owner": "Hermes",
++      "called_by": "[скилл: edit-plan-confluence, confluence-gantt-plan, tutu-confluence-jira, workvault-rag]"
+     },
+     "case_collector": {
+       "name": "CaseCollector",
+@@ -955,6 +955,7 @@
+       "name": "edit-plan-confluence",
+       "tools": [
+         "MppReader",
++        "MofsIndex",
+         "ConfluenceSync"
+       ],
+       "triggers": [
+@@ -966,7 +967,11 @@
+         "создай страницу с планом",
+         "поставь гант на страницу",
+         "залей план на страницу",
+-        "файл .mpp/.zip"
++        "файл .mpp/.zip",
++        "сохрани только в архив",
++        "сохрани все MPP из Inbox",
++        "покажи хронологию планов",
++        "сравни версии плана"
+       ],
+       "tz_ref": "TZ/EditPlanConfluence/EditPlanConfluence_TZ.md"
+     }
+@@ -1827,4 +1832,4 @@
+       }
+     }
+   }
+-}+}

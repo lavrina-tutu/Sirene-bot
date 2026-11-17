@@ -291,8 +291,8 @@ def _validate_test_root(path):
 
 def pytest_configure(config):
     stage = config.getoption("--acceptance-stage")
-    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"):
-        raise pytest.UsageError("this acceptance contour implements stages 01 through 11")
+    if stage and stage not in ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"):
+        raise pytest.UsageError("this acceptance contour implements stages 01 through 12")
     root = config.getoption("--test-root")
     if stage and not root:
         raise pytest.UsageError("--test-root required for acceptance")
@@ -314,6 +314,8 @@ def pytest_configure(config):
         config._acceptance_start_hashes=_stage10_sources()
     if stage=='11':
         config._acceptance_start_hashes=_stage11_sources()
+    if stage=='12':
+        config._acceptance_start_hashes=_stage12_sources()
 
 
 @pytest.hookimpl(tryfirst=True)
@@ -332,7 +334,14 @@ def pytest_collection_modifyitems(config, items):
         else:
             group = "unit"
         item.add_marker(getattr(pytest.mark, group))
-    if config.getoption('--acceptance-stage') in ('08','09','10','11'):
+    if config.getoption('--acceptance-stage') == '12':
+        # Some previous tests inherit unit at module level and also carry live.
+        # Stage 12 is explicitly offline: live wins over the inherited marker.
+        deselected = [item for item in items if item.get_closest_marker('confluence_live')]
+        if deselected:
+            config.hook.pytest_deselected(items=deselected)
+            items[:] = [item for item in items if item not in deselected]
+    if config.getoption('--acceptance-stage') in ('08','09','10','11','12'):
         order={'unit':0,'archive_integration':1,'mpp_fixtures':2,'confluence_live':3}
         items.sort(key=lambda item:(max(order[g] for g in GROUPS if item.get_closest_marker(g)),item.nodeid))
 
@@ -342,7 +351,7 @@ def pytest_collection_finish(session):
         selected = {item.path.name+"::"+item.name for item in session.items}
         selected |= {value.split("[")[0] for value in selected}
         stage = session.config.getoption("--acceptance-stage")
-        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED, "09": STAGE09_REQUIRED, "10": STAGE10_REQUIRED, "11": STAGE11_REQUIRED}[stage]
+        required = {"01": STAGE01_REQUIRED, "02": STAGE02_REQUIRED, "03": STAGE03_REQUIRED, "04": STAGE04_REQUIRED, "05": STAGE05_REQUIRED, "06": STAGE06_REQUIRED, "07": STAGE07_REQUIRED, "08": STAGE08_REQUIRED, "09": STAGE09_REQUIRED, "10": STAGE10_REQUIRED, "11": STAGE11_REQUIRED, "12": STAGE12_REQUIRED}[stage]
         missing = sorted(required - selected)
         if missing:
             raise pytest.UsageError(f"mandatory stage-{stage} tests not selected: " + ", ".join(missing))
@@ -361,6 +370,9 @@ def pytest_sessionfinish(session, exitstatus):
     config = session.config
     root = getattr(config, "_acceptance_root", None)
     if root is None:
+        return
+    if config.getoption('--acceptance-stage') == '12':
+        _stage12_report(session,exitstatus,root)
         return
     if config.getoption('--acceptance-stage') == '11':
         _stage11_report(session,exitstatus,root)
@@ -1654,4 +1666,145 @@ def _stage11_report(session,exitstatus,root):
         '',f"Дерево исходников: `{report['source_tree_sha256']}`. Защищено файлов: {len(protected)}, изменено: {len(changed)}.",
         '', 'Завершающий SHA записывается после commit в журнал канонического плана. canon.md в поставку не включается.',
         '', 'Ограничения:','']+['- '+value for value in limitations]
+    (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')
+
+
+# Stage 12 adds delivery/docs contracts; earlier stages keep their own gates.
+_STAGE12_EXCLUDED_LIVE = {
+    'test_publish_live.py::test_stage09_live_publish_bytes_storage_and_binary_blocker',
+    'test_plugin_controls_live.py::test_installed_plugin_controls_live',
+    'test_rest_live.py::test_stage10_live_recovery_idempotency_and_child',
+    'test_publication_verify.py::test_stage11_live_verify_only_get_repeat_and_historical_scope',
+    'test_publication_verify.py::test_verify_cli_loopback_concurrent_reads_append_observations',
+}
+_STAGE12_EXCLUDED_LIVE |= {
+    'test_publish_resume.py::test_real_process_death_http_reconciliation['+boundary+']'
+    for boundary in ('before_post','after_post','before_put','after_put','after_confirmation','hold_post')}
+STAGE12_REQUIRED = (STAGE11_REQUIRED - _STAGE12_EXCLUDED_LIVE) | {
+    'test_identity_resume_e2e.py::test_bootstrap_no_save_one_arrival_then_identity_confirm_resume',
+    'test_identity_resume_e2e.py::test_resume_forms_are_mutually_exclusive_and_apply_has_slug',
+} | {'test_skill_contract.py::' + name for name in (
+    'test_active_library_loads_both_names', 'test_wrapper_has_one_canon_and_no_algorithm',
+    'test_documented_cli_examples_parse', 'test_documented_options_cover_parser',
+    'test_global_parameters_cannot_follow_subcommand', 'test_user_routes_dispatch_with_global_isolation',
+    'test_real_archive_stdout_and_receipts_redact_secrets', 'test_invalid_arguments_do_not_echo_secret',
+    'test_today_example_uses_local_midnights_and_offsets', 'test_reference_links_and_json_examples',
+    'test_forbidden_legacy_routes_removed')}
+
+
+def _stage12_sources():
+    hashes = _stage11_sources()
+    h = SKILL_ROOT.parents[2]
+    files = [SKILL_ROOT/'SKILL.md', *(SKILL_ROOT/'references').glob('*.md'),
+        h/'skills/productivity/confluence-gantt-plan/SKILL.md',
+        h/'skills/productivity/tutu-confluence-jira/SKILL.md',
+        MOFS_INDEX_ROOT/'README.md', Path.home()/'USERTOOLS/MppReader/README.md',
+        h/'restore-all-skills.sh', h/'sync-to-hermes.sh']
+    hashes.update({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files})
+    return hashes
+
+
+def _stage12_report(session, exitstatus, root):
+    config = session.config
+    def read(name):
+        p = root/'reports'/name
+        return json.loads(p.read_text()) if p.is_file() else {}
+    initial, external, loads = (read(n) for n in ('initial-state.json','external-checks.json','skill-loads.json'))
+    protected = initial.get('protected_hashes', {})
+    changed = [p for p,h in protected.items() if not Path(p).is_file() or hashlib.sha256(Path(p).read_bytes()).hexdigest()!=h]
+    hashes = _stage12_sources()
+    start = config._acceptance_start_hashes
+    drift = sorted(set(hashes)^set(start) | {p for p,h in hashes.items() if start.get(p)!=h})
+    results = config._acceptance_results
+    selected = {item.path.name+'::'+item.name for item in session.items}
+    selected |= {name.split('[')[0] for name in selected}
+    missing = sorted(STAGE12_REQUIRED-selected)
+    passed_ids = {Path(r['test_id'].split('::',1)[0]).name+'::'+r['test_id'].split('::',1)[1]
+                  for r in results if r['status']=='passed' and r['phase']=='call'}
+    passed_ids |= {name.split('[')[0] for name in passed_ids}
+    mandatory_not_passed = sorted(STAGE12_REQUIRED-passed_ids)
+    # Verify the evidence against the actual active files, not its success label alone.
+    load_records = loads.get('skills', [])
+    load_ok = len(load_records)==4 and all(
+        entry.get('success') and Path(entry['path']).is_file()
+        and str(Path(entry['path']).resolve())==entry['resolved_path']
+        and hashlib.sha256(Path(entry['path']).read_bytes()).hexdigest()==entry['sha256']
+        for entry in load_records)
+    no_live = not any(item.get_closest_marker('confluence_live') for item in session.items)
+    good = (int(exitstatus)==0 and bool(session.items) and bool(results)
+        and all(r['status']=='passed' for r in results) and not missing and not mandatory_not_passed
+        and bool(protected) and not changed and not drift and no_live and load_ok
+        and external.get('gate')=='passed')
+    master = Path.home()/'WorkVault/Hermes-Backlog/TZ/EditPlanConfluence/EditPlanConfluence_TZ.md'
+    plan = master.parent/'plans/HF-plan_EditPlanConfluence_20261116.md'
+    schema = Path.home()/'WorkVault/Registries/EcosystemConfig.schema.json'
+    implemented = {
+        'S/SKILL.md':'канонические publish/save/Inbox/history/compare/identity/resume, адресные решения и раздельное доверие',
+        'W/SKILL.md':'короткое перенаправление в skill_view канона без алгоритма',
+        'Q/SKILL.md + Q/references/plan-queries.md':'русские запросы того же typed API, локальные сутки и текущая/подтверждённая версия',
+        'C/SKILL.md':'адресная ссылка на канон и unified credential loader, прежние JIRA правила сохранены',
+        'A/edit-plan-confluence + A/confluence-gantt-plan':'штатный restore после backup/исправления live слоя по регламенту библиотеки; реальные skill_view paths/hashes',
+        'S/references/mpp-to-gantt.md':'prepared data вместо обязательной CSV цепочки, качество и ограничения',
+        'S/references/cli-contract.md':'все команды/флаги/defaults, глобальные пути, схемы, exit codes, исполнимые parser примеры',
+        'S/references/batch-and-inbox.md':'freeze-all, manifest, неизменяемый контекст, разделение регистрации/исполнения решения',
+        'S/references/identity-and-rules.md':'evidence/revision, B/C, once/project, identity bootstrap',
+        'S/references/history-and-verification.md':'точные selectors, время/offset/cursor, trust и GET-only observations',
+        'S/references/testing-and-acceptance.md':'изоляция, группы, ограничения покрытия этапа 12, отчёты и gate',
+        'S/references/operations-and-recovery.md':'численные лимиты и реальные источники, backup до будущей миграции, recovery и частичные эффекты',
+        'S/references/cases-trisigma.md':'A–G и D-risks, hashes/размеры/метрики и границы функциональной приёмки',
+        'R/README.md + M/README.md':'export_full-v2 и typed API; before/after/patch/manifest и восстановление',
+        'S/tests/test_skill_contract.py':'загрузчик, parser/dispatch, stdout, secret canary, offsets и совместимость',
+        'S/tests/conftest.py':'STAGE12_REQUIRED, отдельные offline selection/order/report; прежние hooks/карты сохранены',
+        'E/Manifest + digest/render; MAIN_TZ_INVENTORY':'согласованы существующие записи/ID, версия actual master 0.5.1, внешние пути/hashes/diffs'}
+    limitations = [
+        'Только этап 12. Полная приёмка этапа 13, live A–D/G и отдельные A–F записи §20.7.3 этим gate не закрываются; прежние evidence не редактировались.',
+        'Маршрутизация проверена по инструкции, реальному parser/dispatch CLI и выбранной регрессии. Сообщение через Gateway/LLM не прогонялось; отклонённое сообщение скилл исправить не может.',
+        'Настоящий skill_view успешен, но штатный загрузчик предупреждает о symlink вне trusted root; loader/Gateway не изменены.',
+        'Generic Codex quick_validate не принимает существующие Hermes frontmatter keys platforms/tools/version (rc=1); рабочий формат сохранён и проверен настоящим Hermes loader. Это не ошибка загрузки Hermes.',
+        'Master на диске 0.5.1 с отдельным §21, исполнялся §20. Inventory приведено к фактической версии, новый APPROVE не заявлен.',
+        'Manifest имеет прежние ошибки общей schema вне новой дельты; список/равенство before-after в registry/manifest-ids.json. Новые ошибки и Tool ID не добавлены.',
+        'Schedule остаётся независимым, unknown/partial identity не превращается в доказанное соответствие. Полный счётчик всех reader/cache регрессий не измерен (null).',
+        'Production БД/архивы/страницы A–D/AB не менялись; приёмка offline. Gateway, кроны, наблюдатели и расписания не менялись. OwnCloud sync не подтверждён.',
+        'Первый отдельный smoke 74 passed выполнялся с изолированным стандартным pytest tmp; финальная приёмка и внешние проверки целиком в T/stage-12. Предварительный smoke не используется как gate.',
+    ]
+    report = {'stage':'12','gate':'passed' if good else 'failed','exit_code':int(exitstatus),
+        'base_commit':initial.get('base_commit'),'command':[sys.executable,'-m','pytest',*config.invocation_params.args],
+        'environment':{'python':sys.executable,'version':platform.python_version(),'cli_python':'/usr/bin/python3',
+            'PYTHONPATH':os.environ.get('PYTHONPATH'),'test_root':str(root)},
+        'master':{'path':str(master),'version':master.read_text().split('version:',1)[1].splitlines()[0].strip(),
+            'sha256':hashlib.sha256(master.read_bytes()).hexdigest(),
+            'section20_sha256':hashlib.sha256(master.read_text().split('## 20. ')[1].split('## 21. ')[0].encode()).hexdigest()},
+        'plan':{'path':str(plan),'sha256':hashlib.sha256(plan.read_bytes()).hexdigest(),
+            'normative_prefix_sha256':hashlib.sha256(plan.read_text().split('## Журнал исполнения')[0].encode()).hexdigest()},
+        'config_contract_sha256':hashlib.sha256(schema.read_bytes()).hexdigest(),
+        'source_files':hashes,'source_tree_sha256':hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),
+        'implemented_files':implemented,'migrations':[],'protected_files_checked':len(protected),
+        'changed_protected_files':changed,'changed_during_test_run':drift,
+        'selected':len(session.items),'tests':results,'mandatory_test_ids':sorted(STAGE12_REQUIRED),
+        'missing_required':missing,'mandatory_not_passed':mandatory_not_passed,'external_checks':external,
+        'active_skill_loads':loads,'no_live_selected':no_live,
+        'counters':{'MPXJ_read':None,'cache_hit':None,'cache_miss':None,'live_POST':0,'live_PUT':0,
+            'instrumented_regression':config._acceptance_counters},
+        'coverage':{'§20.7.3':'эксплуатационная интеграция; полные A–F записи отложены этапу 13',
+            'AC-04':'документация и bootstrap/identity/resume регрессия',
+            'AC-17':'маршрут Inbox, выбранные архивные регрессии; полная приёмка отдельно',
+            'AC-19':'адресные решения и прежние тесты регистрации/исполнения',
+            'AC-23':'history/локальные сутки/cursor и typed API регрессия',
+            'AC-24':'точные compare и все десять CLI подслучаев в выбранной регрессии',
+            'AC-25':'запрет неоднозначного v2, точные publication selectors'},
+        'limitations':limitations,'generated_at':datetime.now(timezone.utc).isoformat()}
+    (root/'reports/stage-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    lines=['# Этап 12 — интеграция скилла и эксплуатационная документация','',
+        f"Gate: **{report['gate']}**; S rc={exitstatus}; selected={len(session.items)}; passed={sum(r['status']=='passed' and r['phase']=='call' for r in results)}.",'',
+        'Команда S:','','```text',' '.join(report['command']),'```','',
+        'Пофайловая поставка:','']+['- `'+key+'`: '+value+'.' for key,value in implemented.items()]
+    lines+=['','Фактически загруженные имена:','']
+    lines+=['- `'+entry['requested_name']+'`: `'+entry['path']+'` → `'+entry['resolved_path']+'`; SHA-256 `'+entry['sha256']+'`.' for entry in load_records]
+    lines+=['','Внешние команды/rc/JUnit, восстановление USERTOOLS, конфиг-источники и Registries: external-checks.json и связанные evidence.',
+        '',f"Source tree: `{report['source_tree_sha256']}`; защищено {len(protected)} файлов, изменено {len(changed)}.",
+        '', 'Удалены предварительный save, ручное копирование /tmp, автоудаление связей, доказательство отсутствия публикации по nullable дате и повторное общее да для publish.',
+        '', 'Timeout: reader 180 с, JVM probe 60 с, HTTP 120 с; retry limit 1 (GET до 2 попыток); MPP/ZIP 64 MiB, ZIP 128 entries/256 MiB unpacked/ratio 100.',
+        '', 'Secret-redaction: canary stdout/receipt и сканирование поставки без сохранения реальных секретов. Backup/recovery описаны, production миграция не выполнялась.',
+        '', 'Завершающий commit/SHA — после gate, в журнале канонического плана; canon.md исключён.','', 'Ограничения:','']
+    lines+=['- '+value for value in limitations]
     (root/'reports/stage-report.md').write_text('\n'.join(lines)+'\n')

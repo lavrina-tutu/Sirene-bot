@@ -1,7 +1,7 @@
 ---
 name: workvault-rag
 description: "Use when: 'найди в архиве', 'архив', 'найди в базе', 'найди"
-version: 2.7.1
+version: 2.7.2
 author: Sirene
 license: MIT
 platforms: [linux]
@@ -119,6 +119,15 @@ Items без разделения "Имя: задача" — общий спис
 (обновляется `orglookup rooms`; проверить `updated:` в frontmatter на актуальность).
 
 ## Планы (gantt/mpp)
+
+Канон действий — `skill_view(name="edit-plan-confluence")`,
+[SKILL.md](../../productivity/edit-plan-confluence/SKILL.md).
+«Залей» → publish, «только в архив» → save, «все MPP из Inbox» → batch save.
+История и compare читают тот же typed API без свободного SQL.
+«Какая версия опубликована» — отдельно последняя подтверждённая версия
+с точными page/attachment/publication IDs, trust/временем и текущее наблюдение;
+при необходимости GET-only publication verify выбранной записи.
+
 
 Для «хронология планов», «какие файлы загрузили сегодня» использовать
 `from mofs_index.plan.history import history, HistoryRequest` — тот же typed API,

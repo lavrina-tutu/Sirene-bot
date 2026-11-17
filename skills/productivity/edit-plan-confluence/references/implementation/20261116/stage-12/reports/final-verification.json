@@ -1,0 +1,26 @@
+{
+  "stage": "12",
+  "gate": "passed",
+  "s_rc": 0,
+  "s_passed": 660,
+  "s_deselected": 25,
+  "junit_failures": 0,
+  "junit_errors": 0,
+  "junit_skipped": 0,
+  "warnings": [
+    "intentional ZIP duplicate-name negative test"
+  ],
+  "source_tree_sha256": "e0f876a39bf2c4307d3c18109d1bc0899b707e58747902c9269a480f7a65ab14",
+  "report_sha256": "6e5a419d188a099b1c0bf148c18f08b8c10fb1cd0fe6f8f5b4eb02f82993b821",
+  "foreign_canon_unchanged": true,
+  "parent_before_stage12_commit": "dfa56b672e2e0e730b206ebdc0b63b71797e3c1c",
+  "concurrent_change": "Unrelated resume-skills commit appeared after task entry; it is retained as parent, excluded from stage-12 delta.",
+  "default_preprocessing_loads": "default-skill-loads.json",
+  "secret_scan": "final-secret-scan.json",
+  "preserved_failed_attempt": "failed-collection/attempt.json",
+  "white_space_note": "Raw failed-attempt stderr retains its original terminal newline; unified patch context whitespace is preserved. Source docs/tests pass git diff --cached --check.",
+  "source_whitespace_check": {
+    "rc": 0,
+    "paths_checked": 15
+  }
+}

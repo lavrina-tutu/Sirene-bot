@@ -1,99 +1,45 @@
-# MPP → gantt-chart-planner JSON: полный рецепт конвертера
+# Подготовленные данные → Gantt
 
-Проверено 08.09.2026 на тестовой странице pageId=519501810 (план «Доработки АБ-платформы ТУТУ до Trisigma», 33 задачи). Заливка MPP 080926 и синк календаря подтверждены рендером.
+Штатные `save`, `diff`, `publish` используют frozen MPP →
+`MppReader.plan_export.export_full` (`full-export-v2`) → `PreparedPlan`.
+Один холодный MPXJ-read обеспечивает архив, календари, «Итого», диагностику и
+представление; пригодный parse cache исключает повторное чтение.
+`convert_prepared_plan`/`calendar_from_prepared`/`compute_itogo_from_prepared`
+не открывают MPP и не вызывают CSV. Публикуются сохранённые детерминированные bytes.
 
-## Источник: CSV от read_mpp.py
+Parse cache зависит от source SHA, reader/MPXJ/export/schema/normalization и timezone.
+Representation cache дополнительно зависит от converter/rules/plugin/summary,
+шаблона и выбранного корня. Повреждённые записи перестраиваются из проверенных
+архивных байтов; cache не заменяет архив и свежий GET Confluence.
 
-Используем `read_mpp.py` (скилл `read-mpp`), который уже валит mpxj в CSV:
-```bash
-source /home/tkachenkoav/hermes-agent/.venv/bin/activate
-python3 /home/tkachenkoav/USERTOOLS/MppReader/read_mpp.py /tmp/plan.mpp --format csv
-# → /tmp/plan__tasks.csv, plan__resources.csv, plan__assignments.csv
-```
+Исходные ID/UID/WBS, иерархия, summary/milestone, dates/constraints/actuals/splits,
+baseline, ресурсы и назначения сохраняются в snapshot. ID=0 остаётся в архиве,
+исключается только из отображения. Ресурсы по одному имени не схлопываются.
+FS/SS/FF/SF, signed lag, units, elapsed/working и calendar basis передаются по
+проверенному `profiles/installed-gantt-profile.json`. Неизвестный тип не FS/0.
+Параллельные связи остаются отдельными записями.
 
-## Схема сборки JSON вложения
+Календари включают внутридневные интервалы, исключения, наследование, коэффициенты
+и bindings проекта/задач/ресурсов. Неподдержанное отражается диагностикой и допуском;
+одни weekday-флаги не означают полноту. Таймзона неизвестна без явного указания
+или доказанного профиля проекта; константа ZD на Trisigma не переносится.
 
-### eventsData (дерево)
-- Читать `__tasks.csv`: `id, outline_level, name, duration, start, finish, percent_complete, milestone, summary, predecessors`.
-- **Фильтр строк перед деревом:** в обработку попадают только строки с непустым `id`, `id != "0"` и `outline_level`, распарсенным как число **> 0** (пустое / `"0"` / `"0.0"` / мусор → 0 → отброс). Служебная **шапка** MS Project (`outline_level=0`, иногда с ненулевым `id`, напр. 217) в дерево и в `dependenciesData` не входит — иначе `eventsData[0]` становится шапкой и плагин показывает «No records to display» или неверный корень.
-- Построить дерево из отфильтрованных строк по `outline_level` (стек, как в MS Project). 
-- Каждое событие — объект с полями (шаблон из любого существующего вложения):
-  ```
-  {baselines:[], calendar:None, constraintType:'', duration:d, durationUnit:'day',
-   effort:eff|None, effortDriven:False, effortUnit:'hour', ignoreResourceCalendar:None,
-   inactive:None, manuallyScheduled:False, parentId:int|None, parentIndex:int,
-   percentDone:0, rollup:bool, schedulingMode:'FixedDuration', segments:None,
-   unscheduled:False, startDate, endDate, name, children:[]}
-  ```
-- `rollup` = `summary` MPP (сводная). `duration` = `duration` MPP (0 у вех). `startDate`/`endDate` = `start`/`finish` MPP.
-- Веха (milestone=True) → `duration:0`, `effort:0`.
-- КОРЕНЬ дерева (`eventsData[0]`) — первый узел с `outline_level >= 1` после фильтра (сводная-корень плана; в тесте 080926 — `id=1`, «Доработки АБ-платформы ТУТУ до Trisigma - оценка»). Строки с `outline_level=0` не рассматривать как корень.
+«Итого» — единственный содержательный верхний summary-корень, дни из его
+длительности и параметров источника с ceil: 84.875→85, 76.875→77, 106.875→107.
+Несколько корней требуют адресного выбора из proposal; неизвестное основание
+не даёт произвольного числа. Work — Decimal сумма назначений обычных задач и
+вех без summary/service/timephased-дубля, ROUND_HALF_UP до трёх знаков.
+Missing не ноль. Work/«Трудозатраты» не записываются в storage.
 
-### resourcesData (активная группа + новые)
-- Читать `__resources.csv`: `id, name, max_units`.
-- В существующем JSON плагина ресурсы могут иметь НЕСКОЛЬКО записей с одинаковым `name` и разными id (группы копий). **Активная = запись с наибольшим id на имя.**
-- Матчить ресурсы MPP с активной группой **по имени**; у кого нет матча (напр. «Найм») — **создать новый** ресурс с id из idCounter (или max(id)+1):
-  `{id:NEW, parentId:None, name, eventColor:'red', resourceType:'custom'}`.
+Допуск проверяет задачи и вехи (точность дат 60 секунд), граф, полноту,
+профиль и потери семантики. Полная диагностика хранится в admission evidence.
+Локальная longest-path эвристика не доказывает поведение плагина или причину
+расхождения; автоматически удалять связи по ней запрещено. B/C применяются
+с доказанной identity/revision и повторной проверкой причины.
+Успешный read-back bytes/storage не равен `schedule:verified`.
 
-### assignmentsData (назначения)
-- Читать `__assignments.csv`: `task_id, resource_name, units, work`.
-- Для каждой строки: `{id:ASN_ID, event:<task_id>, resource:<plugin_res_id>, units:<units>}`.
-  `units` = % загрузки (напр. 70). Одна задача может иметь несколько назначений (тестирование: продуктовые 100% + Гладких 50%).
-- **effort события** = СУММА `work` (ч/ч) всех назначений на эту задачу (в mpp `work` в формате "X h").
-- id назначений — из idCounter, инкрементировать.
-
-### dependenciesData (связи)
-- Из `__tasks.csv` колонка `predecessors` (строка вида `[2]` или `[15, 17, 19]`).
-- Для каждого предшественника: `{id:DEP_ID, from:<pred_id>, to:<task_id>, type:2, lag:0, lagUnit:'day', active:true}`. `type:2` = финиш-старт (FS).
-- ⚠️ задача/предшественник должны существовать в flat-мапе событий; сравнивать id как int.
-
-### Остальные ключи
-- `startDate` (верхний уровень) = дата старта корня.
-- `idCounter` = след. свободный id; нормализовать под новые id сущностей.
-- `macroConfig, calendarsData, initialState, baselineVersions, customColumns, linkedSites` — **копировать из существующего вложения как есть** (не трогать, кроме calendarsData при синке календаря).
-
-## Синк календаря MPP → плагин
-
-Календарь «рабочее время» в MPP («Стандартный») читается через java-API mpxj (не CSV):
-```python
-# импорты: import mpxj; import jpype; import jpype.imports; if not jpype.isJVMStarted(): jpype.startJVM()
-from org.mpxj.reader import UniversalProjectReader  # НЕ net.mpxj.*
-pj = UniversalProjectReader().read('/tmp/plan.mpp')
-cal = pj.getDefaultCalendar()   # не getProjectCalendar
-# нерабочие исключения:
-for x in cal.getCalendarExceptions():
-    if not x.getWorking():
-        fd = str(x.getFromDate())  # '2026-11-04'
-        td = str(x.getToDate())
-        # в плагине интервал [fd, td+1день) нерабочий
-# рабочие часы по умолчанию: cal.getCalendarHours()
-# проверка дня: cal.isWorkingDate(java.time.LocalDate.parse('2026-11-04'))
-```
-
-Маппинг в `calendarsData` (один календарь general):
-```json
-{
-  "id": "general", "name": "General", "unspecifiedTimeIsWorking": true,
-  "intervals": [
-    {"recurrentStartDate": "at 12:00", "recurrentEndDate": "at 13:00", "isWorking": false},  // обед
-    {"recurrentStartDate": "at 18:00", "recurrentEndDate": "at 09:00", "isWorking": false},  // ночь
-    {"recurrentStartDate": "on Sun", "recurrentEndDate": "on Mon", "isWorking": false},      // вс
-    {"recurrentStartDate": "on Sat", "recurrentEndDate": "on Sun", "isWorking": false},       // сб
-    {"startDate": "2026-11-04 00:00", "endDate": "2026-11-05 00:00", "isWorking": false},     // праздник из MPP
-    ...
-  ]
-}
-```
-Receipt: для каждого нерабочего исключения `{startDate: f.isoformat()+" 00:00", endDate: (t+timedelta(days=1)).isoformat()+" 00:00", isWorking:false}` (end эксклюзивен).
-
-## Проверка после заливки
-1. POST вернул 200, version вложения бампнулась.
-2. Пере-GET вложения → сверить: число событий (дерево с корнем), resourcesData (новый ресурс есть), calendarsData (праздники в периоде плана), суммарный effort листьев.
-3. Визуально на странице: план отрисовался, связи-стрелки, ресурсы на барах, праздники/выходные как неработающие дни.
-
-## Ключевые питфоллы конвертера
-- **Шапка `outline_level=0`:** не полагаться только на `id == "0"` — шапка может иметь реальный id; отсекать по уровню до сборки стека.
-- **id типов:** события с `id` из MPP (1..N) могут конфликтовать с существующими id наследуемого плагина. При точечных вставках после заливки — пересчитывать idCounter, не хардкодить (тестовый конвертер ставил 300000 — сломан, см. вероятность коллизии).
-- **predecessors парс:** строка `[2]` → приводить к int и сверять с int-ключами flat-мапы (сравнение str vs int молча даёт 0 связей).
-- **несколько людей на задаче** (тестирование): в assignments несколько записей на один `event` с разными `resource`/`units`, effort = сумма work.
-- **`import mpxj` и `import jpype.imports` ДО `startJVM()`** — иначе Java-пакеты не резолвятся.
+Совместимый `convert` сохраняет CSV-адаптер старых потребителей и может повторно
+читать календарь. Его результат не заменяет prepared admission/receipt.
+В существующей цели сохраняются macro-id/id/hash; вложение определяется param_id.
+Read-back проверяет SHA точной версии, актуальную цель, единственный макрос,
+«Итого», отсутствие «Трудозатрат» и сохранность соседних блоков.

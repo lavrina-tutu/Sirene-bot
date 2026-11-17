@@ -1,0 +1,15 @@
+{
+  "tool": "MofsIndex",
+  "reason": "stage-12 exporter/typed API operational documentation only",
+  "files": [
+    {
+      "relative_path": "README.md",
+      "target_path": "/home/tkachenkoav/USERTOOLS/MofsIndex/README.md",
+      "action": "modify",
+      "before_sha256": "7cd174bfdf2903df773cac8dfd5f576c4c29f4fc97e6ed09fa08aa8b0c5386f9",
+      "after_sha256": "06960b1fc9ea93a6a603c3a8a8ec45b62fcac7a29aa3ab483e7af629507c2350",
+      "before_mode": "0o600",
+      "after_mode": "0o600"
+    }
+  ]
+}

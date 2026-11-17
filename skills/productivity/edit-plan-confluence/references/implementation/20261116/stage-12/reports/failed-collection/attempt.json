@@ -1,0 +1,4 @@
+{
+  "rc": 4,
+  "reason": "Stage-12 mandatory map inherited six confluence_live process-death tests excluded by the offline selection. No test calls ran. Corrected only STAGE12 exclusions; earlier maps unchanged."
+}

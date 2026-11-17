@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "components": [
+    {
+      "tool": "MppReader",
+      "checks": [
+        {
+          "method": "patch",
+          "command": [
+            "patch",
+            "-p1",
+            "-i",
+            "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-12/usertools/MppReader/changes.patch"
+          ],
+          "rc": 0,
+          "stdout": "patching file README.md\n",
+          "stderr": ""
+        },
+        {
+          "method": "after-copy",
+          "rc": 0,
+          "operation": "shutil.copy2(after/README.md, restore/README.md)"
+        }
+      ],
+      "sha256": "f6c9dbb49f201818c168777079d7a29150cf9b925667ac21db26f685573c0050",
+      "status": "passed"
+    },
+    {
+      "tool": "MofsIndex",
+      "checks": [
+        {
+          "method": "patch",
+          "command": [
+            "patch",
+            "-p1",
+            "-i",
+            "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261116/stage-12/usertools/MofsIndex/changes.patch"
+          ],
+          "rc": 0,
+          "stdout": "patching file README.md\n",
+          "stderr": ""
+        },
+        {
+          "method": "after-copy",
+          "rc": 0,
+          "operation": "shutil.copy2(after/README.md, restore/README.md)"
+        }
+      ],
+      "sha256": "06960b1fc9ea93a6a603c3a8a8ec45b62fcac7a29aa3ab483e7af629507c2350",
+      "status": "passed"
+    }
+  ]
+}

@@ -1,0 +1,287 @@
+{
+  "tools_before": [
+    "aggregate_from_meetings",
+    "anywhere_contacts",
+    "confluence_sync",
+    "dev_kanban_pipeline",
+    "ecosystem_integration",
+    "entities_migration",
+    "entity_registry",
+    "entity_registry_cli",
+    "error_bus",
+    "exchange_monitor",
+    "exchange_org_lookup",
+    "fireflies_autojoin",
+    "honcho_integration",
+    "mark_objects_from_summary",
+    "meeting_scheduler",
+    "mofs_index",
+    "mpp_reader",
+    "move_from_ff",
+    "move_from_jira",
+    "move_from_loop",
+    "move_from_zulip",
+    "okr_sheets_exporter",
+    "okr_tool",
+    "obsidian_from_confluence",
+    "protocol_from_summary",
+    "srtool",
+    "status_snapshot",
+    "task_refresh",
+    "tz_dev_cleanup",
+    "tz_dev_decommission",
+    "tz_workflow",
+    "loop_channel_digest",
+    "proxy_check_linux",
+    "piiscan",
+    "process_improvement",
+    "skills_improvement",
+    "vestnik_theme",
+    "deep_mine_project",
+    "contract_assistant",
+    "edit_plan_confluence",
+    "case_collector",
+    "sync_aralov",
+    "dialog_backlog",
+    "dialog_backlog_to_kanban",
+    "telegram_group_topics",
+    "tg_topic_duplicate",
+    "dev_workflow",
+    "move_from_keytalk"
+  ],
+  "tools_after": [
+    "aggregate_from_meetings",
+    "anywhere_contacts",
+    "confluence_sync",
+    "dev_kanban_pipeline",
+    "ecosystem_integration",
+    "entities_migration",
+    "entity_registry",
+    "entity_registry_cli",
+    "error_bus",
+    "exchange_monitor",
+    "exchange_org_lookup",
+    "fireflies_autojoin",
+    "honcho_integration",
+    "mark_objects_from_summary",
+    "meeting_scheduler",
+    "mofs_index",
+    "mpp_reader",
+    "move_from_ff",
+    "move_from_jira",
+    "move_from_loop",
+    "move_from_zulip",
+    "okr_sheets_exporter",
+    "okr_tool",
+    "obsidian_from_confluence",
+    "protocol_from_summary",
+    "srtool",
+    "status_snapshot",
+    "task_refresh",
+    "tz_dev_cleanup",
+    "tz_dev_decommission",
+    "tz_workflow",
+    "loop_channel_digest",
+    "proxy_check_linux",
+    "piiscan",
+    "process_improvement",
+    "skills_improvement",
+    "vestnik_theme",
+    "deep_mine_project",
+    "contract_assistant",
+    "edit_plan_confluence",
+    "case_collector",
+    "sync_aralov",
+    "dialog_backlog",
+    "dialog_backlog_to_kanban",
+    "telegram_group_topics",
+    "tg_topic_duplicate",
+    "dev_workflow",
+    "move_from_keytalk"
+  ],
+  "skills_before": [
+    "hermes_feature",
+    "tz_workflow",
+    "ecosystem_scheme",
+    "tutu_confluence_jira",
+    "exchange_monitor",
+    "taskrefresh",
+    "movedfromloop_api",
+    "tutu_jira_okr",
+    "tutu_jira_sr",
+    "workvault_entities",
+    "aggregate_wildcard",
+    "protocol_from_summary",
+    "about_usr_skills",
+    "natdam_mon_overview",
+    "loop_channel_digest",
+    "proxy_check",
+    "deep_mine_project",
+    "pmo_charter_fill",
+    "page_to_schedule",
+    "read_mpp",
+    "contract-assistant",
+    "edit_plan_confluence"
+  ],
+  "skills_after": [
+    "hermes_feature",
+    "tz_workflow",
+    "ecosystem_scheme",
+    "tutu_confluence_jira",
+    "exchange_monitor",
+    "taskrefresh",
+    "movedfromloop_api",
+    "tutu_jira_okr",
+    "tutu_jira_sr",
+    "workvault_entities",
+    "aggregate_wildcard",
+    "protocol_from_summary",
+    "about_usr_skills",
+    "natdam_mon_overview",
+    "loop_channel_digest",
+    "proxy_check",
+    "deep_mine_project",
+    "pmo_charter_fill",
+    "page_to_schedule",
+    "read_mpp",
+    "contract-assistant",
+    "edit_plan_confluence"
+  ],
+  "no_new_tool_id": true,
+  "preexisting_schema_errors": [
+    {
+      "path": "links/52",
+      "message": "'note' is a required property"
+    },
+    {
+      "path": "links/53",
+      "message": "'note' is a required property"
+    },
+    {
+      "path": "links/54",
+      "message": "'note' is a required property"
+    },
+    {
+      "path": "links/55",
+      "message": "'note' is a required property"
+    },
+    {
+      "path": "links/56",
+      "message": "'note' is a required property"
+    },
+    {
+      "path": "links/57",
+      "message": "'note' is a required property"
+    },
+    {
+      "path": "links/58",
+      "message": "'note' is a required property"
+    },
+    {
+      "path": "links/59",
+      "message": "'note' is a required property"
+    },
+    {
+      "path": "skills/deep_mine_project",
+      "message": "Additional properties are not allowed ('scripts', 'tz_ref' were unexpected)"
+    },
+    {
+      "path": "skills/edit_plan_confluence",
+      "message": "Additional properties are not allowed ('tz_ref' was unexpected)"
+    },
+    {
+      "path": "skills/page_to_schedule",
+      "message": "Additional properties are not allowed ('replaces', 'scripts', 'tz_ref' were unexpected)"
+    },
+    {
+      "path": "skills/pmo_charter_fill",
+      "message": "Additional properties are not allowed ('replaces', 'tz_ref' were unexpected)"
+    },
+    {
+      "path": "skills/read_mpp",
+      "message": "Additional properties are not allowed ('scripts', 'tz_ref' were unexpected)"
+    },
+    {
+      "path": "skills/tutu_confluence_jira",
+      "message": "Additional properties are not allowed ('scripts', 'tz_ref' were unexpected)"
+    },
+    {
+      "path": "tools/anywhere_contacts",
+      "message": "Additional properties are not allowed ('version' was unexpected)"
+    },
+    {
+      "path": "tools/deep_mine_project",
+      "message": "'called_by' is a required property"
+    },
+    {
+      "path": "tools/deep_mine_project/category",
+      "message": "'skill' is not one of ['usertool', 'hermes_skill', 'infra_service']"
+    },
+    {
+      "path": "tools/dev_workflow",
+      "message": "Additional properties are not allowed ('updated', 'version' were unexpected)"
+    },
+    {
+      "path": "tools/dialog_backlog",
+      "message": "'called_by' is a required property"
+    },
+    {
+      "path": "tools/dialog_backlog_to_kanban",
+      "message": "'called_by' is a required property"
+    },
+    {
+      "path": "tools/dialog_backlog_to_kanban/category",
+      "message": "'infra-plan' is not one of ['usertool', 'hermes_skill', 'infra_service']"
+    },
+    {
+      "path": "tools/mark_objects_from_summary",
+      "message": "Additional properties are not allowed ('version' was unexpected)"
+    },
+    {
+      "path": "tools/meeting_scheduler",
+      "message": "Additional properties are not allowed ('version' was unexpected)"
+    },
+    {
+      "path": "tools/process_improvement",
+      "message": "'called_by' is a required property"
+    },
+    {
+      "path": "tools/process_improvement/category",
+      "message": "'infra-plan' is not one of ['usertool', 'hermes_skill', 'infra_service']"
+    },
+    {
+      "path": "tools/protocol_from_summary",
+      "message": "Additional properties are not allowed ('version' was unexpected)"
+    },
+    {
+      "path": "tools/skills_improvement",
+      "message": "'called_by' is a required property"
+    },
+    {
+      "path": "tools/skills_improvement/category",
+      "message": "'infra-plan' is not one of ['usertool', 'hermes_skill', 'infra_service']"
+    },
+    {
+      "path": "tools/telegram_group_topics",
+      "message": "'called_by' is a required property"
+    },
+    {
+      "path": "tools/telegram_group_topics/category",
+      "message": "'infra-plan' is not one of ['usertool', 'hermes_skill', 'infra_service']"
+    },
+    {
+      "path": "tools/tg_topic_duplicate/category",
+      "message": "'infra-plan' is not one of ['usertool', 'hermes_skill', 'infra_service']"
+    },
+    {
+      "path": "tools/vestnik_theme",
+      "message": "'called_by' is a required property"
+    },
+    {
+      "path": "tools/vestnik_theme/category",
+      "message": "'skill-scripts' is not one of ['usertool', 'hermes_skill', 'infra_service']"
+    }
+  ],
+  "schema_errors_unchanged": true,
+  "changed_delta_valid": true
+}

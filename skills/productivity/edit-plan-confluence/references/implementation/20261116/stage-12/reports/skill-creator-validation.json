@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence"
+  ],
+  "rc": 1,
+  "stdout": "Unexpected key(s) in SKILL.md frontmatter: platforms, tools, version. Allowed properties are: allowed-tools, description, license, metadata, name\n",
+  "stderr": "",
+  "applicability": "Generic Codex validator; existing Hermes frontmatter extensions are validated by actual installed Hermes skill_view, not removed for Codex compatibility."
+}

@@ -1,0 +1,36 @@
+--- a/README.md
++++ b/README.md
+@@ -63,3 +63,33 @@
+    общается с ним по HTTP/SSH.
+ 3. Двусторонняя синхронизация: Sirene делает правку в Project через COM,
+    возвращает diff пользователю.
++
++## Полный экспорт для edit-plan-confluence (§20)
++
++`plan_export.export_full(path)` — versioned `full-export-v2`, один вызов общего
++`read_project_file`/MPXJ reader. CLI скилла выбирает проверенный Python/JVM через
++`env.select_mpxj_python`: текущий `/usr/bin/python3.9`,
++`PYTHONPATH=/home/tkachenkoav/.local/lib/python3.9/site-packages`, MPXJ 16.4.0 /
++JPype 1.7.1. CLI — `/usr/bin/python3`, exporter subprocess — выбранный MPXJ Python.
++Список выше про старый hermes-venv относится к прежней установке; наличие JVM
++проверяется запуском, не наличием бинарника.
++
++Экспорт сохраняет ID/UID/WBS/иерархию/summary/milestone, dates/durations/constraints,
++actuals/splits/baseline (слоты 0–10), FS/SS/FF/SF с signed lag/units/elapsed,
++ресурсы/назначения/units/work/timephased, интервалы и исключения календарей,
++наследование/коэффициенты и bindings проекта/задач/ресурсов. Поля хранят
++value/quality/reason, численные quantities — десятичные значения и units;
++missing/unsupported не заменяют нулём, ошибки getter снижают качество.
++Timezone unknown сохраняется. Completeness извлечения не доказывает расписание.
++
++`PreparedPlan` нормализует результат в существующем скилле; календарь, «Итого»,
++архив и Gantt используют те же данные без CSV и повторного reader.
++Старые `read_mpp.py`/CSV/Google Sheets потребители сохраняют свои контракты;
++legacy `convert` не заменяет новый admission. Scheduler capability matrix
++`references/scheduler-capability-matrix.md` ограничивает локальную модель,
++а не возможности Confluence-плагина; полного schedule replay не обещает.
++
++Публичные команды, лимиты и recovery:
++`~/hermes-workspace/skills/productivity/edit-plan-confluence/references/cli-contract.md`,
++`operations-and-recovery.md`, `export-contract.md`.
++Новых CLI, reader daemon, конфигов и расписаний этот контракт не вводит.

@@ -58,7 +58,8 @@ class PluginProfile:
             'calendar:bindings:assignments','resource:availability','assignment:start','assignment:finish',
             'task:segments','task:active','dependency:summary_endpoint','resource:default_availability','assignment:coincident_task_interval'}
         for name, capability in d['capabilities'].items():
-            needs_behavior = (name in corrective or name.startswith(('task:actual_', 'task:task_type:', 'task:constraint:')))
+            separated = name.startswith(('display:', 'schedule:'))
+            needs_behavior = (separated or name in corrective or name.startswith(('task:actual_', 'task:task_type:', 'task:constraint:')))
             if (needs_behavior and capability['status'] == 'tested_supported'
                     and d['plugin']['key'] == 'com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence'):
                 witnesses = [documents[k] for k in capability['evidence'] if k in documents]
@@ -74,6 +75,21 @@ class PluginProfile:
                         and w.get('input_sha256') == w.get('browser_received_sha256'))
                 if not any(proves(w) for w in witnesses):
                     raise ValueError('capability_without_behavior_control:'+name)
+                if separated:
+                    layer = name.split(':', 1)[0]
+                    if (capability.get('layer') != layer or not capability.get('source_field')
+                            or not capability.get('representation') or not capability.get('required_checks')):
+                        raise ValueError('capability_scope_missing:'+name)
+                    if name != ':'.join((layer, capability['source_field'], capability['representation'])):
+                        raise ValueError('capability_scope_mismatch:'+name)
+                    # Status/custom columns live in the wrapper, not the engine.
+                    def scoped(w):
+                        return (proves(w) and (layer != 'schedule' or w.get('schedule_verification', {}).get('status') == 'verified')
+                            and d['plugin'].get('wrapper_asset_sha256') is not None
+                            and w.get('wrapper_asset_sha256') == d['plugin']['wrapper_asset_sha256']
+                            and all(k in w.get('checks', {}) for k in capability['required_checks']))
+                    if not any(scoped(w) for w in witnesses):
+                        raise ValueError('capability_without_scoped_wrapper_proof:'+name)
         relation_names = {'FS':'EndToStart','SS':'StartToStart','FF':'EndToEnd','SF':'StartToEnd'}
         for kind, codes in d['codes'].items():
             for name, code in codes.items():
@@ -95,6 +111,12 @@ class PluginProfile:
 
     def supports(self, name):
         return self.document['capabilities'].get(name, {}).get('status') == 'tested_supported'
+
+    def supports_field(self, field, *, layer, representation):
+        """Display evidence never grants scheduling support, or another method."""
+        cap = self.document['capabilities'].get(layer+':'+field+':'+representation, {})
+        return (cap.get('status') == 'tested_supported' and cap.get('layer') == layer
+                and cap.get('source_field') == field and cap.get('representation') == representation)
 
     def code(self, kind, name):
         if not isinstance(name, str) or not self.supports(kind + ':' + name):

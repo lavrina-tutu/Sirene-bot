@@ -49,3 +49,30 @@ def test_context_installed_profiles_from_registry(tmp_path):
     assert profiles['SUMMARY_PROFILE']['status']=='available'
     assert profiles['PLUGIN_PROFILE']['status']=='available'
     assert profiles['PLUGIN_PROFILE']['sha256']==hashlib.sha256((Path(__file__).parents[1]/'references/profiles/installed-gantt-profile.json').read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize('change', ['wrapper', 'field', 'method', 'checks', 'schedule'])
+def test_separate_field_capability_rejects_unbound_proof(change):
+    d = deepcopy(PluginProfile.load().document)
+    cap = d['capabilities']['display:actual_finish:customtext']
+    if change == 'wrapper':
+        d['plugin']['wrapper_asset_sha256'] = '0'*64
+    elif change == 'field':
+        cap['source_field'] = 'actual_start'
+    elif change == 'method':
+        cap['representation'] = 'native'
+    elif change == 'checks':
+        cap['required_checks'] = ['unobserved.field']
+    else:
+        # Reusing a positive display witness cannot authorize native scheduling.
+        d['capabilities']['schedule:actual_finish:native'] = {**cap, 'layer':'schedule', 'representation':'native'}
+    with pytest.raises(ValueError, match='capability_'):
+        PluginProfile(d).validate()
+
+
+def test_display_capability_cannot_grant_schedule():
+    p = PluginProfile.load()
+    for field in ('actual_start','actual_finish','actual_duration','actual_work','stop','resume'):
+        assert p.supports_field(field, layer='display', representation='customtext')
+        assert not p.supports_field(field, layer='schedule', representation='native')
+        assert not p.supports_field(field, layer='display', representation='native')

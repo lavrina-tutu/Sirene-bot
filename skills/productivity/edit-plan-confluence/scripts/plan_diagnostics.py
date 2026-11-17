@@ -129,7 +129,7 @@ def completeness(data, profile):
     return findings
 
 
-def capability_findings(data, plugin_profile):
+def capability_findings(data, plugin_profile, conversion=None):
     issues=[]
     from mpp_calendar import default_availability_equivalent, coincident_assignment_interval
     tasks={t['task_key']:t for t in data['tasks'] if 'error' not in t}
@@ -139,8 +139,18 @@ def capability_findings(data, plugin_profile):
             raw=task.get(field);value=field_value(raw)
             quantity=raw.get('quantity',{}) if isinstance(raw,dict) else {}
             empty=value in (None,False,0,'0','0.0','0.0h','0.0d') or quantity.get('amount') in ('0','0.0')
-            if not empty and not plugin_profile.supports('task:'+field):
-                issues.append(finding('unsupported_semantics','task_actuals_unrepresented:'+field,task['task_key'],raw))
+            if not empty and not plugin_profile.supports_field(field, layer='schedule', representation='native'):
+                # Describe an exact display without presenting it as calendar proof.
+                from mpp_convert import SOURCE_COLUMNS, source_value_text
+                column = SOURCE_COLUMNS[field][0]
+                nodes = flatten((conversion or {}).get('gantt', {}).get('eventsData', []))
+                ident = (conversion or {}).get('mappings', {}).get('tasks', {}).get(task['task_key'])
+                value = nodes.get(ident, {}).get(column)
+                display = {'method':'customtext', 'field':column, 'value':value,
+                    'source_match':value == source_value_text(raw),
+                    'profile_supported':plugin_profile.supports_field(field, layer='display', representation='customtext'),
+                    'calendar_semantics':'not_verified'}
+                issues.append(finding('unsupported_semantics','task_actuals_unrepresented:'+field,task['task_key'],raw,display))
     for resource in data['resources']:
         if (resource.get('availability') and not plugin_profile.supports('resource:availability')
                 and not (plugin_profile.supports('resource:default_availability') and default_availability_equivalent(resource,data))):
@@ -237,7 +247,7 @@ def compare_dates(data, conversion, *, observation=None, profile=None):
 def diagnose(prepared, conversion, *, plugin_profile, excluded=(), observation=None):
     data=prepared.normalized_data; profile=policy_profile()
     findings=completeness(data,profile)+graph_findings(data,excluded=excluded)
-    if plugin_profile is not None:findings+=capability_findings(data,plugin_profile)
+    if plugin_profile is not None:findings+=capability_findings(data,plugin_profile,conversion)
     if data['resolved_timezone'] is None:
         findings.append(finding('timezone','timezone_required','source_dates',None))
     if plugin_profile is None or not plugin_profile.document['plugin'].get('version'):

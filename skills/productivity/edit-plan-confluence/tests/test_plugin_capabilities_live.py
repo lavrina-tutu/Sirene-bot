@@ -72,12 +72,14 @@ def test_installed_capability_control(case,capability_page,request):
     assert received==payload
     (folder/'received.json').write_bytes(received)
     storage=client.get_page(page_id);(folder/'storage.xml').write_text(storage['body']['storage']['value'])
-    page=ctx.new_page();fetched=[];assets=set();errors=[]
+    page=ctx.new_page();fetched=[];assets=set();wrappers=set();errors=[]
     def capture(response):
         if response.status==200 and '/download/attachments/'+page_id+'/' in response.url:
             fetched.append({'url':response.url,'bytes':response.body()})
         if response.status==200 and '/static/chunks/' in response.url and response.url.endswith('7b1ccf34.b54da94330ce3dd5.js'):
             assets.add(hashlib.sha256(response.body()).hexdigest())
+        if response.status==200 and response.url.endswith('103.dc91403c7e11c30e.js'):
+            wrappers.add(hashlib.sha256(response.body()).hexdigest())
     page.on('response',capture);page.on('pageerror',lambda err:errors.append(str(err)))
     observation={'case':case['id'],'capabilities':case['capabilities'],'status':'not_verified','page_id':page_id,
         'attachment_id':att.attach_id,'attachment_version':att.version,'page_version':storage['version']['number'],
@@ -95,7 +97,7 @@ def test_installed_capability_control(case,capability_page,request):
         data=frame.evaluate('''async()=>{
             await Promise.race([gantt.project.commitAsync(),new Promise((_,r)=>setTimeout(()=>r(new Error('commit_timeout')),10000))]);
             const local=d=>d&&[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')+'T'+[d.getHours(),d.getMinutes(),d.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
-            const fields=['actualStartDate','actualEndDate','actualDuration','actualEffort','startDate','endDate','availability'];
+            const fields=['actualStartDate','actualEndDate','actualDuration','actualEffort','stopDate','resumeDate','startDate','endDate','availability'];
             const native=m=>Object.fromEntries(fields.map(f=>[f,Boolean(m.getFieldDefinition?.(f))]));
             return {build:__NEXT_DATA__.buildId,engine_version:bryntum.getVersion('gantt'),
                 tasks:gantt.project.eventStore.allRecords.map(t=>({...t.toJSON(),children:undefined,startDate:local(t.startDate),endDate:local(t.endDate),calendar:t.calendar?.id??t.calendar,segments:t.segments?.map(s=>({...s.toJSON(),startDate:local(s.startDate),endDate:local(s.endDate)})),native_fields:native(t)})),
@@ -108,6 +110,9 @@ def test_installed_capability_control(case,capability_page,request):
         assert 'frontend-build:'+data['build']==profile.document['plugin']['version']
         assert profile.document['plugin']['asset_sha256'] in assets
         observation['asset_sha256']=profile.document['plugin']['asset_sha256']
+        if profile.document['plugin'].get('wrapper_asset_sha256'):
+            assert profile.document['plugin']['wrapper_asset_sha256'] in wrappers
+            observation['wrapper_asset_sha256']=profile.document['plugin']['wrapper_asset_sha256']
         observation['confluence_version']=page.locator('meta[name="ajs-version-number"]').get_attribute('content')
         assert fetched and fetched[-1]['bytes']==payload
         from urllib.parse import urlsplit,parse_qs

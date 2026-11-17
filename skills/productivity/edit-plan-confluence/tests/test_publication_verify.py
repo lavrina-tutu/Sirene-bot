@@ -249,3 +249,36 @@ def test_stage11_live_verify_only_get_repeat_and_historical_scope(tmp_path,reque
         (root/'reports').mkdir(exist_ok=True)
         (root/'reports/stage11-live.json').write_text(json.dumps(status,ensure_ascii=False,indent=2))
         conn.close()
+
+
+def test_get_only_verification_keeps_visible_source_values_unverified(publication, tmp_path, monkeypatch):
+    # The read-back transport cannot observe the rendered browser grid.
+    conn, pub, state = publication
+    result = verify(tmp_path, pub, fake_get(monkeypatch, state))
+    assert result['source_values']['status'] == 'not_verified'
+    assert result['schedule'] == 'not_verified'
+
+
+@pytest.mark.parametrize('change', ['hash','page','version','wrapper','visible','model','reopen'])
+def test_source_value_browser_proof_rejects_wrong_binding(change):
+    from copy import deepcopy
+    from prepared_plan import ROOT
+    from plugin_profile import PluginProfile
+    from plan_publication_verify import verify_source_value_observation
+    evidence = ROOT/'references/implementation/20261116/stage-13-fix2/group-4/live/source-values'
+    gantt = json.loads((evidence/'input.json').read_text())
+    observation = json.loads((evidence/'observation.json').read_text())
+    profile = PluginProfile.load()
+    def check(o):
+        return verify_source_value_observation(gantt, o, plugin_profile=profile,
+            page_id=observation['page_id'], attachment_version=observation['attachment_version'])
+    assert check(observation)['status'] == 'verified'
+    broken = deepcopy(observation)
+    if change == 'hash': broken['browser_received_sha256'] = '0'*64
+    elif change == 'page': broken['page_id'] = 'other-test-page'
+    elif change == 'version': broken['attachment_version'] += 1
+    elif change == 'wrapper': broken['wrapper_asset_sha256'] = '0'*64
+    elif change == 'visible': broken['openings'][1]['visible_values']['custom_mpp_actual_finish'] = []
+    elif change == 'model': broken['openings'][1]['tasks'][0]['model']['custom_mpp_percent_complete'] = 'wrong'
+    else: broken['openings'] = broken['openings'][:1]
+    assert check(broken)['status'] != 'verified'

@@ -93,6 +93,7 @@ def single_receipt(*, operation_id=None, item_id=None, project_slug=None, source
             "task_count": None, "display_task_count": None, "dependency_count": None,
             "exceptions": [], "attachment_version": None,
             "verification": {"archive": "not_verified", "attachment": "not_applicable", "storage": "not_applicable",
+                             "source_values": {"status": "not_applicable", "checks": [], "limitations": [], "evidence_ids": []},
                              "schedule": {"status": "not_verified", "checks": [], "limitations": [], "evidence_ids": []}},
             "published": False, "warnings": [], "completed_stages": [], "external_effect": "none", "error": None}
 

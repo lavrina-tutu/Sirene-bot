@@ -119,3 +119,14 @@ def test_mask_driver_strings(value):
 def test_receipt_rejects_path_escape(attempt, event):
     with pytest.raises(ValueError):
         pr.write_receipt(attempt, event, {})
+
+
+def test_source_value_receipt_does_not_verify_schedule():
+    r = pr.single_receipt()
+    r['verification']['source_values']['status'] = 'verified'
+    assert r['verification']['schedule']['status'] == 'not_verified'
+    pr.validate_single_receipt(r)
+    del r['verification']['source_values']
+    import jsonschema
+    with pytest.raises(jsonschema.ValidationError):
+        pr.validate_single_receipt(r)

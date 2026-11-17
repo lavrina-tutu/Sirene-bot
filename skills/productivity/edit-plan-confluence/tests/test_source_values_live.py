@@ -75,6 +75,7 @@ def test_visible_source_values_and_reopen(capability_page, request):
                         assert value==wanted
                 # Observe native summary separately: the exact source is custom text.
                 data['source_summary_percent']='47.375'
+                data['visible_values']={}
                 columns={c['id']:c for c in data['columns']}
                 for name in ('status','percentdone','startdate','enddate','duration',*[c for c,_ in SOURCE_COLUMNS.values()]):
                     assert columns[name]['hidden'] is False, name
@@ -83,6 +84,7 @@ def test_visible_source_values_and_reopen(capability_page, request):
                     assert cells.count()>=7, (name, columns[name], frame.locator('.b-grid-cell').evaluate_all('(cells)=>cells.slice(0,15).map(c=>({column:c.dataset.column,columnId:c.dataset.columnId,text:c.textContent}))'))
                     cells.first.scroll_into_view_if_needed()
                     text=cells.all_text_contents()
+                    data['visible_values'][name]=[t.strip() for t in text]
                     expected=[row[name] for row in control['expected_source_values'].values()] if name.startswith('custom_') else None
                     if expected is not None:
                         assert sorted(t.strip() for t in text)==sorted(expected), (name,text,expected)
@@ -98,6 +100,11 @@ def test_visible_source_values_and_reopen(capability_page, request):
         assert observation['asset_sha256']==profile.document['plugin']['asset_sha256']
         assert observation['wrapper_asset_sha256']==control['wrapper_asset_sha256']
         assert 'frontend-build:'+observation['build']==profile.document['plugin']['version']
+        from plan_publication_verify import verify_source_value_observation
+        observation['source_values_verification']=verify_source_value_observation(control['input'], observation,
+            plugin_profile=profile, page_id=page_id, attachment_version=att.version)
+        assert observation['source_values_verification']['status']=='verified'
+        observation['schedule_verification']={'status':'not_verified','reason':'text_does_not_prove_calendar_semantics'}
         latest=client.get_page(page_id)
         assert latest['version']['number']==storage['version']['number']
         current=next(a for a in client.list_attachments(page_id) if a['title']==filename)

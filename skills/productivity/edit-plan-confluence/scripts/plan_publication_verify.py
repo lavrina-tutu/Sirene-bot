@@ -9,6 +9,52 @@ from pathlib import Path
 from conf_client import ConfluenceClient
 
 
+def verify_source_value_observation(gantt, observation, *, plugin_profile,
+                                    page_id, attachment_version):
+    """Bound exact source text to this browser load, independently of schedule.
+
+    The GET-only publication verifier cannot produce browser evidence itself.
+    Acceptance/browser callers supply raw model, serialization and visible text.
+    """
+    from collections import Counter
+    from mpp_convert import SOURCE_COLUMNS
+    from plan_diagnostics import flatten
+    from prepared_plan import canonical_bytes
+    digest = hashlib.sha256(canonical_bytes(gantt)).hexdigest()
+    result = {'status':'not_verified', 'checks':[], 'limitations':[], 'evidence_ids':[]}
+    plugin = plugin_profile.document['plugin']
+    if (str(observation.get('page_id')) != str(page_id)
+            or observation.get('attachment_version') != attachment_version
+            or observation.get('input_sha256') != digest
+            or observation.get('browser_received_sha256') != digest
+            or observation.get('wrapper_asset_sha256') != plugin.get('wrapper_asset_sha256')
+            or observation.get('asset_sha256') != plugin.get('asset_sha256')
+            or 'frontend-build:'+str(observation.get('build')) != plugin.get('version')
+            or observation.get('confluence_version') != plugin_profile.document['confluence_version']):
+        result['limitations'] = ['browser_observation_binding_mismatch']
+        return result
+    openings = observation.get('openings', [])
+    if len(openings) < 2:
+        result['limitations'] = ['ordinary_view_and_reopening_required']
+        return result
+    expected = flatten(gantt.get('eventsData', []))
+    if not expected:
+        result['limitations'] = ['source_rows_required']
+        return result
+    for opening in openings:
+        records = {str(t['id']):t for t in opening.get('tasks', [])}
+        for source_field, (column, _) in SOURCE_COLUMNS.items():
+            values = [t.get(column) for t in expected.values()]
+            match = (opening.get('readOnly') is True and all(isinstance(v, str) for v in values)
+                and all(records.get(str(ident), {}).get(layer, {}).get(column) == node.get(column)
+                        for ident, node in expected.items() for layer in ('model','persistable'))
+                and Counter(opening.get('visible_values', {}).get(column, [])) == Counter(values))
+            result['checks'].append({'source_field':source_field,'representation':'customtext',
+                                     'model_serialization_and_visible_text_match':match})
+    result['status'] = 'verified' if all(c['model_serialization_and_visible_text_match'] for c in result['checks']) else 'mismatch'
+    return result
+
+
 class ReadOnlyConfluenceClient(ConfluenceClient):
     """Transport-level guard, including direct/download requests."""
     @classmethod
@@ -109,6 +155,8 @@ def _verify(conn, pub, client, scope):
     status = 'verified_observation' if ok else 'verification_failed' if mismatch else 'not_verified'
     evidence = {'checks':{k:v for k,v in checks.items() if k!='exact_attachment'},'attachment':attachment,
         'reasons':reasons,'publication_id':pub['publication_id'],'historical_publication_proven':False,
+        'source_values':{'status':'not_verified','checks':[],
+            'limitations':['GET_bytes_and_storage_do_not_prove_visible_source_values'],'evidence_ids':[]},
         'schedule':'not_verified'}
     obs_id = w.record_page_observation(conn,w.PageObservationSpec(plan_id=pub['plan_id'],page_id=pub['page_id'],
         page_version=page.get('version',{}).get('number'),itogo_raw=storage,
@@ -122,6 +170,7 @@ def _verify(conn, pub, client, scope):
         'status':status if ok else 'not_verified','verification_status':status,'publication_id':pub['publication_id'],
         'observation_id':obs_id,'verified_at':observation['verified_at'],'scope':scope,'checks':checks,'reasons':reasons,
         'trust':pub['trust'],'historical_status':pub['historical_status'],'historical_publication_proven':False,
+        'source_values':evidence['source_values'],
         'schedule':'not_verified','error':None if ok else {'code':'not_verified','message':'Недостаточные свидетельства или несоответствие'}}
 
 

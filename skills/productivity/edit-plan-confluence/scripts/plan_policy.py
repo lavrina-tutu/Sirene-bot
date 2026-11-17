@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from prepared_plan import fingerprint
 
-POLICY_VERSION = 'publication-admission-v1'
+POLICY_VERSION = 'publication-admission-v2'
 
 
 @dataclass(frozen=True)

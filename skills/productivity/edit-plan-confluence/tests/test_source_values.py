@@ -66,3 +66,18 @@ def test_custom_summary_values_are_text_and_not_aggregates(stage08_export, stage
     for mode in ('view', 'edit'):
         columns = {c['id']: c for c in out['gantt']['initialState'][mode]['columns']}
         assert all(columns[column]['hidden'] is False for column, _ in SOURCE_COLUMNS.values())
+
+
+def test_displayed_actuals_still_block_unproven_schedule(stage08_export):
+    from plugin_profile import PluginProfile
+    from plan_diagnostics import capability_findings
+    export = deepcopy(stage08_export)
+    export['tasks'][2]['actual_start'] = {'value':'2026-01-05T09:00:00','quality':'ok','reason':None}
+    prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+    profile = PluginProfile.load()
+    conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+    found = next(f for f in capability_findings(prepared.normalized_data, profile, conversion)
+                 if f['entity']==export['tasks'][2]['task_key'] and f['code']=='task_actuals_unrepresented:actual_start')
+    assert found['category']=='unsupported_semantics'
+    assert found['represented']['profile_supported'] and found['represented']['source_match']
+    assert found['represented']['calendar_semantics']=='not_verified'

@@ -238,13 +238,52 @@
             "limitations",
             "evidence_ids"
           ]
+        },
+        "source_values": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "checks",
+            "limitations",
+            "evidence_ids"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "verified",
+                "not_verified",
+                "mismatch",
+                "not_applicable"
+              ]
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         }
       },
       "required": [
         "archive",
         "attachment",
         "storage",
-        "schedule"
+        "schedule",
+        "source_values"
       ]
     },
     "published": {

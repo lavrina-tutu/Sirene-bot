@@ -1,11 +1,12 @@
 {
   "schema_version": 1,
   "id": "installed-gantt-profile",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "plugin": {
     "key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
     "version": "frontend-build:H6u7SQymvwxeyojc1ur6Z",
-    "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe"
+    "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+    "wrapper_asset_sha256": "9a43a94647ce8c2fff5cabdb07a52b8619b824bf8673b0bcafe9a090cd9dccb2"
   },
   "confluence_version": "8.9.4",
   "codes": {
@@ -511,6 +512,232 @@
         "corrective__summary-dependency__storage_xml"
       ],
       "scope": "Installed-wrapper independent behavior control summary-dependency. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
+    },
+    "display:actual_start:customtext": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Exact source text, model/persistable values and ordinary read-only view across reopening including summary; no scheduling claim.",
+      "layer": "display",
+      "source_field": "actual_start",
+      "representation": "customtext",
+      "required_checks": [
+        "0.1.model.custom_mpp_actual_start",
+        "1.1.persistable.custom_mpp_actual_start",
+        "0.visible.custom_mpp_actual_start",
+        "1.visible.custom_mpp_actual_start"
+      ]
+    },
+    "schedule:actual_start:native": {
+      "status": "not_verified",
+      "evidence": [],
+      "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
+      "layer": "schedule",
+      "source_field": "actual_start",
+      "representation": "native",
+      "required_checks": []
+    },
+    "display:actual_finish:customtext": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Exact source text, model/persistable values and ordinary read-only view across reopening including summary; no scheduling claim.",
+      "layer": "display",
+      "source_field": "actual_finish",
+      "representation": "customtext",
+      "required_checks": [
+        "0.1.model.custom_mpp_actual_finish",
+        "1.1.persistable.custom_mpp_actual_finish",
+        "0.visible.custom_mpp_actual_finish",
+        "1.visible.custom_mpp_actual_finish"
+      ]
+    },
+    "schedule:actual_finish:native": {
+      "status": "not_verified",
+      "evidence": [],
+      "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
+      "layer": "schedule",
+      "source_field": "actual_finish",
+      "representation": "native",
+      "required_checks": []
+    },
+    "display:actual_duration:customtext": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Exact source text, model/persistable values and ordinary read-only view across reopening including summary; no scheduling claim.",
+      "layer": "display",
+      "source_field": "actual_duration",
+      "representation": "customtext",
+      "required_checks": [
+        "0.1.model.custom_mpp_actual_duration",
+        "1.1.persistable.custom_mpp_actual_duration",
+        "0.visible.custom_mpp_actual_duration",
+        "1.visible.custom_mpp_actual_duration"
+      ]
+    },
+    "schedule:actual_duration:native": {
+      "status": "not_verified",
+      "evidence": [],
+      "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
+      "layer": "schedule",
+      "source_field": "actual_duration",
+      "representation": "native",
+      "required_checks": []
+    },
+    "display:actual_work:customtext": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Exact source text, model/persistable values and ordinary read-only view across reopening including summary; no scheduling claim.",
+      "layer": "display",
+      "source_field": "actual_work",
+      "representation": "customtext",
+      "required_checks": [
+        "0.1.model.custom_mpp_actual_work",
+        "1.1.persistable.custom_mpp_actual_work",
+        "0.visible.custom_mpp_actual_work",
+        "1.visible.custom_mpp_actual_work"
+      ]
+    },
+    "schedule:actual_work:native": {
+      "status": "not_verified",
+      "evidence": [],
+      "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
+      "layer": "schedule",
+      "source_field": "actual_work",
+      "representation": "native",
+      "required_checks": []
+    },
+    "display:stop:customtext": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Exact source text, model/persistable values and ordinary read-only view across reopening including summary; no scheduling claim.",
+      "layer": "display",
+      "source_field": "stop",
+      "representation": "customtext",
+      "required_checks": [
+        "0.1.model.custom_mpp_stop",
+        "1.1.persistable.custom_mpp_stop",
+        "0.visible.custom_mpp_stop",
+        "1.visible.custom_mpp_stop"
+      ]
+    },
+    "schedule:stop:native": {
+      "status": "not_verified",
+      "evidence": [],
+      "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
+      "layer": "schedule",
+      "source_field": "stop",
+      "representation": "native",
+      "required_checks": []
+    },
+    "display:resume:customtext": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Exact source text, model/persistable values and ordinary read-only view across reopening including summary; no scheduling claim.",
+      "layer": "display",
+      "source_field": "resume",
+      "representation": "customtext",
+      "required_checks": [
+        "0.1.model.custom_mpp_resume",
+        "1.1.persistable.custom_mpp_resume",
+        "0.visible.custom_mpp_resume",
+        "1.visible.custom_mpp_resume"
+      ]
+    },
+    "schedule:resume:native": {
+      "status": "not_verified",
+      "evidence": [],
+      "scope": "No proven equivalent calendar behavior for this field; customtext display grants no schedule admission.",
+      "layer": "schedule",
+      "source_field": "resume",
+      "representation": "native",
+      "required_checks": []
+    },
+    "display:percent:leaf": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Installed wrapper observed field/method only; source summary preserved as custom text, native summary may aggregate.",
+      "layer": "display",
+      "source_field": "percent",
+      "representation": "leaf",
+      "required_checks": [
+        "0.3.percent",
+        "0.4.percent",
+        "0.5.percent",
+        "0.6.percent",
+        "0.7.percent",
+        "1.7.percent"
+      ]
+    },
+    "display:percent:source_exact": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Installed wrapper observed field/method only; source summary preserved as custom text, native summary may aggregate.",
+      "layer": "display",
+      "source_field": "percent",
+      "representation": "source_exact",
+      "required_checks": [
+        "0.1.model.custom_mpp_percent_complete",
+        "1.1.persistable.custom_mpp_percent_complete",
+        "0.visible.custom_mpp_percent_complete",
+        "1.visible.custom_mpp_percent_complete"
+      ]
+    },
+    "display:percent:summary_source": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Installed wrapper observed field/method only; source summary preserved as custom text, native summary may aggregate.",
+      "layer": "display",
+      "source_field": "percent",
+      "representation": "summary_source",
+      "required_checks": [
+        "0.1.model.custom_mpp_percent_complete",
+        "1.1.persistable.custom_mpp_percent_complete",
+        "1.visible.custom_mpp_percent_complete"
+      ]
+    },
+    "display:status:derived": {
+      "status": "tested_supported",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Installed wrapper observed field/method only; source summary preserved as custom text, native summary may aggregate.",
+      "layer": "display",
+      "source_field": "status",
+      "representation": "derived",
+      "required_checks": [
+        "0.2.status",
+        "0.3.status",
+        "0.6.status",
+        "1.visible.status"
+      ]
+    },
+    "display:percent:summary_native": {
+      "status": "not_verified",
+      "evidence": [
+        "fix2_source_values"
+      ],
+      "scope": "Observed source summary 47.375 became native 44.1875; exact source summary is supported only as custom text.",
+      "layer": "display",
+      "source_field": "percent",
+      "representation": "summary_native",
+      "required_checks": []
     }
   },
   "evidence": {
@@ -1089,6 +1316,10 @@
     "corrective__task-calendar__storage_xml": {
       "path": "references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/storage.xml",
       "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "fix2_source_values": {
+      "path": "references/implementation/20261116/stage-13-fix2/group-3/live/source-values/observation.json",
+      "sha256": "6644fc7c75e6a9889b84df4c6e63ecb4d2d6b028c2361bd4da57471728d968db"
     }
   },
   "limitations": [
@@ -1098,6 +1329,7 @@
     "Elapsed eday encoding failed; other elapsed encodings, varied daily intervals, inheritance/workweeks/recurrences and task/resource/assignment calendar bindings remain not_verified.",
     "Representation conversion does not establish schedule equality for arbitrary source plans. Exact source dates and per-task comparison remain separate.",
     "Work is displayed in diagnostics only; no work block is published in storage.",
-    "Corrective cycle 17.11.2026: nested calendar children, task binding, FixedUnits, SNET/FNET, segments with source-derived duration, inactive and summary endpoints verified independently. Native actuals, arbitrary assignment offsets, independent resource calendars and availability remain not_verified; narrow default-availability and coincident-assignment transformations have separate controls."
+    "Corrective cycle 17.11.2026: nested calendar children, task binding, FixedUnits, SNET/FNET, segments with source-derived duration, inactive and summary endpoints verified independently. Native actuals, arbitrary assignment offsets, independent resource calendars and availability remain not_verified; narrow default-availability and coincident-assignment transformations have separate controls.",
+    "Source facts customtext are verified independently of scheduling; native summary percent aggregates and is not the source summary percent."
   ]
 }

@@ -53,6 +53,13 @@
             "null"
           ],
           "pattern": "^[a-f0-9]{64}$"
+        },
+        "wrapper_asset_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
         }
       }
     },
@@ -115,6 +122,28 @@
           "scope": {
             "type": "string",
             "minLength": 1
+          },
+          "layer": {
+            "enum": [
+              "display",
+              "schedule"
+            ]
+          },
+          "source_field": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_checks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0,
+            "uniqueItems": true
           }
         }
       }

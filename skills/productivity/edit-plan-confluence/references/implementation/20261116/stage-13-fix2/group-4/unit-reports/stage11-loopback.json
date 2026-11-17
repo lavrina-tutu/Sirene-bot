@@ -1,0 +1,116 @@
+{
+  "status": "passed",
+  "processes": 2,
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-4-unit/pytest-tmp/test_verify_cli_loopback_concu0/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-4-unit/pytest-tmp/test_verify_cli_loopback_concu0/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix2-20261117-145510/group-4-unit/pytest-tmp/test_verify_cli_loopback_concu0/cache",
+    "publication",
+    "verify",
+    "--project-slug",
+    "verify-stage11",
+    "--publication-id",
+    "pub_8fc7d9a06f8b416883b6c91b37598346"
+  ],
+  "rc": [
+    0,
+    0
+  ],
+  "results": [
+    {
+      "schema_version": 1,
+      "action": "publication verify",
+      "exit_code": 0,
+      "status": "verified_observation",
+      "verification_status": "verified_observation",
+      "publication_id": "pub_8fc7d9a06f8b416883b6c91b37598346",
+      "observation_id": "obs_976695dd91194a5292396c714752d098",
+      "verified_at": "2026-11-17T12:06:36+00:00",
+      "scope": "current_state",
+      "checks": {
+        "exact_attachment": true,
+        "skeleton_version": true,
+        "skeleton_macro_count": true,
+        "page_version": true,
+        "one_gantt_macro": true,
+        "macro_id": true,
+        "param_id": true,
+        "param_hash": true,
+        "attachment_name": true,
+        "one_itogo": true,
+        "itogo_values": true,
+        "itogo_above_macro": true,
+        "no_trudozatraty": true,
+        "storage_preserved": true,
+        "current_attachment": true,
+        "current_page_stable": true
+      },
+      "reasons": [],
+      "trust": "legacy_unverified",
+      "historical_status": null,
+      "historical_publication_proven": false,
+      "source_values": {
+        "status": "not_verified",
+        "checks": [],
+        "limitations": [
+          "GET_bytes_and_storage_do_not_prove_visible_source_values"
+        ],
+        "evidence_ids": []
+      },
+      "schedule": "not_verified",
+      "error": null
+    },
+    {
+      "schema_version": 1,
+      "action": "publication verify",
+      "exit_code": 0,
+      "status": "verified_observation",
+      "verification_status": "verified_observation",
+      "publication_id": "pub_8fc7d9a06f8b416883b6c91b37598346",
+      "observation_id": "obs_6271988d373a42ffb53c79e6f42659c5",
+      "verified_at": "2026-11-17T12:06:36+00:00",
+      "scope": "current_state",
+      "checks": {
+        "exact_attachment": true,
+        "skeleton_version": true,
+        "skeleton_macro_count": true,
+        "page_version": true,
+        "one_gantt_macro": true,
+        "macro_id": true,
+        "param_id": true,
+        "param_hash": true,
+        "attachment_name": true,
+        "one_itogo": true,
+        "itogo_values": true,
+        "itogo_above_macro": true,
+        "no_trudozatraty": true,
+        "storage_preserved": true,
+        "current_attachment": true,
+        "current_page_stable": true
+      },
+      "reasons": [],
+      "trust": "legacy_unverified",
+      "historical_status": null,
+      "historical_publication_proven": false,
+      "source_values": {
+        "status": "not_verified",
+        "checks": [],
+        "limitations": [
+          "GET_bytes_and_storage_do_not_prove_visible_source_values"
+        ],
+        "evidence_ids": []
+      },
+      "schedule": "not_verified",
+      "error": null
+    }
+  ],
+  "GET": 10,
+  "POST": 0,
+  "PUT": 0,
+  "attachment_version": 2
+}

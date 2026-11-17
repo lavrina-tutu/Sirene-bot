@@ -789,6 +789,8 @@ def prepare_publish(client=None, page_id=None, mpp_path=None, *, project_slug=No
     from plan_policy import evaluate, POLICY_VERSION
     from plan_rules import apply_rules, resolve_drop_links, relation_signature, task_context, RULES_VERSION
     receipt=single_receipt(project_slug=project_slug);receipt['mode']='publish'
+    receipt['verification']['source_values']={'status':'not_verified','checks':[],
+        'limitations':['ordinary_view_for_this_plan_not_observed'],'evidence_ids':[]}
     counters=dict(MPXJ_read=0,cache_hit=0,cache_miss=0,POST=0,PUT=0)
     outcome=PublishPreparation(receipt,counters);conn=None
     try:

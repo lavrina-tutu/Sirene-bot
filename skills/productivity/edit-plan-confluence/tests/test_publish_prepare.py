@@ -181,3 +181,57 @@ def test_mpp_child_uses_shared_admission_before_page_creation(publish_case,monke
     assert result.exit_code==0 and result.receipt['page_id']=='test-child',result.receipt
     assert result.counters['POST']==2 and result.counters['PUT']==0
     assert c['conn'].execute('SELECT count(*) FROM plan_import_item').fetchone()[0]==1
+
+
+@pytest.mark.parametrize('unavailable', ['client', 'server', 'profile'])
+def test_primary_archive_survives_unavailable_confluence(publish_case, monkeypatch, unavailable):
+    """Remote failure cannot precede the complete local archive/read-back."""
+    import pipeline
+    from plugin_profile import PluginProfile
+    c = publish_case
+    original = pipeline._publish_readback
+    checked = []
+    def readback(conn, snapshot_id):
+        original(conn, snapshot_id)
+        checked.append(snapshot_id)
+    def fail(*args, **kwargs):
+        assert checked, 'remote/profile work preceded snapshot read-back'
+        raise OSError('controlled unavailable dependency')
+    monkeypatch.setattr(pipeline, '_publish_readback', readback)
+    client, profile = c['client'], c['profile']
+    if unavailable == 'client':
+        client = None
+        monkeypatch.setattr(pipeline, 'ConfluenceClient', fail)
+    elif unavailable == 'server':
+        monkeypatch.setattr(client, 'get_page', fail)
+    else:
+        profile = None
+        monkeypatch.setattr(PluginProfile, 'load', fail)
+    r = pipeline.prepare_publish(client, 'test-page', c['source'], project_slug='test',
+        timezone_hint='Europe/Moscow', context=c['context'], export=c['export'], plugin_profile=profile)
+    assert r.exit_code == 5 and r.receipt['published'] is False, r.receipt
+    assert r.receipt['snapshot_id'] in checked
+    assert r.receipt['verification']['archive'] == 'verified'
+    assert 'archived' in r.receipt['completed_stages']
+    w.verify_snapshot(c['conn'], r.receipt['snapshot_id'])
+    assert r.counters['POST'] == r.counters['PUT'] == 0
+
+
+def test_archive_before_remote_failure_resumes_same_snapshot(publish_case, monkeypatch):
+    import pipeline
+    c = publish_case
+    original = c['client'].get_page
+    def fail(*args, **kwargs):
+        raise OSError('controlled offline')
+    monkeypatch.setattr(c['client'], 'get_page', fail)
+    first = prepare(c)
+    assert first.receipt['verification']['archive'] == 'verified'
+    monkeypatch.setattr(c['client'], 'get_page', original)
+    c['source'].unlink()
+    resumed = pipeline.prepare_publish(c['client'], operation_id=first.receipt['operation_id'],
+        db_path=c['context'].db, workvault=c['context'].workvault, cache_dir=c['context'].cache_dir,
+        plugin_profile=c['profile'])
+    assert resumed.exit_code == 0, resumed.receipt
+    assert resumed.receipt['snapshot_id'] == first.receipt['snapshot_id']
+    assert resumed.counters['MPXJ_read'] == 0
+    assert c['conn'].execute('SELECT count(*) FROM plan_snapshot').fetchone()[0] == 1

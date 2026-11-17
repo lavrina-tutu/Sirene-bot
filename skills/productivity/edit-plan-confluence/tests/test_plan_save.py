@@ -367,3 +367,33 @@ def test_missing_runtime_is_explicit_failure_before_read(save_case, monkeypatch)
     assert result.exit_code == 5 and result.error["code"] == "mpxj_runtime_unavailable"
     assert result.item_id and result.snapshot_id is None
     assert result.counters["MPXJ_read"] == 0
+
+
+def test_six_source_actual_fields_roundtrip_without_confluence(save_case):
+    context, source, original = save_case
+    export = copy.deepcopy(original)
+    values = {
+        'actual_start': {'value': '2026-04-23T09:00', 'quality': 'ok', 'reason': None},
+        'actual_finish': {'value': None, 'quality': 'missing', 'reason': 'not_set'},
+        'actual_duration': {'value': '1.125 h', 'quality': 'ok', 'reason': None,
+                            'quantity': {'amount': '1.125', 'units': 'HOURS', 'elapsed': False, 'source_units': 'h'}},
+        'actual_work': {'value': '0.375 h', 'quality': 'ok', 'reason': None,
+                        'quantity': {'amount': '0.375', 'units': 'HOURS', 'elapsed': False, 'source_units': 'h'}},
+        'stop': {'value': '2026-04-23T10:07:30', 'quality': 'ok', 'reason': None},
+        'resume': {'value': '2026-04-24T09:00', 'quality': 'ok', 'reason': None},
+    }
+    export['tasks'][1].update(copy.deepcopy(values))
+    result = ps.save_snapshot(source, context=context, project_slug='test-project', export=export)
+    assert result.exit_code == 0, result.receipt
+    c = _conn(context)
+    try:
+        snapshot = q.get_snapshot(c, result.snapshot_id)
+        document = json.loads(snapshot['source_json'])
+        tasks = document.get('normalized_data', document)['tasks']
+        for field, expected in values.items():
+            assert tasks[1][field] == expected
+        rows = c.execute('SELECT source_json FROM plan_task_version WHERE snapshot_id=?', (result.snapshot_id,)).fetchall()
+        task = next(json.loads(r[0]) for r in rows if json.loads(r[0]).get('task_key') == tasks[1]['task_key'])
+        assert all(task[field] == expected for field, expected in values.items())
+    finally:
+        c.close()

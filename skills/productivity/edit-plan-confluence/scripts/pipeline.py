@@ -770,7 +770,7 @@ def prepare_publish(client=None, page_id=None, mpp_path=None, *, project_slug=No
                     db_path=None, workvault=None, cache_dir=None, operation_id=None,
                     mapping_revision=None, accept_proposal=None, reason=None, rule_scope='once',
                     export=None, plugin_profile=None, child=False, title=None):
-    """Freeze → prepared → project/target → snapshot/read-back → identity/rules/admission.
+    """Freeze → prepared → local project → snapshot/read-back → target → admission.
 
     No POST/PUT. Resume reads durable prepared artifacts, never the original path.
     """
@@ -863,9 +863,16 @@ def prepare_publish(client=None, page_id=None, mpp_path=None, *, project_slug=No
             prepared,frozen=_prepared_source(conn,operation,context,request,counters,export)
             receipt['source']={'name':frozen.original_name,'sha256':frozen.sha256,'size_bytes':frozen.size_bytes}
             receipt['completed_stages']=['input_frozen','prepared']
-        # Project resolution and read-only target validation precede snapshot creation.
+        # Only local, unambiguous project/lineage resolution precedes the archive.
+        # Remote availability and publication capabilities must not prevent it.
         binding=resolve_plan_binding(page_id,request.get('project_slug'),lineage_id=request.get('lineage_id'),conn=conn)
         request.update(project_slug=binding['project_slug'],lineage_id=binding['lineage_id'])
+        receipt['project_slug']=binding['project_slug']
+        if not previous:
+            receipt['snapshot_id']=_archive_publish_source(conn,operation,prepared,frozen,binding,context)
+            _publish_readback(conn,receipt['snapshot_id'])
+        receipt['verification']['archive']='verified'
+        receipt['completed_stages']=['input_frozen','prepared','archived']
         publication_profiles={name:hashlib.sha256((PROFILES/name).read_bytes()).hexdigest()
                               for name in ('publication-policy-v1.json','project-rules-v1.json')}
         if previous and request.get('publication_profiles')!=publication_profiles:
@@ -875,19 +882,14 @@ def prepare_publish(client=None, page_id=None, mpp_path=None, *, project_slug=No
             request['rule_revisions']=[{'rule_id':r['rule_id'],'revision':r['revision'],'content_sha256':r['content_sha256']}
                                        for r in q.get_project_rules(conn,binding['project_slug'])]
         receipt['project_slug']=binding['project_slug']
-        client=client or ConfluenceClient()
-        page,target=_current_target(client,page_id)
-        outcome.target=target
-        if not previous:
-            receipt['snapshot_id']=_archive_publish_source(conn,operation,prepared,frozen,binding,context)
-            _publish_readback(conn,receipt['snapshot_id'])
-        receipt['verification']['archive']='verified'
-        receipt['completed_stages']=['input_frozen','prepared','archived']
         item=q.get_operation_item(conn,operation.operation_id)
         receipt['source']={'name':item['original_name'],'sha256':item['source_mpp_sha256'],'size_bytes':item['size_bytes']}
         prep_artifact,_=store_artifact(canonical_bytes(prepared.to_dict()),'prepared_json',ext='json',project_slug=request['project_slug'],conn=conn,workvault=context.workvault)
         plan_writer.record_preparation(conn,plan_writer.PreparationSpec(operation.operation_id,revision,receipt['snapshot_id'],
             prep_artifact,context.snapshot(),request))
+        client=client or ConfluenceClient()
+        page,target=_current_target(client,page_id)
+        outcome.target=target
         # A target change invalidates old proposals/decisions even before effects.
         prior_result=q.get_preparation_result(conn,operation.operation_id)
         if previous and prior_result and prior_result['result']['target']['sha256']!=target['sha256']:

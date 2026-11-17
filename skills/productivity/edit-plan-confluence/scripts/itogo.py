@@ -113,6 +113,21 @@ def insert_itogo_above_macro(storage: str, macro_start: int, itogo_html: str) ->
     return storage[:macro_start] + itogo_html + storage[macro_start:]
 
 
+def mark_planned_schedule(storage: str) -> str:
+    """Keep the mode label inside the owned summary, protected on resume."""
+    from mpp_convert import PUBLICATION_LABEL
+    from html import unescape
+    for match in re.finditer(r'<p\b[^>]*>.*?</p>', storage, re.S):
+        block = match.group(0)
+        if not re.search(r'Итого\s*:', unescape(re.sub(r'<[^>]+>', '', block))):
+            continue
+        if PUBLICATION_LABEL in block:
+            return storage
+        block = block[:-4] + '<br />' + PUBLICATION_LABEL + '</p>'
+        return storage[:match.start()] + block + storage[match.end():]
+    return storage
+
+
 def apply_itogo(storage: str, d1: str, d2: str, n_days: int, m_hours: int, macro_start: int | None = None) -> str:
     if ITOGO_LINE1_RE.search(storage):
         return patch_itogo(storage, d1, d2, n_days, m_hours)

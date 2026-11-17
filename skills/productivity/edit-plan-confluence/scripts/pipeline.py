@@ -17,6 +17,7 @@ from gantt_attachment import (AttachmentInfo, UploadVerificationConflict, find_g
 from gate_diff import build_diff, is_confirmed
 from itogo import (
     apply_itogo,
+    mark_planned_schedule,
     build_itogo_html,
     compute_itogo_from_csv,
     compute_itogo_from_gantt,
@@ -1169,6 +1170,7 @@ def publish_prepared(client, preparation, *, allow_live_ab=False):
                     macro=macro or find_macro(macro_html)
                     storage=apply_itogo(page['body']['storage']['value']+(macro_html or ''),*itogo,0)
                     before=target['attachment']
+                storage=mark_planned_schedule(storage)
                 # A new preparation may correct its own old summary. It cannot
                 # legitimize a third party's changed macro/summary/attachment.
                 prior=q.latest_target_confirmation(conn,namespace,parent_id) if not request.get('child') else None
@@ -1316,7 +1318,7 @@ def publish_prepared(client, preparation, *, allow_live_ab=False):
                 if not getattr(verified,'ok',False) or verified.actual_sha256!=expected:
                     raise UploadVerificationConflict('current attachment verification returned false')
                 storage=page['body']['storage']['value']
-                desired=apply_itogo(storage+(network['new_macro_html'] or '' if find_macro(storage) is None else ''),*itogo,0)
+                desired=mark_planned_schedule(apply_itogo(storage+(network['new_macro_html'] or '' if find_macro(storage) is None else ''),*itogo,0))
                 if managed_state(storage)==network['intended_managed']:
                     # Already matches, including PUT with a lost local event.
                     if put_intent:

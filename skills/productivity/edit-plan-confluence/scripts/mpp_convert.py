@@ -366,7 +366,10 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v5'
+CONVERTER_VERSION = 'prepared-gantt-v6'
+
+PUBLICATION_MODE = 'planned_schedule_with_actuals_columns'
+PUBLICATION_LABEL = 'по плану; факт — в колонках'
 
 # The wrapper registers these fields before loading tasks. Text columns preserve
 # source decimals and summary values; they do not participate in scheduling.

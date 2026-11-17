@@ -37,6 +37,7 @@ MATRIX = (
     AdmissionRule(17, 'storage', 5),
     AdmissionRule(18, 'network_unknown', 5),
     AdmissionRule(19, 'target_conflict', 4),
+    AdmissionRule(20, 'display_only', 0, warning=True),
 )
 BY_CATEGORY = {r.category: r for r in MATRIX}
 

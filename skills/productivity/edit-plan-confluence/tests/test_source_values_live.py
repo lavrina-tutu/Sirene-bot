@@ -125,6 +125,6 @@ def test_real_plan_observer_reads_visible_values(capability_page, request):
     att=(_post_attachment_data(client,page_id,prior[0]['id'],filename,payload) if prior
          else _create_attachment(client,page_id,filename,payload))
     request.config._acceptance_counters['live_POST']+=1
-    observation=observe_plugin(client,page_id,payload,request,root/'real-plan-observer',attachment_version=att.version,browser_context=ctx)
+    observation=observe_plugin(client,page_id,payload,request,root/'real-plan-observer',attachment_version=att.version,browser_context=ctx,require_planned_label=False)
     assert observation['source_values_verification']['status']=='verified'
     assert len(observation['openings'])==2 and len(observation['tasks'])==7

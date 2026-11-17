@@ -68,7 +68,7 @@ def test_custom_summary_values_are_text_and_not_aggregates(stage08_export, stage
         assert all(columns[column]['hidden'] is False for column, _ in SOURCE_COLUMNS.values())
 
 
-def test_displayed_actuals_still_block_unproven_schedule(stage08_export):
+def test_displayed_actuals_use_planned_schedule(stage08_export):
     from plugin_profile import PluginProfile
     from plan_diagnostics import capability_findings
     export = deepcopy(stage08_export)
@@ -77,7 +77,58 @@ def test_displayed_actuals_still_block_unproven_schedule(stage08_export):
     profile = PluginProfile.load()
     conversion = convert_prepared_plan(prepared, plugin_profile=profile)
     found = next(f for f in capability_findings(prepared.normalized_data, profile, conversion)
-                 if f['entity']==export['tasks'][2]['task_key'] and f['code']=='task_actuals_unrepresented:actual_start')
-    assert found['category']=='unsupported_semantics'
+                 if f['entity']==export['tasks'][2]['task_key'] and f['code']=='task_actuals_display_only:actual_start')
+    assert found['category']=='display_only'
     assert found['represented']['profile_supported'] and found['represented']['source_match']
     assert found['represented']['calendar_semantics']=='not_verified'
+
+
+@pytest.mark.parametrize('damage', ['date', 'duration', 'native', 'hidden', 'missing', 'type', 'text'])
+def test_actuals_display_cannot_hide_schedule_or_display_loss(stage08_export, damage):
+    from plugin_profile import PluginProfile
+    from plan_diagnostics import capability_findings
+    from plan_policy import evaluate
+    export = deepcopy(stage08_export)
+    task = export['tasks'][2]
+    task['actual_start'] = {'value':'2026-01-05T09:00:00','quality':'ok','reason':None}
+    prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+    profile = PluginProfile.load()
+    conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+    node = flatten(conversion['gantt']['eventsData'])[conversion['mappings']['tasks'][task['task_key']]]
+    column = 'custom_mpp_actual_start'
+    if damage == 'date': node['startDate'] = '2099-01-01T09:00:00'
+    elif damage == 'duration': node['duration'] += 1
+    elif damage == 'native': node['actualStart'] = task['actual_start']['value']
+    elif damage == 'hidden':
+        next(c for c in conversion['gantt']['initialState']['view']['columns'] if c['id']==column)['hidden']=True
+    elif damage == 'missing': del node[column]
+    elif damage == 'type': conversion['gantt']['customColumns'][column]['type']='number'
+    else: node[column] = 'wrong fact'
+    found = [f for f in capability_findings(prepared.normalized_data,profile,conversion) if f['entity']==task['task_key']]
+    assert evaluate(found)['exit_code']==5
+    assert any(f['classification']=='schedule-affecting' for f in found)
+
+
+def test_publish_with_all_actuals_then_repeat(publish_case, monkeypatch):
+    import pipeline
+    from test_publish_prepare import _fake_raw_upload
+    from mpp_convert import PUBLICATION_LABEL
+    from plugin_profile import PluginProfile
+    c = publish_case
+    _fake_raw_upload(c, monkeypatch)
+    data = deepcopy(c['export'])
+    task = data['tasks'][2]
+    for field, value in [('actual_start','2026-01-05T09:00:00'),
+                         ('actual_finish','2026-01-06T18:00:00'),
+                         ('actual_duration','2 h'), ('actual_work','3 h'),
+                         ('stop','2026-01-05T10:00:00'), ('resume','2026-01-05T11:00:00')]:
+        task[field] = {'value':value,'quality':'ok','reason':None}
+    options = dict(page_id='test-page',mpp_path=c['source'],project_slug='test',
+        timezone_hint='Europe/Moscow',context=c['context'],export=data,plugin_profile=PluginProfile.load())
+    result = pipeline.publish_plan(c['client'], **options)
+    assert result.exit_code == 0 and result.receipt['published'] is True, result.receipt
+    assert PUBLICATION_LABEL in c['client'].get_page('test-page')['body']['storage']['value']
+    assert result.receipt['verification']['schedule']['status']=='not_verified'
+    repeat = pipeline.publish_plan(c['client'], **options)
+    assert repeat.exit_code == 0 and repeat.receipt['status']=='unchanged'
+    assert repeat.counters['POST']==repeat.counters['PUT']==0

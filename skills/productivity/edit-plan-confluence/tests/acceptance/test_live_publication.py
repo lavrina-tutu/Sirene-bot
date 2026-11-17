@@ -50,7 +50,7 @@ def live_page(tmp_path, request, monkeypatch, stage13_record):
         'POST': sum(c['method']=='POST' for c in calls), 'PUT': sum(c['method']=='PUT' for c in calls)})
 
 
-def observe_plugin(client, page_id, expected, request, folder, *, attachment_version, browser_context=None):
+def observe_plugin(client, page_id, expected, request, folder, *, attachment_version, browser_context=None, require_planned_label=True):
     """Read-only normal view: dates, raw facts, rendered cells and reopening."""
     root = getattr(request.config, '_acceptance_root', folder)
     if (root/'browser-deps').is_dir(): sys.path.insert(0, str(root/'browser-deps'))
@@ -90,6 +90,9 @@ def observe_plugin(client, page_id, expected, request, folder, *, attachment_ver
                 page.on('response', capture)
                 try:
                     page.goto(client.base_url+'/pages/viewpage.action?pageId='+page_id, wait_until='domcontentloaded', timeout=60000)
+                    from mpp_convert import PUBLICATION_LABEL
+                    if require_planned_label:
+                        assert PUBLICATION_LABEL in page.locator('#main-content').inner_text()
                     frame = page.wait_for_selector('iframe[src*="gantt-chart.html"]', timeout=45000).content_frame()
                     frame.wait_for_function('() => window.gantt?.project?.eventStore?.allRecords?.length > 1', timeout=45000)
                     data = frame.evaluate("""async () => {
@@ -165,6 +168,9 @@ def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, 
         assert result['verification']['archive'] == 'verified', result
         assert counters['MPXJ_read'] == 1
         assert result['exit_code'] == 0 and result['published'] is True, result
+        from mpp_convert import PUBLICATION_LABEL
+        assert PUBLICATION_LABEL in after['body']['storage']['value']
+        assert counters['POST'] > 0 and counters['PUT'] > 0
         assert after['version']['number']-before['version']['number'] == 1
         attachment_version_before = 0  # Dedicated empty page has no managed attachment.
         assert result['attachment_version']-attachment_version_before == 1

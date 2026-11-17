@@ -2372,7 +2372,7 @@ def _stage13_report(session, exitstatus, root):
         'live_pages':live_pages, 'production_pages_excluded':sorted(STAGE13_PRODUCTION_PAGES),
         'execution_order':'execution-order.json',
         'limitations':['Acceptance of §20 only; §19 W5/ZD/AC-101…144 remains independent.',
-            'Master v0.5.2 with separate §21; fix2 separates source facts, display and schedule. Original archived stages 01–13 and failed cycles remain preserved.',
+            'Master v0.5.3 with separate §21; по плану; факт — в колонках. Actuals do not claim equivalent schedule recalculation. Original archived stages 01–13 and failed cycles remain preserved.',
             'Product defects belong to earlier stages and are reported, not repaired in stage 13.',
             'No token economy claim: tokens were not measured.',
             'Process-death tests do not model power loss. Gateway, cron and watchers are unchanged.',

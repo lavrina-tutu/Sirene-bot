@@ -55,10 +55,11 @@ def test_historical_link_retained_without_active_revision(case):
 
 
 @pytest.mark.parametrize('case', ['A','B','C','D'])
-def test_custom_actuals_keep_calendar_fail_closed_for_real_sources(case):
+def test_custom_actuals_are_display_only_for_real_sources(case):
     data, prepared, profile, conversion = converted(case)
     findings=capability_findings(prepared.normalized_data, profile, conversion)
-    actuals=[f for f in findings if f['code'].startswith('task_actuals_unrepresented:')]
+    actuals=[f for f in findings if f['code'].startswith('task_actuals_display_only:')]
     assert actuals
     assert all(f['represented']['source_match'] and f['represented']['profile_supported'] for f in actuals)
     assert all(f['represented']['calendar_semantics']=='not_verified' for f in actuals)
+    assert all(f['classification']=='display-only' for f in actuals)

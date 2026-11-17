@@ -133,24 +133,51 @@ def capability_findings(data, plugin_profile, conversion=None):
     issues=[]
     from mpp_calendar import default_availability_equivalent, coincident_assignment_interval
     tasks={t['task_key']:t for t in data['tasks'] if 'error' not in t}
+    nodes = flatten((conversion or {}).get('gantt', {}).get('eventsData', []))
     for task in data['tasks']:
         if task.get('id')==0:continue
         for field in ('actual_start','actual_finish','actual_duration','actual_work','stop','resume'):
             raw=task.get(field);value=field_value(raw)
             quantity=raw.get('quantity',{}) if isinstance(raw,dict) else {}
             empty=value in (None,False,0,'0','0.0','0.0h','0.0d') or quantity.get('amount') in ('0','0.0')
-            if not empty and not plugin_profile.supports_field(field, layer='schedule', representation='native'):
+            if not empty:
                 # Describe an exact display without presenting it as calendar proof.
                 from mpp_convert import SOURCE_COLUMNS, source_value_text
                 column = SOURCE_COLUMNS[field][0]
-                nodes = flatten((conversion or {}).get('gantt', {}).get('eventsData', []))
                 ident = (conversion or {}).get('mappings', {}).get('tasks', {}).get(task['task_key'])
                 value = nodes.get(ident, {}).get(column)
                 display = {'method':'customtext', 'field':column, 'value':value,
                     'source_match':value == source_value_text(raw),
                     'profile_supported':plugin_profile.supports_field(field, layer='display', representation='customtext'),
                     'calendar_semantics':'not_verified'}
-                issues.append(finding('unsupported_semantics','task_actuals_unrepresented:'+field,task['task_key'],raw,display))
+                node = nodes.get(ident, {})
+                from itogo import quantity_minutes, decimal_value
+                minutes, _, reason = quantity_minutes(task.get('duration'), data['project'], working_only=True)
+                day = decimal_value(field_value(data['project'].get('minutes_per_day')))
+                duration = decimal_value(node.get('duration'))
+                planned = (node.get('startDate') == field_value(task.get('start'))
+                    and node.get('endDate') == field_value(task.get('finish'))
+                    and not reason and minutes is not None and day is not None and day > 0
+                    and duration is not None and duration * day == minutes)
+                gantt = (conversion or {}).get('gantt', {})
+                column_type = gantt.get('customColumns', {}).get(column, {}).get('type')
+                visible = all(any(c.get('id') == column and c.get('hidden') is False
+                    for c in gantt.get('initialState', {}).get(mode, {}).get('columns', []))
+                    for mode in ('view', 'edit'))
+                native_fields = ('actualStart', 'actualEnd', 'actualFinish', 'actualDuration',
+                    'actualStartDate', 'actualEndDate', 'actualFinishDate', 'actualEffort',
+                    'actualWork', 'stopDate', 'resumeDate', 'stop', 'resume',
+                    'actual_start', 'actual_finish', 'actual_duration', 'actual_work')
+                isolated = not any(k in node for k in native_fields)
+                display.update(planned_schedule_preserved=planned, visible=visible,
+                    isolated_from_schedule=isolated)
+                admissible = (display['source_match'] and display['profile_supported']
+                    and column_type == 'customtext' and visible and isolated and planned)
+                row = finding('display_only' if admissible else 'unsupported_semantics',
+                    ('task_actuals_display_only:' if admissible else 'task_actuals_unrepresented:')+field,
+                    task['task_key'], raw, display)
+                row['classification'] = 'display-only' if admissible else 'schedule-affecting'
+                issues.append(row)
     for resource in data['resources']:
         if (resource.get('availability') and not plugin_profile.supports('resource:availability')
                 and not (plugin_profile.supports('resource:default_availability') and default_availability_equivalent(resource,data))):

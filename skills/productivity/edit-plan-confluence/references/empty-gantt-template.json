@@ -151,17 +151,17 @@
         {
           "id": "startdate",
           "width": 130,
-          "hidden": true
+          "hidden": false
         },
         {
           "id": "enddate",
           "width": 130,
-          "hidden": true
+          "hidden": false
         },
         {
           "id": "duration",
           "width": 100,
-          "hidden": true
+          "hidden": false
         },
         {
           "id": "resourceassignment",
@@ -181,12 +181,12 @@
         {
           "id": "status",
           "width": 90,
-          "hidden": true
+          "hidden": false
         },
         {
           "id": "percentdone",
           "width": 70,
-          "hidden": true
+          "hidden": false
         },
         {
           "id": "predecessor",
@@ -339,13 +339,13 @@
         {
           "id": "status",
           "width": 90,
-          "hidden": true,
+          "hidden": false,
           "order": 8
         },
         {
           "id": "percentdone",
           "width": 70,
-          "hidden": true,
+          "hidden": false,
           "order": 9
         },
         {

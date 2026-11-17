@@ -90,10 +90,7 @@ def build_event_tree(tasks: list[dict[str, str]], leaf_template: dict[str, Any])
         node["id"] = int(r["id"])
         node["children"] = []
         if r.get("percent_complete"):
-            try:
-                node["percentDone"] = int(float(r["percent_complete"]))
-            except ValueError:
-                node["percentDone"] = 0
+            node["percentDone"] = _number(r["percent_complete"])
         while stack and stack[-1][0] >= lvl:
             stack.pop()
         if stack:
@@ -369,7 +366,7 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v3'
+CONVERTER_VERSION = 'prepared-gantt-v4'
 
 
 def _number(value):

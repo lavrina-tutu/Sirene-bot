@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="12" time="129.780" timestamp="2026-11-17T12:31:14.130003+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[task-calendar]" time="9.364" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[calendar-inheritance]" time="6.805" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[resource-calendar]" time="6.752" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[fixed-units]" time="6.966" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[constraint-START_NO_EARLIER_THAN]" time="6.856" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[constraint-FINISH_NO_EARLIER_THAN]" time="6.718" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[segments]" time="7.241" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[inactive]" time="6.585" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[summary-dependency]" time="49.342"><failure message="playwright._impl._errors.TimeoutError: Frame.wait_for_function: Timeout 45000ms exceeded.">case = {'capabilities': ['dependency:summary_endpoint'], 'expected': {'3.endDate': '2026-01-09T18:00:00', '3.startDate': '202...rrentEndDate': 'on Mon', 'recurrentStartDate': 'on Sat'}], 'name': 'General', 'unspecifiedTimeIsWorking': True}], ...}}
+capability_page = (&lt;conf_client.ConfluenceClient object at 0x7fb79cc5f6d0&gt;, '537574001', 'gantt-chart-fad4ab4f4ec748c4b60c154776b1dd3c.j.../home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-2-live/capability-controls'))
+request = &lt;FixtureRequest for &lt;Function test_installed_capability_control[summary-dependency]&gt;&gt;
+
+    @pytest.mark.parametrize('case',CASES,ids=lambda c:c['id'])
+    def test_installed_capability_control(case,capability_page,request):
+        from gantt_attachment import _create_attachment
+        from prepared_plan import canonical_bytes
+        from plugin_profile import PluginProfile
+        client,page_id,filename,ctx,root = capability_page
+        folder=root/case['id'];folder.mkdir(exist_ok=True)
+        payload=canonical_bytes(case['input']);(folder/'input.json').write_bytes(payload)
+        # create helper resolves existing attachment updates through the same endpoint.
+        from gantt_attachment import _post_attachment_data,attachment_info
+        prior=[a for a in client.list_attachments(page_id) if a['title']==filename]
+        att=(_post_attachment_data(client,page_id,prior[0]['id'],filename,payload) if prior
+             else _create_attachment(client,page_id,filename,payload))
+        request.config._acceptance_counters['live_POST']+=1
+        received=client.download_attachment(page_id,filename,att.version)
+        assert received==payload
+        (folder/'received.json').write_bytes(received)
+        storage=client.get_page(page_id);(folder/'storage.xml').write_text(storage['body']['storage']['value'])
+        page=ctx.new_page();fetched=[];assets=set();errors=[]
+        def capture(response):
+            if response.status==200 and '/download/attachments/'+page_id+'/' in response.url:
+                fetched.append({'url':response.url,'bytes':response.body()})
+            if response.status==200 and '/static/chunks/' in response.url and response.url.endswith('7b1ccf34.b54da94330ce3dd5.js'):
+                assets.add(hashlib.sha256(response.body()).hexdigest())
+        page.on('response',capture);page.on('pageerror',lambda err:errors.append(str(err)))
+        observation={'case':case['id'],'capabilities':case['capabilities'],'status':'not_verified','page_id':page_id,
+            'attachment_id':att.attach_id,'attachment_version':att.version,'page_version':storage['version']['number'],
+            'source_normalization':case.get('source_normalization'),'expected':case['expected'],'input_sha256':hashlib.sha256(payload).hexdigest(),'runtime_errors':errors}
+        try:
+            page.goto(client.base_url+'/pages/viewpage.action?pageId='+page_id,wait_until='domcontentloaded',timeout=60000)
+            frame=page.wait_for_selector('iframe[src*="gantt-chart.html"]',timeout=45000).content_frame()
+&gt;           frame.wait_for_function('()=&gt;window.gantt?.project?.eventStore?.allRecords?.length&gt;=3',timeout=45000)
+
+tests/test_plugin_capabilities_live.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../../.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-2-live/browser-deps/playwright/sync_api/_generated.py:6198: in wait_for_function
+    self._sync(
+../../../../.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-2-live/browser-deps/playwright/_impl/_frame.py:910: in wait_for_function
+    await self._channel.send("waitForFunction", self._timeout, params)
+../../../../.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-2-live/browser-deps/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;playwright._impl._connection.Connection object at 0x7fb79c57b3d0&gt;
+cb = &lt;function Channel.send.&lt;locals&gt;.&lt;lambda&gt; at 0x7fb79aec9d30&gt;
+is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -&gt; Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        st: List[inspect.FrameInfo] = getattr(
+            task, "__pw_stack__", None
+        ) or inspect.stack(0)
+    
+        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+&gt;           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Frame.wait_for_function: Timeout 45000ms exceeded.
+
+../../../../.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211/group-2-live/browser-deps/playwright/_impl/_connection.py:559: TimeoutError</failure></testcase><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[actuals]" time="7.858" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[assignment-dates]" time="8.111" /><testcase classname="test_plugin_capabilities_live" name="test_installed_capability_control[resource-availability]" time="6.781" /></testsuite></testsuites>

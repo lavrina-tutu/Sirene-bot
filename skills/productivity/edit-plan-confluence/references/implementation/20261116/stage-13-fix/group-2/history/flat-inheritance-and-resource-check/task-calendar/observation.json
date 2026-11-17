@@ -1,0 +1,227 @@
+{
+  "case": "task-calendar",
+  "capabilities": [
+    "calendar:bindings:tasks"
+  ],
+  "status": "passed",
+  "page_id": "537573962",
+  "attachment_id": "537573963",
+  "attachment_version": 1,
+  "page_version": 1,
+  "expected": {
+    "3.startDate": "2026-01-12T09:00:00",
+    "3.endDate": "2026-01-12T18:00:00",
+    "3.calendar": "alternate"
+  },
+  "input_sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107",
+  "runtime_errors": [
+    "Failed to fetch",
+    "Failed to fetch",
+    "Failed to fetch",
+    "generateDropDownMenu is not defined",
+    "Failed to fetch",
+    "Failed to fetch"
+  ],
+  "build": "H6u7SQymvwxeyojc1ur6Z",
+  "engine_version": "5.4.1",
+  "tasks": [
+    {
+      "id": 1,
+      "parentIndex": 0,
+      "expanded": true,
+      "startDate": "2026-01-07T09:00:00",
+      "endDate": "2026-01-12T18:00:00",
+      "duration": 4,
+      "durationUnit": "day",
+      "cls": "",
+      "name": "FS",
+      "calendar": null,
+      "direction": null,
+      "manuallyScheduled": false,
+      "unscheduled": false,
+      "ignoreResourceCalendar": null,
+      "constraintType": "",
+      "constraintDate": null,
+      "percentDone": 0,
+      "effort": 24,
+      "effortUnit": "hour",
+      "inactive": false,
+      "segments": null,
+      "effortDriven": false,
+      "schedulingMode": "Normal",
+      "baselines": [],
+      "parentId": null,
+      "rollup": true,
+      "propagateColor": true,
+      "defaultCollapse": false,
+      "children": null,
+      "native_fields": {
+        "actualStartDate": false,
+        "actualEndDate": false,
+        "actualDuration": false,
+        "actualEffort": false,
+        "startDate": true,
+        "endDate": true,
+        "availability": false
+      }
+    },
+    {
+      "id": 2,
+      "parentIndex": 0,
+      "expanded": true,
+      "startDate": "2026-01-07T09:00:00",
+      "endDate": "2026-01-08T18:00:00",
+      "duration": 2,
+      "durationUnit": "day",
+      "cls": "",
+      "name": "A",
+      "calendar": null,
+      "direction": null,
+      "manuallyScheduled": true,
+      "unscheduled": false,
+      "ignoreResourceCalendar": null,
+      "constraintType": null,
+      "constraintDate": null,
+      "percentDone": 0,
+      "effort": 16,
+      "effortUnit": "hour",
+      "inactive": null,
+      "segments": null,
+      "effortDriven": false,
+      "schedulingMode": "FixedDuration",
+      "baselines": [],
+      "parentId": 1,
+      "propagateColor": true,
+      "defaultCollapse": false,
+      "children": null,
+      "native_fields": {
+        "actualStartDate": false,
+        "actualEndDate": false,
+        "actualDuration": false,
+        "actualEffort": false,
+        "startDate": true,
+        "endDate": true,
+        "availability": false
+      }
+    },
+    {
+      "id": 3,
+      "parentIndex": 1,
+      "expanded": true,
+      "startDate": "2026-01-12T09:00:00",
+      "endDate": "2026-01-12T18:00:00",
+      "duration": 1,
+      "durationUnit": "day",
+      "cls": "",
+      "name": "B",
+      "calendar": "alternate",
+      "direction": null,
+      "manuallyScheduled": false,
+      "unscheduled": false,
+      "ignoreResourceCalendar": null,
+      "constraintType": null,
+      "constraintDate": null,
+      "percentDone": 0,
+      "effort": 8,
+      "effortUnit": "hour",
+      "inactive": null,
+      "segments": null,
+      "effortDriven": false,
+      "schedulingMode": "FixedDuration",
+      "baselines": [],
+      "parentId": 1,
+      "propagateColor": true,
+      "defaultCollapse": false,
+      "children": null,
+      "native_fields": {
+        "actualStartDate": false,
+        "actualEndDate": false,
+        "actualDuration": false,
+        "actualEffort": false,
+        "startDate": true,
+        "endDate": true,
+        "availability": false
+      }
+    }
+  ],
+  "resources": [],
+  "assignments": [],
+  "calendars": [
+    {
+      "id": "general",
+      "parentId": null,
+      "intervals": [
+        {
+          "id": "_generatedi_10e32d97-8f2c-4f9e-96eb-caa76e2e60e8",
+          "recurrentStartDate": "at 12:00",
+          "recurrentEndDate": "at 13:00",
+          "isWorking": false
+        },
+        {
+          "id": "_generatedi_325db3c8-fc8b-488f-8bf1-33d136e0e272",
+          "recurrentStartDate": "at 18:00",
+          "recurrentEndDate": "at 09:00",
+          "isWorking": false
+        },
+        {
+          "id": "_generatedi_a0c056b7-9acc-46a2-bde2-a623f2f94cce",
+          "recurrentStartDate": "on Sat",
+          "recurrentEndDate": "on Mon",
+          "isWorking": false
+        }
+      ]
+    },
+    {
+      "id": "alternate",
+      "parentId": null,
+      "intervals": [
+        {
+          "id": "_generatedi_1fa69482-8cd0-4502-991b-fde1a17a18ee",
+          "recurrentStartDate": "at 12:00",
+          "recurrentEndDate": "at 13:00",
+          "isWorking": false
+        },
+        {
+          "id": "_generatedi_e57c2626-3eda-4651-94ae-6e8f1593ac81",
+          "recurrentStartDate": "at 18:00",
+          "recurrentEndDate": "at 09:00",
+          "isWorking": false
+        },
+        {
+          "id": "_generatedi_ddfb1b7a-9fb0-4e79-88d7-eb5ceaf4bc4a",
+          "recurrentStartDate": "on Sat",
+          "recurrentEndDate": "on Mon",
+          "isWorking": false
+        },
+        {
+          "id": "_generatedi_99780f98-9f8e-491f-909b-5222f14975c4",
+          "startDate": "2026-01-09T00:00:00",
+          "endDate": "2026-01-10T00:00:00",
+          "isWorking": false,
+          "priority": 20
+        }
+      ]
+    }
+  ],
+  "asset_sha256": "4e57cf0dcdcc4f9c855d59d8f600e3682a12dadd91725426fedb096581433cfe",
+  "confluence_version": "8.9.4",
+  "browser_received_sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107",
+  "checks": {
+    "3.startDate": {
+      "expected": "2026-01-12T09:00:00",
+      "actual": "2026-01-12T09:00:00",
+      "passed": true
+    },
+    "3.endDate": {
+      "expected": "2026-01-12T18:00:00",
+      "actual": "2026-01-12T18:00:00",
+      "passed": true
+    },
+    "3.calendar": {
+      "expected": "alternate",
+      "actual": "alternate",
+      "passed": true
+    }
+  },
+  "assertion_kind": "supported"
+}

@@ -54,6 +54,26 @@ class PluginProfile:
                         and w.get('confluence_version') == d['confluence_version']]
             if not matching:
                 raise ValueError('installed_version_without_matching_metadata_evidence')
+        corrective = {'calendar:inheritance','calendar:bindings:tasks','calendar:bindings:resources',
+            'calendar:bindings:assignments','resource:availability','assignment:start','assignment:finish',
+            'task:segments','task:active','dependency:summary_endpoint','resource:default_availability','assignment:coincident_task_interval'}
+        for name, capability in d['capabilities'].items():
+            needs_behavior = (name in corrective or name.startswith(('task:actual_', 'task:task_type:', 'task:constraint:')))
+            if (needs_behavior and capability['status'] == 'tested_supported'
+                    and d['plugin']['key'] == 'com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence'):
+                witnesses = [documents[k] for k in capability['evidence'] if k in documents]
+                def proves(w):
+                    checks = w.get('checks', {})
+                    return (name in w.get('capabilities', []) and w.get('status') == 'passed'
+                        and w.get('assertion_kind') == 'supported' and bool(checks)
+                        and all(c.get('passed') is True and c.get('expected') == c.get('actual') for c in checks.values())
+                        and 'frontend-build:'+str(w.get('build')) == d['plugin']['version']
+                        and w.get('asset_sha256') == d['plugin']['asset_sha256']
+                        and w.get('confluence_version') == d['confluence_version']
+                        and w.get('input_sha256') is not None
+                        and w.get('input_sha256') == w.get('browser_received_sha256'))
+                if not any(proves(w) for w in witnesses):
+                    raise ValueError('capability_without_behavior_control:'+name)
         relation_names = {'FS':'EndToStart','SS':'StartToStart','FF':'EndToEnd','SF':'StartToEnd'}
         for kind, codes in d['codes'].items():
             for name, code in codes.items():

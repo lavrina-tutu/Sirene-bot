@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "installed-gantt-profile",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "plugin": {
     "key": "com.ricksoft-inc.plugins.gantt-chart-planner-for-confluence",
     "version": "frontend-build:H6u7SQymvwxeyojc1ur6Z",
@@ -197,9 +197,16 @@
       "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
     },
     "calendar:inheritance": {
-      "status": "not_verified",
-      "evidence": [],
-      "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__calendar-inheritance__browser-received_json",
+        "corrective__calendar-inheritance__input_json",
+        "corrective__calendar-inheritance__observation_json",
+        "corrective__calendar-inheritance__received_json",
+        "corrective__calendar-inheritance__render_png",
+        "corrective__calendar-inheritance__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control calendar-inheritance. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
     },
     "calendar:recurrence": {
       "status": "not_verified",
@@ -212,14 +219,28 @@
       "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
     },
     "calendar:bindings:tasks": {
-      "status": "not_verified",
-      "evidence": [],
-      "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__task-calendar__browser-received_json",
+        "corrective__task-calendar__input_json",
+        "corrective__task-calendar__observation_json",
+        "corrective__task-calendar__received_json",
+        "corrective__task-calendar__render_png",
+        "corrective__task-calendar__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control task-calendar. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
     },
     "calendar:bindings:resources": {
       "status": "not_verified",
-      "evidence": [],
-      "scope": "No live control proves this construct for the installed wrapper; source retained, explicit conversion diagnostics."
+      "evidence": [
+        "corrective__resource-calendar__browser-received_json",
+        "corrective__resource-calendar__input_json",
+        "corrective__resource-calendar__observation_json",
+        "corrective__resource-calendar__received_json",
+        "corrective__resource-calendar__render_png",
+        "corrective__resource-calendar__storage_xml"
+      ],
+      "scope": "Attempted installed-wrapper control resource-calendar does not establish scheduling support. Source retained and admission remains blocking."
     },
     "calendar:bindings:assignments": {
       "status": "not_verified",
@@ -310,6 +331,186 @@
         "profile-controls__hour-lag__received_json"
       ],
       "scope": "This type/unit/sign combination only; shared endpoint/project calendar; source lag magnitude retained."
+    },
+    "task:actual_start": {
+      "status": "not_verified",
+      "evidence": [
+        "corrective__actuals__browser-received_json",
+        "corrective__actuals__input_json",
+        "corrective__actuals__observation_json",
+        "corrective__actuals__received_json",
+        "corrective__actuals__render_png",
+        "corrective__actuals__storage_xml"
+      ],
+      "scope": "Attempted installed-wrapper control actuals does not establish scheduling support. Source retained and admission remains blocking."
+    },
+    "task:actual_finish": {
+      "status": "not_verified",
+      "evidence": [
+        "corrective__actuals__browser-received_json",
+        "corrective__actuals__input_json",
+        "corrective__actuals__observation_json",
+        "corrective__actuals__received_json",
+        "corrective__actuals__render_png",
+        "corrective__actuals__storage_xml"
+      ],
+      "scope": "Attempted installed-wrapper control actuals does not establish scheduling support. Source retained and admission remains blocking."
+    },
+    "task:actual_duration": {
+      "status": "not_verified",
+      "evidence": [
+        "corrective__actuals__browser-received_json",
+        "corrective__actuals__input_json",
+        "corrective__actuals__observation_json",
+        "corrective__actuals__received_json",
+        "corrective__actuals__render_png",
+        "corrective__actuals__storage_xml"
+      ],
+      "scope": "Attempted installed-wrapper control actuals does not establish scheduling support. Source retained and admission remains blocking."
+    },
+    "task:actual_work": {
+      "status": "not_verified",
+      "evidence": [
+        "corrective__actuals__browser-received_json",
+        "corrective__actuals__input_json",
+        "corrective__actuals__observation_json",
+        "corrective__actuals__received_json",
+        "corrective__actuals__render_png",
+        "corrective__actuals__storage_xml"
+      ],
+      "scope": "Attempted installed-wrapper control actuals does not establish scheduling support. Source retained and admission remains blocking."
+    },
+    "assignment:start": {
+      "status": "not_verified",
+      "evidence": [
+        "corrective__assignment-dates__browser-received_json",
+        "corrective__assignment-dates__input_json",
+        "corrective__assignment-dates__observation_json",
+        "corrective__assignment-dates__received_json",
+        "corrective__assignment-dates__render_png",
+        "corrective__assignment-dates__storage_xml"
+      ],
+      "scope": "Attempted installed-wrapper control assignment-dates does not establish scheduling support. Source retained and admission remains blocking."
+    },
+    "assignment:finish": {
+      "status": "not_verified",
+      "evidence": [
+        "corrective__assignment-dates__browser-received_json",
+        "corrective__assignment-dates__input_json",
+        "corrective__assignment-dates__observation_json",
+        "corrective__assignment-dates__received_json",
+        "corrective__assignment-dates__render_png",
+        "corrective__assignment-dates__storage_xml"
+      ],
+      "scope": "Attempted installed-wrapper control assignment-dates does not establish scheduling support. Source retained and admission remains blocking."
+    },
+    "assignment:coincident_task_interval": {
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__coincident-assignment__browser-received_json",
+        "corrective__coincident-assignment__input_json",
+        "corrective__coincident-assignment__observation_json",
+        "corrective__coincident-assignment__received_json",
+        "corrective__coincident-assignment__render_png",
+        "corrective__coincident-assignment__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control coincident-assignment. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
+    },
+    "task:constraint:FINISH_NO_EARLIER_THAN": {
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__constraint-FINISH_NO_EARLIER_THAN__browser-received_json",
+        "corrective__constraint-FINISH_NO_EARLIER_THAN__input_json",
+        "corrective__constraint-FINISH_NO_EARLIER_THAN__observation_json",
+        "corrective__constraint-FINISH_NO_EARLIER_THAN__received_json",
+        "corrective__constraint-FINISH_NO_EARLIER_THAN__render_png",
+        "corrective__constraint-FINISH_NO_EARLIER_THAN__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control constraint-FINISH_NO_EARLIER_THAN. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
+    },
+    "task:constraint:START_NO_EARLIER_THAN": {
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__constraint-START_NO_EARLIER_THAN__browser-received_json",
+        "corrective__constraint-START_NO_EARLIER_THAN__input_json",
+        "corrective__constraint-START_NO_EARLIER_THAN__observation_json",
+        "corrective__constraint-START_NO_EARLIER_THAN__received_json",
+        "corrective__constraint-START_NO_EARLIER_THAN__render_png",
+        "corrective__constraint-START_NO_EARLIER_THAN__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control constraint-START_NO_EARLIER_THAN. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
+    },
+    "resource:default_availability": {
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__default-availability__browser-received_json",
+        "corrective__default-availability__input_json",
+        "corrective__default-availability__observation_json",
+        "corrective__default-availability__received_json",
+        "corrective__default-availability__render_png",
+        "corrective__default-availability__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control default-availability. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
+    },
+    "task:task_type:FIXED_UNITS": {
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__fixed-units__browser-received_json",
+        "corrective__fixed-units__input_json",
+        "corrective__fixed-units__observation_json",
+        "corrective__fixed-units__received_json",
+        "corrective__fixed-units__render_png",
+        "corrective__fixed-units__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control fixed-units. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
+    },
+    "task:active": {
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__inactive__browser-received_json",
+        "corrective__inactive__input_json",
+        "corrective__inactive__observation_json",
+        "corrective__inactive__received_json",
+        "corrective__inactive__render_png",
+        "corrective__inactive__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control inactive. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
+    },
+    "resource:availability": {
+      "status": "not_verified",
+      "evidence": [
+        "corrective__resource-availability__browser-received_json",
+        "corrective__resource-availability__input_json",
+        "corrective__resource-availability__observation_json",
+        "corrective__resource-availability__received_json",
+        "corrective__resource-availability__render_png",
+        "corrective__resource-availability__storage_xml"
+      ],
+      "scope": "Attempted installed-wrapper control resource-availability does not establish scheduling support. Source retained and admission remains blocking."
+    },
+    "task:segments": {
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__segments__browser-received_json",
+        "corrective__segments__input_json",
+        "corrective__segments__observation_json",
+        "corrective__segments__received_json",
+        "corrective__segments__render_png",
+        "corrective__segments__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control segments. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
+    },
+    "dependency:summary_endpoint": {
+      "status": "tested_supported",
+      "evidence": [
+        "corrective__summary-dependency__browser-received_json",
+        "corrective__summary-dependency__input_json",
+        "corrective__summary-dependency__observation_json",
+        "corrective__summary-dependency__received_json",
+        "corrective__summary-dependency__render_png",
+        "corrective__summary-dependency__storage_xml"
+      ],
+      "scope": "Installed-wrapper independent behavior control summary-dependency. See exact input, browser bytes and checks; no arbitrary-plan schedule claim."
     }
   },
   "evidence": {
@@ -552,6 +753,342 @@
     "profile-controls__resources-assignments__storage_xml": {
       "path": "references/implementation/20261116/stage-08/live/profile-controls/resources-assignments/storage.xml",
       "sha256": "b7d1c205b2742b68e4ef4f93b07907b827f079eacbf0a8ab3c4e15c7ff1e5743"
+    },
+    "corrective__actuals__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/actuals/browser-received.json",
+      "sha256": "4e13475254ee2b191d770c94617f44b8f131a2dcbf56f28cddbd10a4a710e4d6"
+    },
+    "corrective__actuals__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/actuals/input.json",
+      "sha256": "4e13475254ee2b191d770c94617f44b8f131a2dcbf56f28cddbd10a4a710e4d6"
+    },
+    "corrective__actuals__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/actuals/observation.json",
+      "sha256": "835df81d144a9c61ff448deeba980f6f7a72a8b9342f3a6b1f6de27db01c6416"
+    },
+    "corrective__actuals__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/actuals/received.json",
+      "sha256": "4e13475254ee2b191d770c94617f44b8f131a2dcbf56f28cddbd10a4a710e4d6"
+    },
+    "corrective__actuals__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/actuals/render.png",
+      "sha256": "d4609f4f71ec1050a6d7392ac91ef9489dd7e2b3dbd55b90e4a7b725a2e4bc21"
+    },
+    "corrective__actuals__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/actuals/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__assignment-dates__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/browser-received.json",
+      "sha256": "c2c4d10ff80e033571df798f20c9c0e05450255d4e0d079c91ee993b3ce2e2ce"
+    },
+    "corrective__assignment-dates__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/input.json",
+      "sha256": "c2c4d10ff80e033571df798f20c9c0e05450255d4e0d079c91ee993b3ce2e2ce"
+    },
+    "corrective__assignment-dates__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/observation.json",
+      "sha256": "29a10a35e7acb3d64250b24eadae831127b445a412e35c76b16c53954c9886ca"
+    },
+    "corrective__assignment-dates__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/received.json",
+      "sha256": "c2c4d10ff80e033571df798f20c9c0e05450255d4e0d079c91ee993b3ce2e2ce"
+    },
+    "corrective__assignment-dates__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/render.png",
+      "sha256": "4de27cfe2cd0ab6fefb65763e8051da9423e0737c5a468da6ee34abae3d871fc"
+    },
+    "corrective__assignment-dates__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/assignment-dates/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__calendar-inheritance__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/browser-received.json",
+      "sha256": "052d4833c5e1e6fa02615b3213cba0a0a755d45931de4748708b59624f36a549"
+    },
+    "corrective__calendar-inheritance__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/input.json",
+      "sha256": "052d4833c5e1e6fa02615b3213cba0a0a755d45931de4748708b59624f36a549"
+    },
+    "corrective__calendar-inheritance__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/observation.json",
+      "sha256": "1540554d05cbe11aff697d32247cb813da12b5456dceb3fa785b9455e254b441"
+    },
+    "corrective__calendar-inheritance__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/received.json",
+      "sha256": "052d4833c5e1e6fa02615b3213cba0a0a755d45931de4748708b59624f36a549"
+    },
+    "corrective__calendar-inheritance__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/render.png",
+      "sha256": "cd2b9e05c83374cff4f309d96cc45f2a6e95c9e9229d9f02d48de7446b6d13bf"
+    },
+    "corrective__calendar-inheritance__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/calendar-inheritance/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__coincident-assignment__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/browser-received.json",
+      "sha256": "5e875897f416dd399e72627f1507d14afdc28419b62f740e936147cc16d23029"
+    },
+    "corrective__coincident-assignment__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/input.json",
+      "sha256": "5e875897f416dd399e72627f1507d14afdc28419b62f740e936147cc16d23029"
+    },
+    "corrective__coincident-assignment__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/observation.json",
+      "sha256": "631bc150d8d94eeff03b7ad93a688202ef0556b862bc9b2d0737e39179cd074f"
+    },
+    "corrective__coincident-assignment__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/received.json",
+      "sha256": "5e875897f416dd399e72627f1507d14afdc28419b62f740e936147cc16d23029"
+    },
+    "corrective__coincident-assignment__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/render.png",
+      "sha256": "fc6fb750a5af1021959b621485a61867cf58c291ed9a54fb73b2defdec27b926"
+    },
+    "corrective__coincident-assignment__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/coincident-assignment/storage.xml",
+      "sha256": "01f1b6f05edf8635b754888275446f7fa009b729b1f267b580219a6229fed367"
+    },
+    "corrective__constraint-FINISH_NO_EARLIER_THAN__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/browser-received.json",
+      "sha256": "052bc2f9344d5d2d81ca20a693cd67323a2360d60f8bf57647cef9b43369f300"
+    },
+    "corrective__constraint-FINISH_NO_EARLIER_THAN__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/input.json",
+      "sha256": "052bc2f9344d5d2d81ca20a693cd67323a2360d60f8bf57647cef9b43369f300"
+    },
+    "corrective__constraint-FINISH_NO_EARLIER_THAN__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/observation.json",
+      "sha256": "e542a82f5415b847add2d364045213bcda7e89bafc6be87f914ac0852ab0e522"
+    },
+    "corrective__constraint-FINISH_NO_EARLIER_THAN__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/received.json",
+      "sha256": "052bc2f9344d5d2d81ca20a693cd67323a2360d60f8bf57647cef9b43369f300"
+    },
+    "corrective__constraint-FINISH_NO_EARLIER_THAN__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/render.png",
+      "sha256": "645b8d09d205c78dab91801f1b0f017bd104e4587062ce429eeba1891161f85a"
+    },
+    "corrective__constraint-FINISH_NO_EARLIER_THAN__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-FINISH_NO_EARLIER_THAN/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__constraint-START_NO_EARLIER_THAN__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/browser-received.json",
+      "sha256": "621da876bf0c6e2b320518983a672d73ce3d467c0aa0c0acfc0b4ac086ebc01e"
+    },
+    "corrective__constraint-START_NO_EARLIER_THAN__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/input.json",
+      "sha256": "621da876bf0c6e2b320518983a672d73ce3d467c0aa0c0acfc0b4ac086ebc01e"
+    },
+    "corrective__constraint-START_NO_EARLIER_THAN__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/observation.json",
+      "sha256": "8411542b9efddf28cc513a174cb113a30ad9ff99b59e4623cb5a3df1389a252e"
+    },
+    "corrective__constraint-START_NO_EARLIER_THAN__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/received.json",
+      "sha256": "621da876bf0c6e2b320518983a672d73ce3d467c0aa0c0acfc0b4ac086ebc01e"
+    },
+    "corrective__constraint-START_NO_EARLIER_THAN__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/render.png",
+      "sha256": "ab848393cdf2bef03fb6ac9e69cd3d7ffd15f11b308ed16b1746784292b04cf0"
+    },
+    "corrective__constraint-START_NO_EARLIER_THAN__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/constraint-START_NO_EARLIER_THAN/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__default-availability__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/default-availability/browser-received.json",
+      "sha256": "fa99e179fe00e5488dd5ade38fef29450113d5023a494eaf7bfbfe2bd94d4b9b"
+    },
+    "corrective__default-availability__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/default-availability/input.json",
+      "sha256": "fa99e179fe00e5488dd5ade38fef29450113d5023a494eaf7bfbfe2bd94d4b9b"
+    },
+    "corrective__default-availability__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/default-availability/observation.json",
+      "sha256": "00840b25bbed6009a259425ab6b97cd1cd77df0640c444324ad84d0c264a2ce1"
+    },
+    "corrective__default-availability__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/default-availability/received.json",
+      "sha256": "fa99e179fe00e5488dd5ade38fef29450113d5023a494eaf7bfbfe2bd94d4b9b"
+    },
+    "corrective__default-availability__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/default-availability/render.png",
+      "sha256": "06da348241ca16cc4a209329b9cc3da86c2047df6c58c76ccceaa94d7b03a565"
+    },
+    "corrective__default-availability__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/default-availability/storage.xml",
+      "sha256": "01f1b6f05edf8635b754888275446f7fa009b729b1f267b580219a6229fed367"
+    },
+    "corrective__fixed-units__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/browser-received.json",
+      "sha256": "7890a1e453416acca5ae830bb3ae2aea1b91d55257460a1d826bf6b242760e35"
+    },
+    "corrective__fixed-units__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/input.json",
+      "sha256": "7890a1e453416acca5ae830bb3ae2aea1b91d55257460a1d826bf6b242760e35"
+    },
+    "corrective__fixed-units__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/observation.json",
+      "sha256": "2c0451bb9e9d0f4e7a9587924be71b48d0d29aa170d14474c1332aedd048fa31"
+    },
+    "corrective__fixed-units__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/received.json",
+      "sha256": "7890a1e453416acca5ae830bb3ae2aea1b91d55257460a1d826bf6b242760e35"
+    },
+    "corrective__fixed-units__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/render.png",
+      "sha256": "b24f60074cdb49ef017ed927a0b4a25f48028c49122b00ba033788ea74e69b28"
+    },
+    "corrective__fixed-units__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/fixed-units/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__inactive__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/inactive/browser-received.json",
+      "sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c"
+    },
+    "corrective__inactive__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/inactive/input.json",
+      "sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c"
+    },
+    "corrective__inactive__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/inactive/observation.json",
+      "sha256": "13ba1a2bfd50fcf55e30e5901ef64d3fbbab3bd41342340315e88225e0b9d038"
+    },
+    "corrective__inactive__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/inactive/received.json",
+      "sha256": "b719f2c98c8f927cb69f0289c7371b7ef6920d3f749efee69d58f502907f0d8c"
+    },
+    "corrective__inactive__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/inactive/render.png",
+      "sha256": "dbfd1a2e7d9bcc88873b84adcf85ca4b5925daa9229a61ab8988967a57764890"
+    },
+    "corrective__inactive__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/inactive/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__resource-availability__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/browser-received.json",
+      "sha256": "5580bbd836f2349a3a0349973772db3bbbbacc8d22fa1570b9cbbbc9d6a713c5"
+    },
+    "corrective__resource-availability__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/input.json",
+      "sha256": "5580bbd836f2349a3a0349973772db3bbbbacc8d22fa1570b9cbbbc9d6a713c5"
+    },
+    "corrective__resource-availability__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/observation.json",
+      "sha256": "eceef9a8d931fe14f6daceecb654378e974c4fc127a12111fe29189e69e9178e"
+    },
+    "corrective__resource-availability__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/received.json",
+      "sha256": "5580bbd836f2349a3a0349973772db3bbbbacc8d22fa1570b9cbbbc9d6a713c5"
+    },
+    "corrective__resource-availability__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/render.png",
+      "sha256": "3f53eaffd123ace99d00566a07c36bb5dbbdef5a56a3c45161c2ddfd8235e028"
+    },
+    "corrective__resource-availability__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-availability/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__resource-calendar__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/browser-received.json",
+      "sha256": "847dd07135d4ac13f3fc8096ebff6e289a4eedb9fc13980d2fa91895e6de501c"
+    },
+    "corrective__resource-calendar__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/input.json",
+      "sha256": "847dd07135d4ac13f3fc8096ebff6e289a4eedb9fc13980d2fa91895e6de501c"
+    },
+    "corrective__resource-calendar__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/observation.json",
+      "sha256": "e549eec64903f7b18def165a1d354ae66b4dae0eee210dc9f912b0eabffaa8a0"
+    },
+    "corrective__resource-calendar__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/received.json",
+      "sha256": "847dd07135d4ac13f3fc8096ebff6e289a4eedb9fc13980d2fa91895e6de501c"
+    },
+    "corrective__resource-calendar__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/render.png",
+      "sha256": "935b7d3ab39867620c20e4f015d03816d26b07404f26c7048ce357503d24a60e"
+    },
+    "corrective__resource-calendar__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/resource-calendar/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__segments__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/segments/browser-received.json",
+      "sha256": "c434cc74c2e88d437ab77d8c1b537e6d93676a60a163685555aa5915a0682862"
+    },
+    "corrective__segments__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/segments/input.json",
+      "sha256": "c434cc74c2e88d437ab77d8c1b537e6d93676a60a163685555aa5915a0682862"
+    },
+    "corrective__segments__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/segments/observation.json",
+      "sha256": "73e77f4dea3eb64e859baeffaf90eb5c073b664ba6bcf77113799dcb6fe139fc"
+    },
+    "corrective__segments__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/segments/received.json",
+      "sha256": "c434cc74c2e88d437ab77d8c1b537e6d93676a60a163685555aa5915a0682862"
+    },
+    "corrective__segments__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/segments/render.png",
+      "sha256": "b1fbf93b64df289d424341bfd6e7faddef0b677274667a83ad08b2c26eb64072"
+    },
+    "corrective__segments__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/segments/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
+    },
+    "corrective__summary-dependency__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/browser-received.json",
+      "sha256": "f375e9fa2b0c18cd2db0b47d90b6f273e692e96106f34e0d084cb1690b30cfbb"
+    },
+    "corrective__summary-dependency__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/input.json",
+      "sha256": "f375e9fa2b0c18cd2db0b47d90b6f273e692e96106f34e0d084cb1690b30cfbb"
+    },
+    "corrective__summary-dependency__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/observation.json",
+      "sha256": "a746fe26af668dc90a63b008530b126212d668ca1915c607c617f3d6b9a2724a"
+    },
+    "corrective__summary-dependency__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/received.json",
+      "sha256": "f375e9fa2b0c18cd2db0b47d90b6f273e692e96106f34e0d084cb1690b30cfbb"
+    },
+    "corrective__summary-dependency__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/render.png",
+      "sha256": "aa2d9402bb2148cf71e815ca5c8a9ebac4358141b90202cf57ee41384d98be03"
+    },
+    "corrective__summary-dependency__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/summary-dependency/storage.xml",
+      "sha256": "57dfce4acd1fc291218d53dffa5bac9ab217157c4648caf937ca98bbdc99eaae"
+    },
+    "corrective__task-calendar__browser-received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/browser-received.json",
+      "sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107"
+    },
+    "corrective__task-calendar__input_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/input.json",
+      "sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107"
+    },
+    "corrective__task-calendar__observation_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/observation.json",
+      "sha256": "b5a8edf085925cadcdbebb7159a756e094a298cba030fe88e86ae9224f11d366"
+    },
+    "corrective__task-calendar__received_json": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/received.json",
+      "sha256": "3a6a4b18717650da466c51352dd0afd642ecc6127cd4bbcf32e436113c6f4107"
+    },
+    "corrective__task-calendar__render_png": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/render.png",
+      "sha256": "014cda07fb79c24d2c7b236d2c1670a647ed8140fa19d1b4215524019ccb5da6"
+    },
+    "corrective__task-calendar__storage_xml": {
+      "path": "references/implementation/20261116/stage-13-fix/group-2/live/task-calendar/storage.xml",
+      "sha256": "ab069727540e4ea46811bdc837c509d81d160c8d930367a301916ba8c7d54180"
     }
   },
   "limitations": [
@@ -560,6 +1097,7 @@
     "Only the stated control scopes are verified. Type+nonzero lag combinations other than FS have no live proof.",
     "Elapsed eday encoding failed; other elapsed encodings, varied daily intervals, inheritance/workweeks/recurrences and task/resource/assignment calendar bindings remain not_verified.",
     "Representation conversion does not establish schedule equality for arbitrary source plans. Exact source dates and per-task comparison remain separate.",
-    "Work is displayed in diagnostics only; no work block is published in storage."
+    "Work is displayed in diagnostics only; no work block is published in storage.",
+    "Corrective cycle 17.11.2026: nested calendar children, task binding, FixedUnits, SNET/FNET, segments with source-derived duration, inactive and summary endpoints verified independently. Native actuals, arbitrary assignment offsets, independent resource calendars and availability remain not_verified; narrow default-availability and coincident-assignment transformations have separate controls."
   ]
 }

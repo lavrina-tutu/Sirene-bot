@@ -1,0 +1,6394 @@
+{
+  "schema_version": 1,
+  "origin": "Independent installed-wrapper controls for corrective cycle 17.11.2026. Golden expected dates set before live execution. Empty expected = exploratory probe, never grants support.",
+  "cases": [
+    {
+      "id": "task-calendar",
+      "capabilities": [
+        "calendar:bindings:tasks"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "calendar": "alternate"
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          },
+          {
+            "id": "alternate",
+            "name": "Alternate",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              },
+              {
+                "startDate": "2026-01-09T00:00:00",
+                "endDate": "2026-01-10T00:00:00",
+                "isWorking": false,
+                "priority": 20
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-12T09:00:00",
+        "3.endDate": "2026-01-12T18:00:00",
+        "3.calendar": "alternate"
+      }
+    },
+    {
+      "id": "calendar-inheritance",
+      "capabilities": [
+        "calendar:inheritance"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "calendar": "child"
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              },
+              {
+                "startDate": "2026-01-09T00:00:00",
+                "endDate": "2026-01-10T00:00:00",
+                "isWorking": false,
+                "priority": 20
+              }
+            ],
+            "children": [
+              {
+                "id": "child",
+                "name": "Child",
+                "parentId": "general",
+                "intervals": []
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-12T09:00:00",
+        "3.endDate": "2026-01-12T18:00:00",
+        "3.calendar": "child"
+      }
+    },
+    {
+      "id": "resource-calendar",
+      "capabilities": [
+        "calendar:bindings:resources"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "ignoreResourceCalendar": false,
+                "effort": 8
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [
+          {
+            "id": 10,
+            "name": "Resource",
+            "resourceType": "custom",
+            "calendar": "alternate"
+          }
+        ],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [
+          {
+            "id": 11,
+            "event": 3,
+            "resource": 10,
+            "units": 100
+          }
+        ],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          },
+          {
+            "id": "alternate",
+            "name": "Alternate",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              },
+              {
+                "startDate": "2026-01-09T00:00:00",
+                "endDate": "2026-01-10T00:00:00",
+                "isWorking": false,
+                "priority": 20
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-09T09:00:00",
+        "3.endDate": "2026-01-09T18:00:00"
+      },
+      "assertion_kind": "unsupported",
+      "unsupported_reason": "Resource calendar roundtrips but did not move task across its nonworking day. No scheduling equivalence established."
+    },
+    {
+      "id": "fixed-units",
+      "capabilities": [
+        "task:task_type:FIXED_UNITS"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedUnits",
+                "effort": 8,
+                "effortUnit": "hour",
+                "effortDriven": true
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [
+          {
+            "id": 10,
+            "name": "Resource",
+            "resourceType": "custom"
+          }
+        ],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [
+          {
+            "id": 11,
+            "event": 3,
+            "resource": 10,
+            "units": 50
+          }
+        ],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-09T09:00:00",
+        "3.endDate": "2026-01-12T18:00:00",
+        "3.schedulingMode": "FixedUnits",
+        "3.duration": 2
+      }
+    },
+    {
+      "id": "constraint-START_NO_EARLIER_THAN",
+      "capabilities": [
+        "task:constraint:START_NO_EARLIER_THAN"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "constraintType": "startnoearlierthan",
+                "constraintDate": "2026-01-13T09:00:00"
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-13T09:00:00",
+        "3.endDate": "2026-01-13T18:00:00",
+        "3.constraintType": "startnoearlierthan"
+      }
+    },
+    {
+      "id": "constraint-FINISH_NO_EARLIER_THAN",
+      "capabilities": [
+        "task:constraint:FINISH_NO_EARLIER_THAN"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "constraintType": "finishnoearlierthan",
+                "constraintDate": "2026-01-14T18:00:00"
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-14T09:00:00",
+        "3.endDate": "2026-01-14T18:00:00",
+        "3.constraintType": "finishnoearlierthan"
+      }
+    },
+    {
+      "id": "segments",
+      "capabilities": [
+        "task:segments"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "segments": [
+                  {
+                    "startDate": "2026-01-09T09:00:00",
+                    "endDate": "2026-01-09T18:00:00",
+                    "duration": 1,
+                    "durationUnit": "day"
+                  },
+                  {
+                    "startDate": "2026-01-13T09:00:00",
+                    "endDate": "2026-01-13T18:00:00",
+                    "duration": 1,
+                    "durationUnit": "day"
+                  }
+                ]
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-09T09:00:00",
+        "3.endDate": "2026-01-13T18:00:00",
+        "3.segments.length": 2
+      }
+    },
+    {
+      "id": "inactive",
+      "capabilities": [
+        "task:active"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration",
+                "inactive": true
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration"
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "2.inactive": true,
+        "3.startDate": "2026-01-05T09:00:00"
+      }
+    },
+    {
+      "id": "summary-dependency",
+      "capabilities": [
+        "dependency:summary_endpoint"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "children": [
+                  {
+                    "id": 4,
+                    "name": "A",
+                    "startDate": "2026-01-07T09:00:00",
+                    "endDate": "2026-01-08T18:00:00",
+                    "duration": 2,
+                    "durationUnit": "day",
+                    "manuallyScheduled": true,
+                    "schedulingMode": "FixedDuration",
+                    "parentId": 2
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration"
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-09T09:00:00",
+        "3.endDate": "2026-01-09T18:00:00"
+      }
+    },
+    {
+      "id": "actuals",
+      "capabilities": [
+        "task:actual_start",
+        "task:actual_finish",
+        "task:actual_duration",
+        "task:actual_work"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "actualStartDate": "2026-01-07T09:00:00",
+                "actualEndDate": "2026-01-08T18:00:00",
+                "actualDuration": 2,
+                "actualEffort": 16
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.native_fields.actualStartDate": false,
+        "3.native_fields.actualEndDate": false,
+        "3.native_fields.actualDuration": false,
+        "3.native_fields.actualEffort": false
+      },
+      "assertion_kind": "unsupported"
+    },
+    {
+      "id": "assignment-dates",
+      "capabilities": [
+        "assignment:start",
+        "assignment:finish"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration"
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [
+          {
+            "id": 10,
+            "name": "Resource",
+            "resourceType": "custom"
+          }
+        ],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [
+          {
+            "id": 11,
+            "event": 3,
+            "resource": 10,
+            "units": 100,
+            "startDate": "2026-01-13T09:00:00",
+            "endDate": "2026-01-14T18:00:00"
+          }
+        ],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-09T09:00:00",
+        "3.endDate": "2026-01-09T18:00:00"
+      },
+      "assertion_kind": "unsupported"
+    },
+    {
+      "id": "resource-availability",
+      "capabilities": [
+        "resource:availability"
+      ],
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration"
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [
+          {
+            "id": 10,
+            "name": "Resource",
+            "resourceType": "custom",
+            "availability": [
+              {
+                "startDate": "2026-01-12T09:00:00",
+                "endDate": "2026-01-13T18:00:00",
+                "units": 100
+              }
+            ]
+          }
+        ],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [
+          {
+            "id": 11,
+            "event": 3,
+            "resource": 10,
+            "units": 100
+          }
+        ],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-09T09:00:00",
+        "3.endDate": "2026-01-09T18:00:00"
+      },
+      "assertion_kind": "unsupported"
+    },
+    {
+      "id": "default-availability",
+      "capabilities": [
+        "resource:default_availability"
+      ],
+      "source_normalization": {
+        "max_units": 100,
+        "availability": [
+          {
+            "available_from": "1984-01-01T00:00",
+            "available_to": "2049-12-31T23:59",
+            "max_units": 100
+          }
+        ]
+      },
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "calendar": null
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [
+          {
+            "id": 10,
+            "name": "Resource",
+            "resourceType": "custom"
+          }
+        ],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [
+          {
+            "id": 11,
+            "event": 3,
+            "resource": 10,
+            "units": 100
+          }
+        ],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-09T09:00:00",
+        "3.endDate": "2026-01-09T18:00:00"
+      }
+    },
+    {
+      "id": "coincident-assignment",
+      "capabilities": [
+        "assignment:coincident_task_interval"
+      ],
+      "source_normalization": {
+        "task_start": "2026-01-09T09:00:00",
+        "task_finish": "2026-01-09T18:00:00",
+        "assignment_start": "2026-01-09T09:00:00",
+        "assignment_finish": "2026-01-09T18:00:00",
+        "segments": []
+      },
+      "input": {
+        "eventsData": [
+          {
+            "id": 1,
+            "parentIndex": 0,
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-08T18:00:00",
+            "duration": 4,
+            "durationUnit": "day",
+            "name": "FS",
+            "calendar": null,
+            "manuallyScheduled": false,
+            "unscheduled": false,
+            "ignoreResourceCalendar": null,
+            "constraintType": "",
+            "percentDone": 0,
+            "effort": null,
+            "effortUnit": "hour",
+            "inactive": null,
+            "segments": null,
+            "baselines": [],
+            "parentId": null,
+            "rollup": true,
+            "children": [
+              {
+                "id": 2,
+                "name": "A",
+                "startDate": "2026-01-07T09:00:00",
+                "endDate": "2026-01-08T18:00:00",
+                "duration": 2,
+                "durationUnit": "day",
+                "manuallyScheduled": true,
+                "schedulingMode": "FixedDuration"
+              },
+              {
+                "id": 3,
+                "name": "B",
+                "startDate": "2026-01-05T09:00:00",
+                "endDate": "2026-01-05T18:00:00",
+                "duration": 1,
+                "durationUnit": "day",
+                "manuallyScheduled": false,
+                "schedulingMode": "FixedDuration",
+                "calendar": null
+              }
+            ],
+            "effortDriven": false,
+            "schedulingMode": "FixedDuration"
+          }
+        ],
+        "resourcesData": [
+          {
+            "id": 10,
+            "name": "Resource",
+            "resourceType": "custom"
+          }
+        ],
+        "dependenciesData": [
+          {
+            "id": 4,
+            "from": 2,
+            "to": 3,
+            "type": 2,
+            "lag": 0,
+            "lagUnit": "day",
+            "active": true
+          }
+        ],
+        "assignmentsData": [
+          {
+            "id": 11,
+            "event": 3,
+            "resource": 10,
+            "units": 100,
+            "startDate": "2026-01-09T09:00:00",
+            "endDate": "2026-01-09T18:00:00"
+          }
+        ],
+        "startDate": "2026-01-05",
+        "macroConfig": {
+          "defaultSchedulingMode": "FixedDuration",
+          "height": 600,
+          "weekNumberMode": "None",
+          "rowHeight": 45,
+          "keptVersions": 50,
+          "labelPosition": "left",
+          "showJiraIssueKey": false,
+          "jiraProgressTimeTracking": false,
+          "jiraProgressResolved": true,
+          "jiraFieldMappings": {}
+        },
+        "calendarsData": [
+          {
+            "id": "general",
+            "name": "General",
+            "unspecifiedTimeIsWorking": true,
+            "intervals": [
+              {
+                "recurrentStartDate": "at 12:00",
+                "recurrentEndDate": "at 13:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "at 18:00",
+                "recurrentEndDate": "at 09:00",
+                "isWorking": false
+              },
+              {
+                "recurrentStartDate": "on Sat",
+                "recurrentEndDate": "on Mon",
+                "isWorking": false
+              }
+            ]
+          }
+        ],
+        "initialState": {
+          "view": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": true
+              },
+              {
+                "id": "name",
+                "width": 250
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": true
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": true
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ],
+            "stateAtSaving": true
+          },
+          "edit": {
+            "columns": [
+              {
+                "id": "wbs",
+                "width": 60,
+                "hidden": false,
+                "order": 0
+              },
+              {
+                "id": "name",
+                "width": 250,
+                "order": 1
+              },
+              {
+                "id": "startdate",
+                "width": 130,
+                "hidden": false,
+                "order": 2
+              },
+              {
+                "id": "enddate",
+                "width": 130,
+                "hidden": false,
+                "order": 3
+              },
+              {
+                "id": "duration",
+                "width": 100,
+                "hidden": false,
+                "order": 4
+              },
+              {
+                "id": "resourceassignment",
+                "width": 130,
+                "hidden": false,
+                "order": 5
+              },
+              {
+                "id": "effort",
+                "width": 100,
+                "hidden": false,
+                "order": 6
+              },
+              {
+                "id": "schedulingMode",
+                "width": 110,
+                "hidden": true,
+                "order": 7
+              },
+              {
+                "id": "status",
+                "width": 90,
+                "hidden": true,
+                "order": 8
+              },
+              {
+                "id": "percentdone",
+                "width": 70,
+                "hidden": true,
+                "order": 9
+              },
+              {
+                "id": "predecessor",
+                "width": 120,
+                "hidden": true,
+                "order": 10
+              },
+              {
+                "id": "successor",
+                "width": 120,
+                "hidden": true,
+                "order": 11
+              },
+              {
+                "id": "constrainttype",
+                "width": 145,
+                "hidden": true,
+                "order": 12
+              },
+              {
+                "id": "constraintdate",
+                "width": 145,
+                "hidden": true,
+                "order": 13
+              },
+              {
+                "id": "deadlinedate",
+                "width": 130,
+                "hidden": true,
+                "order": 14
+              },
+              {
+                "id": "manuallyscheduled",
+                "width": 90,
+                "hidden": true,
+                "order": 15
+              },
+              {
+                "id": "rollup",
+                "width": 90,
+                "hidden": true,
+                "order": 16
+              },
+              {
+                "id": "defaultcollapse",
+                "width": 90,
+                "hidden": true,
+                "order": 17
+              },
+              {
+                "id": "inactive",
+                "width": 90,
+                "hidden": true,
+                "order": 18
+              },
+              {
+                "id": "color",
+                "width": 90,
+                "hidden": true,
+                "order": 19
+              },
+              {
+                "id": "propagatecolor",
+                "width": 90,
+                "hidden": true,
+                "order": 20
+              },
+              {
+                "id": "weblink",
+                "width": 145,
+                "hidden": true,
+                "order": 21
+              },
+              {
+                "id": "note",
+                "width": 150,
+                "hidden": true,
+                "order": 22
+              }
+            ],
+            "features": [
+              {
+                "id": "labels",
+                "disabled": false
+              },
+              {
+                "id": "timelineFlag",
+                "disabled": false
+              },
+              {
+                "id": "rollups",
+                "disabled": false
+              },
+              {
+                "id": "progressLine",
+                "disabled": true
+              },
+              {
+                "id": "criticalPaths",
+                "disabled": true
+              },
+              {
+                "id": "baselines",
+                "disabled": true
+              },
+              {
+                "id": "resourceHistogram",
+                "disabled": true,
+                "type": "utilization"
+              }
+            ]
+          }
+        },
+        "baselineVersions": [],
+        "customColumns": {},
+        "linkedSites": [],
+        "idCounter": 5,
+        "calendar": "general"
+      },
+      "expected": {
+        "3.startDate": "2026-01-09T09:00:00",
+        "3.endDate": "2026-01-09T18:00:00",
+        "assignments.11.startDate": "2026-01-09T09:00:00",
+        "assignments.11.endDate": "2026-01-09T18:00:00"
+      }
+    }
+  ]
+}

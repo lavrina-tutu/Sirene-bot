@@ -48,7 +48,7 @@ def test_prepared_calendar_intervals_exceptions_inheritance_bindings(stage08_exp
     exception=[iv for iv in ivs if 'startDate' in iv]
     assert exception[0]['endDate']=='2026-01-07T00:00:00'
     assert exception[1]['startDate']=='2026-01-06T10:00:00'
-    assert out['calendarsData'][1]['parentId']==base['id']
+    assert out['calendarsData'][0]['children'][0]['parentId']==base['id']
     assert out['bindings']['project']=='cal'
     assert out['bindings']['tasks']['a']['effective']=='cal'
     assert out['bindings']['resources']['r1']['explicit']=='cal'

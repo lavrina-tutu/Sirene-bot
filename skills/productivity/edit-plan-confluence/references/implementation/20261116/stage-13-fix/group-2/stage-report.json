@@ -1,0 +1,363 @@
+{
+  "group": 2,
+  "gate": "failed",
+  "scope": "Исправления представления и проверка установленной обёртки; использованные A–D actuals ещё не представлены.",
+  "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix-20261117-121211",
+  "unit_final": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "42",
+    "time": "11.040",
+    "timestamp": "2026-11-17T12:43:22.090806+03:00",
+    "hostname": "hermes-agents.devel.tutu.ru"
+  },
+  "live_controls": {
+    "task-calendar": {
+      "status": "passed",
+      "capabilities": [
+        "calendar:bindings:tasks"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-12T09:00:00",
+          "actual": "2026-01-12T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-12T18:00:00",
+          "actual": "2026-01-12T18:00:00",
+          "passed": true
+        },
+        "3.calendar": {
+          "expected": "alternate",
+          "actual": "alternate",
+          "passed": true
+        }
+      }
+    },
+    "calendar-inheritance": {
+      "status": "passed",
+      "capabilities": [
+        "calendar:inheritance"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-12T09:00:00",
+          "actual": "2026-01-12T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-12T18:00:00",
+          "actual": "2026-01-12T18:00:00",
+          "passed": true
+        },
+        "3.calendar": {
+          "expected": "child",
+          "actual": "child",
+          "passed": true
+        }
+      }
+    },
+    "resource-calendar": {
+      "status": "not_verified",
+      "capabilities": [
+        "calendar:bindings:resources"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    "fixed-units": {
+      "status": "passed",
+      "capabilities": [
+        "task:task_type:FIXED_UNITS"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-12T18:00:00",
+          "actual": "2026-01-12T18:00:00",
+          "passed": true
+        },
+        "3.schedulingMode": {
+          "expected": "FixedUnits",
+          "actual": "FixedUnits",
+          "passed": true
+        },
+        "3.duration": {
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        }
+      }
+    },
+    "constraint-START_NO_EARLIER_THAN": {
+      "status": "passed",
+      "capabilities": [
+        "task:constraint:START_NO_EARLIER_THAN"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-13T09:00:00",
+          "actual": "2026-01-13T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-13T18:00:00",
+          "actual": "2026-01-13T18:00:00",
+          "passed": true
+        },
+        "3.constraintType": {
+          "expected": "startnoearlierthan",
+          "actual": "startnoearlierthan",
+          "passed": true
+        }
+      }
+    },
+    "constraint-FINISH_NO_EARLIER_THAN": {
+      "status": "passed",
+      "capabilities": [
+        "task:constraint:FINISH_NO_EARLIER_THAN"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-14T09:00:00",
+          "actual": "2026-01-14T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-14T18:00:00",
+          "actual": "2026-01-14T18:00:00",
+          "passed": true
+        },
+        "3.constraintType": {
+          "expected": "finishnoearlierthan",
+          "actual": "finishnoearlierthan",
+          "passed": true
+        }
+      }
+    },
+    "segments": {
+      "status": "passed",
+      "capabilities": [
+        "task:segments"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-13T18:00:00",
+          "actual": "2026-01-13T18:00:00",
+          "passed": true
+        },
+        "3.segments.length": {
+          "expected": 2,
+          "actual": 2,
+          "passed": true
+        }
+      }
+    },
+    "inactive": {
+      "status": "passed",
+      "capabilities": [
+        "task:active"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "2.inactive": {
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        "3.startDate": {
+          "expected": "2026-01-05T09:00:00",
+          "actual": "2026-01-05T09:00:00",
+          "passed": true
+        }
+      }
+    },
+    "summary-dependency": {
+      "status": "passed",
+      "capabilities": [
+        "dependency:summary_endpoint"
+      ],
+      "page_id": "537574043",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    "actuals": {
+      "status": "not_verified",
+      "capabilities": [
+        "task:actual_start",
+        "task:actual_finish",
+        "task:actual_duration",
+        "task:actual_work"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.native_fields.actualStartDate": {
+          "expected": false,
+          "actual": false,
+          "passed": true
+        },
+        "3.native_fields.actualEndDate": {
+          "expected": false,
+          "actual": false,
+          "passed": true
+        },
+        "3.native_fields.actualDuration": {
+          "expected": false,
+          "actual": false,
+          "passed": true
+        },
+        "3.native_fields.actualEffort": {
+          "expected": false,
+          "actual": false,
+          "passed": true
+        }
+      }
+    },
+    "assignment-dates": {
+      "status": "not_verified",
+      "capabilities": [
+        "assignment:start",
+        "assignment:finish"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    "resource-availability": {
+      "status": "not_verified",
+      "capabilities": [
+        "resource:availability"
+      ],
+      "page_id": "537574001",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    "default-availability": {
+      "status": "passed",
+      "capabilities": [
+        "resource:default_availability"
+      ],
+      "page_id": "537574020",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    },
+    "coincident-assignment": {
+      "status": "passed",
+      "capabilities": [
+        "assignment:coincident_task_interval"
+      ],
+      "page_id": "537574020",
+      "checks": {
+        "3.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "3.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        },
+        "assignments.11.startDate": {
+          "expected": "2026-01-09T09:00:00",
+          "actual": "2026-01-09T09:00:00",
+          "passed": true
+        },
+        "assignments.11.endDate": {
+          "expected": "2026-01-09T18:00:00",
+          "actual": "2026-01-09T18:00:00",
+          "passed": true
+        }
+      }
+    }
+  },
+  "remaining_blockers": [
+    "task actuals/stop/resume: no supported behavior proof",
+    "independent resource calendar/availability and assignment offsets remain not_verified; only narrow source-proven equivalences admitted"
+  ],
+  "profile_sha256": "22ab97028534a57754a53b0015c7cee901d1b52073d3d675eb5e796696488642",
+  "changes": [
+    "calendar tree children and exact no-override inheritance alias",
+    "FixedUnits, SNET/FNET, inactive tasks; source calendar segment durations with equality check",
+    "default 100% availability within source plan bounds; assignments with identical task intervals; zero-work unassigned milestones",
+    "behavior proof required for every newly supported installed capability; source semantics retained"
+  ],
+  "commands": [
+    "PYTHONPATH=/home/tkachenkoav/.local/lib/python3.9/site-packages /usr/bin/python3.9 -m pytest tests/test_corrective_representation.py tests/test_mpp_calendar.py tests/test_mpp_convert.py tests/test_plugin_profile.py --test-root T/group-2-unit",
+    "/usr/bin/python3.9 -m pytest tests/test_plugin_capabilities_live.py --test-root T/group-2-live; then targeted summary-dependency and default-availability/coincident-assignment checks"
+  ],
+  "limitations": [
+    "Полный live-прогон имел timeout summary-dependency; адресный повтор прошёл. Группа 5 повторяет весь набор.",
+    "Ни совпадение bytes, ни номер Bryntum сами по себе не дают tested_supported.",
+    "Полная приёмка §20 failed."
+  ]
+}

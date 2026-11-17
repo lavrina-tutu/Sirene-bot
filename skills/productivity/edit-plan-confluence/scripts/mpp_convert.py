@@ -369,7 +369,7 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v1'
+CONVERTER_VERSION = 'prepared-gantt-v2'
 
 
 def _number(value):
@@ -431,7 +431,7 @@ def build_dependencies(rows, task_mapping, start_id, *, plugin_profile, diagnost
     return deps
 
 
-def build_assignments(assignments, task_mapping, resource_mapping, start_id, *, diagnostics, excluded_task_keys=()):
+def build_assignments(assignments, task_mapping, resource_mapping, start_id, *, diagnostics, excluded_task_keys=(), source_tasks=None, plugin_profile=None, transformations=None):
     from itogo import field_value
     out = []
     for index,a in enumerate(assignments):
@@ -439,12 +439,79 @@ def build_assignments(assignments, task_mapping, resource_mapping, start_id, *, 
             continue
         task, resource = task_mapping.get(a.get('task_key')), resource_mapping.get(a.get('resource_key'))
         units = _number(field_value(a.get('units')))
+        source_task=(source_tasks or {}).get(a.get('task_key'))
+        from mpp_calendar import coincident_assignment_interval
+        coincident=coincident_assignment_interval(a,source_task)
+        if (resource is None and source_task and source_task.get('milestone') is True
+                and source_task.get('duration',{}).get('quantity',{}).get('amount')=='0'
+                and coincident and all(a.get(field,{}).get('quality')=='ok'
+                    and a.get(field,{}).get('quantity',{}).get('amount')=='0'
+                    for field in ('work','actual_work','remaining_work','overtime_work'))):
+            if transformations is not None:
+                transformations.append({'entity':a['assignment_key'],'field':'resource_key','kind':'zero_work_unassigned_milestone',
+                    'source':deepcopy(a),'normalized':None,'represented':None,
+                    'basis':'no_resource_and_all_work_known_zero_milestone_duration_zero_coincident_dates'})
+            continue
         if task is None or resource is None or units is None or 'error' in a:
             diagnostics.append({'code':'assignment_partial','entity':a.get('assignment_key'),
                                 'source':deepcopy(a),'represented':None})
             continue
-        out.append({'id':start_id+index,'event':task,'resource':resource,'units':units})
+        node={'id':start_id+index,'event':task,'resource':resource,'units':units}
+        if coincident and plugin_profile is not None and plugin_profile.supports('assignment:coincident_task_interval'):
+            node.update(startDate=field_value(a.get('start')),endDate=field_value(a.get('finish')))
+            if transformations is not None:
+                transformations.append({'entity':a['assignment_key'],'field':'segments','kind':'assignment_task_envelope',
+                    'source':deepcopy(a),'normalized':{'start':node['startDate'],'finish':node['endDate']},
+                    'represented':deepcopy(node),'basis':'coincident_task_interval_and_no_independent_split'})
+        out.append(node)
     return out
+
+
+def _source_working_minutes(data, calendar_key, start, finish):
+    """Exact source calendar windows for segment durations; reject unknowns."""
+    from datetime import datetime, timedelta
+    from decimal import Decimal
+    from itogo import field_value
+    calendars={c['calendar_key']:c for c in data['calendars'] if 'error' not in c}
+    chain=[];seen=set();key=calendar_key
+    while key is not None:
+        if key in seen or key not in calendars:raise ValueError('segment_calendar_unresolved')
+        seen.add(key);cal=calendars[key];chain.append(cal);key=field_value(cal.get('parent_key'))
+        if cal.get('work_weeks'):raise ValueError('segment_work_weeks_unverified')
+    if not chain:raise ValueError('segment_calendar_unresolved')
+    begin,end=datetime.fromisoformat(start),datetime.fromisoformat(finish)
+    if begin.tzinfo != end.tzinfo or begin>end:raise ValueError('segment_dates_invalid')
+    weekdays=['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY']
+    def windows(day):
+        chosen=None
+        for cal in reversed(chain):
+            source=next((d for d in cal.get('weekdays',[]) if d.get('day')==weekdays[day.weekday()]),None)
+            if source is None:raise ValueError('segment_calendar_day_missing')
+            if field_value(source.get('day_type')) != 'DEFAULT':chosen=source
+            for exc in cal.get('exceptions',[]):
+                if field_value(exc.get('recurrence')) is not None:raise ValueError('segment_recurrence_unverified')
+                a,b=field_value(exc.get('from_date')),field_value(exc.get('to_date'))
+                if a is None or b is None:raise ValueError('segment_exception_incomplete')
+                if a[:10]<=day.isoformat()<=b[:10]:chosen=exc
+        if chosen is None:raise ValueError('segment_calendar_day_missing')
+        working=field_value(chosen.get('working'))
+        if working is False:return []
+        ranges=field_value(chosen.get('intervals'))
+        if working is not True or ranges is None:raise ValueError('segment_calendar_intervals_missing')
+        return ranges
+    def at(day,clock):
+        if clock is None:raise ValueError('segment_clock_missing')
+        if clock in ('24:00','24:00:00'):return datetime.combine(day+timedelta(days=1),datetime.min.time()).replace(tzinfo=begin.tzinfo)
+        return datetime.fromisoformat(day.isoformat()+'T'+clock).replace(tzinfo=begin.tzinfo)
+    day=begin.date();total=Decimal(0)
+    while day<=end.date():
+        for window in windows(day):
+            a=at(day,field_value(window.get('start')));b=at(day,field_value(window.get('end')))
+            if a>=b:raise ValueError('segment_calendar_interval_invalid')
+            a,b=max(a,begin),min(b,end)
+            if b>a:total+=Decimal(str((b-a).total_seconds()))/Decimal(60)
+        day+=timedelta(days=1)
+    return total
 
 
 def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, root_task_key=None):
@@ -466,6 +533,7 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
     summary = compute_itogo_from_prepared(prepared,root_task_key=root_task_key)
     cal = calendar_from_prepared(prepared,plugin_profile=profile)
     diagnostics = cal['diagnostics'][:]
+    transformations = cal['transformations'][:]
     diagnostics.extend({'code':r,'entity':'summary','source':summary['source_duration'],'represented':None} for r in summary['reasons'])
     tasks = [t for t in data['tasks'] if 'error' not in t and t.get('id') != 0]
     task_mapping = {}
@@ -501,7 +569,10 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
             else:
                 diagnostics.append({'code':'task_mode_unverified','entity':key,'source':t.get('task_mode'),'represented':None})
             if field_value(t.get('active')) is False:
-                diagnostics.append({'code':'inactive_task_unverified','entity':key,'source':t.get('active'),'represented':None})
+                if profile.supports('task:active'):
+                    node['inactive'] = True
+                else:
+                    diagnostics.append({'code':'inactive_task_unverified','entity':key,'source':t.get('active'),'represented':None})
             leveling = t.get('leveling_delay',{}).get('quantity')
             if leveling and decimal_value(leveling.get('amount')) != 0:
                 diagnostics.append({'code':'leveling_delay_unrepresented','entity':key,'source':t.get('leveling_delay'),'represented':None})
@@ -514,12 +585,53 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
             metric=summary['work']['per_task'].get(key)
             node['effort']=_number(metric['hours']) if metric and metric['quality']=='complete' else None
             nodes[key]=node
-            # Never silently assert support for planning fields outside the proven profile.
-            for field in ('constraint_type','constraint_date','secondary_constraint_type','secondary_constraint_date','deadline',
-                          'task_type','segments','ignore_resource_calendar','effort_driven'):
+            task_type = field_value(t.get('task_type'))
+            modes = {'FIXED_UNITS':'FixedUnits','FIXED_DURATION':'FixedDuration','FIXED_WORK':'FixedEffort'}
+            if task_type == 'FIXED_DURATION' or profile.supports('task:task_type:'+str(task_type)):
+                node['schedulingMode'] = modes.get(task_type)
+            elif task_type is not None:
+                diagnostics.append({'code':'task_semantics_unrepresented:task_type','entity':key,'source':deepcopy(t['task_type']),'represented':None})
+            constraint = field_value(t.get('constraint_type'))
+            constraints = {'START_NO_EARLIER_THAN':'startnoearlierthan','FINISH_NO_EARLIER_THAN':'finishnoearlierthan',
+                           'MUST_START_ON':'muststarton','MUST_FINISH_ON':'mustfinishon',
+                           'START_NO_LATER_THAN':'startnolaterthan','FINISH_NO_LATER_THAN':'finishnolaterthan'}
+            if constraint in constraints and profile.supports('task:constraint:'+constraint):
+                node['constraintType'] = constraints[constraint]
+                node['constraintDate'] = field_value(t.get('constraint_date'))
+                if node['constraintDate'] is None:
+                    diagnostics.append({'code':'task_constraint_date_missing','entity':key,'source':t.get('constraint_date'),'represented':None})
+            elif constraint not in (None,'AS_SOON_AS_POSSIBLE','As Soon As Possible'):
+                diagnostics.append({'code':'task_semantics_unrepresented:constraint_type','entity':key,'source':deepcopy(t.get('constraint_type')),'represented':None})
+            segments = field_value(t.get('segments'))
+            if segments:
+                envelope = len(segments) == 1 and all(field_value(segments[0].get(src)) == field_value(t.get(dest))
+                    for src,dest in [('start','start'),('end','finish')])
+                if envelope:
+                    transformations.append({'entity':key,'field':'segments','kind':'single_work_envelope',
+                        'source':deepcopy(t['segments']),'normalized':[],
+                        'represented':{'startDate':node['startDate'],'endDate':node['endDate'],'duration':node['duration']},
+                        'basis':'one_working_period_equals_task_start_and_finish_no_interruption'})
+                elif len(segments) > 1 and profile.supports('task:segments'):
+                    periods = [(field_value(part.get('start')),field_value(part.get('end'))) for part in segments]
+                    if (all(a is not None and b is not None and a < b for a,b in periods)
+                            and all(periods[i][1] <= periods[i+1][0] for i in range(len(periods)-1))):
+                        try:
+                            lengths = [_source_working_minutes(data, binding, a, b) for a,b in periods]
+                            if minutes is None or sum(lengths) != minutes:
+                                raise ValueError('segment_duration_source_mismatch')
+                            values = [_number(length/day) for length in lengths]
+                            if any(v is None for v in values):raise ValueError('segment_duration_imprecise')
+                            node['segments'] = [{'startDate':a,'endDate':b,'duration':v,'durationUnit':'day'}
+                                                for (a,b),v in zip(periods,values)]
+                        except (ValueError,TypeError) as exc:
+                            diagnostics.append({'code':str(exc),'entity':key,'source':deepcopy(t['segments']),'represented':None})
+                    else:
+                        diagnostics.append({'code':'task_segments_invalid','entity':key,'source':deepcopy(t['segments']),'represented':None})
+                else:
+                    diagnostics.append({'code':'task_semantics_unrepresented:segments','entity':key,'source':deepcopy(t['segments']),'represented':None})
+            for field in ('secondary_constraint_type','secondary_constraint_date','deadline','ignore_resource_calendar','effort_driven'):
                 value=field_value(t.get(field))
-                harmless = value in (None,False,[], 'AS_SOON_AS_POSSIBLE','As Soon As Possible','FIXED_DURATION')
-                if not harmless:
+                if value not in (None,False,[]):
                     diagnostics.append({'code':'task_semantics_unrepresented:'+field,'entity':key,'source':deepcopy(t.get(field)),'represented':None})
     roots=[]
     source_tasks={t['task_key']:t for t in data['tasks'] if 'error' not in t}
@@ -551,6 +663,11 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
         binding=field_value(r.get('calendar_key')) or field_value(r.get('base_calendar_key'))
         if profile.supports('calendar:bindings:resources') and binding in cal['mapping']:
             node['calendar']=cal['mapping'][binding]
+        from mpp_calendar import default_availability_equivalent
+        if profile.supports('resource:default_availability') and default_availability_equivalent(r,data):
+            transformations.append({'entity':key,'field':'availability','kind':'default_availability_within_plan',
+                'source':deepcopy(r['availability']),'normalized':{'max_units':100},'represented':deepcopy(node),
+                'basis':'known_100_percent_window_covers_all_assigned_task_intervals_and_units'})
         resources.append(node);next_id+=1
     for dependency in data['dependencies']:
         endpoints = [source_tasks.get(dependency.get(k),{}) for k in ('predecessor_task_key','successor_task_key')]
@@ -563,7 +680,8 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
     next_id+=len(data['dependencies'])
     assignment_start = next_id
     assignments=build_assignments(data['assignments'],task_mapping,resource_mapping,next_id,diagnostics=diagnostics,
-                                  excluded_task_keys={t['task_key'] for t in data['tasks'] if t.get('id') == 0})
+                                  excluded_task_keys={t['task_key'] for t in data['tasks'] if t.get('id') == 0},
+                                  source_tasks=source_tasks,plugin_profile=profile,transformations=transformations)
     for name in ('tasks','dependencies','external_dependencies','resources','assignments'):
         if data['collections'][name]['status']!='complete':
             diagnostics.append({'code':'source_collection_incomplete','entity':name,'source':data['collections'][name],'represented':None})
@@ -587,7 +705,7 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
             'mappings':{'tasks':task_mapping,'resources':resource_mapping,'calendars':cal['mapping'],
                         'dependencies':{r.get('dependency_key',f'row:{i}'):dependency_start+i for i,r in enumerate(data['dependencies']) if any(d['id']==dependency_start+i for d in deps)},
                         'assignments':{r.get('assignment_key',f'row:{i}'):assignment_start+i for i,r in enumerate(data['assignments']) if any(a['id']==assignment_start+i for a in assignments)}},
-            'source_semantics':source_semantics,'diagnostics':diagnostics,'publishable':not diagnostics,
+            'source_semantics':source_semantics,'semantic_transformations':transformations,'diagnostics':diagnostics,'publishable':not diagnostics,
             'schedule':{'status':'not_verified','source':'no_model_replay_or_live_observation'}}
 
 

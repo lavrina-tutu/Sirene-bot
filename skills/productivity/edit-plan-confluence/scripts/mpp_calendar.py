@@ -58,9 +58,34 @@ def calendar_from_prepared(prepared, *, plugin_profile):
     from itogo import field_value
     prepared.validate()
     data = prepared.normalized_data
-    out, diagnostics = [], []
+    out, diagnostics, transformations = [], [], []
     default_key = field_value(data['project'].get('default_calendar_key'))
     mapping = {c['calendar_key']: ('general' if c['calendar_key'] == default_key and plugin_profile.supports('calendar:project_id_general') else 'calendar-' + str(i + 1)) for i,c in enumerate(data['calendars']) if 'error' not in c}
+    # A calendar with no own overrides is exactly its parent. Alias source
+    # identities to one represented calendar, retaining every source record.
+    calendars = {c['calendar_key']: c for c in data['calendars'] if 'error' not in c}
+    aliases = {}
+    def alias(key, chain=()):
+        if key in chain:
+            return key  # the ordinary unsupported-inheritance path blocks cycles
+        cal = calendars[key]
+        parent = field_value(cal.get('parent_key'))
+        inherited = (parent in calendars and not cal.get('exceptions') and not cal.get('work_weeks')
+            and all(field_value(d.get('day_type')) == 'DEFAULT' for d in cal.get('weekdays', []))
+            and len(cal.get('weekdays', [])) == 7
+            and all(cal.get(k, {}).get('value') in (None, calendars[parent].get(k, {}).get('value'))
+                    for k in ('minutes_per_day','minutes_per_week','minutes_per_month','minutes_per_year')))
+        if inherited:
+            target = alias(parent, (*chain, key))
+            if target != key:
+                aliases[key] = target
+                mapping[key] = mapping[target]
+                transformations.append({'entity':key,'field':'parent_key','kind':'equivalent_calendar_alias',
+                    'source':deepcopy(cal),'normalized':target,'represented':mapping[target],
+                    'basis':'seven_DEFAULT_days_no_exceptions_no_workweeks_same_duration_coefficients'})
+                return target
+        return key
+    for key in calendars: alias(key)
     days = {'MONDAY':'Mon','TUESDAY':'Tue','WEDNESDAY':'Wed','THURSDAY':'Thu','FRIDAY':'Fri','SATURDAY':'Sat','SUNDAY':'Sun'}
 
     def issue(code, key, source=None):
@@ -72,6 +97,8 @@ def calendar_from_prepared(prepared, *, plugin_profile):
 
     for cal in data['calendars']:
         key = cal.get('calendar_key')
+        if key in aliases:
+            continue
         if 'error' in cal:
             issue('calendar_unreadable',key,cal); continue
         intervals = []
@@ -192,13 +219,67 @@ def calendar_from_prepared(prepared, *, plugin_profile):
         if kind == 'project':
             required = values is None or not plugin_profile.supports('calendar:bindings:project')
         elif kind == 'tasks':
-            required = any(v['effective'] is None or v['effective'] != project_calendar
-                           or v['explicit'] not in (None,project_calendar) for v in values.values())
+            required = any(v['effective'] not in mapping or mapping[v['effective']] != mapping.get(project_calendar)
+                           or (v['explicit'] is not None and mapping.get(v['explicit']) != mapping.get(project_calendar)) for v in values.values())
         elif kind == 'resources':
-            required = any(v['explicit'] not in (None,project_calendar) or v['base'] not in (None,project_calendar) for v in values.values())
+            required = any(any(k is not None and mapping.get(k) != mapping.get(project_calendar) for k in (v['explicit'],v['base'])) for v in values.values())
         else:
-            required = any(v is None or v != project_calendar for v in values.values())
+            required = any(v not in mapping or mapping[v] != mapping.get(project_calendar) for v in values.values())
         if required and not plugin_profile.supports('calendar:bindings:'+kind):
             issue('calendar_binding_unsupported',kind,values)
+    # The installed wrapper loads calendar inheritance as a nested tree.
+    # Flat parentId input was observed to lose the parent's working intervals.
+    if plugin_profile.supports('calendar:inheritance'):
+        by_id = {node['id']:node for node in out}
+        roots = []
+        for node in out:
+            parent_id = node.get('parentId')
+            if parent_id in by_id:
+                by_id[parent_id].setdefault('children', []).append(node)
+            else:
+                roots.append(node)
+        out = roots
     return {'calendarsData':out,'mapping':mapping,'bindings':bindings,
-            'source_calendars':deepcopy(data['calendars']),'diagnostics':diagnostics}
+            'source_calendars':deepcopy(data['calendars']),'diagnostics':diagnostics,'transformations':transformations,'aliases':aliases}
+
+
+def default_availability_equivalent(resource, data):
+    """Prove the default 100% window covers every published source interval."""
+    from decimal import Decimal
+    from datetime import datetime
+    from itogo import field_value
+    rows=resource.get('availability')
+    if not rows:return False
+    if len(rows)!=1 or resource.get('availability_quality',{}).get('status')!='complete':return False
+    row=rows[0]
+    try:
+        for field in ('available_from','available_to','max_units'):
+            if row[field]['quality']!='ok':return False
+        if resource.get('max_units',{}).get('quality')!='ok':return False
+        if Decimal(str(field_value(row['max_units'])))!=100 or Decimal(str(field_value(resource['max_units'])))!=100:return False
+        begin,end=map(datetime.fromisoformat,[field_value(row['available_from']),field_value(row['available_to'])])
+        tasks={t['task_key']:t for t in data['tasks'] if 'error' not in t}
+        for assignment in data['assignments']:
+            if assignment.get('resource_key')!=resource['resource_key']:continue
+            task=tasks.get(assignment.get('task_key'))
+            if task is None:return False
+            for field in ('start','finish'):
+                stamp=datetime.fromisoformat(field_value(task.get(field)))
+                if not begin<=stamp<=end:return False
+            units=Decimal(str(field_value(assignment.get('units'))))
+            if not 0<=units<=100:return False
+        return True
+    except (ValueError,TypeError,KeyError):return False
+
+
+def coincident_assignment_interval(assignment, task):
+    """No independent dates/splits when the assignment equals its task envelope."""
+    from itogo import field_value
+    if task is None:return False
+    for field in ('start','finish'):
+        a,b=assignment.get(field,{}),task.get(field,{})
+        if a.get('quality')!='ok' or b.get('quality')!='ok' or a.get('value')!=b.get('value'):return False
+    segments=field_value(assignment.get('segments'))
+    if assignment.get('segments',{}).get('quality') not in ('ok','missing'):return False
+    return not segments or (len(segments)==1 and all(field_value(segments[0].get(a))==field_value(task.get(b))
+        for a,b in [('start','start'),('end','finish')]))

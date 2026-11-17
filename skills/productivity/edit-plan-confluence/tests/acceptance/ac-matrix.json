@@ -787,7 +787,7 @@
     "test_fix4_owner_history.py::test_snapshot_display_preserves_dates_links_and_source_mode[manual]",
     "test_fix4_owner_history.py::test_snapshot_display_preserves_dates_links_and_source_mode[source_mode]",
     "test_fix4_owner_history.py::test_snapshot_display_preserves_dates_links_and_source_mode[hidden]",
-    "test_fix4_owner_history.py::test_zero_duration_milestone_with_different_dates_is_not_silently_fixed"
+    "test_fix4_owner_history.py::test_zero_duration_milestone_with_different_dates_is_published_collapsed"
   ],
   "acceptance_test_ids": [
     "test_cases_trisigma.py::test_real_cold_warm_archive[A]",

@@ -36,7 +36,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-ad87cf8397164b33bd5af011d6c7a5b4.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-c609d0ed02b1460db0c6b7e5789dc06c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -48,7 +48,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-ad87cf8397164b33bd5af011d6c7a5b4.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-c609d0ed02b1460db0c6b7e5789dc06c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -68,7 +68,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-ad87cf8397164b33bd5af011d6c7a5b4.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-c609d0ed02b1460db0c6b7e5789dc06c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -92,7 +92,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-ad87cf8397164b33bd5af011d6c7a5b4.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-c609d0ed02b1460db0c6b7e5789dc06c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -117,15 +117,15 @@
     "exceptions": [],
     "exit_code": 0,
     "external_effect": "storage_written",
-    "item_id": "item_bc8d51460d5d45cd9a013080c85405fc",
+    "item_id": "item_b0c92ad24efa4e2faf03f69395610f60",
     "mode": "publish",
-    "operation_id": "operation_4b277064f94a4409a9b29dc10ce40bd5",
+    "operation_id": "operation_4dd4734427724009abb90afe7e2986d8",
     "page_id": "test-page",
     "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=test-page",
     "project_slug": "test",
     "published": true,
     "schema_version": 1,
-    "snapshot_id": "snapshot_f7fe50fdaa86448d9788584943fec1b3",
+    "snapshot_id": "snapshot_c914c6f108624e81bb3059cc13a54580",
     "source": {
       "name": "synthetic-source.mpp",
       "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
@@ -162,7 +162,7 @@
           }
         ],
         "evidence_ids": [
-          "artifact_a471de64153a447e85baa7fc148fec00"
+          "artifact_e86dbe456c1d4103bcd36a0e07b185c0"
         ],
         "limitations": [
           "local_scheduler_not_run",
@@ -183,12 +183,12 @@
     "warnings": [
       {
         "code": "local_scheduler_prepared_unsupported",
-        "details_ref": "artifact:artifact_a471de64153a447e85baa7fc148fec00",
+        "details_ref": "artifact:artifact_e86dbe456c1d4103bcd36a0e07b185c0",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
-        "details_ref": "artifact:artifact_a471de64153a447e85baa7fc148fec00",
+        "details_ref": "artifact:artifact_e86dbe456c1d4103bcd36a0e07b185c0",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
       }
     ]
@@ -212,15 +212,15 @@
     "exceptions": [],
     "exit_code": 4,
     "external_effect": "unknown",
-    "item_id": "item_bc8d51460d5d45cd9a013080c85405fc",
+    "item_id": "item_b0c92ad24efa4e2faf03f69395610f60",
     "mode": "publish",
-    "operation_id": "operation_4b277064f94a4409a9b29dc10ce40bd5",
+    "operation_id": "operation_4dd4734427724009abb90afe7e2986d8",
     "page_id": null,
     "page_url": null,
     "project_slug": "test",
     "published": null,
     "schema_version": 1,
-    "snapshot_id": "snapshot_f7fe50fdaa86448d9788584943fec1b3",
+    "snapshot_id": "snapshot_c914c6f108624e81bb3059cc13a54580",
     "source": {
       "name": "synthetic-source.mpp",
       "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
@@ -257,7 +257,7 @@
           }
         ],
         "evidence_ids": [
-          "artifact_a471de64153a447e85baa7fc148fec00"
+          "artifact_e86dbe456c1d4103bcd36a0e07b185c0"
         ],
         "limitations": [
           "local_scheduler_not_run",
@@ -278,12 +278,12 @@
     "warnings": [
       {
         "code": "local_scheduler_prepared_unsupported",
-        "details_ref": "artifact:artifact_a471de64153a447e85baa7fc148fec00",
+        "details_ref": "artifact:artifact_e86dbe456c1d4103bcd36a0e07b185c0",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
-        "details_ref": "artifact:artifact_a471de64153a447e85baa7fc148fec00",
+        "details_ref": "artifact:artifact_e86dbe456c1d4103bcd36a0e07b185c0",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
       }
     ]

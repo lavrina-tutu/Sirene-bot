@@ -6,7 +6,7 @@
   "PYTHONPATH": "/home/tkachenkoav/.local/lib/python3.9/site-packages",
   "java": "openjdk version \"17.0.17\" 2025-10-21 LTS\nOpenJDK Runtime Environment (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS)\nOpenJDK 64-Bit Server VM (Red_Hat-17.0.17.0.10-1) (build 17.0.17+10-LTS, mixed mode, sharing)",
   "java_rc": 0,
-  "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final",
+  "test_root": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final",
   "plugin_profile": {
     "schema_version": 1,
     "id": "installed-gantt-profile",

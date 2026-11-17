@@ -114,14 +114,16 @@ def test_snapshot_display_preserves_dates_links_and_source_mode(damage):
     assert conversion['source_semantics']['tasks']==prepared.normalized_data['tasks']
 
 
-def test_zero_duration_milestone_with_different_dates_is_not_silently_fixed():
+def test_zero_duration_milestone_with_different_dates_is_published_collapsed():
     data, prepared, profile, conversion = converted('D')
     from plan_policy import evaluate
     findings = capability_findings(prepared.normalized_data,profile,conversion)
-    conflicts = [f for f in findings if f['code']=='source_milestone_interval_conflict']
-    assert len(conflicts)==1 and conflicts[0]['entity']=='uid:373'
-    assert conflicts[0]['source']['start']['value']=='2026-03-30T09:00'
-    assert conflicts[0]['source']['finish']['value']=='2026-04-22T18:00'
-    assert conflicts[0]['source']['duration']['quantity']['amount']=='0'
-    assert evaluate(findings)['exit_code']==5
+    collapsed = [f for f in findings if f['code']=='source_milestone_interval_collapsed']
+    assert len(collapsed)==1 and collapsed[0]['entity']=='uid:373'
+    assert collapsed[0]['source']['start']['value']=='2026-03-30T09:00'
+    assert collapsed[0]['source']['finish']['value']=='2026-04-22T18:00'
+    assert collapsed[0]['source']['duration']['quantity']['amount']=='0'
+    assert collapsed[0]['category']=='display_only'
+    assert evaluate(findings)['exit_code']==0
+    assert conversion['source_semantics']['tasks']==prepared.normalized_data['tasks']
     assert {f['entity'] for f in findings if f['code']=='unassigned_resource_source_display'} >= {'uid:441','uid:699','uid:700','uid:701'}

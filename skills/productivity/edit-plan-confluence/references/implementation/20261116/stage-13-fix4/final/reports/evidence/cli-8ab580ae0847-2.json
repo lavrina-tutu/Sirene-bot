@@ -1,0 +1,141 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]",
+  "observed_at": "2026-11-17T21:43:38.416979+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
+    "--db",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o3/state/index.sqlite",
+    "--workvault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o3/WorkVault",
+    "--cache-dir",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o3/cache",
+    "publish",
+    "--mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o3/D.mpp",
+    "--page-id",
+    "537576721",
+    "--project-slug",
+    "trisigma",
+    "--timezone-hint",
+    "Europe/Moscow"
+  ],
+  "rc": 0,
+  "duration_seconds": 13.356147853017319,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_c7ffd11f9279458393effb4069840df5\", \"item_id\": \"item_5de2374ef7f24c58b5b4ca7d0bd04299\", \"status\": \"unchanged\", \"mode\": \"publish\", \"exit_code\": 0, \"project_slug\": \"trisigma\", \"source\": {\"name\": \"D.mpp\", \"sha256\": \"82143e6516d425408136dcb07b38234638d4583d9184e75732a04b402c14e7f9\", \"size_bytes\": 544256}, \"snapshot_id\": \"snapshot_9432428947e24420ab9f610aeb43bd12\", \"page_id\": \"537576721\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537576721\", \"task_count\": 72, \"display_task_count\": 71, \"dependency_count\": 76, \"exceptions\": [], \"attachment_version\": 1, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"storage\": \"verified\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"source_milestone_interval_collapsed\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"uid:373\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"source_snapshot_dates\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 71, \"example_entities\": [\"uid:164\", \"uid:532\", \"uid:373\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_duration\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 34, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:494\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_finish\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 29, \"example_entities\": [\"uid:532\", \"uid:373\", \"uid:496\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_start\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 39, \"example_entities\": [\"uid:164\", \"uid:532\", \"uid:373\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_work\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 31, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:494\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:resume\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 39, \"example_entities\": [\"uid:164\", \"uid:532\", \"uid:373\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:stop\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 39, \"example_entities\": [\"uid:164\", \"uid:532\", \"uid:373\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"unassigned_resource_source_display\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 9, \"example_entities\": [\"uid:441\", \"uid:443\", \"uid:445\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_030ad6b7cefb4b4e98382438b6c5cfea\"]}}, \"published\": true, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"source_milestone_interval_collapsed\", \"message\": \"source_milestone_interval_collapsed: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"source_snapshot_dates\", \"message\": \"source_snapshot_dates: 71 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"task_actuals_display_only:actual_duration\", \"message\": \"task_actuals_display_only:actual_duration: 34 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"task_actuals_display_only:actual_finish\", \"message\": \"task_actuals_display_only:actual_finish: 29 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"task_actuals_display_only:actual_start\", \"message\": \"task_actuals_display_only:actual_start: 39 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"task_actuals_display_only:actual_work\", \"message\": \"task_actuals_display_only:actual_work: 31 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"task_actuals_display_only:resume\", \"message\": \"task_actuals_display_only:resume: 39 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"task_actuals_display_only:stop\", \"message\": \"task_actuals_display_only:stop: 39 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}, {\"code\": \"unassigned_resource_source_display\", \"message\": \"unassigned_resource_source_display: 9 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_030ad6b7cefb4b4e98382438b6c5cfea\"}], \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"external_effect\": \"none\", \"error\": null}\n",
+  "stderr": "",
+  "live": true,
+  "counters": {
+    "MPXJ_read": 0,
+    "cache_hit": 1,
+    "cache_miss": 0,
+    "POST": 0,
+    "PUT": 0,
+    "calls": [
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576722"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576721/gantt-chart-9308437aae79474eb4432d458ab3aefc.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576722"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576721/gantt-chart-9308437aae79474eb4432d458ab3aefc.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576722"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576721/gantt-chart-9308437aae79474eb4432d458ab3aefc.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576722"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576721/gantt-chart-9308437aae79474eb4432d458ab3aefc.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576722"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576721/gantt-chart-9308437aae79474eb4432d458ab3aefc.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721/child/attachment"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576722"
+      },
+      {
+        "method": "GET",
+        "path": "/download/attachments/537576721/gantt-chart-9308437aae79474eb4432d458ab3aefc.json"
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/content/537576721/child/attachment"
+      }
+    ]
+  }
+}

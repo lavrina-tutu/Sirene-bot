@@ -40,7 +40,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-5f4b84748683429e93ae0b5e62869bf3.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-520e8b914b15442d9e388ca62fddc10e.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -60,7 +60,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-5f4b84748683429e93ae0b5e62869bf3.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-520e8b914b15442d9e388ca62fddc10e.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -84,7 +84,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-5f4b84748683429e93ae0b5e62869bf3.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-520e8b914b15442d9e388ca62fddc10e.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -109,15 +109,15 @@
     "exceptions": [],
     "exit_code": 0,
     "external_effect": "storage_written",
-    "item_id": "item_efd97b74bfa34df0b6a652ec81d80201",
+    "item_id": "item_eca6425809e347b1aec859a4b15e93c1",
     "mode": "publish",
-    "operation_id": "operation_6bf3551ef4b5467182558e30fb96b6d1",
+    "operation_id": "operation_b3f60ab4eb314bf6a69a24277eb13c98",
     "page_id": "test-page",
     "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=test-page",
     "project_slug": "test",
     "published": true,
     "schema_version": 1,
-    "snapshot_id": "snapshot_a2c8bc39bfd24e40aed0dd5b20b285bd",
+    "snapshot_id": "snapshot_2cc9f161aeee43969d3429b64be394e1",
     "source": {
       "name": "synthetic-source.mpp",
       "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
@@ -154,7 +154,7 @@
           }
         ],
         "evidence_ids": [
-          "artifact_e9e3e5e09be042efad4f3e4f5ec96df7"
+          "artifact_84c380a696e449ca8cd2ce9e5813b507"
         ],
         "limitations": [
           "local_scheduler_not_run",
@@ -175,12 +175,12 @@
     "warnings": [
       {
         "code": "local_scheduler_prepared_unsupported",
-        "details_ref": "artifact:artifact_e9e3e5e09be042efad4f3e4f5ec96df7",
+        "details_ref": "artifact:artifact_84c380a696e449ca8cd2ce9e5813b507",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
-        "details_ref": "artifact:artifact_e9e3e5e09be042efad4f3e4f5ec96df7",
+        "details_ref": "artifact:artifact_84c380a696e449ca8cd2ce9e5813b507",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
       }
     ]

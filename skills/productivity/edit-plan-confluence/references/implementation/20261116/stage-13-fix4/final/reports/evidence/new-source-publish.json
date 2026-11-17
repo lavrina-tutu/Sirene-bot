@@ -1,12 +1,12 @@
 {
   "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
-  "observed_at": "2026-11-17T17:05:58.973270+00:00",
+  "observed_at": "2026-11-17T21:37:24.372483+00:00",
   "kind": "positive",
   "action": "publish",
   "anchor": {
     "schema_version": 1,
-    "operation_id": "operation_ce755f2e4bd649a4805356480afc58da",
-    "item_id": "item_4d39f65e16b6409ba48ab5f8c398fa96",
+    "operation_id": "operation_ab83e06a1e7642589a023bd8b00c8a71",
+    "item_id": "item_d1c82cc42c5d41d3ac32be42695aba7d",
     "status": "prepared",
     "mode": "publish",
     "exit_code": 0,
@@ -16,7 +16,7 @@
       "sha256": "7aea0277b7a3d08fc19d17a67529022f35cea0a35e5938110c1ab433c9a02b4b",
       "size_bytes": 180736
     },
-    "snapshot_id": "snapshot_cab3304005b14e2fb920282524f6ced2",
+    "snapshot_id": "snapshot_5ec1e794ce054794b5a8813f47fb7601",
     "page_id": null,
     "page_url": null,
     "task_count": 6,
@@ -80,7 +80,7 @@
           "plan_plugin_result_not_verified"
         ],
         "evidence_ids": [
-          "artifact_87fd3931069448b08a921f13805c21f0"
+          "artifact_773960273e6a45aaa440a1620cf0d8fa"
         ]
       }
     },
@@ -89,17 +89,17 @@
       {
         "code": "local_scheduler_prepared_unsupported",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_87fd3931069448b08a921f13805c21f0"
+        "details_ref": "artifact:artifact_773960273e6a45aaa440a1620cf0d8fa"
       },
       {
         "code": "source_snapshot_dates",
         "message": "source_snapshot_dates: 6 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_87fd3931069448b08a921f13805c21f0"
+        "details_ref": "artifact:artifact_773960273e6a45aaa440a1620cf0d8fa"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_87fd3931069448b08a921f13805c21f0"
+        "details_ref": "artifact:artifact_773960273e6a45aaa440a1620cf0d8fa"
       }
     ],
     "completed_stages": [
@@ -113,8 +113,8 @@
   },
   "first": {
     "schema_version": 1,
-    "operation_id": "operation_5dcee0ee87f141dd9ea0469a7d113184",
-    "item_id": "item_09f8b578b88e4fb2b5119a72f1f44382",
+    "operation_id": "operation_7c60cdef618541c2848165eff699206e",
+    "item_id": "item_452fcc8b27304771a25daa0b6e0afe4f",
     "status": "needs_decision",
     "mode": "publish",
     "exit_code": 3,
@@ -124,7 +124,7 @@
       "sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
       "size_bytes": 180736
     },
-    "snapshot_id": "snapshot_8e27530d7c41460dacc1f1cfc4d9d07e",
+    "snapshot_id": "snapshot_bbb24f35fd0b41f5a2c484690ada42c7",
     "page_id": null,
     "page_url": null,
     "task_count": 6,
@@ -135,7 +135,7 @@
         "rule_id": "new-source-publish",
         "revision": "binary-fixture-v1",
         "result": "inactive",
-        "evidence_id": "artifact_39398764e2cc44e9879f4c956b7e719c",
+        "evidence_id": "artifact_b4837058564148aebf1c56d7485508c4",
         "reason": "identity_confirmation_required",
         "owner_decision": null
       }
@@ -208,7 +208,7 @@
           "plan_plugin_result_not_verified"
         ],
         "evidence_ids": [
-          "artifact_bf5cd38e986d4b66a46f829b461b562f"
+          "artifact_cbfacb47a1ed4b2799d148e0d2b03ac1"
         ]
       }
     },
@@ -217,17 +217,17 @@
       {
         "code": "local_scheduler_prepared_unsupported",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_bf5cd38e986d4b66a46f829b461b562f"
+        "details_ref": "artifact:artifact_cbfacb47a1ed4b2799d148e0d2b03ac1"
       },
       {
         "code": "source_snapshot_dates",
         "message": "source_snapshot_dates: 6 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_bf5cd38e986d4b66a46f829b461b562f"
+        "details_ref": "artifact:artifact_cbfacb47a1ed4b2799d148e0d2b03ac1"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_bf5cd38e986d4b66a46f829b461b562f"
+        "details_ref": "artifact:artifact_cbfacb47a1ed4b2799d148e0d2b03ac1"
       }
     ],
     "completed_stages": [
@@ -240,33 +240,33 @@
       "code": "identity_confirmation_required",
       "message": "identity_confirmation_required",
       "retryable": false,
-      "next_action": "operation show --operation-id operation_5dcee0ee87f141dd9ea0469a7d113184"
+      "next_action": "operation show --operation-id operation_7c60cdef618541c2848165eff699206e"
     }
   },
   "operation_show": {
     "schema_version": 1,
     "action": "show_operation",
     "exit_code": 0,
-    "operation_id": "operation_5dcee0ee87f141dd9ea0469a7d113184",
-    "item_id": "item_09f8b578b88e4fb2b5119a72f1f44382",
+    "operation_id": "operation_7c60cdef618541c2848165eff699206e",
+    "item_id": "item_452fcc8b27304771a25daa0b6e0afe4f",
     "batch_id": null,
     "source_mpp_sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
-    "snapshot_id": "snapshot_8e27530d7c41460dacc1f1cfc4d9d07e",
+    "snapshot_id": "snapshot_bbb24f35fd0b41f5a2c484690ada42c7",
     "preparation_revision": 1,
     "preparations": [
       {
-        "operation_id": "operation_5dcee0ee87f141dd9ea0469a7d113184",
+        "operation_id": "operation_7c60cdef618541c2848165eff699206e",
         "revision": 1,
-        "snapshot_id": "snapshot_8e27530d7c41460dacc1f1cfc4d9d07e",
-        "prepared_artifact_id": "artifact_310a96d340594e4a86a2f7bbfd9f3faa",
-        "created_at": "2026-11-17T17:05:48+00:00",
+        "snapshot_id": "snapshot_bbb24f35fd0b41f5a2c484690ada42c7",
+        "prepared_artifact_id": "artifact_6c26b665618b41c7a1c346b3e687106a",
+        "created_at": "2026-11-17T21:37:11+00:00",
         "context": {
-          "fingerprint": "ac1f61378b84e38e2a8d85949e6be57e904682ab99ff8098eabd2cfe3897e2b0",
+          "fingerprint": "a7f6350183bf3f5f5e057ac27c9634e16b92ce1b7318e54544454cc60e91711c",
           "paths": {
-            "cache_dir": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
-            "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu1/state/index.sqlite",
+            "cache_dir": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
+            "db": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu1/state/index.sqlite",
             "mpp_reader": "/home/tkachenkoav/USERTOOLS/MppReader",
-            "workvault": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault"
+            "workvault": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault"
           },
           "profiles": {
             "NORMALIZATION_PROFILE": {
@@ -286,7 +286,7 @@
             }
           },
           "settings": {
-            "CACHE_DIR": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
+            "CACHE_DIR": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
             "CONFLUENCE_URL": "https://dom.tutu.ru",
             "HTTP_RETRY_LIMIT": 1,
             "HTTP_TIMEOUT_SECONDS": 120,
@@ -296,7 +296,7 @@
             "NORMALIZATION_PROFILE": "normalization-v1",
             "PLUGIN_PROFILE": "installed-gantt-profile",
             "SUMMARY_PROFILE": "summary-v1",
-            "WORKVAULT_PATH": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault",
+            "WORKVAULT_PATH": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault",
             "ZIP_MAX_BYTES": 67108864,
             "ZIP_MAX_ENTRIES": 128,
             "ZIP_MAX_RATIO": 100,
@@ -324,8 +324,8 @@
         "request": {
           "child": false,
           "drop_links": [],
-          "lineage_id": "lineage_be7ab7b36693420bb725ef75e3dcfd16",
-          "page_id": "537576413",
+          "lineage_id": "lineage_8da43467f89b4a8f99e99e7c721c6cf8",
+          "page_id": "537576709",
           "project_slug": "stage13-binary-positive",
           "publication_profiles": {
             "project-rules-v1.json": "2a3e01dd1896517e59a0f2c90a1797c4d29260d67125b57056598bfbb69b0714",
@@ -367,15 +367,15 @@
     "decisions": [],
     "identity_requirements": [
       {
-        "requirement_id": "identity_requirement_8281721892e0475784fc2f2ad356b882",
-        "operation_id": "operation_5dcee0ee87f141dd9ea0469a7d113184",
+        "requirement_id": "identity_requirement_24f675d4f3b84e8abeca3a40b5694c47",
+        "operation_id": "operation_7c60cdef618541c2848165eff699206e",
         "preparation_revision": 1,
-        "plan_id": "plan_91126043d9014eaa9a091cfe4e183a7f",
-        "from_snapshot_id": "snapshot_cab3304005b14e2fb920282524f6ced2",
-        "to_snapshot_id": "snapshot_8e27530d7c41460dacc1f1cfc4d9d07e",
+        "plan_id": "plan_8f210208313e4bf5a693143f6f51ba38",
+        "from_snapshot_id": "snapshot_5ec1e794ce054794b5a8813f47fb7601",
+        "to_snapshot_id": "snapshot_bbb24f35fd0b41f5a2c484690ada42c7",
         "rule_id": "new-source-publish",
         "rule_revision": "binary-fixture-v1",
-        "created_at": "2026-11-17T17:05:49+00:00",
+        "created_at": "2026-11-17T21:37:13+00:00",
         "required_entities": [
           {
             "entity_kind": "task",
@@ -396,13 +396,13 @@
         "scope": {
           "from_profile": "a22b622f83306016a9f82dd98f34995b6956eadf17de10d0101af877342c28ce",
           "from_representation": "mpp",
-          "from_snapshot_id": "snapshot_cab3304005b14e2fb920282524f6ced2",
+          "from_snapshot_id": "snapshot_5ec1e794ce054794b5a8813f47fb7601",
           "from_source_sha256": "7aea0277b7a3d08fc19d17a67529022f35cea0a35e5938110c1ab433c9a02b4b",
           "from_timezone": "Europe/Moscow",
-          "plan_id": "plan_91126043d9014eaa9a091cfe4e183a7f",
+          "plan_id": "plan_8f210208313e4bf5a693143f6f51ba38",
           "to_profile": "a22b622f83306016a9f82dd98f34995b6956eadf17de10d0101af877342c28ce",
           "to_representation": "mpp",
-          "to_snapshot_id": "snapshot_8e27530d7c41460dacc1f1cfc4d9d07e",
+          "to_snapshot_id": "snapshot_bbb24f35fd0b41f5a2c484690ada42c7",
           "to_source_sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
           "to_timezone": "Europe/Moscow"
         },
@@ -420,12 +420,12 @@
         "mapping_status": "unselected",
         "checks": [
           {
-            "check_id": "identity_check_d98a22c847f040749fcec328f8abc904",
-            "requirement_id": "identity_requirement_8281721892e0475784fc2f2ad356b882",
+            "check_id": "identity_check_2844e28915064b7aa54c20d98830c17a",
+            "requirement_id": "identity_requirement_24f675d4f3b84e8abeca3a40b5694c47",
             "mapping_revision_id": null,
             "result": "identity_confirmation_required",
             "detail_json": "[{\"entity_kind\":\"task\",\"from_key\":\"uid:1000\",\"to_key\":null},{\"entity_kind\":\"task\",\"from_key\":\"uid:2\",\"to_key\":null},{\"entity_kind\":\"task\",\"from_key\":\"uid:3\",\"to_key\":null}]",
-            "recorded_at": "2026-11-17T17:05:49+00:00"
+            "recorded_at": "2026-11-17T21:37:13+00:00"
           }
         ]
       }
@@ -916,52 +916,52 @@
     },
     "events": [
       {
-        "event_id": "event_ea45f352467c4bfdb0c143621d7d52ec",
-        "attempt_id": "attempt_9635190def874d918f65a3cff9d2bbeb",
+        "event_id": "event_bf3d4b0741394f0eaafe7113402246a7",
+        "attempt_id": "attempt_2ca01fdeffd14acfbf1e7c10bacdd235",
         "stage": "archive",
         "status": "confirmed",
-        "detail": "item_09f8b578b88e4fb2b5119a72f1f44382",
-        "created_at": "2026-11-17T17:05:45+00:00",
+        "detail": "item_452fcc8b27304771a25daa0b6e0afe4f",
+        "created_at": "2026-11-17T21:37:09+00:00",
         "event_kind": "attempt_started",
         "snapshot_id": null
       },
       {
-        "event_id": "event_65269911ce8243caa496925f13fd5824",
-        "attempt_id": "attempt_9635190def874d918f65a3cff9d2bbeb",
+        "event_id": "event_e8db049ab12a43c5a0ef85573c6adee3",
+        "attempt_id": "attempt_2ca01fdeffd14acfbf1e7c10bacdd235",
         "stage": "archive",
         "status": "confirmed",
-        "detail": "item_09f8b578b88e4fb2b5119a72f1f44382",
-        "created_at": "2026-11-17T17:05:45+00:00",
+        "detail": "item_452fcc8b27304771a25daa0b6e0afe4f",
+        "created_at": "2026-11-17T21:37:09+00:00",
         "event_kind": "input_frozen",
         "snapshot_id": null
       },
       {
-        "event_id": "event_347c979b283c4ef29b07815eae0893b4",
-        "attempt_id": "attempt_9635190def874d918f65a3cff9d2bbeb",
+        "event_id": "event_7a4adf590eaa4fdaaeec45d60fb87ac4",
+        "attempt_id": "attempt_2ca01fdeffd14acfbf1e7c10bacdd235",
         "stage": "archive",
         "status": "confirmed",
-        "detail": "{\"item_id\": \"item_09f8b578b88e4fb2b5119a72f1f44382\", \"source_mpp_sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"source_mtime_ns\": 1794935139940261446, \"basis\": \"source_file_mtime\"}",
-        "created_at": "2026-11-17T17:05:45+00:00",
+        "detail": "{\"item_id\": \"item_452fcc8b27304771a25daa0b6e0afe4f\", \"source_mpp_sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"source_mtime_ns\": 1794951422782901234, \"basis\": \"source_file_mtime\"}",
+        "created_at": "2026-11-17T21:37:09+00:00",
         "event_kind": "source_file_metadata",
         "snapshot_id": null
       },
       {
-        "event_id": "snapshot_committed:item_09f8b578b88e4fb2b5119a72f1f44382",
-        "attempt_id": "attempt_9635190def874d918f65a3cff9d2bbeb",
+        "event_id": "snapshot_committed:item_452fcc8b27304771a25daa0b6e0afe4f",
+        "attempt_id": "attempt_2ca01fdeffd14acfbf1e7c10bacdd235",
         "stage": "archive",
         "status": "confirmed",
-        "detail": "item_09f8b578b88e4fb2b5119a72f1f44382",
-        "created_at": "2026-11-17T17:05:48+00:00",
+        "detail": "item_452fcc8b27304771a25daa0b6e0afe4f",
+        "created_at": "2026-11-17T21:37:11+00:00",
         "event_kind": "snapshot_committed",
-        "snapshot_id": "snapshot_8e27530d7c41460dacc1f1cfc4d9d07e"
+        "snapshot_id": "snapshot_bbb24f35fd0b41f5a2c484690ada42c7"
       },
       {
-        "event_id": "event_c70dc81f8d544d9b990c9400819fce1a",
-        "attempt_id": "attempt_9635190def874d918f65a3cff9d2bbeb",
+        "event_id": "event_2dbc389414094faf8a1eec2761b01beb",
+        "attempt_id": "attempt_2ca01fdeffd14acfbf1e7c10bacdd235",
         "stage": "archive",
         "status": "confirmed",
-        "detail": "preparation_result_add233403afa4154af5a66c99532fc0f",
-        "created_at": "2026-11-17T17:05:49+00:00",
+        "detail": "preparation_result_54853035b04f4f06845f179d4efa5340",
+        "created_at": "2026-11-17T21:37:13+00:00",
         "event_kind": "publish_preparation",
         "snapshot_id": null
       }
@@ -978,7 +978,7 @@
     "calls": [
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413"
+        "path": "/rest/api/content/537576709"
       }
     ]
   },
@@ -989,21 +989,21 @@
     "status": "confirmed",
     "exit_code": 0,
     "project_slug": "stage13-binary-positive",
-    "from_snapshot_id": "snapshot_cab3304005b14e2fb920282524f6ced2",
-    "to_snapshot_id": "snapshot_8e27530d7c41460dacc1f1cfc4d9d07e",
+    "from_snapshot_id": "snapshot_5ec1e794ce054794b5a8813f47fb7601",
+    "to_snapshot_id": "snapshot_bbb24f35fd0b41f5a2c484690ada42c7",
     "from_source_sha256": "7aea0277b7a3d08fc19d17a67529022f35cea0a35e5938110c1ab433c9a02b4b",
     "to_source_sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
-    "mapping_revision_id": "mapping_eadeafd4e6be4a6098fabb40e9bcd702",
+    "mapping_revision_id": "mapping_3ebb452150eb4542b218eea2fd6e5c27",
     "revision_status": "active",
-    "evidence_id": "artifact_39398764e2cc44e9879f4c956b7e719c",
+    "evidence_id": "artifact_b4837058564148aebf1c56d7485508c4",
     "evidence_sha256": "99cd720acf36d9e4e0ff602a8ded67afabf1b34dc270ad69bfcedd08ebd4f9de",
     "published": false,
     "error": null
   },
   "resume": {
     "schema_version": 1,
-    "operation_id": "operation_5dcee0ee87f141dd9ea0469a7d113184",
-    "item_id": "item_09f8b578b88e4fb2b5119a72f1f44382",
+    "operation_id": "operation_7c60cdef618541c2848165eff699206e",
+    "item_id": "item_452fcc8b27304771a25daa0b6e0afe4f",
     "status": "published_with_warnings",
     "mode": "publish",
     "exit_code": 0,
@@ -1013,9 +1013,9 @@
       "sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
       "size_bytes": 180736
     },
-    "snapshot_id": "snapshot_8e27530d7c41460dacc1f1cfc4d9d07e",
-    "page_id": "537576413",
-    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576413",
+    "snapshot_id": "snapshot_bbb24f35fd0b41f5a2c484690ada42c7",
+    "page_id": "537576709",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576709",
     "task_count": 6,
     "display_task_count": 6,
     "dependency_count": 4,
@@ -1024,7 +1024,7 @@
         "rule_id": "new-source-publish",
         "revision": "binary-fixture-v1",
         "result": "applied",
-        "evidence_id": "artifact_39398764e2cc44e9879f4c956b7e719c",
+        "evidence_id": "artifact_b4837058564148aebf1c56d7485508c4",
         "reason": "historical_consent_and_current_cause_verified",
         "owner_decision": null
       }
@@ -1086,7 +1086,7 @@
           "plan_plugin_result_not_verified"
         ],
         "evidence_ids": [
-          "artifact_f49aa5015cb149669c6df2ff0e6498ea"
+          "artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67"
         ]
       }
     },
@@ -1095,17 +1095,17 @@
       {
         "code": "local_scheduler_prepared_unsupported",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_f49aa5015cb149669c6df2ff0e6498ea"
+        "details_ref": "artifact:artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67"
       },
       {
         "code": "source_snapshot_dates",
         "message": "source_snapshot_dates: 6 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_f49aa5015cb149669c6df2ff0e6498ea"
+        "details_ref": "artifact:artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_f49aa5015cb149669c6df2ff0e6498ea"
+        "details_ref": "artifact:artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67"
       }
     ],
     "completed_stages": [
@@ -1130,83 +1130,83 @@
     "calls": [
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413"
+        "path": "/rest/api/content/537576709"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413"
+        "path": "/rest/api/content/537576709"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413"
+        "path": "/rest/api/content/537576709"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       },
       {
         "method": "POST",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576414"
+        "path": "/rest/api/content/537576710"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576413/gantt-chart-cec13229217543e1827ff15c5be6e583.json"
+        "path": "/download/attachments/537576709/gantt-chart-dc468e77a046470ba61bed2d13c2e1c7.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413"
+        "path": "/rest/api/content/537576709"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576414"
+        "path": "/rest/api/content/537576710"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576413/gantt-chart-cec13229217543e1827ff15c5be6e583.json"
+        "path": "/download/attachments/537576709/gantt-chart-dc468e77a046470ba61bed2d13c2e1c7.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       },
       {
         "method": "PUT",
-        "path": "/rest/api/content/537576413"
+        "path": "/rest/api/content/537576709"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413"
+        "path": "/rest/api/content/537576709"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576414"
+        "path": "/rest/api/content/537576710"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576413/gantt-chart-cec13229217543e1827ff15c5be6e583.json"
+        "path": "/download/attachments/537576709/gantt-chart-dc468e77a046470ba61bed2d13c2e1c7.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       }
     ]
   },
@@ -1228,7 +1228,7 @@
     "error": null,
     "exceptions": [
       {
-        "evidence_id": "artifact_39398764e2cc44e9879f4c956b7e719c",
+        "evidence_id": "artifact_b4837058564148aebf1c56d7485508c4",
         "owner_decision": null,
         "reason": "historical_consent_and_current_cause_verified",
         "result": "applied",
@@ -1238,15 +1238,15 @@
     ],
     "exit_code": 0,
     "external_effect": "none",
-    "item_id": "item_09f8b578b88e4fb2b5119a72f1f44382",
+    "item_id": "item_452fcc8b27304771a25daa0b6e0afe4f",
     "mode": "publish",
-    "operation_id": "operation_5dcee0ee87f141dd9ea0469a7d113184",
-    "page_id": "537576413",
-    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576413",
+    "operation_id": "operation_7c60cdef618541c2848165eff699206e",
+    "page_id": "537576709",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576709",
     "project_slug": "stage13-binary-positive",
     "published": true,
     "schema_version": 1,
-    "snapshot_id": "snapshot_8e27530d7c41460dacc1f1cfc4d9d07e",
+    "snapshot_id": "snapshot_bbb24f35fd0b41f5a2c484690ada42c7",
     "source": {
       "name": "new-binary.mpp",
       "sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
@@ -1296,7 +1296,7 @@
           }
         ],
         "evidence_ids": [
-          "artifact_f49aa5015cb149669c6df2ff0e6498ea"
+          "artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67"
         ],
         "limitations": [
           "local_scheduler_not_run",
@@ -1317,17 +1317,17 @@
     "warnings": [
       {
         "code": "local_scheduler_prepared_unsupported",
-        "details_ref": "artifact:artifact_f49aa5015cb149669c6df2ff0e6498ea",
+        "details_ref": "artifact:artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
       },
       {
         "code": "source_snapshot_dates",
-        "details_ref": "artifact:artifact_f49aa5015cb149669c6df2ff0e6498ea",
+        "details_ref": "artifact:artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67",
         "message": "source_snapshot_dates: 6 проверок; подробности в свидетельстве"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
-        "details_ref": "artifact:artifact_f49aa5015cb149669c6df2ff0e6498ea",
+        "details_ref": "artifact:artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
       }
     ]
@@ -1341,23 +1341,23 @@
     "calls": [
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413"
+        "path": "/rest/api/content/537576709"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576414"
+        "path": "/rest/api/content/537576710"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576413/gantt-chart-cec13229217543e1827ff15c5be6e583.json"
+        "path": "/download/attachments/537576709/gantt-chart-dc468e77a046470ba61bed2d13c2e1c7.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       }
     ]
   }

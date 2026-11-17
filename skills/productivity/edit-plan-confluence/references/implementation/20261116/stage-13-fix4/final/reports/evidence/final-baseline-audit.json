@@ -1,604 +1,604 @@
 {
   "test_id": "acceptance/test_user_journeys.py::test_final_baseline_audit",
-  "observed_at": "2026-11-17T17:00:14.925727+00:00",
+  "observed_at": "2026-11-17T21:30:52.655401+00:00",
   "observations": [
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/G-continue-first.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/G-continue-first.json",
       "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[continue]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3775003e32a740f6a7cdf6fbacb34756','plan_b09750b69036459d81556aa75f898edf','snapshot_6f8a75ad08ff40afa30dc80eee770a24',0,1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_834d56349bf04f09837ee62d94bcc902','plan_a418d304e89f497cb0e6025014021a00','snapshot_8c301e0deca14b559e19fa9a54db15fd',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_62d5e4120e184195b7c9dca0356ad511','lineage_77dbd39f9b8541d68d5edecaf100df2f','snapshot_6f8a75ad08ff40afa30dc80eee770a24',1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_9e2b2a4c35234ed4b547b129136ee520','lineage_1d849db3ed44482b867607b84af9b2ca','snapshot_8c301e0deca14b559e19fa9a54db15fd',1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3775003e32a740f6a7cdf6fbacb34756','plan_b09750b69036459d81556aa75f898edf','snapshot_6f8a75ad08ff40afa30dc80eee770a24',0,1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_834d56349bf04f09837ee62d94bcc902','plan_a418d304e89f497cb0e6025014021a00','snapshot_8c301e0deca14b559e19fa9a54db15fd',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_62d5e4120e184195b7c9dca0356ad511','lineage_77dbd39f9b8541d68d5edecaf100df2f','snapshot_6f8a75ad08ff40afa30dc80eee770a24',1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_9e2b2a4c35234ed4b547b129136ee520','lineage_1d849db3ed44482b867607b84af9b2ca','snapshot_8c301e0deca14b559e19fa9a54db15fd',1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/EF-batch.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/EF-batch.json",
       "test_id": "acceptance/test_user_journeys.py::test_real_ef_batch_and_exact_compare",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f10ac86abd9a4af6bee93e7b983ebf29','plan_6d41707ec8044f84b8b761e93bf97633','snapshot_bcf62af271b74cc9945d4239400d832f',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3fe8073aeac84cdb9731c53681aa53a2','plan_fcce226f57084c2ea1d442df0b0ecd4f','snapshot_06b64379baa24142bcf29afaf7cff3b4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:27:07+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3a37c1b700042fab1307ee2119b015c','lineage_bffa5be9e9a9486ba7a5c6c717c3223d','snapshot_bcf62af271b74cc9945d4239400d832f',1,'test owner before acceptance',NULL,'2026-11-17T16:56:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_b043bf1d597947649f5d91ed9ff8d5ac','lineage_6695fe7ffddc4b66804bd5c6023658c8','snapshot_06b64379baa24142bcf29afaf7cff3b4',1,'test owner before acceptance',NULL,'2026-11-17T21:27:07+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f10ac86abd9a4af6bee93e7b983ebf29','plan_6d41707ec8044f84b8b761e93bf97633','snapshot_bcf62af271b74cc9945d4239400d832f',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3fe8073aeac84cdb9731c53681aa53a2','plan_fcce226f57084c2ea1d442df0b0ecd4f','snapshot_06b64379baa24142bcf29afaf7cff3b4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:27:07+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3a37c1b700042fab1307ee2119b015c','lineage_bffa5be9e9a9486ba7a5c6c717c3223d','snapshot_bcf62af271b74cc9945d4239400d832f',1,'test owner before acceptance',NULL,'2026-11-17T16:56:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_b043bf1d597947649f5d91ed9ff8d5ac','lineage_6695fe7ffddc4b66804bd5c6023658c8','snapshot_06b64379baa24142bcf29afaf7cff3b4',1,'test owner before acceptance',NULL,'2026-11-17T21:27:07+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-A-cold.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-A-cold.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[A]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_61e9c345faaa4cb987872402c2a8bea5','plan_87d14615f19b4167a2684615dd0584a3','snapshot_882f196fe28645b989365260b330bbaf',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_abf37165ba004fa8aff8408460cf6772','plan_634747671d924754a0689a9e05e44050','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3d1601d76ca542ecbed25b294f7e6ba4','lineage_1e700abf67e744b1925fc2a28edba4a8','snapshot_882f196fe28645b989365260b330bbaf',1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7341e04f7fad45118f825d2aacd30ab0','lineage_4c042288ae144f17a30e054316d74d81','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_61e9c345faaa4cb987872402c2a8bea5','plan_87d14615f19b4167a2684615dd0584a3','snapshot_882f196fe28645b989365260b330bbaf',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_abf37165ba004fa8aff8408460cf6772','plan_634747671d924754a0689a9e05e44050','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3d1601d76ca542ecbed25b294f7e6ba4','lineage_1e700abf67e744b1925fc2a28edba4a8','snapshot_882f196fe28645b989365260b330bbaf',1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7341e04f7fad45118f825d2aacd30ab0','lineage_4c042288ae144f17a30e054316d74d81','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-A-warm.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-A-warm.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[A]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_61e9c345faaa4cb987872402c2a8bea5','plan_87d14615f19b4167a2684615dd0584a3','snapshot_882f196fe28645b989365260b330bbaf',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_abf37165ba004fa8aff8408460cf6772','plan_634747671d924754a0689a9e05e44050','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3d1601d76ca542ecbed25b294f7e6ba4','lineage_1e700abf67e744b1925fc2a28edba4a8','snapshot_882f196fe28645b989365260b330bbaf',1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7341e04f7fad45118f825d2aacd30ab0','lineage_4c042288ae144f17a30e054316d74d81','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_61e9c345faaa4cb987872402c2a8bea5','plan_87d14615f19b4167a2684615dd0584a3','snapshot_882f196fe28645b989365260b330bbaf',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_abf37165ba004fa8aff8408460cf6772','plan_634747671d924754a0689a9e05e44050','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3d1601d76ca542ecbed25b294f7e6ba4','lineage_1e700abf67e744b1925fc2a28edba4a8','snapshot_882f196fe28645b989365260b330bbaf',1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7341e04f7fad45118f825d2aacd30ab0','lineage_4c042288ae144f17a30e054316d74d81','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/G-continue-resume.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/G-continue-resume.json",
       "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[continue]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3775003e32a740f6a7cdf6fbacb34756','plan_b09750b69036459d81556aa75f898edf','snapshot_6f8a75ad08ff40afa30dc80eee770a24',0,1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_834d56349bf04f09837ee62d94bcc902','plan_a418d304e89f497cb0e6025014021a00','snapshot_8c301e0deca14b559e19fa9a54db15fd',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_62d5e4120e184195b7c9dca0356ad511','lineage_77dbd39f9b8541d68d5edecaf100df2f','snapshot_6f8a75ad08ff40afa30dc80eee770a24',1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_9e2b2a4c35234ed4b547b129136ee520','lineage_1d849db3ed44482b867607b84af9b2ca','snapshot_8c301e0deca14b559e19fa9a54db15fd',1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3775003e32a740f6a7cdf6fbacb34756','plan_b09750b69036459d81556aa75f898edf','snapshot_6f8a75ad08ff40afa30dc80eee770a24',0,1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_834d56349bf04f09837ee62d94bcc902','plan_a418d304e89f497cb0e6025014021a00','snapshot_8c301e0deca14b559e19fa9a54db15fd',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_62d5e4120e184195b7c9dca0356ad511','lineage_77dbd39f9b8541d68d5edecaf100df2f','snapshot_6f8a75ad08ff40afa30dc80eee770a24',1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_9e2b2a4c35234ed4b547b129136ee520','lineage_1d849db3ed44482b867607b84af9b2ca','snapshot_8c301e0deca14b559e19fa9a54db15fd',1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-8296694d0a3a.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-8296694d0a3a.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[A]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_61e9c345faaa4cb987872402c2a8bea5','plan_87d14615f19b4167a2684615dd0584a3','snapshot_882f196fe28645b989365260b330bbaf',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_abf37165ba004fa8aff8408460cf6772','plan_634747671d924754a0689a9e05e44050','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3d1601d76ca542ecbed25b294f7e6ba4','lineage_1e700abf67e744b1925fc2a28edba4a8','snapshot_882f196fe28645b989365260b330bbaf',1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7341e04f7fad45118f825d2aacd30ab0','lineage_4c042288ae144f17a30e054316d74d81','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_61e9c345faaa4cb987872402c2a8bea5','plan_87d14615f19b4167a2684615dd0584a3','snapshot_882f196fe28645b989365260b330bbaf',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_abf37165ba004fa8aff8408460cf6772','plan_634747671d924754a0689a9e05e44050','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3d1601d76ca542ecbed25b294f7e6ba4','lineage_1e700abf67e744b1925fc2a28edba4a8','snapshot_882f196fe28645b989365260b330bbaf',1,'test owner before acceptance',NULL,'2026-11-17T16:49:04+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_7341e04f7fad45118f825d2aacd30ab0','lineage_4c042288ae144f17a30e054316d74d81','snapshot_34f954b95fea4c5aaeceac3ad09a7eeb',1,'test owner before acceptance',NULL,'2026-11-17T21:19:35+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-B-cold.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-B-cold.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[B]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3f5feb494066486cadd6f78c14938a3c','plan_cd28a28a104f4ff88a5cb365220738e4','snapshot_f584f3702579437b9ffcfa00f7303a22',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_6080ae980ceb4f689e0505fbff189db1','plan_4e23e7f0e1f74632beb217c5f566922b','snapshot_1591000406f748d28b140a0aa862a960',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e154b469496e4ed3baa0e98228d0b308','lineage_daa74ddad64b43548b3d9e39d92be537','snapshot_f584f3702579437b9ffcfa00f7303a22',1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db21ef9dfb2740328535322c0a21636c','lineage_b7eb2d39343b4c2faf852db8da221237','snapshot_1591000406f748d28b140a0aa862a960',1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3f5feb494066486cadd6f78c14938a3c','plan_cd28a28a104f4ff88a5cb365220738e4','snapshot_f584f3702579437b9ffcfa00f7303a22',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_6080ae980ceb4f689e0505fbff189db1','plan_4e23e7f0e1f74632beb217c5f566922b','snapshot_1591000406f748d28b140a0aa862a960',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e154b469496e4ed3baa0e98228d0b308','lineage_daa74ddad64b43548b3d9e39d92be537','snapshot_f584f3702579437b9ffcfa00f7303a22',1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db21ef9dfb2740328535322c0a21636c','lineage_b7eb2d39343b4c2faf852db8da221237','snapshot_1591000406f748d28b140a0aa862a960',1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-1145316684dd.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-1145316684dd.json",
       "test_id": "acceptance/test_user_journeys.py::test_real_ef_batch_and_exact_compare",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f10ac86abd9a4af6bee93e7b983ebf29','plan_6d41707ec8044f84b8b761e93bf97633','snapshot_bcf62af271b74cc9945d4239400d832f',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3fe8073aeac84cdb9731c53681aa53a2','plan_fcce226f57084c2ea1d442df0b0ecd4f','snapshot_06b64379baa24142bcf29afaf7cff3b4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:27:07+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3a37c1b700042fab1307ee2119b015c','lineage_bffa5be9e9a9486ba7a5c6c717c3223d','snapshot_bcf62af271b74cc9945d4239400d832f',1,'test owner before acceptance',NULL,'2026-11-17T16:56:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_b043bf1d597947649f5d91ed9ff8d5ac','lineage_6695fe7ffddc4b66804bd5c6023658c8','snapshot_06b64379baa24142bcf29afaf7cff3b4',1,'test owner before acceptance',NULL,'2026-11-17T21:27:07+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f10ac86abd9a4af6bee93e7b983ebf29','plan_6d41707ec8044f84b8b761e93bf97633','snapshot_bcf62af271b74cc9945d4239400d832f',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3fe8073aeac84cdb9731c53681aa53a2','plan_fcce226f57084c2ea1d442df0b0ecd4f','snapshot_06b64379baa24142bcf29afaf7cff3b4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:27:07+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_f3a37c1b700042fab1307ee2119b015c','lineage_bffa5be9e9a9486ba7a5c6c717c3223d','snapshot_bcf62af271b74cc9945d4239400d832f',1,'test owner before acceptance',NULL,'2026-11-17T16:56:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_b043bf1d597947649f5d91ed9ff8d5ac','lineage_6695fe7ffddc4b66804bd5c6023658c8','snapshot_06b64379baa24142bcf29afaf7cff3b4',1,'test owner before acceptance',NULL,'2026-11-17T21:27:07+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-B-warm.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-B-warm.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[B]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3f5feb494066486cadd6f78c14938a3c','plan_cd28a28a104f4ff88a5cb365220738e4','snapshot_f584f3702579437b9ffcfa00f7303a22',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_6080ae980ceb4f689e0505fbff189db1','plan_4e23e7f0e1f74632beb217c5f566922b','snapshot_1591000406f748d28b140a0aa862a960',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e154b469496e4ed3baa0e98228d0b308','lineage_daa74ddad64b43548b3d9e39d92be537','snapshot_f584f3702579437b9ffcfa00f7303a22',1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db21ef9dfb2740328535322c0a21636c','lineage_b7eb2d39343b4c2faf852db8da221237','snapshot_1591000406f748d28b140a0aa862a960',1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3f5feb494066486cadd6f78c14938a3c','plan_cd28a28a104f4ff88a5cb365220738e4','snapshot_f584f3702579437b9ffcfa00f7303a22',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_6080ae980ceb4f689e0505fbff189db1','plan_4e23e7f0e1f74632beb217c5f566922b','snapshot_1591000406f748d28b140a0aa862a960',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e154b469496e4ed3baa0e98228d0b308','lineage_daa74ddad64b43548b3d9e39d92be537','snapshot_f584f3702579437b9ffcfa00f7303a22',1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db21ef9dfb2740328535322c0a21636c','lineage_b7eb2d39343b4c2faf852db8da221237','snapshot_1591000406f748d28b140a0aa862a960',1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-0094acafda42.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-0094acafda42.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[B]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3f5feb494066486cadd6f78c14938a3c','plan_cd28a28a104f4ff88a5cb365220738e4','snapshot_f584f3702579437b9ffcfa00f7303a22',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_6080ae980ceb4f689e0505fbff189db1','plan_4e23e7f0e1f74632beb217c5f566922b','snapshot_1591000406f748d28b140a0aa862a960',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e154b469496e4ed3baa0e98228d0b308','lineage_daa74ddad64b43548b3d9e39d92be537','snapshot_f584f3702579437b9ffcfa00f7303a22',1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db21ef9dfb2740328535322c0a21636c','lineage_b7eb2d39343b4c2faf852db8da221237','snapshot_1591000406f748d28b140a0aa862a960',1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3f5feb494066486cadd6f78c14938a3c','plan_cd28a28a104f4ff88a5cb365220738e4','snapshot_f584f3702579437b9ffcfa00f7303a22',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_6080ae980ceb4f689e0505fbff189db1','plan_4e23e7f0e1f74632beb217c5f566922b','snapshot_1591000406f748d28b140a0aa862a960',0,1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_e154b469496e4ed3baa0e98228d0b308','lineage_daa74ddad64b43548b3d9e39d92be537','snapshot_f584f3702579437b9ffcfa00f7303a22',1,'test owner before acceptance',NULL,'2026-11-17T16:49:17+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db21ef9dfb2740328535322c0a21636c','lineage_b7eb2d39343b4c2faf852db8da221237','snapshot_1591000406f748d28b140a0aa862a960',1,'test owner before acceptance',NULL,'2026-11-17T21:19:48+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-C-cold.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-C-cold.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[C]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-d10a8ce76211.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-d10a8ce76211.json",
       "test_id": "acceptance/test_user_journeys.py::test_today_cli_local_boundaries",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_523790a5cedd41f5ada36cd03b975f58','plan_7d4108e6a40e443dad3761c52a797734','snapshot_937502248bfd42178178953737bdbb8c',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:47+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0508ef62654d4809a609fe972a2089af','plan_5f46938286124bc89ad11897664d24a7','snapshot_1a7b5b3f141f4e3b86a20b82e25a0f63',0,1,'test owner before acceptance',NULL,'2026-11-17T21:27:26+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fbb2722ae99048509f4b26e26b3ff5cd','lineage_f7cbb9c0beda49e38b96feddd465eb21','snapshot_937502248bfd42178178953737bdbb8c',1,'test owner before acceptance',NULL,'2026-11-17T16:56:47+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_0acd62fef00e4ae5bc8f11895154bba2','lineage_837f87ea1b8d48cb8bc043c0fa0b5f0c','snapshot_1a7b5b3f141f4e3b86a20b82e25a0f63',1,'test owner before acceptance',NULL,'2026-11-17T21:27:26+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_523790a5cedd41f5ada36cd03b975f58','plan_7d4108e6a40e443dad3761c52a797734','snapshot_937502248bfd42178178953737bdbb8c',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:47+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0508ef62654d4809a609fe972a2089af','plan_5f46938286124bc89ad11897664d24a7','snapshot_1a7b5b3f141f4e3b86a20b82e25a0f63',0,1,'test owner before acceptance',NULL,'2026-11-17T21:27:26+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fbb2722ae99048509f4b26e26b3ff5cd','lineage_f7cbb9c0beda49e38b96feddd465eb21','snapshot_937502248bfd42178178953737bdbb8c',1,'test owner before acceptance',NULL,'2026-11-17T16:56:47+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_0acd62fef00e4ae5bc8f11895154bba2','lineage_837f87ea1b8d48cb8bc043c0fa0b5f0c','snapshot_1a7b5b3f141f4e3b86a20b82e25a0f63',1,'test owner before acceptance',NULL,'2026-11-17T21:27:26+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-C-warm.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-C-warm.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[C]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-166c0e53f169.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-166c0e53f169.json",
       "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[continue]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3775003e32a740f6a7cdf6fbacb34756','plan_b09750b69036459d81556aa75f898edf','snapshot_6f8a75ad08ff40afa30dc80eee770a24',0,1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_834d56349bf04f09837ee62d94bcc902','plan_a418d304e89f497cb0e6025014021a00','snapshot_8c301e0deca14b559e19fa9a54db15fd',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_62d5e4120e184195b7c9dca0356ad511','lineage_77dbd39f9b8541d68d5edecaf100df2f','snapshot_6f8a75ad08ff40afa30dc80eee770a24',1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_9e2b2a4c35234ed4b547b129136ee520','lineage_1d849db3ed44482b867607b84af9b2ca','snapshot_8c301e0deca14b559e19fa9a54db15fd',1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3775003e32a740f6a7cdf6fbacb34756','plan_b09750b69036459d81556aa75f898edf','snapshot_6f8a75ad08ff40afa30dc80eee770a24',0,1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_834d56349bf04f09837ee62d94bcc902','plan_a418d304e89f497cb0e6025014021a00','snapshot_8c301e0deca14b559e19fa9a54db15fd',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_62d5e4120e184195b7c9dca0356ad511','lineage_77dbd39f9b8541d68d5edecaf100df2f','snapshot_6f8a75ad08ff40afa30dc80eee770a24',1,'test owner before acceptance',NULL,'2026-11-17T16:55:51+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_9e2b2a4c35234ed4b547b129136ee520','lineage_1d849db3ed44482b867607b84af9b2ca','snapshot_8c301e0deca14b559e19fa9a54db15fd',1,'test owner before acceptance',NULL,'2026-11-17T21:26:28+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-21b40040b7fe.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-21b40040b7fe.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[C]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-D-risks-cold.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-D-risks-cold.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D-risks]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_d288c51c1aff440d8b2c08e58f8b0ae0','plan_e9bdb27a981743c393105626f67480dd','snapshot_754e5ee015e143b6baa597988b5575c5',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a279e32b210845faa0a0c63d26c771fd','plan_738170781ac8423597f5c937dfd88689','snapshot_20e4c8acadb9400eb13abf45d74b714d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fe5d7d34ebfc4b82ad8a70d2012f06f0','lineage_ad830e6a6a574c37ad344bc48030d75b','snapshot_754e5ee015e143b6baa597988b5575c5',1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_a818681f7d6f43f1831ab4a5d855e5f2','lineage_306a47b7a97e46f69a90295e710b3339','snapshot_20e4c8acadb9400eb13abf45d74b714d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_d288c51c1aff440d8b2c08e58f8b0ae0','plan_e9bdb27a981743c393105626f67480dd','snapshot_754e5ee015e143b6baa597988b5575c5',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a279e32b210845faa0a0c63d26c771fd','plan_738170781ac8423597f5c937dfd88689','snapshot_20e4c8acadb9400eb13abf45d74b714d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fe5d7d34ebfc4b82ad8a70d2012f06f0','lineage_ad830e6a6a574c37ad344bc48030d75b','snapshot_754e5ee015e143b6baa597988b5575c5',1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_a818681f7d6f43f1831ab4a5d855e5f2','lineage_306a47b7a97e46f69a90295e710b3339','snapshot_20e4c8acadb9400eb13abf45d74b714d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-D-risks-warm.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-D-risks-warm.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D-risks]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_d288c51c1aff440d8b2c08e58f8b0ae0','plan_e9bdb27a981743c393105626f67480dd','snapshot_754e5ee015e143b6baa597988b5575c5',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a279e32b210845faa0a0c63d26c771fd','plan_738170781ac8423597f5c937dfd88689','snapshot_20e4c8acadb9400eb13abf45d74b714d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fe5d7d34ebfc4b82ad8a70d2012f06f0','lineage_ad830e6a6a574c37ad344bc48030d75b','snapshot_754e5ee015e143b6baa597988b5575c5',1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_a818681f7d6f43f1831ab4a5d855e5f2','lineage_306a47b7a97e46f69a90295e710b3339','snapshot_20e4c8acadb9400eb13abf45d74b714d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_d288c51c1aff440d8b2c08e58f8b0ae0','plan_e9bdb27a981743c393105626f67480dd','snapshot_754e5ee015e143b6baa597988b5575c5',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a279e32b210845faa0a0c63d26c771fd','plan_738170781ac8423597f5c937dfd88689','snapshot_20e4c8acadb9400eb13abf45d74b714d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fe5d7d34ebfc4b82ad8a70d2012f06f0','lineage_ad830e6a6a574c37ad344bc48030d75b','snapshot_754e5ee015e143b6baa597988b5575c5',1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_a818681f7d6f43f1831ab4a5d855e5f2','lineage_306a47b7a97e46f69a90295e710b3339','snapshot_20e4c8acadb9400eb13abf45d74b714d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-0e35e0a93717.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-0e35e0a93717.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D-risks]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_d288c51c1aff440d8b2c08e58f8b0ae0','plan_e9bdb27a981743c393105626f67480dd','snapshot_754e5ee015e143b6baa597988b5575c5',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a279e32b210845faa0a0c63d26c771fd','plan_738170781ac8423597f5c937dfd88689','snapshot_20e4c8acadb9400eb13abf45d74b714d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fe5d7d34ebfc4b82ad8a70d2012f06f0','lineage_ad830e6a6a574c37ad344bc48030d75b','snapshot_754e5ee015e143b6baa597988b5575c5',1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_a818681f7d6f43f1831ab4a5d855e5f2','lineage_306a47b7a97e46f69a90295e710b3339','snapshot_20e4c8acadb9400eb13abf45d74b714d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_d288c51c1aff440d8b2c08e58f8b0ae0','plan_e9bdb27a981743c393105626f67480dd','snapshot_754e5ee015e143b6baa597988b5575c5',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a279e32b210845faa0a0c63d26c771fd','plan_738170781ac8423597f5c937dfd88689','snapshot_20e4c8acadb9400eb13abf45d74b714d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_fe5d7d34ebfc4b82ad8a70d2012f06f0','lineage_ad830e6a6a574c37ad344bc48030d75b','snapshot_754e5ee015e143b6baa597988b5575c5',1,'test owner before acceptance',NULL,'2026-11-17T16:49:43+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_a818681f7d6f43f1831ab4a5d855e5f2','lineage_306a47b7a97e46f69a90295e710b3339','snapshot_20e4c8acadb9400eb13abf45d74b714d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:14+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-D-cold.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-D-cold.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3ba07b9fe5ef44e9a4cb1a570955e317','plan_3c6c82f09dea47fa9e27dbec3a19d54a','snapshot_40344ae474b345dab28f81d3c78d7f5b',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_cbf96a2574c748febda1b0b8f2e7f692','plan_dc92ac499bcc45cf8a8ab038e65284d8','snapshot_e4561730d884474f8b97ce584b0351d4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c8dc15e6758d4c62bb7df216a1381212','lineage_343e1933ebe94fd2980e0a773908b97c','snapshot_40344ae474b345dab28f81d3c78d7f5b',1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2067e55f0e084238875f534346dacab2','lineage_807b86194613484db15ec2df5a525e28','snapshot_e4561730d884474f8b97ce584b0351d4',1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3ba07b9fe5ef44e9a4cb1a570955e317','plan_3c6c82f09dea47fa9e27dbec3a19d54a','snapshot_40344ae474b345dab28f81d3c78d7f5b',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_cbf96a2574c748febda1b0b8f2e7f692','plan_dc92ac499bcc45cf8a8ab038e65284d8','snapshot_e4561730d884474f8b97ce584b0351d4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c8dc15e6758d4c62bb7df216a1381212','lineage_343e1933ebe94fd2980e0a773908b97c','snapshot_40344ae474b345dab28f81d3c78d7f5b',1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2067e55f0e084238875f534346dacab2','lineage_807b86194613484db15ec2df5a525e28','snapshot_e4561730d884474f8b97ce584b0351d4',1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-D-warm.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-D-warm.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3ba07b9fe5ef44e9a4cb1a570955e317','plan_3c6c82f09dea47fa9e27dbec3a19d54a','snapshot_40344ae474b345dab28f81d3c78d7f5b',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_cbf96a2574c748febda1b0b8f2e7f692','plan_dc92ac499bcc45cf8a8ab038e65284d8','snapshot_e4561730d884474f8b97ce584b0351d4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c8dc15e6758d4c62bb7df216a1381212','lineage_343e1933ebe94fd2980e0a773908b97c','snapshot_40344ae474b345dab28f81d3c78d7f5b',1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2067e55f0e084238875f534346dacab2','lineage_807b86194613484db15ec2df5a525e28','snapshot_e4561730d884474f8b97ce584b0351d4',1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3ba07b9fe5ef44e9a4cb1a570955e317','plan_3c6c82f09dea47fa9e27dbec3a19d54a','snapshot_40344ae474b345dab28f81d3c78d7f5b',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_cbf96a2574c748febda1b0b8f2e7f692','plan_dc92ac499bcc45cf8a8ab038e65284d8','snapshot_e4561730d884474f8b97ce584b0351d4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c8dc15e6758d4c62bb7df216a1381212','lineage_343e1933ebe94fd2980e0a773908b97c','snapshot_40344ae474b345dab28f81d3c78d7f5b',1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2067e55f0e084238875f534346dacab2','lineage_807b86194613484db15ec2df5a525e28','snapshot_e4561730d884474f8b97ce584b0351d4',1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-f2f687e667c9.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-f2f687e667c9.json",
       "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0aeac7bfa64c4ea2bb0cc15f15d941bb','plan_e3f796cfae02421e8e871e1e72964c9c','snapshot_41baa533dca74d60b19d8496aed992a7',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_894b1f6c9b714ad984cdaab1be82a2a1','plan_e5e91228acae4ce1a8592623b5fc22d3','snapshot_aec8c18de12944d69e0dc960efd96016',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_45b6d49f1aa8432aa7420753ccd9f673','lineage_0432968762f54f20a2f399b6f262ad55','snapshot_41baa533dca74d60b19d8496aed992a7',1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2349de9bb6184ce1b169569c4768f94d','lineage_163e9adb14be47b8b02e4dde40be0875','snapshot_aec8c18de12944d69e0dc960efd96016',1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0aeac7bfa64c4ea2bb0cc15f15d941bb','plan_e3f796cfae02421e8e871e1e72964c9c','snapshot_41baa533dca74d60b19d8496aed992a7',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_894b1f6c9b714ad984cdaab1be82a2a1','plan_e5e91228acae4ce1a8592623b5fc22d3','snapshot_aec8c18de12944d69e0dc960efd96016',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_45b6d49f1aa8432aa7420753ccd9f673','lineage_0432968762f54f20a2f399b6f262ad55','snapshot_41baa533dca74d60b19d8496aed992a7',1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2349de9bb6184ce1b169569c4768f94d','lineage_163e9adb14be47b8b02e4dde40be0875','snapshot_aec8c18de12944d69e0dc960efd96016',1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-3d3434701e01.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-3d3434701e01.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[D]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3ba07b9fe5ef44e9a4cb1a570955e317','plan_3c6c82f09dea47fa9e27dbec3a19d54a','snapshot_40344ae474b345dab28f81d3c78d7f5b',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_cbf96a2574c748febda1b0b8f2e7f692','plan_dc92ac499bcc45cf8a8ab038e65284d8','snapshot_e4561730d884474f8b97ce584b0351d4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c8dc15e6758d4c62bb7df216a1381212','lineage_343e1933ebe94fd2980e0a773908b97c','snapshot_40344ae474b345dab28f81d3c78d7f5b',1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2067e55f0e084238875f534346dacab2','lineage_807b86194613484db15ec2df5a525e28','snapshot_e4561730d884474f8b97ce584b0351d4',1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_3ba07b9fe5ef44e9a4cb1a570955e317','plan_3c6c82f09dea47fa9e27dbec3a19d54a','snapshot_40344ae474b345dab28f81d3c78d7f5b',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_cbf96a2574c748febda1b0b8f2e7f692','plan_dc92ac499bcc45cf8a8ab038e65284d8','snapshot_e4561730d884474f8b97ce584b0351d4',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c8dc15e6758d4c62bb7df216a1381212','lineage_343e1933ebe94fd2980e0a773908b97c','snapshot_40344ae474b345dab28f81d3c78d7f5b',1,'test owner before acceptance',NULL,'2026-11-17T16:49:57+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2067e55f0e084238875f534346dacab2','lineage_807b86194613484db15ec2df5a525e28','snapshot_e4561730d884474f8b97ce584b0351d4',1,'test owner before acceptance',NULL,'2026-11-17T21:20:28+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-E-cold.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-E-cold.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[E]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f128d81f828b4ffb9622b17b7f65cd2d','plan_7f19397dbc494eaf9ca6032cf8b5b54d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_30add23097694319ad0d9ad3858b3b33','plan_724b7054e40b44a9838cc60bab0872b5','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c858f6f3982d4329a028778416161fd3','lineage_9c3231e117cb4dad95aa4a4da7f3d62d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db5f57c446e34521b5cb83b7fa43e5b5','lineage_368663d50d1641afb8c5b9c29a8b25fe','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f128d81f828b4ffb9622b17b7f65cd2d','plan_7f19397dbc494eaf9ca6032cf8b5b54d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_30add23097694319ad0d9ad3858b3b33','plan_724b7054e40b44a9838cc60bab0872b5','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c858f6f3982d4329a028778416161fd3','lineage_9c3231e117cb4dad95aa4a4da7f3d62d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db5f57c446e34521b5cb83b7fa43e5b5','lineage_368663d50d1641afb8c5b9c29a8b25fe','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-E-warm.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-E-warm.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[E]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f128d81f828b4ffb9622b17b7f65cd2d','plan_7f19397dbc494eaf9ca6032cf8b5b54d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_30add23097694319ad0d9ad3858b3b33','plan_724b7054e40b44a9838cc60bab0872b5','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c858f6f3982d4329a028778416161fd3','lineage_9c3231e117cb4dad95aa4a4da7f3d62d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db5f57c446e34521b5cb83b7fa43e5b5','lineage_368663d50d1641afb8c5b9c29a8b25fe','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f128d81f828b4ffb9622b17b7f65cd2d','plan_7f19397dbc494eaf9ca6032cf8b5b54d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_30add23097694319ad0d9ad3858b3b33','plan_724b7054e40b44a9838cc60bab0872b5','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c858f6f3982d4329a028778416161fd3','lineage_9c3231e117cb4dad95aa4a4da7f3d62d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db5f57c446e34521b5cb83b7fa43e5b5','lineage_368663d50d1641afb8c5b9c29a8b25fe','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/G-stop-first.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/G-stop-first.json",
       "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0aeac7bfa64c4ea2bb0cc15f15d941bb','plan_e3f796cfae02421e8e871e1e72964c9c','snapshot_41baa533dca74d60b19d8496aed992a7',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_894b1f6c9b714ad984cdaab1be82a2a1','plan_e5e91228acae4ce1a8592623b5fc22d3','snapshot_aec8c18de12944d69e0dc960efd96016',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_45b6d49f1aa8432aa7420753ccd9f673','lineage_0432968762f54f20a2f399b6f262ad55','snapshot_41baa533dca74d60b19d8496aed992a7',1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2349de9bb6184ce1b169569c4768f94d','lineage_163e9adb14be47b8b02e4dde40be0875','snapshot_aec8c18de12944d69e0dc960efd96016',1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0aeac7bfa64c4ea2bb0cc15f15d941bb','plan_e3f796cfae02421e8e871e1e72964c9c','snapshot_41baa533dca74d60b19d8496aed992a7',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_894b1f6c9b714ad984cdaab1be82a2a1','plan_e5e91228acae4ce1a8592623b5fc22d3','snapshot_aec8c18de12944d69e0dc960efd96016',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_45b6d49f1aa8432aa7420753ccd9f673','lineage_0432968762f54f20a2f399b6f262ad55','snapshot_41baa533dca74d60b19d8496aed992a7',1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2349de9bb6184ce1b169569c4768f94d','lineage_163e9adb14be47b8b02e4dde40be0875','snapshot_aec8c18de12944d69e0dc960efd96016',1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-1d768dba485e.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-1d768dba485e.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[E]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f128d81f828b4ffb9622b17b7f65cd2d','plan_7f19397dbc494eaf9ca6032cf8b5b54d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_30add23097694319ad0d9ad3858b3b33','plan_724b7054e40b44a9838cc60bab0872b5','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c858f6f3982d4329a028778416161fd3','lineage_9c3231e117cb4dad95aa4a4da7f3d62d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db5f57c446e34521b5cb83b7fa43e5b5','lineage_368663d50d1641afb8c5b9c29a8b25fe','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_f128d81f828b4ffb9622b17b7f65cd2d','plan_7f19397dbc494eaf9ca6032cf8b5b54d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_30add23097694319ad0d9ad3858b3b33','plan_724b7054e40b44a9838cc60bab0872b5','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_c858f6f3982d4329a028778416161fd3','lineage_9c3231e117cb4dad95aa4a4da7f3d62d','snapshot_98f58d6780b14e9c83516f5ef6b415fa',1,'test owner before acceptance',NULL,'2026-11-17T16:50:12+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_db5f57c446e34521b5cb83b7fa43e5b5','lineage_368663d50d1641afb8c5b9c29a8b25fe','snapshot_4f7ac92b2ca24461b5bebe9f7b02cb09',1,'test owner before acceptance',NULL,'2026-11-17T21:20:42+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-F-cold.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-F-cold.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[F]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_eaff6a4c7e46467590533f88b8d16f56','plan_d585d15ff4b74494b447729ca3b076de','snapshot_a3fcf725d6a94ab4955a976137796361',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7852450dbf04f1a975db983b7ecccd9','plan_fd160bed38a240f8a951414923e0f8ed','snapshot_2d86108399de4dc0b5412a4054407cef',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_bf5dcb4882714efc99f4d4ac05768f6e','lineage_3664378e3b5f4a44aadc232dc64ebee9','snapshot_a3fcf725d6a94ab4955a976137796361',1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_34ec94d079a443d6b4c539c803940a14','lineage_eba7de596c6c432ba7d2c2a2e34ca885','snapshot_2d86108399de4dc0b5412a4054407cef',1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_eaff6a4c7e46467590533f88b8d16f56','plan_d585d15ff4b74494b447729ca3b076de','snapshot_a3fcf725d6a94ab4955a976137796361',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7852450dbf04f1a975db983b7ecccd9','plan_fd160bed38a240f8a951414923e0f8ed','snapshot_2d86108399de4dc0b5412a4054407cef',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_bf5dcb4882714efc99f4d4ac05768f6e','lineage_3664378e3b5f4a44aadc232dc64ebee9','snapshot_a3fcf725d6a94ab4955a976137796361',1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_34ec94d079a443d6b4c539c803940a14','lineage_eba7de596c6c432ba7d2c2a2e34ca885','snapshot_2d86108399de4dc0b5412a4054407cef',1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/case-F-warm.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/case-F-warm.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[F]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_eaff6a4c7e46467590533f88b8d16f56','plan_d585d15ff4b74494b447729ca3b076de','snapshot_a3fcf725d6a94ab4955a976137796361',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7852450dbf04f1a975db983b7ecccd9','plan_fd160bed38a240f8a951414923e0f8ed','snapshot_2d86108399de4dc0b5412a4054407cef',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_bf5dcb4882714efc99f4d4ac05768f6e','lineage_3664378e3b5f4a44aadc232dc64ebee9','snapshot_a3fcf725d6a94ab4955a976137796361',1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_34ec94d079a443d6b4c539c803940a14','lineage_eba7de596c6c432ba7d2c2a2e34ca885','snapshot_2d86108399de4dc0b5412a4054407cef',1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_eaff6a4c7e46467590533f88b8d16f56','plan_d585d15ff4b74494b447729ca3b076de','snapshot_a3fcf725d6a94ab4955a976137796361',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7852450dbf04f1a975db983b7ecccd9','plan_fd160bed38a240f8a951414923e0f8ed','snapshot_2d86108399de4dc0b5412a4054407cef',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_bf5dcb4882714efc99f4d4ac05768f6e','lineage_3664378e3b5f4a44aadc232dc64ebee9','snapshot_a3fcf725d6a94ab4955a976137796361',1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_34ec94d079a443d6b4c539c803940a14','lineage_eba7de596c6c432ba7d2c2a2e34ca885','snapshot_2d86108399de4dc0b5412a4054407cef',1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/baseline-c9ae0e089be8.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/baseline-c9ae0e089be8.json",
       "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[F]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_eaff6a4c7e46467590533f88b8d16f56','plan_d585d15ff4b74494b447729ca3b076de','snapshot_a3fcf725d6a94ab4955a976137796361',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7852450dbf04f1a975db983b7ecccd9','plan_fd160bed38a240f8a951414923e0f8ed','snapshot_2d86108399de4dc0b5412a4054407cef',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_bf5dcb4882714efc99f4d4ac05768f6e','lineage_3664378e3b5f4a44aadc232dc64ebee9','snapshot_a3fcf725d6a94ab4955a976137796361',1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_34ec94d079a443d6b4c539c803940a14','lineage_eba7de596c6c432ba7d2c2a2e34ca885','snapshot_2d86108399de4dc0b5412a4054407cef',1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_eaff6a4c7e46467590533f88b8d16f56','plan_d585d15ff4b74494b447729ca3b076de','snapshot_a3fcf725d6a94ab4955a976137796361',0,1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_c7852450dbf04f1a975db983b7ecccd9','plan_fd160bed38a240f8a951414923e0f8ed','snapshot_2d86108399de4dc0b5412a4054407cef',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_bf5dcb4882714efc99f4d4ac05768f6e','lineage_3664378e3b5f4a44aadc232dc64ebee9','snapshot_a3fcf725d6a94ab4955a976137796361',1,'test owner before acceptance',NULL,'2026-11-17T16:50:27+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_34ec94d079a443d6b4c539c803940a14','lineage_eba7de596c6c432ba7d2c2a2e34ca885','snapshot_2d86108399de4dc0b5412a4054407cef',1,'test owner before acceptance',NULL,'2026-11-17T21:20:56+00:00');"
         ]
       }
     },
     {
-      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/evidence/G-stop-resume.json",
+      "source": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/evidence/G-stop-resume.json",
       "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[stop]",
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0aeac7bfa64c4ea2bb0cc15f15d941bb','plan_e3f796cfae02421e8e871e1e72964c9c','snapshot_41baa533dca74d60b19d8496aed992a7',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_894b1f6c9b714ad984cdaab1be82a2a1','plan_e5e91228acae4ce1a8592623b5fc22d3','snapshot_aec8c18de12944d69e0dc960efd96016',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_45b6d49f1aa8432aa7420753ccd9f673','lineage_0432968762f54f20a2f399b6f262ad55','snapshot_41baa533dca74d60b19d8496aed992a7',1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2349de9bb6184ce1b169569c4768f94d','lineage_163e9adb14be47b8b02e4dde40be0875','snapshot_aec8c18de12944d69e0dc960efd96016',1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0aeac7bfa64c4ea2bb0cc15f15d941bb','plan_e3f796cfae02421e8e871e1e72964c9c','snapshot_41baa533dca74d60b19d8496aed992a7',0,1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_894b1f6c9b714ad984cdaab1be82a2a1','plan_e5e91228acae4ce1a8592623b5fc22d3','snapshot_aec8c18de12944d69e0dc960efd96016',0,1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_45b6d49f1aa8432aa7420753ccd9f673','lineage_0432968762f54f20a2f399b6f262ad55','snapshot_41baa533dca74d60b19d8496aed992a7',1,'test owner before acceptance',NULL,'2026-11-17T16:56:14+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_2349de9bb6184ce1b169569c4768f94d','lineage_163e9adb14be47b8b02e4dde40be0875','snapshot_aec8c18de12944d69e0dc960efd96016',1,'test owner before acceptance',NULL,'2026-11-17T21:26:52+00:00');"
         ]
       }
     }

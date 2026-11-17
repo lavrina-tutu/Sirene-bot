@@ -4,8 +4,8 @@
     "task:task_type:FIXED_UNITS"
   ],
   "status": "passed",
-  "page_id": "537576367",
-  "attachment_id": "537576368",
+  "page_id": "537576663",
+  "attachment_id": "537576664",
   "attachment_version": 9,
   "page_version": 1,
   "source_normalization": null,
@@ -22,12 +22,6 @@
     "Failed to fetch",
     "generateDropDownMenu is not defined",
     "Failed to fetch",
-    "Failed to fetch",
-    "Failed to fetch",
-    "Failed to fetch",
-    "Failed to fetch",
-    "Failed to fetch",
-    "generateDropDownMenu is not defined",
     "Failed to fetch"
   ],
   "build": "H6u7SQymvwxeyojc1ur6Z",
@@ -215,19 +209,19 @@
       "parentId": null,
       "intervals": [
         {
-          "id": "_generatedi_2df96627-9b33-44d0-a404-09d206e42a51",
+          "id": "_generatedi_93c6494f-10a2-4498-84cd-d565e20b21df",
           "recurrentStartDate": "at 12:00",
           "recurrentEndDate": "at 13:00",
           "isWorking": false
         },
         {
-          "id": "_generatedi_971f0be7-7a17-40bf-9e6b-0259a1372482",
+          "id": "_generatedi_5b0e60b8-16d7-4c49-af3e-3fcb4beeb4f9",
           "recurrentStartDate": "at 18:00",
           "recurrentEndDate": "at 09:00",
           "isWorking": false
         },
         {
-          "id": "_generatedi_551b8c09-cf32-4a95-a418-674c921e5f9f",
+          "id": "_generatedi_bcf12478-4a1e-4799-9bdc-4b9757053075",
           "recurrentStartDate": "on Sat",
           "recurrentEndDate": "on Mon",
           "isWorking": false

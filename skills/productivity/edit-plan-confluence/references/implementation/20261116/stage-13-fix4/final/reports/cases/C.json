@@ -12,7 +12,7 @@
     "evidence": "master §20.7.4; user evidence 2026-11-16",
     "identity_status": "source_bytes_verified",
     "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
-    "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/fixtures/real/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
+    "copy": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/fixtures/real/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
     "status": "verified",
     "original_verified": false,
     "identity_basis": "Фактические данные пользователя от 16.11.2026 и проверка SHA-256; master §20.7.4",
@@ -34,14 +34,14 @@
       "/usr/bin/python3",
       "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
       "--db",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/state/index.sqlite",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/state/index.sqlite",
       "--workvault",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault",
       "--cache-dir",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/cache",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/cache",
       "save",
       "--mpp",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/C.mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/C.mpp",
       "--project-slug",
       "stage13-trisigma",
       "--timezone-hint",
@@ -51,14 +51,14 @@
       "/usr/bin/python3",
       "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
       "--db",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/state/index.sqlite",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/state/index.sqlite",
       "--workvault",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault",
       "--cache-dir",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/cache",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/cache",
       "save",
       "--mpp",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/same-bytes-renamed.mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/same-bytes-renamed.mpp",
       "--project-slug",
       "stage13-trisigma",
       "--timezone-hint",
@@ -68,16 +68,16 @@
       "/usr/bin/python3",
       "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
       "--db",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/state/index.sqlite",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/state/index.sqlite",
       "--workvault",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/WorkVault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/WorkVault",
       "--cache-dir",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/cache",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/cache",
       "publish",
       "--mpp",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/C.mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/C.mpp",
       "--page-id",
-      "537576424",
+      "537576718",
       "--project-slug",
       "trisigma",
       "--timezone-hint",
@@ -87,16 +87,16 @@
       "/usr/bin/python3",
       "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
       "--db",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/state/index.sqlite",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/state/index.sqlite",
       "--workvault",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/WorkVault",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/WorkVault",
       "--cache-dir",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/cache",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/cache",
       "publish",
       "--mpp",
-      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/C.mpp",
+      "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/C.mpp",
       "--page-id",
-      "537576424",
+      "537576718",
       "--project-slug",
       "trisigma",
       "--timezone-hint",
@@ -104,7 +104,7 @@
     ]
   ],
   "source": {
-    "path": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/fixtures/real/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
+    "path": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/fixtures/real/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
     "repository_copy": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/fixtures/real/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7.mpp",
     "origin": "/home/tkachenkoav/.hermes/cache/documents/native-inputs/38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7/doc_06ee0cb06cd4_Переход_на_Trisigma_Только_пилот_260526.mpp",
     "sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
@@ -113,8 +113,8 @@
   "operation_item_batch_snapshot_publication_ids": [
     {
       "schema_version": 1,
-      "operation_id": "operation_23cc567d4af44e3fbf2dfe3b00528fae",
-      "item_id": "item_41889ae018004b07b37a593c01811aba",
+      "operation_id": "operation_9ded111d22fc4b26b4614a0ddb68cde2",
+      "item_id": "item_5f8d68907e8d4eed9955727f3033c556",
       "status": "published_with_warnings",
       "mode": "publish",
       "exit_code": 0,
@@ -124,9 +124,9 @@
         "sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
         "size_bytes": 532480
       },
-      "snapshot_id": "snapshot_e0f09ac08fc8477187e7a475c2a32b2f",
-      "page_id": "537576424",
-      "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576424",
+      "snapshot_id": "snapshot_2a59d9dafc7d4b6984ae1c43dc7b0c63",
+      "page_id": "537576718",
+      "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576718",
       "task_count": 62,
       "display_task_count": 61,
       "dependency_count": 61,
@@ -141,10 +141,11 @@
             "schema_version": 1,
             "decision_id": "owner-20261117-fix4",
             "evidence_path": "references/implementation/20261116/stage-13-fix4/owner-decision.md",
-            "evidence_sha256": "e6bc9687628d390a115378cb2dcc8953a78af26bcc74f3a58781cac15fd666a1",
+            "evidence_sha256": "22455970f9d7667bfd98ba1e249339e4ec5cc33c530ab35145de6e492e4c521d",
             "historical_rules": "not_applicable",
             "unassigned_resources": "preserve_source_display",
-            "actuality": "source_file_mtime_ns"
+            "actuality": "source_file_mtime_ns",
+            "milestone_interval_conflict": "publish_collapsed"
           }
         }
       ],
@@ -307,7 +308,7 @@
             "plan_plugin_result_not_verified"
           ],
           "evidence_ids": [
-            "artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+            "artifact_1a9c9726354e4f42ab8f4e5572fe054b"
           ]
         }
       },
@@ -316,57 +317,57 @@
         {
           "code": "historical_rule_not_applicable_owner_decision",
           "message": "historical_rule_not_applicable_owner_decision: 1 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "local_scheduler_prepared_unsupported",
           "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "source_snapshot_dates",
           "message": "source_snapshot_dates: 61 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "specific_plan_plugin_result_not_verified",
           "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "task_actuals_display_only:actual_duration",
           "message": "task_actuals_display_only:actual_duration: 17 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "task_actuals_display_only:actual_finish",
           "message": "task_actuals_display_only:actual_finish: 14 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "task_actuals_display_only:actual_start",
           "message": "task_actuals_display_only:actual_start: 18 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "task_actuals_display_only:actual_work",
           "message": "task_actuals_display_only:actual_work: 17 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "task_actuals_display_only:resume",
           "message": "task_actuals_display_only:resume: 18 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "task_actuals_display_only:stop",
           "message": "task_actuals_display_only:stop: 18 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         },
         {
           "code": "unassigned_resource_source_display",
           "message": "unassigned_resource_source_display: 6 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_179e8b9a16914b7ca16c2b2596ad4bea"
+          "details_ref": "artifact:artifact_1a9c9726354e4f42ab8f4e5572fe054b"
         }
       ],
       "completed_stages": [
@@ -384,8 +385,8 @@
     },
     {
       "schema_version": 1,
-      "operation_id": "operation_af11dde5b5304b5dacde26cac559620c",
-      "item_id": "item_1d67a6d72e7845c6a3ed18342ad2f75d",
+      "operation_id": "operation_43e3ac97ab2043fbb5f14719bb20644c",
+      "item_id": "item_28fefbbe21ec4ca999f703e70dfce22f",
       "status": "saved_with_warnings",
       "mode": "save",
       "exit_code": 0,
@@ -395,7 +396,7 @@
         "sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
         "size_bytes": 532480
       },
-      "snapshot_id": "snapshot_284cdde0136e485fbbc80e874bfe50bc",
+      "snapshot_id": "snapshot_e4fa41ceacbb4bbbbbd0b14cab465925",
       "page_id": null,
       "page_url": null,
       "task_count": 62,
@@ -429,12 +430,12 @@
         {
           "code": "fields_missing",
           "message": "Часть исходных полей имеет качество missing",
-          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/f445f09bf6519df9bbde79642adec1c6637999cc2eb6dd80dac51b1fa7f4698d.json"
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/f445f09bf6519df9bbde79642adec1c6637999cc2eb6dd80dac51b1fa7f4698d.json"
         },
         {
           "code": "fields_unsupported",
           "message": "Часть исходных полей имеет качество unsupported",
-          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/f445f09bf6519df9bbde79642adec1c6637999cc2eb6dd80dac51b1fa7f4698d.json"
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/f445f09bf6519df9bbde79642adec1c6637999cc2eb6dd80dac51b1fa7f4698d.json"
         }
       ],
       "completed_stages": [
@@ -447,8 +448,8 @@
     },
     {
       "schema_version": 1,
-      "operation_id": "operation_969542031d334a68bbd842b03ba29599",
-      "item_id": "item_177d303a46a14d2e9a96c0265bff8c45",
+      "operation_id": "operation_eee3218c818c42efa71c2dba0821778e",
+      "item_id": "item_9faa9d1456b1412d97bc4deb754dffc2",
       "status": "unchanged",
       "mode": "save",
       "exit_code": 0,
@@ -458,7 +459,7 @@
         "sha256": "38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7",
         "size_bytes": 532480
       },
-      "snapshot_id": "snapshot_284cdde0136e485fbbc80e874bfe50bc",
+      "snapshot_id": "snapshot_e4fa41ceacbb4bbbbbd0b14cab465925",
       "page_id": null,
       "page_url": null,
       "task_count": 62,
@@ -492,12 +493,12 @@
         {
           "code": "fields_missing",
           "message": "Часть исходных полей имеет качество missing",
-          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/f445f09bf6519df9bbde79642adec1c6637999cc2eb6dd80dac51b1fa7f4698d.json"
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/f445f09bf6519df9bbde79642adec1c6637999cc2eb6dd80dac51b1fa7f4698d.json"
         },
         {
           "code": "fields_unsupported",
           "message": "Часть исходных полей имеет качество unsupported",
-          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/f445f09bf6519df9bbde79642adec1c6637999cc2eb6dd80dac51b1fa7f4698d.json"
+          "details_ref": "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_cold_warm_archive_C_0/WorkVault/Entities/stage13-trisigma/Sources/plans/stage13-trisigma.ganttchart/artifacts/f445f09bf6519df9bbde79642adec1c6637999cc2eb6dd80dac51b1fa7f4698d.json"
         }
       ],
       "completed_stages": [
@@ -601,7 +602,7 @@
       "wrapper_asset_sha256": "9a43a94647ce8c2fff5cabdb07a52b8619b824bf8673b0bcafe9a090cd9dccb2"
     },
     "observed_plugin": {
-      "page_id": "537576424",
+      "page_id": "537576718",
       "attachment_version": 1,
       "input_sha256": "a1f92d78c2db1681858c704e4abd077cc4a5c4d1ca375c0ec68e4fac1f78f144",
       "openings": [
@@ -39958,10 +39959,11 @@
         "schema_version": 1,
         "decision_id": "owner-20261117-fix4",
         "evidence_path": "references/implementation/20261116/stage-13-fix4/owner-decision.md",
-        "evidence_sha256": "e6bc9687628d390a115378cb2dcc8953a78af26bcc74f3a58781cac15fd666a1",
+        "evidence_sha256": "22455970f9d7667bfd98ba1e249339e4ec5cc33c530ab35145de6e492e4c521d",
         "historical_rules": "not_applicable",
         "unassigned_resources": "preserve_source_display",
-        "actuality": "source_file_mtime_ns"
+        "actuality": "source_file_mtime_ns",
+        "milestone_interval_conflict": "publish_collapsed"
       }
     }
   ],
@@ -40367,9 +40369,9 @@
     "before": 0,
     "after": 1
   },
-  "storage_from_GET": "<p><strong>Итого: с 23.04.26 по 12.08.26 - 77 рабочих дней</strong><br />по плану; факт — в колонках</p><p>Stage 13 acceptance neighbour</p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"c47eda5d-c669-4cbe-b1cb-a752ee3e952e\"><ac:parameter ac:name=\"id\">26840fb91e2649ef81ed03fa0262ba44</ac:parameter><ac:parameter ac:name=\"hash\">c0cebb15219f41238c8a992cec97ea0c</ac:parameter></ac:structured-macro></p>",
+  "storage_from_GET": "<p><strong>Итого: с 23.04.26 по 12.08.26 - 77 рабочих дней</strong><br />по плану; факт — в колонках</p><p>Stage 13 acceptance neighbour</p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"dc0158d8-a8a7-40db-be9f-8f8df3ea0c84\"><ac:parameter ac:name=\"id\">f4b37d9a56354e39b8074838b59a9bcf</ac:parameter><ac:parameter ac:name=\"hash\">90551c12496648b0871bcce61dec59de</ac:parameter></ac:structured-macro></p>",
   "observed_plugin_dates": {
-    "page_id": "537576424",
+    "page_id": "537576718",
     "attachment_version": 1,
     "input_sha256": "a1f92d78c2db1681858c704e4abd077cc4a5c4d1ca375c0ec68e4fac1f78f144",
     "openings": [
@@ -79724,83 +79726,83 @@
       "calls": [
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424"
+          "path": "/rest/api/content/537576718"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424"
+          "path": "/rest/api/content/537576718"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424"
+          "path": "/rest/api/content/537576718"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424/child/attachment"
+          "path": "/rest/api/content/537576718/child/attachment"
         },
         {
           "method": "POST",
-          "path": "/rest/api/content/537576424/child/attachment"
+          "path": "/rest/api/content/537576718/child/attachment"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424/child/attachment"
+          "path": "/rest/api/content/537576718/child/attachment"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576426"
+          "path": "/rest/api/content/537576719"
         },
         {
           "method": "GET",
-          "path": "/download/attachments/537576424/gantt-chart-26840fb91e2649ef81ed03fa0262ba44.json"
+          "path": "/download/attachments/537576718/gantt-chart-f4b37d9a56354e39b8074838b59a9bcf.json"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424/child/attachment"
+          "path": "/rest/api/content/537576718/child/attachment"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424"
+          "path": "/rest/api/content/537576718"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424/child/attachment"
+          "path": "/rest/api/content/537576718/child/attachment"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576426"
+          "path": "/rest/api/content/537576719"
         },
         {
           "method": "GET",
-          "path": "/download/attachments/537576424/gantt-chart-26840fb91e2649ef81ed03fa0262ba44.json"
+          "path": "/download/attachments/537576718/gantt-chart-f4b37d9a56354e39b8074838b59a9bcf.json"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424/child/attachment"
+          "path": "/rest/api/content/537576718/child/attachment"
         },
         {
           "method": "PUT",
-          "path": "/rest/api/content/537576424"
+          "path": "/rest/api/content/537576718"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424"
+          "path": "/rest/api/content/537576718"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424/child/attachment"
+          "path": "/rest/api/content/537576718/child/attachment"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576426"
+          "path": "/rest/api/content/537576719"
         },
         {
           "method": "GET",
-          "path": "/download/attachments/537576424/gantt-chart-26840fb91e2649ef81ed03fa0262ba44.json"
+          "path": "/download/attachments/537576718/gantt-chart-f4b37d9a56354e39b8074838b59a9bcf.json"
         },
         {
           "method": "GET",
-          "path": "/rest/api/content/537576424/child/attachment"
+          "path": "/rest/api/content/537576718/child/attachment"
         }
       ]
     },
@@ -79823,54 +79825,54 @@
     {
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_87966750591b4354be547d6821434b45','plan_646d33d0c74e40018e1115be3df329dc','snapshot_b6a6ed3ac1d14175bb5274a9b3ce86bb',0,1,'test owner before acceptance',NULL,'2026-11-17T17:08:49+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_6f77bd0647df4f88aab3121a74e9af33','plan_3a8527d3a4fd48fe935bf7e8a846e408','snapshot_12d511820049460e8636badaf83999c0',0,1,'test owner before acceptance',NULL,'2026-11-17T21:40:26+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_cbe287bdeda047a0b8194809271e234d','lineage_be86154146bf44ce9a06629a3901916d','snapshot_b6a6ed3ac1d14175bb5274a9b3ce86bb',1,'test owner before acceptance',NULL,'2026-11-17T17:08:49+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1cd76070dc7742009fe04cf8821ed10b','lineage_9df5ffdecf9e4600a9acffeb0fdb89b7','snapshot_12d511820049460e8636badaf83999c0',1,'test owner before acceptance',NULL,'2026-11-17T21:40:26+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_87966750591b4354be547d6821434b45','plan_646d33d0c74e40018e1115be3df329dc','snapshot_b6a6ed3ac1d14175bb5274a9b3ce86bb',0,1,'test owner before acceptance',NULL,'2026-11-17T17:08:49+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_6f77bd0647df4f88aab3121a74e9af33','plan_3a8527d3a4fd48fe935bf7e8a846e408','snapshot_12d511820049460e8636badaf83999c0',0,1,'test owner before acceptance',NULL,'2026-11-17T21:40:26+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_cbe287bdeda047a0b8194809271e234d','lineage_be86154146bf44ce9a06629a3901916d','snapshot_b6a6ed3ac1d14175bb5274a9b3ce86bb',1,'test owner before acceptance',NULL,'2026-11-17T17:08:49+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1cd76070dc7742009fe04cf8821ed10b','lineage_9df5ffdecf9e4600a9acffeb0fdb89b7','snapshot_12d511820049460e8636badaf83999c0',1,'test owner before acceptance',NULL,'2026-11-17T21:40:26+00:00');"
         ]
       }
     },
     {
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       }
     },
     {
       "before": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       },
       "after": {
         "plan_baseline_selection": [
-          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_33903fb6e1664f50b66d96c23911c55d','plan_74e7f5a170e0408090889eb82eacd17e','snapshot_3a2d4d88910e4c728016f716c1203117',0,1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_0d3eb44a4a424056befa20185af4b08e','plan_c78ad8781482414d841b6340c7c6a993','snapshot_bf7fd22b6a72469684540943eeff689d',0,1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ],
         "plan_snapshot_selection": [
-          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_02a613cb8d3944d784d7943b10919574','lineage_fcf8332014924411b7b612cc14d596f1','snapshot_3a2d4d88910e4c728016f716c1203117',1,'test owner before acceptance',NULL,'2026-11-17T16:49:30+00:00');"
+          "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_5d51f923fff544c3bc44ba27c0feafe4','lineage_f5a2ec964bce4fee87537831505c79cb','snapshot_bf7fd22b6a72469684540943eeff689d',1,'test owner before acceptance',NULL,'2026-11-17T21:20:01+00:00');"
         ]
       }
     }
@@ -79885,7 +79887,7 @@
   "limitations": [],
   "historical_rule_identity": "not_required_owner_decision_preserves_source_link",
   "durations_seconds": [
-    12.016782185004558,
-    84.8738336180104
+    11.975661818985827,
+    91.08327326102881
   ]
 }

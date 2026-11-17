@@ -32,7 +32,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-82989df51141483ea85df6151db2d84e.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-3db508d8dfe543169bd394164df22c4c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -52,7 +52,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-82989df51141483ea85df6151db2d84e.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-3db508d8dfe543169bd394164df22c4c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -72,7 +72,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-82989df51141483ea85df6151db2d84e.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-3db508d8dfe543169bd394164df22c4c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -84,7 +84,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-82989df51141483ea85df6151db2d84e.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-3db508d8dfe543169bd394164df22c4c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -104,7 +104,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-82989df51141483ea85df6151db2d84e.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-3db508d8dfe543169bd394164df22c4c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -128,7 +128,7 @@
     ],
     [
       "GET",
-      "/download/attachments/test-page/gantt-chart-82989df51141483ea85df6151db2d84e.json?api=v2&version=1"
+      "/download/attachments/test-page/gantt-chart-3db508d8dfe543169bd394164df22c4c.json?api=v2&version=1"
     ],
     [
       "GET",
@@ -153,15 +153,15 @@
     "exceptions": [],
     "exit_code": 0,
     "external_effect": "storage_written",
-    "item_id": "item_bcd0f8e036494664ab0eda0fb06a6ce5",
+    "item_id": "item_772f8a47fc004eca9693a2d49c4b3911",
     "mode": "publish",
-    "operation_id": "operation_4080a7e69b734f9f93a7108d3f10c4df",
+    "operation_id": "operation_09f9b1184d2a497d80ec57b8b8cdfa95",
     "page_id": "test-page",
     "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=test-page",
     "project_slug": "test",
     "published": true,
     "schema_version": 1,
-    "snapshot_id": "snapshot_84fb05aac8c344bca7e63b8905c7882f",
+    "snapshot_id": "snapshot_6d691927635a4baa86ce898a53992a37",
     "source": {
       "name": "synthetic-source.mpp",
       "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
@@ -198,7 +198,7 @@
           }
         ],
         "evidence_ids": [
-          "artifact_62e5c2fe7ef44f06a205e8aebb57bec4"
+          "artifact_0c1d7ee1a7084e7e88915f635910423b"
         ],
         "limitations": [
           "local_scheduler_not_run",
@@ -219,12 +219,12 @@
     "warnings": [
       {
         "code": "local_scheduler_prepared_unsupported",
-        "details_ref": "artifact:artifact_62e5c2fe7ef44f06a205e8aebb57bec4",
+        "details_ref": "artifact:artifact_0c1d7ee1a7084e7e88915f635910423b",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
-        "details_ref": "artifact:artifact_62e5c2fe7ef44f06a205e8aebb57bec4",
+        "details_ref": "artifact:artifact_0c1d7ee1a7084e7e88915f635910423b",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
       }
     ]

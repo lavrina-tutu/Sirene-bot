@@ -616,7 +616,7 @@
       "group": 0
     },
     {
-      "test_id": "test_fix4_owner_history.py::test_zero_duration_milestone_with_different_dates_is_not_silently_fixed",
+      "test_id": "test_fix4_owner_history.py::test_zero_duration_milestone_with_different_dates_is_published_collapsed",
       "phase": 3,
       "group": 0
     },

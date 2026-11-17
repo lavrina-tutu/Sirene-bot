@@ -2,8 +2,9 @@
   "schema_version": 1,
   "decision_id": "owner-20261117-fix4",
   "evidence_path": "references/implementation/20261116/stage-13-fix4/owner-decision.md",
-  "evidence_sha256": "e6bc9687628d390a115378cb2dcc8953a78af26bcc74f3a58781cac15fd666a1",
+  "evidence_sha256": "22455970f9d7667bfd98ba1e249339e4ec5cc33c530ab35145de6e492e4c521d",
   "historical_rules": "not_applicable",
   "unassigned_resources": "preserve_source_display",
-  "actuality": "source_file_mtime_ns"
+  "actuality": "source_file_mtime_ns",
+  "milestone_interval_conflict": "publish_collapsed"
 }

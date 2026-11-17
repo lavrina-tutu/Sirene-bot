@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "gate": "failed",
+  "gate": "passed",
   "publication_mode": "planned_schedule_with_actuals_columns",
   "label": "по плану; факт — в колонках",
   "native_actuals_schedule": "not_verified; equivalent recalculation not claimed",
@@ -14028,100 +14028,14 @@
       "evidence": "final/reports/evidence/live-D.json"
     }
   ],
-  "schedule_affecting_blockers": [
-    {
-      "case": "D",
-      "classification": "schedule-affecting",
-      "finding": {
-        "category": "unsupported_semantics",
-        "code": "source_milestone_interval_conflict",
-        "entity": "uid:373",
-        "exit_code": 5,
-        "finding_sha256": "622f98885027e6e8c3010505103b788269160b87beb48e1b6b83538a5b6c7299",
-        "model": null,
-        "observed": null,
-        "represented": {
-          "reason": "Installed plugin collapses zero-duration milestone to one date; no source date or duration is invented."
-        },
-        "row": 8,
-        "source": {
-          "duration": {
-            "quality": "ok",
-            "quantity": {
-              "amount": "0",
-              "elapsed": false,
-              "source_units": "d",
-              "units": "DAYS"
-            },
-            "reason": null,
-            "value": "0 d"
-          },
-          "finish": {
-            "quality": "ok",
-            "reason": null,
-            "value": "2026-04-22T18:00"
-          },
-          "milestone": true,
-          "start": {
-            "quality": "ok",
-            "reason": null,
-            "value": "2026-03-30T09:00"
-          }
-        }
-      },
-      "evidence": "final/reports/evidence/live-D.json"
-    }
-  ],
+  "schedule_affecting_blockers": [],
   "identity_blockers": [],
-  "remaining_blockers": [
-    {
-      "case": "D",
-      "classification": "schedule-affecting",
-      "finding": {
-        "category": "unsupported_semantics",
-        "code": "source_milestone_interval_conflict",
-        "entity": "uid:373",
-        "exit_code": 5,
-        "finding_sha256": "622f98885027e6e8c3010505103b788269160b87beb48e1b6b83538a5b6c7299",
-        "model": null,
-        "observed": null,
-        "represented": {
-          "reason": "Installed plugin collapses zero-duration milestone to one date; no source date or duration is invented."
-        },
-        "row": 8,
-        "source": {
-          "duration": {
-            "quality": "ok",
-            "quantity": {
-              "amount": "0",
-              "elapsed": false,
-              "source_units": "d",
-              "units": "DAYS"
-            },
-            "reason": null,
-            "value": "0 d"
-          },
-          "finish": {
-            "quality": "ok",
-            "reason": null,
-            "value": "2026-04-22T18:00"
-          },
-          "milestone": true,
-          "start": {
-            "quality": "ok",
-            "reason": null,
-            "value": "2026-03-30T09:00"
-          }
-        }
-      },
-      "evidence": "final/reports/evidence/live-D.json"
-    }
-  ],
+  "remaining_blockers": [],
   "cases": [
     {
       "case": "A",
       "status": "passed",
-      "page_id": "537576416",
+      "page_id": "537576712",
       "parent_id": "519501810",
       "published": true,
       "exit_code": 0,
@@ -14143,7 +14057,7 @@
     {
       "case": "B",
       "status": "passed",
-      "page_id": "537576420",
+      "page_id": "537576715",
       "parent_id": "519501810",
       "published": true,
       "exit_code": 0,
@@ -14165,7 +14079,7 @@
     {
       "case": "C",
       "status": "passed",
-      "page_id": "537576424",
+      "page_id": "537576718",
       "parent_id": "519501810",
       "published": true,
       "exit_code": 0,
@@ -14186,37 +14100,29 @@
     },
     {
       "case": "D",
-      "status": "failed",
-      "page_id": "537576430",
+      "status": "passed",
+      "page_id": "537576721",
       "parent_id": "519501810",
-      "published": false,
-      "exit_code": 5,
-      "POST": 0,
-      "PUT": 0,
+      "published": true,
+      "exit_code": 0,
+      "POST": 1,
+      "PUT": 1,
       "page_version_before": 1,
-      "page_version_after": 1,
+      "page_version_after": 2,
       "archive_task_count": 72,
       "display_task_count": 71,
       "dependency_count": 76,
       "work_hours": "3136",
-      "observed_task_count": 0,
-      "openings": 0,
-      "source_values_verification": null,
-      "repeat_status": null,
-      "repeat_POST": null,
-      "repeat_PUT": null
+      "observed_task_count": 71,
+      "openings": 2,
+      "source_values_verification": "verified",
+      "repeat_status": "unchanged",
+      "repeat_POST": 0,
+      "repeat_PUT": 0
     }
   ],
-  "failed_contracts": [
-    {
-      "test_id": "acceptance.test_live_publication::test_real_publish_repeat_and_observed_dates[D]",
-      "message": "AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 76, 'display_task_count': 71, ...}\nassert (5 == 0)",
-      "details": "case = 'D'\nlive_page = (<conf_client.ConfluenceClient object at 0x7f7cfb0650a0>, '537576430', {'_expandable': {'children': '/rest/api/content...: '/rest/api/content/537576430'}, 'representation': 'storage', 'value': '<p>Stage 13 acceptance neighbour</p>'}}, ...})\nstage13_input = <function stage13_input.<locals>.select at 0x7f7cce4e4f70>\nstage13_cli = (<conftest.stage13_cli.<locals>.ObservedContext object at 0x7f7cfe3a8eb0>, <function stage13_cli.<locals>.run at 0x7f7cd9a83e50>)\nstage13_record = <function stage13_record.<locals>.record at 0x7f7cfdf50af0>\nrequest = <FixtureRequest for <Function test_real_publish_repeat_and_observed_dates[D]>>\n\n    @pytest.mark.parametrize('case', ['A','B','C','D'])\n    def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, stage13_cli, stage13_record, request):\n        from macro import find_macro\n        from itogo import compute_itogo_from_prepared\n        from prepared_plan import PreparedPlan, fingerprint\n        client, page_id, before = live_page\n        context, run = stage13_cli\n        source, fixture = stage13_input(case)\n        # Real Trisigma scope also exercises historical B/C rule diagnostics.\n        result = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',\n                     '--timezone-hint', 'Europe/Moscow', live=True)\n        counters = deepcopy(run.last_probe)\n        after = client.get_page(page_id)\n        conn = connect_durable(context.db)\n        try:\n            operation = result['operation_id']\n            snapshot = q.get_snapshot(conn, result['snapshot_id']) if result['snapshot_id'] else None\n            prep = q.get_preparation_result(conn, operation) if operation else None\n            versions = q.list_versions(conn, snapshot['plan_id']) if snapshot else None\n            status = {'case': case, 'fixture': fixture, 'receipt': result, 'counters': counters,\n                'page_id': page_id, 'page_version_before': before['version']['number'],\n                'page_version_after': after['version']['number'], 'storage_from_GET': after['body']['storage']['value'],\n                'preparation': prep, 'versions': versions, 'baseline_before': context.baseline_before,\n                'baseline_after': context.baseline(), 'functional_status': 'passed' if result['published'] is True else 'failed',\n                'plugin_observation': None, 'limitation': None if result['published'] is True else 'Real public pipeline did not admit this MPP; no direct-upload fallback'}\n            stage13_record('live-'+case, status)\n            assert result['verification']['archive'] == 'verified', result\n            assert counters['MPXJ_read'] == 1\n>           assert result['exit_code'] == 0 and result['published'] is True, result\nE           AssertionError: {'attachment_version': None, 'completed_stages': ['input_frozen', 'prepared', 'archived'], 'dependency_count': 76, 'display_task_count': 71, ...}\nE           assert (5 == 0)\n\nskills/productivity/edit-plan-confluence/tests/acceptance/test_live_publication.py:210: AssertionError"
-    }
-  ],
-  "mandatory_not_passed": [
-    "test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]"
-  ],
+  "failed_contracts": [],
+  "mandatory_not_passed": [],
   "blocking_boundaries": [
     "Changed planned start/finish/duration",
     "Facts written into schedule fields",

@@ -150,9 +150,16 @@ def capability_findings(data, plugin_profile, conversion=None):
             from itogo import quantity_minutes
             duration, _, _ = quantity_minutes(task.get('duration'), data['project'], working_only=True)
             if task.get('milestone') is True and duration == 0 and field_value(task.get('start')) != field_value(task.get('finish')):
-                issues.append(finding('unsupported_semantics','source_milestone_interval_conflict',task['task_key'],
-                    {'start':task.get('start'),'finish':task.get('finish'),'duration':task.get('duration'),'milestone':True},
-                    {'reason':'Installed plugin collapses zero-duration milestone to one date; no source date or duration is invented.'}))
+                from plan_policy import owner_decision
+                decision = owner_decision()
+                if decision.get('milestone_interval_conflict') == 'publish_collapsed':
+                    issues.append(finding('display_only','source_milestone_interval_collapsed',task['task_key'],
+                        {'start':task.get('start'),'finish':task.get('finish'),'duration':task.get('duration'),'milestone':True},
+                        {'reason':'Веха публикуется как есть; плагин рисует её точкой на одну дату, интервал сжат при отображении; обе исходные даты сохранены в архиве (решение владельца).','owner_decision':decision['decision_id']}))
+                else:
+                    issues.append(finding('unsupported_semantics','source_milestone_interval_conflict',task['task_key'],
+                        {'start':task.get('start'),'finish':task.get('finish'),'duration':task.get('duration'),'milestone':True},
+                        {'reason':'Installed plugin collapses zero-duration milestone to one date; no source date or duration is invented.'}))
             row = finding('display_only' if exact else 'unsupported_semantics',
                 'source_snapshot_dates' if exact else 'source_snapshot_display_unverified',task['task_key'],task.get('task_mode'),
                 {'source_mode':snapshot_text(task),'plugin_recalculation':False,'verified':exact})

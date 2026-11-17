@@ -14,114 +14,114 @@
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395"
+      "path": "/rest/api/content/537576691"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395"
+      "path": "/rest/api/content/537576691"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395"
+      "path": "/rest/api/content/537576691"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     },
     {
       "method": "POST",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576396"
+      "path": "/rest/api/content/537576692"
     },
     {
       "method": "GET",
-      "path": "/download/attachments/537576395/gantt-chart-836974bcbfbb486a9f4f0b572a7ba7e5.json"
+      "path": "/download/attachments/537576691/gantt-chart-d63bb4e57518452eb1c61bfb111406b0.json"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395"
+      "path": "/rest/api/content/537576691"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576396"
+      "path": "/rest/api/content/537576692"
     },
     {
       "method": "GET",
-      "path": "/download/attachments/537576395/gantt-chart-836974bcbfbb486a9f4f0b572a7ba7e5.json"
+      "path": "/download/attachments/537576691/gantt-chart-d63bb4e57518452eb1c61bfb111406b0.json"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     },
     {
       "method": "PUT",
-      "path": "/rest/api/content/537576395"
+      "path": "/rest/api/content/537576691"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395"
+      "path": "/rest/api/content/537576691"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576396"
+      "path": "/rest/api/content/537576692"
     },
     {
       "method": "GET",
-      "path": "/download/attachments/537576395/gantt-chart-836974bcbfbb486a9f4f0b572a7ba7e5.json"
+      "path": "/download/attachments/537576691/gantt-chart-d63bb4e57518452eb1c61bfb111406b0.json"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395"
+      "path": "/rest/api/content/537576691"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576396"
+      "path": "/rest/api/content/537576692"
     },
     {
       "method": "GET",
-      "path": "/download/attachments/537576395/gantt-chart-836974bcbfbb486a9f4f0b572a7ba7e5.json"
+      "path": "/download/attachments/537576691/gantt-chart-d63bb4e57518452eb1c61bfb111406b0.json"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395"
+      "path": "/rest/api/content/537576691"
     },
     {
       "method": "GET",
-      "path": "/rest/api/content/537576395/child/attachment"
+      "path": "/rest/api/content/537576691/child/attachment"
     }
   ],
-  "page_id": "537576395",
+  "page_id": "537576691",
   "receipt": {
     "schema_version": 1,
-    "operation_id": "operation_818adcfc2ef24da3887ec32fd7e8af6f",
-    "item_id": "item_e462493b724c4d089eb44377648dabf1",
+    "operation_id": "operation_021d5ecfb0ec4a85a6c8d929011af572",
+    "item_id": "item_9cd3fde098484daab81aad3ae30b3840",
     "status": "published_with_warnings",
     "mode": "publish",
     "exit_code": 0,
@@ -131,9 +131,9 @@
       "sha256": "b7432224b0956ae3d08c6fd89722f2d02873c24dc7f16ba4fa49278be7cb0788",
       "size_bytes": 59
     },
-    "snapshot_id": "snapshot_905390567b95412ab68af17159a2e159",
-    "page_id": "537576395",
-    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576395",
+    "snapshot_id": "snapshot_02a481d2e8f74bbdb99b7ea9c1d1d053",
+    "page_id": "537576691",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=537576691",
     "task_count": 3,
     "display_task_count": 3,
     "dependency_count": 1,
@@ -195,7 +195,7 @@
           "plan_plugin_result_not_verified"
         ],
         "evidence_ids": [
-          "artifact_1ea54d836f39433fa1d4dedf86bb64c8"
+          "artifact_bbccdacc7a3b47fd8b124418a1bb13f6"
         ]
       }
     },
@@ -204,17 +204,17 @@
       {
         "code": "local_scheduler_prepared_unsupported",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_1ea54d836f39433fa1d4dedf86bb64c8"
+        "details_ref": "artifact:artifact_bbccdacc7a3b47fd8b124418a1bb13f6"
       },
       {
         "code": "source_snapshot_dates",
         "message": "source_snapshot_dates: 3 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_1ea54d836f39433fa1d4dedf86bb64c8"
+        "details_ref": "artifact:artifact_bbccdacc7a3b47fd8b124418a1bb13f6"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_1ea54d836f39433fa1d4dedf86bb64c8"
+        "details_ref": "artifact:artifact_bbccdacc7a3b47fd8b124418a1bb13f6"
       }
     ],
     "completed_stages": [
@@ -237,14 +237,14 @@
     "POST": 1,
     "PUT": 1
   },
-  "attachment_id": "537576396",
+  "attachment_id": "537576692",
   "received_sha256": "73feba2969f613f8d747da9518c2a89f6032fe0cd7f3ddfe81b4b072117a0ef9",
   "page_version": 2,
   "binary": {
     "receipt": {
       "schema_version": 1,
-      "operation_id": "operation_329abfefdd7942b6a32a007f897ef21f",
-      "item_id": "item_1cc160402faa4cccba3c6762af3e9c3c",
+      "operation_id": "operation_91fd3eb6b76b4f5f8a8f13c0671e3bd6",
+      "item_id": "item_10383bd1f1864fedba829fa8afa81d98",
       "status": "failed",
       "mode": "publish",
       "exit_code": 5,
@@ -254,7 +254,7 @@
         "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
         "size_bytes": 180736
       },
-      "snapshot_id": "snapshot_30061cf2b77e4089950b4cd7d40b49c5",
+      "snapshot_id": "snapshot_1c88cd8c28d84af4a4ba2e1dcbcf988f",
       "page_id": null,
       "page_url": null,
       "task_count": 6,
@@ -388,7 +388,7 @@
             "plan_plugin_result_not_verified"
           ],
           "evidence_ids": [
-            "artifact_74cba9be034b443ca746d797752bb906"
+            "artifact_f456e459fe4542ab8198bfe243201e84"
           ]
         }
       },
@@ -397,22 +397,22 @@
         {
           "code": "local_scheduler_prepared_unsupported",
           "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_74cba9be034b443ca746d797752bb906"
+          "details_ref": "artifact:artifact_f456e459fe4542ab8198bfe243201e84"
         },
         {
           "code": "source_snapshot_dates",
           "message": "source_snapshot_dates: 5 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_74cba9be034b443ca746d797752bb906"
+          "details_ref": "artifact:artifact_f456e459fe4542ab8198bfe243201e84"
         },
         {
           "code": "specific_plan_plugin_result_not_verified",
           "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_74cba9be034b443ca746d797752bb906"
+          "details_ref": "artifact:artifact_f456e459fe4542ab8198bfe243201e84"
         },
         {
           "code": "unassigned_resource_source_display",
           "message": "unassigned_resource_source_display: 5 проверок; подробности в свидетельстве",
-          "details_ref": "artifact:artifact_74cba9be034b443ca746d797752bb906"
+          "details_ref": "artifact:artifact_f456e459fe4542ab8198bfe243201e84"
         }
       ],
       "completed_stages": [
@@ -425,7 +425,7 @@
         "code": "summary_root_missing",
         "message": "summary_root_missing",
         "retryable": false,
-        "next_action": "operation show --operation-id operation_329abfefdd7942b6a32a007f897ef21f"
+        "next_action": "operation show --operation-id operation_91fd3eb6b76b4f5f8a8f13c0671e3bd6"
       }
     },
     "counters": {
@@ -438,11 +438,11 @@
     "calls": [
       {
         "method": "GET",
-        "path": "/rest/api/content/537576395"
+        "path": "/rest/api/content/537576691"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576395/child/attachment"
+        "path": "/rest/api/content/537576691/child/attachment"
       }
     ]
   },

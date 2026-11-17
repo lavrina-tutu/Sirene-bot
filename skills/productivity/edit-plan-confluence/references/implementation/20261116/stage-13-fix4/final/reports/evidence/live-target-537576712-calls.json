@@ -1,0 +1,41 @@
+{
+  "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[A]",
+  "observed_at": "2026-11-17T21:38:51.910786+00:00",
+  "page_id": "537576712",
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/rest/api/content/519501810"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/content"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576712"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576712/child/attachment"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576713"
+    },
+    {
+      "method": "GET",
+      "path": "/download/attachments/537576712/gantt-chart-719aa45a21b04c4d85c0145f09be1864.json"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576712"
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/content/537576713"
+    }
+  ],
+  "POST": 1,
+  "PUT": 0
+}

@@ -1,24 +1,24 @@
 {
   "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[diff]",
-  "observed_at": "2026-11-17T17:05:35.943666+00:00",
+  "observed_at": "2026-11-17T21:36:57.702705+00:00",
   "command": [
     "/usr/bin/python3",
     "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
     "--db",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu0/state/index.sqlite",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu0/state/index.sqlite",
     "--workvault",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu0/WorkVault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu0/WorkVault",
     "--cache-dir",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu0/cache",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu0/cache",
     "resume",
     "--operation-id",
-    "operation_1770b940931d4474ac4a9f59b26602eb",
+    "operation_3e8926c42c9a4b08a58a3e2350b4d285",
     "--mapping-revision",
-    "mapping_889cc6a5410d4f048a7076832583bcc6"
+    "mapping_9b030db2da834dc3acc0a297a578ba27"
   ],
   "rc": 0,
-  "duration_seconds": 5.12158224300947,
-  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_1770b940931d4474ac4a9f59b26602eb\", \"item_id\": \"item_a3fe64a5210549fbb75c73bb057ee16a\", \"status\": \"published_with_warnings\", \"mode\": \"publish\", \"exit_code\": 0, \"project_slug\": \"stage13-binary-positive\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_4b36ebe16ed04d7bb5ad2393ec4fb425\", \"page_id\": \"537576410\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537576410\", \"task_count\": 6, \"display_task_count\": 6, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"new-source-diff\", \"revision\": \"binary-fixture-v1\", \"result\": \"applied\", \"evidence_id\": \"artifact_e8cad0156c354a25a679c7668ca4a2c5\", \"reason\": \"historical_consent_and_current_cause_verified\", \"owner_decision\": null}], \"attachment_version\": 1, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"storage\": \"verified\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"source_snapshot_dates\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 6, \"example_entities\": [\"uid:1000\", \"uid:1\", \"uid:2\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_4ab452b131ff46a9a2db15c562e1bf3b\"]}}, \"published\": true, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_4ab452b131ff46a9a2db15c562e1bf3b\"}, {\"code\": \"source_snapshot_dates\", \"message\": \"source_snapshot_dates: 6 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_4ab452b131ff46a9a2db15c562e1bf3b\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_4ab452b131ff46a9a2db15c562e1bf3b\"}], \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"external_effect\": \"storage_written\", \"error\": null}\n",
+  "duration_seconds": 6.316145402030088,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_3e8926c42c9a4b08a58a3e2350b4d285\", \"item_id\": \"item_579655f7d319429baa884bc13cdc1d19\", \"status\": \"published_with_warnings\", \"mode\": \"publish\", \"exit_code\": 0, \"project_slug\": \"stage13-binary-positive\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"snapshot_id\": \"snapshot_ce56fc0ef2af4c36bd8f1264a68273ad\", \"page_id\": \"537576706\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537576706\", \"task_count\": 6, \"display_task_count\": 6, \"dependency_count\": 4, \"exceptions\": [{\"rule_id\": \"new-source-diff\", \"revision\": \"binary-fixture-v1\", \"result\": \"applied\", \"evidence_id\": \"artifact_aa3eb58218e8480491c33a7556116cbb\", \"reason\": \"historical_consent_and_current_cause_verified\", \"owner_decision\": null}], \"attachment_version\": 1, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"storage\": \"verified\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"source_snapshot_dates\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 6, \"example_entities\": [\"uid:1000\", \"uid:1\", \"uid:2\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_53c7a173164847709fef2fd53da645ed\"]}}, \"published\": true, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_53c7a173164847709fef2fd53da645ed\"}, {\"code\": \"source_snapshot_dates\", \"message\": \"source_snapshot_dates: 6 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_53c7a173164847709fef2fd53da645ed\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_53c7a173164847709fef2fd53da645ed\"}], \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"external_effect\": \"storage_written\", \"error\": null}\n",
   "stderr": "",
   "live": true,
   "counters": {
@@ -30,83 +30,83 @@
     "calls": [
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410"
+        "path": "/rest/api/content/537576706"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410"
+        "path": "/rest/api/content/537576706"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410"
+        "path": "/rest/api/content/537576706"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410/child/attachment"
+        "path": "/rest/api/content/537576706/child/attachment"
       },
       {
         "method": "POST",
-        "path": "/rest/api/content/537576410/child/attachment"
+        "path": "/rest/api/content/537576706/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410/child/attachment"
+        "path": "/rest/api/content/537576706/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576411"
+        "path": "/rest/api/content/537576707"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576410/gantt-chart-8ef52d0001fd4cb59095e5bf0634f64a.json"
+        "path": "/download/attachments/537576706/gantt-chart-7fd17095089d4af985bd824d8793e6ab.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410/child/attachment"
+        "path": "/rest/api/content/537576706/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410"
+        "path": "/rest/api/content/537576706"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410/child/attachment"
+        "path": "/rest/api/content/537576706/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576411"
+        "path": "/rest/api/content/537576707"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576410/gantt-chart-8ef52d0001fd4cb59095e5bf0634f64a.json"
+        "path": "/download/attachments/537576706/gantt-chart-7fd17095089d4af985bd824d8793e6ab.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410/child/attachment"
+        "path": "/rest/api/content/537576706/child/attachment"
       },
       {
         "method": "PUT",
-        "path": "/rest/api/content/537576410"
+        "path": "/rest/api/content/537576706"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410"
+        "path": "/rest/api/content/537576706"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410/child/attachment"
+        "path": "/rest/api/content/537576706/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576411"
+        "path": "/rest/api/content/537576707"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576410/gantt-chart-8ef52d0001fd4cb59095e5bf0634f64a.json"
+        "path": "/download/attachments/537576706/gantt-chart-7fd17095089d4af985bd824d8793e6ab.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576410/child/attachment"
+        "path": "/rest/api/content/537576706/child/attachment"
       }
     ]
   }

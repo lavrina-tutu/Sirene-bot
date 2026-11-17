@@ -1,6 +1,6 @@
 {
   "test_id": "acceptance/test_user_journeys.py::test_inbox_errors_resume_and_history[continue]",
-  "observed_at": "2026-11-17T16:56:11.478416+00:00",
+  "observed_at": "2026-11-17T21:26:49.655333+00:00",
   "case": "G",
   "result": {
     "schema_version": 1,
@@ -21,8 +21,8 @@
         "not_started": 0
       },
       "error": null,
-      "manifest_sha256": "d8378abfec6f0fa6b917c8b375c5233fc923b9b7d7652a82a89af3faebac96db",
-      "inputs_frozen_at": "2026-11-17T16:55:52+00:00",
+      "manifest_sha256": "b5f84e5dbf51c8e2e6a8ec44e2e771fb24f51c639dbb47a4a936fb80a789ab2d",
+      "inputs_frozen_at": "2026-11-17T21:26:30+00:00",
       "items": [
         {
           "item_id": "2",

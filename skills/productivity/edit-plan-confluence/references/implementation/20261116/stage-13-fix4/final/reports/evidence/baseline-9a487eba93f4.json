@@ -1,20 +1,20 @@
 {
   "test_id": "acceptance/test_live_publication.py::test_binary_identity_does_not_override_semantic_losses[publish]",
-  "observed_at": "2026-11-17T17:05:18.068939+00:00",
+  "observed_at": "2026-11-17T21:36:36.156417+00:00",
   "baseline_before": {
     "plan_baseline_selection": [
-      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a6f54e8e17e9482fa12d63f6d8ebe23b','plan_77ef142a3feb42bab716a4301d71096c','snapshot_18fbdd4ee7c54030b7b3230aa44c0090',0,1,'test owner before acceptance',NULL,'2026-11-17T17:05:02+00:00');"
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_d66e6c93b1c344dea023ab47abc8791d','plan_fd54f8c6807c40068c0be967a1131d83','snapshot_216a97542a3649409c8bd7f46fdf40a2',0,1,'test owner before acceptance',NULL,'2026-11-17T21:36:19+00:00');"
     ],
     "plan_snapshot_selection": [
-      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3f324a7dd4c2460b9d57b86051d5da5c','lineage_42bf9490ccf7461d939a4b5b45ff1096','snapshot_18fbdd4ee7c54030b7b3230aa44c0090',1,'test owner before acceptance',NULL,'2026-11-17T17:05:02+00:00');"
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1b2cc35d8dd9494d9f15002d6697e43f','lineage_b105256b545d4a69aa0ab16269e37069','snapshot_216a97542a3649409c8bd7f46fdf40a2',1,'test owner before acceptance',NULL,'2026-11-17T21:36:19+00:00');"
     ]
   },
   "baseline_after": {
     "plan_baseline_selection": [
-      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_a6f54e8e17e9482fa12d63f6d8ebe23b','plan_77ef142a3feb42bab716a4301d71096c','snapshot_18fbdd4ee7c54030b7b3230aa44c0090',0,1,'test owner before acceptance',NULL,'2026-11-17T17:05:02+00:00');"
+      "INSERT INTO \"plan_baseline_selection\" VALUES('bsel_d66e6c93b1c344dea023ab47abc8791d','plan_fd54f8c6807c40068c0be967a1131d83','snapshot_216a97542a3649409c8bd7f46fdf40a2',0,1,'test owner before acceptance',NULL,'2026-11-17T21:36:19+00:00');"
     ],
     "plan_snapshot_selection": [
-      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_3f324a7dd4c2460b9d57b86051d5da5c','lineage_42bf9490ccf7461d939a4b5b45ff1096','snapshot_18fbdd4ee7c54030b7b3230aa44c0090',1,'test owner before acceptance',NULL,'2026-11-17T17:05:02+00:00');"
+      "INSERT INTO \"plan_snapshot_selection\" VALUES('sel_1b2cc35d8dd9494d9f15002d6697e43f','lineage_b105256b545d4a69aa0ab16269e37069','snapshot_216a97542a3649409c8bd7f46fdf40a2',1,'test owner before acceptance',NULL,'2026-11-17T21:36:19+00:00');"
     ]
   },
   "unchanged": true

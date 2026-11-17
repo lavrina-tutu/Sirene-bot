@@ -1,28 +1,28 @@
 {
   "test_id": "acceptance/test_live_publication.py::test_real_publish_repeat_and_observed_dates[C]",
-  "observed_at": "2026-11-17T17:10:13.860103+00:00",
+  "observed_at": "2026-11-17T21:41:57.818993+00:00",
   "command": [
     "/usr/bin/python3",
     "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
     "--db",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/state/index.sqlite",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/state/index.sqlite",
     "--workvault",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/WorkVault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/WorkVault",
     "--cache-dir",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/cache",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/cache",
     "publish",
     "--mpp",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_real_publish_repeat_and_o2/C.mpp",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_real_publish_repeat_and_o2/C.mpp",
     "--page-id",
-    "537576424",
+    "537576718",
     "--project-slug",
     "trisigma",
     "--timezone-hint",
     "Europe/Moscow"
   ],
   "rc": 0,
-  "duration_seconds": 12.019161903008353,
-  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_0619136151864936a3b524e44ffd3cfa\", \"item_id\": \"item_33ea3244ae8842158abd0f5d702f9f2d\", \"status\": \"unchanged\", \"mode\": \"publish\", \"exit_code\": 0, \"project_slug\": \"trisigma\", \"source\": {\"name\": \"C.mpp\", \"sha256\": \"38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7\", \"size_bytes\": 532480}, \"snapshot_id\": \"snapshot_e0f09ac08fc8477187e7a475c2a32b2f\", \"page_id\": \"537576424\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537576424\", \"task_count\": 62, \"display_task_count\": 61, \"dependency_count\": 61, \"exceptions\": [{\"rule_id\": \"C\", \"revision\": \"historical-unresolved-v1\", \"result\": \"not_needed\", \"evidence_id\": null, \"reason\": \"историческое правило не применяется (решение владельца)\", \"owner_decision\": {\"schema_version\": 1, \"decision_id\": \"owner-20261117-fix4\", \"evidence_path\": \"references/implementation/20261116/stage-13-fix4/owner-decision.md\", \"evidence_sha256\": \"e6bc9687628d390a115378cb2dcc8953a78af26bcc74f3a58781cac15fd666a1\", \"historical_rules\": \"not_applicable\", \"unassigned_resources\": \"preserve_source_display\", \"actuality\": \"source_file_mtime_ns\"}}], \"attachment_version\": 1, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"storage\": \"verified\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"historical_rule_not_applicable_owner_decision\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"C\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"source_snapshot_dates\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 61, \"example_entities\": [\"uid:164\", \"uid:532\", \"uid:373\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_duration\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 17, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_finish\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 14, \"example_entities\": [\"uid:322\", \"uid:510\", \"uid:323\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_start\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 18, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_work\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 17, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:resume\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 18, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:stop\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 18, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"unassigned_resource_source_display\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 6, \"example_entities\": [\"uid:441\", \"uid:443\", \"uid:445\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_5e9744a0aef34756b5d35e95addbe926\"]}}, \"published\": true, \"warnings\": [{\"code\": \"historical_rule_not_applicable_owner_decision\", \"message\": \"historical_rule_not_applicable_owner_decision: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"source_snapshot_dates\", \"message\": \"source_snapshot_dates: 61 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"task_actuals_display_only:actual_duration\", \"message\": \"task_actuals_display_only:actual_duration: 17 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"task_actuals_display_only:actual_finish\", \"message\": \"task_actuals_display_only:actual_finish: 14 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"task_actuals_display_only:actual_start\", \"message\": \"task_actuals_display_only:actual_start: 18 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"task_actuals_display_only:actual_work\", \"message\": \"task_actuals_display_only:actual_work: 17 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"task_actuals_display_only:resume\", \"message\": \"task_actuals_display_only:resume: 18 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"task_actuals_display_only:stop\", \"message\": \"task_actuals_display_only:stop: 18 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}, {\"code\": \"unassigned_resource_source_display\", \"message\": \"unassigned_resource_source_display: 6 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_5e9744a0aef34756b5d35e95addbe926\"}], \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"external_effect\": \"none\", \"error\": null}\n",
+  "duration_seconds": 13.186585600022227,
+  "stdout": "{\"schema_version\": 1, \"operation_id\": \"operation_633827c253d24f9780716017db433869\", \"item_id\": \"item_3d6b214289e444809f8afebdcedcad26\", \"status\": \"unchanged\", \"mode\": \"publish\", \"exit_code\": 0, \"project_slug\": \"trisigma\", \"source\": {\"name\": \"C.mpp\", \"sha256\": \"38aa9b0c6b0a15a4e159078bd81b03fc4d7b3bcc69a71e5fc0182bb1d035b8f7\", \"size_bytes\": 532480}, \"snapshot_id\": \"snapshot_2a59d9dafc7d4b6984ae1c43dc7b0c63\", \"page_id\": \"537576718\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537576718\", \"task_count\": 62, \"display_task_count\": 61, \"dependency_count\": 61, \"exceptions\": [{\"rule_id\": \"C\", \"revision\": \"historical-unresolved-v1\", \"result\": \"not_needed\", \"evidence_id\": null, \"reason\": \"историческое правило не применяется (решение владельца)\", \"owner_decision\": {\"schema_version\": 1, \"decision_id\": \"owner-20261117-fix4\", \"evidence_path\": \"references/implementation/20261116/stage-13-fix4/owner-decision.md\", \"evidence_sha256\": \"22455970f9d7667bfd98ba1e249339e4ec5cc33c530ab35145de6e492e4c521d\", \"historical_rules\": \"not_applicable\", \"unassigned_resources\": \"preserve_source_display\", \"actuality\": \"source_file_mtime_ns\", \"milestone_interval_conflict\": \"publish_collapsed\"}}], \"attachment_version\": 1, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"storage\": \"verified\", \"source_values\": {\"status\": \"not_verified\", \"checks\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"evidence_ids\": []}, \"schedule\": {\"status\": \"not_verified\", \"checks\": [{\"row\": 5, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"model\"]}, {\"row\": 6, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"plugin\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"historical_rule_not_applicable_owner_decision\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 1, \"example_entities\": [\"C\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"source_snapshot_dates\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 61, \"example_entities\": [\"uid:164\", \"uid:532\", \"uid:373\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_duration\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 17, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_finish\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 14, \"example_entities\": [\"uid:322\", \"uid:510\", \"uid:323\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_start\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 18, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:actual_work\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 17, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:resume\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 18, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"task_actuals_display_only:stop\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 18, \"example_entities\": [\"uid:164\", \"uid:376\", \"uid:322\"]}, {\"row\": 20, \"category\": \"display_only\", \"code\": \"unassigned_resource_source_display\", \"exit_code\": 0, \"accepted_deviation\": false, \"count\": 6, \"example_entities\": [\"uid:441\", \"uid:443\", \"uid:445\"]}], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"evidence_ids\": [\"artifact_44b958c4ad5d47fca870f97351c16865\"]}}, \"published\": true, \"warnings\": [{\"code\": \"historical_rule_not_applicable_owner_decision\", \"message\": \"historical_rule_not_applicable_owner_decision: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"local_scheduler_prepared_unsupported\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"source_snapshot_dates\", \"message\": \"source_snapshot_dates: 61 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"task_actuals_display_only:actual_duration\", \"message\": \"task_actuals_display_only:actual_duration: 17 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"task_actuals_display_only:actual_finish\", \"message\": \"task_actuals_display_only:actual_finish: 14 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"task_actuals_display_only:actual_start\", \"message\": \"task_actuals_display_only:actual_start: 18 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"task_actuals_display_only:actual_work\", \"message\": \"task_actuals_display_only:actual_work: 17 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"task_actuals_display_only:resume\", \"message\": \"task_actuals_display_only:resume: 18 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"task_actuals_display_only:stop\", \"message\": \"task_actuals_display_only:stop: 18 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}, {\"code\": \"unassigned_resource_source_display\", \"message\": \"unassigned_resource_source_display: 6 проверок; подробности в свидетельстве\", \"details_ref\": \"artifact:artifact_44b958c4ad5d47fca870f97351c16865\"}], \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"external_effect\": \"none\", \"error\": null}\n",
   "stderr": "",
   "live": true,
   "counters": {
@@ -34,107 +34,107 @@
     "calls": [
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424"
+        "path": "/rest/api/content/537576718"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424/child/attachment"
+        "path": "/rest/api/content/537576718/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424"
+        "path": "/rest/api/content/537576718"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424/child/attachment"
+        "path": "/rest/api/content/537576718/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576426"
+        "path": "/rest/api/content/537576719"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576424/gantt-chart-26840fb91e2649ef81ed03fa0262ba44.json"
+        "path": "/download/attachments/537576718/gantt-chart-f4b37d9a56354e39b8074838b59a9bcf.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576426"
+        "path": "/rest/api/content/537576719"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576424/gantt-chart-26840fb91e2649ef81ed03fa0262ba44.json"
+        "path": "/download/attachments/537576718/gantt-chart-f4b37d9a56354e39b8074838b59a9bcf.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424"
+        "path": "/rest/api/content/537576718"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424/child/attachment"
+        "path": "/rest/api/content/537576718/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576426"
+        "path": "/rest/api/content/537576719"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576424/gantt-chart-26840fb91e2649ef81ed03fa0262ba44.json"
+        "path": "/download/attachments/537576718/gantt-chart-f4b37d9a56354e39b8074838b59a9bcf.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424/child/attachment"
+        "path": "/rest/api/content/537576718/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576426"
+        "path": "/rest/api/content/537576719"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576424/gantt-chart-26840fb91e2649ef81ed03fa0262ba44.json"
+        "path": "/download/attachments/537576718/gantt-chart-f4b37d9a56354e39b8074838b59a9bcf.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424/child/attachment"
+        "path": "/rest/api/content/537576718/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424"
+        "path": "/rest/api/content/537576718"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424/child/attachment"
+        "path": "/rest/api/content/537576718/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576426"
+        "path": "/rest/api/content/537576719"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576424/gantt-chart-26840fb91e2649ef81ed03fa0262ba44.json"
+        "path": "/download/attachments/537576718/gantt-chart-f4b37d9a56354e39b8074838b59a9bcf.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424/child/attachment"
+        "path": "/rest/api/content/537576718/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424"
+        "path": "/rest/api/content/537576718"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424/child/attachment"
+        "path": "/rest/api/content/537576718/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576426"
+        "path": "/rest/api/content/537576719"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576424/gantt-chart-26840fb91e2649ef81ed03fa0262ba44.json"
+        "path": "/download/attachments/537576718/gantt-chart-f4b37d9a56354e39b8074838b59a9bcf.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576424/child/attachment"
+        "path": "/rest/api/content/537576718/child/attachment"
       }
     ]
   }

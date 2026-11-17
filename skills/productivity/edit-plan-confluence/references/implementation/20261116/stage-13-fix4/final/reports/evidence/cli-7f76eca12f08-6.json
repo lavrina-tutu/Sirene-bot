@@ -1,22 +1,22 @@
 {
   "test_id": "acceptance/test_live_publication.py::test_new_binary_identity_to_publication[publish]",
-  "observed_at": "2026-11-17T17:05:58.971697+00:00",
+  "observed_at": "2026-11-17T21:37:24.370508+00:00",
   "command": [
     "/usr/bin/python3",
     "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/scripts/cli.py",
     "--db",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu1/state/index.sqlite",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu1/state/index.sqlite",
     "--workvault",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu1/WorkVault",
     "--cache-dir",
-    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
+    "/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/pytest-tmp/test_new_binary_identity_to_pu1/cache",
     "resume",
     "--operation-id",
-    "operation_5dcee0ee87f141dd9ea0469a7d113184"
+    "operation_7c60cdef618541c2848165eff699206e"
   ],
   "rc": 0,
-  "duration_seconds": 2.8549202990252525,
-  "stdout": "{\"attachment_version\": 1, \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"dependency_count\": 4, \"display_task_count\": 6, \"error\": null, \"exceptions\": [{\"evidence_id\": \"artifact_39398764e2cc44e9879f4c956b7e719c\", \"owner_decision\": null, \"reason\": \"historical_consent_and_current_cause_verified\", \"result\": \"applied\", \"revision\": \"binary-fixture-v1\", \"rule_id\": \"new-source-publish\"}], \"exit_code\": 0, \"external_effect\": \"none\", \"item_id\": \"item_09f8b578b88e4fb2b5119a72f1f44382\", \"mode\": \"publish\", \"operation_id\": \"operation_5dcee0ee87f141dd9ea0469a7d113184\", \"page_id\": \"537576413\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537576413\", \"project_slug\": \"stage13-binary-positive\", \"published\": true, \"schema_version\": 1, \"snapshot_id\": \"snapshot_8e27530d7c41460dacc1f1cfc4d9d07e\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"status\": \"unchanged\", \"task_count\": 6, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"schedule\": {\"checks\": [{\"accepted_deviation\": false, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"count\": 1, \"example_entities\": [\"model\"], \"exit_code\": 0, \"row\": 5}, {\"accepted_deviation\": false, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"count\": 1, \"example_entities\": [\"plugin\"], \"exit_code\": 0, \"row\": 6}, {\"accepted_deviation\": false, \"category\": \"display_only\", \"code\": \"source_snapshot_dates\", \"count\": 6, \"example_entities\": [\"uid:1000\", \"uid:1\", \"uid:2\"], \"exit_code\": 0, \"row\": 20}], \"evidence_ids\": [\"artifact_f49aa5015cb149669c6df2ff0e6498ea\"], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"status\": \"not_verified\"}, \"source_values\": {\"checks\": [], \"evidence_ids\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"status\": \"not_verified\"}, \"storage\": \"verified\"}, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"details_ref\": \"artifact:artifact_f49aa5015cb149669c6df2ff0e6498ea\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\"}, {\"code\": \"source_snapshot_dates\", \"details_ref\": \"artifact:artifact_f49aa5015cb149669c6df2ff0e6498ea\", \"message\": \"source_snapshot_dates: 6 проверок; подробности в свидетельстве\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"details_ref\": \"artifact:artifact_f49aa5015cb149669c6df2ff0e6498ea\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\"}]}\n",
+  "duration_seconds": 3.0044685060274787,
+  "stdout": "{\"attachment_version\": 1, \"completed_stages\": [\"prepared\", \"archived\", \"admitted\", \"attachment_uploaded\", \"attachment_verified\", \"storage_written\", \"storage_verified\", \"confirmed\"], \"dependency_count\": 4, \"display_task_count\": 6, \"error\": null, \"exceptions\": [{\"evidence_id\": \"artifact_b4837058564148aebf1c56d7485508c4\", \"owner_decision\": null, \"reason\": \"historical_consent_and_current_cause_verified\", \"result\": \"applied\", \"revision\": \"binary-fixture-v1\", \"rule_id\": \"new-source-publish\"}], \"exit_code\": 0, \"external_effect\": \"none\", \"item_id\": \"item_452fcc8b27304771a25daa0b6e0afe4f\", \"mode\": \"publish\", \"operation_id\": \"operation_7c60cdef618541c2848165eff699206e\", \"page_id\": \"537576709\", \"page_url\": \"https://dom.tutu.ru/pages/viewpage.action?pageId=537576709\", \"project_slug\": \"stage13-binary-positive\", \"published\": true, \"schema_version\": 1, \"snapshot_id\": \"snapshot_bbb24f35fd0b41f5a2c484690ada42c7\", \"source\": {\"name\": \"new-binary.mpp\", \"sha256\": \"e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b\", \"size_bytes\": 180736}, \"status\": \"unchanged\", \"task_count\": 6, \"verification\": {\"archive\": \"verified\", \"attachment\": \"verified\", \"schedule\": {\"checks\": [{\"accepted_deviation\": false, \"category\": \"local_unsupported\", \"code\": \"local_scheduler_prepared_unsupported\", \"count\": 1, \"example_entities\": [\"model\"], \"exit_code\": 0, \"row\": 5}, {\"accepted_deviation\": false, \"category\": \"plugin_unobserved\", \"code\": \"specific_plan_plugin_result_not_verified\", \"count\": 1, \"example_entities\": [\"plugin\"], \"exit_code\": 0, \"row\": 6}, {\"accepted_deviation\": false, \"category\": \"display_only\", \"code\": \"source_snapshot_dates\", \"count\": 6, \"example_entities\": [\"uid:1000\", \"uid:1\", \"uid:2\"], \"exit_code\": 0, \"row\": 20}], \"evidence_ids\": [\"artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67\"], \"limitations\": [\"local_scheduler_not_run\", \"plan_plugin_result_not_verified\"], \"status\": \"not_verified\"}, \"source_values\": {\"checks\": [], \"evidence_ids\": [], \"limitations\": [\"ordinary_view_for_this_plan_not_observed\"], \"status\": \"not_verified\"}, \"storage\": \"verified\"}, \"warnings\": [{\"code\": \"local_scheduler_prepared_unsupported\", \"details_ref\": \"artifact:artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67\", \"message\": \"local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве\"}, {\"code\": \"source_snapshot_dates\", \"details_ref\": \"artifact:artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67\", \"message\": \"source_snapshot_dates: 6 проверок; подробности в свидетельстве\"}, {\"code\": \"specific_plan_plugin_result_not_verified\", \"details_ref\": \"artifact:artifact_0a0ace01ffa646e29b6ebf5bb8bc4f67\", \"message\": \"specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве\"}]}\n",
   "stderr": "",
   "live": true,
   "counters": {
@@ -28,23 +28,23 @@
     "calls": [
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413"
+        "path": "/rest/api/content/537576709"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576414"
+        "path": "/rest/api/content/537576710"
       },
       {
         "method": "GET",
-        "path": "/download/attachments/537576413/gantt-chart-cec13229217543e1827ff15c5be6e583.json"
+        "path": "/download/attachments/537576709/gantt-chart-dc468e77a046470ba61bed2d13c2e1c7.json"
       },
       {
         "method": "GET",
-        "path": "/rest/api/content/537576413/child/attachment"
+        "path": "/rest/api/content/537576709/child/attachment"
       }
     ]
   }

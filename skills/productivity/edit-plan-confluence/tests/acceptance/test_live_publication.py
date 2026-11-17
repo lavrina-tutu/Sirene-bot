@@ -234,11 +234,28 @@ def test_real_publish_repeat_and_observed_dates(case, live_page, stage13_input, 
         for task in observation['tasks']:
             source_task = source_dates.get(str(task['id']))
             if source_task:
+                duration_amount = None
+                try:
+                    duration_amount = source_task.get('duration', {}).get('quantity', {}).get('amount')
+                except AttributeError:
+                    pass
+                collapsed = (source_task.get('milestone') is True and duration_amount == '0'
+                             and source_task.get('start', {}).get('value') != source_task.get('finish', {}).get('value'))
                 for original, observed in [('start','start'),('finish','finish')]:
                     expected_date = source_task[original].get('value')
                     if expected_date:
-                        delta = abs((datetime.fromisoformat(task[observed])-datetime.fromisoformat(expected_date)).total_seconds())
-                        assert delta <= 60
+                        if collapsed:
+                            # Решение владельца: веха с duration=0 и расходящимися
+                            # start/finish публикуется как есть, плагин рисует точку.
+                            # Наблюдается одна дата; обе исходные даты остаются в архиве.
+                            delta = abs((datetime.fromisoformat(task[observed])-datetime.fromisoformat(source_task['start'].get('value'))).total_seconds())
+                            if original == 'start':
+                                assert delta <= 60
+                            else:
+                                assert delta <= 60 or abs((datetime.fromisoformat(task[observed])-datetime.fromisoformat(source_task['finish'].get('value'))).total_seconds()) <= 60
+                        else:
+                            delta = abs((datetime.fromisoformat(task[observed])-datetime.fromisoformat(expected_date)).total_seconds())
+                            assert delta <= 60
         repeat = run('publish', '--mpp', str(source), '--page-id', page_id, '--project-slug', 'trisigma',
                      '--timezone-hint', 'Europe/Moscow', live=True)
         status['repeat'] = repeat; status['repeat_counters'] = run.last_probe

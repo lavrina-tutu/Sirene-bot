@@ -1,6 +1,6 @@
 {
   "test_id": "acceptance/test_cases_trisigma.py::test_real_cold_warm_archive[C]",
-  "observed_at": "2026-11-17T16:49:37.766783+00:00",
+  "observed_at": "2026-11-17T21:20:08.493779+00:00",
   "case": "C",
   "historical": {
     "model": 89,

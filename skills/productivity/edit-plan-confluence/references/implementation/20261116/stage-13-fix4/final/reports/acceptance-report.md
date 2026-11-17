@@ -1,11 +1,11 @@
 # Этап 13 — комплексная приёмка
 
-Gate: **failed**; pytest rc=1; selected=824.
+Gate: **passed**; pytest rc=0; selected=824.
 
 ## Команда
 
 ```text
-/usr/bin/python3.9 -m pytest -c skills/productivity/edit-plan-confluence/tests/pytest.ini skills/productivity/edit-plan-confluence/tests --acceptance-stage 13 --test-root /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final -m unit or archive_integration or mpp_fixtures or confluence_live --junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-20261117/final/reports/junit.xml -q
+/usr/bin/python3.9 -m pytest -c /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/pytest.ini /home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests --acceptance-stage 13 --test-root /home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final -m unit or archive_integration or mpp_fixtures or confluence_live --junitxml=/home/tkachenkoav/.cache/edit-plan-confluence-acceptance/accept-fix4-d4-20261117-r4/final/reports/junit.xml -q
 ```
 
 ## Матрица AC
@@ -13,8 +13,8 @@ Gate: **failed**; pytest rc=1; selected=824.
 | AC | Статус | Подслучаи passed / всего |
 |---|---|---|
 | AC-01 | passed | 0/0 |
-| AC-02 | failed | 0/0 |
-| AC-03 | failed | 0/0 |
+| AC-02 | passed | 0/0 |
+| AC-03 | passed | 0/0 |
 | AC-04 | passed | 8/8 |
 | AC-05 | passed | 0/0 |
 | AC-06 | passed | 0/0 |
@@ -49,7 +49,7 @@ Gate: **failed**; pytest rc=1; selected=824.
 | A | passed | [JSON](cases/A.json) |
 | B | passed | [JSON](cases/B.json) |
 | C | passed | [JSON](cases/C.json) |
-| D | failed | [JSON](cases/D.json) |
+| D | passed | [JSON](cases/D.json) |
 | E | passed | [JSON](cases/E.json) |
 | F | passed | [JSON](cases/F.json) |
 | G | passed | [JSON](cases/G.json) |
@@ -57,7 +57,7 @@ Gate: **failed**; pytest rc=1; selected=824.
 
 ## Пользовательские сценарии
 
-- 01-publish-no-general-consent: **failed**.
+- 01-publish-no-general-consent: **passed**.
 - 02-save-no-client-baseline: **passed**.
 - 03-inbox-one-text-command: **passed**.
 - 04-batch-show-errors: **passed**.
@@ -73,10 +73,10 @@ Gate: **failed**; pytest rc=1; selected=824.
 
 - nonempty_results: True.
 - all_required_selected: True.
-- all_required_passed: False.
-- all_AC_passed: False.
-- all_cases_passed: False.
-- all_journeys_passed: False.
+- all_required_passed: True.
+- all_AC_passed: True.
+- all_cases_passed: True.
+- all_journeys_passed: True.
 - fixtures_verified: True.
 - populated_baseline_preserved: True.
 - protected_files_unchanged: True.
@@ -86,7 +86,7 @@ Gate: **failed**; pytest rc=1; selected=824.
 - prior_twelve_commits: True.
 - original_stage13_failed_preserved: True.
 - no_production_live_targets: True.
-- pytest_exit_zero: False.
+- pytest_exit_zero: True.
 - ordered_phases_2_through_11: True.
 - ordered_unit_archive_mpp_live: True.
 
@@ -103,4 +103,3 @@ Gate: **failed**; pytest rc=1; selected=824.
 
 Непрошедшие обязательные тесты:
 
-- `test_live_publication.py::test_real_publish_repeat_and_observed_dates[D]`

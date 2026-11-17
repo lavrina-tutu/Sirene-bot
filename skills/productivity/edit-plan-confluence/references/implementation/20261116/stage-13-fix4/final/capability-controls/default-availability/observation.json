@@ -4,8 +4,8 @@
     "resource:default_availability"
   ],
   "status": "passed",
-  "page_id": "537576367",
-  "attachment_id": "537576368",
+  "page_id": "537576663",
+  "attachment_id": "537576664",
   "attachment_version": 8,
   "page_version": 1,
   "source_normalization": {
@@ -216,19 +216,19 @@
       "parentId": null,
       "intervals": [
         {
-          "id": "_generatedi_46ebf8d4-e70d-4938-a7cb-6042d0276d70",
+          "id": "_generatedi_a8e2479d-81ff-4ce7-a182-98a6d600eba5",
           "recurrentStartDate": "at 12:00",
           "recurrentEndDate": "at 13:00",
           "isWorking": false
         },
         {
-          "id": "_generatedi_bb9467dc-b859-4b13-b2cf-a6449e3c025c",
+          "id": "_generatedi_be9e412f-9a07-421d-9ed4-737e903f277f",
           "recurrentStartDate": "at 18:00",
           "recurrentEndDate": "at 09:00",
           "isWorking": false
         },
         {
-          "id": "_generatedi_7d1e6ff2-40a7-497c-8c99-58d84960e5b2",
+          "id": "_generatedi_61d05151-be8a-467e-9bdb-18af2b5faf6f",
           "recurrentStartDate": "on Sat",
           "recurrentEndDate": "on Mon",
           "isWorking": false

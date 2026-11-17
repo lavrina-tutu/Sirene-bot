@@ -1,10 +1,10 @@
 {
   "test_id": "acceptance/test_failure_matrix.py::test_identity_choice_complete_preparation_chain[missing]",
-  "observed_at": "2026-11-17T16:47:10.568954+00:00",
+  "observed_at": "2026-11-17T21:17:40.601606+00:00",
   "receipt": {
     "schema_version": 1,
-    "operation_id": "operation_1613cb5d5818450d9485e8e71fad26da",
-    "item_id": "item_26c7689549fb478090651f081c807073",
+    "operation_id": "operation_062495faaae74545bff1c6af88ae403d",
+    "item_id": "item_ae7430b71ce6407b8e3a002c9909891c",
     "status": "needs_decision",
     "mode": "publish",
     "exit_code": 3,
@@ -14,7 +14,7 @@
       "sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
       "size_bytes": 70
     },
-    "snapshot_id": "snapshot_a66337e3fea54d2db0059ad903c32da6",
+    "snapshot_id": "snapshot_3d3c653dd84948a7a067eb90d79f6abe",
     "page_id": null,
     "page_url": null,
     "task_count": 3,
@@ -25,7 +25,7 @@
         "rule_id": "B",
         "revision": "1",
         "result": "inactive",
-        "evidence_id": "artifact_cbbe4aacb4d2424bb66173a73bfddb1d",
+        "evidence_id": "artifact_a04a740024954bdfaa7fa77d1d3047df",
         "reason": "identity_confirmation_required",
         "owner_decision": null
       }
@@ -96,7 +96,7 @@
           "plan_plugin_result_not_verified"
         ],
         "evidence_ids": [
-          "artifact_71b04660b2a54a248ef6f91c5e020407"
+          "artifact_22bf40e70ae2432bbf82a87dc4c14fdb"
         ]
       }
     },
@@ -105,12 +105,12 @@
       {
         "code": "local_scheduler_prepared_unsupported",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_71b04660b2a54a248ef6f91c5e020407"
+        "details_ref": "artifact:artifact_22bf40e70ae2432bbf82a87dc4c14fdb"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_71b04660b2a54a248ef6f91c5e020407"
+        "details_ref": "artifact:artifact_22bf40e70ae2432bbf82a87dc4c14fdb"
       }
     ],
     "completed_stages": [
@@ -123,7 +123,7 @@
       "code": "identity_confirmation_required",
       "message": "identity_confirmation_required",
       "retryable": false,
-      "next_action": "operation show --operation-id operation_1613cb5d5818450d9485e8e71fad26da"
+      "next_action": "operation show --operation-id operation_062495faaae74545bff1c6af88ae403d"
     }
   },
   "counters": {

@@ -1,11 +1,11 @@
 {
   "test_id": "acceptance/test_failure_matrix.py::test_identity_choice_complete_preparation_chain[ambiguous-explicit]",
-  "observed_at": "2026-11-17T16:47:02.579922+00:00",
+  "observed_at": "2026-11-17T21:17:33.005908+00:00",
   "source_kind": "explicit synthetic export; not a real MPXJ measurement",
   "initial": {
     "schema_version": 1,
-    "operation_id": "operation_ca24b41ed0874fb5b4fedfa0a3206b41",
-    "item_id": "item_3100299712b34791a270846781981c93",
+    "operation_id": "operation_7b01699621874a9098f6fac23c29716d",
+    "item_id": "item_1bbd020be1e5426aad625b0af3c5d687",
     "status": "needs_decision",
     "mode": "publish",
     "exit_code": 3,
@@ -15,7 +15,7 @@
       "sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
       "size_bytes": 70
     },
-    "snapshot_id": "snapshot_89eb1999d29242e6b5891dbcc449dae8",
+    "snapshot_id": "snapshot_c32ca6e1a6044718bb0acd922c2dd511",
     "page_id": null,
     "page_url": null,
     "task_count": 3,
@@ -26,7 +26,7 @@
         "rule_id": "B",
         "revision": "1",
         "result": "inactive",
-        "evidence_id": "artifact_f4c4979eea6e430d8015a3a0f3b819ee",
+        "evidence_id": "artifact_16b3a85f734346cbaea4c559cd9a5515",
         "reason": "identity_confirmation_required",
         "owner_decision": null
       }
@@ -97,7 +97,7 @@
           "plan_plugin_result_not_verified"
         ],
         "evidence_ids": [
-          "artifact_c40aeb6eff5c4080bb12ef7c553e8fe9"
+          "artifact_0f1927707f7349d4b2dbe870aeec7e54"
         ]
       }
     },
@@ -106,12 +106,12 @@
       {
         "code": "local_scheduler_prepared_unsupported",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_c40aeb6eff5c4080bb12ef7c553e8fe9"
+        "details_ref": "artifact:artifact_0f1927707f7349d4b2dbe870aeec7e54"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_c40aeb6eff5c4080bb12ef7c553e8fe9"
+        "details_ref": "artifact:artifact_0f1927707f7349d4b2dbe870aeec7e54"
       }
     ],
     "completed_stages": [
@@ -124,7 +124,7 @@
       "code": "identity_confirmation_required",
       "message": "identity_confirmation_required",
       "retryable": false,
-      "next_action": "operation show --operation-id operation_ca24b41ed0874fb5b4fedfa0a3206b41"
+      "next_action": "operation show --operation-id operation_7b01699621874a9098f6fac23c29716d"
     }
   },
   "identity": {
@@ -133,21 +133,21 @@
     "status": "confirmed",
     "exit_code": 0,
     "project_slug": "test",
-    "from_snapshot_id": "snapshot_e28706f23946410b8029ed4ea404649c",
-    "to_snapshot_id": "snapshot_89eb1999d29242e6b5891dbcc449dae8",
+    "from_snapshot_id": "snapshot_550154dc16a540cba766825e4f83c301",
+    "to_snapshot_id": "snapshot_c32ca6e1a6044718bb0acd922c2dd511",
     "from_source_sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
     "to_source_sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
-    "mapping_revision_id": "mapping_1a335d37e6e94fff8b64bbd0a2d56e0f",
+    "mapping_revision_id": "mapping_cb9f9356fc3f4d3bace077068c00ad64",
     "revision_status": "active",
-    "evidence_id": "artifact_f4c4979eea6e430d8015a3a0f3b819ee",
+    "evidence_id": "artifact_16b3a85f734346cbaea4c559cd9a5515",
     "evidence_sha256": "fe5fd3b0f097aca5fda7f043d3740a68253e3a2d92890eb0d8985a35cc91a1aa",
     "published": false,
     "error": null
   },
   "resumed": {
     "schema_version": 1,
-    "operation_id": "operation_ca24b41ed0874fb5b4fedfa0a3206b41",
-    "item_id": "item_3100299712b34791a270846781981c93",
+    "operation_id": "operation_7b01699621874a9098f6fac23c29716d",
+    "item_id": "item_1bbd020be1e5426aad625b0af3c5d687",
     "status": "prepared",
     "mode": "publish",
     "exit_code": 0,
@@ -157,7 +157,7 @@
       "sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
       "size_bytes": 70
     },
-    "snapshot_id": "snapshot_89eb1999d29242e6b5891dbcc449dae8",
+    "snapshot_id": "snapshot_c32ca6e1a6044718bb0acd922c2dd511",
     "page_id": null,
     "page_url": null,
     "task_count": 3,
@@ -168,7 +168,7 @@
         "rule_id": "B",
         "revision": "1",
         "result": "applied",
-        "evidence_id": "artifact_f4c4979eea6e430d8015a3a0f3b819ee",
+        "evidence_id": "artifact_16b3a85f734346cbaea4c559cd9a5515",
         "reason": "historical_consent_and_current_cause_verified",
         "owner_decision": null
       }
@@ -217,7 +217,7 @@
           "plan_plugin_result_not_verified"
         ],
         "evidence_ids": [
-          "artifact_afb481ac95bd4eb58d524a0f250a2138"
+          "artifact_bf77ea95cde0411eb29884da354d1b73"
         ]
       }
     },
@@ -226,12 +226,12 @@
       {
         "code": "local_scheduler_prepared_unsupported",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_afb481ac95bd4eb58d524a0f250a2138"
+        "details_ref": "artifact:artifact_bf77ea95cde0411eb29884da354d1b73"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
-        "details_ref": "artifact:artifact_afb481ac95bd4eb58d524a0f250a2138"
+        "details_ref": "artifact:artifact_bf77ea95cde0411eb29884da354d1b73"
       }
     ],
     "completed_stages": [
@@ -256,7 +256,7 @@
     "error": null,
     "exceptions": [
       {
-        "evidence_id": "artifact_f4c4979eea6e430d8015a3a0f3b819ee",
+        "evidence_id": "artifact_16b3a85f734346cbaea4c559cd9a5515",
         "owner_decision": null,
         "reason": "historical_consent_and_current_cause_verified",
         "result": "applied",
@@ -266,15 +266,15 @@
     ],
     "exit_code": 0,
     "external_effect": "none",
-    "item_id": "item_3100299712b34791a270846781981c93",
+    "item_id": "item_1bbd020be1e5426aad625b0af3c5d687",
     "mode": "publish",
-    "operation_id": "operation_ca24b41ed0874fb5b4fedfa0a3206b41",
+    "operation_id": "operation_7b01699621874a9098f6fac23c29716d",
     "page_id": null,
     "page_url": null,
     "project_slug": "test",
     "published": false,
     "schema_version": 1,
-    "snapshot_id": "snapshot_89eb1999d29242e6b5891dbcc449dae8",
+    "snapshot_id": "snapshot_c32ca6e1a6044718bb0acd922c2dd511",
     "source": {
       "name": "synthetic-source.mpp",
       "sha256": "5edf9757ff8a64357fd3c155f387a81ad61d83cfdb93d775ae7eae72e6ec95c8",
@@ -311,7 +311,7 @@
           }
         ],
         "evidence_ids": [
-          "artifact_afb481ac95bd4eb58d524a0f250a2138"
+          "artifact_bf77ea95cde0411eb29884da354d1b73"
         ],
         "limitations": [
           "local_scheduler_not_run",
@@ -332,17 +332,17 @@
     "warnings": [
       {
         "code": "local_scheduler_prepared_unsupported",
-        "details_ref": "artifact:artifact_afb481ac95bd4eb58d524a0f250a2138",
+        "details_ref": "artifact:artifact_bf77ea95cde0411eb29884da354d1b73",
         "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
       },
       {
         "code": "specific_plan_plugin_result_not_verified",
-        "details_ref": "artifact:artifact_afb481ac95bd4eb58d524a0f250a2138",
+        "details_ref": "artifact:artifact_bf77ea95cde0411eb29884da354d1b73",
         "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
       }
     ]
   },
-  "selected_mapping_revision": "mapping_1a335d37e6e94fff8b64bbd0a2d56e0f",
+  "selected_mapping_revision": "mapping_cb9f9356fc3f4d3bace077068c00ad64",
   "counters": {
     "MPXJ_read": 0,
     "cache_hit": 0,

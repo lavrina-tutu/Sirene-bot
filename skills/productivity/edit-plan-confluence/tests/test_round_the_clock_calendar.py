@@ -7,12 +7,12 @@ import json
 from pathlib import Path
 import pytest
 
-pytestmark = pytest.mark.unit
 SKILL = Path(__file__).resolve().parents[1]
 V2_ID = 'owner-20261118-calendar-publish-as-is-v2'
 V2_SHA = '7ede8a9c5a098c89f1c17897163d8acf925b16d2ba41176de51e117dbf5b16b3'
 
 
+@pytest.mark.unit
 def test_calendar_owner_v2():
     from plan_policy import owner_decision, calendar_publish_as_is
     policy = owner_decision()
@@ -27,6 +27,7 @@ def test_calendar_owner_v2():
 
 
 @pytest.mark.parametrize('damage', ['value', 'id', 'path', 'hash', 'missing'])
+@pytest.mark.unit
 def test_calendar_owner_invalid(tmp_path, monkeypatch, damage):
     import prepared_plan, plan_policy
     from plan_policy import owner_decision
@@ -50,6 +51,7 @@ def test_calendar_owner_invalid(tmp_path, monkeypatch, damage):
         owner_decision()
 
 
+@pytest.mark.unit
 def test_calendar_without_directive_blocks(publish_case, monkeypatch):
     import plan_policy
     from prepared_plan import PreparedPlan
@@ -71,6 +73,7 @@ def test_calendar_without_directive_blocks(publish_case, monkeypatch):
     assert any(f['code'].startswith('calendar_') for f in result['findings'])
 
 
+@pytest.mark.unit
 def test_calendar_not_inspected(publish_case, monkeypatch):
     from prepared_plan import PreparedPlan
     from mpp_convert import convert_prepared_plan
@@ -83,6 +86,7 @@ def test_calendar_not_inspected(publish_case, monkeypatch):
     convert_prepared_plan(prepared, plugin_profile=profile)
 
 
+@pytest.mark.unit
 def test_calendar_classification(publish_case):
     from prepared_plan import PreparedPlan
     from mpp_convert import convert_prepared_plan
@@ -101,6 +105,7 @@ def test_calendar_classification(publish_case):
     assert warning['details_ref'] == 'artifact:test-evidence'
 
 
+@pytest.mark.unit
 def test_calendar_noncalendar_blockers(publish_case):
     from prepared_plan import PreparedPlan
     from mpp_convert import convert_prepared_plan
@@ -116,6 +121,7 @@ def test_calendar_noncalendar_blockers(publish_case):
     assert any(f['entity'] == 'negative-control' for f in admission['blockers'])
 
 
+@pytest.mark.unit
 def test_calendar_exact_source_values(publish_case):
     from prepared_plan import PreparedPlan
     from mpp_convert import convert_prepared_plan, flatten_events
@@ -138,12 +144,17 @@ def test_calendar_exact_source_values(publish_case):
 
 
 @pytest.mark.parametrize('damage', ['hidden_column', 'altered_note', 'missing_root'])
+@pytest.mark.unit
 def test_calendar_snapshot_guard(publish_case, damage):
     from prepared_plan import PreparedPlan
     from mpp_convert import convert_prepared_plan, SNAPSHOT_COLUMN, flatten_events
     from plan_diagnostics import diagnose
     prepared = PreparedPlan.from_export(deepcopy(publish_case['export']), timezone_hint='Europe/Moscow')
     profile = deepcopy(publish_case['profile'])
+    supports = profile.supports
+    # The generic unit profile does not claim snapshot publication. This guard
+    # fixture must opt into that exact capability before preparing its view.
+    profile.supports = lambda name: name == 'publication:source_snapshot_dates' or supports(name)
     conversion = convert_prepared_plan(prepared, plugin_profile=profile)
     root_key = conversion['summary']['root_task_key']
     root_id = conversion['mappings']['tasks'][root_key]
@@ -156,6 +167,7 @@ def test_calendar_snapshot_guard(publish_case, damage):
     assert any(f['code'] == 'source_snapshot_display_unverified' for f in findings)
 
 
+@pytest.mark.unit
 def test_calendar_resume_same_snapshot(publish_case, monkeypatch):
     import plan_policy
     from test_publish_prepare import prepare, _fake_raw_upload
@@ -248,14 +260,17 @@ def calendar_24h(source):
     return data
 
 
+@pytest.mark.unit
 def test_24h_owner_evidence():
     test_calendar_owner_v2()
 
 
+@pytest.mark.unit
 def test_24h_owner_evidence_corrupt_fails_closed(tmp_path, monkeypatch):
     test_calendar_owner_invalid(tmp_path, monkeypatch, 'hash')
 
 
+@pytest.mark.unit
 def test_24h_predicate(publish_case):
     from plan_policy import round_the_clock_calendars
     data = calendar_24h(publish_case['export'])
@@ -267,6 +282,7 @@ def test_24h_predicate(publish_case):
     '24_hour_end','bad_quality','parent','exception','work_week','eight_days','unknown_day','string_bool',
     'empty_intervals','same_nonzero','partial_day','missing_exception_quality','missing_work_week_quality','duplicate_calendar_key',
 ])
+@pytest.mark.unit
 def test_predicate_rejects_near_matches(publish_case, damage):
     from plan_policy import round_the_clock_calendars
     data = calendar_24h(publish_case['export']); cal = data['calendars'][0]
@@ -295,24 +311,29 @@ def test_predicate_rejects_near_matches(publish_case, damage):
     assert round_the_clock_calendars(data) == {}
 
 
+@pytest.mark.unit
 def test_collection_must_be_complete(publish_case):
     from plan_policy import round_the_clock_calendars
     data = calendar_24h(publish_case['export']); data['collections']['calendars']['enumeration_complete'] = False
     assert round_the_clock_calendars(data) == {}
 
 
+@pytest.mark.unit
 def test_24h_classification(publish_case):
     test_calendar_classification(publish_case)
 
 
 @pytest.mark.parametrize('damage', ['hidden_column','altered_note','missing_root'])
+@pytest.mark.unit
 def test_24h_snapshot_guard(publish_case, damage):
     test_calendar_snapshot_guard(publish_case, damage)
 
 
+@pytest.mark.unit
 def test_24h_mixed_blockers(publish_case):
     test_calendar_noncalendar_blockers(publish_case)
 
 
+@pytest.mark.unit
 def test_24h_resume_same_snapshot(publish_case, monkeypatch):
     test_calendar_resume_same_snapshot(publish_case, monkeypatch)

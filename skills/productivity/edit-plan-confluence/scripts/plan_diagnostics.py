@@ -248,7 +248,6 @@ def capability_findings(data, plugin_profile, conversion=None):
                 row['classification'] = 'display-only' if admissible else 'schedule-affecting'
                 issues.append(row)
     for resource in data['resources']:
-        from itogo import field_value
         if (not calendar_v2 and resource.get('availability') and not plugin_profile.supports('resource:availability')
                 and not __import__('mpp_calendar').default_availability_equivalent(resource,data)):
             issues.append(finding('unsupported_semantics','resource_availability_unrepresented',resource['resource_key'],resource['availability']))

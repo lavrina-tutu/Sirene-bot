@@ -11,7 +11,7 @@ from fnmatch import fnmatchcase
 from zoneinfo import ZoneInfo
 
 from prepared_plan import ROOT, fingerprint
-from plan_policy import round_the_clock_calendars
+from plan_policy import calendar_publish_as_is
 from itogo import field_value
 
 
@@ -61,8 +61,31 @@ def completeness(data, profile):
                 walk(v,path+'.'+k if path else k)
         elif isinstance(value,list):
             for index,v in enumerate(value):walk(v,path+'.'+str(index))
+    # Under the validated owner directive, calendar values and their quality
+    # mirrors are preserved as source data but are outside semantic admission.
+    calendar_v2, _authority = calendar_publish_as_is()
+    inspected = deepcopy(data)
+    if calendar_v2:
+        inspected['calendars'] = []
+        inspected['collections']['calendars'] = {'status':'complete','enumeration_complete':True,
+            'count':len(data.get('calendars',[])), 'record_count':len(data.get('calendars',[])), 'error_count':0}
+        calendar_fields = {'default_calendar','default_calendar_key','relationship_lag_calendar','calendar_key','calendar_uid',
+            'effective_calendar_key','ignore_resource_calendar','base_calendar_key','lag_calendar','project_lag_calendar'}
+        def strip_calendar_fields(value):
+            if isinstance(value, dict):
+                for key in list(value):
+                    if key in calendar_fields: value.pop(key, None)
+                    else: strip_calendar_fields(value[key])
+                if isinstance(value.get('quality_issues'), list):
+                    value['quality_issues'] = [q for q in value['quality_issues'] if q.get('field') not in calendar_fields]
+            elif isinstance(value, list):
+                for item in value: strip_calendar_fields(item)
+        for group in ('project','tasks','dependencies','resources','assignments'):
+            strip_calendar_fields(inspected[group])
+    else:
+        inspected=data
     groups=('project','tasks','dependencies','resources','assignments','calendars','external_dependencies')
-    for name in groups:walk(data[name],name)
+    for name in groups:walk(inspected[name],name)
     for prefix,rows in mirrors:
         if not isinstance(rows,list):
             findings.append(finding('incomplete','invalid_quality_issues',prefix+'.quality_issues',rows));continue
@@ -85,12 +108,12 @@ def completeness(data, profile):
         row=finding(category,code,path,deepcopy(item['source']))
         row['provenance_paths']=item['origins'][:]
         findings.append(row);by_group.setdefault(path.split('.')[0],[]).append(row)
-    for name,status in data['collections'].items():
+    for name,status in inspected['collections'].items():
         if status.get('enumeration_complete') is False:
             findings.append(finding('incomplete','collection_enumeration_unproven','collections.'+name,deepcopy(status)))
             continue
         if status['status']=='complete':continue
-        rows=(data.get(name) if name!='baseline_values' else [b for t in data['tasks'] for b in t.get('baseline_values',[])])
+        rows=(inspected.get(name) if name!='baseline_values' else [b for t in inspected['tasks'] for b in t.get('baseline_values',[])])
         causes=by_group.get(name,[])
         record_count=status.get('record_count')
         enumerated=(isinstance(rows,list) and record_count==len(rows)==status.get('count')
@@ -112,7 +135,7 @@ def completeness(data, profile):
                 # graph_findings classifies these exact raw records; never warn.
                 continue
         findings.append(finding('incomplete','collection_'+status['status'],'collections.'+name,deepcopy(status)))
-    audit=data.get('diagnose_graph',{}).get('raw_relation_enumeration')
+    audit=inspected.get('diagnose_graph',{}).get('raw_relation_enumeration')
     if audit is not None:
         raw=audit.get('value') or {}
         if (audit.get('quality')!='ok' or raw.get('enumeration_complete') is not True
@@ -121,7 +144,7 @@ def completeness(data, profile):
                 or audit.get('visible_records_match') is False):
             findings.append(finding('incomplete','raw_relation_completeness_unproven','diagnose_graph.raw_relation_enumeration',deepcopy(audit)))
     for group,properties in profile['known_record_fields'].items():
-        rows=[data[group]] if group=='project' else data[group]
+        rows=[inspected[group]] if group=='project' else inspected[group]
         for index,row in enumerate(rows):
             for key in row.keys()-set(properties):
                 path=group+'.'+str(index)+'.'+key
@@ -132,12 +155,10 @@ def completeness(data, profile):
 
 def capability_findings(data, plugin_profile, conversion=None):
     issues=[]
-    from mpp_calendar import default_availability_equivalent, coincident_assignment_interval
+    from mpp_calendar import coincident_assignment_interval
+    calendar_v2, calendar_authority = calendar_publish_as_is()
     tasks={t['task_key']:t for t in data['tasks'] if 'error' not in t}
     nodes = flatten((conversion or {}).get('gantt', {}).get('eventsData', []))
-    round_clock = round_the_clock_calendars(data)
-    from plan_policy import owner_decision
-    round_clock_owner = owner_decision() if round_clock else {}
     root_key = (conversion or {}).get('summary', {}).get('root_task_key')
     for task in data['tasks']:
         if task.get('id')==0:continue
@@ -149,12 +170,9 @@ def capability_findings(data, plugin_profile, conversion=None):
             visible = all(any(c.get('id')==SNAPSHOT_COLUMN and c.get('hidden') is False
                 for c in gantt.get('initialState',{}).get(mode,{}).get('columns',[])) for mode in ('view','edit'))
             expected_snapshot = snapshot_text(task)
-            if (round_clock and round_clock_owner.get('round_the_clock_calendar') == 'publish_as_is'
-                    and round_clock_owner.get('round_the_clock_calendar_evidence_verified')
-                    and task.get('task_key') == root_key):
-                note = ('В исходнике круглосуточный календарь (7 дней, 00:00–00:00). '
-                    'Даты показаны снимком MPP без пересчёта; исходные интервалы сохранены в архиве.'
-                    + '\nКалендари: ' + ', '.join(round_clock))
+            if calendar_v2 and calendar_authority and task.get('task_key') == root_key:
+                note = ('Даты задач показаны 1-в-1 из MPP без пересчёта. '
+                    'Календарь не анализируется по решению владельца; корректность календарного расписания не проверена.')
                 expected_snapshot = snapshot_text(task, note)
             exact = (node.get('manuallyScheduled') is True and node.get('skipNonWorkingTimeWhenSchedulingManually') is False
                 and node.get(SNAPSHOT_COLUMN)==expected_snapshot and visible
@@ -162,6 +180,15 @@ def capability_findings(data, plugin_profile, conversion=None):
                 and node.get('startDate')==field_value(task.get('start')) and node.get('endDate')==field_value(task.get('finish')))
             from itogo import quantity_minutes
             duration, _, _ = quantity_minutes(task.get('duration'), data['project'], working_only=True)
+            from decimal import Decimal, InvalidOperation
+            raw_day = field_value(data['project'].get('minutes_per_day'))
+            try:
+                represented_duration = Decimal(str(node.get('duration')))*Decimal(str(raw_day))
+                duration_exact = duration is not None and represented_duration == duration
+            except (InvalidOperation, TypeError, ZeroDivisionError):
+                duration_exact = False
+            if calendar_v2 and not duration_exact:
+                issues.append(finding('date_mismatch','task_duration_mismatch',task['task_key'],task.get('duration'),node.get('duration')))
             if task.get('milestone') is True and duration == 0 and field_value(task.get('start')) != field_value(task.get('finish')):
                 from plan_policy import owner_decision
                 decision = owner_decision()
@@ -221,8 +248,9 @@ def capability_findings(data, plugin_profile, conversion=None):
                 row['classification'] = 'display-only' if admissible else 'schedule-affecting'
                 issues.append(row)
     for resource in data['resources']:
-        if (resource.get('availability') and not plugin_profile.supports('resource:availability')
-                and not (plugin_profile.supports('resource:default_availability') and default_availability_equivalent(resource,data))):
+        from itogo import field_value
+        if (not calendar_v2 and resource.get('availability') and not plugin_profile.supports('resource:availability')
+                and not __import__('mpp_calendar').default_availability_equivalent(resource,data)):
             issues.append(finding('unsupported_semantics','resource_availability_unrepresented',resource['resource_key'],resource['availability']))
     for assignment in data['assignments']:
         from mpp_convert import unassigned_source, unassigned_text, UNASSIGNED_COLUMN
@@ -301,6 +329,7 @@ def flatten(events):
 
 def compare_dates(data, conversion, *, observation=None, profile=None):
     profile=profile or policy_profile(); timezone_name=data['resolved_timezone']
+    calendar_v2, _authority = calendar_publish_as_is()
     nodes=flatten(conversion['gantt']['eventsData']); findings=[]; checks=[]
     observed=(observation or {}).get('tasks',{})
     for task in data['tasks']:
@@ -330,7 +359,9 @@ def compare_dates(data, conversion, *, observation=None, profile=None):
                     check.update(absolute_comparison=True,delta_seconds=(bb-aa).total_seconds())
                     if obs is not None:check['observation_delta_seconds']=(absolute(datetime.fromisoformat(obs.replace('Z','+00:00')))-aa).total_seconds()
                     deltas=[check['delta_seconds'],check['observation_delta_seconds']]
-                    if any(v is not None and abs(v)>profile['date_tolerance_seconds'] for v in deltas):
+                    if calendar_v2 and (src != represented or (obs is not None and obs != src)):
+                        findings.append(finding('date_mismatch','task_date_mismatch',key+':'+source_field,src,represented,observed=obs))
+                    elif any(v is not None and abs(v)>profile['date_tolerance_seconds'] for v in deltas):
                         findings.append(finding('date_mismatch','task_date_mismatch',key+':'+source_field,src,represented,observed=obs))
             except (ValueError,TypeError,KeyError):
                 findings.append(finding('incomplete','date_missing_or_ambiguous',key+':'+source_field,src,represented,observed=obs))
@@ -346,63 +377,25 @@ def diagnose(prepared, conversion, *, plugin_profile, excluded=(), observation=N
         findings.append(finding('timezone','timezone_required','source_dates',None))
     if plugin_profile is None or not plugin_profile.document['plugin'].get('version'):
         findings.append(finding('plugin_unknown','plugin_profile_required','plugin'))
-    round_clock = {}
-    round_clock_decision = None
-    round_clock_diagnostics = {}
-    if plugin_profile is not None:
-        from plan_policy import owner_decision
-        round_clock = round_the_clock_calendars(data)
-        if round_clock and plugin_profile.supports('publication:source_snapshot_dates'):
-            try: round_clock_decision = owner_decision()
-            except (OSError,ValueError,KeyError,TypeError): round_clock_decision = None
-    root_ok = False
-    if (round_clock and round_clock_decision
-            and round_clock_decision.get('round_the_clock_calendar') == 'publish_as_is'
-            and round_clock_decision.get('round_the_clock_calendar_evidence_verified')
-            and conversion.get('summary',{}).get('root_task_key')):
-        from mpp_convert import SNAPSHOT_COLUMN, snapshot_text, flatten_events
-        root_key=conversion['summary']['root_task_key']
-        root_task=next((t for t in data['tasks'] if t.get('task_key')==root_key and 'error' not in t),None)
-        root_id=conversion.get('mappings',{}).get('tasks',{}).get(root_key)
-        roots=conversion.get('gantt',{}).get('eventsData',[])
-        nodes={ident:node for root in roots for ident,node in flatten_events(root).items()}
-        node=nodes.get(root_id,{})
-        note=('В исходнике круглосуточный календарь (7 дней, 00:00–00:00). '
-            'Даты показаны снимком MPP без пересчёта; исходные интервалы сохранены в архиве.'
-            + '\nКалендари: ' + ', '.join(round_clock))
-        visible=all(any(c.get('id')==SNAPSHOT_COLUMN and c.get('hidden') is False
-            for c in conversion.get('gantt',{}).get('initialState',{}).get(mode,{}).get('columns',[]))
-            for mode in ('view','edit'))
-        root_ok=(root_task is not None and node.get(SNAPSHOT_COLUMN)==snapshot_text(root_task,note)
-            and node.get('manuallyScheduled') is True
-            and node.get('skipNonWorkingTimeWhenSchedulingManually') is False and visible)
-    if root_ok:
-        from copy import deepcopy
-        for diagnostic in conversion['diagnostics']:
-            key=diagnostic.get('entity'); calendar=round_clock.get(key)
-            if calendar is None or key in excluded: continue
-            code=diagnostic.get('code'); source=diagnostic.get('source')
-            matched_day=next((d for d in calendar.get('weekdays',[]) if source == d),None)
-            matched_window=next((w for d in calendar.get('weekdays',[])
-                for w in (d.get('intervals',{}).get('value') or []) if source == w),None)
-            eligible=(code=='calendar_intervals_unsupported' and matched_day is not None)
-            eligible |= (code=='calendar_interval_invalid' and plugin_profile.supports('calendar:intervals')
-                and matched_window is not None)
-            if eligible:
-                round_clock_diagnostics.setdefault(key,[]).append(deepcopy(diagnostic))
-    for key, records in sorted(round_clock_diagnostics.items()):
-        evidence=round_clock_decision['round_the_clock_calendar_evidence']
-        verified=round_clock_decision['round_the_clock_calendar_evidence_verified']
-        findings.append(finding('display_only','source_calendar_24h_publish_as_is',key,
-            {'calendar':round_clock[key],'diagnostics':records},
-            {'description':'Исходный круглосуточный календарь сохранён в архиве; даты задач показаны снимком MPP без пересчёта.',
-             'decision_id':evidence['decision_id'],'evidence_path':verified['path'],'evidence_sha256':verified['sha256'],
-             'calendar_keys':list(round_clock),'snapshot_verified':root_ok}))
+    try:
+        calendar_v2, calendar_authority = calendar_publish_as_is()
+    except (OSError,ValueError,KeyError,TypeError) as exc:
+        calendar_v2, calendar_authority = False, None
+        findings.append(finding('incomplete','calendar_owner_evidence_invalid','owner-decision',str(exc)))
+    if calendar_v2:
+        findings.append(finding('display_only','source_calendar_publish_as_is','source_calendars',
+            {'calendar_analysis':'not_performed'},
+            {'decision_id':calendar_authority['decision_id'],'evidence_path':calendar_authority['path'],
+             'evidence_sha256':calendar_authority['sha256'],'calendar_analysis':'not_performed'}))
     for diagnostic in conversion['diagnostics']:
-        if diagnostic in [item for rows in round_clock_diagnostics.values() for item in rows]:
-            continue
         if diagnostic.get('entity') in excluded: continue
         code=diagnostic['code']
+        if calendar_v2 and code in {'calendar_intervals_unsupported','calendar_interval_invalid','calendar_inheritance_unsupported',
+            'calendar_binding_unsupported','calendar_day_incomplete','calendar_collection_incomplete','calendar_unreadable',
+            'calendar_recurrence_unsupported','calendar_exceptions_unsupported','calendar_exception_incomplete',
+            'calendar_exception_invalid','calendar_exception_interval_invalid','calendar_work_weeks_unsupported',
+            'calendar_duration_day_basis_mismatch','dependency_calendar_basis_unsupported'}:
+            continue
         if code=='summary_timezone_unresolved':continue # dedicated timezone row/3
         if code=='source_collection_incomplete':continue # classified by completeness
         category='graph' if code.startswith('graph_problem:') else 'unsupported_semantics'
@@ -433,7 +426,7 @@ def compact_receipt_diagnostics(admission, evidence_id=None):
     for warning in admission['warnings']:
         warnings[warning['code']]=warnings.get(warning['code'],0)+1
     ref='artifact:'+evidence_id if evidence_id else None
-    friendly={'source_calendar_24h_publish_as_is':'Круглосуточный календарь показан как снимок MPP без пересчёта'}
+    friendly={'source_calendar_publish_as_is':'Календарь не анализировался по решению владельца; даты задач перенесены 1-в-1'}
     return ({'status':admission['schedule']['status'],'checks':[groups[k] for k in sorted(groups)],
              'limitations':admission['schedule']['limitations'],'evidence_ids':[evidence_id] if evidence_id else []},
             [{'code':code,'message':friendly.get(code,code)+': '+str(count)+' проверок; подробности в свидетельстве',

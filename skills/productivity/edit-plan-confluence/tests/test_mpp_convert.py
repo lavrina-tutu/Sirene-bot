@@ -246,7 +246,12 @@ def test_prepared_dependencies_types_signed_lag_parallel_resources(stage08_expor
 
 
 @pytest.mark.parametrize('kind',['type','lag','unit','elapsed','basis','endpoint','external'])
-def test_prepared_unknown_dependency_never_fs_zero(stage08_export,stage08_profile,kind):
+def test_prepared_unknown_dependency_never_fs_zero(stage08_export,stage08_profile,kind,monkeypatch):
+    import plan_policy
+    original=plan_policy.owner_decision
+    def without_v2():
+        result=original();result.pop('calendar',None);result.pop('calendar_evidence',None);result.pop('calendar_evidence_verified',None);return result
+    monkeypatch.setattr(plan_policy,'owner_decision',without_v2)
     d=stage08_export['dependencies'][0]
     if kind=='type':d['link_type']=None
     if kind=='lag':d['lag_value']={'value':None,'quality':'missing','reason':'not_set'}
@@ -290,8 +295,13 @@ def test_prepared_hierarchy_cycle_rejected(stage08_export,stage08_profile):
         convert_prepared_plan(PreparedPlan.from_export(stage08_export),plugin_profile=stage08_profile)
 
 
-def test_prepared_lag_basis_only_equivalent_calendars(stage08_export,stage08_profile):
+def test_prepared_lag_basis_only_equivalent_calendars(stage08_export,stage08_profile,monkeypatch):
     from copy import deepcopy
+    import plan_policy
+    original=plan_policy.owner_decision
+    def without_v2():
+        result=original();result.pop('calendar',None);result.pop('calendar_evidence',None);result.pop('calendar_evidence_verified',None);return result
+    monkeypatch.setattr(plan_policy,'owner_decision',without_v2)
     stage08_profile.document['capabilities']['lag_basis:PREDECESSOR']['status']='not_verified'
     cap=deepcopy(stage08_profile.document['capabilities']['lag:zero'])
     stage08_profile.document['capabilities']['lag_basis:equal_endpoint_calendars']=cap
@@ -304,8 +314,13 @@ def test_prepared_lag_basis_only_equivalent_calendars(stage08_export,stage08_pro
     assert any(d['code']=='dependency_calendar_basis_unsupported' for d in out['diagnostics'])
 
 
-def test_prepared_golden_bytes_and_storage(stage08_export,stage08_profile):
+def test_prepared_golden_bytes_and_storage(stage08_export,stage08_profile,monkeypatch):
     import hashlib,json
+    import plan_policy
+    original=plan_policy.owner_decision
+    def without_v2():
+        result=original();result.pop('calendar',None);result.pop('calendar_evidence',None);result.pop('calendar_evidence_verified',None);return result
+    monkeypatch.setattr(plan_policy,'owner_decision',without_v2)
     golden=Path(__file__).parent/'fixtures/golden'
     for item in json.loads((golden/'manifest.json').read_text())['fixtures']:
         assert hashlib.sha256((golden/item['path']).read_bytes()).hexdigest()==item['sha256']

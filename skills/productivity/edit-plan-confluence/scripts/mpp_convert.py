@@ -366,7 +366,7 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v9-calendar-24h-snapshot'
+CONVERTER_VERSION = 'prepared-gantt-v10-calendar-publish-as-is-v2'
 
 PUBLICATION_MODE = 'planned_schedule_with_actuals_columns'
 PUBLICATION_LABEL = 'по плану; факт — в колонках'
@@ -488,7 +488,7 @@ def _number(value):
     return out if decimal_value(out) == amount else None
 
 
-def build_dependencies(rows, task_mapping, start_id, *, plugin_profile, diagnostics, project, task_calendars=None):
+def build_dependencies(rows, task_mapping, start_id, *, plugin_profile, diagnostics, project, task_calendars=None, calendar_publish_as_is=False):
     from itogo import field_value, decimal_value
     deps = []
     for index, row in enumerate(rows):
@@ -517,18 +517,19 @@ def build_dependencies(rows, task_mapping, start_id, *, plugin_profile, diagnost
                 problems.append('dependency_lag_sign_unsupported')
             if not plugin_profile.supports('dependency:'+str(typ)+':'+str(unit)+':'+sign):
                 problems.append('dependency_combination_unverified')
-        basis = field_value(row.get('lag_calendar')) or field_value(row.get('project_lag_calendar'))
-        if basis is None:
-            basis = field_value(project.get('relationship_lag_calendar'))
-        supported_basis = plugin_profile.supports('lag_basis:'+str(basis))
-        if not supported_basis and basis in ('PREDECESSOR','SUCCESSOR','PROJECT') and task_calendars:
-            pred_cal = task_calendars.get(row.get('predecessor_task_key'))
-            succ_cal = task_calendars.get(row.get('successor_task_key'))
-            default_cal = field_value(project.get('default_calendar_key'))
-            supported_basis = (plugin_profile.supports('lag_basis:equal_endpoint_calendars')
-                               and pred_cal is not None and pred_cal == succ_cal == default_cal)
-        if not supported_basis:
-            problems.append('dependency_calendar_basis_unsupported')
+        if not calendar_publish_as_is:
+            basis = field_value(row.get('lag_calendar')) or field_value(row.get('project_lag_calendar'))
+            if basis is None:
+                basis = field_value(project.get('relationship_lag_calendar'))
+            supported_basis = plugin_profile.supports('lag_basis:'+str(basis))
+            if not supported_basis and basis in ('PREDECESSOR','SUCCESSOR','PROJECT') and task_calendars:
+                pred_cal = task_calendars.get(row.get('predecessor_task_key'))
+                succ_cal = task_calendars.get(row.get('successor_task_key'))
+                default_cal = field_value(project.get('default_calendar_key'))
+                supported_basis = (plugin_profile.supports('lag_basis:equal_endpoint_calendars')
+                                   and pred_cal is not None and pred_cal == succ_cal == default_cal)
+            if not supported_basis:
+                problems.append('dependency_calendar_basis_unsupported')
         if problems:
             diagnostics.extend({'code':p,'entity':key,'source':deepcopy(row),'represented':None} for p in problems)
             continue
@@ -644,7 +645,6 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
     """
     from decimal import localcontext
     from itogo import compute_itogo_from_prepared, field_value, quantity_minutes, decimal_value
-    from mpp_calendar import calendar_from_prepared
     from plugin_profile import PluginProfile
     prepared.validate()
     profile = plugin_profile or PluginProfile.load()
@@ -652,18 +652,21 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
     data = prepared.normalized_data
     tmpl = deepcopy(template_json if template_json is not None else json.loads(EMPTY_TEMPLATE.read_text()))
     summary = compute_itogo_from_prepared(prepared,root_task_key=root_task_key)
-    cal = calendar_from_prepared(prepared,plugin_profile=profile)
+    from plan_policy import calendar_publish_as_is as owner_calendar_publish_as_is
+    calendar_v2, calendar_authority = owner_calendar_publish_as_is()
+    if calendar_v2:
+        cal = {'diagnostics': [], 'transformations': [], 'mapping': {}, 'bindings': {'project': None},
+               'calendarsData': deepcopy(tmpl.get('calendarsData', []))}
+    else:
+        from mpp_calendar import calendar_from_prepared
+        cal = calendar_from_prepared(prepared,plugin_profile=profile)
     diagnostics = cal['diagnostics'][:]
     transformations = cal['transformations'][:]
     diagnostics.extend({'code':r,'entity':'summary','source':summary['source_duration'],'represented':None} for r in summary['reasons'])
     tasks = [t for t in data['tasks'] if 'error' not in t and t.get('id') != 0]
     task_mapping = {}
-    from plan_policy import round_the_clock_calendars, owner_decision
-    round_clock = round_the_clock_calendars(data)
-    round_clock_decision = owner_decision() if round_clock else None
-    round_clock_note = ('В исходнике круглосуточный календарь (7 дней, 00:00–00:00). '
-        'Даты показаны снимком MPP без пересчёта; исходные интервалы сохранены в архиве.'
-        + '\nКалендари: ' + ', '.join(round_clock))
+    calendar_note = ('Даты задач показаны 1-в-1 из MPP без пересчёта. '
+        'Календарь не анализируется по решению владельца; корректность календарного расписания не проверена.')
     # Source-local keys define identity; ID collisions never merge tasks.
     source_ids = [t.get('id') for t in tasks]
     used_ids = set()
@@ -741,7 +744,9 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
             elif constraint not in (None,'AS_SOON_AS_POSSIBLE','As Soon As Possible'):
                 diagnostics.append({'code':'task_semantics_unrepresented:constraint_type','entity':key,'source':deepcopy(t.get('constraint_type')),'represented':None})
             segments = field_value(t.get('segments'))
-            if segments:
+            if calendar_v2 and segments:
+                diagnostics.append({'code':'task_semantics_unrepresented:segments','entity':key,'source':deepcopy(t.get('segments')),'represented':None})
+            elif segments:
                 envelope = len(segments) == 1 and all(field_value(segments[0].get(src)) == field_value(t.get(dest))
                     for src,dest in [('start','start'),('end','finish')])
                 if envelope:
@@ -792,21 +797,18 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
                 diagnostics.append({'code':'task_parent_missing','entity':key,'source':parent,'represented':None})
     for i,node in enumerate(roots):
         fill_parent_fields(node,parent_index=i)
-    if (round_clock and profile.supports('publication:source_snapshot_dates')
-            and round_clock_decision.get('round_the_clock_calendar') == 'publish_as_is'
-            and round_clock_decision.get('round_the_clock_calendar_evidence_verified')):
+    if calendar_v2 and profile.supports('publication:source_snapshot_dates') and calendar_authority:
         root_key = summary.get('root_task_key')
         root_id = task_mapping.get(root_key)
         flattened = {ident:node for root in roots for ident,node in flatten_events(root).items()}
         root_node = flattened.get(root_id) if root_id is not None else None
         if root_node is not None:
             root_task = next((task for task in tasks if task.get('task_key') == root_key), {})
-            root_node[SNAPSHOT_COLUMN] = snapshot_text(root_task, round_clock_note)
-            transformations.append({'entity':root_key,'field':SNAPSHOT_COLUMN,'kind':'round_the_clock_calendar_snapshot',
-                'source':round_clock,'normalized':{'calendar_keys':list(round_clock)},
-                'represented':root_node[SNAPSHOT_COLUMN], 'owner_decision':round_clock_decision,
-                'decision_id':round_clock_decision['round_the_clock_calendar_evidence']['decision_id'],
-                'evidence':round_clock_decision['round_the_clock_calendar_evidence_verified']})
+            root_node[SNAPSHOT_COLUMN] = snapshot_text(root_task, calendar_note)
+            transformations.append({'entity':root_key,'field':SNAPSHOT_COLUMN,'kind':'calendar_publish_as_is_snapshot',
+                'source':'calendar_analysis:not_performed','normalized':None,
+                'represented':root_node[SNAPSHOT_COLUMN], 'owner_decision':calendar_authority,
+                'decision_id':calendar_authority['decision_id'],'evidence':calendar_authority})
     resources=[];resource_mapping={};next_id=max(used_ids,default=0)+1
     for r in data['resources']:
         if 'error' in r:
@@ -817,7 +819,7 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
         if profile.supports('calendar:bindings:resources') and binding in cal['mapping']:
             node['calendar']=cal['mapping'][binding]
         from mpp_calendar import default_availability_equivalent
-        if profile.supports('resource:default_availability') and default_availability_equivalent(r,data):
+        if not calendar_v2 and profile.supports('resource:default_availability') and default_availability_equivalent(r,data):
             transformations.append({'entity':key,'field':'availability','kind':'default_availability_within_plan',
                 'source':deepcopy(r['availability']),'normalized':{'max_units':100},'represented':deepcopy(node),
                 'basis':'known_100_percent_window_covers_all_assigned_task_intervals_and_units'})
@@ -829,7 +831,8 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
                                 'source':deepcopy(dependency),'represented':None})
     dependency_start = next_id
     deps=build_dependencies(data['dependencies'],task_mapping,next_id,plugin_profile=profile,diagnostics=diagnostics,project=data['project'],
-                            task_calendars={t['task_key']:field_value(t.get('effective_calendar_key')) for t in tasks})
+                            task_calendars={t['task_key']:field_value(t.get('effective_calendar_key')) for t in tasks},
+                            calendar_publish_as_is=calendar_v2)
     next_id+=len(data['dependencies'])
     assignment_start = next_id
     assignments=build_assignments(data['assignments'],task_mapping,resource_mapping,next_id,diagnostics=diagnostics,

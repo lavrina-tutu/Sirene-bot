@@ -18,15 +18,31 @@ def owner_decision():
             raise ValueError('owner_decision_evidence_integrity')
         return {'path': str(evidence), 'sha256': expected}
     verify(policy['evidence_path'], policy['evidence_sha256'])
-    if 'round_the_clock_calendar' in policy or 'round_the_clock_calendar_evidence' in policy:
-        receipt = policy.get('round_the_clock_calendar_evidence')
-        if (policy.get('round_the_clock_calendar') != 'publish_as_is' or not isinstance(receipt,dict)
+    legacy_keys = {'round_the_clock_calendar', 'round_the_clock_calendar_evidence'}
+    if legacy_keys.intersection(policy):
+        raise ValueError('legacy_calendar_owner_decision_invalid')
+    if 'calendar' in policy or 'calendar_evidence' in policy:
+        receipt = policy.get('calendar_evidence')
+        if (policy.get('calendar') != 'publish_as_is' or not isinstance(receipt, dict)
                 or set(receipt) != {'decision_id','evidence_path','evidence_sha256'}
-                or receipt.get('decision_id') != 'owner-20261118-round-the-clock-calendar'):
-            raise ValueError('round_the_clock_owner_decision_invalid')
+                or receipt.get('decision_id') != 'owner-20261118-calendar-publish-as-is-v2'
+                or receipt.get('evidence_path') != 'references/decisions/owner-calendar-20261118-v2.md'):
+            raise ValueError('calendar_owner_decision_invalid')
         verified = verify(receipt['evidence_path'], receipt['evidence_sha256'])
-        policy['round_the_clock_calendar_evidence_verified'] = verified
+        if receipt['evidence_sha256'] != '7ede8a9c5a098c89f1c17897163d8acf925b16d2ba41176de51e117dbf5b16b3':
+            raise ValueError('calendar_owner_decision_invalid')
+        policy['calendar_evidence_verified'] = verified
+
     return policy
+
+
+def calendar_publish_as_is():
+    """Return validated v2 owner authority without inspecting normalized calendars."""
+    decision = owner_decision()
+    receipt = decision.get('calendar_evidence')
+    if decision.get('calendar') != 'publish_as_is' or not receipt or not decision.get('calendar_evidence_verified'):
+        return False, None
+    return True, {'decision_id': receipt['decision_id'], **decision['calendar_evidence_verified']}
 
 
 def round_the_clock_calendars(data):
@@ -165,8 +181,14 @@ def evaluate(findings, *, proposals=(), accepted_deviations=()):
     schedule = 'mismatch' if any(f['category']=='date_mismatch' and not f.get('accepted_deviation') for f in checks) else (
         'accepted_deviation' if any(f.get('accepted_deviation') for f in checks) else 'not_verified')
     # schedule:verified is assigned only by a complete, bound live observation.
+    limitations=['local_scheduler_not_run','plan_plugin_result_not_verified']
+    calendar_finding=next((f for f in warnings if f.get('code')=='source_calendar_publish_as_is'),None)
+    if calendar_finding:
+        limitations.append('calendar_analysis_not_performed')
+        decision_id=(calendar_finding.get('represented') or {}).get('decision_id')
+        if decision_id: limitations.append('owner_decision:'+decision_id)
     return {'policy_revision': POLICY_VERSION, 'allowed': not blockers, 'exit_code': rc,
             'status': 'prepared' if not blockers else 'needs_decision' if rc==3 else 'conflict' if rc==4 else 'failed',
             'blockers': blockers, 'warnings': warnings, 'checks': checks,
             'schedule': {'status':schedule, 'checks': checks,
-                         'limitations':['local_scheduler_not_run','plan_plugin_result_not_verified'], 'evidence_ids':[]}}
+                         'limitations':limitations, 'evidence_ids':[]}}

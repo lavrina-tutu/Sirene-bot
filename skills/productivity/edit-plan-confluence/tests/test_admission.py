@@ -53,9 +53,14 @@ def test_specific_proposal_cannot_override_archive_or_profile():
 
 @pytest.mark.parametrize('milestone',[False,True],ids=['task','milestone'])
 @pytest.mark.parametrize('seconds,expected',[(60,0),(61,5),(-61,5)])
-def test_dates_each_task_and_milestone_with_matching_root(publish_case,milestone,seconds,expected):
+def test_dates_each_task_and_milestone_with_matching_root(publish_case,milestone,seconds,expected,monkeypatch):
     from mpp_convert import convert_prepared_plan
     from datetime import datetime,timedelta
+    import plan_policy
+    original=plan_policy.owner_decision
+    def without_v2():
+        result=original();result.pop('calendar',None);result.pop('calendar_evidence',None);result.pop('calendar_evidence_verified',None);return result
+    monkeypatch.setattr(plan_policy,'owner_decision',without_v2)
     d=deepcopy(publish_case['export']);d['tasks'][1]['milestone']=milestone
     p=PreparedPlan.from_export(d,timezone_hint='Europe/Moscow')
     result=convert_prepared_plan(p,plugin_profile=publish_case['profile'])
@@ -91,8 +96,14 @@ def test_local_scheduler_unsupported_and_plan_unobserved_are_warnings(publish_ca
 
 
 @pytest.mark.parametrize('kind',['type','signed_lag','calendar','assignment','graph_cycle','self_reference','dangling','external'])
-def test_semantic_losses_block_after_archive(publish_case,kind):
+def test_semantic_losses_block_after_archive(publish_case,kind,monkeypatch):
     c=publish_case;d=deepcopy(c['export'])
+    if kind=='calendar':
+        import plan_policy
+        original=plan_policy.owner_decision
+        def without_v2():
+            result=original();result.pop('calendar',None);result.pop('calendar_evidence',None);result.pop('calendar_evidence_verified',None);return result
+        monkeypatch.setattr(plan_policy,'owner_decision',without_v2)
     if kind=='type':
         d['dependencies'][0]['link_type']=None
         d['dependencies'][0]['type_quality']={'quality':'unsupported','value':None,'reason':'unknown_source_type'}

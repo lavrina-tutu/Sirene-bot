@@ -6,5 +6,11 @@
   "historical_rules": "not_applicable",
   "unassigned_resources": "preserve_source_display",
   "actuality": "source_file_mtime_ns",
-  "milestone_interval_conflict": "publish_collapsed"
+  "milestone_interval_conflict": "publish_collapsed",
+  "round_the_clock_calendar": "publish_as_is",
+  "round_the_clock_calendar_evidence": {
+    "decision_id": "owner-20261118-round-the-clock-calendar",
+    "evidence_path": "references/decisions/owner-calendar-20261118.md",
+    "evidence_sha256": "c79826c00145bc87f6bb4ce9a87edb0e9df94d9de120bd8ac2f912844c312114"
+  }
 }

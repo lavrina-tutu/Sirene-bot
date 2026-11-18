@@ -366,7 +366,7 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v8-owner-source'
+CONVERTER_VERSION = 'prepared-gantt-v9-calendar-24h-snapshot'
 
 PUBLICATION_MODE = 'planned_schedule_with_actuals_columns'
 PUBLICATION_LABEL = 'по плану; факт — в колонках'
@@ -436,8 +436,9 @@ def source_fact_values(task):
 SNAPSHOT_COLUMN = 'custom_mpp_schedule_mode'
 UNASSIGNED_COLUMN = 'custom_mpp_unassigned'
 
-def snapshot_text(task):
-    return 'Сохранённые даты MPP; исходный режим: ' + source_value_text(task.get('task_mode'))
+def snapshot_text(task, addition=None):
+    text = 'Сохранённые даты MPP; исходный режим: ' + source_value_text(task.get('task_mode'))
+    return text + (('\n' + addition) if addition else '')
 
 
 def unassigned_source(assignment, source_tasks):
@@ -657,6 +658,12 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
     diagnostics.extend({'code':r,'entity':'summary','source':summary['source_duration'],'represented':None} for r in summary['reasons'])
     tasks = [t for t in data['tasks'] if 'error' not in t and t.get('id') != 0]
     task_mapping = {}
+    from plan_policy import round_the_clock_calendars, owner_decision
+    round_clock = round_the_clock_calendars(data)
+    round_clock_decision = owner_decision() if round_clock else None
+    round_clock_note = ('В исходнике круглосуточный календарь (7 дней, 00:00–00:00). '
+        'Даты показаны снимком MPP без пересчёта; исходные интервалы сохранены в архиве.'
+        + '\nКалендари: ' + ', '.join(round_clock))
     # Source-local keys define identity; ID collisions never merge tasks.
     source_ids = [t.get('id') for t in tasks]
     used_ids = set()
@@ -785,6 +792,21 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
                 diagnostics.append({'code':'task_parent_missing','entity':key,'source':parent,'represented':None})
     for i,node in enumerate(roots):
         fill_parent_fields(node,parent_index=i)
+    if (round_clock and profile.supports('publication:source_snapshot_dates')
+            and round_clock_decision.get('round_the_clock_calendar') == 'publish_as_is'
+            and round_clock_decision.get('round_the_clock_calendar_evidence_verified')):
+        root_key = summary.get('root_task_key')
+        root_id = task_mapping.get(root_key)
+        flattened = {ident:node for root in roots for ident,node in flatten_events(root).items()}
+        root_node = flattened.get(root_id) if root_id is not None else None
+        if root_node is not None:
+            root_task = next((task for task in tasks if task.get('task_key') == root_key), {})
+            root_node[SNAPSHOT_COLUMN] = snapshot_text(root_task, round_clock_note)
+            transformations.append({'entity':root_key,'field':SNAPSHOT_COLUMN,'kind':'round_the_clock_calendar_snapshot',
+                'source':round_clock,'normalized':{'calendar_keys':list(round_clock)},
+                'represented':root_node[SNAPSHOT_COLUMN], 'owner_decision':round_clock_decision,
+                'decision_id':round_clock_decision['round_the_clock_calendar_evidence']['decision_id'],
+                'evidence':round_clock_decision['round_the_clock_calendar_evidence_verified']})
     resources=[];resource_mapping={};next_id=max(used_ids,default=0)+1
     for r in data['resources']:
         if 'error' in r:

@@ -11,6 +11,7 @@ from fnmatch import fnmatchcase
 from zoneinfo import ZoneInfo
 
 from prepared_plan import ROOT, fingerprint
+from plan_policy import round_the_clock_calendars
 from itogo import field_value
 
 
@@ -134,6 +135,10 @@ def capability_findings(data, plugin_profile, conversion=None):
     from mpp_calendar import default_availability_equivalent, coincident_assignment_interval
     tasks={t['task_key']:t for t in data['tasks'] if 'error' not in t}
     nodes = flatten((conversion or {}).get('gantt', {}).get('eventsData', []))
+    round_clock = round_the_clock_calendars(data)
+    from plan_policy import owner_decision
+    round_clock_owner = owner_decision() if round_clock else {}
+    root_key = (conversion or {}).get('summary', {}).get('root_task_key')
     for task in data['tasks']:
         if task.get('id')==0:continue
         if plugin_profile.supports('publication:source_snapshot_dates'):
@@ -143,8 +148,16 @@ def capability_findings(data, plugin_profile, conversion=None):
             gantt = (conversion or {}).get('gantt', {})
             visible = all(any(c.get('id')==SNAPSHOT_COLUMN and c.get('hidden') is False
                 for c in gantt.get('initialState',{}).get(mode,{}).get('columns',[])) for mode in ('view','edit'))
+            expected_snapshot = snapshot_text(task)
+            if (round_clock and round_clock_owner.get('round_the_clock_calendar') == 'publish_as_is'
+                    and round_clock_owner.get('round_the_clock_calendar_evidence_verified')
+                    and task.get('task_key') == root_key):
+                note = ('В исходнике круглосуточный календарь (7 дней, 00:00–00:00). '
+                    'Даты показаны снимком MPP без пересчёта; исходные интервалы сохранены в архиве.'
+                    + '\nКалендари: ' + ', '.join(round_clock))
+                expected_snapshot = snapshot_text(task, note)
             exact = (node.get('manuallyScheduled') is True and node.get('skipNonWorkingTimeWhenSchedulingManually') is False
-                and node.get(SNAPSHOT_COLUMN)==snapshot_text(task) and visible
+                and node.get(SNAPSHOT_COLUMN)==expected_snapshot and visible
                 and gantt.get('customColumns',{}).get(SNAPSHOT_COLUMN,{}).get('type')=='customtext'
                 and node.get('startDate')==field_value(task.get('start')) and node.get('endDate')==field_value(task.get('finish')))
             from itogo import quantity_minutes
@@ -333,7 +346,61 @@ def diagnose(prepared, conversion, *, plugin_profile, excluded=(), observation=N
         findings.append(finding('timezone','timezone_required','source_dates',None))
     if plugin_profile is None or not plugin_profile.document['plugin'].get('version'):
         findings.append(finding('plugin_unknown','plugin_profile_required','plugin'))
+    round_clock = {}
+    round_clock_decision = None
+    round_clock_diagnostics = {}
+    if plugin_profile is not None:
+        from plan_policy import owner_decision
+        round_clock = round_the_clock_calendars(data)
+        if round_clock and plugin_profile.supports('publication:source_snapshot_dates'):
+            try: round_clock_decision = owner_decision()
+            except (OSError,ValueError,KeyError,TypeError): round_clock_decision = None
+    root_ok = False
+    if (round_clock and round_clock_decision
+            and round_clock_decision.get('round_the_clock_calendar') == 'publish_as_is'
+            and round_clock_decision.get('round_the_clock_calendar_evidence_verified')
+            and conversion.get('summary',{}).get('root_task_key')):
+        from mpp_convert import SNAPSHOT_COLUMN, snapshot_text, flatten_events
+        root_key=conversion['summary']['root_task_key']
+        root_task=next((t for t in data['tasks'] if t.get('task_key')==root_key and 'error' not in t),None)
+        root_id=conversion.get('mappings',{}).get('tasks',{}).get(root_key)
+        roots=conversion.get('gantt',{}).get('eventsData',[])
+        nodes={ident:node for root in roots for ident,node in flatten_events(root).items()}
+        node=nodes.get(root_id,{})
+        note=('В исходнике круглосуточный календарь (7 дней, 00:00–00:00). '
+            'Даты показаны снимком MPP без пересчёта; исходные интервалы сохранены в архиве.'
+            + '\nКалендари: ' + ', '.join(round_clock))
+        visible=all(any(c.get('id')==SNAPSHOT_COLUMN and c.get('hidden') is False
+            for c in conversion.get('gantt',{}).get('initialState',{}).get(mode,{}).get('columns',[]))
+            for mode in ('view','edit'))
+        root_ok=(root_task is not None and node.get(SNAPSHOT_COLUMN)==snapshot_text(root_task,note)
+            and node.get('manuallyScheduled') is True
+            and node.get('skipNonWorkingTimeWhenSchedulingManually') is False and visible)
+    if root_ok:
+        from copy import deepcopy
+        for diagnostic in conversion['diagnostics']:
+            key=diagnostic.get('entity'); calendar=round_clock.get(key)
+            if calendar is None or key in excluded: continue
+            code=diagnostic.get('code'); source=diagnostic.get('source')
+            matched_day=next((d for d in calendar.get('weekdays',[]) if source == d),None)
+            matched_window=next((w for d in calendar.get('weekdays',[])
+                for w in (d.get('intervals',{}).get('value') or []) if source == w),None)
+            eligible=(code=='calendar_intervals_unsupported' and matched_day is not None)
+            eligible |= (code=='calendar_interval_invalid' and plugin_profile.supports('calendar:intervals')
+                and matched_window is not None)
+            if eligible:
+                round_clock_diagnostics.setdefault(key,[]).append(deepcopy(diagnostic))
+    for key, records in sorted(round_clock_diagnostics.items()):
+        evidence=round_clock_decision['round_the_clock_calendar_evidence']
+        verified=round_clock_decision['round_the_clock_calendar_evidence_verified']
+        findings.append(finding('display_only','source_calendar_24h_publish_as_is',key,
+            {'calendar':round_clock[key],'diagnostics':records},
+            {'description':'Исходный круглосуточный календарь сохранён в архиве; даты задач показаны снимком MPP без пересчёта.',
+             'decision_id':evidence['decision_id'],'evidence_path':verified['path'],'evidence_sha256':verified['sha256'],
+             'calendar_keys':list(round_clock),'snapshot_verified':root_ok}))
     for diagnostic in conversion['diagnostics']:
+        if diagnostic in [item for rows in round_clock_diagnostics.values() for item in rows]:
+            continue
         if diagnostic.get('entity') in excluded: continue
         code=diagnostic['code']
         if code=='summary_timezone_unresolved':continue # dedicated timezone row/3
@@ -366,7 +433,8 @@ def compact_receipt_diagnostics(admission, evidence_id=None):
     for warning in admission['warnings']:
         warnings[warning['code']]=warnings.get(warning['code'],0)+1
     ref='artifact:'+evidence_id if evidence_id else None
+    friendly={'source_calendar_24h_publish_as_is':'Круглосуточный календарь показан как снимок MPP без пересчёта'}
     return ({'status':admission['schedule']['status'],'checks':[groups[k] for k in sorted(groups)],
              'limitations':admission['schedule']['limitations'],'evidence_ids':[evidence_id] if evidence_id else []},
-            [{'code':code,'message':code+': '+str(count)+' проверок; подробности в свидетельстве',
+            [{'code':code,'message':friendly.get(code,code)+': '+str(count)+' проверок; подробности в свидетельстве',
               'details_ref':ref} for code,count in sorted(warnings.items())])

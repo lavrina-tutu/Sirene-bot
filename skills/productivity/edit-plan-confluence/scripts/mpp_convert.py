@@ -366,7 +366,7 @@ def count_tasks(root: dict[str, Any]) -> int:
     return n
 
 
-CONVERTER_VERSION = 'prepared-gantt-v10-calendar-publish-as-is-v2'
+CONVERTER_VERSION = 'prepared-gantt-v11-calendar-v2-segments-display'
 
 PUBLICATION_MODE = 'planned_schedule_with_actuals_columns'
 PUBLICATION_LABEL = 'по плану; факт — в колонках'
@@ -439,6 +439,32 @@ UNASSIGNED_COLUMN = 'custom_mpp_unassigned'
 def snapshot_text(task, addition=None):
     text = 'Сохранённые даты MPP; исходный режим: ' + source_value_text(task.get('task_mode'))
     return text + (('\n' + addition) if addition else '')
+
+
+def source_segments_text(task):
+    """Deterministically show every source interval without deriving durations."""
+    from itogo import field_value
+    segments = field_value(task.get('segments'))
+    if not isinstance(segments, list) or not segments:
+        return None
+    lines = ['Разбиение задачи не рисуется на шкале; исходные интервалы сохранены ниже и в архиве. '
+             'Даты и длительность задачи — из MPP']
+    for index, segment in enumerate(segments, 1):
+        if not isinstance(segment, dict):
+            return None
+        ident = field_value(segment.get('id'))
+        label = str(ident) if ident is not None else str(index)
+        start = source_value_text(segment.get('start'))
+        end = source_value_text(segment.get('end'))
+        duration = segment.get('duration')
+        if duration is None:
+            duration_text = 'не задана в источнике'
+        elif isinstance(duration, dict) and duration.get('quality') == 'missing' and duration.get('reason') == 'not_set':
+            duration_text = 'не задана в источнике'
+        else:
+            duration_text = source_value_text(duration)
+        lines.append(f'Сегмент {label}: начало {start}; конец {end}; исходная длительность {duration_text}')
+    return '\n'.join(lines)
 
 
 def unassigned_source(assignment, source_tasks):
@@ -664,6 +690,10 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
     transformations = cal['transformations'][:]
     diagnostics.extend({'code':r,'entity':'summary','source':summary['source_duration'],'represented':None} for r in summary['reasons'])
     tasks = [t for t in data['tasks'] if 'error' not in t and t.get('id') != 0]
+    if calendar_v2:
+        diagnostics.extend({'code':'task_semantics_unrepresented:segments','entity':t.get('task_key'),
+            'source':deepcopy(t.get('segments')),'represented':None}
+            for t in data['tasks'] if t.get('id') == 0 and field_value(t.get('segments')))
     task_mapping = {}
     calendar_note = ('Даты задач показаны 1-в-1 из MPP без пересчёта. '
         'Календарь не анализируется по решению владельца; корректность календарного расписания не проверена.')
@@ -709,6 +739,10 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
                     'represented':{'manuallyScheduled':True,'skipNonWorkingTimeWhenSchedulingManually':False},
                     'basis':'Source dates are the published snapshot; no plugin schedule recalculation claimed',
                     'owner_decision':decision})
+                if calendar_v2 and field_value(t.get('segments')):
+                    segment_text = source_segments_text(t)
+                    if segment_text is not None:
+                        node[SNAPSHOT_COLUMN] += '\n' + segment_text
             if field_value(t.get('active')) is False:
                 if profile.supports('task:active'):
                     node['inactive'] = True
@@ -745,7 +779,13 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
                 diagnostics.append({'code':'task_semantics_unrepresented:constraint_type','entity':key,'source':deepcopy(t.get('constraint_type')),'represented':None})
             segments = field_value(t.get('segments'))
             if calendar_v2 and segments:
-                diagnostics.append({'code':'task_semantics_unrepresented:segments','entity':key,'source':deepcopy(t.get('segments')),'represented':None})
+                segment_text = source_segments_text(t)
+                transformations.append({'entity':key,'field':'segments','kind':'source_segments_publish_as_is',
+                    'source':deepcopy(t.get('segments')),'normalized':None,
+                    'represented':segment_text,'basis':'source intervals shown as text; native timeline segmentation and segment schedule are not verified',
+                    'owner_decision':calendar_authority})
+                if segment_text is None or not profile.supports('publication:source_snapshot_dates'):
+                    diagnostics.append({'code':'task_semantics_unrepresented:segments','entity':key,'source':deepcopy(t.get('segments')),'represented':None})
             elif segments:
                 envelope = len(segments) == 1 and all(field_value(segments[0].get(src)) == field_value(t.get(dest))
                     for src,dest in [('start','start'),('end','finish')])
@@ -804,7 +844,8 @@ def convert_prepared_plan(prepared, *, plugin_profile=None, template_json=None, 
         root_node = flattened.get(root_id) if root_id is not None else None
         if root_node is not None:
             root_task = next((task for task in tasks if task.get('task_key') == root_key), {})
-            root_node[SNAPSHOT_COLUMN] = snapshot_text(root_task, calendar_note)
+            segment_text = source_segments_text(root_task)
+            root_node[SNAPSHOT_COLUMN] = snapshot_text(root_task, calendar_note + (('\n' + segment_text) if segment_text else ''))
             transformations.append({'entity':root_key,'field':SNAPSHOT_COLUMN,'kind':'calendar_publish_as_is_snapshot',
                 'source':'calendar_analysis:not_performed','normalized':None,
                 'represented':root_node[SNAPSHOT_COLUMN], 'owner_decision':calendar_authority,

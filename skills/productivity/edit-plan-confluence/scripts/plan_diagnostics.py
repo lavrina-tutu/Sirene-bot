@@ -9,6 +9,7 @@ import json
 from datetime import datetime, timezone
 from fnmatch import fnmatchcase
 from zoneinfo import ZoneInfo
+from copy import deepcopy
 
 from prepared_plan import ROOT, fingerprint
 from plan_policy import calendar_publish_as_is
@@ -21,6 +22,38 @@ def policy_profile():
 
 def finding(category, code, entity, source=None, represented=None, *, model=None, observed=None):
     return dict(category=category,code=code,entity=entity,source=source,represented=represented,model=model,observed=observed)
+
+
+def _segments_text_and_valid(task):
+    """Return the prescribed text and reject missing, malformed, or unordered source intervals."""
+    from datetime import datetime
+    from mpp_convert import source_segments_text
+    segments_field = task.get('segments')
+    segments = field_value(segments_field)
+    if not isinstance(segments, list) or not segments:
+        return None, False
+    previous_end = None
+    for segment in segments:
+        if not isinstance(segment, dict):
+            return source_segments_text(task), False
+        start_raw, end_raw = segment.get('start'), segment.get('end')
+        start, end = field_value(start_raw), field_value(end_raw)
+        if not isinstance(start, str) or not isinstance(end, str):
+            return source_segments_text(task), False
+        try:
+            start_dt = datetime.fromisoformat(start.replace('Z', '+00:00'))
+            end_dt = datetime.fromisoformat(end.replace('Z', '+00:00'))
+        except ValueError:
+            return source_segments_text(task), False
+        if start_dt.tzinfo != end_dt.tzinfo or start_dt >= end_dt or (previous_end is not None and start_dt < previous_end):
+            return source_segments_text(task), False
+        previous_end = end_dt
+        duration = segment.get('duration')
+        if duration is not None and not (isinstance(duration, dict) and duration.get('quality') == 'missing'
+                                        and duration.get('reason') == 'not_set'):
+            if not isinstance(duration, dict) or duration.get('quality') != 'ok' or field_value(duration) is None:
+                return source_segments_text(task), False
+    return source_segments_text(task), True
 
 
 def completeness(data, profile):
@@ -162,18 +195,21 @@ def capability_findings(data, plugin_profile, conversion=None):
     root_key = (conversion or {}).get('summary', {}).get('root_task_key')
     for task in data['tasks']:
         if task.get('id')==0:continue
+        from mpp_convert import SNAPSHOT_COLUMN, snapshot_text
+        segment_text, segment_valid = _segments_text_and_valid(task)
+        expected_snapshot = snapshot_text(task)
+        if segment_text and segment_valid:
+            expected_snapshot += '\n' + segment_text
+        if calendar_v2 and calendar_authority and task.get('task_key') == root_key:
+            note = ('Даты задач показаны 1-в-1 из MPP без пересчёта. '
+                'Календарь не анализируется по решению владельца; корректность календарного расписания не проверена.')
+            expected_snapshot = snapshot_text(task, note + (('\n' + segment_text) if segment_text and segment_valid else ''))
         if plugin_profile.supports('publication:source_snapshot_dates'):
-            from mpp_convert import SNAPSHOT_COLUMN, snapshot_text
             ident = (conversion or {}).get('mappings', {}).get('tasks', {}).get(task['task_key'])
             node = nodes.get(ident, {})
             gantt = (conversion or {}).get('gantt', {})
             visible = all(any(c.get('id')==SNAPSHOT_COLUMN and c.get('hidden') is False
                 for c in gantt.get('initialState',{}).get(mode,{}).get('columns',[])) for mode in ('view','edit'))
-            expected_snapshot = snapshot_text(task)
-            if calendar_v2 and calendar_authority and task.get('task_key') == root_key:
-                note = ('Даты задач показаны 1-в-1 из MPP без пересчёта. '
-                    'Календарь не анализируется по решению владельца; корректность календарного расписания не проверена.')
-                expected_snapshot = snapshot_text(task, note)
             exact = (node.get('manuallyScheduled') is True and node.get('skipNonWorkingTimeWhenSchedulingManually') is False
                 and node.get(SNAPSHOT_COLUMN)==expected_snapshot and visible
                 and gantt.get('customColumns',{}).get(SNAPSHOT_COLUMN,{}).get('type')=='customtext'
@@ -205,6 +241,45 @@ def capability_findings(data, plugin_profile, conversion=None):
                 {'source_mode':snapshot_text(task),'plugin_recalculation':False,'verified':exact})
             row['classification'] = 'display-only' if exact else 'schedule-affecting'
             issues.append(row)
+        segments = field_value(task.get('segments'))
+        if calendar_v2 and calendar_authority and segments:
+            ident = (conversion or {}).get('mappings', {}).get('tasks', {}).get(task['task_key'])
+            node = nodes.get(ident, {})
+            semantics_tasks = (conversion or {}).get('source_semantics', {}).get('tasks', [])
+            archived = next((row for row in semantics_tasks if row.get('task_key') == task.get('task_key')), None)
+            archived_segments = archived.get('segments') if isinstance(archived, dict) else None
+            source_segments = task.get('segments')
+            native_segments_absent = node.get('segments') in (None, [])
+            text_visible = all(any(c.get('id') == SNAPSHOT_COLUMN and c.get('hidden') is False
+                for c in (conversion or {}).get('gantt', {}).get('initialState', {}).get(mode, {}).get('columns', []))
+                for mode in ('view', 'edit'))
+            exact_task_dates = (node.get('startDate') == field_value(task.get('start'))
+                and node.get('endDate') == field_value(task.get('finish')))
+            from itogo import quantity_minutes
+            from decimal import Decimal, InvalidOperation
+            minutes, _, reason = quantity_minutes(task.get('duration'), data['project'], working_only=True)
+            try:
+                day = Decimal(str(field_value(data['project'].get('minutes_per_day'))))
+                exact_task_dates = exact_task_dates and not reason and minutes is not None and day > 0 \
+                    and Decimal(str(node.get('duration'))) * day == minutes
+            except (InvalidOperation, TypeError, ValueError, ZeroDivisionError):
+                exact_task_dates = False
+            exact = (segment_valid and source_segments == archived_segments and segment_text is not None
+                and node.get(SNAPSHOT_COLUMN) == expected_snapshot
+                and text_visible
+                and (conversion or {}).get('gantt', {}).get('customColumns', {}).get(SNAPSHOT_COLUMN, {}).get('type') == 'customtext'
+                and native_segments_absent and exact_task_dates)
+            segment_finding = finding('display_only' if exact else 'unsupported_semantics',
+                'source_segments_publish_as_is' if exact else 'task_semantics_unrepresented:segments',
+                task['task_key'], deepcopy(task.get('segments')),
+                {'classification':'display-only' if exact else 'schedule-affecting',
+                 'source_segments':source_segments,'archived_segments':archived_segments,
+                 'text':node.get(SNAPSHOT_COLUMN),'expected_text':snapshot_text(task, segment_text) if segment_text else None,
+                 'intervals_valid':segment_valid,'task_dates_exact':exact_task_dates,
+                 'native_segments_absent':native_segments_absent,'decision_id':calendar_authority['decision_id'],
+                 'evidence_path':calendar_authority['path'],'evidence_sha256':calendar_authority['sha256']})
+            segment_finding['classification'] = 'display-only' if exact else 'schedule-affecting'
+            issues.append(segment_finding)
         for field in ('actual_start','actual_finish','actual_duration','actual_work','stop','resume'):
             raw=task.get(field);value=field_value(raw)
             quantity=raw.get('quantity',{}) if isinstance(raw,dict) else {}
@@ -389,6 +464,12 @@ def diagnose(prepared, conversion, *, plugin_profile, excluded=(), observation=N
     for diagnostic in conversion['diagnostics']:
         if diagnostic.get('entity') in excluded: continue
         code=diagnostic['code']
+        if calendar_v2 and code == 'task_semantics_unrepresented:segments':
+            key = diagnostic.get('entity')
+            if any(row.get('entity') == key and row.get('code') in {'source_segments_publish_as_is',
+                    'task_semantics_unrepresented:segments'}
+                   for row in findings):
+                continue
         if calendar_v2 and code in {'calendar_intervals_unsupported','calendar_interval_invalid','calendar_inheritance_unsupported',
             'calendar_binding_unsupported','calendar_day_incomplete','calendar_collection_incomplete','calendar_unreadable',
             'calendar_recurrence_unsupported','calendar_exceptions_unsupported','calendar_exception_incomplete',

@@ -167,6 +167,113 @@ def test_calendar_snapshot_guard(publish_case, damage):
     assert any(f['code'] == 'source_snapshot_display_unverified' for f in findings)
 
 
+def _with_source_segments(export):
+    from copy import deepcopy
+    from datetime import datetime
+    data = deepcopy(export)
+    task = next(row for row in data['tasks'] if row.get('id') != 0 and row.get('summary') is not True)
+    def field(value):
+        return {'value':value,'quality':'ok','reason':None}
+    start = datetime.fromisoformat(task['start']['value'])
+    finish = datetime.fromisoformat(task['finish']['value'])
+    midpoint = start + (finish - start) / 2
+    task['segments'] = field([
+        {'id':field('seg-a'),'start':field(start.isoformat()),'end':field(midpoint.isoformat()),
+         'duration':{'value':None,'quality':'missing','reason':'not_set'}},
+        {'id':field('seg-b'),'start':field(midpoint.isoformat()),'end':field(finish.isoformat()),
+         'duration':{'value':'5','quality':'ok','reason':None,
+                     'quantity':{'amount':'5','units':'HOURS','source_units':'HOURS'}}},
+    ])
+    return data, task['task_key']
+
+
+@pytest.mark.unit
+def test_calendar_segments_display_only(publish_case):
+    from prepared_plan import PreparedPlan
+    from mpp_convert import convert_prepared_plan, SNAPSHOT_COLUMN
+    from plan_diagnostics import diagnose
+    from plan_policy import evaluate
+    source, key = _with_source_segments(publish_case['export'])
+    prepared = PreparedPlan.from_export(source, timezone_hint='Europe/Moscow')
+    profile = deepcopy(publish_case['profile']); supports = profile.supports
+    profile.supports = lambda name: name == 'publication:source_snapshot_dates' or supports(name)
+    conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+    result = diagnose(prepared, conversion, plugin_profile=profile)
+    segment = next(f for f in result['findings'] if f['code'] == 'source_segments_publish_as_is')
+    assert segment['entity'] == key and segment['category'] == 'display_only'
+    assert segment['represented']['intervals_valid'] is True
+    node = next(n for root in conversion['gantt']['eventsData'] for n in _flatten(root).values()
+                if n['id'] == conversion['mappings']['tasks'][key])
+    assert 'Сегмент seg-a:' in node[SNAPSHOT_COLUMN]
+    assert 'Сегмент seg-b:' in node[SNAPSHOT_COLUMN]
+    assert 'не задана в источнике' in node[SNAPSHOT_COLUMN]
+    assert node['segments'] in (None, [])
+    assert evaluate(result['findings'])['allowed'] is True
+
+
+@pytest.mark.unit
+def test_calendar_segments_preservation_guard(publish_case):
+    from prepared_plan import PreparedPlan
+    from mpp_convert import convert_prepared_plan
+    from plan_diagnostics import diagnose
+    source, _ = _with_source_segments(publish_case['export'])
+    prepared = PreparedPlan.from_export(source, timezone_hint='Europe/Moscow')
+    profile = deepcopy(publish_case['profile']); supports = profile.supports
+    profile.supports = lambda name: name == 'publication:source_snapshot_dates' or supports(name)
+    conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+    conversion['diagnostics'] = [d for d in conversion['diagnostics'] if d['code'] != 'task_semantics_unrepresented:segments']
+    archived = next(row for row in conversion['source_semantics']['tasks'] if row.get('task_key') == _)
+    archived['segments'] = {'value':[],'quality':'ok','reason':None}
+    result = diagnose(prepared, conversion, plugin_profile=profile)
+    assert any(f['code'] == 'task_semantics_unrepresented:segments' and f['category'] == 'unsupported_semantics'
+               for f in result['findings'])
+
+
+@pytest.mark.unit
+def test_calendar_segments_noncalendar_blockers(publish_case):
+    from prepared_plan import PreparedPlan
+    from mpp_convert import convert_prepared_plan
+    from plan_diagnostics import diagnose
+    from plan_policy import evaluate
+    source, _ = _with_source_segments(publish_case['export'])
+    prepared = PreparedPlan.from_export(source, timezone_hint='Europe/Moscow')
+    profile = deepcopy(publish_case['profile']); supports = profile.supports
+    profile.supports = lambda name: name == 'publication:source_snapshot_dates' or supports(name)
+    conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+    conversion['diagnostics'].append({'code':'task_dates_missing','entity':'mixed-defect','source':None,'represented':None})
+    admission = evaluate(diagnose(prepared, conversion, plugin_profile=profile)['findings'])
+    assert admission['allowed'] is False
+    assert any(row['entity'] == 'mixed-defect' for row in admission['blockers'])
+
+
+@pytest.mark.unit
+def test_calendar_segments_without_directive(publish_case, monkeypatch):
+    import plan_policy
+    from prepared_plan import PreparedPlan
+    from mpp_convert import convert_prepared_plan
+    from plan_diagnostics import diagnose
+    source, _ = _with_source_segments(publish_case['export'])
+    prepared = PreparedPlan.from_export(source, timezone_hint='Europe/Moscow')
+    original = plan_policy.owner_decision
+    def no_v2():
+        decision = original()
+        decision.pop('calendar', None); decision.pop('calendar_evidence', None)
+        decision.pop('calendar_evidence_verified', None)
+        return decision
+    monkeypatch.setattr(plan_policy, 'owner_decision', no_v2)
+    conversion = convert_prepared_plan(prepared, plugin_profile=deepcopy(publish_case['profile']))
+    findings = diagnose(prepared, conversion, plugin_profile=deepcopy(publish_case['profile']))['findings']
+    assert any(f['code'] == 'task_semantics_unrepresented:segments' and f['category'] == 'unsupported_semantics'
+               for f in findings)
+
+
+def _flatten(node):
+    result = {node['id']:node}
+    for child in node.get('children', []):
+        result.update(_flatten(child))
+    return result
+
+
 @pytest.mark.unit
 def test_calendar_resume_same_snapshot(publish_case, monkeypatch):
     import plan_policy

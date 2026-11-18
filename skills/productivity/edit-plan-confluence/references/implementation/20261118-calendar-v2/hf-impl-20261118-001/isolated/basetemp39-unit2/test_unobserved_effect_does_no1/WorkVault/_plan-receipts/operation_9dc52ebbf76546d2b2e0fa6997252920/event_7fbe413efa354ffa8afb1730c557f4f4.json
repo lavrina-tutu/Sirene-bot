@@ -1,0 +1,51 @@
+{
+  "result_id": "preparation_result_58f59dd87e7140b9841b8768c33126b0",
+  "representation_sha256": "9e477d0d271fc338f7effa1acf9bc4c05ffba9680bfeb16ce5114de9713a7136",
+  "namespace": "confluence:dom.tutu.ru",
+  "parent_id": "test-page",
+  "child": false,
+  "macro": {
+    "macro_id": "03147154-6279-412d-970a-68cef565c061",
+    "param_id": "bc46ace6a7654e3f9138947042ab8ed3",
+    "param_hash": "dcbea199837a4848bf06ed3ab4a4a85c",
+    "attachment_name": "gantt-chart-bc46ace6a7654e3f9138947042ab8ed3.json",
+    "_span": [
+      126,
+      422
+    ]
+  },
+  "new_macro_html": null,
+  "base_managed": {
+    "macro": "<root><ac:structured-macro xmlns:ac=\"http://atlassian.com/content\" ac:macro-id=\"03147154-6279-412d-970a-68cef565c061\" ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\"><ac:parameter ac:name=\"id\">bc46ace6a7654e3f9138947042ab8ed3</ac:parameter><ac:parameter ac:name=\"hash\">dcbea199837a4848bf06ed3ab4a4a85c</ac:parameter></ac:structured-macro></root>",
+    "blocks": [
+      "<p><strong>Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней</strong><br></br>по плану; факт — в колонках</p>"
+    ],
+    "marker_texts": [
+      "Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней"
+    ],
+    "summary_above_macro": true,
+    "sha256": "47b2751b8daa00097406705624902e97792501b95a0b82577b2ea100c8178174"
+  },
+  "base_version": 4,
+  "before_attachment": {
+    "attach_id": "actual-attachment-id",
+    "filename": "gantt-chart-bc46ace6a7654e3f9138947042ab8ed3.json",
+    "version": 1,
+    "title": "gantt-chart-bc46ace6a7654e3f9138947042ab8ed3.json"
+  },
+  "before_attachment_sha256": "9e477d0d271fc338f7effa1acf9bc4c05ffba9680bfeb16ce5114de9713a7136",
+  "intended_storage": "<p><strong>Итого: с 05.01.26 по 05.01.26 - 2 рабочих дней</strong><br />по плану; факт — в колонках</p><p>Соседний блок</p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"03147154-6279-412d-970a-68cef565c061\"><ac:parameter ac:name=\"id\">bc46ace6a7654e3f9138947042ab8ed3</ac:parameter><ac:parameter ac:name=\"hash\">dcbea199837a4848bf06ed3ab4a4a85c</ac:parameter></ac:structured-macro></p>",
+  "intended_managed": {
+    "macro": "<root><ac:structured-macro xmlns:ac=\"http://atlassian.com/content\" ac:macro-id=\"03147154-6279-412d-970a-68cef565c061\" ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\"><ac:parameter ac:name=\"id\">bc46ace6a7654e3f9138947042ab8ed3</ac:parameter><ac:parameter ac:name=\"hash\">dcbea199837a4848bf06ed3ab4a4a85c</ac:parameter></ac:structured-macro></root>",
+    "blocks": [
+      "<p><strong>Итого: с 05.01.26 по 05.01.26 - 2 рабочих дней</strong><br></br>по плану; факт — в колонках</p>"
+    ],
+    "marker_texts": [
+      "Итого: с 05.01.26 по 05.01.26 - 2 рабочих дней"
+    ],
+    "summary_above_macro": true,
+    "sha256": "e1a29e137379a13940df62a0f2c74720a8b8da82807909106ceaf71b464afcdc"
+  },
+  "title": "Test. План 18.11.26",
+  "space_key": "TEST"
+}

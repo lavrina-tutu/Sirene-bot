@@ -1,0 +1,1 @@
+TEST ONLY: explicit synthetic acceptance assertion of the stated task mapping. This is not an assertion about production Trisigma files.

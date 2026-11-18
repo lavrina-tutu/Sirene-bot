@@ -1,0 +1,1 @@
+TEST ONLY: user explicitly confirms that snapshot B continues snapshot A, preserving the UID namespace. This synthetic statement has no production scope.

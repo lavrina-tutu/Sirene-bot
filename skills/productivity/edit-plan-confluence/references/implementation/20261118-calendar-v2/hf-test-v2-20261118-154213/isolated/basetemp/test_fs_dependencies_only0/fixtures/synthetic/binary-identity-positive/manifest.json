@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "scope": "Positive binary identity/resume only; no production identity or consent",
+  "seed": "../mpp14relations.mpp",
+  "seed_sha256": "8f33cdb774aa090b664d90145879acc8a289057ca45a6575884eb0da9fd91f30",
+  "mpxj": "16.4.0",
+  "recipe": "../binary_recipe.py::make_identity_positive_fixture",
+  "recipe_sha256": "3ba9758e446cd22681a5e75737603a741a62f604f1406f875c9d809dc0b12465",
+  "files": {
+    "anchor.mpp": {
+      "sha256": "7aea0277b7a3d08fc19d17a67529022f35cea0a35e5938110c1ab433c9a02b4b",
+      "size_bytes": 180736
+    },
+    "revised.mpp": {
+      "sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
+      "size_bytes": 180736
+    },
+    "test-only-user-evidence.txt": {
+      "sha256": "99cd720acf36d9e4e0ff602a8ded67afabf1b34dc270ad69bfcedd08ebd4f9de",
+      "size_bytes": 422
+    }
+  },
+  "changes": [
+    "Stored summary promoted to UID1000/ID1, leaf parent references and VarMeta UID remapped; source hierarchy 1/2",
+    "Binary source tasks FixedDuration, no effort-driven scheduling/work/actuals; binary assignment streams deliberately empty",
+    "Four FS working-day links; revised source changes UID1 lag to +1 day",
+    "Test-only rule addresses unchanged UID2 relation and exact revised source hash; identity must be confirmed before applying"
+  ],
+  "expected": {
+    "archive_tasks": 6,
+    "display_tasks": 6,
+    "dependencies": 4,
+    "root_task_key": "uid:1000",
+    "initial": "needs_decision/3",
+    "after_confirm_resume": "published/0",
+    "independent_blockers": 0
+  },
+  "negative_fixture": "../relations-all-types.mpp",
+  "negative_contract": "successful identity confirmation retains failed/5 and zero network writes when semantic losses exist"
+}

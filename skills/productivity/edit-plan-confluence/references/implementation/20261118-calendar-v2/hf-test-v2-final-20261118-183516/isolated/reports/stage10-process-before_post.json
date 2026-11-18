@@ -1,0 +1,210 @@
+{
+  "boundary": "before_post",
+  "child_rc": 73,
+  "calls": [
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "POST",
+      "/rest/api/content/test-page/child/attachment"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/att?expand=version%2Ccontainer&version=1"
+    ],
+    [
+      "GET",
+      "/download/attachments/test-page/gantt-chart-5e78640016474143a0bfe337a4fdb8be.json?api=v2&version=1"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/att?expand=version%2Ccontainer&version=1"
+    ],
+    [
+      "GET",
+      "/download/attachments/test-page/gantt-chart-5e78640016474143a0bfe337a4fdb8be.json?api=v2&version=1"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "PUT",
+      "/rest/api/content/test-page"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page?expand=body.storage%2Cversion%2Cspace"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ],
+    [
+      "GET",
+      "/rest/api/content/att?expand=version%2Ccontainer&version=1"
+    ],
+    [
+      "GET",
+      "/download/attachments/test-page/gantt-chart-5e78640016474143a0bfe337a4fdb8be.json?api=v2&version=1"
+    ],
+    [
+      "GET",
+      "/rest/api/content/test-page/child/attachment?limit=200&start=0&expand=version"
+    ]
+  ],
+  "receipt": {
+    "attachment_version": 1,
+    "completed_stages": [
+      "prepared",
+      "archived",
+      "admitted",
+      "attachment_uploaded",
+      "attachment_verified",
+      "storage_written",
+      "storage_verified",
+      "confirmed"
+    ],
+    "dependency_count": 1,
+    "display_task_count": 3,
+    "error": null,
+    "exceptions": [],
+    "exit_code": 0,
+    "external_effect": "storage_written",
+    "item_id": "item_dfda578dc8ea4cc8ba2ccb44be95697d",
+    "mode": "publish",
+    "operation_id": "operation_75e4eba764d543e990f706537ef52402",
+    "page_id": "test-page",
+    "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=test-page",
+    "project_slug": "test",
+    "published": true,
+    "schema_version": 1,
+    "snapshot_id": "snapshot_c26f331313a94a729dc53b8ec31e5074",
+    "source": {
+      "name": "synthetic-source.mpp",
+      "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+      "size_bytes": 57
+    },
+    "status": "published_with_warnings",
+    "task_count": 3,
+    "verification": {
+      "archive": "verified",
+      "attachment": "verified",
+      "schedule": {
+        "checks": [
+          {
+            "accepted_deviation": false,
+            "category": "local_unsupported",
+            "code": "local_scheduler_prepared_unsupported",
+            "count": 1,
+            "example_entities": [
+              "model"
+            ],
+            "exit_code": 0,
+            "row": 5
+          },
+          {
+            "accepted_deviation": false,
+            "category": "plugin_unobserved",
+            "code": "specific_plan_plugin_result_not_verified",
+            "count": 1,
+            "example_entities": [
+              "plugin"
+            ],
+            "exit_code": 0,
+            "row": 6
+          },
+          {
+            "accepted_deviation": false,
+            "category": "display_only",
+            "code": "source_calendar_publish_as_is",
+            "count": 1,
+            "example_entities": [
+              "source_calendars"
+            ],
+            "exit_code": 0,
+            "row": 20
+          }
+        ],
+        "evidence_ids": [
+          "artifact_387acbdf7e644d4cb6fbdc834156bed6"
+        ],
+        "limitations": [
+          "local_scheduler_not_run",
+          "plan_plugin_result_not_verified",
+          "calendar_analysis_not_performed",
+          "owner_decision:owner-20261118-calendar-publish-as-is-v2"
+        ],
+        "status": "not_verified"
+      },
+      "source_values": {
+        "checks": [],
+        "evidence_ids": [],
+        "limitations": [
+          "ordinary_view_for_this_plan_not_observed"
+        ],
+        "status": "not_verified"
+      },
+      "storage": "verified"
+    },
+    "warnings": [
+      {
+        "code": "local_scheduler_prepared_unsupported",
+        "details_ref": "artifact:artifact_387acbdf7e644d4cb6fbdc834156bed6",
+        "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+      },
+      {
+        "code": "source_calendar_publish_as_is",
+        "details_ref": "artifact:artifact_387acbdf7e644d4cb6fbdc834156bed6",
+        "message": "Календарь не анализировался по решению владельца; даты задач перенесены 1-в-1: 1 проверок; подробности в свидетельстве"
+      },
+      {
+        "code": "specific_plan_plugin_result_not_verified",
+        "details_ref": "artifact:artifact_387acbdf7e644d4cb6fbdc834156bed6",
+        "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+      }
+    ]
+  },
+  "busy": null,
+  "POST": 1,
+  "PUT": 1,
+  "GET": 20
+}

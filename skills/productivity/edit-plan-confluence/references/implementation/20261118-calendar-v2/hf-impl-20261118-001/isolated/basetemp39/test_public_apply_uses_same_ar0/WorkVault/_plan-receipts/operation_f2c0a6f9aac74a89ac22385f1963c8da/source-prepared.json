@@ -1,0 +1,3114 @@
+{
+  "schema_version": 1,
+  "normalized_data": {
+    "tasks": [
+      {
+        "task_key": "uid:1",
+        "identity_quality": {
+          "value": "uid:0",
+          "quality": "ok",
+          "reason": null
+        },
+        "id": 1,
+        "uid": 1,
+        "wbs": "1",
+        "name": "root",
+        "outline_level": 1,
+        "outline_number": "0",
+        "milestone": false,
+        "summary": true,
+        "field_quality": {
+          "id": {
+            "value": 0,
+            "quality": "ok",
+            "reason": null
+          },
+          "uid": {
+            "value": 0,
+            "quality": "ok",
+            "reason": null
+          },
+          "wbs": {
+            "value": "0",
+            "quality": "ok",
+            "reason": null
+          },
+          "name": {
+            "value": "mpp14relations",
+            "quality": "ok",
+            "reason": null
+          },
+          "outline_level": {
+            "value": 0,
+            "quality": "ok",
+            "reason": null
+          },
+          "outline_number": {
+            "value": "0",
+            "quality": "ok",
+            "reason": null
+          },
+          "milestone": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "summary": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        "start": {
+          "value": "2026-01-05T09:00:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "finish": {
+          "value": "2026-01-05T18:00:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "early_start": {
+          "value": "2006-09-21T08:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "early_finish": {
+          "value": "2006-09-25T17:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "late_start": {
+          "value": "2006-09-21T08:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "late_finish": {
+          "value": "2006-09-25T17:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "constraint_type": {
+          "value": "AS_SOON_AS_POSSIBLE",
+          "quality": "ok",
+          "reason": null
+        },
+        "constraint_date": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "secondary_constraint_type": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "secondary_constraint_date": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "actual_start": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "actual_finish": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "deadline": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "task_mode": {
+          "value": "AUTO_SCHEDULED",
+          "quality": "ok",
+          "reason": null
+        },
+        "task_type": {
+          "value": "FIXED_DURATION",
+          "quality": "ok",
+          "reason": null
+        },
+        "stop": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "resume": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "scheduled_start": {
+          "value": "2006-09-21T08:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "scheduled_finish": {
+          "value": "2006-09-25T17:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "notes": {
+          "value": "",
+          "quality": "ok",
+          "reason": null
+        },
+        "external_project": {
+          "value": "False",
+          "quality": "ok",
+          "reason": null
+        },
+        "subproject_file": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "duration": {
+          "value": "1 DAYS",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "1",
+            "units": "DAYS",
+            "source_units": "DAYS",
+            "elapsed": false
+          }
+        },
+        "actual_duration": {
+          "value": "0 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "remaining_duration": {
+          "value": "3 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "3",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "manual_duration": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "scheduled_duration": {
+          "value": "3 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "3",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "work": {
+          "value": "0 h",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          }
+        },
+        "actual_work": {
+          "value": "0 h",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          }
+        },
+        "remaining_work": {
+          "value": "0 h",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          }
+        },
+        "leveling_delay": {
+          "value": "0 ed",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "ELAPSED_DAYS",
+            "source_units": "ed",
+            "elapsed": true
+          }
+        },
+        "total_slack": {
+          "value": "0 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "free_slack": {
+          "value": "0 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "percent_complete": {
+          "value": "0",
+          "quality": "ok",
+          "reason": null
+        },
+        "percent_work_complete": {
+          "value": "0",
+          "quality": "ok",
+          "reason": null
+        },
+        "effort_driven": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "ignore_resource_calendar": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "active": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        },
+        "external_task": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "estimated": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        },
+        "leveling_can_split": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        },
+        "parent_task_key": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "child_task_keys": {
+          "value": [
+            "uid:2",
+            "uid:3"
+          ],
+          "quality": "ok",
+          "reason": null
+        },
+        "calendar_key": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "effective_calendar_key": {
+          "value": "cal",
+          "quality": "ok",
+          "reason": null
+        },
+        "calendar_uid": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "segments": {
+          "value": [],
+          "quality": "ok",
+          "reason": null
+        },
+        "segments_quality": "ok",
+        "baseline_values": [
+          {
+            "slot": 0,
+            "start": null,
+            "finish": null,
+            "duration": {
+              "amount": "0",
+              "units": "DAYS",
+              "source_units": "d",
+              "elapsed": false
+            },
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": {
+                  "amount": "0",
+                  "units": "DAYS",
+                  "source_units": "d",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 1,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 2,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 3,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 4,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 5,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 6,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 7,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 8,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 9,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 10,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          }
+        ],
+        "quality_issues": []
+      },
+      {
+        "task_key": "uid:2",
+        "identity_quality": {
+          "value": "uid:0",
+          "quality": "ok",
+          "reason": null
+        },
+        "id": 2,
+        "uid": 2,
+        "wbs": "1.2",
+        "name": "a",
+        "outline_level": 2,
+        "outline_number": "0",
+        "milestone": false,
+        "summary": false,
+        "field_quality": {
+          "id": {
+            "value": 0,
+            "quality": "ok",
+            "reason": null
+          },
+          "uid": {
+            "value": 0,
+            "quality": "ok",
+            "reason": null
+          },
+          "wbs": {
+            "value": "0",
+            "quality": "ok",
+            "reason": null
+          },
+          "name": {
+            "value": "mpp14relations",
+            "quality": "ok",
+            "reason": null
+          },
+          "outline_level": {
+            "value": 0,
+            "quality": "ok",
+            "reason": null
+          },
+          "outline_number": {
+            "value": "0",
+            "quality": "ok",
+            "reason": null
+          },
+          "milestone": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "summary": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        "start": {
+          "value": "2026-01-05T09:00:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "finish": {
+          "value": "2026-01-05T18:00:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "early_start": {
+          "value": "2006-09-21T08:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "early_finish": {
+          "value": "2006-09-25T17:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "late_start": {
+          "value": "2006-09-21T08:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "late_finish": {
+          "value": "2006-09-25T17:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "constraint_type": {
+          "value": "AS_SOON_AS_POSSIBLE",
+          "quality": "ok",
+          "reason": null
+        },
+        "constraint_date": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "secondary_constraint_type": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "secondary_constraint_date": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "actual_start": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "actual_finish": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "deadline": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "task_mode": {
+          "value": "AUTO_SCHEDULED",
+          "quality": "ok",
+          "reason": null
+        },
+        "task_type": {
+          "value": "FIXED_DURATION",
+          "quality": "ok",
+          "reason": null
+        },
+        "stop": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "resume": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "scheduled_start": {
+          "value": "2006-09-21T08:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "scheduled_finish": {
+          "value": "2006-09-25T17:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "notes": {
+          "value": "",
+          "quality": "ok",
+          "reason": null
+        },
+        "external_project": {
+          "value": "False",
+          "quality": "ok",
+          "reason": null
+        },
+        "subproject_file": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "duration": {
+          "value": "1 DAYS",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "1",
+            "units": "DAYS",
+            "source_units": "DAYS",
+            "elapsed": false
+          }
+        },
+        "actual_duration": {
+          "value": "0 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "remaining_duration": {
+          "value": "3 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "3",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "manual_duration": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "scheduled_duration": {
+          "value": "3 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "3",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "work": {
+          "value": "0 h",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          }
+        },
+        "actual_work": {
+          "value": "0 h",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          }
+        },
+        "remaining_work": {
+          "value": "0 h",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          }
+        },
+        "leveling_delay": {
+          "value": "0 ed",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "ELAPSED_DAYS",
+            "source_units": "ed",
+            "elapsed": true
+          }
+        },
+        "total_slack": {
+          "value": "0 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "free_slack": {
+          "value": "0 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "percent_complete": {
+          "value": "0",
+          "quality": "ok",
+          "reason": null
+        },
+        "percent_work_complete": {
+          "value": "0",
+          "quality": "ok",
+          "reason": null
+        },
+        "effort_driven": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "ignore_resource_calendar": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "active": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        },
+        "external_task": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "estimated": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        },
+        "leveling_can_split": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        },
+        "parent_task_key": {
+          "value": "uid:1",
+          "quality": "ok",
+          "reason": null
+        },
+        "child_task_keys": {
+          "value": [],
+          "quality": "ok",
+          "reason": null
+        },
+        "calendar_key": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "effective_calendar_key": {
+          "value": "cal",
+          "quality": "ok",
+          "reason": null
+        },
+        "calendar_uid": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "segments": {
+          "value": [],
+          "quality": "ok",
+          "reason": null
+        },
+        "segments_quality": "ok",
+        "baseline_values": [
+          {
+            "slot": 0,
+            "start": null,
+            "finish": null,
+            "duration": {
+              "amount": "0",
+              "units": "DAYS",
+              "source_units": "d",
+              "elapsed": false
+            },
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": {
+                  "amount": "0",
+                  "units": "DAYS",
+                  "source_units": "d",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 1,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 2,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 3,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 4,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 5,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 6,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 7,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 8,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 9,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 10,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          }
+        ],
+        "quality_issues": []
+      },
+      {
+        "task_key": "uid:3",
+        "identity_quality": {
+          "value": "uid:0",
+          "quality": "ok",
+          "reason": null
+        },
+        "id": 3,
+        "uid": 3,
+        "wbs": "1.3",
+        "name": "b",
+        "outline_level": 2,
+        "outline_number": "0",
+        "milestone": true,
+        "summary": false,
+        "field_quality": {
+          "id": {
+            "value": 0,
+            "quality": "ok",
+            "reason": null
+          },
+          "uid": {
+            "value": 0,
+            "quality": "ok",
+            "reason": null
+          },
+          "wbs": {
+            "value": "0",
+            "quality": "ok",
+            "reason": null
+          },
+          "name": {
+            "value": "mpp14relations",
+            "quality": "ok",
+            "reason": null
+          },
+          "outline_level": {
+            "value": 0,
+            "quality": "ok",
+            "reason": null
+          },
+          "outline_number": {
+            "value": "0",
+            "quality": "ok",
+            "reason": null
+          },
+          "milestone": {
+            "value": false,
+            "quality": "ok",
+            "reason": null
+          },
+          "summary": {
+            "value": true,
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        "start": {
+          "value": "2026-01-05T09:00:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "finish": {
+          "value": "2026-01-05T09:00:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "early_start": {
+          "value": "2006-09-21T08:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "early_finish": {
+          "value": "2006-09-25T17:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "late_start": {
+          "value": "2006-09-21T08:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "late_finish": {
+          "value": "2006-09-25T17:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "constraint_type": {
+          "value": "AS_SOON_AS_POSSIBLE",
+          "quality": "ok",
+          "reason": null
+        },
+        "constraint_date": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "secondary_constraint_type": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "secondary_constraint_date": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "actual_start": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "actual_finish": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "deadline": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "task_mode": {
+          "value": "AUTO_SCHEDULED",
+          "quality": "ok",
+          "reason": null
+        },
+        "task_type": {
+          "value": "FIXED_DURATION",
+          "quality": "ok",
+          "reason": null
+        },
+        "stop": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "resume": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "scheduled_start": {
+          "value": "2006-09-21T08:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "scheduled_finish": {
+          "value": "2006-09-25T17:00",
+          "quality": "ok",
+          "reason": null
+        },
+        "notes": {
+          "value": "",
+          "quality": "ok",
+          "reason": null
+        },
+        "external_project": {
+          "value": "False",
+          "quality": "ok",
+          "reason": null
+        },
+        "subproject_file": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "duration": {
+          "value": "0 DAYS",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "DAYS",
+            "elapsed": false
+          }
+        },
+        "actual_duration": {
+          "value": "0 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "remaining_duration": {
+          "value": "3 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "3",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "manual_duration": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "scheduled_duration": {
+          "value": "3 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "3",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "work": {
+          "value": "0 h",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          }
+        },
+        "actual_work": {
+          "value": "0 h",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          }
+        },
+        "remaining_work": {
+          "value": "0 h",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "HOURS",
+            "source_units": "h",
+            "elapsed": false
+          }
+        },
+        "leveling_delay": {
+          "value": "0 ed",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "ELAPSED_DAYS",
+            "source_units": "ed",
+            "elapsed": true
+          }
+        },
+        "total_slack": {
+          "value": "0 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "free_slack": {
+          "value": "0 d",
+          "quality": "ok",
+          "reason": null,
+          "quantity": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "d",
+            "elapsed": false
+          }
+        },
+        "percent_complete": {
+          "value": "0",
+          "quality": "ok",
+          "reason": null
+        },
+        "percent_work_complete": {
+          "value": "0",
+          "quality": "ok",
+          "reason": null
+        },
+        "effort_driven": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "ignore_resource_calendar": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "active": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        },
+        "external_task": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "estimated": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        },
+        "leveling_can_split": {
+          "value": true,
+          "quality": "ok",
+          "reason": null
+        },
+        "parent_task_key": {
+          "value": "uid:1",
+          "quality": "ok",
+          "reason": null
+        },
+        "child_task_keys": {
+          "value": [],
+          "quality": "ok",
+          "reason": null
+        },
+        "calendar_key": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "effective_calendar_key": {
+          "value": "cal",
+          "quality": "ok",
+          "reason": null
+        },
+        "calendar_uid": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "segments": {
+          "value": [],
+          "quality": "ok",
+          "reason": null
+        },
+        "segments_quality": "ok",
+        "baseline_values": [
+          {
+            "slot": 0,
+            "start": null,
+            "finish": null,
+            "duration": {
+              "amount": "0",
+              "units": "DAYS",
+              "source_units": "d",
+              "elapsed": false
+            },
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": {
+                  "amount": "0",
+                  "units": "DAYS",
+                  "source_units": "d",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 1,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 2,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 3,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 4,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 5,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 6,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 7,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 8,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 9,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          },
+          {
+            "slot": 10,
+            "start": null,
+            "finish": null,
+            "duration": null,
+            "work": {
+              "amount": "0",
+              "units": "HOURS",
+              "source_units": "h",
+              "elapsed": false
+            },
+            "cost": "0",
+            "field_quality": {
+              "start": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "finish": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "duration": {
+                "value": null,
+                "quality": "missing",
+                "reason": "not_set"
+              },
+              "work": {
+                "value": {
+                  "amount": "0",
+                  "units": "HOURS",
+                  "source_units": "h",
+                  "elapsed": false
+                },
+                "quality": "ok",
+                "reason": null
+              },
+              "cost": {
+                "value": "0",
+                "quality": "ok",
+                "reason": null
+              }
+            }
+          }
+        ],
+        "quality_issues": []
+      }
+    ],
+    "dependencies": [
+      {
+        "dependency_key": "dep:2:3",
+        "uid": {
+          "value": 1,
+          "quality": "ok",
+          "reason": null
+        },
+        "predecessor_task_key": "uid:2",
+        "successor_task_key": "uid:3",
+        "predecessor_id": {
+          "value": 1,
+          "quality": "ok",
+          "reason": null
+        },
+        "predecessor_uid": {
+          "value": 1,
+          "quality": "ok",
+          "reason": null
+        },
+        "successor_id": {
+          "value": 2,
+          "quality": "ok",
+          "reason": null
+        },
+        "successor_uid": {
+          "value": 2,
+          "quality": "ok",
+          "reason": null
+        },
+        "source_link_type": {
+          "value": "FS",
+          "quality": "ok",
+          "reason": null
+        },
+        "link_type": "FS",
+        "type_quality": {
+          "value": "FS",
+          "quality": "ok",
+          "reason": null
+        },
+        "lag": "1 d",
+        "lag_value": {
+          "value": {
+            "amount": "0",
+            "units": "DAYS",
+            "source_units": "DAYS",
+            "elapsed": false
+          },
+          "quality": "ok",
+          "reason": null
+        },
+        "lag_calendar": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "project_lag_calendar": {
+          "value": "PREDECESSOR",
+          "quality": "ok",
+          "reason": null
+        },
+        "driving": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "endpoint_quality": {
+          "predecessor": {
+            "quality": "ok",
+            "reason": null
+          },
+          "successor": {
+            "quality": "ok",
+            "reason": null
+          }
+        },
+        "external": false,
+        "quality_issues": [
+          {
+            "field": "lag_calendar",
+            "quality": "missing",
+            "reason": "not_set",
+            "value": null
+          }
+        ]
+      }
+    ],
+    "external_dependencies": [],
+    "resources": [],
+    "assignments": [],
+    "calendars": [
+      {
+        "calendar_key": "cal",
+        "identity_quality": {
+          "value": "uid:1",
+          "quality": "ok",
+          "reason": null
+        },
+        "name": "Base",
+        "uid": {
+          "value": 1,
+          "quality": "ok",
+          "reason": null
+        },
+        "parent_uid": null,
+        "parent_key": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "type": {
+          "value": "GLOBAL",
+          "quality": "ok",
+          "reason": null
+        },
+        "personal": {
+          "value": false,
+          "quality": "ok",
+          "reason": null
+        },
+        "minutes_per_day": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "minutes_per_week": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "minutes_per_month": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "minutes_per_year": {
+          "value": null,
+          "quality": "missing",
+          "reason": "not_set"
+        },
+        "weekdays": [
+          {
+            "day": "MONDAY",
+            "working": {
+              "value": true,
+              "quality": "ok",
+              "reason": null
+            },
+            "day_type": {
+              "value": "WORKING",
+              "quality": "ok",
+              "reason": null
+            },
+            "intervals": {
+              "value": [
+                {
+                  "start": {
+                    "value": "09:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "12:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                },
+                {
+                  "start": {
+                    "value": "13:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "18:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                }
+              ],
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          {
+            "day": "TUESDAY",
+            "working": {
+              "value": true,
+              "quality": "ok",
+              "reason": null
+            },
+            "day_type": {
+              "value": "WORKING",
+              "quality": "ok",
+              "reason": null
+            },
+            "intervals": {
+              "value": [
+                {
+                  "start": {
+                    "value": "09:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "12:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                },
+                {
+                  "start": {
+                    "value": "13:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "18:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                }
+              ],
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          {
+            "day": "WEDNESDAY",
+            "working": {
+              "value": true,
+              "quality": "ok",
+              "reason": null
+            },
+            "day_type": {
+              "value": "WORKING",
+              "quality": "ok",
+              "reason": null
+            },
+            "intervals": {
+              "value": [
+                {
+                  "start": {
+                    "value": "09:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "12:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                },
+                {
+                  "start": {
+                    "value": "13:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "18:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                }
+              ],
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          {
+            "day": "THURSDAY",
+            "working": {
+              "value": true,
+              "quality": "ok",
+              "reason": null
+            },
+            "day_type": {
+              "value": "WORKING",
+              "quality": "ok",
+              "reason": null
+            },
+            "intervals": {
+              "value": [
+                {
+                  "start": {
+                    "value": "09:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "12:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                },
+                {
+                  "start": {
+                    "value": "13:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "18:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                }
+              ],
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          {
+            "day": "FRIDAY",
+            "working": {
+              "value": true,
+              "quality": "ok",
+              "reason": null
+            },
+            "day_type": {
+              "value": "WORKING",
+              "quality": "ok",
+              "reason": null
+            },
+            "intervals": {
+              "value": [
+                {
+                  "start": {
+                    "value": "09:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "12:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                },
+                {
+                  "start": {
+                    "value": "13:00",
+                    "quality": "ok",
+                    "reason": null
+                  },
+                  "end": {
+                    "value": "18:00",
+                    "quality": "ok",
+                    "reason": null
+                  }
+                }
+              ],
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          {
+            "day": "SATURDAY",
+            "working": {
+              "value": false,
+              "quality": "ok",
+              "reason": null
+            },
+            "day_type": {
+              "value": "NON_WORKING",
+              "quality": "ok",
+              "reason": null
+            },
+            "intervals": {
+              "value": [],
+              "quality": "ok",
+              "reason": null
+            }
+          },
+          {
+            "day": "SUNDAY",
+            "working": {
+              "value": false,
+              "quality": "ok",
+              "reason": null
+            },
+            "day_type": {
+              "value": "NON_WORKING",
+              "quality": "ok",
+              "reason": null
+            },
+            "intervals": {
+              "value": [],
+              "quality": "ok",
+              "reason": null
+            }
+          }
+        ],
+        "weekdays_quality": "ok",
+        "exceptions": [],
+        "exceptions_quality": {
+          "status": "complete",
+          "count": 0,
+          "reason": null
+        },
+        "work_weeks": [],
+        "work_weeks_quality": {
+          "status": "complete",
+          "count": 0,
+          "reason": null
+        },
+        "quality_issues": []
+      }
+    ],
+    "project": {
+      "status_date": {
+        "value": null,
+        "quality": "missing",
+        "reason": "not_set"
+      },
+      "minutes_per_day": {
+        "value": "480",
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_week": {
+        "value": "2400",
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_month": {
+        "value": "9600",
+        "quality": "ok",
+        "reason": null
+      },
+      "minutes_per_year": {
+        "value": "115200",
+        "quality": "ok",
+        "reason": null
+      },
+      "default_calendar_key": {
+        "value": "cal",
+        "quality": "ok",
+        "reason": null
+      },
+      "relationship_lag_calendar": {
+        "value": "PREDECESSOR",
+        "quality": "ok",
+        "reason": null
+      }
+    },
+    "collections": {
+      "tasks": {
+        "status": "complete",
+        "count": 3,
+        "reason": null
+      },
+      "dependencies": {
+        "status": "complete",
+        "count": 1,
+        "reason": null
+      },
+      "external_dependencies": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "resources": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "assignments": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      },
+      "calendars": {
+        "status": "complete",
+        "count": 1,
+        "reason": null
+      },
+      "baseline_values": {
+        "status": "complete",
+        "count": 0,
+        "reason": null
+      }
+    },
+    "diagnose_graph": {
+      "cycles": [],
+      "self_references": [],
+      "dangling_dependencies": [],
+      "external_dependencies": [],
+      "schedule_status": "not_verified"
+    },
+    "summary_inputs": {},
+    "export_version": "full-export-v2",
+    "source_identity": {
+      "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+      "size_bytes": 57,
+      "reader": "unit-only",
+      "mpxj": "unit-only",
+      "jpype": "unit-only"
+    },
+    "normalization": {
+      "id": "normalization-v1",
+      "version": "1.0.0",
+      "normalizer_version": "prepared-v1",
+      "fingerprint": "26f75d00b4daf3847545115420e36fea574c96044530ae1847dd0c81399efcad"
+    },
+    "resolved_timezone": null
+  },
+  "semantic_sha256": "891f546a0e818777bae0d5d46040857ef3972d36f0e9d23c9de496b87f032873",
+  "provenance": {
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57,
+    "reader": "unit-only",
+    "mpxj": "unit-only",
+    "jpype": "unit-only",
+    "original_name": "synthetic-source.mpp",
+    "source_path": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-v2/hf-impl-20261118-001/isolated/basetemp39/test_public_apply_uses_same_ar0/synthetic-source.mpp",
+    "timezone_origin": "unknown"
+  }
+}

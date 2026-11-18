@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "item_id": "first",
+      "path": "first.mpp",
+      "project_slug": "batch-project"
+    },
+    {
+      "item_id": "first",
+      "path": "first.mpp",
+      "project_slug": "batch-project"
+    }
+  ]
+}

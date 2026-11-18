@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "operation_id": "operation_d3073a28c80549ca9ac9dfbdc928a70f",
+  "item_id": "item_d9f53ac8b8864abba3b363b2d1756f74",
+  "status": "prepared",
+  "mode": "publish",
+  "exit_code": 0,
+  "project_slug": "test",
+  "source": {
+    "name": "synthetic-source.mpp",
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57
+  },
+  "snapshot_id": "snapshot_0509e9a7142e4d668f3d8bbbf6383cf3",
+  "page_id": null,
+  "page_url": null,
+  "task_count": 3,
+  "display_task_count": 3,
+  "dependency_count": 1,
+  "exceptions": [],
+  "attachment_version": null,
+  "verification": {
+    "archive": "verified",
+    "attachment": "not_applicable",
+    "storage": "not_applicable",
+    "source_values": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [
+        "ordinary_view_for_this_plan_not_observed"
+      ],
+      "evidence_ids": []
+    },
+    "schedule": {
+      "status": "not_verified",
+      "checks": [
+        {
+          "row": 5,
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "exit_code": 0,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "model"
+          ]
+        },
+        {
+          "row": 6,
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "exit_code": 0,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "plugin"
+          ]
+        }
+      ],
+      "limitations": [
+        "local_scheduler_not_run",
+        "plan_plugin_result_not_verified"
+      ],
+      "evidence_ids": [
+        "artifact_88f8dfdc2d434a7588d43689306d090f"
+      ]
+    }
+  },
+  "published": false,
+  "warnings": [
+    {
+      "code": "local_scheduler_prepared_unsupported",
+      "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+      "details_ref": "artifact:artifact_88f8dfdc2d434a7588d43689306d090f"
+    },
+    {
+      "code": "specific_plan_plugin_result_not_verified",
+      "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+      "details_ref": "artifact:artifact_88f8dfdc2d434a7588d43689306d090f"
+    }
+  ],
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived",
+    "admitted"
+  ],
+  "external_effect": "none",
+  "error": null
+}

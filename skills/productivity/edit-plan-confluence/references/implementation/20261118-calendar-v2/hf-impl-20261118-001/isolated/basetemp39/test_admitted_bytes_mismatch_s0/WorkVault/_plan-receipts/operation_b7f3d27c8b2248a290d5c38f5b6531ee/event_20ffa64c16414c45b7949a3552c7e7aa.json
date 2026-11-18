@@ -1,0 +1,6 @@
+{
+  "exception_type": "UploadVerificationConflict",
+  "http_status": null,
+  "errno": null,
+  "stage": "attachment_verify"
+}

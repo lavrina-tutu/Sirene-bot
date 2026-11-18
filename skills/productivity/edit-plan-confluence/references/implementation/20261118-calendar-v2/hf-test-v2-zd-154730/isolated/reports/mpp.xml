@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="7.695" timestamp="2026-11-18T15:47:30.448471+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_round_the_clock_calendar" name="test_calendar_real_zd" time="7.626"><failure message="AssertionError: {'allowed': False, 'blockers': [{'category': 'unsupported_semantics', 'code': 'task_semantics_unrepresented:segments',...ion': 'display-only', 'code': 'task_actuals_display_only:resume', 'entity': 'uid:336', ...}, ...], 'exit_code': 5, ...}&#10;assert False is True">tmp_path = PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-v2/hf-test-v2-zd-154730/isolated/basetemp/test_calendar_real_zd0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7fe793f25730&gt;
+
+    @pytest.mark.mpp_fixtures
+    def test_calendar_real_zd(tmp_path, monkeypatch):
+        import os, subprocess
+        from env import select_mpxj_python
+        from plan_context import PlanContext
+        from prepared_plan import PreparedPlan
+        from plugin_profile import PluginProfile
+        from mpp_convert import convert_prepared_plan
+        from plan_diagnostics import diagnose
+        from plan_policy import evaluate
+        source = Path(os.environ.get('EDITPLAN_ZD_MPP',
+            '/home/tkachenkoav/WorkVault/Entities/zd/Sources/plans/zd.ganttchart/artifacts/'
+            '777641df7b9bae75e13a566fec315cc7cac5864c31214ab03c46603add7abe17.mpp'))
+        if not source.is_file():
+            pytest.skip('ZD binary fixture is unavailable')
+        assert hashlib.sha256(source.read_bytes()).hexdigest() == '777641df7b9bae75e13a566fec315cc7cac5864c31214ab03c46603add7abe17'
+        runtime = select_mpxj_python(); context = PlanContext.resolve()
+        proc = subprocess.run([runtime.python, str(context.mpp_reader/'plan_export.py'), str(source)],
+            capture_output=True, text=True, timeout=180)
+        assert proc.returncode == 0, proc.stderr
+        raw = proc.stdout[proc.stdout.index('{'):]
+        export = json.loads(raw)
+        assert export['telemetry']['MPXJ_read'] == 1
+        prepared = PreparedPlan.from_export(export, timezone_hint='Europe/Moscow')
+        profile = PluginProfile.load()
+        import mpp_calendar, plan_policy
+        monkeypatch.setattr(mpp_calendar, 'calendar_from_prepared', lambda *a, **k: (_ for _ in ()).throw(AssertionError('calendar analyzer called')))
+        monkeypatch.setattr(plan_policy, 'round_the_clock_calendars', lambda *a, **k: (_ for _ in ()).throw(AssertionError('calendar predicate called')))
+        conversion = convert_prepared_plan(prepared, plugin_profile=profile)
+        result = diagnose(prepared, conversion, plugin_profile=profile)
+        admission = evaluate(result['findings'])
+        assert len(export['tasks']) == 34 and conversion['summary']['counts']['display_task_count'] == 33
+        assert len(export['dependencies']) == 35
+        assert admission['schedule']['status'] == 'not_verified'
+&gt;       assert admission['allowed'] is True, admission
+E       AssertionError: {'allowed': False, 'blockers': [{'category': 'unsupported_semantics', 'code': 'task_semantics_unrepresented:segments',...ion': 'display-only', 'code': 'task_actuals_display_only:resume', 'entity': 'uid:336', ...}, ...], 'exit_code': 5, ...}
+E       assert False is True
+
+tests/test_round_the_clock_calendar.py:230: AssertionError</failure></testcase></testsuite></testsuites>

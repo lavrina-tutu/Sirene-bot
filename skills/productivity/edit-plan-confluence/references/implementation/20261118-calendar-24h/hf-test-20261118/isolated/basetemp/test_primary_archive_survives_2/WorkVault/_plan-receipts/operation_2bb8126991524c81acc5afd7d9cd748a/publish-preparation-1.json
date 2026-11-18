@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "operation_id": "operation_2bb8126991524c81acc5afd7d9cd748a",
+  "item_id": "item_9d52e388d22d464fa3de4e2646ec2ab5",
+  "status": "failed",
+  "mode": "publish",
+  "exit_code": 5,
+  "project_slug": "test",
+  "source": {
+    "name": "synthetic-source.mpp",
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57
+  },
+  "snapshot_id": "snapshot_3ac86b3a48724ac8a8d553c692bf6823",
+  "page_id": null,
+  "page_url": null,
+  "task_count": null,
+  "display_task_count": null,
+  "dependency_count": null,
+  "exceptions": [],
+  "attachment_version": null,
+  "verification": {
+    "archive": "verified",
+    "attachment": "not_applicable",
+    "storage": "not_applicable",
+    "source_values": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [
+        "ordinary_view_for_this_plan_not_observed"
+      ],
+      "evidence_ids": []
+    },
+    "schedule": {
+      "status": "not_verified",
+      "checks": [
+        {
+          "row": 7,
+          "category": "plugin_unknown",
+          "code": "plugin_profile_required",
+          "exit_code": 5,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "plugin"
+          ]
+        }
+      ],
+      "limitations": [
+        "local_scheduler_not_run",
+        "plan_plugin_result_not_verified"
+      ],
+      "evidence_ids": [
+        "artifact_f76a8d904c8e45e49cec59d56cb0e290"
+      ]
+    }
+  },
+  "published": false,
+  "warnings": [],
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived"
+  ],
+  "external_effect": "none",
+  "error": {
+    "code": "plugin_profile_required",
+    "message": "plugin_profile_required",
+    "retryable": false,
+    "next_action": "operation show --operation-id operation_2bb8126991524c81acc5afd7d9cd748a"
+  }
+}

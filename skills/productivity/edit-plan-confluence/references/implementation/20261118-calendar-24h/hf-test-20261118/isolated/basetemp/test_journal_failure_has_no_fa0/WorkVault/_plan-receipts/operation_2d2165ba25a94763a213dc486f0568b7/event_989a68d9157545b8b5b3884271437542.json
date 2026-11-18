@@ -1,0 +1,42 @@
+{
+  "result_id": "preparation_result_85b194447d5a47f8935ccd763a2cdced",
+  "representation_sha256": "19928d5179fae5144fdb598327f32e8bf5bbaaa1b0e68124534c71ae5df91eaa",
+  "namespace": "confluence:dom.tutu.ru",
+  "parent_id": "test-page",
+  "child": false,
+  "macro": {
+    "macro_id": "12fb7026-7aa6-4d5a-a1f2-4b5aab47127d",
+    "param_id": "822a4675adf54735bd6edea4fb5106ab",
+    "param_hash": "2e2a8eec33a845f1897ad12d82be2f86",
+    "attachment_name": "gantt-chart-822a4675adf54735bd6edea4fb5106ab.json",
+    "_span": [
+      3,
+      299
+    ]
+  },
+  "new_macro_html": "<p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"12fb7026-7aa6-4d5a-a1f2-4b5aab47127d\"><ac:parameter ac:name=\"id\">822a4675adf54735bd6edea4fb5106ab</ac:parameter><ac:parameter ac:name=\"hash\">2e2a8eec33a845f1897ad12d82be2f86</ac:parameter></ac:structured-macro></p>",
+  "base_managed": {
+    "macro": "<root></root>",
+    "blocks": [],
+    "marker_texts": [],
+    "summary_above_macro": false,
+    "sha256": "ae73bd827a76eefe11882fc98e142c053a4db68ddadf02fbfed54e57d6baae54"
+  },
+  "base_version": 3,
+  "before_attachment": null,
+  "before_attachment_sha256": null,
+  "intended_storage": "<p><strong>Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней</strong><br />по плану; факт — в колонках</p><p>Соседний блок</p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"12fb7026-7aa6-4d5a-a1f2-4b5aab47127d\"><ac:parameter ac:name=\"id\">822a4675adf54735bd6edea4fb5106ab</ac:parameter><ac:parameter ac:name=\"hash\">2e2a8eec33a845f1897ad12d82be2f86</ac:parameter></ac:structured-macro></p>",
+  "intended_managed": {
+    "macro": "<root><ac:structured-macro xmlns:ac=\"http://atlassian.com/content\" ac:macro-id=\"12fb7026-7aa6-4d5a-a1f2-4b5aab47127d\" ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\"><ac:parameter ac:name=\"id\">822a4675adf54735bd6edea4fb5106ab</ac:parameter><ac:parameter ac:name=\"hash\">2e2a8eec33a845f1897ad12d82be2f86</ac:parameter></ac:structured-macro></root>",
+    "blocks": [
+      "<p><strong>Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней</strong><br></br>по плану; факт — в колонках</p>"
+    ],
+    "marker_texts": [
+      "Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней"
+    ],
+    "summary_above_macro": true,
+    "sha256": "07b923468f4c4fda880e6b68efb2cb2c347e0bb5b74dd247517360f23972cb8b"
+  },
+  "title": "Test. План 18.11.26",
+  "space_key": "TEST"
+}

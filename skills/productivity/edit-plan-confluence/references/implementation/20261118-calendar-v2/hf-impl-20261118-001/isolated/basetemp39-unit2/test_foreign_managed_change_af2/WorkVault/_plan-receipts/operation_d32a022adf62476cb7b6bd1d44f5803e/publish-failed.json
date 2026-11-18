@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "operation_id": "operation_d32a022adf62476cb7b6bd1d44f5803e",
+  "item_id": "item_0715e8d9284648bc9a0f5ba89044e75b",
+  "status": "conflict",
+  "mode": "publish",
+  "exit_code": 4,
+  "project_slug": "test",
+  "source": {
+    "name": "synthetic-source.mpp",
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57
+  },
+  "snapshot_id": "snapshot_de34ba09aef244f2ac7b8dfd5deb5162",
+  "page_id": "test-page",
+  "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=test-page",
+  "task_count": 3,
+  "display_task_count": 3,
+  "dependency_count": 1,
+  "exceptions": [],
+  "attachment_version": 1,
+  "verification": {
+    "archive": "verified",
+    "attachment": "verified",
+    "storage": "not_verified",
+    "source_values": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [
+        "ordinary_view_for_this_plan_not_observed"
+      ],
+      "evidence_ids": []
+    },
+    "schedule": {
+      "status": "not_verified",
+      "checks": [
+        {
+          "row": 5,
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "exit_code": 0,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "model"
+          ]
+        },
+        {
+          "row": 6,
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "exit_code": 0,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "plugin"
+          ]
+        },
+        {
+          "row": 20,
+          "category": "display_only",
+          "code": "source_calendar_publish_as_is",
+          "exit_code": 0,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "source_calendars"
+          ]
+        }
+      ],
+      "limitations": [
+        "local_scheduler_not_run",
+        "plan_plugin_result_not_verified",
+        "calendar_analysis_not_performed",
+        "owner_decision:owner-20261118-calendar-publish-as-is-v2"
+      ],
+      "evidence_ids": [
+        "artifact_2111bf7132f343d89cbc6595183769d7"
+      ]
+    }
+  },
+  "published": false,
+  "warnings": [
+    {
+      "code": "local_scheduler_prepared_unsupported",
+      "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+      "details_ref": "artifact:artifact_2111bf7132f343d89cbc6595183769d7"
+    },
+    {
+      "code": "source_calendar_publish_as_is",
+      "message": "Календарь не анализировался по решению владельца; даты задач перенесены 1-в-1: 1 проверок; подробности в свидетельстве",
+      "details_ref": "artifact:artifact_2111bf7132f343d89cbc6595183769d7"
+    },
+    {
+      "code": "specific_plan_plugin_result_not_verified",
+      "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+      "details_ref": "artifact:artifact_2111bf7132f343d89cbc6595183769d7"
+    }
+  ],
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived",
+    "admitted",
+    "attachment_uploaded",
+    "attachment_verified"
+  ],
+  "external_effect": "none",
+  "error": {
+    "code": "attachment_target_conflict",
+    "message": "attachment_target_conflict",
+    "retryable": false,
+    "next_action": "Проверить конфликт цели; новая операция diff --project-slug test"
+  }
+}

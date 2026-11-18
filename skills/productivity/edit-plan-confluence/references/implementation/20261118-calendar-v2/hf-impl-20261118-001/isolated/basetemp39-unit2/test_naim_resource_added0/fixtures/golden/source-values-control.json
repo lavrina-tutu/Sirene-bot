@@ -1,0 +1,783 @@
+{
+  "schema_version": 1,
+  "origin": "fix2 independent installed-wrapper control; source facts are text, no schedule equivalence claimed",
+  "capabilities": [
+    "display:percent:leaf",
+    "display:percent:source_exact",
+    "display:percent:summary_source",
+    "display:status:derived",
+    "display:actual_start:customtext",
+    "display:actual_finish:customtext",
+    "display:actual_duration:customtext",
+    "display:actual_work:customtext",
+    "display:stop:customtext",
+    "display:resume:customtext"
+  ],
+  "wrapper_asset_sha256": "9a43a94647ce8c2fff5cabdb07a52b8619b824bf8673b0bcafe9a090cd9dccb2",
+  "input": {
+    "eventsData": [
+      {
+        "id": 1,
+        "parentIndex": 0,
+        "startDate": "2026-01-05T09:00:00",
+        "endDate": "2026-01-08T18:00:00",
+        "duration": 4,
+        "durationUnit": "day",
+        "name": "Source-1",
+        "calendar": null,
+        "manuallyScheduled": false,
+        "unscheduled": false,
+        "ignoreResourceCalendar": null,
+        "constraintType": "",
+        "percentDone": 47.375,
+        "effort": null,
+        "effortUnit": "hour",
+        "inactive": null,
+        "segments": null,
+        "baselines": [],
+        "parentId": null,
+        "rollup": true,
+        "children": [
+          {
+            "id": 2,
+            "name": "Source-2",
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "manuallyScheduled": false,
+            "schedulingMode": "FixedDuration",
+            "percentDone": 0.0,
+            "custom_mpp_percent_complete": "0",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_stop": "2026-01-05T10:07:30",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: new"
+          },
+          {
+            "id": 3,
+            "name": "Source-3",
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "manuallyScheduled": false,
+            "schedulingMode": "FixedDuration",
+            "percentDone": 21.0,
+            "custom_mpp_percent_complete": "21",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "2026-01-05T09:00",
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_stop": "2026-01-05T10:07:30",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate"
+          },
+          {
+            "id": 4,
+            "name": "Source-4",
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "manuallyScheduled": false,
+            "schedulingMode": "FixedDuration",
+            "percentDone": 47.0,
+            "custom_mpp_percent_complete": "47",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_stop": "2026-01-05T10:07:30",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate"
+          },
+          {
+            "id": 5,
+            "name": "Source-5",
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "manuallyScheduled": false,
+            "schedulingMode": "FixedDuration",
+            "percentDone": 76.0,
+            "custom_mpp_percent_complete": "76",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_stop": "2026-01-05T10:07:30",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate"
+          },
+          {
+            "id": 6,
+            "name": "Source-6",
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "manuallyScheduled": false,
+            "schedulingMode": "FixedDuration",
+            "percentDone": 100.0,
+            "custom_mpp_percent_complete": "100",
+            "custom_mpp_actual_finish": "2026-01-06T18:00",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_stop": "2026-01-05T10:07:30",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: done"
+          },
+          {
+            "id": 7,
+            "name": "Source-7",
+            "startDate": "2026-01-05T09:00:00",
+            "endDate": "2026-01-05T18:00:00",
+            "duration": 1,
+            "durationUnit": "day",
+            "manuallyScheduled": false,
+            "schedulingMode": "FixedDuration",
+            "percentDone": 21.125,
+            "custom_mpp_percent_complete": "21.125",
+            "custom_mpp_actual_finish": "не задано",
+            "custom_mpp_actual_start": "не задано",
+            "custom_mpp_actual_duration": "1.125 h",
+            "custom_mpp_actual_work": "0.375 h",
+            "custom_mpp_stop": "2026-01-05T10:07:30",
+            "custom_mpp_resume": "2026-01-06T09:00",
+            "custom_mpp_source_state": "по исходному проценту: indeterminate"
+          }
+        ],
+        "effortDriven": false,
+        "schedulingMode": "FixedDuration",
+        "custom_mpp_percent_complete": "47.375",
+        "custom_mpp_actual_finish": "2026-01-06T18:00",
+        "custom_mpp_actual_start": "2026-01-05T09:00",
+        "custom_mpp_actual_duration": "1.125 h",
+        "custom_mpp_actual_work": "0.375 h",
+        "custom_mpp_stop": "2026-01-05T10:07:30",
+        "custom_mpp_resume": "2026-01-06T09:00",
+        "custom_mpp_source_state": "требует проверки: менее 100% при заданном фактическом окончании"
+      }
+    ],
+    "resourcesData": [],
+    "dependenciesData": [],
+    "assignmentsData": [],
+    "startDate": "2026-01-05",
+    "macroConfig": {
+      "defaultSchedulingMode": "FixedDuration",
+      "height": 600,
+      "weekNumberMode": "None",
+      "rowHeight": 45,
+      "keptVersions": 50,
+      "labelPosition": "left",
+      "showJiraIssueKey": false,
+      "jiraProgressTimeTracking": false,
+      "jiraProgressResolved": true,
+      "jiraFieldMappings": {}
+    },
+    "calendarsData": [
+      {
+        "id": "general",
+        "name": "General",
+        "unspecifiedTimeIsWorking": true,
+        "intervals": [
+          {
+            "recurrentStartDate": "at 12:00",
+            "recurrentEndDate": "at 13:00",
+            "isWorking": false
+          },
+          {
+            "recurrentStartDate": "at 18:00",
+            "recurrentEndDate": "at 09:00",
+            "isWorking": false
+          },
+          {
+            "recurrentStartDate": "on Sat",
+            "recurrentEndDate": "on Mon",
+            "isWorking": false
+          }
+        ]
+      },
+      {
+        "id": "alternate",
+        "name": "Alternate",
+        "unspecifiedTimeIsWorking": true,
+        "intervals": [
+          {
+            "recurrentStartDate": "at 12:00",
+            "recurrentEndDate": "at 13:00",
+            "isWorking": false
+          },
+          {
+            "recurrentStartDate": "at 18:00",
+            "recurrentEndDate": "at 09:00",
+            "isWorking": false
+          },
+          {
+            "recurrentStartDate": "on Sat",
+            "recurrentEndDate": "on Mon",
+            "isWorking": false
+          },
+          {
+            "startDate": "2026-01-09T00:00:00",
+            "endDate": "2026-01-10T00:00:00",
+            "isWorking": false,
+            "priority": 20
+          }
+        ]
+      }
+    ],
+    "initialState": {
+      "view": {
+        "columns": [
+          {
+            "id": "wbs",
+            "width": 60,
+            "hidden": true
+          },
+          {
+            "id": "name",
+            "width": 250
+          },
+          {
+            "id": "startdate",
+            "width": 130,
+            "hidden": false
+          },
+          {
+            "id": "enddate",
+            "width": 130,
+            "hidden": false
+          },
+          {
+            "id": "duration",
+            "width": 100,
+            "hidden": false
+          },
+          {
+            "id": "resourceassignment",
+            "width": 130,
+            "hidden": true
+          },
+          {
+            "id": "effort",
+            "width": 100,
+            "hidden": true
+          },
+          {
+            "id": "schedulingMode",
+            "width": 110,
+            "hidden": true
+          },
+          {
+            "id": "status",
+            "width": 90,
+            "hidden": false
+          },
+          {
+            "id": "percentdone",
+            "width": 70,
+            "hidden": false
+          },
+          {
+            "id": "predecessor",
+            "width": 120,
+            "hidden": true
+          },
+          {
+            "id": "successor",
+            "width": 120,
+            "hidden": true
+          },
+          {
+            "id": "constrainttype",
+            "width": 145,
+            "hidden": true
+          },
+          {
+            "id": "constraintdate",
+            "width": 145,
+            "hidden": true
+          },
+          {
+            "id": "deadlinedate",
+            "width": 130,
+            "hidden": true
+          },
+          {
+            "id": "manuallyscheduled",
+            "width": 90,
+            "hidden": true
+          },
+          {
+            "id": "rollup",
+            "width": 90,
+            "hidden": true
+          },
+          {
+            "id": "defaultcollapse",
+            "width": 90,
+            "hidden": true
+          },
+          {
+            "id": "inactive",
+            "width": 90,
+            "hidden": true
+          },
+          {
+            "id": "color",
+            "width": 90,
+            "hidden": true
+          },
+          {
+            "id": "propagatecolor",
+            "width": 90,
+            "hidden": true
+          },
+          {
+            "id": "weblink",
+            "width": 145,
+            "hidden": true
+          },
+          {
+            "id": "note",
+            "width": 150,
+            "hidden": true
+          },
+          {
+            "id": "custom_mpp_percent_complete",
+            "width": 210,
+            "hidden": false,
+            "order": 23
+          },
+          {
+            "id": "custom_mpp_actual_finish",
+            "width": 210,
+            "hidden": false,
+            "order": 24
+          },
+          {
+            "id": "custom_mpp_actual_start",
+            "width": 210,
+            "hidden": false,
+            "order": 25
+          },
+          {
+            "id": "custom_mpp_actual_duration",
+            "width": 210,
+            "hidden": false,
+            "order": 26
+          },
+          {
+            "id": "custom_mpp_actual_work",
+            "width": 210,
+            "hidden": false,
+            "order": 27
+          },
+          {
+            "id": "custom_mpp_stop",
+            "width": 210,
+            "hidden": false,
+            "order": 28
+          },
+          {
+            "id": "custom_mpp_resume",
+            "width": 210,
+            "hidden": false,
+            "order": 29
+          },
+          {
+            "id": "custom_mpp_source_state",
+            "width": 210,
+            "hidden": false,
+            "order": 30
+          }
+        ],
+        "features": [
+          {
+            "id": "labels",
+            "disabled": false
+          },
+          {
+            "id": "timelineFlag",
+            "disabled": true
+          },
+          {
+            "id": "rollups",
+            "disabled": false
+          },
+          {
+            "id": "progressLine",
+            "disabled": true
+          },
+          {
+            "id": "criticalPaths",
+            "disabled": true
+          },
+          {
+            "id": "baselines",
+            "disabled": true
+          },
+          {
+            "id": "resourceHistogram",
+            "disabled": true,
+            "type": "utilization"
+          }
+        ],
+        "stateAtSaving": true
+      },
+      "edit": {
+        "columns": [
+          {
+            "id": "wbs",
+            "width": 60,
+            "hidden": false,
+            "order": 0
+          },
+          {
+            "id": "name",
+            "width": 250,
+            "order": 1
+          },
+          {
+            "id": "startdate",
+            "width": 130,
+            "hidden": false,
+            "order": 2
+          },
+          {
+            "id": "enddate",
+            "width": 130,
+            "hidden": false,
+            "order": 3
+          },
+          {
+            "id": "duration",
+            "width": 100,
+            "hidden": false,
+            "order": 4
+          },
+          {
+            "id": "resourceassignment",
+            "width": 130,
+            "hidden": false,
+            "order": 5
+          },
+          {
+            "id": "effort",
+            "width": 100,
+            "hidden": false,
+            "order": 6
+          },
+          {
+            "id": "schedulingMode",
+            "width": 110,
+            "hidden": true,
+            "order": 7
+          },
+          {
+            "id": "status",
+            "width": 90,
+            "hidden": false,
+            "order": 8
+          },
+          {
+            "id": "percentdone",
+            "width": 70,
+            "hidden": false,
+            "order": 9
+          },
+          {
+            "id": "predecessor",
+            "width": 120,
+            "hidden": true,
+            "order": 10
+          },
+          {
+            "id": "successor",
+            "width": 120,
+            "hidden": true,
+            "order": 11
+          },
+          {
+            "id": "constrainttype",
+            "width": 145,
+            "hidden": true,
+            "order": 12
+          },
+          {
+            "id": "constraintdate",
+            "width": 145,
+            "hidden": true,
+            "order": 13
+          },
+          {
+            "id": "deadlinedate",
+            "width": 130,
+            "hidden": true,
+            "order": 14
+          },
+          {
+            "id": "manuallyscheduled",
+            "width": 90,
+            "hidden": true,
+            "order": 15
+          },
+          {
+            "id": "rollup",
+            "width": 90,
+            "hidden": true,
+            "order": 16
+          },
+          {
+            "id": "defaultcollapse",
+            "width": 90,
+            "hidden": true,
+            "order": 17
+          },
+          {
+            "id": "inactive",
+            "width": 90,
+            "hidden": true,
+            "order": 18
+          },
+          {
+            "id": "color",
+            "width": 90,
+            "hidden": true,
+            "order": 19
+          },
+          {
+            "id": "propagatecolor",
+            "width": 90,
+            "hidden": true,
+            "order": 20
+          },
+          {
+            "id": "weblink",
+            "width": 145,
+            "hidden": true,
+            "order": 21
+          },
+          {
+            "id": "note",
+            "width": 150,
+            "hidden": true,
+            "order": 22
+          },
+          {
+            "id": "custom_mpp_percent_complete",
+            "width": 210,
+            "hidden": false,
+            "order": 23
+          },
+          {
+            "id": "custom_mpp_actual_finish",
+            "width": 210,
+            "hidden": false,
+            "order": 24
+          },
+          {
+            "id": "custom_mpp_actual_start",
+            "width": 210,
+            "hidden": false,
+            "order": 25
+          },
+          {
+            "id": "custom_mpp_actual_duration",
+            "width": 210,
+            "hidden": false,
+            "order": 26
+          },
+          {
+            "id": "custom_mpp_actual_work",
+            "width": 210,
+            "hidden": false,
+            "order": 27
+          },
+          {
+            "id": "custom_mpp_stop",
+            "width": 210,
+            "hidden": false,
+            "order": 28
+          },
+          {
+            "id": "custom_mpp_resume",
+            "width": 210,
+            "hidden": false,
+            "order": 29
+          },
+          {
+            "id": "custom_mpp_source_state",
+            "width": 210,
+            "hidden": false,
+            "order": 30
+          }
+        ],
+        "features": [
+          {
+            "id": "labels",
+            "disabled": false
+          },
+          {
+            "id": "timelineFlag",
+            "disabled": false
+          },
+          {
+            "id": "rollups",
+            "disabled": false
+          },
+          {
+            "id": "progressLine",
+            "disabled": true
+          },
+          {
+            "id": "criticalPaths",
+            "disabled": true
+          },
+          {
+            "id": "baselines",
+            "disabled": true
+          },
+          {
+            "id": "resourceHistogram",
+            "disabled": true,
+            "type": "utilization"
+          }
+        ]
+      }
+    },
+    "baselineVersions": [],
+    "customColumns": {
+      "custom_mpp_percent_complete": {
+        "id": "custom_mpp_percent_complete",
+        "text": "Процент MPP (исходный)",
+        "type": "customtext"
+      },
+      "custom_mpp_actual_finish": {
+        "id": "custom_mpp_actual_finish",
+        "text": "Фактическое окончание MPP",
+        "type": "customtext"
+      },
+      "custom_mpp_actual_start": {
+        "id": "custom_mpp_actual_start",
+        "text": "Фактическое начало MPP",
+        "type": "customtext"
+      },
+      "custom_mpp_actual_duration": {
+        "id": "custom_mpp_actual_duration",
+        "text": "Фактическая длительность MPP",
+        "type": "customtext"
+      },
+      "custom_mpp_actual_work": {
+        "id": "custom_mpp_actual_work",
+        "text": "Фактическая работа MPP",
+        "type": "customtext"
+      },
+      "custom_mpp_stop": {
+        "id": "custom_mpp_stop",
+        "text": "Остановка MPP",
+        "type": "customtext"
+      },
+      "custom_mpp_resume": {
+        "id": "custom_mpp_resume",
+        "text": "Возобновление MPP",
+        "type": "customtext"
+      },
+      "custom_mpp_source_state": {
+        "id": "custom_mpp_source_state",
+        "text": "Проверка исходных фактов MPP",
+        "type": "customtext"
+      }
+    },
+    "linkedSites": [],
+    "idCounter": 5,
+    "calendar": "general"
+  },
+  "expected_source_values": {
+    "1": {
+      "custom_mpp_percent_complete": "47.375",
+      "custom_mpp_actual_finish": "2026-01-06T18:00",
+      "custom_mpp_actual_start": "2026-01-05T09:00",
+      "custom_mpp_actual_duration": "1.125 h",
+      "custom_mpp_actual_work": "0.375 h",
+      "custom_mpp_stop": "2026-01-05T10:07:30",
+      "custom_mpp_resume": "2026-01-06T09:00",
+      "custom_mpp_source_state": "требует проверки: менее 100% при заданном фактическом окончании"
+    },
+    "2": {
+      "custom_mpp_percent_complete": "0",
+      "custom_mpp_actual_finish": "не задано",
+      "custom_mpp_actual_start": "не задано",
+      "custom_mpp_actual_duration": "1.125 h",
+      "custom_mpp_actual_work": "0.375 h",
+      "custom_mpp_stop": "2026-01-05T10:07:30",
+      "custom_mpp_resume": "2026-01-06T09:00",
+      "custom_mpp_source_state": "по исходному проценту: new"
+    },
+    "3": {
+      "custom_mpp_percent_complete": "21",
+      "custom_mpp_actual_finish": "не задано",
+      "custom_mpp_actual_start": "2026-01-05T09:00",
+      "custom_mpp_actual_duration": "1.125 h",
+      "custom_mpp_actual_work": "0.375 h",
+      "custom_mpp_stop": "2026-01-05T10:07:30",
+      "custom_mpp_resume": "2026-01-06T09:00",
+      "custom_mpp_source_state": "по исходному проценту: indeterminate"
+    },
+    "4": {
+      "custom_mpp_percent_complete": "47",
+      "custom_mpp_actual_finish": "не задано",
+      "custom_mpp_actual_start": "не задано",
+      "custom_mpp_actual_duration": "1.125 h",
+      "custom_mpp_actual_work": "0.375 h",
+      "custom_mpp_stop": "2026-01-05T10:07:30",
+      "custom_mpp_resume": "2026-01-06T09:00",
+      "custom_mpp_source_state": "по исходному проценту: indeterminate"
+    },
+    "5": {
+      "custom_mpp_percent_complete": "76",
+      "custom_mpp_actual_finish": "не задано",
+      "custom_mpp_actual_start": "не задано",
+      "custom_mpp_actual_duration": "1.125 h",
+      "custom_mpp_actual_work": "0.375 h",
+      "custom_mpp_stop": "2026-01-05T10:07:30",
+      "custom_mpp_resume": "2026-01-06T09:00",
+      "custom_mpp_source_state": "по исходному проценту: indeterminate"
+    },
+    "6": {
+      "custom_mpp_percent_complete": "100",
+      "custom_mpp_actual_finish": "2026-01-06T18:00",
+      "custom_mpp_actual_start": "не задано",
+      "custom_mpp_actual_duration": "1.125 h",
+      "custom_mpp_actual_work": "0.375 h",
+      "custom_mpp_stop": "2026-01-05T10:07:30",
+      "custom_mpp_resume": "2026-01-06T09:00",
+      "custom_mpp_source_state": "по исходному проценту: done"
+    },
+    "7": {
+      "custom_mpp_percent_complete": "21.125",
+      "custom_mpp_actual_finish": "не задано",
+      "custom_mpp_actual_start": "не задано",
+      "custom_mpp_actual_duration": "1.125 h",
+      "custom_mpp_actual_work": "0.375 h",
+      "custom_mpp_stop": "2026-01-05T10:07:30",
+      "custom_mpp_resume": "2026-01-06T09:00",
+      "custom_mpp_source_state": "по исходному проценту: indeterminate"
+    }
+  },
+  "expected_leaf_percent": {
+    "2": 0.0,
+    "3": 21.0,
+    "4": 47.0,
+    "5": 76.0,
+    "6": 100.0,
+    "7": 21.125
+  }
+}

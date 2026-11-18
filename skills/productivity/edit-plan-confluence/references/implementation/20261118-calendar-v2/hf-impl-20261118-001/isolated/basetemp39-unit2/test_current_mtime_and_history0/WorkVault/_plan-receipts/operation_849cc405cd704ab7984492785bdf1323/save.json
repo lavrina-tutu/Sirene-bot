@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "operation_id": "operation_849cc405cd704ab7984492785bdf1323",
+  "item_id": "item_9d35aba8c9134ef1a240b6e0d77b3c32",
+  "status": "unchanged",
+  "mode": "save",
+  "exit_code": 0,
+  "project_slug": "test-project",
+  "source": {
+    "name": "first.mpp",
+    "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+    "size_bytes": 180736
+  },
+  "snapshot_id": "snapshot_8a376645f2924278b8b7e9dac652f5af",
+  "page_id": null,
+  "page_url": null,
+  "task_count": 6,
+  "display_task_count": 5,
+  "dependency_count": 4,
+  "exceptions": [],
+  "attachment_version": null,
+  "verification": {
+    "archive": "verified",
+    "attachment": "not_applicable",
+    "storage": "not_applicable",
+    "source_values": {
+      "status": "not_applicable",
+      "checks": [],
+      "limitations": [],
+      "evidence_ids": []
+    },
+    "schedule": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [
+        "timezone_unknown",
+        "collection_assignments_partial",
+        "collection_dependencies_partial",
+        "fields_missing",
+        "fields_unsupported",
+        "graph_multiple_roots",
+        "schedule_not_verified"
+      ],
+      "evidence_ids": []
+    }
+  },
+  "published": false,
+  "warnings": [
+    {
+      "code": "timezone_unknown",
+      "message": "Исходные даты сохранены без подтверждённой таймзоны",
+      "details_ref": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-v2/hf-impl-20261118-001/isolated/basetemp39-unit2/test_current_mtime_and_history0/WorkVault/Entities/test-project/Sources/plans/test-project.ganttchart/artifacts/2a828ef30205111f4e2c0a7c548e3b8ffaaf6e05f9448ab71f61921d82b0533b.json"
+    },
+    {
+      "code": "collection_assignments_partial",
+      "message": "Полнота коллекции assignments: partial",
+      "details_ref": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-v2/hf-impl-20261118-001/isolated/basetemp39-unit2/test_current_mtime_and_history0/WorkVault/Entities/test-project/Sources/plans/test-project.ganttchart/artifacts/2a828ef30205111f4e2c0a7c548e3b8ffaaf6e05f9448ab71f61921d82b0533b.json"
+    },
+    {
+      "code": "collection_dependencies_partial",
+      "message": "Полнота коллекции dependencies: partial",
+      "details_ref": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-v2/hf-impl-20261118-001/isolated/basetemp39-unit2/test_current_mtime_and_history0/WorkVault/Entities/test-project/Sources/plans/test-project.ganttchart/artifacts/2a828ef30205111f4e2c0a7c548e3b8ffaaf6e05f9448ab71f61921d82b0533b.json"
+    },
+    {
+      "code": "fields_missing",
+      "message": "Часть исходных полей имеет качество missing",
+      "details_ref": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-v2/hf-impl-20261118-001/isolated/basetemp39-unit2/test_current_mtime_and_history0/WorkVault/Entities/test-project/Sources/plans/test-project.ganttchart/artifacts/2a828ef30205111f4e2c0a7c548e3b8ffaaf6e05f9448ab71f61921d82b0533b.json"
+    },
+    {
+      "code": "fields_unsupported",
+      "message": "Часть исходных полей имеет качество unsupported",
+      "details_ref": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-v2/hf-impl-20261118-001/isolated/basetemp39-unit2/test_current_mtime_and_history0/WorkVault/Entities/test-project/Sources/plans/test-project.ganttchart/artifacts/2a828ef30205111f4e2c0a7c548e3b8ffaaf6e05f9448ab71f61921d82b0533b.json"
+    },
+    {
+      "code": "graph_multiple_roots",
+      "message": "Проблема структуры сохранена в архиве: multiple_roots",
+      "details_ref": "/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-v2/hf-impl-20261118-001/isolated/basetemp39-unit2/test_current_mtime_and_history0/WorkVault/Entities/test-project/Sources/plans/test-project.ganttchart/artifacts/2a828ef30205111f4e2c0a7c548e3b8ffaaf6e05f9448ab71f61921d82b0533b.json"
+    }
+  ],
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived"
+  ],
+  "external_effect": "none",
+  "error": null
+}

@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "mpxj": "16.4.0",
+  "fixtures": [
+    {
+      "id": "relations-all-types",
+      "path": "relations-all-types.json",
+      "kind": "export_json_unit_only",
+      "purpose": "All four types, FS +1d and SS -1ed, zero; source binary paired",
+      "origin": "relations-all-types.mpp",
+      "generator": "plan_export full-export-v2 / mpxj 16.4.0; explicit JSON edits below",
+      "sha256": "121ade72bc562cb4f8f91fc983fd23e8c149bd8a78da146bce16f740c38cf55f",
+      "size_bytes": 174201
+    },
+    {
+      "id": "calendar-intervals",
+      "path": "calendar-intervals.json",
+      "kind": "export_json_unit_only",
+      "purpose": "Intraday gaps, exceptions, inheritance, resource/project bindings",
+      "origin": "mpp14calendar.mpp",
+      "generator": "plan_export full-export-v2 / mpxj 16.4.0; explicit JSON edits below",
+      "sha256": "0f3b87097e0f9f7c39e7d0260faf8ba3876586ff315dc305fa5fc2b42bbf7238",
+      "size_bytes": 112279
+    },
+    {
+      "id": "calendar-bindings",
+      "path": "calendar-bindings.json",
+      "kind": "export_json_unit_only",
+      "purpose": "Unit-only task binding added explicitly; project/resource bindings from binary",
+      "origin": "mpp14calendar.mpp plus task calendar binding JSON edit",
+      "generator": "plan_export full-export-v2 / mpxj 16.4.0; explicit JSON edits below",
+      "sha256": "017543e6055c2f49edf372be82f17159cc1fb2b8b5289d678ab7eb49ba69a5f1",
+      "size_bytes": 112346
+    },
+    {
+      "id": "graph-invalid",
+      "path": "graph-invalid.json",
+      "kind": "export_json_unit_only",
+      "purpose": "Cycle, self relation, unknown endpoint, unresolved external relation",
+      "origin": "relations-all-types.mpp plus explicit invalid graph JSON edits",
+      "generator": "plan_export full-export-v2 / mpxj 16.4.0; explicit JSON edits below",
+      "sha256": "d7a3bd8e22dcd40b49df773dc449ab19afe0980324230f94e02347d36d9d71cd",
+      "size_bytes": 184090
+    },
+    {
+      "id": "missing-getter-errors",
+      "path": "missing-getter-errors.json",
+      "kind": "export_json_unit_only",
+      "purpose": "Null versus zero, unsupported getter and getter error; JSON unit fixture",
+      "origin": "relations-all-types.mpp plus explicit field quality JSON edits",
+      "generator": "plan_export full-export-v2 / mpxj 16.4.0; explicit JSON edits below",
+      "sha256": "3faa19935655a6286bbb2a9917cd9923f309a963c5d4b6cbbd9de8f9cf938735",
+      "size_bytes": 174251
+    },
+    {
+      "id": "mpp14relations.mpp",
+      "kind": "binary_mpp",
+      "path": "mpp14relations.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/mpp14relations.mpp",
+      "sha256": "8f33cdb774aa090b664d90145879acc8a289057ca45a6575884eb0da9fd91f30",
+      "size_bytes": 180736,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "id": "mpp14calendar.mpp",
+      "kind": "binary_mpp",
+      "path": "mpp14calendar.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/mpp14calendar.mpp",
+      "sha256": "98c8a0fb569be058c0a76ec61d2918f4d81a2a6af9cdcc3ffd1e5640b888e8ec",
+      "size_bytes": 188416,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "id": "mpp14splittask.mpp",
+      "kind": "binary_mpp",
+      "path": "mpp14splittask.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/mpp14splittask.mpp",
+      "sha256": "75fbd3626845ea2912cc2d7a1ce1e0b647e1b7dbcb33f7c78f45624eee8d6d31",
+      "size_bytes": 176640,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "id": "calendar-recurring-exceptions-project2010-mpp14.mpp",
+      "kind": "binary_mpp",
+      "path": "calendar-recurring-exceptions-project2010-mpp14.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/generated/calendar-recurring-exceptions/calendar-recurring-exceptions-project2010-mpp14.mpp",
+      "sha256": "3c3ddd9e595154ed562199d2b91d43fe4004fe9cfeca9a021e229f25874e6d3a",
+      "size_bytes": 222720,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "id": "mpxj-LICENSE",
+      "kind": "license",
+      "path": "mpxj-LICENSE",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/LICENSE",
+      "sha256": "20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331",
+      "size_bytes": 26526,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "id": "mpp14duration.mpp",
+      "kind": "binary_mpp",
+      "path": "mpp14duration.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/mpp14duration.mpp",
+      "sha256": "1bb7752a049c05224dd1397d17273c26b1541755c2f13b70da33523506b7a705",
+      "size_bytes": 184832,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "id": "relations-all-types-binary",
+      "path": "relations-all-types.mpp",
+      "kind": "binary_mpp",
+      "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "size_bytes": 180736,
+      "origin": "mpp14relations.mpp from MPXJ upstream-manifest.json",
+      "generator": "binary_recipe.py:make_elapsed_fixture; POI bundled with MPXJ 16.4.0",
+      "recipe_sha256": "fab664afd18fdb808a08c78302bbf1002c1d03308f57095c3aef13f2122b391e",
+      "purpose": "Negative identity/resume: confirmation does not override elapsed-lag/other semantic losses; failed/5 and zero writes."
+    },
+    {
+      "id": "same-bytes-diff-names",
+      "kind": "runtime_copies",
+      "origin": "relations-all-types.mpp",
+      "source_sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "names": [
+        "one.mpp",
+        "renamed.mpp"
+      ],
+      "generator": "test copies identical verified binary bytes into two test directories"
+    },
+    {
+      "id": "graph-invalid-binary",
+      "path": "graph-invalid.mpp",
+      "kind": "binary_mpp",
+      "sha256": "7c6429b58c31bf388aa094e33bae245320a517a918a25aea1b1cce5fa2ad7e20",
+      "size_bytes": 180736,
+      "origin": "mpp14relations.mpp from upstream-manifest.json",
+      "generator": "binary_recipe.py:make_graph_fixture; POI/MPXJ 16.4.0",
+      "purpose": "cycle visible; self/dangling filtered by MPXJ and explicitly unsupported"
+    },
+    {
+      "id": "binary-identity-positive-anchor",
+      "path": "binary-identity-positive/anchor.mpp",
+      "kind": "binary_mpp",
+      "purpose": "Positive identity/resume fixture with supported source semantics; see nested manifest.",
+      "origin": "pinned mpp14relations.mpp plus documented binary source recipe",
+      "generator": "binary_recipe.py::make_identity_positive_fixture",
+      "sha256": "7aea0277b7a3d08fc19d17a67529022f35cea0a35e5938110c1ab433c9a02b4b",
+      "size_bytes": 180736
+    },
+    {
+      "id": "binary-identity-positive-revised",
+      "path": "binary-identity-positive/revised.mpp",
+      "kind": "binary_mpp",
+      "purpose": "Positive identity/resume fixture with supported source semantics; see nested manifest.",
+      "origin": "pinned mpp14relations.mpp plus documented binary source recipe",
+      "generator": "binary_recipe.py::make_identity_positive_fixture",
+      "sha256": "e4be7de8c20f663e7f260d31dd4dff4e90b55ab3bf2b6059d8331055d1efe59b",
+      "size_bytes": 180736
+    }
+  ]
+}

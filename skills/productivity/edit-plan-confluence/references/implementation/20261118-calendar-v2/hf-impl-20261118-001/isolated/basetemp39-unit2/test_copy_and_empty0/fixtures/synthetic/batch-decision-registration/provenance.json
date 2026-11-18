@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "quality": "unconfirmed",
+  "source": "synthetic:batch-decision-registration",
+  "reason": "Fixture only: contradictory, unverified placement label; no task identity assertion",
+  "evidence": {"origin": "synthetic local provenance", "assertion": "unverified archive placement", "not_identity": true}
+}

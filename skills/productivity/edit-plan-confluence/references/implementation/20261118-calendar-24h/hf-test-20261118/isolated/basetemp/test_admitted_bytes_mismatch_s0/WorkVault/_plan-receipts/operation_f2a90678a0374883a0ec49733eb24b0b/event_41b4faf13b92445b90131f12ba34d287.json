@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "operation_id": "operation_f2a90678a0374883a0ec49733eb24b0b",
+  "item_id": "item_3680901a9bc3437e850725523f8d71c9",
+  "status": "failed",
+  "mode": "publish",
+  "exit_code": 5,
+  "project_slug": "test",
+  "source": {
+    "name": "synthetic-source.mpp",
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57
+  },
+  "snapshot_id": "snapshot_4ead8b81a7204e06be88b71c7353a2b4",
+  "page_id": "test-page",
+  "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=test-page",
+  "task_count": 3,
+  "display_task_count": 3,
+  "dependency_count": 1,
+  "exceptions": [],
+  "attachment_version": 1,
+  "verification": {
+    "archive": "verified",
+    "attachment": "failed",
+    "storage": "not_verified",
+    "source_values": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [
+        "ordinary_view_for_this_plan_not_observed"
+      ],
+      "evidence_ids": []
+    },
+    "schedule": {
+      "status": "not_verified",
+      "checks": [
+        {
+          "row": 5,
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "exit_code": 0,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "model"
+          ]
+        },
+        {
+          "row": 6,
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "exit_code": 0,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "plugin"
+          ]
+        }
+      ],
+      "limitations": [
+        "local_scheduler_not_run",
+        "plan_plugin_result_not_verified"
+      ],
+      "evidence_ids": [
+        "artifact_21272c6508144a10ad5db0b7b1b4c2be"
+      ]
+    }
+  },
+  "published": null,
+  "warnings": [
+    {
+      "code": "local_scheduler_prepared_unsupported",
+      "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+      "details_ref": "artifact:artifact_21272c6508144a10ad5db0b7b1b4c2be"
+    },
+    {
+      "code": "specific_plan_plugin_result_not_verified",
+      "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+      "details_ref": "artifact:artifact_21272c6508144a10ad5db0b7b1b4c2be"
+    }
+  ],
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived",
+    "admitted",
+    "attachment_uploaded"
+  ],
+  "external_effect": "attachment_written",
+  "error": {
+    "code": "attachment_verification_failed",
+    "message": "attachment_verification_failed",
+    "retryable": true,
+    "next_action": "Восстановить доступ к архиву/журналу/Confluence и выполнить resume --operation-id operation_f2a90678a0374883a0ec49733eb24b0b"
+  }
+}

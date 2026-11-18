@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "origin": "Compiler golden from manually specified stage08_export + test-only profile with nonproduction type codes 10–13; semantic assertions independently check quantities, identities and types. Live control inputs are separately specified by hand; see plugin-controls-method.md.",
+  "fixtures": [
+    {
+      "path": "plugin-controls-expected.json",
+      "sha256": "3c45775447a11881e7dd043e078e434a2126265842c008981c1c3f230d17fdbc"
+    },
+    {
+      "path": "plugin-controls-method.md",
+      "sha256": "2fb5f8f0b0bf227ebd5deeb13d43d1ebc2852a4ef2862dcf7420ae7d1593c017"
+    },
+    {
+      "path": "plugin-controls.json",
+      "sha256": "58d113e0fad5646479562be5028d9e35bcc259ca62f780829723ce6d18bcb7f0"
+    },
+    {
+      "path": "prepared-unit-gantt.json",
+      "sha256": "d7f891686b59a96c95b696faae35b14d1679b09168de752f322e5b4202d0d9b1"
+    },
+    {
+      "path": "prepared-unit-storage.xml",
+      "sha256": "364a56885eb8a38193ad0dcee071daedb4dffe0503e072741fa46e9c3ed6e6b8"
+    },
+    {
+      "path": "source-values-control.json",
+      "kind": "installed-wrapper-source-facts-control",
+      "sha256": "b25b7a2996a788d940cd02d87c0ee3c213dc63c644837aba6a61a87db11cd953"
+    }
+  ]
+}

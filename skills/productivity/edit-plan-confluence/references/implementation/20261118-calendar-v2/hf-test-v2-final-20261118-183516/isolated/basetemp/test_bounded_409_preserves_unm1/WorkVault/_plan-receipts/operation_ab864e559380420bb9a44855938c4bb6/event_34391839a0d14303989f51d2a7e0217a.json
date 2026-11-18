@@ -1,0 +1,10 @@
+{
+  "stage": "attachment_uploaded",
+  "attachment": {
+    "attach_id": "actual-attachment-id",
+    "filename": "gantt-chart-9f779488afa94f1b90abc470a7b69f95.json",
+    "version": 1,
+    "title": "gantt-chart-9f779488afa94f1b90abc470a7b69f95.json"
+  },
+  "reused": true
+}

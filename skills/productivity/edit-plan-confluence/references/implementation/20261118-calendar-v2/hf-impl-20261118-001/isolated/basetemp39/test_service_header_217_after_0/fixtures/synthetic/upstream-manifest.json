@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "fixtures": [
+    {
+      "path": "mpp14relations.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/mpp14relations.mpp",
+      "sha256": "8f33cdb774aa090b664d90145879acc8a289057ca45a6575884eb0da9fd91f30",
+      "size_bytes": 180736,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "path": "mpp14calendar.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/mpp14calendar.mpp",
+      "sha256": "98c8a0fb569be058c0a76ec61d2918f4d81a2a6af9cdcc3ffd1e5640b888e8ec",
+      "size_bytes": 188416,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "path": "mpp14splittask.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/mpp14splittask.mpp",
+      "sha256": "75fbd3626845ea2912cc2d7a1ce1e0b647e1b7dbcb33f7c78f45624eee8d6d31",
+      "size_bytes": 176640,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "path": "calendar-recurring-exceptions-project2010-mpp14.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/generated/calendar-recurring-exceptions/calendar-recurring-exceptions-project2010-mpp14.mpp",
+      "sha256": "3c3ddd9e595154ed562199d2b91d43fe4004fe9cfeca9a021e229f25874e6d3a",
+      "size_bytes": 222720,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "path": "mpxj-LICENSE",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/LICENSE",
+      "sha256": "20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331",
+      "size_bytes": 26526,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    },
+    {
+      "path": "mpp14duration.mpp",
+      "origin": "https://raw.githubusercontent.com/joniles/mpxj/4982974b2594ffc7146cdb9ebdf2ae46186737ca/junit/data/mpp14duration.mpp",
+      "sha256": "1bb7752a049c05224dd1397d17273c26b1541755c2f13b70da33523506b7a705",
+      "size_bytes": 184832,
+      "version": "4982974b2594ffc7146cdb9ebdf2ae46186737ca",
+      "creation": "MPXJ upstream MS Project binary test corpus; reused without modifications"
+    }
+  ]
+}

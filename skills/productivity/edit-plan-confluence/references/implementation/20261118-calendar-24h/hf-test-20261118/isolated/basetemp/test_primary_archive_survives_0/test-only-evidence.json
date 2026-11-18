@@ -1,0 +1,1 @@
+{"scope": "unit compiler contract, not installed plugin verification", "relation_codes": {"EndToStart": 12, "StartToStart": 10, "EndToEnd": 13, "StartToEnd": 11}, "dependencies": [{"lagUnit": "day"}, {"lagUnit": "hour"}, {"lagUnit": "eday"}]}

@@ -1,0 +1,852 @@
+{
+  "eventsData": [
+    {
+      "id": 245,
+      "parentIndex": 0,
+      "startDate": "2026-09-28T00:00:00",
+      "endDate": "2027-08-20T17:00:00",
+      "duration": 222,
+      "durationUnit": "day",
+      "name": "Доработки АБ-платформы ТУТУ до Trisigma - оценка",
+      "calendar": null,
+      "manuallyScheduled": false,
+      "unscheduled": false,
+      "ignoreResourceCalendar": null,
+      "constraintType": "",
+      "percentDone": 0,
+      "effortUnit": "hour",
+      "inactive": false,
+      "segments": null,
+      "baselines": [],
+      "parentId": null,
+      "rollup": true,
+      "children": [
+        {
+          "id": 246,
+          "parentIndex": 0,
+          "startDate": "2026-09-28T00:00:00",
+          "endDate": "2026-09-28T00:00:00",
+          "duration": 0,
+          "durationUnit": "day",
+          "name": "Старт работ согласован",
+          "calendar": null,
+          "manuallyScheduled": false,
+          "unscheduled": false,
+          "ignoreResourceCalendar": null,
+          "constraintType": "startnoearlierthan",
+          "constraintDate": "2026-09-07T09:00:00",
+          "percentDone": 0,
+          "effort": 0,
+          "effortUnit": "hour",
+          "inactive": null,
+          "segments": null,
+          "effortDriven": false,
+          "schedulingMode": "FixedDuration",
+          "baselines": [],
+          "parentId": 245,
+          "rollup": false,
+          "children": []
+        }
+      ]
+    }
+  ],
+  "resourcesData": [
+    {
+      "id": 90,
+      "calendar": null,
+      "parentId": null,
+      "name": "Жиров",
+      "eventColor": "red",
+      "resourceType": "custom"
+    },
+    {
+      "id": 91,
+      "calendar": null,
+      "parentId": null,
+      "name": "Ткаченко",
+      "eventColor": "violet",
+      "resourceType": "custom"
+    },
+    {
+      "id": 92,
+      "calendar": null,
+      "parentId": null,
+      "name": "Малый",
+      "eventColor": "indigo",
+      "resourceType": "custom"
+    },
+    {
+      "id": 93,
+      "calendar": null,
+      "parentId": null,
+      "name": "Data Engineer",
+      "eventColor": "green",
+      "resourceType": "custom"
+    },
+    {
+      "id": 94,
+      "calendar": null,
+      "parentId": null,
+      "name": "Разработчик",
+      "eventColor": "orange",
+      "resourceType": "custom"
+    },
+    {
+      "id": 95,
+      "calendar": null,
+      "parentId": null,
+      "name": "Продуктовый аналитик",
+      "eventColor": "gray",
+      "resourceType": "custom"
+    },
+    {
+      "id": 96,
+      "calendar": null,
+      "parentId": null,
+      "name": "Юрченко Илья",
+      "eventColor": "pink",
+      "resourceType": "custom"
+    },
+    {
+      "id": 97,
+      "calendar": null,
+      "parentId": null,
+      "name": "Mobile Core",
+      "eventColor": "blue",
+      "resourceType": "custom"
+    },
+    {
+      "id": 98,
+      "calendar": null,
+      "parentId": null,
+      "name": "Гладких",
+      "eventColor": "purple",
+      "resourceType": "custom"
+    },
+    {
+      "id": 99,
+      "calendar": null,
+      "parentId": null,
+      "name": "Котики",
+      "eventColor": "lime",
+      "resourceType": "custom"
+    },
+    {
+      "id": 100,
+      "calendar": null,
+      "parentId": null,
+      "name": "Администраторы (АДД)",
+      "eventColor": "red",
+      "resourceType": "custom"
+    },
+    {
+      "id": 101,
+      "calendar": null,
+      "parentId": null,
+      "name": "ПА вертикалей",
+      "eventColor": "violet",
+      "resourceType": "custom"
+    },
+    {
+      "id": 102,
+      "calendar": null,
+      "parentId": null,
+      "name": "Специалист2",
+      "eventColor": "indigo",
+      "resourceType": "custom"
+    },
+    {
+      "id": 103,
+      "calendar": null,
+      "parentId": null,
+      "name": "Специалист1",
+      "eventColor": "green",
+      "resourceType": "custom"
+    },
+    {
+      "id": 104,
+      "calendar": null,
+      "parentId": null,
+      "name": "Продуктовые аналитики (все платформы)",
+      "eventColor": "orange",
+      "resourceType": "custom"
+    },
+    {
+      "id": 200,
+      "calendar": null,
+      "parentId": null,
+      "name": "Жиров",
+      "eventColor": "red",
+      "resourceType": "custom"
+    },
+    {
+      "id": 201,
+      "calendar": null,
+      "parentId": null,
+      "name": "Ткаченко",
+      "eventColor": "violet",
+      "resourceType": "custom"
+    },
+    {
+      "id": 202,
+      "calendar": null,
+      "parentId": null,
+      "name": "Малый",
+      "eventColor": "indigo",
+      "resourceType": "custom"
+    },
+    {
+      "id": 203,
+      "calendar": null,
+      "parentId": null,
+      "name": "Data Engineer",
+      "eventColor": "green",
+      "resourceType": "custom"
+    },
+    {
+      "id": 204,
+      "calendar": null,
+      "parentId": null,
+      "name": "Разработчик",
+      "eventColor": "orange",
+      "resourceType": "custom"
+    },
+    {
+      "id": 205,
+      "calendar": null,
+      "parentId": null,
+      "name": "Продуктовый аналитик",
+      "eventColor": "gray",
+      "resourceType": "custom"
+    },
+    {
+      "id": 206,
+      "calendar": null,
+      "parentId": null,
+      "name": "Юрченко Илья",
+      "eventColor": "pink",
+      "resourceType": "custom"
+    },
+    {
+      "id": 207,
+      "calendar": null,
+      "parentId": null,
+      "name": "Mobile Core",
+      "eventColor": "blue",
+      "resourceType": "custom"
+    },
+    {
+      "id": 208,
+      "calendar": null,
+      "parentId": null,
+      "name": "Гладких",
+      "eventColor": "purple",
+      "resourceType": "custom"
+    },
+    {
+      "id": 209,
+      "calendar": null,
+      "parentId": null,
+      "name": "Котики",
+      "eventColor": "lime",
+      "resourceType": "custom"
+    },
+    {
+      "id": 210,
+      "calendar": null,
+      "parentId": null,
+      "name": "Администраторы (АДД)",
+      "eventColor": "red",
+      "resourceType": "custom"
+    },
+    {
+      "id": 211,
+      "calendar": null,
+      "parentId": null,
+      "name": "ПА вертикалей",
+      "eventColor": "violet",
+      "resourceType": "custom"
+    },
+    {
+      "id": 212,
+      "calendar": null,
+      "parentId": null,
+      "name": "Специалист2",
+      "eventColor": "indigo",
+      "resourceType": "custom"
+    },
+    {
+      "id": 213,
+      "calendar": null,
+      "parentId": null,
+      "name": "Специалист1",
+      "eventColor": "green",
+      "resourceType": "custom"
+    },
+    {
+      "id": 214,
+      "calendar": null,
+      "parentId": null,
+      "name": "Продуктовые аналитики (все платформы)",
+      "eventColor": "orange",
+      "resourceType": "custom"
+    },
+    {
+      "id": 310,
+      "calendar": null,
+      "parentId": null,
+      "name": "Жиров",
+      "eventColor": "red",
+      "resourceType": "custom"
+    },
+    {
+      "id": 311,
+      "calendar": null,
+      "parentId": null,
+      "name": "Ткаченко",
+      "eventColor": "violet",
+      "resourceType": "custom"
+    },
+    {
+      "id": 312,
+      "calendar": null,
+      "parentId": null,
+      "name": "Малый",
+      "eventColor": "indigo",
+      "resourceType": "custom"
+    },
+    {
+      "id": 313,
+      "calendar": null,
+      "parentId": null,
+      "name": "Data Engineer",
+      "eventColor": "green",
+      "resourceType": "custom"
+    },
+    {
+      "id": 314,
+      "calendar": null,
+      "parentId": null,
+      "name": "Разработчик",
+      "eventColor": "orange",
+      "resourceType": "custom"
+    },
+    {
+      "id": 315,
+      "calendar": null,
+      "parentId": null,
+      "name": "Продуктовый аналитик",
+      "eventColor": "gray",
+      "resourceType": "custom"
+    },
+    {
+      "id": 316,
+      "calendar": null,
+      "parentId": null,
+      "name": "Юрченко Илья",
+      "eventColor": "pink",
+      "resourceType": "custom"
+    },
+    {
+      "id": 317,
+      "calendar": null,
+      "parentId": null,
+      "name": "Mobile Core",
+      "eventColor": "blue",
+      "resourceType": "custom"
+    },
+    {
+      "id": 318,
+      "calendar": null,
+      "parentId": null,
+      "name": "Гладких",
+      "eventColor": "purple",
+      "resourceType": "custom"
+    },
+    {
+      "id": 319,
+      "calendar": null,
+      "parentId": null,
+      "name": "Котики",
+      "eventColor": "lime",
+      "resourceType": "custom"
+    },
+    {
+      "id": 320,
+      "calendar": null,
+      "parentId": null,
+      "name": "Администраторы (АДД)",
+      "eventColor": "red",
+      "resourceType": "custom"
+    },
+    {
+      "id": 321,
+      "calendar": null,
+      "parentId": null,
+      "name": "ПА вертикалей",
+      "eventColor": "violet",
+      "resourceType": "custom"
+    },
+    {
+      "id": 322,
+      "calendar": null,
+      "parentId": null,
+      "name": "Специалист2",
+      "eventColor": "indigo",
+      "resourceType": "custom"
+    },
+    {
+      "id": 323,
+      "calendar": null,
+      "parentId": null,
+      "name": "Специалист1",
+      "eventColor": "green",
+      "resourceType": "custom"
+    },
+    {
+      "id": 324,
+      "calendar": null,
+      "parentId": null,
+      "name": "Продуктовые аналитики (все платформы)",
+      "eventColor": "orange",
+      "resourceType": "custom"
+    }
+  ],
+  "dependenciesData": [],
+  "assignmentsData": [],
+  "startDate": "2026-09-28",
+  "macroConfig": {
+    "defaultSchedulingMode": "FixedDuration",
+    "height": 600,
+    "weekNumberMode": "None",
+    "rowHeight": 45,
+    "keptVersions": 50,
+    "labelPosition": "left",
+    "showJiraIssueKey": false,
+    "jiraProgressTimeTracking": false,
+    "jiraProgressResolved": true,
+    "jiraFieldMappings": {}
+  },
+  "calendarsData": [
+    {
+      "id": "general",
+      "name": "General",
+      "unspecifiedTimeIsWorking": true,
+      "intervals": [
+        {
+          "recurrentStartDate": "at 12:00",
+          "recurrentEndDate": "at 13:00",
+          "isWorking": false
+        },
+        {
+          "recurrentStartDate": "at 17:00",
+          "recurrentEndDate": "at 08:00",
+          "isWorking": false
+        },
+        {
+          "recurrentStartDate": "on Sun",
+          "recurrentEndDate": "on Mon",
+          "isWorking": false
+        },
+        {
+          "recurrentStartDate": "on Sat",
+          "recurrentEndDate": "on Sun",
+          "isWorking": false
+        },
+        {
+          "startDate": "2026-11-04 00:00",
+          "endDate": "2026-11-05 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2026-12-31 00:00",
+          "endDate": "2027-01-01 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-01-01 00:00",
+          "endDate": "2027-01-02 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-01-04 00:00",
+          "endDate": "2027-01-05 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-01-05 00:00",
+          "endDate": "2027-01-06 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-01-06 00:00",
+          "endDate": "2027-01-07 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-01-07 00:00",
+          "endDate": "2027-01-08 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-01-08 00:00",
+          "endDate": "2027-01-09 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-02-22 00:00",
+          "endDate": "2027-02-23 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-02-23 00:00",
+          "endDate": "2027-02-24 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-03-08 00:00",
+          "endDate": "2027-03-09 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-05-03 00:00",
+          "endDate": "2027-05-04 00:00",
+          "isWorking": false
+        },
+        {
+          "startDate": "2027-05-10 00:00",
+          "endDate": "2027-05-11 00:00",
+          "isWorking": false
+        }
+      ]
+    }
+  ],
+  "initialState": {
+    "view": {
+      "columns": [
+        {
+          "id": "wbs",
+          "width": 60,
+          "hidden": true
+        },
+        {
+          "id": "name",
+          "width": 250
+        },
+        {
+          "id": "startdate",
+          "width": 130,
+          "hidden": true
+        },
+        {
+          "id": "enddate",
+          "width": 130,
+          "hidden": true
+        },
+        {
+          "id": "duration",
+          "width": 100,
+          "hidden": true
+        },
+        {
+          "id": "resourceassignment",
+          "width": 130,
+          "hidden": true
+        },
+        {
+          "id": "effort",
+          "width": 100,
+          "hidden": true
+        },
+        {
+          "id": "schedulingMode",
+          "width": 110,
+          "hidden": true
+        },
+        {
+          "id": "status",
+          "width": 90,
+          "hidden": true
+        },
+        {
+          "id": "percentdone",
+          "width": 70,
+          "hidden": true
+        },
+        {
+          "id": "predecessor",
+          "width": 120,
+          "hidden": true
+        },
+        {
+          "id": "successor",
+          "width": 120,
+          "hidden": true
+        },
+        {
+          "id": "constrainttype",
+          "width": 145,
+          "hidden": true
+        },
+        {
+          "id": "constraintdate",
+          "width": 145,
+          "hidden": true
+        },
+        {
+          "id": "deadlinedate",
+          "width": 130,
+          "hidden": true
+        },
+        {
+          "id": "manuallyscheduled",
+          "width": 90,
+          "hidden": true
+        },
+        {
+          "id": "rollup",
+          "width": 90,
+          "hidden": true
+        },
+        {
+          "id": "defaultcollapse",
+          "width": 90,
+          "hidden": true
+        },
+        {
+          "id": "inactive",
+          "width": 90,
+          "hidden": true
+        },
+        {
+          "id": "color",
+          "width": 90,
+          "hidden": true
+        },
+        {
+          "id": "propagatecolor",
+          "width": 90,
+          "hidden": true
+        },
+        {
+          "id": "weblink",
+          "width": 145,
+          "hidden": true
+        },
+        {
+          "id": "note",
+          "width": 150,
+          "hidden": true
+        }
+      ],
+      "features": [
+        {
+          "id": "labels",
+          "disabled": false
+        },
+        {
+          "id": "timelineFlag",
+          "disabled": true
+        },
+        {
+          "id": "rollups",
+          "disabled": false
+        },
+        {
+          "id": "progressLine",
+          "disabled": true
+        },
+        {
+          "id": "criticalPaths",
+          "disabled": true
+        },
+        {
+          "id": "baselines",
+          "disabled": true
+        },
+        {
+          "id": "resourceHistogram",
+          "disabled": true,
+          "type": "utilization"
+        }
+      ],
+      "stateAtSaving": true
+    },
+    "edit": {
+      "columns": [
+        {
+          "id": "wbs",
+          "width": 60,
+          "hidden": false,
+          "order": 0
+        },
+        {
+          "id": "name",
+          "width": 250,
+          "order": 1
+        },
+        {
+          "id": "startdate",
+          "width": 130,
+          "hidden": false,
+          "order": 2
+        },
+        {
+          "id": "enddate",
+          "width": 130,
+          "hidden": false,
+          "order": 3
+        },
+        {
+          "id": "duration",
+          "width": 100,
+          "hidden": false,
+          "order": 4
+        },
+        {
+          "id": "resourceassignment",
+          "width": 130,
+          "hidden": false,
+          "order": 5
+        },
+        {
+          "id": "effort",
+          "width": 100,
+          "hidden": false,
+          "order": 6
+        },
+        {
+          "id": "schedulingMode",
+          "width": 110,
+          "hidden": true,
+          "order": 7
+        },
+        {
+          "id": "status",
+          "width": 90,
+          "hidden": true,
+          "order": 8
+        },
+        {
+          "id": "percentdone",
+          "width": 70,
+          "hidden": true,
+          "order": 9
+        },
+        {
+          "id": "predecessor",
+          "width": 120,
+          "hidden": true,
+          "order": 10
+        },
+        {
+          "id": "successor",
+          "width": 120,
+          "hidden": true,
+          "order": 11
+        },
+        {
+          "id": "constrainttype",
+          "width": 145,
+          "hidden": true,
+          "order": 12
+        },
+        {
+          "id": "constraintdate",
+          "width": 145,
+          "hidden": true,
+          "order": 13
+        },
+        {
+          "id": "deadlinedate",
+          "width": 130,
+          "hidden": true,
+          "order": 14
+        },
+        {
+          "id": "manuallyscheduled",
+          "width": 90,
+          "hidden": true,
+          "order": 15
+        },
+        {
+          "id": "rollup",
+          "width": 90,
+          "hidden": true,
+          "order": 16
+        },
+        {
+          "id": "defaultcollapse",
+          "width": 90,
+          "hidden": true,
+          "order": 17
+        },
+        {
+          "id": "inactive",
+          "width": 90,
+          "hidden": true,
+          "order": 18
+        },
+        {
+          "id": "color",
+          "width": 90,
+          "hidden": true,
+          "order": 19
+        },
+        {
+          "id": "propagatecolor",
+          "width": 90,
+          "hidden": true,
+          "order": 20
+        },
+        {
+          "id": "weblink",
+          "width": 145,
+          "hidden": true,
+          "order": 21
+        },
+        {
+          "id": "note",
+          "width": 150,
+          "hidden": true,
+          "order": 22
+        }
+      ],
+      "features": [
+        {
+          "id": "labels",
+          "disabled": false
+        },
+        {
+          "id": "timelineFlag",
+          "disabled": false
+        },
+        {
+          "id": "rollups",
+          "disabled": false
+        },
+        {
+          "id": "progressLine",
+          "disabled": true
+        },
+        {
+          "id": "criticalPaths",
+          "disabled": true
+        },
+        {
+          "id": "baselines",
+          "disabled": true
+        },
+        {
+          "id": "resourceHistogram",
+          "disabled": true,
+          "type": "utilization"
+        }
+      ]
+    }
+  },
+  "baselineVersions": [],
+  "customColumns": {},
+  "linkedSites": [],
+  "idCounter": 354
+}

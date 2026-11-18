@@ -1,0 +1,20 @@
+{
+  "scope": "Synthetic export/identity test; no production confirmation",
+  "files": {
+    "prepared-export.json": "8a3e8c71859d9d8a512cf834dd3dd340cbd43cbf1beb74a7e64dc9fdd2cd6900",
+    "test-only-user-evidence.txt": "fe5fd3b0f097aca5fda7f043d3740a68253e3a2d92890eb0d8985a35cc91a1aa"
+  },
+  "binary_bootstrap": "Existing versioned mpp14relations.mpp -> relations-all-types.mpp; real MPXJ on each, explicit test-only confirmation and resume without a new arrival/read",
+  "binary_fixtures": [
+    {
+      "path": "../mpp14relations.mpp",
+      "sha256": "8f33cdb774aa090b664d90145879acc8a289057ca45a6575884eb0da9fd91f30",
+      "size_bytes": 180736
+    },
+    {
+      "path": "../relations-all-types.mpp",
+      "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "size_bytes": 180736
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "attachment_version": 1,
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived",
+    "admitted",
+    "attachment_uploaded",
+    "attachment_verified",
+    "storage_written",
+    "storage_verified"
+  ],
+  "dependency_count": 1,
+  "display_task_count": 3,
+  "error": {
+    "code": "schedule_mismatch",
+    "message": "schedule_mismatch",
+    "retryable": false,
+    "next_action": "Разобрать наблюдение расписания; новая подготовка после адресного решения, без rollback"
+  },
+  "exceptions": [],
+  "exit_code": 5,
+  "external_effect": "storage_written",
+  "item_id": "item_3ae56252104a4587ae33314944f6e622",
+  "mode": "publish",
+  "operation_id": "operation_d176f30478e948a6a8809903d1a75fe4",
+  "page_id": "test-page",
+  "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=test-page",
+  "project_slug": "test",
+  "published": null,
+  "schema_version": 1,
+  "snapshot_id": "snapshot_b537ca408a014679a0afbe4b22a611db",
+  "source": {
+    "name": "synthetic-source.mpp",
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57
+  },
+  "status": "failed",
+  "task_count": 3,
+  "verification": {
+    "archive": "verified",
+    "attachment": "verified",
+    "schedule": {
+      "checks": [
+        {
+          "accepted_deviation": false,
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "count": 1,
+          "example_entities": [
+            "model"
+          ],
+          "exit_code": 0,
+          "row": 5
+        },
+        {
+          "accepted_deviation": false,
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "count": 1,
+          "example_entities": [
+            "plugin"
+          ],
+          "exit_code": 0,
+          "row": 6
+        },
+        {
+          "source": "installed_plugin",
+          "status": "mismatch",
+          "task": "T"
+        }
+      ],
+      "evidence_ids": [
+        "artifact_b018a908f8a348deb0f352ed796f967a"
+      ],
+      "limitations": [
+        "local_scheduler_not_run",
+        "plan_plugin_result_not_verified"
+      ],
+      "status": "mismatch"
+    },
+    "source_values": {
+      "checks": [],
+      "evidence_ids": [],
+      "limitations": [
+        "ordinary_view_for_this_plan_not_observed"
+      ],
+      "status": "not_verified"
+    },
+    "storage": "verified"
+  },
+  "warnings": [
+    {
+      "code": "local_scheduler_prepared_unsupported",
+      "details_ref": "artifact:artifact_b018a908f8a348deb0f352ed796f967a",
+      "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+    },
+    {
+      "code": "specific_plan_plugin_result_not_verified",
+      "details_ref": "artifact:artifact_b018a908f8a348deb0f352ed796f967a",
+      "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+    }
+  ]
+}

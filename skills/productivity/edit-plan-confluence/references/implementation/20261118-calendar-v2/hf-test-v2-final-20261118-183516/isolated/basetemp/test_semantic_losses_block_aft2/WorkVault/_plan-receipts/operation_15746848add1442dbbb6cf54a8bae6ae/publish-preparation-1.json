@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "operation_id": "operation_15746848add1442dbbb6cf54a8bae6ae",
+  "item_id": "item_cc1c81c8e2b8485a928ed9f2d8450e6b",
+  "status": "failed",
+  "mode": "publish",
+  "exit_code": 5,
+  "project_slug": "test",
+  "source": {
+    "name": "synthetic-source.mpp",
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57
+  },
+  "snapshot_id": "snapshot_a1aac7eed79743f8bf03115e9be880b2",
+  "page_id": null,
+  "page_url": null,
+  "task_count": 3,
+  "display_task_count": 3,
+  "dependency_count": 1,
+  "exceptions": [],
+  "attachment_version": null,
+  "verification": {
+    "archive": "verified",
+    "attachment": "not_applicable",
+    "storage": "not_applicable",
+    "source_values": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [
+        "ordinary_view_for_this_plan_not_observed"
+      ],
+      "evidence_ids": []
+    },
+    "schedule": {
+      "status": "not_verified",
+      "checks": [
+        {
+          "row": 3,
+          "category": "incomplete",
+          "code": "field_unsupported",
+          "exit_code": 5,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "calendars.0.weekdays.0.intervals"
+          ]
+        },
+        {
+          "row": 5,
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "exit_code": 0,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "model"
+          ]
+        },
+        {
+          "row": 6,
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "exit_code": 0,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "plugin"
+          ]
+        },
+        {
+          "row": 8,
+          "category": "unsupported_semantics",
+          "code": "calendar_day_incomplete",
+          "exit_code": 5,
+          "accepted_deviation": false,
+          "count": 1,
+          "example_entities": [
+            "cal"
+          ]
+        }
+      ],
+      "limitations": [
+        "local_scheduler_not_run",
+        "plan_plugin_result_not_verified"
+      ],
+      "evidence_ids": [
+        "artifact_4dac815aaa594223b40ae7579d70b4de"
+      ]
+    }
+  },
+  "published": false,
+  "warnings": [
+    {
+      "code": "local_scheduler_prepared_unsupported",
+      "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве",
+      "details_ref": "artifact:artifact_4dac815aaa594223b40ae7579d70b4de"
+    },
+    {
+      "code": "specific_plan_plugin_result_not_verified",
+      "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве",
+      "details_ref": "artifact:artifact_4dac815aaa594223b40ae7579d70b4de"
+    }
+  ],
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived"
+  ],
+  "external_effect": "none",
+  "error": {
+    "code": "field_unsupported",
+    "message": "field_unsupported",
+    "retryable": false,
+    "next_action": "operation show --operation-id operation_15746848add1442dbbb6cf54a8bae6ae"
+  }
+}

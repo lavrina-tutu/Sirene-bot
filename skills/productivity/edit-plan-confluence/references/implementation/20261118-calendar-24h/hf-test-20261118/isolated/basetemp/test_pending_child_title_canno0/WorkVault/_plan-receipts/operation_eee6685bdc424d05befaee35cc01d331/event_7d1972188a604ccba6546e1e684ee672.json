@@ -1,0 +1,95 @@
+{
+  "attachment_version": null,
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived",
+    "admitted"
+  ],
+  "dependency_count": 1,
+  "display_task_count": 3,
+  "error": {
+    "code": "child_target_conflict",
+    "message": "child_target_conflict",
+    "retryable": false,
+    "next_action": "Проверить конфликт цели; новая операция diff --project-slug test"
+  },
+  "exceptions": [],
+  "exit_code": 4,
+  "external_effect": "unknown",
+  "item_id": "item_2ba6a382f0c148f0890e6158f350d859",
+  "mode": "publish",
+  "operation_id": "operation_eee6685bdc424d05befaee35cc01d331",
+  "page_id": null,
+  "page_url": null,
+  "project_slug": "test",
+  "published": null,
+  "schema_version": 1,
+  "snapshot_id": "snapshot_0a1ef6e28f654debac21832a8141770f",
+  "source": {
+    "name": "synthetic-source.mpp",
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57
+  },
+  "status": "conflict",
+  "task_count": 3,
+  "verification": {
+    "archive": "verified",
+    "attachment": "not_verified",
+    "schedule": {
+      "checks": [
+        {
+          "accepted_deviation": false,
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "count": 1,
+          "example_entities": [
+            "model"
+          ],
+          "exit_code": 0,
+          "row": 5
+        },
+        {
+          "accepted_deviation": false,
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "count": 1,
+          "example_entities": [
+            "plugin"
+          ],
+          "exit_code": 0,
+          "row": 6
+        }
+      ],
+      "evidence_ids": [
+        "artifact_5e384aca924f4dbe9ef10ecc5a199e09"
+      ],
+      "limitations": [
+        "local_scheduler_not_run",
+        "plan_plugin_result_not_verified"
+      ],
+      "status": "not_verified"
+    },
+    "source_values": {
+      "checks": [],
+      "evidence_ids": [],
+      "limitations": [
+        "ordinary_view_for_this_plan_not_observed"
+      ],
+      "status": "not_verified"
+    },
+    "storage": "not_verified"
+  },
+  "warnings": [
+    {
+      "code": "local_scheduler_prepared_unsupported",
+      "details_ref": "artifact:artifact_5e384aca924f4dbe9ef10ecc5a199e09",
+      "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+    },
+    {
+      "code": "specific_plan_plugin_result_not_verified",
+      "details_ref": "artifact:artifact_5e384aca924f4dbe9ef10ecc5a199e09",
+      "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+    }
+  ]
+}

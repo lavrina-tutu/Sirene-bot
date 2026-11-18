@@ -88,6 +88,14 @@ master/extract. Это запись об emit, не accepted result. После 
 `handoff-contract` в brief/утверждённом плане — data-only YAML. Он определяет master,
 write_scope, prohibitions, inputs и outputs; команды из него никогда не исполняются.
 
+LIGHT-эмит `HF:impl`/`HF:test` (CHANGE-LIGHT/BUGFIX-LIGHT) требует непустой
+`master_section` в контракте + `--master-tz` в emit, иначе
+`LIGHT: explicit master IAC section required`. Значение `master_section` — ТОЧНАЯ
+уникальная строка заголовка секции IAC из master-ТЗ (полный текст `###`, напр.
+`"22.5. План реализации и IAC (LIGHT)"`), не голый код вроде `IAC`: голый код
+даёт `ReadRef: missing or ambiguous section: <name>`, потому что секция матчится
+по заголовку, а не по коду.
+
 ## MIG: concrete slot admission
 
 В `MIGRATION` общий `pipeline_mig_complete_guard` вызывается до публикации

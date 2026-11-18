@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "origin": "handwritten synthetic explicit user statement for isolated tests only",
+  "policy_revision": "identity-v1",
+  "file": "user-statement.txt",
+  "sha256": "6476a9a05b99d8bd092358575bd707007748f9f4f100cc1b663a72c767b3df30"
+}

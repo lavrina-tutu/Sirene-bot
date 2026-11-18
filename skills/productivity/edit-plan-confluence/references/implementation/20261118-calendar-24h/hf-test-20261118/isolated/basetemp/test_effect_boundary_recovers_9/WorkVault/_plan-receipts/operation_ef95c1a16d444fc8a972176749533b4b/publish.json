@@ -1,0 +1,94 @@
+{
+  "attachment_version": 1,
+  "completed_stages": [
+    "prepared",
+    "archived",
+    "admitted",
+    "attachment_uploaded",
+    "attachment_verified",
+    "storage_written",
+    "storage_verified",
+    "confirmed"
+  ],
+  "dependency_count": 1,
+  "display_task_count": 3,
+  "error": null,
+  "exceptions": [],
+  "exit_code": 0,
+  "external_effect": "none",
+  "item_id": "item_0769cf3b6f3b4819b439184f2ca7ae64",
+  "mode": "publish",
+  "operation_id": "operation_ef95c1a16d444fc8a972176749533b4b",
+  "page_id": "test-page",
+  "page_url": "https://dom.tutu.ru/pages/viewpage.action?pageId=test-page",
+  "project_slug": "test",
+  "published": true,
+  "schema_version": 1,
+  "snapshot_id": "snapshot_bf1daa4bfa8c412389112cecd59afd70",
+  "source": {
+    "name": "synthetic-source.mpp",
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57
+  },
+  "status": "unchanged",
+  "task_count": 3,
+  "verification": {
+    "archive": "verified",
+    "attachment": "verified",
+    "schedule": {
+      "checks": [
+        {
+          "accepted_deviation": false,
+          "category": "local_unsupported",
+          "code": "local_scheduler_prepared_unsupported",
+          "count": 1,
+          "example_entities": [
+            "model"
+          ],
+          "exit_code": 0,
+          "row": 5
+        },
+        {
+          "accepted_deviation": false,
+          "category": "plugin_unobserved",
+          "code": "specific_plan_plugin_result_not_verified",
+          "count": 1,
+          "example_entities": [
+            "plugin"
+          ],
+          "exit_code": 0,
+          "row": 6
+        }
+      ],
+      "evidence_ids": [
+        "artifact_1315097d8feb4dbabd36c785ee2fc6f4"
+      ],
+      "limitations": [
+        "local_scheduler_not_run",
+        "plan_plugin_result_not_verified"
+      ],
+      "status": "not_verified"
+    },
+    "source_values": {
+      "checks": [],
+      "evidence_ids": [],
+      "limitations": [
+        "ordinary_view_for_this_plan_not_observed"
+      ],
+      "status": "not_verified"
+    },
+    "storage": "verified"
+  },
+  "warnings": [
+    {
+      "code": "local_scheduler_prepared_unsupported",
+      "details_ref": "artifact:artifact_1315097d8feb4dbabd36c785ee2fc6f4",
+      "message": "local_scheduler_prepared_unsupported: 1 проверок; подробности в свидетельстве"
+    },
+    {
+      "code": "specific_plan_plugin_result_not_verified",
+      "details_ref": "artifact:artifact_1315097d8feb4dbabd36c785ee2fc6f4",
+      "message": "specific_plan_plugin_result_not_verified: 1 проверок; подробности в свидетельстве"
+    }
+  ]
+}

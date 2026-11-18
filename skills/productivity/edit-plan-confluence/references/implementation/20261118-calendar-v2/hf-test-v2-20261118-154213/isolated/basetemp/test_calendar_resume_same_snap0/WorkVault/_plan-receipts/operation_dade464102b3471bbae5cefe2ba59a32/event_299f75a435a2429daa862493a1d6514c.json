@@ -1,0 +1,7 @@
+{
+  "effect": "upload",
+  "attempt": 1,
+  "page_id": "test-page",
+  "before": null,
+  "expected_sha256": "dc1c7b71447143ab3ff5be95f49d9c98903fc2cea12f9a4d9bec4746c8d1f116"
+}

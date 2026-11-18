@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "operation_id": "operation_2ea73f584d214581b00eea4cebaf70d3",
+  "item_id": "item_cc6bed4879024b599d10b065729d6b47",
+  "status": "failed",
+  "mode": "publish",
+  "exit_code": 5,
+  "project_slug": "test",
+  "source": {
+    "name": "synthetic-source.mpp",
+    "sha256": "7b0f24b2d7756b5e8ba994ba4834bb61e53deea2b3b1466d5795dc53e3c5eb11",
+    "size_bytes": 57
+  },
+  "snapshot_id": "snapshot_28ce768d02604829b772ff77c5b4ee51",
+  "page_id": null,
+  "page_url": null,
+  "task_count": null,
+  "display_task_count": null,
+  "dependency_count": null,
+  "exceptions": [],
+  "attachment_version": null,
+  "verification": {
+    "archive": "verified",
+    "attachment": "not_applicable",
+    "storage": "not_applicable",
+    "source_values": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [
+        "ordinary_view_for_this_plan_not_observed"
+      ],
+      "evidence_ids": []
+    },
+    "schedule": {
+      "status": "not_verified",
+      "checks": [],
+      "limitations": [],
+      "evidence_ids": []
+    }
+  },
+  "published": false,
+  "warnings": [],
+  "completed_stages": [
+    "input_frozen",
+    "prepared",
+    "archived"
+  ],
+  "external_effect": "none",
+  "error": {
+    "code": "archive_unavailable",
+    "message": "Сохранение не подтверждено: archive_unavailable",
+    "retryable": true,
+    "next_action": "Проверить архив и повторить операцию"
+  }
+}

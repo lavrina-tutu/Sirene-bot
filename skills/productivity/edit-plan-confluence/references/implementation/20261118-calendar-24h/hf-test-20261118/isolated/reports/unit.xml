@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="181" time="315.316" timestamp="2026-11-18T12:49:13.947746+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="test_round_the_clock_calendar" name="test_24h_owner_evidence" time="0.005" /><testcase classname="test_round_the_clock_calendar" name="test_24h_owner_evidence_corrupt_fails_closed" time="0.005" /><testcase classname="test_round_the_clock_calendar" name="test_24h_predicate" time="0.787" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[six_days]" time="0.696" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[duplicate_day]" time="0.732" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[false_working]" time="0.619" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[default_day]" time="0.702" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[two_intervals]" time="0.627" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[non_midnight]" time="0.766" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[seconds]" time="0.737" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[24_hour_end]" time="0.724" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[bad_quality]" time="0.700" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[parent]" time="0.682" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[exception]" time="0.717" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[work_week]" time="0.658" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[eight_days]" time="0.680" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[unknown_day]" time="0.682" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[string_bool]" time="0.688" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[empty_intervals]" time="0.624" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[same_nonzero]" time="0.647" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[partial_day]" time="0.651" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[missing_exception_quality]" time="0.646" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[missing_work_week_quality]" time="0.671" /><testcase classname="test_round_the_clock_calendar" name="test_predicate_rejects_near_matches[duplicate_calendar_key]" time="0.651" /><testcase classname="test_round_the_clock_calendar" name="test_collection_must_be_complete" time="0.695" /><testcase classname="test_round_the_clock_calendar" name="test_24h_classification" time="0.925" /><testcase classname="test_round_the_clock_calendar" name="test_24h_snapshot_guard[hidden_column]" time="0.841" /><testcase classname="test_round_the_clock_calendar" name="test_24h_snapshot_guard[altered_note]" time="0.800" /><testcase classname="test_round_the_clock_calendar" name="test_24h_snapshot_guard[missing_root]" time="0.880" /><testcase classname="test_round_the_clock_calendar" name="test_24h_mixed_blockers" time="0.909" /><testcase classname="test_round_the_clock_calendar" name="test_24h_resume_same_snapshot" time="2.570" /><testcase classname="test_admission" name="test_matrix_row[row-1]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-2]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-3]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-4]" time="0.003" /><testcase classname="test_admission" name="test_matrix_row[row-5]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-6]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-7]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-8]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-9]" time="0.004" /><testcase classname="test_admission" name="test_matrix_row[row-10]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-11]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-12]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-13]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-14]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-15]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-16]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-17]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-18]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-19]" time="0.002" /><testcase classname="test_admission" name="test_matrix_row[row-20]" time="0.002" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-3]" time="0.997" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-4]" time="1.055" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-7]" time="1.195" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-8]" time="1.005" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-9]" time="1.041" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-11]" time="1.253" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-12]" time="1.072" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-13]" time="1.145" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-14]" time="1.091" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-15]" time="1.059" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-16]" time="1.014" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-17]" time="1.121" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-18]" time="1.153" /><testcase classname="test_admission" name="test_matrix_blocker_archives_and_performs_zero_writes[row-19]" time="1.060" /><testcase classname="test_admission" name="test_specific_proposal_cannot_override_archive_or_profile" time="0.003" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[60-0-task]" time="0.875" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[60-0-milestone]" time="0.861" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[61-5-task]" time="0.857" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[61-5-milestone]" time="0.970" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[-61-5-task]" time="0.838" /><testcase classname="test_admission" name="test_dates_each_task_and_milestone_with_matching_root[-61-5-milestone]" time="0.886" /><testcase classname="test_admission" name="test_unknown_timezone_never_claims_absolute_date_delta" time="0.820" /><testcase classname="test_admission" name="test_unknown_field_blocks_but_proven_nonimpact_warns" time="1.666" /><testcase classname="test_admission" name="test_local_scheduler_unsupported_and_plan_unobserved_are_warnings" time="1.129" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[type]" time="1.116" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[signed_lag]" time="1.202" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[calendar]" time="1.200" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[assignment]" time="1.138" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[graph_cycle]" time="1.024" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[self_reference]" time="1.017" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[dangling]" time="1.053" /><testcase classname="test_admission" name="test_semantic_losses_block_after_archive[external]" time="1.034" /><testcase classname="test_admission" name="test_accepted_date_deviation_never_becomes_verified" time="0.003" /><testcase classname="test_admission" name="test_legacy_longest_path_excludes_root_and_never_proposes_auto_removal" time="0.002" /><testcase classname="test_fix2_schedule_boundaries" name="test_D_unassigned_resources_and_independent_interval_preserved_by_owner" time="5.153" /><testcase classname="test_fix2_schedule_boundaries" name="test_historical_link_retained_without_active_revision[B]" time="4.283" /><testcase classname="test_fix2_schedule_boundaries" name="test_historical_link_retained_without_active_revision[C]" time="4.583" /><testcase classname="test_fix2_schedule_boundaries" name="test_custom_actuals_are_display_only_for_real_sources[A]" time="4.150" /><testcase classname="test_fix2_schedule_boundaries" name="test_custom_actuals_are_display_only_for_real_sources[B]" time="5.122" /><testcase classname="test_fix2_schedule_boundaries" name="test_custom_actuals_are_display_only_for_real_sources[C]" time="4.743" /><testcase classname="test_fix2_schedule_boundaries" name="test_custom_actuals_are_display_only_for_real_sources[D]" time="5.655" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[none]" time="5.230" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[text]" time="5.293" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[hidden]" time="6.022" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[date]" time="5.254" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[resource_uid]" time="4.852" /><testcase classname="test_fix4_owner_history" name="test_missing_resource_requires_exact_source_display[error]" time="4.688" /><testcase classname="test_fix4_owner_history" name="test_current_mtime_and_history_task_links" time="2.077" /><testcase classname="test_fix4_owner_history" name="test_snapshot_display_preserves_dates_links_and_source_mode[none]" time="4.939" /><testcase classname="test_fix4_owner_history" name="test_snapshot_display_preserves_dates_links_and_source_mode[manual]" time="4.964" /><testcase classname="test_fix4_owner_history" name="test_snapshot_display_preserves_dates_links_and_source_mode[source_mode]" time="4.662" /><testcase classname="test_fix4_owner_history" name="test_snapshot_display_preserves_dates_links_and_source_mode[hidden]" time="4.753" /><testcase classname="test_fix4_owner_history" name="test_zero_duration_milestone_with_different_dates_is_published_collapsed" time="5.449" /><testcase classname="test_publish_prepare" name="test_first_diff_snapshot_before_admission" time="1.026" /><testcase classname="test_publish_prepare" name="test_new_binding_without_slug_retains_input_no_resumable_id" time="0.827" /><testcase classname="test_publish_prepare" name="test_unknown_timezone_archived_before_needs_decision" time="1.151" /><testcase classname="test_publish_prepare" name="test_archive_failure_never_writes_network[write]" time="0.815" /><testcase classname="test_publish_prepare" name="test_archive_failure_never_writes_network[readback]" time="0.739" /><testcase classname="test_publish_prepare" name="test_binding_conflict_preserves_frozen_intake" time="1.222" /><testcase classname="test_publish_prepare" name="test_new_mpp_publish_in_clean_environment_archives_when_blocked" time="1.023" /><testcase classname="test_publish_prepare" name="test_prepared_branch_never_calls_legacy_readers" time="1.087" /><testcase classname="test_publish_prepare" name="test_durable_admission_before_network_and_actual_readback" time="1.745" /><testcase classname="test_publish_prepare" name="test_admitted_bytes_mismatch_stops_before_put" time="1.776" /><testcase classname="test_publish_prepare" name="test_changed_target_invalidates_admission_and_proposal" time="1.704" /><testcase classname="test_publish_prepare" name="test_prepared_artifact_corruption_never_uploads" time="1.176" /><testcase classname="test_publish_prepare" name="test_false_attachment_verifier_blocks_put" time="1.802" /><testcase classname="test_publish_prepare" name="test_public_apply_uses_same_archive_and_admission" time="1.175" /><testcase classname="test_publish_prepare" name="test_mpp_child_uses_shared_admission_before_page_creation" time="2.643" /><testcase classname="test_publish_prepare" name="test_primary_archive_survives_unavailable_confluence[client]" time="0.897" /><testcase classname="test_publish_prepare" name="test_primary_archive_survives_unavailable_confluence[server]" time="0.999" /><testcase classname="test_publish_prepare" name="test_primary_archive_survives_unavailable_confluence[profile]" time="0.898" /><testcase classname="test_publish_prepare" name="test_archive_before_remote_failure_resumes_same_snapshot" time="1.621" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[crash-before-upload]" time="2.778" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[crash-before-put]" time="2.899" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[crash-before-create]" time="2.364" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[crash-after-upload]" time="2.998" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[crash-after-put]" time="2.675" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[crash-after-create]" time="2.202" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[timeout-before-upload]" time="2.788" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[timeout-before-put]" time="2.727" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[timeout-before-create]" time="2.412" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[timeout-after-upload]" time="2.543" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[timeout-after-put]" time="2.702" /><testcase classname="test_publish_resume" name="test_effect_boundary_recovers_without_duplicate[timeout-after-create]" time="2.676" /><testcase classname="test_publish_resume" name="test_journal_failure_has_no_false_success_and_resumes[intent]" time="2.943" /><testcase classname="test_publish_resume" name="test_journal_failure_has_no_false_success_and_resumes[upload_observation]" time="2.665" /><testcase classname="test_publish_resume" name="test_journal_failure_has_no_false_success_and_resumes[put_observation]" time="2.824" /><testcase classname="test_publish_resume" name="test_journal_failure_has_no_false_success_and_resumes[confirmation]" time="2.773" /><testcase classname="test_publish_resume" name="test_journal_failure_has_no_false_success_and_resumes[mirror]" time="2.788" /><testcase classname="test_publish_resume" name="test_missing_or_corrupt_archive_blocks_every_effect[representation_artifact_id]" time="1.228" /><testcase classname="test_publish_resume" name="test_missing_or_corrupt_archive_blocks_every_effect[evidence_artifact_id]" time="1.042" /><testcase classname="test_publish_resume" name="test_missing_or_corrupt_archive_blocks_every_effect[prepared_artifact_id]" time="1.113" /><testcase classname="test_publish_resume" name="test_missing_or_corrupt_archive_blocks_every_effect[source]" time="1.018" /><testcase classname="test_publish_resume" name="test_resume_rechecks_ab_flag_after_effect" time="2.860" /><testcase classname="test_publish_resume" name="test_legacy_operation_without_slug_or_binding_cannot_resume" time="1.090" /><testcase classname="test_publish_resume" name="test_unobserved_effect_does_not_authorize_foreign_summary[False]" time="3.706" /><testcase classname="test_publish_resume" name="test_unobserved_effect_does_not_authorize_foreign_summary[True]" time="3.430" /><testcase classname="test_publish_resume" name="test_archive_failure_after_post_retains_unknown_external_effect" time="2.081" /><testcase classname="test_publish_resume" name="test_network_error_retains_safe_type_and_status" time="1.083" /><testcase classname="test_publish_resume" name="test_transport_retries_only_get_with_configured_timeout[GET]" time="0.522" /><testcase classname="test_publish_resume" name="test_transport_retries_only_get_with_configured_timeout[POST]" time="0.412" /><testcase classname="test_publish_resume" name="test_transport_retries_only_get_with_configured_timeout[PUT]" time="0.421" /><testcase classname="test_publish_resume" name="test_schedule_mismatch_after_write_is_durable_without_rollback" time="2.139" /><testcase classname="test_publish_resume" name="test_real_process_death_http_reconciliation[before_post]" time="5.471"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r0/reports/stage10-process-before_post.json'">publish_case = {'cache': PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementa..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+rest_server = ('http://127.0.0.1:37779', {'attachment': {'id': 'att', 'title': 'gantt-chart-468817aa7f3b485fabfb98ae105d1d37.json', ...4e4cc&lt;/ac:parameter&gt;&lt;/ac:structured-macro&gt;&lt;/p&gt;'}}, 'id': 'test-page', 'space': {'key': 'TEST'}, 'title': 'Test', ...}})
+boundary = 'before_post'
+request = &lt;FixtureRequest for &lt;Function test_real_process_death_http_reconciliation[before_post]&gt;&gt;
+
+    @pytest.mark.confluence_live
+    @pytest.mark.parametrize('boundary',['before_post','after_post','before_put','after_put','after_confirmation','hold_post'])
+    def test_real_process_death_http_reconciliation(publish_case,rest_server,boundary,request):
+        """os._exit / SIGKILL, real REST and WAL journal, no second upload/PUT."""
+        c=publish_case;url,state=rest_server
+        from conf_client import ConfluenceClient
+        c['client']=ConfluenceClient(token='loopback-test',base_url=url)
+        prepared=prepare(c);assert prepared.exit_code==0,prepared.receipt
+        config=c['tmp']/'process.json';ready=c['tmp']/'ready'
+        config.write_text(json.dumps({'url':url,'operation':prepared.receipt['operation_id'],
+            'db':str(c['db']),'wv':str(c['wv']),'cache':str(c['cache']),'boundary':boundary,'ready':str(ready)}))
+        code='''import sys,json,os,time
+    from pathlib import Path
+    sys.path[:0]=sys.argv[2:]
+    import pipeline
+    from conf_client import ConfluenceClient
+    from mofs_index.plan import writer as w
+    cfg=json.loads(Path(sys.argv[1]).read_text());client=ConfluenceClient(token='loopback-test',base_url=cfg['url'])
+    def wrap(owner,name,where):
+     original=getattr(owner,name)
+     def effect(*a,**k):
+      if cfg['boundary']=='before_'+where:os._exit(73)
+      result=original(*a,**k)
+      if cfg['boundary']=='after_'+where:os._exit(73)
+      if cfg['boundary']=='hold_'+where:
+       Path(cfg['ready']).touch();time.sleep(30)
+      return result
+     setattr(owner,name,effect)
+    wrap(pipeline,'_upload_prepared_bytes','post');wrap(client,'put_page','put');wrap(w,'confirm_publish','confirmation')
+    prepared=pipeline.prepare_publish(client,operation_id=cfg['operation'],db_path=cfg['db'],workvault=cfg['wv'],cache_dir=cfg['cache'])
+    result=pipeline.publish_prepared(client,prepared)
+    print(json.dumps(result.receipt));sys.exit(result.exit_code)
+    '''
+        process=subprocess.Popen([sys.executable,'-c',code,str(config),str(Path(pipeline.__file__).parent),
+            '/home/tkachenkoav/USERTOOLS/MofsIndex'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        busy=None
+        if boundary=='hold_post':
+            try:
+                deadline=time.monotonic()+15
+                while not ready.exists():
+                    assert process.poll() is None and time.monotonic()&lt;deadline
+                    time.sleep(.02)
+                busy=resume(c,prepared.receipt['operation_id'])
+                assert busy.exit_code==4 and busy.receipt['error']['code']=='target_busy',busy.receipt
+            finally:process.kill()
+        out,err=process.communicate(timeout=25)
+        assert process.returncode==(-9 if boundary=='hold_post' else 73),(out,err)
+        result=resume(c,prepared.receipt['operation_id'])
+        assert result.exit_code==0 and result.receipt['published'] is True,result.receipt
+        assert sum(call[0]=='POST' for call in state['calls'])==1
+        assert sum(call[0]=='PUT' for call in state['calls'])==1
+        assert c['conn'].execute('SELECT count(*) FROM plan_publication').fetchone()[0]==1
+        root=getattr(request.config,'_acceptance_root',c['tmp'])
+        evidence={'boundary':boundary,'child_rc':process.returncode,'calls':state['calls'],'receipt':result.receipt,
+            'busy':busy.receipt if busy else None,'POST':1,'PUT':1,'GET':sum(call[0]=='GET' for call in state['calls'])}
+&gt;       (root/'reports'/('stage10-process-'+boundary+'.json')).write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+
+tests/test_publish_resume.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.9/pathlib.py:1213: in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors) as f:
+/usr/lib64/python3.9/pathlib.py:1180: in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261...endar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r0/reports/stage10-process-before_post.json')
+name = '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r0/reports/stage10-process-before_post.json'
+flags = 524865, mode = 438
+
+    def _opener(self, name, flags, mode=0o666):
+        # A stub for the opener argument to built-in open()
+&gt;       return self._accessor.open(self, flags, mode)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r0/reports/stage10-process-before_post.json'
+
+/usr/lib64/python3.9/pathlib.py:1038: FileNotFoundError</failure></testcase><testcase classname="test_publish_resume" name="test_real_process_death_http_reconciliation[after_post]" time="4.835"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r1/reports/stage10-process-after_post.json'">publish_case = {'cache': PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementa..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+rest_server = ('http://127.0.0.1:42805', {'attachment': {'id': 'att', 'title': 'gantt-chart-94155b178719485ca687df882f3beba4.json', ...fa533&lt;/ac:parameter&gt;&lt;/ac:structured-macro&gt;&lt;/p&gt;'}}, 'id': 'test-page', 'space': {'key': 'TEST'}, 'title': 'Test', ...}})
+boundary = 'after_post'
+request = &lt;FixtureRequest for &lt;Function test_real_process_death_http_reconciliation[after_post]&gt;&gt;
+
+    @pytest.mark.confluence_live
+    @pytest.mark.parametrize('boundary',['before_post','after_post','before_put','after_put','after_confirmation','hold_post'])
+    def test_real_process_death_http_reconciliation(publish_case,rest_server,boundary,request):
+        """os._exit / SIGKILL, real REST and WAL journal, no second upload/PUT."""
+        c=publish_case;url,state=rest_server
+        from conf_client import ConfluenceClient
+        c['client']=ConfluenceClient(token='loopback-test',base_url=url)
+        prepared=prepare(c);assert prepared.exit_code==0,prepared.receipt
+        config=c['tmp']/'process.json';ready=c['tmp']/'ready'
+        config.write_text(json.dumps({'url':url,'operation':prepared.receipt['operation_id'],
+            'db':str(c['db']),'wv':str(c['wv']),'cache':str(c['cache']),'boundary':boundary,'ready':str(ready)}))
+        code='''import sys,json,os,time
+    from pathlib import Path
+    sys.path[:0]=sys.argv[2:]
+    import pipeline
+    from conf_client import ConfluenceClient
+    from mofs_index.plan import writer as w
+    cfg=json.loads(Path(sys.argv[1]).read_text());client=ConfluenceClient(token='loopback-test',base_url=cfg['url'])
+    def wrap(owner,name,where):
+     original=getattr(owner,name)
+     def effect(*a,**k):
+      if cfg['boundary']=='before_'+where:os._exit(73)
+      result=original(*a,**k)
+      if cfg['boundary']=='after_'+where:os._exit(73)
+      if cfg['boundary']=='hold_'+where:
+       Path(cfg['ready']).touch();time.sleep(30)
+      return result
+     setattr(owner,name,effect)
+    wrap(pipeline,'_upload_prepared_bytes','post');wrap(client,'put_page','put');wrap(w,'confirm_publish','confirmation')
+    prepared=pipeline.prepare_publish(client,operation_id=cfg['operation'],db_path=cfg['db'],workvault=cfg['wv'],cache_dir=cfg['cache'])
+    result=pipeline.publish_prepared(client,prepared)
+    print(json.dumps(result.receipt));sys.exit(result.exit_code)
+    '''
+        process=subprocess.Popen([sys.executable,'-c',code,str(config),str(Path(pipeline.__file__).parent),
+            '/home/tkachenkoav/USERTOOLS/MofsIndex'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        busy=None
+        if boundary=='hold_post':
+            try:
+                deadline=time.monotonic()+15
+                while not ready.exists():
+                    assert process.poll() is None and time.monotonic()&lt;deadline
+                    time.sleep(.02)
+                busy=resume(c,prepared.receipt['operation_id'])
+                assert busy.exit_code==4 and busy.receipt['error']['code']=='target_busy',busy.receipt
+            finally:process.kill()
+        out,err=process.communicate(timeout=25)
+        assert process.returncode==(-9 if boundary=='hold_post' else 73),(out,err)
+        result=resume(c,prepared.receipt['operation_id'])
+        assert result.exit_code==0 and result.receipt['published'] is True,result.receipt
+        assert sum(call[0]=='POST' for call in state['calls'])==1
+        assert sum(call[0]=='PUT' for call in state['calls'])==1
+        assert c['conn'].execute('SELECT count(*) FROM plan_publication').fetchone()[0]==1
+        root=getattr(request.config,'_acceptance_root',c['tmp'])
+        evidence={'boundary':boundary,'child_rc':process.returncode,'calls':state['calls'],'receipt':result.receipt,
+            'busy':busy.receipt if busy else None,'POST':1,'PUT':1,'GET':sum(call[0]=='GET' for call in state['calls'])}
+&gt;       (root/'reports'/('stage10-process-'+boundary+'.json')).write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+
+tests/test_publish_resume.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.9/pathlib.py:1213: in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors) as f:
+/usr/lib64/python3.9/pathlib.py:1180: in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261...lendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r1/reports/stage10-process-after_post.json')
+name = '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r1/reports/stage10-process-after_post.json'
+flags = 524865, mode = 438
+
+    def _opener(self, name, flags, mode=0o666):
+        # A stub for the opener argument to built-in open()
+&gt;       return self._accessor.open(self, flags, mode)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r1/reports/stage10-process-after_post.json'
+
+/usr/lib64/python3.9/pathlib.py:1038: FileNotFoundError</failure></testcase><testcase classname="test_publish_resume" name="test_real_process_death_http_reconciliation[before_put]" time="4.931"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r2/reports/stage10-process-before_put.json'">publish_case = {'cache': PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementa..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+rest_server = ('http://127.0.0.1:33805', {'attachment': {'id': 'att', 'title': 'gantt-chart-fadf8baf839740a6b7545904145ea663.json', ...fb9fa&lt;/ac:parameter&gt;&lt;/ac:structured-macro&gt;&lt;/p&gt;'}}, 'id': 'test-page', 'space': {'key': 'TEST'}, 'title': 'Test', ...}})
+boundary = 'before_put'
+request = &lt;FixtureRequest for &lt;Function test_real_process_death_http_reconciliation[before_put]&gt;&gt;
+
+    @pytest.mark.confluence_live
+    @pytest.mark.parametrize('boundary',['before_post','after_post','before_put','after_put','after_confirmation','hold_post'])
+    def test_real_process_death_http_reconciliation(publish_case,rest_server,boundary,request):
+        """os._exit / SIGKILL, real REST and WAL journal, no second upload/PUT."""
+        c=publish_case;url,state=rest_server
+        from conf_client import ConfluenceClient
+        c['client']=ConfluenceClient(token='loopback-test',base_url=url)
+        prepared=prepare(c);assert prepared.exit_code==0,prepared.receipt
+        config=c['tmp']/'process.json';ready=c['tmp']/'ready'
+        config.write_text(json.dumps({'url':url,'operation':prepared.receipt['operation_id'],
+            'db':str(c['db']),'wv':str(c['wv']),'cache':str(c['cache']),'boundary':boundary,'ready':str(ready)}))
+        code='''import sys,json,os,time
+    from pathlib import Path
+    sys.path[:0]=sys.argv[2:]
+    import pipeline
+    from conf_client import ConfluenceClient
+    from mofs_index.plan import writer as w
+    cfg=json.loads(Path(sys.argv[1]).read_text());client=ConfluenceClient(token='loopback-test',base_url=cfg['url'])
+    def wrap(owner,name,where):
+     original=getattr(owner,name)
+     def effect(*a,**k):
+      if cfg['boundary']=='before_'+where:os._exit(73)
+      result=original(*a,**k)
+      if cfg['boundary']=='after_'+where:os._exit(73)
+      if cfg['boundary']=='hold_'+where:
+       Path(cfg['ready']).touch();time.sleep(30)
+      return result
+     setattr(owner,name,effect)
+    wrap(pipeline,'_upload_prepared_bytes','post');wrap(client,'put_page','put');wrap(w,'confirm_publish','confirmation')
+    prepared=pipeline.prepare_publish(client,operation_id=cfg['operation'],db_path=cfg['db'],workvault=cfg['wv'],cache_dir=cfg['cache'])
+    result=pipeline.publish_prepared(client,prepared)
+    print(json.dumps(result.receipt));sys.exit(result.exit_code)
+    '''
+        process=subprocess.Popen([sys.executable,'-c',code,str(config),str(Path(pipeline.__file__).parent),
+            '/home/tkachenkoav/USERTOOLS/MofsIndex'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        busy=None
+        if boundary=='hold_post':
+            try:
+                deadline=time.monotonic()+15
+                while not ready.exists():
+                    assert process.poll() is None and time.monotonic()&lt;deadline
+                    time.sleep(.02)
+                busy=resume(c,prepared.receipt['operation_id'])
+                assert busy.exit_code==4 and busy.receipt['error']['code']=='target_busy',busy.receipt
+            finally:process.kill()
+        out,err=process.communicate(timeout=25)
+        assert process.returncode==(-9 if boundary=='hold_post' else 73),(out,err)
+        result=resume(c,prepared.receipt['operation_id'])
+        assert result.exit_code==0 and result.receipt['published'] is True,result.receipt
+        assert sum(call[0]=='POST' for call in state['calls'])==1
+        assert sum(call[0]=='PUT' for call in state['calls'])==1
+        assert c['conn'].execute('SELECT count(*) FROM plan_publication').fetchone()[0]==1
+        root=getattr(request.config,'_acceptance_root',c['tmp'])
+        evidence={'boundary':boundary,'child_rc':process.returncode,'calls':state['calls'],'receipt':result.receipt,
+            'busy':busy.receipt if busy else None,'POST':1,'PUT':1,'GET':sum(call[0]=='GET' for call in state['calls'])}
+&gt;       (root/'reports'/('stage10-process-'+boundary+'.json')).write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+
+tests/test_publish_resume.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.9/pathlib.py:1213: in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors) as f:
+/usr/lib64/python3.9/pathlib.py:1180: in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261...lendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r2/reports/stage10-process-before_put.json')
+name = '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r2/reports/stage10-process-before_put.json'
+flags = 524865, mode = 438
+
+    def _opener(self, name, flags, mode=0o666):
+        # A stub for the opener argument to built-in open()
+&gt;       return self._accessor.open(self, flags, mode)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r2/reports/stage10-process-before_put.json'
+
+/usr/lib64/python3.9/pathlib.py:1038: FileNotFoundError</failure></testcase><testcase classname="test_publish_resume" name="test_real_process_death_http_reconciliation[after_put]" time="4.924"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r3/reports/stage10-process-after_put.json'">publish_case = {'cache': PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementa..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+rest_server = ('http://127.0.0.1:37851', {'attachment': {'id': 'att', 'title': 'gantt-chart-0c9f1c93b3b54553ac525330dd2d2908.json', ...09c2c&lt;/ac:parameter&gt;&lt;/ac:structured-macro&gt;&lt;/p&gt;'}}, 'id': 'test-page', 'space': {'key': 'TEST'}, 'title': 'Test', ...}})
+boundary = 'after_put'
+request = &lt;FixtureRequest for &lt;Function test_real_process_death_http_reconciliation[after_put]&gt;&gt;
+
+    @pytest.mark.confluence_live
+    @pytest.mark.parametrize('boundary',['before_post','after_post','before_put','after_put','after_confirmation','hold_post'])
+    def test_real_process_death_http_reconciliation(publish_case,rest_server,boundary,request):
+        """os._exit / SIGKILL, real REST and WAL journal, no second upload/PUT."""
+        c=publish_case;url,state=rest_server
+        from conf_client import ConfluenceClient
+        c['client']=ConfluenceClient(token='loopback-test',base_url=url)
+        prepared=prepare(c);assert prepared.exit_code==0,prepared.receipt
+        config=c['tmp']/'process.json';ready=c['tmp']/'ready'
+        config.write_text(json.dumps({'url':url,'operation':prepared.receipt['operation_id'],
+            'db':str(c['db']),'wv':str(c['wv']),'cache':str(c['cache']),'boundary':boundary,'ready':str(ready)}))
+        code='''import sys,json,os,time
+    from pathlib import Path
+    sys.path[:0]=sys.argv[2:]
+    import pipeline
+    from conf_client import ConfluenceClient
+    from mofs_index.plan import writer as w
+    cfg=json.loads(Path(sys.argv[1]).read_text());client=ConfluenceClient(token='loopback-test',base_url=cfg['url'])
+    def wrap(owner,name,where):
+     original=getattr(owner,name)
+     def effect(*a,**k):
+      if cfg['boundary']=='before_'+where:os._exit(73)
+      result=original(*a,**k)
+      if cfg['boundary']=='after_'+where:os._exit(73)
+      if cfg['boundary']=='hold_'+where:
+       Path(cfg['ready']).touch();time.sleep(30)
+      return result
+     setattr(owner,name,effect)
+    wrap(pipeline,'_upload_prepared_bytes','post');wrap(client,'put_page','put');wrap(w,'confirm_publish','confirmation')
+    prepared=pipeline.prepare_publish(client,operation_id=cfg['operation'],db_path=cfg['db'],workvault=cfg['wv'],cache_dir=cfg['cache'])
+    result=pipeline.publish_prepared(client,prepared)
+    print(json.dumps(result.receipt));sys.exit(result.exit_code)
+    '''
+        process=subprocess.Popen([sys.executable,'-c',code,str(config),str(Path(pipeline.__file__).parent),
+            '/home/tkachenkoav/USERTOOLS/MofsIndex'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        busy=None
+        if boundary=='hold_post':
+            try:
+                deadline=time.monotonic()+15
+                while not ready.exists():
+                    assert process.poll() is None and time.monotonic()&lt;deadline
+                    time.sleep(.02)
+                busy=resume(c,prepared.receipt['operation_id'])
+                assert busy.exit_code==4 and busy.receipt['error']['code']=='target_busy',busy.receipt
+            finally:process.kill()
+        out,err=process.communicate(timeout=25)
+        assert process.returncode==(-9 if boundary=='hold_post' else 73),(out,err)
+        result=resume(c,prepared.receipt['operation_id'])
+        assert result.exit_code==0 and result.receipt['published'] is True,result.receipt
+        assert sum(call[0]=='POST' for call in state['calls'])==1
+        assert sum(call[0]=='PUT' for call in state['calls'])==1
+        assert c['conn'].execute('SELECT count(*) FROM plan_publication').fetchone()[0]==1
+        root=getattr(request.config,'_acceptance_root',c['tmp'])
+        evidence={'boundary':boundary,'child_rc':process.returncode,'calls':state['calls'],'receipt':result.receipt,
+            'busy':busy.receipt if busy else None,'POST':1,'PUT':1,'GET':sum(call[0]=='GET' for call in state['calls'])}
+&gt;       (root/'reports'/('stage10-process-'+boundary+'.json')).write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+
+tests/test_publish_resume.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.9/pathlib.py:1213: in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors) as f:
+/usr/lib64/python3.9/pathlib.py:1180: in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261...alendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r3/reports/stage10-process-after_put.json')
+name = '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r3/reports/stage10-process-after_put.json'
+flags = 524865, mode = 438
+
+    def _opener(self, name, flags, mode=0o666):
+        # A stub for the opener argument to built-in open()
+&gt;       return self._accessor.open(self, flags, mode)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r3/reports/stage10-process-after_put.json'
+
+/usr/lib64/python3.9/pathlib.py:1038: FileNotFoundError</failure></testcase><testcase classname="test_publish_resume" name="test_real_process_death_http_reconciliation[after_confirmation]" time="5.075"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r4/reports/stage10-process-after_confirmation.json'">publish_case = {'cache': PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementa..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+rest_server = ('http://127.0.0.1:35207', {'attachment': {'id': 'att', 'title': 'gantt-chart-4bedbfb55db54b808aed7d6ea775b253.json', ...9a991&lt;/ac:parameter&gt;&lt;/ac:structured-macro&gt;&lt;/p&gt;'}}, 'id': 'test-page', 'space': {'key': 'TEST'}, 'title': 'Test', ...}})
+boundary = 'after_confirmation'
+request = &lt;FixtureRequest for &lt;Function test_real_process_death_http_reconciliation[after_confirmation]&gt;&gt;
+
+    @pytest.mark.confluence_live
+    @pytest.mark.parametrize('boundary',['before_post','after_post','before_put','after_put','after_confirmation','hold_post'])
+    def test_real_process_death_http_reconciliation(publish_case,rest_server,boundary,request):
+        """os._exit / SIGKILL, real REST and WAL journal, no second upload/PUT."""
+        c=publish_case;url,state=rest_server
+        from conf_client import ConfluenceClient
+        c['client']=ConfluenceClient(token='loopback-test',base_url=url)
+        prepared=prepare(c);assert prepared.exit_code==0,prepared.receipt
+        config=c['tmp']/'process.json';ready=c['tmp']/'ready'
+        config.write_text(json.dumps({'url':url,'operation':prepared.receipt['operation_id'],
+            'db':str(c['db']),'wv':str(c['wv']),'cache':str(c['cache']),'boundary':boundary,'ready':str(ready)}))
+        code='''import sys,json,os,time
+    from pathlib import Path
+    sys.path[:0]=sys.argv[2:]
+    import pipeline
+    from conf_client import ConfluenceClient
+    from mofs_index.plan import writer as w
+    cfg=json.loads(Path(sys.argv[1]).read_text());client=ConfluenceClient(token='loopback-test',base_url=cfg['url'])
+    def wrap(owner,name,where):
+     original=getattr(owner,name)
+     def effect(*a,**k):
+      if cfg['boundary']=='before_'+where:os._exit(73)
+      result=original(*a,**k)
+      if cfg['boundary']=='after_'+where:os._exit(73)
+      if cfg['boundary']=='hold_'+where:
+       Path(cfg['ready']).touch();time.sleep(30)
+      return result
+     setattr(owner,name,effect)
+    wrap(pipeline,'_upload_prepared_bytes','post');wrap(client,'put_page','put');wrap(w,'confirm_publish','confirmation')
+    prepared=pipeline.prepare_publish(client,operation_id=cfg['operation'],db_path=cfg['db'],workvault=cfg['wv'],cache_dir=cfg['cache'])
+    result=pipeline.publish_prepared(client,prepared)
+    print(json.dumps(result.receipt));sys.exit(result.exit_code)
+    '''
+        process=subprocess.Popen([sys.executable,'-c',code,str(config),str(Path(pipeline.__file__).parent),
+            '/home/tkachenkoav/USERTOOLS/MofsIndex'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        busy=None
+        if boundary=='hold_post':
+            try:
+                deadline=time.monotonic()+15
+                while not ready.exists():
+                    assert process.poll() is None and time.monotonic()&lt;deadline
+                    time.sleep(.02)
+                busy=resume(c,prepared.receipt['operation_id'])
+                assert busy.exit_code==4 and busy.receipt['error']['code']=='target_busy',busy.receipt
+            finally:process.kill()
+        out,err=process.communicate(timeout=25)
+        assert process.returncode==(-9 if boundary=='hold_post' else 73),(out,err)
+        result=resume(c,prepared.receipt['operation_id'])
+        assert result.exit_code==0 and result.receipt['published'] is True,result.receipt
+        assert sum(call[0]=='POST' for call in state['calls'])==1
+        assert sum(call[0]=='PUT' for call in state['calls'])==1
+        assert c['conn'].execute('SELECT count(*) FROM plan_publication').fetchone()[0]==1
+        root=getattr(request.config,'_acceptance_root',c['tmp'])
+        evidence={'boundary':boundary,'child_rc':process.returncode,'calls':state['calls'],'receipt':result.receipt,
+            'busy':busy.receipt if busy else None,'POST':1,'PUT':1,'GET':sum(call[0]=='GET' for call in state['calls'])}
+&gt;       (root/'reports'/('stage10-process-'+boundary+'.json')).write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+
+tests/test_publish_resume.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.9/pathlib.py:1213: in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors) as f:
+/usr/lib64/python3.9/pathlib.py:1180: in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261...4h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r4/reports/stage10-process-after_confirmation.json')
+name = '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r4/reports/stage10-process-after_confirmation.json'
+flags = 524865, mode = 438
+
+    def _opener(self, name, flags, mode=0o666):
+        # A stub for the opener argument to built-in open()
+&gt;       return self._accessor.open(self, flags, mode)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r4/reports/stage10-process-after_confirmation.json'
+
+/usr/lib64/python3.9/pathlib.py:1038: FileNotFoundError</failure></testcase><testcase classname="test_publish_resume" name="test_real_process_death_http_reconciliation[hold_post]" time="5.832"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r5/reports/stage10-process-hold_post.json'">publish_case = {'cache': PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementa..._PROFILE': 'ecosystem_config', 'PLUGIN_PROFILE': 'ecosystem_config', 'db': 'cli_override'}, frozen_profiles=None), ...}
+rest_server = ('http://127.0.0.1:32945', {'attachment': {'id': 'att', 'title': 'gantt-chart-4ebd641bd2c74f6b9d605ec80eeefd3b.json', ...1934f&lt;/ac:parameter&gt;&lt;/ac:structured-macro&gt;&lt;/p&gt;'}}, 'id': 'test-page', 'space': {'key': 'TEST'}, 'title': 'Test', ...}})
+boundary = 'hold_post'
+request = &lt;FixtureRequest for &lt;Function test_real_process_death_http_reconciliation[hold_post]&gt;&gt;
+
+    @pytest.mark.confluence_live
+    @pytest.mark.parametrize('boundary',['before_post','after_post','before_put','after_put','after_confirmation','hold_post'])
+    def test_real_process_death_http_reconciliation(publish_case,rest_server,boundary,request):
+        """os._exit / SIGKILL, real REST and WAL journal, no second upload/PUT."""
+        c=publish_case;url,state=rest_server
+        from conf_client import ConfluenceClient
+        c['client']=ConfluenceClient(token='loopback-test',base_url=url)
+        prepared=prepare(c);assert prepared.exit_code==0,prepared.receipt
+        config=c['tmp']/'process.json';ready=c['tmp']/'ready'
+        config.write_text(json.dumps({'url':url,'operation':prepared.receipt['operation_id'],
+            'db':str(c['db']),'wv':str(c['wv']),'cache':str(c['cache']),'boundary':boundary,'ready':str(ready)}))
+        code='''import sys,json,os,time
+    from pathlib import Path
+    sys.path[:0]=sys.argv[2:]
+    import pipeline
+    from conf_client import ConfluenceClient
+    from mofs_index.plan import writer as w
+    cfg=json.loads(Path(sys.argv[1]).read_text());client=ConfluenceClient(token='loopback-test',base_url=cfg['url'])
+    def wrap(owner,name,where):
+     original=getattr(owner,name)
+     def effect(*a,**k):
+      if cfg['boundary']=='before_'+where:os._exit(73)
+      result=original(*a,**k)
+      if cfg['boundary']=='after_'+where:os._exit(73)
+      if cfg['boundary']=='hold_'+where:
+       Path(cfg['ready']).touch();time.sleep(30)
+      return result
+     setattr(owner,name,effect)
+    wrap(pipeline,'_upload_prepared_bytes','post');wrap(client,'put_page','put');wrap(w,'confirm_publish','confirmation')
+    prepared=pipeline.prepare_publish(client,operation_id=cfg['operation'],db_path=cfg['db'],workvault=cfg['wv'],cache_dir=cfg['cache'])
+    result=pipeline.publish_prepared(client,prepared)
+    print(json.dumps(result.receipt));sys.exit(result.exit_code)
+    '''
+        process=subprocess.Popen([sys.executable,'-c',code,str(config),str(Path(pipeline.__file__).parent),
+            '/home/tkachenkoav/USERTOOLS/MofsIndex'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        busy=None
+        if boundary=='hold_post':
+            try:
+                deadline=time.monotonic()+15
+                while not ready.exists():
+                    assert process.poll() is None and time.monotonic()&lt;deadline
+                    time.sleep(.02)
+                busy=resume(c,prepared.receipt['operation_id'])
+                assert busy.exit_code==4 and busy.receipt['error']['code']=='target_busy',busy.receipt
+            finally:process.kill()
+        out,err=process.communicate(timeout=25)
+        assert process.returncode==(-9 if boundary=='hold_post' else 73),(out,err)
+        result=resume(c,prepared.receipt['operation_id'])
+        assert result.exit_code==0 and result.receipt['published'] is True,result.receipt
+        assert sum(call[0]=='POST' for call in state['calls'])==1
+        assert sum(call[0]=='PUT' for call in state['calls'])==1
+        assert c['conn'].execute('SELECT count(*) FROM plan_publication').fetchone()[0]==1
+        root=getattr(request.config,'_acceptance_root',c['tmp'])
+        evidence={'boundary':boundary,'child_rc':process.returncode,'calls':state['calls'],'receipt':result.receipt,
+            'busy':busy.receipt if busy else None,'POST':1,'PUT':1,'GET':sum(call[0]=='GET' for call in state['calls'])}
+&gt;       (root/'reports'/('stage10-process-'+boundary+'.json')).write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+
+tests/test_publish_resume.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.9/pathlib.py:1213: in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors) as f:
+/usr/lib64/python3.9/pathlib.py:1180: in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261...alendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r5/reports/stage10-process-hold_post.json')
+name = '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r5/reports/stage10-process-hold_post.json'
+flags = 524865, mode = 438
+
+    def _opener(self, name, flags, mode=0o666):
+        # A stub for the opener argument to built-in open()
+&gt;       return self._accessor.open(self, flags, mode)
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/references/implementation/20261118-calendar-24h/hf-test-20261118/isolated/basetemp/test_real_process_death_http_r5/reports/stage10-process-hold_post.json'
+
+/usr/lib64/python3.9/pathlib.py:1038: FileNotFoundError</failure></testcase><testcase classname="test_publish_idempotency" name="test_same_source_profile_target_no_upload_put_or_duplicate_publication" time="3.850" /><testcase classname="test_publish_idempotency" name="test_new_expected_itogo_is_storage_only" time="2.703" /><testcase classname="test_publish_idempotency" name="test_confirmed_operation_never_repairs_changed_target" time="2.854" /><testcase classname="test_publish_idempotency" name="test_full_confirmation_links_and_legacy_writer_cannot_promote" time="1.676" /><testcase classname="test_publish_idempotency" name="test_operation_show_omits_storage_from_network_journal" time="1.667" /><testcase classname="test_publish_conflicts" name="test_foreign_managed_change_after_upload_is_conflict[macro]" time="2.775" /><testcase classname="test_publish_conflicts" name="test_foreign_managed_change_after_upload_is_conflict[summary]" time="2.918" /><testcase classname="test_publish_conflicts" name="test_foreign_managed_change_after_upload_is_conflict[attachment]" time="2.714" /><testcase classname="test_publish_conflicts" name="test_foreign_managed_change_after_upload_is_conflict[duplicate_macro]" time="2.602" /><testcase classname="test_publish_conflicts" name="test_foreign_attachment_version_after_exact_verification_blocks_put" time="1.656" /><testcase classname="test_publish_conflicts" name="test_bounded_409_preserves_unmanaged_neighbours[1]" time="1.897" /><testcase classname="test_publish_conflicts" name="test_bounded_409_preserves_unmanaged_neighbours[2]" time="3.018" /><testcase classname="test_publish_conflicts" name="test_bounded_409_preserves_unmanaged_neighbours[100]" time="2.806" /><testcase classname="test_publish_conflicts" name="test_409_changed_owned_macro_never_retries_patch" time="1.893" /><testcase classname="test_publish_conflicts" name="test_new_operation_same_source_cannot_overwrite_foreign_target" time="2.187" /><testcase classname="test_publish_conflicts" name="test_target_live_owner_across_process_and_release_after_kill" time="2.501" /><testcase classname="test_publish_conflicts" name="test_pending_child_title_cannot_be_adopted_from_foreign_macro" time="1.805" /><testcase classname="test_mpp_calendar" name="test_base_recurrent_intervals" time="0.002" /><testcase classname="test_mpp_calendar" name="test_prepared_calendar_intervals_exceptions_inheritance_bindings" time="0.159" /><testcase classname="test_mpp_calendar" name="test_prepared_calendar_unsupported_is_explicit" time="0.131" /><testcase classname="test_mpp_calendar" name="test_prepared_calendar_source_day_basis_mismatch_is_explicit" time="0.752" /></testsuite></testsuites>

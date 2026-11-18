@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "origin": "Existing relations-all-types.mpp; duplicates are byte copies; corrupt/Inbox controls are explicit synthetic text. Symlinks created only inside isolated test directories.",
+  "files": {
+    "first.mpp": {
+      "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "size_bytes": 180736
+    },
+    "duplicate.mpp": {
+      "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "size_bytes": 180736
+    },
+    "corrupt.mpp": {
+      "sha256": "78298a6b9f6de78e2f427add9065032ed2d6983ede930291bbe6d46b746ddc2d",
+      "size_bytes": 56
+    },
+    "continue.json": {
+      "sha256": "8affe37a1719b97bbf41d3450530da1baf30ff4bb26d6ddba121ef90f49431df",
+      "size_bytes": 366
+    },
+    "stop.json": {
+      "sha256": "6a2331b1740a8bad3c6c5a89aa385f841be338d00a238fde2e61fa72dd9a4f3d",
+      "size_bytes": 388
+    },
+    "duplicate-ids.json": {
+      "sha256": "a680d1d4b3a66a452fbf9c3bf0442d592d1d21e4e31c1d87d74d753c9a3abf60",
+      "size_bytes": 251
+    },
+    "invalid-null.json": {
+      "sha256": "27039e53100d6a5c036cccb573ca37da7948f48857d492554b29c5f1155e16bf",
+      "size_bytes": 383
+    },
+    "Inbox/A.mpp": {
+      "sha256": "759fd47736cbb4d2c36edc2e4bf521917e2874b3f730be8f57a4c52933ba7937",
+      "size_bytes": 180736
+    },
+    "Inbox/~$open.mpp": {
+      "sha256": "a33e7cf009961aba46cc8f925dd4055d7bdb56ee062efc2a159f2052cba14ec1",
+      "size_bytes": 19
+    },
+    "Inbox/later.mpp.part": {
+      "sha256": "49a94f77f840fae4c405061a76ca9d8c19caa765ecb3843a8600da301e13e965",
+      "size_bytes": 17
+    },
+    "Inbox/nested/excluded.mpp": {
+      "sha256": "7bf4c9c5bf7389bfb9deded1d88b5cd6b4be750afa79e5af1cdaf2c21c825226",
+      "size_bytes": 12
+    }
+  }
+}

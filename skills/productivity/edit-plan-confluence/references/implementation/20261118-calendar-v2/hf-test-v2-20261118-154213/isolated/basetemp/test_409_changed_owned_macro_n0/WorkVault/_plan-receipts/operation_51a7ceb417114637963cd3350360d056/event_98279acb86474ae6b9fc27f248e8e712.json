@@ -1,0 +1,10 @@
+{
+  "effect": "put",
+  "attempt": 1,
+  "page_id": "test-page",
+  "version": 4,
+  "before_version": 3,
+  "before_storage_sha256": "b08c62735eb81e5636056095e091dc611a1057a40f5cc213a0783c97ac78783f",
+  "storage": "<p><strong>Итого: с 05.01.26 по 05.01.26 - 1 рабочих дней</strong><br />по плану; факт — в колонках</p><p>Соседний блок</p><p><ac:structured-macro ac:name=\"gantt-chart-planner\" ac:schema-version=\"1\" ac:macro-id=\"97e1520a-936a-4c8c-8f4b-04a5485c9849\"><ac:parameter ac:name=\"id\">75351ad518a8463fbfb2c9fbe3af0dfc</ac:parameter><ac:parameter ac:name=\"hash\">f85c76753dbe4cf4b7f26db6773ee844</ac:parameter></ac:structured-macro></p>",
+  "storage_sha256": "acb73faad59301b64851a31be24ce3c700e2c36ceeb27fd3cabc36099466aa48"
+}

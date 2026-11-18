@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "origin": "Hand-authored synthetic fixture; only typed writer record_source_provenance(ProvenanceSpec) registers it",
+  "quality": "unconfirmed",
+  "asserts_task_identity": false,
+  "files": {
+    "provenance.json": {
+      "sha256": "b1d4e388ff47ce3231dc198063b96fb7302f70c3e19c3cc30593da1181340a94",
+      "size_bytes": 329
+    }
+  },
+  "used_by": "test_batch_decisions.py::add_evidence"
+}

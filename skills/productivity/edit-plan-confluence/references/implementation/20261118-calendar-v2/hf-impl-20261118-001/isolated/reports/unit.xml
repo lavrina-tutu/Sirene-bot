@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="1.265" timestamp="2026-11-18T15:15:29.471604+03:00" hostname="hermes-agents.devel.tutu.ru"><testcase classname="" name="test_fix4_owner_history" time="0.000"><error message="collection failure">ImportError while importing test module '/home/tkachenkoav/hermes-workspace/skills/productivity/edit-plan-confluence/tests/test_fix4_owner_history.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../../../.local/share/uv/python/cpython-3.14.5-linux-x86_64-gnu/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_fix4_owner_history.py:9: in &lt;module&gt;
+    from test_plan_save import save_case
+tests/test_plan_save.py:13: in &lt;module&gt;
+    import plan_save as ps
+scripts/plan_save.py:21: in &lt;module&gt;
+    from jsonschema.exceptions import ValidationError as SchemaValidationError
+../../../../.local/lib/python3.9/site-packages/jsonschema/__init__.py:13: in &lt;module&gt;
+    from jsonschema._format import FormatChecker
+../../../../.local/lib/python3.9/site-packages/jsonschema/_format.py:11: in &lt;module&gt;
+    from jsonschema.exceptions import FormatError
+../../../../.local/lib/python3.9/site-packages/jsonschema/exceptions.py:15: in &lt;module&gt;
+    from referencing.exceptions import Unresolvable as _Unresolvable
+../../../../.local/lib/python3.9/site-packages/referencing/__init__.py:5: in &lt;module&gt;
+    from referencing._core import Anchor, Registry, Resource, Specification
+../../../../.local/lib/python3.9/site-packages/referencing/_core.py:9: in &lt;module&gt;
+    from rpds import HashTrieMap, HashTrieSet, List
+../../../../.local/lib/python3.9/site-packages/rpds/__init__.py:1: in &lt;module&gt;
+    from .rpds import *
+E   ModuleNotFoundError: No module named 'rpds.rpds'</error></testcase></testsuite></testsuites>

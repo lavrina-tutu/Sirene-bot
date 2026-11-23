@@ -54,7 +54,11 @@ cd <workspace> && timeout 590 codex exec -C <workspace> -m gpt-6.1-sol \
   --sandbox danger-full-access -- "$(cat /tmp/prompt.md)" > /tmp/out.json
 ```
 
-Вывод — JSONL, несколько объектов (не один JSON; `json.load` на весь файл падает `Extra data`). Вердикт роли — объекты `item.type == "agent_message"` → `item.text`; последнее большое agent_message (после web_search/command_execution items) и есть итог. Модели: архитектор gpt-6.1-sol, ревизор gpt-6-astra.
+Вывод — JSONL, несколько объектов (не один JSON; `json.load` на весь файл падает `Extra data`). Вердикт роли лежит под объектами `item.completed` → `item` таблицей где `item.type == "agent_message"` → читать `item.text`. Тop-level события `type == "agent_message"` могут приходить пустыми (`item.text == ""`) — не считать их итогом. Надёжнее перебрать все `item.completed`, собрать text из всех agent_message-элементов и взять последний большой текст. Модели: архитектор gpt-6.1-sol, ревизор gpt-6-astra.
+
+**`codex exec` требует залогиненного CLI.** `codex login status` = Not logged in → вызовы уходят в `401 Unauthorized: Missing bearer...`. Логин: `codex login --device-auth`, юзер вводит код https://auth.openai.com/codex/device. ВАЖНО: device-auth процесс должен ЖДАТЬ обратного вызова, пока юзер вводит код; `timeout N`ы а foreground или короткий таймаут убивают его раньше и логин не доезжает (повторный запуск выдаёт свежий код). Запускать с persist-on-release в фоне, дать юзеру ссылку+код, затем проверить `codex login status` = "Logged in using ChatGPT" и наличие `~/.codex/auth.json`.
+
+Ким/Муншот как провайдер (Platform pay-as-you-go vs Kimi Code подписка, модели, ограничение подписки на автоматику, назначение ролей) — `references/kimi-moonshot.md`.
 
 ## Типовые вердикты по позициям (10.2026, архитектор + ревизор)
 

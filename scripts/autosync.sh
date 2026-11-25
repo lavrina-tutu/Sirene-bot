@@ -41,8 +41,8 @@ if [ -f "$WS/scripts/doctor.sh" ]; then
 fi
 
 echo "[autosync] commit + push..."
-# SSH уже настроен (ключ hermes-vm добавлен в GitHub)
-git remote set-url origin git@github.com:ialextkachenko-byte/hermes-workspace.git
+# Переведено на GitHub Галины (lavrina-tutu/Sirene-bot), auth через ~/.git-credentials (токен Галины). alex-byte не трогаем/не удаляем.
+git remote set-url origin https://github.com/lavrina-tutu/Sirene-bot.git
 git add -A
 if git diff --cached --quiet; then
   echo "[autosync] no changes"

@@ -169,7 +169,7 @@ ff_id: "01HXYZ..."                      # = meeting_id из реестра
 date: "2026-05-20T11:30:00Z"            # UTC, из реестра MoveFromFF
 title: "Встреча с клиентом"
 participants:
-  - tkachenkoav@tutu.ru
+  - lavrina@tutu.ru
   - ivan.petrov@example.com
 duration_min: 47.3                      # float, как в реестре
 kind: transcript                        # transcript | summary | actions

@@ -21,7 +21,7 @@ tags: [zoom, api, oauth, meetings, exchange, tutu]
 
 Хранятся в `~/.hermes/profiles/anthropic/.env`.
 
-**Текущий статус (23.07.2026):** credentials получены, токен работает ✅. User ID Саши: `6fU9sTauSgeCx-x27gbikQ` (tkachenkoav@tutu.ru). Создание встреч блокируется — корп. аккаунт ТУТУ не даёт scope `meeting:write:meeting`. Ожидает разрешения от Zoom-админа ТУТУ.
+**Текущий статус (23.07.2026):** credentials получены, токен работает ✅. User ID Саши: `6fU9sTauSgeCx-x27gbikQ` (lavrina@tutu.ru). Создание встреч блокируется — корп. аккаунт ТУТУ не даёт scope `meeting:write:meeting`. Ожидает разрешения от Zoom-админа ТУТУ.
 
 ## Получение токена
 

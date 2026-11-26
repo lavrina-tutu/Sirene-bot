@@ -101,7 +101,7 @@ MoveFromFF — **первое звено** конвейера обработки
       "meeting_date": "2026-05-20T11:30:00Z",
       "duration_minutes": 47.3,
       "participants": [
-        "tkachenkoav@tutu.ru",
+        "lavrina@tutu.ru",
         "ivan.petrov@example.com"
       ],
       "keywords": ["onboarding", "Q2-planning"],
@@ -135,7 +135,7 @@ MoveFromFF — **первое звено** конвейера обработки
   "agent_version": "0.1",
   "destination": "Meetings/Processed/2026-05/",
   "moved_at": "2026-05-22T14:35:12Z",
-  "contacts_matched": ["tkachenkoav@tutu.ru"],
+  "contacts_matched": ["lavrina@tutu.ru"],
   "contacts_new":     ["ivan.petrov@example.com"]
 }
 ```

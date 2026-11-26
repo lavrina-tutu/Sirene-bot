@@ -105,11 +105,11 @@ MoveFrom<Service>/
 
 ## Корпоративные credentials
 
-Единая учётка `tkachenkoav@tutu.ru` для Confluence, Jira, Exchange, Zulip. **Хранить как PAT, не пароль.**
+Единая учётка `lavrina@tutu.ru` для Confluence, Jira, Exchange, Zulip. **Хранить как PAT, не пароль.**
 
 В `.env` каждого проекта:
 ```
-TUTU_USERNAME=tkachenkoav@tutu.ru
+TUTU_USERNAME=lavrina@tutu.ru
 TUTU_TOKEN=<personal_access_token>
 TUTU_BASE_URL=https://dom.tutu.ru
 ```

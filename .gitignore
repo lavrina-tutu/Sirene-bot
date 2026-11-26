@@ -39,3 +39,4 @@ Thumbs.db
 *.bak_*
 *.bkp
 _bak*
+_backup/
